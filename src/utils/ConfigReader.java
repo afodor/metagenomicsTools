@@ -17,11 +17,14 @@ public class ConfigReader
 	public static final String BLAST_DIRECTORY = "BLAST_DIRECTORY";
 	public static final String VERBOSE_CONSOLE = "VERBOSE_CONSOLE";
 	
+	public static final String PANCREATITIS_DIR = "PANCREATITIS_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
 	}
 
+	
 	private boolean isSetToTrue(String namedProperty)
 	{
 		Object obj = props.get(namedProperty);
@@ -35,7 +38,24 @@ public class ConfigReader
 
 		return false;
 	}
+	
 
+	private static String getAProperty(String namedProperty) throws Exception
+	{
+		Object obj = props.get(namedProperty);
+
+		if (obj == null)
+			throw new Exception("Error!  Could not find " + namedProperty
+					+ " in " + PROPERTIES_FILE);
+
+		return obj.toString();
+	}
+	
+	public static String getPancreatitisDir() throws Exception
+	{
+		return getConfigReader().getAProperty(PANCREATITIS_DIR);
+	}
+	
 	private ConfigReader() throws Exception
 	{
 		Object o = new Object();
