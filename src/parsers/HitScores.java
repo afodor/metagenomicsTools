@@ -416,6 +416,7 @@ public class HitScores implements Comparable<HitScores>
 		return getAsList(new File(filepath), false);
 	}
 	
+	@SuppressWarnings("unused")
 	public static List<HitScores> getAsList(  File file, boolean gzipped) throws Exception
 	{
 		System.out.println("PARSING: " + file.getAbsolutePath());
@@ -448,6 +449,8 @@ public class HitScores implements Comparable<HitScores>
 			nextLine = reader.readLine();
 		}
 		
+		// Bugs in earlier VMs sometimes made this line throw
+		// as hard as that is to believe!!
 		if( nextLine != null)
 			throw new Exception("Parsing error");
 		
