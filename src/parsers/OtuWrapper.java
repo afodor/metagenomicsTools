@@ -96,6 +96,72 @@ public class OtuWrapper
 		return map;
 	}
 	
+	/*
+	 * Makes a new column called other and collapses all rare taxa 
+	 * into that new category
+	 */
+	public void writeReducedOtuSpreadsheetsWithTaxaAsColumns(
+			File newFilePath, int numTaxaToInclude) throws Exception
+	{
+		HashSet<String> toInclude = new LinkedHashSet<String>();
+		HashMap<String, Double> taxaSorted = 
+				getTaxaListSortedByNumberOfCounts();
+		
+		numTaxaToInclude = Math.min(numTaxaToInclude, taxaSorted.size());
+		
+		for( String s : taxaSorted.keySet() )
+		{
+			if( numTaxaToInclude > 0 )
+			{
+				toInclude.add(s);
+				
+				numTaxaToInclude--;
+			}
+		}
+		
+		//System.out.println("Including " + toInclude);
+		
+		if(toInclude.contains("other"))
+			throw new Exception("Other already defined");
+		
+		HashMap<String, Double> otherCounts =new HashMap<String,Double>();
+		
+		for( int x=0; x < this.getSampleNames().size(); x++)
+		{
+			double counts =0;
+			
+			for(int y=0; y < this.getOtuNames().size(); y++)
+				if( ! toInclude.contains(this.getOtuNames().get(y)))
+					counts += this.dataPointsUnnormalized.get(x).get(y);
+			
+			otherCounts.put(this.getSampleNames().get(x), counts);
+		}
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(newFilePath));
+		
+		writer.write("sample");
+		
+		for(String s : toInclude)
+			writer.write("\t" + s);
+		
+		writer.write("\tother\n");
+		
+		for(int x=0;x < this.sampleNames.size(); x++)
+		{
+			writer.write(this.sampleNames.get(x));
+			
+			for(String s : toInclude)
+			{
+				writer.write( "\t" + this.dataPointsUnnormalized.get(x).get(getIndexForOtuName(s)) );
+			}
+				
+			writer.write("\t" + otherCounts.get(this.sampleNames.get(x)) + "\n" );
+		}
+		
+		writer.flush();  writer.close();
+		
+	}
+	
 	public double getChaoRichness( int sampleIndex) throws Exception
 	{
 		double richness = getRichness(sampleIndex);

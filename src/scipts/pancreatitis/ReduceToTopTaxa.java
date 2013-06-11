@@ -17,8 +17,11 @@ public class ReduceToTopTaxa
 		HashMap<String, Double> taxaMap = 
 				wrapper.getTaxaListSortedByNumberOfCounts();
 		
-		
 		for(String s : taxaMap.keySet())
 			System.out.println(s + " " + taxaMap.get(s));
+		
+		wrapper.writeReducedOtuSpreadsheetsWithTaxaAsColumns(
+			new File(ConfigReader.getPancreatitisDir() + File.separator + 
+					"phylaTop6TaxaAsColumns.txt")	, 6);
 	}
 }
