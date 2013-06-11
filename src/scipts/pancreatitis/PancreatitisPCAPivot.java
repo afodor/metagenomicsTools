@@ -23,7 +23,7 @@ public class PancreatitisPCAPivot
 		List<String> keys = new ArrayList<>();
 		for( String s : wrapper.getSampleNames() )
 		{
-			keys.add(s);
+			keys.add(s.replace("human", ""));
 		}
 		
 		List<String> catHeaders = new ArrayList<String>();
