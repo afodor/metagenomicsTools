@@ -893,7 +893,14 @@ public class OtuWrapper
 		writer.flush();
 		writer.close();
 	}
-
+	
+	public void writeunLoggedDataWithSamplesAsColumns(File file)
+		throws Exception
+	{
+		writeunLoggedDataWithSamplesAsColumns(file,
+				this.sampleNames, this.otuNames);
+	}
+	
 	public void writeunLoggedDataWithSamplesAsColumns(File file,
 			List<String> newFileNames, List<String> newOtuNames)
 			throws Exception
@@ -919,6 +926,39 @@ public class OtuWrapper
 
 			for (int y = 0; y < getSampleNames().size(); y++)
 				writer.write("\t" + dataPointsNormalized.get(y).get(x));
+
+			writer.write("\n");
+		}
+
+		writer.flush();
+		writer.close();
+	}
+	
+	public void writeUnNormalizedDataWithSamplesAsColumns(File file,
+			List<String> newFileNames, List<String> newOtuNames)
+			throws Exception
+	{
+		if (newFileNames == null)
+			newFileNames = getSampleNames();
+
+		if (newOtuNames == null)
+			newOtuNames = getOtuNames();
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+		writer.write("taxa");
+
+		for (String s : newFileNames)
+			writer.write("\t" + s);
+
+		writer.write("\n");
+
+		for (int x = 0; x < getOtuNames().size(); x++)
+		{
+			writer.write(newOtuNames.get(x));
+
+			for (int y = 0; y < getSampleNames().size(); y++)
+				writer.write("\t" + dataPointsUnnormalized.get(y).get(x));
 
 			writer.write("\n");
 		}

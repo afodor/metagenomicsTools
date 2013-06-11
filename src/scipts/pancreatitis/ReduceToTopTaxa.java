@@ -20,8 +20,18 @@ public class ReduceToTopTaxa
 		for(String s : taxaMap.keySet())
 			System.out.println(s + " " + taxaMap.get(s));
 		
-		wrapper.writeReducedOtuSpreadsheetsWithTaxaAsColumns(
-			new File(ConfigReader.getPancreatitisDir() + File.separator + 
-					"phylaTop6TaxaAsColumns.txt")	, 6);
+		int numToInclude = 6;
+		
+		File outFile = new File(ConfigReader.getPancreatitisDir() + File.separator + 
+				"phylaTop6TaxaAsColumns.txt");
+		
+		wrapper.writeReducedOtuSpreadsheetsWithTaxaAsColumns( outFile
+				, numToInclude);
+		
+		OtuWrapper wrapper2 = new OtuWrapper(outFile);
+		wrapper2.writeunLoggedDataWithSamplesAsColumns(new File( 
+				ConfigReader.getPancreatitisDir() + File.separator + 
+				"phylaTop6SamplesAsColumns.txt"));
+		
 	}
 }
