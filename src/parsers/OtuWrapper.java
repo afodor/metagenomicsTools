@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -51,6 +52,48 @@ public class OtuWrapper
 	public double getChaoRichness(String sampleName) throws Exception
 	{
 		return getChaoRichness(getIndexForSampleName(sampleName));
+	}
+	
+	private static class TaxaCounts implements Comparable<TaxaCounts>
+	{
+		String taxaName;
+		double counts =0;
+		
+		@Override
+		public int compareTo(TaxaCounts o)
+		{
+			return Double.compare(o.counts, this.counts);
+		}
+	}
+	
+	public HashMap<String, Double> getTaxaListSortedByNumberOfCounts()
+	{
+		HashMap<String, TaxaCounts> tempMap = new HashMap<String,TaxaCounts>();
+		
+		for( int x=0; x < this.getSampleNames().size(); x++)
+			for( int y=0; y < this.getOtuNames().size(); y++)
+			{
+				TaxaCounts tc = tempMap.get(this.getOtuNames().get(y));
+				
+				if(tc==null)
+				{
+					tc = new TaxaCounts();
+					tempMap.put(this.getOtuNames().get(y), tc);
+					tc.taxaName = this.getOtuNames().get(y);
+				}
+				
+				tc.counts += dataPointsUnnormalized.get(x).get(y);
+			}
+		
+		List<TaxaCounts> list = new ArrayList<TaxaCounts>( tempMap.values() );
+		Collections.sort(list);
+		
+		HashMap<String, Double> map = new LinkedHashMap<String,Double>();
+		
+		for( TaxaCounts tc : list )
+			map.put( tc.taxaName, tc.counts );
+		
+		return map;
 	}
 	
 	public double getChaoRichness( int sampleIndex) throws Exception
