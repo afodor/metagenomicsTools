@@ -19,11 +19,17 @@ public class ConfigReader
 	
 	public static final String PANCREATITIS_DIR = "PANCREATITIS_DIR";
 	
+	public static final String MACHINE_LEARNING_DIR = "MACHINE_LEARNING_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
 	}
 
+	public static String getMachineLearningDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MACHINE_LEARNING_DIR);
+	}
 	
 	private boolean isSetToTrue(String namedProperty)
 	{
