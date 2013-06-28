@@ -13,3 +13,16 @@ newFrame <- data.frame( predict(fit, myT[,2:421]) , myT[,1])
 
 plot( predict(fit, myT[,2:421]) , myT[,1])
 
+# now the same thing with shuffled case/control
+
+windows()
+shuffledCase <- sample(myT$sample, length(myT$sample))
+shuffledFit <- penalized(  shuffledCase, myT[,2:421], lambda2=10, standardize=TRUE)
+plot( predict(shuffledFit, myT[,2:421]) , shuffledCase)
+
+
+
+windows()
+shuffledCase <- sample(myT$sample, length(myT$sample))
+shuffledFit <- penalized(  shuffledCase, myT[,2:421], lambda1=10, standardize=TRUE)
+plot( predict(shuffledFit, myT[,2:421]) , shuffledCase)
