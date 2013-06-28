@@ -1,0 +1,15 @@
+
+rm(list=ls())
+library(penalized)
+
+setwd("G:\\MachineLearningJournalClub")
+myT <- read.table("testDataAs1Or0.txt",header=TRUE)
+
+fit <- penalized(myT$sample, myT[,2:421], lambda2=10, standardize=TRUE)
+
+predict(fit, myT[,2:421]) 	
+
+newFrame <- data.frame( predict(fit, myT[,2:421]) , myT[,1])
+
+plot( predict(fit, myT[,2:421]) , myT[,1])
+
