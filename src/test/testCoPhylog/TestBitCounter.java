@@ -10,14 +10,14 @@ public class TestBitCounter extends TestCase
 	{
 		BitHolder bh = new BitHolder(3);
 		
-		String s= "CCCTGGGCCCCCCCCCCCCC";
+		String s= "CCCATTTCCCCCCCCCCCCC";
 		
 		
 		bh.setToString(s);
 		
 		assertEquals(bh.getIndex(), 7);
 		assertEquals(bh.getNumValidChars(),7);
-		assertEquals(bh.getMiddleChar(),'T');
+		assertEquals(bh.getMiddleChar(),'A');
 		
 		System.out.println( Long.toBinaryString(bh.getBits()));
 		

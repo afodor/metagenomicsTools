@@ -43,8 +43,8 @@ public class BitHolder
 	private static final Long G_LONG = new Long(0x0002l);
 	private static final Long T_LONG = new Long(0x0003l);
 	
-	private static final long RIGHT_MASK = 0x00000000FFFFFFFFl;
-	private static final long LEFT_MASK = 0xFFFFFFFF00000000l;
+	private final long RIGHT_MASK;
+	private final long LEFT_MASK;
 	
 
 	private static final long MIDDLE_CHAR_C_MASK= 0x1l << 30; 
@@ -97,6 +97,10 @@ public class BitHolder
 		this.G_LONG_SHIFT = G_LONG << shiftSize;
 		this.T_LONG_SHIFT = T_LONG << shiftSize;
 		
+		long mask=  0x00000000FFFFFFFFl;
+		
+		this.RIGHT_MASK = (mask << shiftSize) & mask;
+		this.LEFT_MASK = this.RIGHT_MASK << 32;
 		
 	}
 	
@@ -155,8 +159,10 @@ public class BitHolder
 		
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
-		System.out.println( Long.toBinaryString(LEFT_MASK));
+		BitHolder bh = new BitHolder(3);
+		System.out.println( Long.toBinaryString(bh.RIGHT_MASK));
+		System.out.println( Long.toBinaryString(bh.LEFT_MASK));
 	}
 }
