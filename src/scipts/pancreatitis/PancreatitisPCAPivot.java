@@ -18,7 +18,7 @@ public class PancreatitisPCAPivot
 		"erinHannaHuman_raw_phyForR.txt"), new HashSet<String>(), new HashSet<String>(),10);
 		
 		
-		double[][] d=  wrapper.getNormalizedThenLoggedAsArray();
+		double[][] d=  wrapper.getUnnorlalizedAsArray();
 		
 		List<String> keys = new ArrayList<>();
 		for( String s : wrapper.getSampleNames() )
