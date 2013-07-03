@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.FastQ;
@@ -100,7 +101,24 @@ public class MakeContextMap
 	
 	private static void writeMap(HashMap<String, ContextCount>  map, File outFile) throws Exception
 	{
-		//BufferedWriter writer = new BufferedWriter(arg0)
+		System.out.println("Writing " + outFile.getAbsolutePath());
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("context\tnumA\tnumC\tnumG\tnumT\n");
+		
+		for( String s : map.keySet() )
+		{
+			writer.write(s + "\t");
+			
+			ContextCount cc= map.get(s);
+			
+			writer.write(cc.getNumA() +"\t" + cc.getNumC() +"\t" + cc.getNumG() + "\t" + cc.getNumT()
+					+ "\n");
+			
+		}
+			
+		writer.flush(); writer.close();
+		System.out.println("Finished");
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -110,5 +128,10 @@ public class MakeContextMap
 		
 		HashMap<String, ContextCount> 
 			map = getContextMap(file, 15, 15);
+		
+		File outFile = new File(ConfigReader.getBurkholderiaDir() + File.separator + 
+				"AS130-2_ATCACG_s_2_1_contextMap.txt");
+		
+		writeMap(map, outFile);
 	}
 }
