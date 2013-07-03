@@ -5,7 +5,7 @@ library(penalized)
 setwd("G:\\MachineLearningJournalClub")
 myT <- read.table("testDataAs1Or0.txt",header=TRUE)
 
-fit <- penalized(myT$sample, myT[,2:421], lambda2=10, standardize=TRUE)
+fit <- penalized(myT$sample, myT[,2:421], lambda1=10, standardize=TRUE)
 
 predict(fit, myT[,2:421]) 	
 
@@ -15,9 +15,8 @@ plot( predict(fit, myT[,2:421]) , myT[,1])
 
 # now the same thing with shuffled case/control
 
-windows()
 shuffledCase <- sample(myT$sample, length(myT$sample))
-shuffledFit <- penalized(  shuffledCase, myT[,2:421], lambda2=10, standardize=TRUE)
+shuffledFit <- penalized(  shuffledCase, myT[,2:421], lambda1=10, standardize=TRUE)
 plot( predict(shuffledFit, myT[,2:421]) , shuffledCase)
 
 
