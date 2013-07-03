@@ -21,6 +21,8 @@ public class ConfigReader
 	
 	public static final String MACHINE_LEARNING_DIR = "MACHINE_LEARNING_DIR";
 	
+	public static final String BURKHOLDERIA_DIR = "BURKHOLDERIA_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -55,6 +57,11 @@ public class ConfigReader
 					+ " in " + PROPERTIES_FILE);
 
 		return obj.toString();
+	}
+	
+	public static String getBurkholderiaDir() throws Exception
+	{
+		return getConfigReader().getAProperty(BURKHOLDERIA_DIR);
 	}
 	
 	public static String getPancreatitisDir() throws Exception
