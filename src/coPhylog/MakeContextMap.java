@@ -1,6 +1,7 @@
 package coPhylog;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -52,11 +53,13 @@ public class MakeContextMap
 		
 		BufferedReader reader = new BufferedReader(new FileReader(fastQFile));
 		
+		int numLines=0;
 		
 		for(  FastQ fastq = FastQ.readOneOrNull(reader); 
 					fastq != null; 
 						fastq = FastQ.readOneOrNull(reader))
 		{
+			numLines++;
 			String seq = fastq.getQualScore().toUpperCase();
 			
 			// todo: test to make sure we are getting to the end of the sequence
@@ -88,10 +91,16 @@ public class MakeContextMap
 				}
 			}
 			
-			System.out.println(map);
+			if( numLines % 10000 ==0)
+				System.out.println(numLines + " " + map.size() + " " + ((float)map.size() / numLines));
 		}
 		
 		return map;
+	}
+	
+	private static void writeMap(HashMap<String, ContextCount>  map, File outFile) throws Exception
+	{
+		//BufferedWriter writer = new BufferedWriter(arg0)
 	}
 	
 	public static void main(String[] args) throws Exception
