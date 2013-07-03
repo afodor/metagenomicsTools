@@ -4,7 +4,7 @@ public class BitHolder
 {
 	// the leftmost 32 bits hold the left context
 	// the rightmost 32 bits hold the right context
-	private long bits = 0x0000;
+	private long bits = 0x0l;
 	
 	public long getBits()
 	{
@@ -38,15 +38,22 @@ public class BitHolder
 	private final int contextSize;
 	
 
-	private static final Long A_LONG = new Long(0x0000);
-	private static final Long C_LONG = new Long(0x0001);
-	private static final Long G_LONG = new Long(0x0002);
-	private static final Long T_LONG = new Long(0x0003);
+	private static final Long A_LONG = new Long(0x0000l);
+	private static final Long C_LONG = new Long(0x0001l);
+	private static final Long G_LONG = new Long(0x0002l);
+	private static final Long T_LONG = new Long(0x0003l);
 	
-	private static final long RIGHT_MASK = 0x00FF;
-	private static final long LEFT_MASK = 0xFF00;
+	private static final long RIGHT_MASK = 0x0000FFFFl;
+	private static final long LEFT_MASK = 0xFFFF0000l;
 	
-	private static final long MIDDLE_CHAR_MASK= 0x00C0; 
+
+	private static final long MIDDLE_CHAR_A_MASK= 0x0l << 31; 
+
+	private static final long MIDDLE_CHAR_C_MASK= 0x1l << 30; 
+
+	private static final long MIDDLE_CHAR_G_MASK= 0x1l << 31; 
+	
+	private static final long MIDDLE_CHAR_T_MASK= 0x3l << 30; 
 	
 	private final Long A_LONG_SHIFT;
 	private final Long C_LONG_SHIFT;
@@ -113,15 +120,15 @@ public class BitHolder
 		leftShifted = leftShifted | (toPush.longValue() << 32) ;
 		
 		// the new middle character
-		long middleVal = bits & MIDDLE_CHAR_MASK;
+		long middleVal = bits & MIDDLE_CHAR_T_MASK;
 		
 		if( middleVal == 0 )
 			middleChar = 'A';
-		else if ( middleVal == 0x0100 )
+		else if ( middleVal == MIDDLE_CHAR_C_MASK)
 			middleChar = 'C';
-		else if (middleVal == 0x0800)
+		else if (middleVal == MIDDLE_CHAR_G_MASK)
 			middleChar = 'G';
-		else if ( middleVal == 0x0C00)
+		else if ( middleVal == MIDDLE_CHAR_T_MASK)
 			middleChar = 'T';
 		else
 			throw new Exception("Logic error");
@@ -147,5 +154,11 @@ public class BitHolder
 		
 		return null;
 		
+	}
+	
+	public static void main(String[] args)
+	{
+		System.out.println( Long.toBinaryString(RIGHT_MASK));
+		System.out.println( Long.toBinaryString(LEFT_MASK));
 	}
 }
