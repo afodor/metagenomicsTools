@@ -18,6 +18,8 @@ import utils.ConfigReader;
  */
 public class MakeContextMap
 {
+	
+	
 	public static HashMap<String, ContextCount> 
 		getContextMap( File fastQFile, int leftHashLength, 
 						int rightHashLength) throws Exception
@@ -26,11 +28,29 @@ public class MakeContextMap
 		
 		BufferedReader reader = new BufferedReader(new FileReader(fastQFile));
 		
+		
 		for(  FastQ fastq = FastQ.readOneOrNull(reader); 
 					fastq != null; 
 						fastq = FastQ.readOneOrNull(reader))
 		{
-			System.out.println(fastq.getSequence());
+			String seq = fastq.getQualScore();
+			
+			// todo: test to make sure we are getting to the end of the sequence
+			// todo: add the reverse complement
+			int stopPoint = seq.length() - (leftHashLength + rightHashLength + 1);
+			
+			for( int x=0; x < stopPoint; x++ )
+			{
+				String leftHash = seq.substring(x, x + leftHashLength);
+				
+				char insert = seq.charAt(x + leftHashLength);
+				
+				String rightHash = seq.substring(x + leftHashLength + 1, 
+						x + leftHashLength + 1 + rightHashLength);
+				
+				if( rightHash.length() !=  rightHashLength)
+					throw new Exception("NO");
+			}
 		}
 		
 		return map;
