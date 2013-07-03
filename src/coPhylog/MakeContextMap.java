@@ -93,7 +93,12 @@ public class MakeContextMap
 			}
 			
 			if( numLines % 10000 ==0)
+			{
 				System.out.println(numLines + " " + map.size() + " " + ((float)map.size() / numLines));
+				writeMap(map, new File( "c:\\temp\\out.txt"));
+				System.exit(1);
+			}
+				
 		}
 		
 		return map;
