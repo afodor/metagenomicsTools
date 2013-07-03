@@ -15,9 +15,12 @@ public class TestBitCounter extends TestCase
 		
 		bh.setToString(s);
 		
-		System.out.println( Long.toBinaryString(bh.getBits()));
 		assertEquals(bh.getIndex(), 7);
 		assertEquals(bh.getNumValidChars(),7);
+		assertEquals(bh.getMiddleChar(),'C');
+		
+		System.out.println( Long.toBinaryString(bh.getBits()));
+		
 	}
 
 }

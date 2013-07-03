@@ -43,11 +43,9 @@ public class BitHolder
 	private static final Long G_LONG = new Long(0x0002l);
 	private static final Long T_LONG = new Long(0x0003l);
 	
-	private static final long RIGHT_MASK = 0x0000FFFFl;
-	private static final long LEFT_MASK = 0xFFFF0000l;
+	private static final long RIGHT_MASK = 0x00000000FFFFFFFFl;
+	private static final long LEFT_MASK = 0xFFFFFFFF00000000l;
 	
-
-	private static final long MIDDLE_CHAR_A_MASK= 0x0l << 31; 
 
 	private static final long MIDDLE_CHAR_C_MASK= 0x1l << 30; 
 
@@ -110,11 +108,12 @@ public class BitHolder
 			return false;
 		
 		long rightShifted = bits << 2;
+		long leftShifted = rightShifted;
+		
 		rightShifted = rightShifted & RIGHT_MASK;
 		rightShifted = rightShifted | mask;
 		
 		// what was in the middle goes to the left
-		long leftShifted = bits << 2;
 		leftShifted = leftShifted & LEFT_MASK;
 		Long toPush = getMaskOrNull(middleChar);
 		leftShifted = leftShifted | (toPush.longValue() << 32) ;
@@ -158,7 +157,6 @@ public class BitHolder
 	
 	public static void main(String[] args)
 	{
-		System.out.println( Long.toBinaryString(RIGHT_MASK));
 		System.out.println( Long.toBinaryString(LEFT_MASK));
 	}
 }
