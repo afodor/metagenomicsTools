@@ -18,7 +18,31 @@ import utils.ConfigReader;
  */
 public class MakeContextMap
 {
+	/*
+	 * Todo: Speed this up.. Shouldn't have to keep re-checking the same 
+	 * positions..
+	 */
+	private static boolean allValid(String s)
+	{
+		for( int x=0; x < s.length(); x++)
+		{
+			char c= s.charAt(x);
+			
+			if ( ! (c=='A' || c=='C' || c =='G' || c == 'T'))
+				return false;
+		
+		}
+		
+		return true;
+	}
 	
+	private static boolean valid(char c)
+	{
+		if ( ! (c=='A' || c=='C' || c =='G' || c == 'T'))
+				return false;
+		
+		return true;
+	}
 	
 	public static HashMap<String, ContextCount> 
 		getContextMap( File fastQFile, int leftHashLength, 
@@ -33,7 +57,7 @@ public class MakeContextMap
 					fastq != null; 
 						fastq = FastQ.readOneOrNull(reader))
 		{
-			String seq = fastq.getQualScore();
+			String seq = fastq.getQualScore().toUpperCase();
 			
 			// todo: test to make sure we are getting to the end of the sequence
 			// todo: add the reverse complement
@@ -48,9 +72,23 @@ public class MakeContextMap
 				String rightHash = seq.substring(x + leftHashLength + 1, 
 						x + leftHashLength + 1 + rightHashLength);
 				
-				if( rightHash.length() !=  rightHashLength)
-					throw new Exception("NO");
+				String key = leftHash + rightHash;
+				
+				if(allValid(key) && valid(insert))
+				{
+					ContextCount cc = map.get(key);
+					
+					if( cc == null)
+					{
+						cc = new ContextCount();
+						map.put(key, cc);
+					}
+					
+					cc.increment(insert);
+				}
 			}
+			
+			System.out.println(map);
 		}
 		
 		return map;

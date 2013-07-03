@@ -26,6 +26,18 @@ public class ContextCount
 	{
 		numT++;
 	}
+	
+	public void increment(char c)
+	{
+		if( c == 'A' )
+			numA++;
+		else if ( c== 'C')
+			numC++;
+		else if( c == 'G')
+			numG++;
+		else if( c == 'T')
+			numT++;
+	}
 
 	public int getNumA()
 	{
@@ -47,7 +59,12 @@ public class ContextCount
 		return numT;
 	}
 
-	
+	@Override
+	public String toString()
+	{
+		return
+		"[" + numA + "," + numC + "," + numG + "," + numT + "]";
+	}
 	
 	
 }
