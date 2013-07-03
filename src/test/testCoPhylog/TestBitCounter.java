@@ -10,7 +10,7 @@ public class TestBitCounter extends TestCase
 	{
 		BitHolder bh = new BitHolder(3);
 		
-		String s= "TCGATTAGAACCCAGAAAAA";
+		String s= "CCCCCCCCCCCCCCCCCCCC";
 		
 		
 		bh.setToString(s);
