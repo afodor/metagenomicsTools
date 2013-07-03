@@ -89,8 +89,13 @@ public class BitHolder
 		this.contextSize = contextSize;
 		shiftSize = 32 - contextSize*2;
 		
-		if(shiftSize < 0 )
-			throw new Exception("Maximum supported context size is 16");
+		// need to keep a few zeros in the bit mask as the
+		// bits shifted from the top of the right hash will spill over to the 
+		// bottom of the left hash in the current implementation
+		// this could be fixed by & between the left hash and a 64 bit made up of 30 1's and then 34 0's 
+		// since we probably won't have context size >15, we leave this as is in current implementation
+		if(shiftSize < 2 )
+			throw new Exception("Maximum supported context size is 15");
 		
 		this.A_LONG_SHIFT = A_LONG << shiftSize;
 		this.C_LONG_SHIFT = C_LONG << shiftSize;
