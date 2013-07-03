@@ -40,10 +40,10 @@ public class MakeContextMap
 	
 	private static boolean valid(char c)
 	{
-		if ( ! (c=='A' || c=='C' || c =='G' || c == 'T'))
-				return false;
+		if ( c=='A' || c=='C' || c =='G' || c == 'T')
+				return true;
 		
-		return true;
+		return false;
 	}
 	
 	public static HashMap<String, ContextCount> 
@@ -61,7 +61,7 @@ public class MakeContextMap
 						fastq = FastQ.readOneOrNull(reader))
 		{
 			numLines++;
-			String seq = fastq.getQualScore().toUpperCase();
+			String seq = fastq.getSequence().toUpperCase();
 			
 			// todo: test to make sure we are getting to the end of the sequence
 			// todo: add the reverse complement
