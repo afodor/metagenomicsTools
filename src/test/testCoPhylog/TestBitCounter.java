@@ -35,6 +35,24 @@ public class TestBitCounter extends TestCase
 		assertEquals( bh.advance(), true); 
 		assertEquals( bh.getNumValidChars(), 6);
 		assertEquals( bh.getMiddleChar(), 'C');
+		assertEquals(bh.getIndex(), 5);
+		assertEquals(s.charAt(bh.getIndex()), 'G');
+		
+		System.out.println( Long.toBinaryString(bh.getBits()) );
+		
+		expectedAnswer = tBase;
+		expectedAnswer = expectedAnswer | tBase;
+		expectedAnswer = expectedAnswer << 32 + (32-2);
+		
+		rightAnswer = cBase;
+		rightAnswer = rightAnswer << 2;
+		rightAnswer = rightAnswer | 0x2l;
+		rightAnswer = rightAnswer << (32-4);
+		
+		expectedAnswer = expectedAnswer | rightAnswer;
+		System.out.println( Long.toBinaryString(expectedAnswer) );
+		
+		assertEquals(expectedAnswer, bh.getBits());
 	}
 	
 	public void testInitial() throws Exception
