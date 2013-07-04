@@ -36,6 +36,9 @@ public class BitHolder
 	
 	private int stopPoint;
 	private final int contextSize;
+	private final int targetChars;
+	
+	private String s = null;
 	
 
 	private static final Long A_LONG = new Long(0x0000l);
@@ -60,10 +63,9 @@ public class BitHolder
 		
 	private final int shiftSize;
 	
-	public void setToString(String s) throws Exception
+	public boolean setToString(String s) throws Exception
 	{
-		int targetChars = contextSize*2 + 1;
-		
+		this.s = s;
 		stopPoint = s.length() - targetChars;
 		
 		while( index < stopPoint && numValidChars < targetChars  )
@@ -82,6 +84,23 @@ public class BitHolder
 			}
 		}
 		
+		return numValidChars >= targetChars;
+	}
+	
+	public boolean advance() throws Exception
+	{
+		index++;
+		
+		if( index >= stopPoint)
+			return false;
+		
+		if(add( s.charAt(index) ))
+			return true;
+		
+		index++;
+		numValidChars=0;
+		
+		return this.setToString(s);
 	}
 	
 	public BitHolder(int contextSize) throws Exception
@@ -96,6 +115,9 @@ public class BitHolder
 		// since we probably won't have context size >15, we leave this as is in current implementation
 		if(shiftSize < 2 )
 			throw new Exception("Maximum supported context size is 15");
+		
+		this.targetChars = contextSize*2 + 1;
+		
 		
 		this.A_LONG_SHIFT = A_LONG << shiftSize;
 		this.C_LONG_SHIFT = C_LONG << shiftSize;
