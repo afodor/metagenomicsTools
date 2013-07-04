@@ -6,20 +6,47 @@ import coPhylog.BitHolder;
 public class TestBitCounter extends TestCase
 {
 
-	public void test() throws Exception
+	public void testAdvance() throws Exception
+	{
+		BitHolder bh = new BitHolder(2);
+		assertEquals(bh.getContextSize(), 2);
+		
+		String s= "TTACCG";
+		
+		assertEquals( bh.setToString(s), true);
+		assertEquals( bh.getNumValidChars(), 5);
+		
+		
+		long tBase= 0x03l;
+		long expectedAnswer = tBase<< 2;
+		expectedAnswer = expectedAnswer | tBase;
+		expectedAnswer = expectedAnswer << 32 + (32-4);
+		
+		long cBase= 0x01l;
+		long rightAnswer = cBase<< 2;
+		rightAnswer= rightAnswer | cBase;
+		rightAnswer = rightAnswer << (32-4);
+		
+		expectedAnswer = expectedAnswer | rightAnswer;
+		assertEquals(expectedAnswer, bh.getBits());
+		
+		
+	}
+	
+	public void testInitial() throws Exception
 	{
 		BitHolder bh = new BitHolder(3);
 		
 		String s= "CCCATTTCCCCCCCCCCCCC";
 		
 		
-		bh.setToString(s);
+		assertEquals( bh.setToString(s),true);
 		
 		assertEquals(bh.getIndex(), 7);
 		assertEquals(bh.getNumValidChars(),7);
 		assertEquals(bh.getMiddleChar(),'A');
 		
-		System.out.println( Long.toBinaryString(bh.getBits()));
+		//System.out.println( Long.toBinaryString(bh.getBits()));
 		
 		long cBase= 0x01l;
 		long expectedAnswer = cBase<< 2;
@@ -38,8 +65,7 @@ public class TestBitCounter extends TestCase
 		
 		expectedAnswer = expectedAnswer | rightAnswer;
 		assertEquals(expectedAnswer, bh.getBits());
-		
-		
+		assertEquals(bh.getContextSize(), 3);
 	}
 
 }

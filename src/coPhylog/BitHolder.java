@@ -34,7 +34,11 @@ public class BitHolder
 		return numValidChars;
 	}
 	
-	private int stopPoint;
+	public int getContextSize()
+	{
+		return contextSize;
+	}
+	
 	private final int contextSize;
 	private final int targetChars;
 	
@@ -66,9 +70,8 @@ public class BitHolder
 	public boolean setToString(String s) throws Exception
 	{
 		this.s = s;
-		stopPoint = s.length() - targetChars;
 		
-		while( index < stopPoint && numValidChars < targetChars  )
+		while( index < s.length() && numValidChars < targetChars  )
 		{
 			boolean isValidChar = add( s.charAt(index) );
 			index++;
@@ -91,7 +94,7 @@ public class BitHolder
 	{
 		index++;
 		
-		if( index >= stopPoint)
+		if( index >= s.length())
 			return false;
 		
 		if(add( s.charAt(index) ))
