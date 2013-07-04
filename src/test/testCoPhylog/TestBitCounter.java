@@ -42,7 +42,7 @@ public class TestBitCounter extends TestCase
 		expectedAnswer = expectedAnswer << 32 + (32-4);
 		rightAnswer = ( 0x01l << 2 ) | (0x03l );
 		rightAnswer = rightAnswer << (32-4);
-		expectedAnswer = expectedAnswer | rightAnswer;s
+		expectedAnswer = expectedAnswer | rightAnswer;
 		assertEquals(expectedAnswer, bh.getBits());
 		
 		assertFalse(bh.advance());
