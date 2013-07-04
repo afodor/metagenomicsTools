@@ -69,12 +69,20 @@ public class BitHolder
 	
 	public boolean setToString(String s) throws Exception
 	{
+		return setToString(s, true);
+	}
+	
+	private boolean setToString(String s, boolean startAtZero) throws Exception
+	{
+		if(startAtZero)
+			index=-1;
+		
 		this.s = s;
 		
 		while( index < s.length() && numValidChars < targetChars  )
 		{
-			boolean isValidChar = add( s.charAt(index) );
 			index++;
+			boolean isValidChar = add( s.charAt(index) );
 			
 			if( ! isValidChar )
 			{
@@ -98,12 +106,15 @@ public class BitHolder
 			return false;
 		
 		if(add( s.charAt(index) ))
+		{
+			numValidChars++;
 			return true;
-		
+		}
+			
 		index++;
 		numValidChars=0;
 		
-		return this.setToString(s);
+		return this.setToString(s,false);
 	}
 	
 	public BitHolder(int contextSize) throws Exception

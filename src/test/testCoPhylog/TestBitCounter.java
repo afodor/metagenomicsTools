@@ -15,6 +15,8 @@ public class TestBitCounter extends TestCase
 		
 		assertEquals( bh.setToString(s), true);
 		assertEquals( bh.getNumValidChars(), 5);
+		assertEquals( bh.getMiddleChar(), 'A');
+		assertEquals( bh.getIndex(), 4);
 		
 		
 		long tBase= 0x03l;
@@ -30,7 +32,9 @@ public class TestBitCounter extends TestCase
 		expectedAnswer = expectedAnswer | rightAnswer;
 		assertEquals(expectedAnswer, bh.getBits());
 		
-		
+		assertEquals( bh.advance(), true); 
+		assertEquals( bh.getNumValidChars(), 6);
+		assertEquals( bh.getMiddleChar(), 'C');
 	}
 	
 	public void testInitial() throws Exception
@@ -42,7 +46,7 @@ public class TestBitCounter extends TestCase
 		
 		assertEquals( bh.setToString(s),true);
 		
-		assertEquals(bh.getIndex(), 7);
+		assertEquals(bh.getIndex(), 6);
 		assertEquals(bh.getNumValidChars(),7);
 		assertEquals(bh.getMiddleChar(),'A');
 		
