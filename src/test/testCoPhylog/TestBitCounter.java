@@ -53,6 +53,8 @@ public class TestBitCounter extends TestCase
 		System.out.println( Long.toBinaryString(expectedAnswer) );
 		
 		assertEquals(expectedAnswer, bh.getBits());
+		
+		assertEquals( bh.advance(), false );
 	}
 	
 	public void testInitial() throws Exception
