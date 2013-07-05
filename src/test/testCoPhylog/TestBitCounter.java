@@ -19,12 +19,16 @@ public class TestBitCounter extends TestCase
 		bit1.setToString(s, true);
 		bit2.setToString(reverseS, false);
 		
-		System.out.println(bit1.getLeftSequence());
+		assertEquals(bit1.getJoinedSequence(), bit2.getJoinedSequence());
+		
+		assertEquals(bit1.getJoinedSequence(), reverseS.substring(0, 11));
 		
 		assertEquals(bit1.getBits(), bit2.getBits());
 		
 		for(int x=0; x < 15; x++)
 		{
+			assertEquals(bit1.getJoinedSequence(), bit2.getJoinedSequence());
+			assertEquals(bit1.getJoinedSequence(), reverseS.substring(x, x+11));
 			assertEquals(bit1.getBits(), bit2.getBits());
 			assertEquals( bit1.getMiddleChar(), bit2.getMiddleChar() );
 			assertEquals(bit2.getIndex(), x + 10);
@@ -32,6 +36,8 @@ public class TestBitCounter extends TestCase
 			assertTrue( bit2.advance());
 		}
 		
+		assertEquals(bit1.getJoinedSequence(), bit2.getJoinedSequence());
+		System.out.println(bit1.getJoinedSequence());
 		assertFalse(bit1.advance());
 		assertFalse(bit2.advance());
 	}
