@@ -145,6 +145,41 @@ public class BitHolder
 		return index >=0;
 	}
 	
+	public String getLeftSequence() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		
+		for( int x=0; x < contextSize; x++)
+		{
+			int shift = 64 - (x+1) * 2;
+			long mask = 0x3l << shift;
+			long val = bits & mask;
+			//System.out.println( x + " "+ shift + "\n" + Long.toBinaryString(mask) + "\n" + 
+				//					Long.toBinaryString(bits) + "\n" + 	Long.toBinaryString(val));
+			val =  val >>> shift;
+			//System.out.println( Long.toBinaryString(val));
+
+			buff.append(getChar(val));
+		}
+		
+		return buff.toString();
+	}
+	
+	private char getChar(long val) throws Exception
+	{
+		if( val==0)
+			return 'A';
+		if( val == 1)
+			return 'C';
+		if( val == 2)
+			return 'G';
+		if(val== 3)
+			return 'T';
+		
+		throw new Exception("Unknown " + val);
+	}
+	
 	public boolean advance() throws Exception
 	{
 		moveIndex();

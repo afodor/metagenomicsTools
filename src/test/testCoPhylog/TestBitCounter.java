@@ -11,13 +11,15 @@ public class TestBitCounter extends TestCase
 	{
 		String s = "ACCTTTACGGGGAAAGGTTAACCCAA";
 		String reverseS = Translate.reverseTranscribe(s);
+		System.out.println(reverseS);
 		
 		BitHolder bit1 = new BitHolder(5);
 		BitHolder bit2 = new BitHolder(5);
 		
 		bit1.setToString(s, true);
-		System.out.println("\n\n");
 		bit2.setToString(reverseS, false);
+		
+		System.out.println(bit1.getLeftSequence());
 		
 		assertEquals(bit1.getBits(), bit2.getBits());
 		
