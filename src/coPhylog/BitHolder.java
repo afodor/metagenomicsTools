@@ -67,21 +67,36 @@ public class BitHolder
 		
 	private final int shiftSize;
 	
-	public boolean setToString(String s) throws Exception
+	private boolean reverseTranscribe;
+	
+	public boolean isReverseTranscribing()
 	{
-		return setToString(s, true);
+		return reverseTranscribe;
 	}
 	
-	private boolean setToString(String s, boolean startAtZero) throws Exception
+	public boolean setToString(String s, boolean reverseTranscribe) throws Exception
 	{
+		return setToString(s, true, reverseTranscribe);
+	}
+	
+	private boolean setToString(String s, boolean startAtZero, boolean reverseTranscribe) throws Exception
+	{
+			this.reverseTranscribe = reverseTranscribe;
+			
 		if(startAtZero)
-			index=-1;
-		
+		{
+			if( ! reverseTranscribe)
+				index=-1;
+			else
+				index = s.length();
+		}
+			
 		this.s = s;
 		
-		while( index < s.length() && numValidChars < targetChars  )
+		while( canStillRead() && numValidChars < targetChars  )
 		{
-			index++;
+			moveIndex();
+			
 			boolean isValidChar = add( s.charAt(index) );
 			
 			if( ! isValidChar )
@@ -98,11 +113,28 @@ public class BitHolder
 		return numValidChars >= targetChars;
 	}
 	
+	private void moveIndex()
+	{
+		if( !reverseTranscribe)
+			index++;
+		else
+			index--;
+		
+	}
+	
+	private boolean canStillRead()
+	{
+		if( ! reverseTranscribe)
+			return index < s.length();
+		
+		return index >=0;
+	}
+	
 	public boolean advance() throws Exception
 	{
-		index++;
+		moveIndex();
 		
-		if( index >= s.length())
+		if( ! canStillRead())
 			return false;
 		
 		if(add( s.charAt(index) ))
@@ -111,10 +143,11 @@ public class BitHolder
 			return true;
 		}
 			
-		index++;
+		moveIndex();
+		
 		numValidChars=0;
 		
-		return this.setToString(s,false);
+		return this.setToString(s,false, reverseTranscribe);
 	}
 	
 	public BitHolder(int contextSize) throws Exception
@@ -184,16 +217,33 @@ public class BitHolder
 	
 	private Long getMaskOrNull(char c)
 	{
-		if( c == 'A' || c =='a' )
+		if( ! reverseTranscribe)
+		{
+			if( c == 'A' || c =='a' )
+				return A_LONG_SHIFT;
+			
+			if( c == 'C' || c =='c' )
+				return C_LONG_SHIFT;
+			
+			if( c == 'G' || c =='g' )
+				return G_LONG_SHIFT;
+			
+			if( c == 'T' || c == 't')
+				return T_LONG_SHIFT;
+			
+			return null;
+		}
+		
+		if( c == 'T' || c =='t' )
 			return A_LONG_SHIFT;
 		
-		if( c == 'C' || c =='c' )
+		if( c == 'G' || c =='g' )
 			return C_LONG_SHIFT;
 		
-		if( c == 'G' || c =='g' )
+		if( c == 'C' || c =='c' )
 			return G_LONG_SHIFT;
 		
-		if( c == 'T' || c == 't')
+		if( c == 'A' || c == 'a')
 			return T_LONG_SHIFT;
 		
 		return null;

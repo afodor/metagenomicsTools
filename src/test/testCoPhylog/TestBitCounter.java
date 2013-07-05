@@ -1,10 +1,32 @@
 package test.testCoPhylog;
 
+import utils.Translate;
 import junit.framework.TestCase;
 import coPhylog.BitHolder;
 
 public class TestBitCounter extends TestCase
 {
+	
+	public void testReverseTranscribe() throws Exception
+	{
+		String s = "ACCTTTACGGGGAAAGGTTAACCCAA";
+		String reverseS = Translate.reverseTranscribe(s);
+		
+		BitHolder bit1 = new BitHolder(5);
+		BitHolder bit2 = new BitHolder(5);
+		
+		bit1.setToString(s, true);
+		bit2.setToString(reverseS, false);
+		
+		for(int x=0; x < s.length() - 5; x++)
+		{
+			System.out.println( Long.toBinaryString(bit1.getBits()));
+			System.out.println( Long.toBinaryString(bit2.getBits()));
+			assertEquals(bit1.getBits(), bit2.getBits());
+			bit1.advance();
+			bit2.advance();
+		}
+	}
 
 	public void testInvalidChars() throws Exception
 	{
@@ -13,7 +35,7 @@ public class TestBitCounter extends TestCase
 		
 		String s= "TTXCCGCCT";
 		
-		assertTrue( bh.setToString(s));
+		assertTrue( bh.setToString(s,false));
 		
 		assertEquals(bh.getMiddleChar(), 'G');
 		assertEquals(bh.getNumValidChars(),5);
@@ -55,7 +77,7 @@ public class TestBitCounter extends TestCase
 		
 		String s= "TTACCG";
 		
-		assertEquals( bh.setToString(s), true);
+		assertEquals( bh.setToString(s,false), true);
 		assertEquals( bh.getNumValidChars(), 5);
 		assertEquals( bh.getMiddleChar(), 'A');
 		assertEquals( bh.getIndex(), 4);
@@ -104,7 +126,7 @@ public class TestBitCounter extends TestCase
 		String s= "CCCATTTCCCCCCCCCCCCC";
 		
 		
-		assertEquals( bh.setToString(s),true);
+		assertEquals( bh.setToString(s,false),true);
 		
 		assertEquals(bh.getIndex(), 6);
 		assertEquals(bh.getNumValidChars(),7);
