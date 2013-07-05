@@ -1,17 +1,72 @@
 package test.testCoPhylog;
 
+import java.util.Random;
+
 import utils.Translate;
 import junit.framework.TestCase;
 import coPhylog.BitHolder;
 
 public class TestBitCounter extends TestCase
 {
+	public void testLong() throws Exception
+	{
+		String s= getRandomString(100);
+		
+		BitHolder bh = new BitHolder(13);
+		bh.setToString(s, false);
+		
+		for( int x=0; x< 100 - (13*2 +1); x++)
+		{
+			assertEquals(bh.getJoinedSequence(), s.substring(x, x+27));
+			assertTrue(bh.advance());
+		}
+		
+		assertFalse(bh.advance());
+		
+		
+		// set to reverseTranscribe
+		bh.setToString(s, true);
+		s = Translate.reverseTranscribe(s);
+		
+		for( int x=0; x< 100 - (13*2 +1); x++)
+		{
+			assertEquals(bh.getJoinedSequence(), s.substring(x, x+27));
+			assertTrue(bh.advance());
+		}
+		
+		assertFalse(bh.advance());
+		
+	}
+	
+	private String getRandomString(int length) throws Exception
+	{
+		Random random = new Random();
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < length; x++)
+		{
+			int val = random.nextInt(4);
+			
+			if( val ==0)
+				buff.append("A");
+			else if ( val == 1)
+				buff.append("C");
+			else if ( val == 2)
+				buff.append("G");
+			else if ( val == 3)
+				buff.append("T");
+			else throw new Exception("No");
+			
+				
+		}
+		
+		return buff.toString();
+	}
 	
 	public void testReverseTranscribe() throws Exception
 	{
 		String s = "ACCTTTACGGGGAAAGGTTAACCCAA";
 		String reverseS = Translate.reverseTranscribe(s);
-		System.out.println(reverseS);
 		
 		BitHolder bit1 = new BitHolder(5);
 		BitHolder bit2 = new BitHolder(5);
@@ -37,7 +92,6 @@ public class TestBitCounter extends TestCase
 		}
 		
 		assertEquals(bit1.getJoinedSequence(), bit2.getJoinedSequence());
-		System.out.println(bit1.getJoinedSequence());
 		assertFalse(bit1.advance());
 		assertFalse(bit2.advance());
 	}

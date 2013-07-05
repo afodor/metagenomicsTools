@@ -105,6 +105,9 @@ public class BitHolder
 				index=-1;
 			else
 				index = s.length();
+			
+			numValidChars=0;
+			bits=0x0000;
 		}
 			
 		this.s = s;
