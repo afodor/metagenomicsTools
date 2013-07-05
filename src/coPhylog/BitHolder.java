@@ -14,9 +14,25 @@ public class BitHolder
 	
 	private char middleChar ='A'; 
 	
-	public char getMiddleChar()
+	public char getMiddleChar() throws Exception
 	{
-		return middleChar;
+		if( ! reverseTranscribe)
+			return middleChar;
+		
+		if( middleChar == 'A' )
+			return 'T';
+		
+		if( middleChar == 'C'  )
+			return 'G';
+		
+		if( middleChar == 'G' )
+			return 'C';
+		
+		if( middleChar == 'T' )
+			return 'A';
+		
+		throw new Exception("Logic error");
+		
 	}
 	
 	// the index of the current string
@@ -81,7 +97,7 @@ public class BitHolder
 	
 	private boolean setToString(String s, boolean startAtZero, boolean reverseTranscribe) throws Exception
 	{
-			this.reverseTranscribe = reverseTranscribe;
+		this.reverseTranscribe = reverseTranscribe;
 			
 		if(startAtZero)
 		{
@@ -119,7 +135,6 @@ public class BitHolder
 			index++;
 		else
 			index--;
-		
 	}
 	
 	private boolean canStillRead()
@@ -199,16 +214,34 @@ public class BitHolder
 		// the new middle character
 		long middleVal = bits & MIDDLE_CHAR_T_MASK;
 		
-		if( middleVal == 0 )
-			middleChar = 'A';
-		else if ( middleVal == MIDDLE_CHAR_C_MASK)
-			middleChar = 'C';
-		else if (middleVal == MIDDLE_CHAR_G_MASK)
-			middleChar = 'G';
-		else if ( middleVal == MIDDLE_CHAR_T_MASK)
-			middleChar = 'T';
+		if( ! reverseTranscribe)
+		{
+			if( middleVal == 0 )
+				middleChar = 'A';
+			else if ( middleVal == MIDDLE_CHAR_C_MASK)
+				middleChar = 'C';
+			else if (middleVal == MIDDLE_CHAR_G_MASK)
+				middleChar = 'G';
+			else if ( middleVal == MIDDLE_CHAR_T_MASK)
+				middleChar = 'T';
+			else
+				throw new Exception("Logic error");
+		}
 		else
-			throw new Exception("Logic error");
+		{
+			if( middleVal == 0 )
+				middleChar = 'T';
+			else if ( middleVal == MIDDLE_CHAR_C_MASK)
+				middleChar = 'G';
+			else if (middleVal == MIDDLE_CHAR_G_MASK)
+				middleChar = 'C';
+			else if ( middleVal == MIDDLE_CHAR_T_MASK)
+				middleChar = 'A';
+			else
+				throw new Exception("Logic error");
+		}
+		
+		
 		
 		bits = leftShifted | rightShifted;
 		

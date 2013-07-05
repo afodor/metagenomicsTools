@@ -16,16 +16,22 @@ public class TestBitCounter extends TestCase
 		BitHolder bit2 = new BitHolder(5);
 		
 		bit1.setToString(s, true);
+		System.out.println("\n\n");
 		bit2.setToString(reverseS, false);
 		
-		for(int x=0; x < s.length() - 5; x++)
+		assertEquals(bit1.getBits(), bit2.getBits());
+		
+		for(int x=0; x < 15; x++)
 		{
-			System.out.println( Long.toBinaryString(bit1.getBits()));
-			System.out.println( Long.toBinaryString(bit2.getBits()));
 			assertEquals(bit1.getBits(), bit2.getBits());
-			bit1.advance();
-			bit2.advance();
+			assertEquals( bit1.getMiddleChar(), bit2.getMiddleChar() );
+			assertEquals(bit2.getIndex(), x + 10);
+			assertTrue( bit1.advance());
+			assertTrue( bit2.advance());
 		}
+		
+		assertFalse(bit1.advance());
+		assertFalse(bit2.advance());
 	}
 
 	public void testInvalidChars() throws Exception
@@ -153,5 +159,4 @@ public class TestBitCounter extends TestCase
 		assertEquals(expectedAnswer, bh.getBits());
 		assertEquals(bh.getContextSize(), 3);
 	}
-
 }
