@@ -8,6 +8,16 @@ import coPhylog.BitHolder;
 
 public class TestBitCounter extends TestCase
 {
+	public void testAllBad() throws Exception
+	{
+		String s1 = "ACAGXAAAXAAACCXXATTGZXXAZZ";
+		
+		BitHolder bh = new BitHolder(3);
+		assertFalse(bh.setToString(s1, false));
+		assertFalse(bh.setToString(s1, true));
+		
+	}
+	
 	public void testMultipleStopsReverseTranscribe() throws Exception
 	{
 		String s1 = getRandomString(8);
