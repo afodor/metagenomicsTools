@@ -8,6 +8,29 @@ import coPhylog.BitHolder;
 
 public class TestBitCounter extends TestCase
 {
+	public void testMultipleStops() throws Exception
+	{
+		String s1 = getRandomString(8);
+		String s2 = getRandomString(8);
+		String s3 = getRandomString(8);
+		
+		String allString = s1 + "X" + s2 + "XX" + s3;
+		System.out.println(allString);
+		
+		BitHolder bh = new BitHolder(3);
+		bh.setToString(allString, false);
+		
+		assertEquals(bh.getJoinedSequence(), allString.substring(0,7));
+		assertTrue(bh.advance());
+		assertEquals(bh.getJoinedSequence(), allString.substring(1,8));
+		
+		assertTrue(bh.advance());
+		System.out.println(bh.getJoinedSequence());
+		assertEquals(bh.getJoinedSequence(), s2.substring(0,7));
+		
+		
+	}
+	
 	public void testLong() throws Exception
 	{
 		String s= getRandomString(100);
