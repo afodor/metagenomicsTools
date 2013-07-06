@@ -116,16 +116,19 @@ public class BitHolder
 		{
 			moveIndex();
 			
-			boolean isValidChar = add( s.charAt(index) );
-			
-			if( ! isValidChar )
+			if( canStillRead())
 			{
-				numValidChars=0;
-				bits = 0x0000;
-			}
-			else
-			{
-				numValidChars++;
+				boolean isValidChar = add( s.charAt(index) );
+				
+				if( ! isValidChar )
+				{
+					numValidChars=0;
+					bits = 0x0000;
+				}
+				else
+				{
+					numValidChars++;
+				}
 			}
 		}
 		
