@@ -8,6 +8,39 @@ import coPhylog.BitHolder;
 
 public class TestBitCounter extends TestCase
 {
+	public void testMultipleStopsReverseTranscribe() throws Exception
+	{
+		String s1 = getRandomString(8);
+		String s2 = getRandomString(8);
+		String s3 = getRandomString(8);
+		
+		String allString = s1 + "X" + s2 + "XX" + s3;
+
+		BitHolder bh = new BitHolder(3);
+		bh.setToString(allString, true);
+		allString = Translate.safeReverseTranscribe(allString);
+		System.out.println(allString);
+		
+		assertEquals(bh.getJoinedSequence(), allString.substring(0,7));
+		assertTrue(bh.advance());
+		assertEquals(bh.getJoinedSequence(), allString.substring(1,8));
+		
+		assertTrue(bh.advance());
+		
+		assertEquals( bh.getJoinedSequence(), allString.substring(10,17));
+
+		assertTrue(bh.advance());
+		assertEquals( bh.getJoinedSequence(), allString.substring(11,18));
+		
+		assertTrue(bh.advance());
+		assertEquals( bh.getJoinedSequence(), allString.substring(19,26));
+		assertTrue(bh.advance());
+		assertEquals( bh.getJoinedSequence(), allString.substring(20,27));
+		
+		assertFalse(bh.advance());
+
+	}
+	
 	public void testMultipleStops() throws Exception
 	{
 		String s1 = getRandomString(8);
@@ -15,7 +48,6 @@ public class TestBitCounter extends TestCase
 		String s3 = getRandomString(8);
 		
 		String allString = s1 + "X" + s2 + "XX" + s3;
-		System.out.println(allString);
 		
 		BitHolder bh = new BitHolder(3);
 		bh.setToString(allString, false);
@@ -25,19 +57,15 @@ public class TestBitCounter extends TestCase
 		assertEquals(bh.getJoinedSequence(), allString.substring(1,8));
 		
 		assertTrue(bh.advance());
-		System.out.println(bh.getJoinedSequence());
 		assertEquals(bh.getJoinedSequence(), s2.substring(0,7));
 
 		assertTrue(bh.advance());
-		System.out.println(bh.getJoinedSequence());
 		assertEquals(bh.getJoinedSequence(), s2.substring(1,8));
 		
 		assertTrue(bh.advance());
-		System.out.println(bh.getJoinedSequence());
 		assertEquals(bh.getJoinedSequence(), s3.substring(0,7));
 
 		assertTrue(bh.advance());
-		System.out.println(bh.getJoinedSequence());
 		assertEquals(bh.getJoinedSequence(), s3.substring(1,8));
 
 		assertFalse(bh.advance());
