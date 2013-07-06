@@ -14,7 +14,7 @@ public class TestBitCounter extends TestCase
 		String s2 = getRandomString(8);
 		String s3 = getRandomString(8);
 		
-		String allString = s1 + "X" + s2 + "XX" + s3;
+		String allString = "X" + s1 + "X" + s2 + "XX" + s3;
 
 		BitHolder bh = new BitHolder(3);
 		bh.setToString(allString, true);
