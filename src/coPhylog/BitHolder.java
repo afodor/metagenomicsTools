@@ -211,8 +211,6 @@ public class BitHolder
 			return true;
 		}
 			
-		moveIndex();
-		
 		numValidChars=0;
 		
 		return this.setToString(s,false, reverseTranscribe);

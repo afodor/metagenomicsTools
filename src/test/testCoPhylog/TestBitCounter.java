@@ -27,7 +27,20 @@ public class TestBitCounter extends TestCase
 		assertTrue(bh.advance());
 		System.out.println(bh.getJoinedSequence());
 		assertEquals(bh.getJoinedSequence(), s2.substring(0,7));
+
+		assertTrue(bh.advance());
+		System.out.println(bh.getJoinedSequence());
+		assertEquals(bh.getJoinedSequence(), s2.substring(1,8));
 		
+		assertTrue(bh.advance());
+		System.out.println(bh.getJoinedSequence());
+		assertEquals(bh.getJoinedSequence(), s3.substring(0,7));
+
+		assertTrue(bh.advance());
+		System.out.println(bh.getJoinedSequence());
+		assertEquals(bh.getJoinedSequence(), s3.substring(1,8));
+
+		assertFalse(bh.advance());
 		
 	}
 	
