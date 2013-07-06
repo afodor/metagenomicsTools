@@ -27,6 +27,28 @@ public class ContextCount
 		numT++;
 	}
 	
+	public int getTotal()
+	{
+		return numA + numC + numG + numT;
+	}
+	
+	public boolean isSingleton()
+	{
+		if( numA > 1 )
+			return false;
+
+		if( numC > 1 )
+			return false;
+		
+		if( numG > 1 )
+			return false;
+
+		if( numT > 1 )
+			return false;
+		
+		return true;
+	}
+	
 	public void increment(char c)
 	{
 		if( c == 'A' )
