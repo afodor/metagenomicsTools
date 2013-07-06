@@ -153,12 +153,12 @@ public class BitHolder
 	
 	public String getLeftSequence() throws Exception
 	{
-		return getASequence(true);
+		return getASequence(this.bits,true,this.contextSize);
 	}
 	
 	public String getRightSequence() throws Exception
 	{
-		return getASequence(false);
+		return getASequence(this.bits, false,this.contextSize);
 	}
 	
 	public String getJoinedSequence() throws Exception
@@ -166,7 +166,17 @@ public class BitHolder
 		return getLeftSequence() + getMiddleChar() + getRightSequence();
 	}
 	
-	private String getASequence(boolean left) throws Exception
+	public String getContext() throws Exception
+	{
+		return getLeftSequence() + getRightSequence();
+	}
+	
+	public static String getContext(long bits, int contextSize) throws Exception
+	{
+		return getASequence(bits, true, contextSize) + getASequence(bits, false, contextSize);
+	}
+	
+	private static String getASequence( long bits, boolean left, int contextSize) throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
 		
@@ -187,7 +197,7 @@ public class BitHolder
 	}
 	
 	
-	private char getChar(long val) throws Exception
+	private static char getChar(long val) throws Exception
 	{
 		if( val==0)
 			return 'A';
