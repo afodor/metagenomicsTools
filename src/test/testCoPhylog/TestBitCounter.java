@@ -110,6 +110,18 @@ public class TestBitCounter extends TestCase
 		
 		assertFalse(bh.advance());
 		
+		// test a third string of a different length
+		s= getRandomString(200);
+		
+		bh.setToString(s, false);
+		
+		for( int x=0; x< 200 - (13*2 +1); x++)
+		{
+			assertEquals(bh.getJoinedSequence(), s.substring(x, x+27));
+			assertTrue(bh.advance());
+		}
+		
+		assertFalse(bh.advance());
 	}
 	
 	private String getRandomString(int length) throws Exception
