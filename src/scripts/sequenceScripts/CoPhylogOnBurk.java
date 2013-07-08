@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
@@ -41,12 +44,43 @@ public class CoPhylogOnBurk
 				File outFile = new File(sequenceDir + File.separator + "results" + File.separator + 
 						s + "_CO_PhylogBin.gz");
 				
-				runAFile(new File(sequenceDir.getAbsolutePath() + File.separator + s), outFile,writer);
+				if( ! outFile.exists())
+				{
+					try
+					{
+						runAFile(new File(sequenceDir.getAbsolutePath() + File.separator + s), outFile,writer);
+					}
+					catch(Exception ex)
+					{
+						log(ex,writer);
+					}
+				}
+				else
+				{
+					log(outFile.getAbsolutePath() + "exists.  Skipping",writer);
+				}
+				
 			}
 		}
 		
 		writer.flush();  writer.close();
 			
+	}
+	
+	private static void log(Exception ex, BufferedWriter writer) throws Exception
+	{
+		ex.printStackTrace();
+		
+		StringWriter tempWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter( tempWriter );
+		ex.printStackTrace( printWriter );
+		printWriter.flush();
+
+		String stackTrace = tempWriter.toString();
+		
+		writer.write(stackTrace + "\n");
+		
+		printWriter.close();  tempWriter.close();
 	}
 	
 	private static void log(String message, BufferedWriter writer ) throws Exception

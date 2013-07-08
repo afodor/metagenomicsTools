@@ -17,16 +17,21 @@ public class CoPhylogBinaryFileReader
 					new File(ConfigReader.getBurkholderiaDir()+ File.separator + "results"+
 				File.separator + "AS130-2_ATCACG_s_2_1_sequence.txt.gz_CO_PhylogBin.gz")))));
 		
+		int numRecords = in.readInt();
+		System.out.println(numRecords);
 		
-		long aLong = in.readLong();
-		
-		byte numA = in.readByte();
-		byte numC = in.readByte();
-		byte numG = in.readByte();
-		byte numT = in.readByte();
-		
-		System.out.println( aLong + "\t" + (numA+128) + "\t" + (numC+128)  + "\t" +  (numG+128) + "\t" + (numT+128)   );
-		
-		
+		for( int x=0; x < numRecords; x++)
+		{
+			long aLong = in.readLong();
+			
+			byte numA = in.readByte();
+			byte numC = in.readByte();
+			byte numG = in.readByte();
+			byte numT = in.readByte();
+			
+			System.out.println( aLong + "\t" + (numA+128) + "\t" + (numC+128)  + "\t" +  (numG+128) + "\t" + (numT+128)   );
+			System.exit(1);
+			
+		}
 	}
 }
