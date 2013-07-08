@@ -13,12 +13,17 @@ public class CoPhylogBinaryFileReader
 {
 	public static HashMap<Long, ContextCount> readBinaryFile(File file) throws Exception
 	{
+		return readBinaryFile(file,-1);
+	}
+	
+	
+	public static HashMap<Long, ContextCount> readBinaryFile(File file, int maxNum) throws Exception
+	{
 		HashMap<Long, ContextCount> map = new HashMap<>();
 		
 		DataInputStream in =new DataInputStream( 
 				new BufferedInputStream(new GZIPInputStream(new FileInputStream(
-					new File(ConfigReader.getBurkholderiaDir()+ File.separator + "results"+
-				File.separator + "AS130-2_ATCACG_s_2_1_sequence.txt.gz_CO_PhylogBin.gz")))));
+					file))));
 		
 		int numRecords = in.readInt();
 		System.out.println(numRecords);
@@ -36,8 +41,39 @@ public class CoPhylogBinaryFileReader
 			if( x % 100000==0)
 				System.out.println("Reading " + x);
 			
+			if( maxNum > -1 && x >= maxNum)
+			{
+				in.close();
+				return map;
+			}
+			
 		}
 		
 		return map;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+
+		HashMap<Long, ContextCount> map2 = 
+				CoPhylogBinaryFileReader.readBinaryFile(new File(
+		File.separator + "results" + File.separator + 
+		"AS130-2_ATCACG_s_2_2_sequence.txt.gz_CO_PhylogBin.gz"),100);
+		
+		HashMap<Long, ContextCount> map1 = 
+				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
+						File.separator + "results" + File.separator + 
+						"AS130-2_ATCACG_s_2_1_sequence.txt.gz_CO_PhylogBin.gz"),100);
+		
+		for(Long l : map2.keySet())
+		{
+			ContextCount cc = map1.get(l);
+			System.out.println(l + " " + cc.getNumA()+ " " + cc.getNumC()+ " " + cc.getNumG() + " " + cc.getNumT());
+			
+			cc = map2.get(l);
+			System.out.println(l + " " + cc.getNumA()+ " " + cc.getNumC()+ " " + cc.getNumG() + " " + cc.getNumT());
+			
+			System.out.println("\n\n\n\n");
+		}
 	}
 }
