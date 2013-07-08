@@ -142,6 +142,8 @@ public class CoPhylogOnBurk
 	{
 		DataOutputStream out =new DataOutputStream( new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(outFile))));
 		
+		out.writeInt(map.size());
+		
 		for( Long l : map.keySet() )
 		{
 			out.writeLong(l);
