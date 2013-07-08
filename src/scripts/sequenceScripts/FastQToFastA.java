@@ -1,4 +1,4 @@
-package scipts.sequenceScripts;
+package scripts.sequenceScripts;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

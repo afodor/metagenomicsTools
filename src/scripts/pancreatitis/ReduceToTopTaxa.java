@@ -1,4 +1,4 @@
-package scipts.pancreatitis;
+package scripts.pancreatitis;
 
 import java.io.File;
 import java.util.HashMap;
