@@ -80,6 +80,26 @@ public class ContextCount
 	{
 		return numT+128;
 	}
+	
+	public byte getAAsByte()
+	{
+		return numA;
+	}
+	
+	public byte getCAsByte()
+	{
+		return numC;
+	}
+	
+	public byte getGAsByte()
+	{
+		return numG;
+	}
+	
+	public byte getTAsByte()
+	{
+		return numT;
+	}
 
 	@Override
 	public String toString()

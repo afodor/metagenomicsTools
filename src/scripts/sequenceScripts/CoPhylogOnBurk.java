@@ -1,15 +1,19 @@
 package scripts.sequenceScripts;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import parsers.FastQ;
 
@@ -21,7 +25,12 @@ public class CoPhylogOnBurk
 {
 	public static void main(String[] args) throws Exception
 	{
+		
+		
 		File sequenceDir = new File(ConfigReader.getBurkholderiaDir());
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
+				sequenceDir + File.separator + "results" + File.separator + "log.txt")));
 		
 		String[] files = sequenceDir.list();
 		
@@ -30,17 +39,26 @@ public class CoPhylogOnBurk
 			if( s.endsWith("gz"))
 			{
 				File outFile = new File(sequenceDir + File.separator + "results" + File.separator + 
-						s + "_CO_Phylog.txt");
+						s + "_CO_PhylogBin.gz");
 				
-				runAFile(new File(sequenceDir.getAbsolutePath() + File.separator + s), outFile);
+				runAFile(new File(sequenceDir.getAbsolutePath() + File.separator + s), outFile,writer);
 			}
 		}
+		
+		writer.flush();  writer.close();
 			
 	}
 	
-	public static void runAFile(File inFile, File outFile) throws Exception
+	private static void log(String message, BufferedWriter writer ) throws Exception
+	{
+		System.out.println(message);
+		writer.write(message + "\n");
+		writer.flush();
+	}
+	
+	public static void runAFile(File inFile, File outFile, BufferedWriter log) throws Exception
 	{	
-		System.out.println("Starting " + inFile.getPath());
+		log("Starting " + inFile.getPath(),log);
 		HashMap<Long, ContextCount> map = new HashMap<>();
 		
 		int contextSize = 13;
@@ -63,24 +81,23 @@ public class CoPhylogOnBurk
 			
 			if(numDone % 10000 == 0 )
 			{
-				System.gc();
-				System.out.println( numRemoved + " " +  numDone + " " + map.size() + " " + (((float)map.size())/numDone) + " "+ 
+				log( numRemoved + " " +  numDone + " " + map.size() + " " + (((float)map.size())/numDone) + " "+ 
 				Runtime.getRuntime().freeMemory() + " " + Runtime.getRuntime().totalMemory() +  " " + Runtime.getRuntime().maxMemory() 
-				+ " " + ((double)Runtime.getRuntime().freeMemory())/Runtime.getRuntime().maxMemory() );
+				+ " " + ((double)Runtime.getRuntime().freeMemory())/Runtime.getRuntime().maxMemory(),log );
 				
 				
 				double fractionFree= 1- (Runtime.getRuntime().totalMemory()- ((double)Runtime.getRuntime().freeMemory() ))
 								/Runtime.getRuntime().totalMemory();
 				
-				System.out.println("fraction Free= " + fractionFree);
+				log("fraction Free= " + fractionFree,log);
 				
 				double fractionAllocated = 1-  (Runtime.getRuntime().maxMemory()- ((double)Runtime.getRuntime().totalMemory() ))
 						/Runtime.getRuntime().maxMemory();
 				
-				System.out.println("fraction allocated = " + fractionAllocated);
+				log("fraction allocated = " + fractionAllocated,log);
 				
 				if( fractionFree <= 0.10 && fractionAllocated >= 0.90 )
-					removeSingletons(map);
+					removeSingletons(map,log);
 				
 				System.out.println("\n\n");
 			}
@@ -89,25 +106,23 @@ public class CoPhylogOnBurk
 		
 		reader.close();
 		
-		System.out.println("Finished reading with " + map.size() + " having removed " + numRemoved + " singletons ");
+		log("Finished reading with " + map.size() + " having removed " + numRemoved + " singletons ",log);
 		
-		System.out.println("Removing singletons");
+		removeSingletons(map,log);
+		
+		log("Removed singletons " + map.size() ,log);
+		log("Writing text file",log);
 		
 		
-		
-		System.out.println("Removed singletons " + map.size() );
-		System.out.println("Writing text file");
-		
-		removeSingletons(map);
-		
-		writeTextFile(outFile, map);
+		writeBinaryFile(outFile, map);
 		
 		System.out.println("Finished " + inFile.getAbsolutePath());
 	}
 	
-	private static int removeSingletons(HashMap<Long, ContextCount> map) 
+	private static int removeSingletons(HashMap<Long, ContextCount> map, BufferedWriter log) 
+		throws Exception
 	{
-		System.out.println("Removing singletons");
+		log("Removing singletons",log);
 		int num =0;
 		
 		for( Iterator<Long> i = map.keySet().iterator(); i.hasNext(); )
@@ -123,6 +138,27 @@ public class CoPhylogOnBurk
 		return num;
 	}
 	
+	private static void writeBinaryFile(File outFile, HashMap<Long, ContextCount> map ) throws Exception
+	{
+		DataOutputStream out =new DataOutputStream( new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(outFile))));
+		
+		for( Long l : map.keySet() )
+		{
+			out.writeLong(l);
+			
+			ContextCount cc = map.get(l);
+			
+			out.writeByte( cc.getAAsByte() );
+			out.writeByte( cc.getCAsByte());
+			out.writeByte(cc.getGAsByte());
+			out.writeByte( cc.getTAsByte());
+		}
+		
+		out.flush();  out.close();
+		
+	}
+	
+	/*
 	private static void writeTextFile( File outFile, HashMap<Long, ContextCount> map ) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
@@ -143,4 +179,5 @@ public class CoPhylogOnBurk
 		
 		writer.flush();  writer.close();
 	}
+	*/
 }
