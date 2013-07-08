@@ -37,9 +37,9 @@ public class ContextCount
 		
 		for( Character c : thisHighest)
 			if( otherHighest.contains(c))
-				return true;
+				return false;
 		
-		return false;
+		return true;
 	}
 	
 	public HashSet<Character> getHighest()
