@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -28,8 +27,7 @@ public class CoPhylogOnBurk
 {
 	public static void main(String[] args) throws Exception
 	{
-		
-		
+		  
 		File sequenceDir = new File(ConfigReader.getBurkholderiaDir());
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 

@@ -1,11 +1,92 @@
 package coPhylog;
 
+import java.util.HashSet;
+
 public class ContextCount
 {
 	private byte numA=-128;
 	private byte numC=-128;
 	private byte numG=-128;
 	private byte numT=-128;
+	
+	public ContextCount( byte numA, byte numC, byte numG, byte numT )
+	{
+		this.numA = numA;
+		this.numC = numC;
+		this.numG = numG;
+		this.numT = numT;
+	}
+	
+	public double getRawDistance(ContextCount other)
+	{
+		double sum =0;
+		
+		sum += (this.numA - other.numA ) * (this.numA - other.numA );
+		sum += (this.numC - other.numC ) * (this.numC - other.numC );
+		sum += (this.numG - other.numG ) * (this.numG - other.numG );
+		sum += (this.numT - other.numT ) * (this.numT - other.numT );
+		
+		return Math.sqrt(sum);
+		
+	}
+	
+	public boolean isDifferentInHighest( ContextCount other ) 
+	{
+		HashSet<Character> thisHighest = getHighest();
+		HashSet<Character> otherHighest = other.getHighest();
+		
+		for( Character c : thisHighest)
+			if( otherHighest.contains(c))
+				return true;
+		
+		return false;
+	}
+	
+	public HashSet<Character> getHighest()
+	{
+		HashSet<Character> set = new HashSet<>();
+		int val = -128;
+		
+		if( numA > val )
+		{
+			set.add('A');
+			val = numA;
+		}
+		
+		if( numC >= val)
+		{
+			if( numC > val )
+				set.clear();
+			
+			set.add('C');
+			val = numC;
+		}
+		
+		if( numG >= val)
+		{
+			if( numG > val )
+				set.clear();
+			
+			set.add('G');
+			val = numG;
+		}
+		
+		if( numT >= val)
+		{
+			if( numT > val )
+				set.clear();
+			
+			set.add('T');
+			val = numT;
+		}
+		
+		return set;
+	}
+	
+	public ContextCount()
+	{
+		
+	}
 	
 	public void incrementA()
 	{
