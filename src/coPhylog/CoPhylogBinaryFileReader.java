@@ -18,15 +18,16 @@ public class CoPhylogBinaryFileReader
 	
 	
 	public static HashMap<Long, ContextCount> readBinaryFile(File file, int maxNum) throws Exception
-	{
-		HashMap<Long, ContextCount> map = new HashMap<>();
-		
+	{	
 		DataInputStream in =new DataInputStream( 
 				new BufferedInputStream(new GZIPInputStream(new FileInputStream(
 					file))));
 		
 		int numRecords = in.readInt();
 		System.out.println(numRecords);
+
+		HashMap<Long, ContextCount> map = new HashMap<>(numRecords);
+	
 		
 		for( int x=0; x < numRecords; x++)
 		{
