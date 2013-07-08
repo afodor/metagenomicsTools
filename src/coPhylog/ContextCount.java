@@ -2,48 +2,48 @@ package coPhylog;
 
 public class ContextCount
 {
-	private int numA=0;
-	private int numC=0;
-	private int numG=0;
-	private int numT=0;
+	private byte numA=-128;
+	private byte numC=-128;
+	private byte numG=-128;
+	private byte numT=-128;
 	
 	public void incrementA()
 	{
-		numA++;
+		if( numA <= 127 )
+			numA++;
 	}
 	
 	public void incrementC()
 	{
-		numC++;
+		if( numC <= 127)
+			numC++;
 	}
 	
 	public void incrementG()
 	{
-		numG++;
+		if( numG <= 127)
+			numG++;
 	}
 	
 	public void incrementT()
 	{
-		numT++;
+		if( numT<=127)
+			numT++;
 	}
 	
-	public int getTotal()
-	{
-		return numA + numC + numG + numT;
-	}
 	
 	public boolean isSingleton()
 	{
-		if( numA > 1 )
+		if( numA > -127 )
 			return false;
 
-		if( numC > 1 )
+		if( numC > -127 )
 			return false;
 		
-		if( numG > 1 )
+		if( numG > -127 )
 			return false;
 
-		if( numT > 1 )
+		if( numT > -127 )
 			return false;
 		
 		return true;
@@ -52,40 +52,40 @@ public class ContextCount
 	public void increment(char c)
 	{
 		if( c == 'A' )
-			numA++;
+			incrementA();
 		else if ( c== 'C')
-			numC++;
+			incrementC();
 		else if( c == 'G')
-			numG++;
+			incrementG();
 		else if( c == 'T')
-			numT++;
+			incrementT();
 	}
 
 	public int getNumA()
 	{
-		return numA;
+		return numA+128;
 	}
 
 	public int getNumC()
 	{
-		return numC;
+		return numC+128;
 	}
 
 	public int getNumG()
 	{
-		return numG;
+		return numG+128;
 	}
 
 	public int getNumT()
 	{
-		return numT;
+		return numT+128;
 	}
 
 	@Override
 	public String toString()
 	{
 		return
-		"[" + numA + "," + numC + "," + numG + "," + numT + "]";
+		"[" + (numA+128) + "," + (numC+128) + "," + (numG+128) + "," + (numT+128) + "]";
 	}
 	
 	

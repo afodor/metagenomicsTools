@@ -30,7 +30,7 @@ public class CoPhylogOnBurk
 		int numDone =0;
 		
 		for(FastQ fq = FastQ.readOneOrNull(reader); 
-				fq != null; 
+				fq != null && numDone < 2000000; 
 				fq = FastQ.readOneOrNull(reader))
 		{
 			ContextHash.addToHash(fq.getSequence(), map, contextSize);
@@ -77,7 +77,7 @@ public class CoPhylogOnBurk
 			writer.write(cc.getNumA() + "\t");
 			writer.write(cc.getNumC() + "\t");
 			writer.write(cc.getNumG() + "\t");
-			writer.write(cc.getNumT() + "\t");
+			writer.write(cc.getNumT() + "\n");
 		}
 		
 		writer.flush();  writer.close();
