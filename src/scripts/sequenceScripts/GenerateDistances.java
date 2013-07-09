@@ -25,6 +25,8 @@ public class GenerateDistances
 				ConfigReader.getBurkholderiaDir()+ File.separator + "distances" +
 						File.separator + "techReps1.txt")));
 		
+		writer.write("longID\tnumA1\tnumC1\tnumG1\tnumT1\tsum1\tmax1\tnumA2\tnumC2\tnumG2\tnumT2\tsum2\tmax2\tdistance\tstatus\n");
+		
 		HashMap<Long, ContextCount> map1 = 
 				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
 						File.separator + "results" + File.separator + 
@@ -44,8 +46,12 @@ public class GenerateDistances
 		int numDiff =0;
 		for(Long l1 : map1.keySet())
 		{
+			writer.write(l1 + "\t");
+			
 			ContextCount cc1 = map1.get(l1);
 			numSearched++;
+			writer.write(cc1.getNumA() + "\t" +  cc1.getNumC() + "\t" + cc1.getNumG() + "\t" + cc1.getNumT() + "\t" +
+								cc1.getSum() + "\t" + cc1.getMax() + "\t");
 			
 			ContextCount cc2 = map2.get(l1);
 			
@@ -55,8 +61,24 @@ public class GenerateDistances
 				
 				map2.remove(cc2);
 				
+				writer.write(cc2.getNumA() + "\t" + cc2.getNumC() + "\t" + cc2.getNumG() + "\t" + cc2.getNumT() + "\t" +
+						cc2.getSum() + "\t" + cc1.getMax() + "\t" + cc1.getRawDistance(cc2));
+				
 				if( cc1.isDifferentInHighest(cc2))
+				{
 					numDiff++;
+					writer.write("\tdiff\n");
+				}
+				else
+				{
+					writer.write("\tmatch\n");
+				}
+					
+			}
+			else
+			{
+				writer.write("-1\t-1\t-1\t-1\t-1\t-1\t-1\tnotFound\n");
+				
 			}
 			
 			if( numSearched % 1000==0)
@@ -66,6 +88,7 @@ public class GenerateDistances
 
 		System.out.println(numSearched + " " + numFound + " "+ numDiff + " " + map2.size());
 		
-		
+	
+		writer.flush();  writer.close();
 	}
 }

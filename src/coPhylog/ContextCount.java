@@ -21,10 +21,10 @@ public class ContextCount
 	{
 		double sum =0;
 		
-		sum += (this.numA - other.numA ) * (this.numA - other.numA );
-		sum += (this.numC - other.numC ) * (this.numC - other.numC );
-		sum += (this.numG - other.numG ) * (this.numG - other.numG );
-		sum += (this.numT - other.numT ) * (this.numT - other.numT );
+		sum += (this.getNumA() - other.getNumA() ) * (this.getNumA() - other.getNumA() );
+		sum += (this.getNumC() - other.getNumC() ) * (this.getNumC() - other.getNumC() );
+		sum += (this.getNumG() - other.getNumG() ) * (this.getNumG() - other.getNumG() );
+		sum += (this.getNumT() - other.getNumT() ) * (this.getNumT() - other.getNumT() );
 		
 		return Math.sqrt(sum);
 		
@@ -140,6 +140,22 @@ public class ContextCount
 			incrementG();
 		else if( c == 'T')
 			incrementT();
+	}
+	
+	public int getSum()
+	{
+		return getNumA() + getNumC() + getNumG() + getNumT();
+	}
+	
+	public int getMax()
+	{
+		int val = getNumA();
+		
+		val = Math.max(val, getNumC());
+		val = Math.max(val, getNumG());
+		val = Math.max(val, getNumT());
+		
+		return val;
 	}
 
 	public int getNumA()

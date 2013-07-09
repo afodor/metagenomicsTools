@@ -26,7 +26,7 @@ public class CoPhylogBinaryFileReader
 		int numRecords = in.readInt();
 		System.out.println(numRecords);
 
-		HashMap<Long, ContextCount> map = new HashMap<>(numRecords);
+		HashMap<Long, ContextCount> map = new HashMap<>(numRecords * 2);
 	
 		
 		for( int x=0; x < numRecords; x++)
