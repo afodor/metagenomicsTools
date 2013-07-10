@@ -64,6 +64,7 @@ public class ChisquareTest
 		List<Double> list2 = new ArrayList<>();
 		list2.add(484.0);  list2.add(239.0); list2.add(477.0);
 		
+		// from R should be 2.953589e-07
 		System.out.println(getChisquarePValue(list1, list2));
 	}
 }
