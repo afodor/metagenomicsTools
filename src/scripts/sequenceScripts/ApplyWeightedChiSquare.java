@@ -39,7 +39,9 @@ public class ApplyWeightedChiSquare
 		
 		List<Double> bVals = new ArrayList<>();
 		
-		bVals.add(0.0);bVals.add(1.0);bVals.add(5.0);bVals.add(10.0);bVals.add(100.0);
+		bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
+		//bVals.add(0.0);bVals.add(0.0001);bVals.add(0.001);bVals.add(0.01);bVals.add(0.1);
+		//bVals.add(1.0);bVals.add(10.0);bVals.add(100.0);bVals.add(1000.0);bVals.add(10000.0);bVals.add(100000.0);
 		
 		HashMap<Long, ContextCount> map1 = 
 				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
@@ -107,6 +109,12 @@ public class ApplyWeightedChiSquare
 					HashMap<Long, ContextCount> map2, CountHolder prior1, CountHolder prior2 )
 		throws Exception
 	{
+		CountHolder countAverage = new CountHolder();
+		countAverage.fractionA = (prior1.fractionA + prior2.fractionA) /2;
+		countAverage.fractionC = (prior1.fractionC + prior2.fractionC) /2;
+		countAverage.fractionG = (prior1.fractionG + prior2.fractionG) /2;
+		countAverage.fractionT = (prior1.fractionT + prior2.fractionT) /2;
+		
 		System.out.println("Staring bVal = " +  bVal);
 		List<Double> pValues = new ArrayList<>();
 		
@@ -119,19 +127,24 @@ public class ApplyWeightedChiSquare
 				ContextCount cc1 = map1.get(aLong);
 				
 				List<Double> list1 = new ArrayList<>();
-				list1.add( cc1.getNumA() + bVal * prior1.fractionA );
-				list1.add( cc1.getNumC() + bVal * prior1.fractionC );
-				list1.add( cc1.getNumG() + bVal * prior1.fractionG );
-				list1.add( cc1.getNumT() + bVal * prior1.fractionT );
+				list1.add( cc1.getNumA() + bVal * countAverage.fractionA );
+				list1.add( cc1.getNumC() + bVal * countAverage.fractionC );
+				list1.add( cc1.getNumG() + bVal * countAverage.fractionG );
+				list1.add( cc1.getNumT() + bVal * countAverage.fractionT );
 				
 
 				List<Double> list2 = new ArrayList<>();
-				list2.add( cc2.getNumA() + bVal * prior2.fractionA );
-				list2.add( cc2.getNumC() + bVal * prior2.fractionC );
-				list2.add( cc2.getNumG() + bVal * prior2.fractionG );
-				list2.add( cc2.getNumT() + bVal * prior2.fractionT );
+				list2.add( cc2.getNumA() + bVal * countAverage.fractionA );
+				list2.add( cc2.getNumC() + bVal * countAverage.fractionC );
+				list2.add( cc2.getNumG() + bVal * countAverage.fractionG );
+				list2.add( cc2.getNumT() + bVal * countAverage.fractionT );
 				
-				pValues.add(ChisquareTest.getChisquarePValue(list1, list2));
+				double pValue =ChisquareTest.getChisquarePValue(list1, list2); 
+				
+				if( Double.isInfinite(pValue) || Double.isNaN(pValue))
+					pValue =1;
+				
+				pValues.add(pValue);
 				
 				if( pValues.size() % 1000000 ==0)
 					System.out.println("\t" + pValues.size());
