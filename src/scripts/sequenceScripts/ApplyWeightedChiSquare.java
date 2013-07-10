@@ -47,6 +47,9 @@ public class ApplyWeightedChiSquare
 						"AS130-2_ATCACG_s_2_1_sequence.txt.gz_CO_PhylogBin.gz"));
 		
 		System.out.println("got map1 " + map1.size());
+		CountHolder prior1 = getCounts(map1);
+		System.out.println(prior1);
+		
 		
 		HashMap<Long, ContextCount> map2 = 
 				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
@@ -55,12 +58,11 @@ public class ApplyWeightedChiSquare
 		
 		System.out.println("got map2 " + map2.size());
 		
-		CountHolder prior1 = getCounts(map1);
 		CountHolder prior2 = getCounts(map2);
+		System.out.println(prior2);
 		
 		for(Double b : bVals)
 			writePValues(b, map1, map2, prior1, prior2);
-
 	}
 	
 	private static CountHolder getCounts( HashMap<Long, ContextCount> map )
@@ -79,10 +81,10 @@ public class ApplyWeightedChiSquare
 		
 		long sum = numA + numC + numT + numG;
 		
-		ch.fractionA = numA / sum;
-		ch.fractionC = numC / sum;
-		ch.fractionG = numG / sum;
-		ch.fractionT = numT / sum;
+		ch.fractionA = ((double)numA) / sum;
+		ch.fractionC = ((double)numC) / sum;
+		ch.fractionG = ((double)numG )/ sum;
+		ch.fractionT = ((double)numT) / sum;
 		
 		return ch;
 	}
@@ -117,21 +119,21 @@ public class ApplyWeightedChiSquare
 				ContextCount cc1 = map1.get(aLong);
 				
 				List<Double> list1 = new ArrayList<>();
-				list1.add( cc1.getNumA() * bVal * prior1.fractionA );
-				list1.add( cc1.getNumC() * bVal * prior1.fractionC );
-				list1.add( cc1.getNumG() * bVal * prior1.fractionG );
-				list1.add( cc1.getNumT() * bVal * prior1.fractionT );
+				list1.add( cc1.getNumA() + bVal * prior1.fractionA );
+				list1.add( cc1.getNumC() + bVal * prior1.fractionC );
+				list1.add( cc1.getNumG() + bVal * prior1.fractionG );
+				list1.add( cc1.getNumT() + bVal * prior1.fractionT );
 				
 
 				List<Double> list2 = new ArrayList<>();
-				list2.add( cc2.getNumA() * bVal * prior2.fractionA );
-				list2.add( cc2.getNumC() * bVal * prior2.fractionC );
-				list2.add( cc2.getNumG() * bVal * prior2.fractionG );
-				list2.add( cc2.getNumT() * bVal * prior2.fractionT );
+				list2.add( cc2.getNumA() + bVal * prior2.fractionA );
+				list2.add( cc2.getNumC() + bVal * prior2.fractionC );
+				list2.add( cc2.getNumG() + bVal * prior2.fractionG );
+				list2.add( cc2.getNumT() + bVal * prior2.fractionT );
 				
 				pValues.add(ChisquareTest.getChisquarePValue(list1, list2));
 				
-				if( pValues.size() % 1000 ==0)
+				if( pValues.size() % 1000000 ==0)
 					System.out.println("\t" + pValues.size());
 			}
 		}

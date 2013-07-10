@@ -65,7 +65,6 @@ public class ChisquareTest
 			sum += val * val /expected;
 		}
 		
-		System.out.println(sum);
 		return 1-StatFunctions.pchisq(sum, list1.size() -1);
 	}
 	
