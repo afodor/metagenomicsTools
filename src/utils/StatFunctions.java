@@ -242,7 +242,7 @@ package utils;
 	    return 0.5+(a*b*s+Math.atan(a))*g1;
 	  }
 
-	  public double pchisq(double q,double df) {
+	  public static double pchisq(double q,double df) {
 	    // Posten, H. (1989) American Statistician 43 p. 261-265
 	    double df2=df*.5;
 	    double q2=q*.5;
