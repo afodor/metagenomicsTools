@@ -22,7 +22,7 @@ import utils.ConfigReader;
 /*
  * This has dependencies on CoPhylogOnBurk and then GenerateDistances
  */
-public class ApplyWeigthedChiSquare
+public class ApplyWeightedChiSquare
 {
 	
 	private static class CountHolder
