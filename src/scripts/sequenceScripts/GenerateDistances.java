@@ -23,14 +23,11 @@ import utils.ConfigReader;
 import coPhylog.CoPhylogBinaryFileReader;
 import coPhylog.ContextCount;
 
+/*
+ * This has dependencies on CoPhylogOnBurk 
+ */
 public class GenerateDistances 
 {
-	private static class Holder
-	{
-		private long aLong;
-		private ContextCount cc1;
-		private ContextCount cc2;
-	}
 	
 	public static void main(String[] args) throws Exception
 	{

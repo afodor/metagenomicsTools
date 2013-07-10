@@ -26,7 +26,6 @@ import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
 
-import utils.ConfigReader;
 
 public class MergePairedEnds
 {
@@ -46,12 +45,12 @@ public class MergePairedEnds
 					new GZIPInputStream( new FileInputStream( File.separator + "s_7_2_sequence.txt.gz") ) ));
 			
 		
-		HashMap<String, Integer> forwardMap = null;
+		HashMap<String, Integer> forwardMap = new HashMap<String,Integer>();
 			//FirstParse.getForwardPrimers();
 		
 		List<String> forwardKeys= new ArrayList<String>( forwardMap.keySet());
 		
-		HashMap<String, Integer> backwardMap = null; // FirstParse.getReversePrimers();
+		HashMap<String, Integer> backwardMap = new HashMap<>(); // FirstParse.getReversePrimers();
 		List<String> reverseKeys = new ArrayList<String>(backwardMap.keySet());
 		
 		Semaphore s = new Semaphore(NUM_PERMIT);
