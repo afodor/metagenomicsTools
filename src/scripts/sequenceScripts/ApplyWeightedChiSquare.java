@@ -39,7 +39,8 @@ public class ApplyWeightedChiSquare
 		
 		List<Double> bVals = new ArrayList<>();
 		
-		bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
+		bVals.add(100.0);  bVals.add(1000.0); bVals.add(10000.0);
+		//bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
 		//bVals.add(0.0);bVals.add(0.0001);bVals.add(0.001);bVals.add(0.01);bVals.add(0.1);
 		//bVals.add(1.0);bVals.add(10.0);bVals.add(100.0);bVals.add(1000.0);bVals.add(10000.0);bVals.add(100000.0);
 		
@@ -105,6 +106,21 @@ public class ApplyWeightedChiSquare
 		}
 	}
 	
+	private static class Holder implements Comparable<Holder>
+	{
+		double pValue =1;
+		ContextCount cc1;
+		ContextCount cc2;
+		List<Double> list1;
+		List<Double> list2;
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return Double.compare(this.pValue, o.pValue);
+		}
+	}
+	
 	private static void writePValues( double bVal, HashMap<Long, ContextCount> map1 ,
 					HashMap<Long, ContextCount> map2, CountHolder prior1, CountHolder prior2 )
 		throws Exception
@@ -116,7 +132,7 @@ public class ApplyWeightedChiSquare
 		countAverage.fractionT = (prior1.fractionT + prior2.fractionT) /2;
 		
 		System.out.println("Staring bVal = " +  bVal);
-		List<Double> pValues = new ArrayList<>();
+		List<Holder> pValues = new ArrayList<>();
 		
 		for( Long aLong : map1.keySet() )
 		{
@@ -144,7 +160,13 @@ public class ApplyWeightedChiSquare
 				if( Double.isInfinite(pValue) || Double.isNaN(pValue))
 					pValue =1;
 				
-				pValues.add(pValue);
+				Holder h= new Holder();
+				h.pValue = pValue;
+				h.cc1 = cc1;
+				h.cc2 = cc2;
+				h.list1=list1;
+				h.list2 = list2;
+				pValues.add(h);
 				
 				if( pValues.size() % 1000000 ==0)
 					System.out.println("\t" + pValues.size());
@@ -157,13 +179,29 @@ public class ApplyWeightedChiSquare
 		System.out.println("Writing");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBurkholderiaDir()+
 				File.separator + "distances" + File.separator + "pValues_" + bVal + ".txt")));
-		writer.write("dunif\tpValue\n");
+		writer.write("dunif\tpValue\tcounts1\tcount2\tlist1\tlist2\n");
 		
-		for( int x=0; x < pValues.size(); x++)
+		boolean flip=false;
+		int numOver =1000;
+		
+		for( int x=0; x < pValues.size() && numOver >=0; x++)
 		{
 			double expected = ((double)(x+1)) / pValues.size();
 			writer.write( expected + "\t" );
-			writer.write(pValues.get(x) + "\n");
+			
+			Holder h = pValues.get(x);
+			
+			writer.write(h.pValue + "\t");
+			writer.write( h.cc1 + "\t" );
+			writer.write( h.cc2 + "\t");
+			writer.write(h.list1 + "\t");
+			writer.write( h.list2 + "\n");	
+			
+			if( pValues.get(x).pValue >= expected)
+				flip = true;
+			
+			if( flip)
+				numOver--;
 		}
 		
 		writer.flush();  writer.close();
