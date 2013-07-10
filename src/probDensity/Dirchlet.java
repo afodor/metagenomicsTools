@@ -52,18 +52,13 @@ public class Dirchlet
 		}
 		
 		this.logNormalizingConstant =  Functions.lnfgamma(sum) - top;
-		System.out.println("CONSTANT " + this.logNormalizingConstant + " " + Math.exp(logNormalizingConstant));
+		//System.out.println("CONSTANT " + this.logNormalizingConstant + " " + Math.exp(logNormalizingConstant));
 	}
 	
 	public double getPDF( double[] x) throws Exception
 	{
 		if( x.length != alphas.length)
 			throw new Exception("Wrong # of parameters");
-		
-		for( Double d : x)
-			System.out.println(d + "\t");
-		
-		System.out.println();
 		
 		double product = Math.exp(logNormalizingConstant);
 		
@@ -72,11 +67,11 @@ public class Dirchlet
 			product = product * Math.pow(x[i], alphas[i]-1);
 		}
 		
-		System.out.println("PRODUCT=" + product);
-		
+		for( Double d : x )
+			System.out.print(d + "\t");
+		System.out.println("\n\t\tRETURN " + product);
 		if( Double.isInfinite(product) || Double.isNaN(product))
 			return 0;
-		
 		
 		return product;
 	}
@@ -110,43 +105,37 @@ public class Dirchlet
 		
 		double stepSize = 0.001;
 		double width = Math.pow(stepSize, 4);
+		System.out.println(width);
 		double interval=0;
 		
 		double[] xs= d1.getMeanCenteredAlphas();
-		
-		System.out.println( d1.getPDF(xs) );
-		
-		/*
-		
-		for( Double d : xs)
-			System.out.println(d + "\t");
-		
-		System.out.println();
 		
 		double sum =0;
 		
 		while(sum <=0.95)
 		{
-			sum += d1.getPDF(xs) / width;
+			sum += d1.getPDF(xs) * width;
+			//System.out.println("SUM=" + sum);
 			
 			interval += stepSize;
 			
 			for( int x=0; x < xs.length; x++)
 				xs[x] -= interval;
 			
-			sum += d1.getPDF(xs) / width;
+			sum += d1.getPDF(xs) * width;
+
+			//System.out.println("SUM=" + sum);
 			
 			for( int x=0; x < xs.length; x++)
-				xs[x] += 2 *  interval;
+				xs[x] += (2 *  interval);
 			
-			sum += d1.getPDF(xs);
+			sum += d1.getPDF(xs) * width;
 			
 			for( int x=0; x < xs.length; x++)
-				xs[x] -= interval / width;
+				xs[x] -= interval;
 			
 			System.out.println("SUM=" + sum);
 			//System.exit(1);
 		}
-		*/
 	}
 }
