@@ -59,6 +59,7 @@ public class CoPhylogOnBurk
 				{
 					try
 					{
+						System.out.println("RUNNING " + outFile.getAbsolutePath());
 						runAFile(new File(sequenceDir.getAbsolutePath() + File.separator + s), outFile,writer);
 					}
 					catch(Exception ex)

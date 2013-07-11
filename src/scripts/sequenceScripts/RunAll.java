@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
+import fileAbstractions.FileUtils;
 import fileAbstractions.PairedReads;
 
 public class RunAll
@@ -28,6 +29,15 @@ public class RunAll
 	public static void main(String[] args) throws Exception
 	{
 		List<PairedReads> pairedList = getAllBurkholderiaPairs();
+		
+		for(PairedReads pr : pairedList)
+		{
+			File countFile1 = FileUtils.getCountsFile(pr.getFirstRead());
+			File countFile2 = FileUtils.getCountsFile(pr.getSecondRead());
+			
+			if( countFile1.exists() && countFile2.exists())
+				System.out.println("MATCH: " + countFile1.getName());
+		}
 	}
 	
 	public static List<PairedReads> getAllBurkholderiaPairs() throws Exception
@@ -59,7 +69,7 @@ public class RunAll
 			
 			String s1 = sToken1.nextToken() + "_" + sToken1.nextToken();
 			String s2 = sToken2.nextToken() + "_" + sToken2.nextToken();
-			System.out.println(s1 + " " + s2);
+			//System.out.println(s1 + " " + s2);
 			
 			if( ! s1.equals(s2))
 				throw new Exception("No ");

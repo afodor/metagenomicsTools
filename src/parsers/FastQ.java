@@ -86,6 +86,12 @@ public class FastQ
 		writer.write(qualScore + "\n");
 	}
 	
+	@Override
+	public String toString()
+	{
+		return this.header + "\n" + this.sequence + "\n" + this.checkLine + "\n" + this.qualScore + "\n";
+	}
+	
 	public static FastQ readOneOrNull(BufferedReader reader) throws Exception
 	{
 		String header= reader.readLine();
