@@ -14,6 +14,9 @@
 package fileAbstractions;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class FileUtils
 {
@@ -25,7 +28,12 @@ public class FileUtils
 	
 	public static File getSNPResultsFile( File file1, File file2 ) throws Exception
 	{
+		List<String> names = new ArrayList<>();
+		names.add(file1.getName());
+		names.add(file2.getName());
+		Collections.sort(names);
+		
 		return new File( file1.getParentFile() + File.separator + "snpProbs" + File.separator + 
-				file1.getName() + "vs" + file2.getName() + ".txt");
+				names.get(0) + "vs" + names.get(1)+ ".txt");
 	}
 }
