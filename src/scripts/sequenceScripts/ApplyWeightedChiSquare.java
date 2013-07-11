@@ -40,7 +40,7 @@ public class ApplyWeightedChiSquare
 		
 		List<Double> bVals = new ArrayList<>();
 		
-		bVals.add(0.0); bVals.add(1.0); bVals.add(2.0);  bVals.add(5.0);  bVals.add(10.0);
+		bVals.add(5.0);  
 		//bVals.add(100.0);  bVals.add(1000.0); bVals.add(10000.0);
 		//bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
 		//bVals.add(0.0);bVals.add(0.0001);bVals.add(0.001);bVals.add(0.01);bVals.add(0.1);
@@ -59,7 +59,7 @@ public class ApplyWeightedChiSquare
 		HashMap<Long, ContextCount> map2 = 
 				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
 						File.separator + "results" + File.separator + 
-						"AS130-2_ATCACG_s_2_2_sequence.txt.gz_CO_PhylogBin.gz"));
+						"AS_150_GGCTAC_s_2_2_sequence.txt.gz_CO_PhylogBin.gz"));
 		
 		System.out.println("got map2 " + map2.size());
 		
@@ -111,6 +111,7 @@ public class ApplyWeightedChiSquare
 	private static class Holder implements Comparable<Holder>
 	{
 		double pValue =1;
+		long longVal;
 		ContextCount cc1;
 		ContextCount cc2;
 		List<Double> list1;
@@ -164,6 +165,7 @@ public class ApplyWeightedChiSquare
 				
 				Holder h= new Holder();
 				h.pValue = pValue;
+				h.longVal=aLong;
 				h.cc1 = cc1;
 				h.cc2 = cc2;
 				h.list1=list1;
@@ -181,15 +183,14 @@ public class ApplyWeightedChiSquare
 		System.out.println("Writing");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBurkholderiaDir()+
 				File.separator + "distances" + File.separator + "pValues_" + bVal + ".txt")));
-		writer.write("dunif\tpValue\tbhCorrected\tbonfCorrected\tcounts1\tcount2\tlist1\tlist2\n");
+		writer.write("longID\tdunif\tpValue\tbhCorrected\tbonfCorrected\tcounts1\tcount2\tlist1\tlist2\n");
 		
 		for( int x=0; x < pValues.size(); x++)
 		{
+			Holder h = pValues.get(x);
+			writer.write(h.longVal + "\t");
 			double expected = ((double)(x+1)) / pValues.size();
 			writer.write( expected + "\t" );
-			
-			Holder h = pValues.get(x);
-			
 			writer.write(h.pValue + "\t");
 			writer.write( (pValues.size() * h.pValue / (x+1)) + "\t");
 			writer.write( ( h.pValue * pValues.size() )  + "\t");
