@@ -1,0 +1,133 @@
+/** 
+ * Author:  anthony.fodor@gmail.com    
+ * This code is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version,
+* provided that any use properly credits the author.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details at http://www.gnu.org * * */
+
+
+package parsers;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class SnpResultFileLine
+{
+	//longID	dunif	pValue	bhCorrected	bonfCorrected	counts1	count2	list1	list2
+
+	private final long longID;
+	private final double dUnif;
+	private final double pValue;
+	private final double bhCorrected;
+	private final double bonfCorrected;
+	private final String counts1;
+	private final String counts2;
+	private final String list1;
+	private final String list2;
+	
+	public long getLongID()
+	{
+		return longID;
+	}
+
+	public double getdUnif()
+	{
+		return dUnif;
+	}
+
+	public double getpValue()
+	{
+		return pValue;
+	}
+	
+	public double getBhCorrected()
+	{
+		return bhCorrected;
+	}
+
+	public double getBonfCorrected()
+	{
+		return bonfCorrected;
+	}
+
+	public String getCounts1()
+	{
+		return counts1;
+	}
+
+	public String getCounts2()
+	{
+		return counts2;
+	}
+
+	public String getList1()
+	{
+		return list1;
+	}
+
+	public String getList2()
+	{
+		return list2;
+	}
+
+	private SnpResultFileLine(String s) throws Exception
+	{
+		StringTokenizer sToken = new StringTokenizer(s, "\t");
+		this.longID = Long.parseLong(sToken.nextToken());
+		this.dUnif = Double.parseDouble(sToken.nextToken());
+		this.pValue = Double.parseDouble(sToken.nextToken());
+		this.bhCorrected = Double.parseDouble(sToken.nextToken());
+		this.bonfCorrected = Double.parseDouble(sToken.nextToken());
+		this.counts1 = sToken.nextToken();
+		this.counts2 = sToken.nextToken();
+		this.list1 = sToken.nextToken();
+		this.list2= sToken.nextToken();
+		
+		if( sToken.hasMoreTokens())
+			throw new Exception("No");
+	}
+	
+	public static HashMap<Long, SnpResultFileLine> parseFile(File file) throws Exception
+	{
+		HashMap<Long, SnpResultFileLine> map = new HashMap<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			SnpResultFileLine snp = new SnpResultFileLine(s);
+			
+			if(map.containsKey(snp.getLongID()))
+				throw new Exception("Duplicate id " + snp.getLongID());
+			
+			map.put(snp.getLongID(), snp);
+		}
+		
+		return map;
+	}
+	
+	public static HashMap<Long, SnpResultFileLine> filter(HashMap<Long, SnpResultFileLine> map, double minPValue ) throws Exception
+	{
+		HashMap<Long, SnpResultFileLine> returnMap = new HashMap<>();
+		
+		for( Long l : map.keySet() )
+		{
+			SnpResultFileLine snp = map.get(l);
+			
+			if( snp.getpValue() <= minPValue)
+				returnMap.put(l, snp);
+		}
+		
+		return returnMap;
+	}
+}

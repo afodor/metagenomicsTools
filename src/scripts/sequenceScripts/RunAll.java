@@ -53,7 +53,9 @@ public class RunAll
 		if( returnMap == null)
 		{
 			returnMap = CoPhylogBinaryFileReader.readBinaryFile(countFile);
-			outerMap.put(countFile.getName(), returnMap);
+			
+			// keep the chache empty until we can do weak references
+			//outerMap.put(countFile.getName(), returnMap);
 			dumpMemoryInfo();
 		}
 		
