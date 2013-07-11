@@ -32,6 +32,7 @@ public class CoPhylogBinaryFileReader
 	
 	public static HashMap<Long, ContextCount> readBinaryFile(File file, int maxNum) throws Exception
 	{	
+		System.out.println("Reading " + file.getAbsolutePath());
 		DataInputStream in =new DataInputStream( 
 				new BufferedInputStream(new GZIPInputStream(new FileInputStream(
 					file))));
@@ -39,9 +40,8 @@ public class CoPhylogBinaryFileReader
 		int numRecords = in.readInt();
 		System.out.println(numRecords);
 
-		HashMap<Long, ContextCount> map = new HashMap<>(numRecords * 2);
+		HashMap<Long, ContextCount> map = new HashMap<>(numRecords);
 	
-		
 		for( int x=0; x < numRecords; x++)
 		{
 			long aLong = in.readLong();

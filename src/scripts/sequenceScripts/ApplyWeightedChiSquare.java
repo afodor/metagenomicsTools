@@ -26,6 +26,7 @@ import utils.ConfigReader;
 
 import coPhylog.CoPhylogBinaryFileReader;
 import coPhylog.ContextCount;
+import fileAbstractions.FileUtils;
 
 
 /*
@@ -34,41 +35,6 @@ import coPhylog.ContextCount;
 public class ApplyWeightedChiSquare
 {
 	public static final int MIN_NUM_READS = 5;
-	
-	public static void main(String[] args) throws Exception
-	{
-		
-		List<Double> bVals = new ArrayList<>();
-		
-		bVals.add(5.0);  
-		//bVals.add(100.0);  bVals.add(1000.0); bVals.add(10000.0);
-		//bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
-		//bVals.add(0.0);bVals.add(0.0001);bVals.add(0.001);bVals.add(0.01);bVals.add(0.1);
-		//bVals.add(1.0);bVals.add(10.0);bVals.add(100.0);bVals.add(1000.0);bVals.add(10000.0);bVals.add(100000.0);
-		
-		HashMap<Long, ContextCount> map1 = 
-				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
-						File.separator + "results" + File.separator + 
-						"AS130-2_ATCACG_s_2_1_sequence.txt.gz_CO_PhylogBin.gz"));
-		
-		System.out.println("got map1 " + map1.size());
-		CountHolder prior1 = getCounts(map1);
-		System.out.println(prior1);
-		
-		
-		HashMap<Long, ContextCount> map2 = 
-				CoPhylogBinaryFileReader.readBinaryFile(new File(ConfigReader.getBurkholderiaDir() +
-						File.separator + "results" + File.separator + 
-						"AS_150_GGCTAC_s_2_2_sequence.txt.gz_CO_PhylogBin.gz"));
-		
-		System.out.println("got map2 " + map2.size());
-		
-		CountHolder prior2 = getCounts(map2);
-		System.out.println(prior2);
-		
-		for(Double b : bVals)
-			writePValues(b, map1, map2, prior1, prior2);
-	}
 	
 	private static CountHolder getCounts( HashMap<Long, ContextCount> map )
 	{
@@ -124,8 +90,16 @@ public class ApplyWeightedChiSquare
 		}
 	}
 	
+	public static void writePValues( double bVal, HashMap<Long, ContextCount> map1 ,
+			HashMap<Long, ContextCount> map2, File outFile ) throws Exception
+	{
+		CountHolder prior1 = getCounts(map1);
+		CountHolder prior2 = getCounts(map2);
+		writePValues(bVal, map1, map2, prior1, prior2, outFile);
+	}
+	
 	private static void writePValues( double bVal, HashMap<Long, ContextCount> map1 ,
-					HashMap<Long, ContextCount> map2, CountHolder prior1, CountHolder prior2 )
+					HashMap<Long, ContextCount> map2, CountHolder prior1, CountHolder prior2, File outFile )
 		throws Exception
 	{
 		CountHolder countAverage = new CountHolder();
@@ -181,8 +155,7 @@ public class ApplyWeightedChiSquare
 		Collections.sort(pValues);
 		
 		System.out.println("Writing");
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBurkholderiaDir()+
-				File.separator + "distances" + File.separator + "pValues_" + bVal + ".txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		writer.write("longID\tdunif\tpValue\tbhCorrected\tbonfCorrected\tcounts1\tcount2\tlist1\tlist2\n");
 		
 		for( int x=0; x < pValues.size(); x++)

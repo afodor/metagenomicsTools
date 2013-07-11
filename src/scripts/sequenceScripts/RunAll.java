@@ -15,8 +15,12 @@ package scripts.sequenceScripts;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import coPhylog.CoPhylogBinaryFileReader;
+import coPhylog.ContextCount;
 
 import utils.ConfigReader;
 
@@ -25,18 +29,76 @@ import fileAbstractions.PairedReads;
 
 public class RunAll
 {
+	public static final double B_VALUE = 5.0;
 
+	private static void dumpMemoryInfo() 
+	{
+		double fractionFree= 1- (Runtime.getRuntime().totalMemory()- ((double)Runtime.getRuntime().freeMemory() ))
+				/Runtime.getRuntime().totalMemory();
+
+		System.out.println("fraction Free= " + fractionFree);
+
+		double fractionAllocated = 1-  (Runtime.getRuntime().maxMemory()- ((double)Runtime.getRuntime().totalMemory() ))
+				/Runtime.getRuntime().maxMemory();
+
+		System.out.println("fraction allocated = " + fractionAllocated);
+
+	}
+	
+	// todo: Make out map with weak references.
+	private static HashMap<Long, ContextCount> getFromCache( File countFile, HashMap<String, HashMap<Long, ContextCount>> outerMap ) throws Exception
+	{
+		HashMap<Long, ContextCount> returnMap = outerMap.get(countFile.getName());
+		
+		if( returnMap == null)
+		{
+			returnMap = CoPhylogBinaryFileReader.readBinaryFile(countFile);
+			outerMap.put(countFile.getName(), returnMap);
+			dumpMemoryInfo();
+		}
+		
+		return returnMap;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, HashMap<Long, ContextCount>> outerMap = new HashMap<>();
 		List<PairedReads> pairedList = getAllBurkholderiaPairs();
 		
-		for(PairedReads pr : pairedList)
+		for(int x=0; x < pairedList.size(); x++)
 		{
+			PairedReads pr = pairedList.get(x);
+			
 			File countFile1 = FileUtils.getCountsFile(pr.getFirstRead());
 			File countFile2 = FileUtils.getCountsFile(pr.getSecondRead());
 			
 			if( countFile1.exists() && countFile2.exists())
+			{
 				System.out.println("MATCH: " + countFile1.getName());
+				HashMap<Long, ContextCount> map1 = getFromCache(countFile1, outerMap);
+				HashMap<Long, ContextCount> map2 = getFromCache(countFile1, outerMap);
+				
+				ApplyWeightedChiSquare.writePValues(B_VALUE, map1, map2, FileUtils.getSNPResultsFile(countFile1, countFile2));
+				
+				for( int y=x+1; y < pairedList.size(); y++)
+				{
+					PairedReads pr2 = pairedList.get(y);
+					File countFile2_1 = FileUtils.getCountsFile(pr2.getFirstRead());
+					File countFile2_2 = FileUtils.getCountsFile(pr2.getSecondRead());
+					
+					if( countFile2_1.exists() && countFile2_2.exists())
+					{
+						HashMap<Long, ContextCount> map2_1 = getFromCache(countFile2_1, outerMap);
+						HashMap<Long, ContextCount> map2_2 = getFromCache(countFile2_2, outerMap);
+						
+						ApplyWeightedChiSquare.writePValues(B_VALUE, map1, map2_1, FileUtils.getSNPResultsFile(countFile1, countFile2_1));
+						ApplyWeightedChiSquare.writePValues(B_VALUE, map1, map2_2, FileUtils.getSNPResultsFile(countFile1, countFile2_2));
+						ApplyWeightedChiSquare.writePValues(B_VALUE, map2, map2_1, FileUtils.getSNPResultsFile(countFile2, countFile2_1));
+						ApplyWeightedChiSquare.writePValues(B_VALUE, map2, map2_2, FileUtils.getSNPResultsFile(countFile2, countFile2_2));
+					}
+				}
+			}
+				
 		}
 	}
 	
