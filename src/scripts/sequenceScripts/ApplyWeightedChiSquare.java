@@ -183,10 +183,7 @@ public class ApplyWeightedChiSquare
 				File.separator + "distances" + File.separator + "pValues_" + bVal + ".txt")));
 		writer.write("dunif\tpValue\tbhCorrected\tbonfCorrected\tcounts1\tcount2\tlist1\tlist2\n");
 		
-		boolean flip=false;
-		int numOver =1000;
-		
-		for( int x=0; x < pValues.size() && numOver >=0; x++)
+		for( int x=0; x < pValues.size(); x++)
 		{
 			double expected = ((double)(x+1)) / pValues.size();
 			writer.write( expected + "\t" );
@@ -200,12 +197,6 @@ public class ApplyWeightedChiSquare
 			writer.write( h.cc2 + "\t");
 			writer.write(h.list1 + "\t");
 			writer.write( h.list2 + "\n");	
-			
-			if( pValues.get(x).pValue >= expected)
-				flip = true;
-			
-			if( flip)
-				numOver--;
 		}
 		
 		writer.flush();  writer.close();
