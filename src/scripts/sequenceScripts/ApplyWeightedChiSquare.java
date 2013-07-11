@@ -33,13 +33,15 @@ import coPhylog.ContextCount;
  */
 public class ApplyWeightedChiSquare
 {
+	public static final int MIN_NUM_READS = 5;
 	
 	public static void main(String[] args) throws Exception
 	{
 		
 		List<Double> bVals = new ArrayList<>();
 		
-		bVals.add(100.0);  bVals.add(1000.0); bVals.add(10000.0);
+		bVals.add(0.0); bVals.add(1.0); bVals.add(2.0);  bVals.add(5.0);  bVals.add(10.0);
+		//bVals.add(100.0);  bVals.add(1000.0); bVals.add(10000.0);
 		//bVals.add(2.0);  bVals.add(4.0); bVals.add(10.0);
 		//bVals.add(0.0);bVals.add(0.0001);bVals.add(0.001);bVals.add(0.01);bVals.add(0.1);
 		//bVals.add(1.0);bVals.add(10.0);bVals.add(100.0);bVals.add(1000.0);bVals.add(10000.0);bVals.add(100000.0);
@@ -137,11 +139,11 @@ public class ApplyWeightedChiSquare
 		for( Long aLong : map1.keySet() )
 		{
 			ContextCount cc2 = map2.get(aLong);
+			ContextCount cc1 = map1.get(aLong);
 			
-			if( cc2 != null)
-			{
-				ContextCount cc1 = map1.get(aLong);
-				
+			if( cc2 != null && cc1.isDifferentInHighest(cc2) && cc1.getMax() >= MIN_NUM_READS &&
+								cc2.getMax() >= MIN_NUM_READS)
+			{	
 				List<Double> list1 = new ArrayList<>();
 				list1.add( cc1.getNumA() + bVal * countAverage.fractionA );
 				list1.add( cc1.getNumC() + bVal * countAverage.fractionC );
@@ -179,7 +181,7 @@ public class ApplyWeightedChiSquare
 		System.out.println("Writing");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBurkholderiaDir()+
 				File.separator + "distances" + File.separator + "pValues_" + bVal + ".txt")));
-		writer.write("dunif\tpValue\tcounts1\tcount2\tlist1\tlist2\n");
+		writer.write("dunif\tpValue\tbhCorrected\tbonfCorrected\tcounts1\tcount2\tlist1\tlist2\n");
 		
 		boolean flip=false;
 		int numOver =1000;
@@ -192,6 +194,8 @@ public class ApplyWeightedChiSquare
 			Holder h = pValues.get(x);
 			
 			writer.write(h.pValue + "\t");
+			writer.write( (pValues.size() * h.pValue / (x+1)) + "\t");
+			writer.write( ( h.pValue * pValues.size() )  + "\t");
 			writer.write( h.cc1 + "\t" );
 			writer.write( h.cc2 + "\t");
 			writer.write(h.list1 + "\t");
