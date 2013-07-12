@@ -32,6 +32,38 @@ public class CountSNPs
 {
 	public static double MIN_PVALUE= 0.05;
 	
+	public static int getYear(String s) throws Exception
+	{
+		HashSet<String> s2010 = new HashSet<>();
+		s2010.add("136");  s2010.add("137");  s2010.add("138");  s2010.add("139");  
+		s2010.add("130");  s2010.add("131");  s2010.add("132");  s2010.add("133");  s2010.add("134");
+
+		for(String s2 : s2010)
+			if(s.indexOf(s2)!=-1)
+				return 2010;
+		
+		HashSet<String> s2009 = new HashSet<>();
+		
+		s2009.add("142");  s2009.add("143");  s2009.add("144");  s2009.add("147");  
+		
+		for(String s2 : s2009)
+			if(s.indexOf(s2)!=-1)
+				return 2009;
+		
+		HashSet<String> s2011 = new HashSet<>();
+		
+		s2011.add("148"); s2011.add("149"); s2011.add("150"); s2011.add("152");
+		s2011.add("154"); s2011.add("155"); s2011.add("156"); s2011.add("157");s2011.add("158");
+		
+		
+		for(String s2 : s2011)
+			if(s.indexOf(s2)!=-1)
+				return 2011;
+		
+		throw new Exception("Could not find " + s);
+	}
+	
+	
 	public static String getAssignment(String s) throws Exception
 	{
 		HashSet<String> sensitive = new HashSet<>();
@@ -70,15 +102,33 @@ public class CountSNPs
 		
 	}
 	
+
+	public static String getYears(String s1,String s2) throws Exception
+	{
+		List<String> list = new ArrayList<>();
+		list.add("" + getYear(s1));
+		list.add("" + getYear(s2));
+		Collections.sort(list);
+		
+		return list.get(0) + "_TO_" + list.get(1);
+		
+	}
+	
+	//This has dependencies on CoPhylogOnBurk and then GenerateDistances and the DoAllBurkComparisons
 	public static void main(String[] args) throws Exception
 	{	
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getBurkholderiaDir() + File.separator +  "summary" + File.separator +
 				"summary.txt")));
-		writer.write("fileA\tfileB\tnumInCommon\tkey\n");
+		writer.write("fileA\tfileB\tnumInCommon\tkey\ttime\n");
 		
-		List<PairedReads> pairedList = RunAll.getAllBurkholderiaPairs();
+		BufferedWriter detailedWriter = new BufferedWriter(new FileWriter(new File( 
+				ConfigReader.getBurkholderiaDir() + File.separator + "details.txt"	)));
+		
+		detailedWriter.write("fileA\tfileB\tnumInCommon\tkey\ttime\tlongID\taCounts1\taCounts2\taCounts3\taCounts4\tbCounts1\tbCounts2\tbCounts3\tbCounts4\n");
+		
+		List<PairedReads> pairedList = DoAllBurkComparisons.getAllBurkholderiaPairs();
 		for(int x=0; x < pairedList.size()-1; x++)
 		{
 			PairedReads prx = pairedList.get(x);
@@ -129,7 +179,31 @@ public class CountSNPs
 						writer.write(prx.getFirstRead().getName() + "\t" + 
 										pry.getSecondRead().getName() + "\t" + 
 											commonLongs.size() + "\t" + 
-												getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\n"	);
+												getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t"	
+												 + getYears(prx.getFirstRead().getName(), pry.getSecondRead().getName()) +  "\n");
+						
+						for(Long longID : commonLongs)
+						{
+							detailedWriter.write(prx.getFirstRead().getName() + "\t" + 
+									pry.getSecondRead().getName() + "\t" + 
+										commonLongs.size() + "\t" + 
+											getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t"	
+											 + getYears(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t");
+							
+							detailedWriter.write(longID +"\t" );
+							detailedWriter.write(map1.get(	longID).getCounts1() + "\t");
+							detailedWriter.write(map2.get(	longID).getCounts1() + "\t");
+							detailedWriter.write(map3.get(	longID).getCounts1() + "\t");
+							detailedWriter.write(map4.get(	longID).getCounts1() + "\t");
+							
+							detailedWriter.write(map1.get(	longID).getCounts2() + "\t");
+							detailedWriter.write(map2.get(	longID).getCounts2() + "\t");
+							detailedWriter.write(map3.get(	longID).getCounts2() + "\t");
+							detailedWriter.write(map4.get(	longID).getCounts2() + "\n");
+							detailedWriter.flush();
+					
+						}
+						
 						writer.flush();
 						
 
@@ -138,6 +212,7 @@ public class CountSNPs
 			}
 		}
 		
-		writer.close();
+		detailedWriter.flush();  detailedWriter.close();
+		writer.flush(); writer.close();
 	}
 }

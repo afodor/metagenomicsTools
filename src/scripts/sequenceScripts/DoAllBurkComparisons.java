@@ -27,7 +27,7 @@ import utils.ConfigReader;
 import fileAbstractions.FileUtils;
 import fileAbstractions.PairedReads;
 
-public class RunAll
+public class DoAllBurkComparisons
 {
 	public static final double B_VALUE = 5.0;
 
@@ -62,6 +62,9 @@ public class RunAll
 		return returnMap;
 	}
 	
+	/*
+	 * This has dependencies on CoPhylogOnBurk and then GenerateDistances
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, HashMap<Long, ContextCount>> outerMap = new HashMap<>();
