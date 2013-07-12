@@ -108,7 +108,9 @@ public class RunAll
 	{
 		List<PairedReads> list = new ArrayList<>();
 		
+		System.out.println("scanning " + ConfigReader.getBurkholderiaDir());
 		File dir = new File(ConfigReader.getBurkholderiaDir());
+		
 		
 		String[] files= dir.list();
 		List<String> fileNames = new ArrayList<>();

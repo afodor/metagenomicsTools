@@ -10,9 +10,9 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package scripts.sequenceScripts;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,49 +27,41 @@ public class CountSNPs
 	
 	public static void main(String[] args) throws Exception
 	{
-		// what SNPs are present in all 4 comparisons ?
 		List<PairedReads> pairedList = RunAll.getAllBurkholderiaPairs();
-		
-		for( int x=0; x < pairedList.size()-1; x++)
+		for(int x=0; x < pairedList.size()-1; x++)
 		{
-			PairedReads prX = pairedList.get(x);
+			PairedReads prx = pairedList.get(x);
 			
-			for( int y=x+1; y < pairedList.size(); y++)
+			System.out.println(prx.getFirstRead().exists() + " " + prx.getFirstRead().getAbsolutePath());
+			if( prx.getFirstRead().exists() && prx.getSecondRead().exists())
 			{
-				try
+				System.out.println("GOT BOTH");
+				for( int y=x+1; y < pairedList.size(); y++)
 				{
-					PairedReads prY = pairedList.get(y);
-					
-					System.out.println(prX.getFirstRead() + " "+ prY.getFirstRead());
-					
+					PairedReads pry = pairedList.get(y);
 					HashMap<Long, SnpResultFileLine> map1 = SnpResultFileLine.parseFile(
-						FileUtils.getSNPResultsFile(prX.getFirstRead(), prY.getFirstRead())	);
-					map1 = SnpResultFileLine.filter(map1, MIN_PVALUE);
-					
+							FileUtils.getSNPResultsFile(prx.getFirstRead(), pry.getFirstRead())	);
+						map1 = SnpResultFileLine.filter(map1, MIN_PVALUE);
+						
 
-					HashMap<Long, SnpResultFileLine> map2 = SnpResultFileLine.parseFile(
-						FileUtils.getSNPResultsFile(prX.getFirstRead(), prY.getSecondRead())	);
-					map2 = SnpResultFileLine.filter(map2, MIN_PVALUE);
-					
+						HashMap<Long, SnpResultFileLine> map2 = SnpResultFileLine.parseFile(
+							FileUtils.getSNPResultsFile(prx.getFirstRead(), pry.getSecondRead())	);
+						map2 = SnpResultFileLine.filter(map2, MIN_PVALUE);
+						
 
-					HashMap<Long, SnpResultFileLine> map3= SnpResultFileLine.parseFile(
-						FileUtils.getSNPResultsFile(prX.getSecondRead(), prY.getFirstRead())	);
-					map3 = SnpResultFileLine.filter(map3, MIN_PVALUE);
-					
+						HashMap<Long, SnpResultFileLine> map3= SnpResultFileLine.parseFile(
+							FileUtils.getSNPResultsFile(prx.getSecondRead(), pry.getFirstRead())	);
+						map3 = SnpResultFileLine.filter(map3, MIN_PVALUE);
+						
 
-					HashMap<Long, SnpResultFileLine> map4= SnpResultFileLine.parseFile(
-						FileUtils.getSNPResultsFile(prX.getSecondRead(), prY.getFirstRead())	);
-					map4 = SnpResultFileLine.filter(map4, MIN_PVALUE);
-					
-					System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " + map4.size());
-					System.exit(1);
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
+						HashMap<Long, SnpResultFileLine> map4= SnpResultFileLine.parseFile(
+							FileUtils.getSNPResultsFile(prx.getSecondRead(), pry.getFirstRead())	);
+						map4 = SnpResultFileLine.filter(map4, MIN_PVALUE);
+						
+						System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " + map4.size());
+						
 				}
 			}
 		}
-		
 	}
 }
