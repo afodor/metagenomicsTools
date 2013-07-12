@@ -13,6 +13,7 @@
 package scripts.sequenceScripts;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import parsers.SnpResultFileLine;
@@ -64,9 +65,15 @@ public class CountSNPs
 																, FileUtils.getCountsFile(pry.getSecondRead()))	);
 						map4 = SnpResultFileLine.filter(map4, MIN_PVALUE);
 						
+						HashSet<Long> commonLongs = new HashSet<>();
+						commonLongs.addAll(map1.keySet());
 						
+						commonLongs.retainAll(map2.keySet());
+						commonLongs.retainAll(map3.keySet());
+						commonLongs.retainAll(map4.keySet());
 
-						System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " + map4.size());
+						System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " 
+								+ map4.size() + " " + commonLongs.size());
 
 					}										
 				}
