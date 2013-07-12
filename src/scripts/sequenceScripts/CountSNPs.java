@@ -15,9 +15,12 @@ package scripts.sequenceScripts;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
 
 import parsers.SnpResultFileLine;
 import utils.ConfigReader;
@@ -29,12 +32,51 @@ public class CountSNPs
 {
 	public static double MIN_PVALUE= 0.05;
 	
-	public static void main(String[] args) throws Exception
+	public static String getAssignment(String s) throws Exception
 	{
+		HashSet<String> sensitive = new HashSet<>();
+		sensitive.add("137");sensitive.add("139");sensitive.add("142");sensitive.add("144");
+		sensitive.add("149");sensitive.add("150");
+		
+		for(String s2 : sensitive)
+			if(s.indexOf(s2)!=-1)
+				return "sensitive";
+	
+		HashSet<String> resistant = new HashSet<>();
+		
+		resistant.add("130"); 
+		resistant.add("131"); 
+		resistant.add("132");
+		resistant.add("133"); 
+		resistant.add("154");
+		resistant.add("155");
+		resistant.add("158"); 
+		
+		for(String s2 : resistant)
+			if(s.indexOf(s2)!=-1)
+				return "resistant";
+		
+		throw new Exception("Could not find " + s);
+	}
+	
+	public static String getCode(String s1,String s2) throws Exception
+	{
+		List<String> list = new ArrayList<>();
+		list.add(getAssignment(s1));
+		list.add(getAssignment(s2));
+		Collections.sort(list);
+		
+		return list.get(0) + "_TO_" + list.get(1);
+		
+	}
+	
+	public static void main(String[] args) throws Exception
+	{	
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
-				ConfigReader.getBurkholderiaDir() + "summary" + File.separator +
+				ConfigReader.getBurkholderiaDir() + File.separator +  "summary" + File.separator +
 				"summary.txt")));
-		writer.write("fileA\tfileB\tnumInCommon\n");
+		writer.write("fileA\tfileB\tnumInCommon\tkey\n");
 		
 		List<PairedReads> pairedList = RunAll.getAllBurkholderiaPairs();
 		for(int x=0; x < pairedList.size()-1; x++)
@@ -85,8 +127,9 @@ public class CountSNPs
 								+ map4.size() + " " + commonLongs.size());
 						
 						writer.write(prx.getFirstRead().getName() + "\t" + 
-										prx.getSecondRead().getName() + "\t" + 
-											commonLongs.size() + "\n");
+										pry.getSecondRead().getName() + "\t" + 
+											commonLongs.size() + "\t" + 
+												getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\n"	);
 						writer.flush();
 						
 
