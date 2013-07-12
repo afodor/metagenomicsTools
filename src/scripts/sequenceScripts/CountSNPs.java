@@ -12,11 +12,15 @@
 
 package scripts.sequenceScripts;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import parsers.SnpResultFileLine;
+import utils.ConfigReader;
 
 import fileAbstractions.FileUtils;
 import fileAbstractions.PairedReads;
@@ -27,6 +31,11 @@ public class CountSNPs
 	
 	public static void main(String[] args) throws Exception
 	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
+				ConfigReader.getBurkholderiaDir() + "summary" + File.separator +
+				"summary.txt")));
+		writer.write("fileA\tfileB\tnumInCommon\n");
+		
 		List<PairedReads> pairedList = RunAll.getAllBurkholderiaPairs();
 		for(int x=0; x < pairedList.size()-1; x++)
 		{
@@ -74,10 +83,18 @@ public class CountSNPs
 
 						System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " 
 								+ map4.size() + " " + commonLongs.size());
+						
+						writer.write(prx.getFirstRead().getName() + "\t" + 
+										prx.getSecondRead().getName() + "\t" + 
+											commonLongs.size() + "\n");
+						writer.flush();
+						
 
 					}										
 				}
 			}
 		}
+		
+		writer.close();
 	}
 }
