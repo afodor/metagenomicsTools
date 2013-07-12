@@ -78,7 +78,7 @@ public class RunAll
 			{
 				System.out.println("MATCH: " + countFile1.getName());
 				HashMap<Long, ContextCount> map1 = getFromCache(countFile1, outerMap);
-				HashMap<Long, ContextCount> map2 = getFromCache(countFile1, outerMap);
+				HashMap<Long, ContextCount> map2 = getFromCache(countFile2, outerMap);
 				
 				ApplyWeightedChiSquare.writePValues(B_VALUE, map1, map2, FileUtils.getSNPResultsFile(countFile1, countFile2));
 				
