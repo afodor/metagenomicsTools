@@ -18,8 +18,8 @@ import java.io.File;
 import java.io.FileReader;
 
 import parsers.FastQ;
-
 import utils.ConfigReader;
+
 
 public class TestFastQ
 {
@@ -27,13 +27,14 @@ public class TestFastQ
 	{
 		FastQ oldFastq = null;
 		
-		File dir = new File("F:\\March21Laptop\\RawBurkholderiaSequences\\sequences");
+		File dir = new File(ConfigReader.getBurkholderiaDir());
 		
 		String [] names = dir.list();
 		
 		for(String s : names)
 		try
 		{
+			System.out.println(s);
 			BufferedReader reader = new BufferedReader(new FileReader(new File(  
 					dir.getAbsolutePath() + File.separator + s)));
 			
@@ -43,7 +44,7 @@ public class TestFastQ
 			{
 				x++;
 				
-				if( x % 10000 ==0 )
+				if( x % 1000000 ==0 )
 					System.out.println(x + " " + fastq.getSequence());
 				
 				oldFastq = fastq;
