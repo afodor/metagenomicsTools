@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
-import coPhylog.ContextCount;
-
 
 import parsers.SnpResultFileLine;
 import utils.ConfigReader;
