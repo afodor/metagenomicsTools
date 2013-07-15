@@ -100,6 +100,7 @@ public class CreateSNPPivotTable
 		HashMap<Long,HashMap<String,Holder>> map = new HashMap<>();
 		
 		List<PairedReads> pairedList = DoAllBurkComparisons.getAllBurkholderiaPairs();
+		System.out.println(pairedList.size());
 		
 		for(PairedReads pr : pairedList)
 		{
@@ -107,7 +108,6 @@ public class CreateSNPPivotTable
 			System.out.println(strainName + " "+ pr.getFirstFileName() + " " + pr.getSecondFileName());
 			addToMap(map, pr.getFirstFileName(), strainName, ids);
 			addToMap(map, pr.getSecondFileName(), strainName, ids);
-			return map;
 		}		
 		
 		return map;
