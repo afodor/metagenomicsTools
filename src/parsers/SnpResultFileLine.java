@@ -44,10 +44,8 @@ public class SnpResultFileLine
 		return new ContextCount(list.get(0), list.get(1), list.get(2),list.get(3));
 	}
 	
-	public List<Integer> getAsInts(boolean firstlist) throws Exception
+	public static List<Integer> parseTextList(String s1) throws Exception
 	{
-		String s1 = firstlist ? counts1 : counts2;
-		
 		s1 = s1.replace("[", "");
 		s1 = s1.replace("]", "");
 		
@@ -62,6 +60,14 @@ public class SnpResultFileLine
 			throw new Exception("Unexpected token " + sToken.nextToken());
 		
 		return list;
+	
+	}
+	
+	public List<Integer> getAsInts(boolean firstlist) throws Exception
+	{
+		String s1 = firstlist ? counts1 : counts2;
+			
+		return parseTextList(s1);
 	}
 	
 	public long getLongID()
