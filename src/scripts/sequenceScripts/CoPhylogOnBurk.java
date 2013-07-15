@@ -119,7 +119,7 @@ public class CoPhylogOnBurk
 		int numRemoved =0;
 		
 		for(FastQ fq = FastQ.readOneOrNull(reader); 
-				fq != null && numDone < 2000000; 
+				fq != null; 
 				fq = FastQ.readOneOrNull(reader))
 		{
 			ContextHash.addToHash(fq.getSequence(), map, contextSize);
