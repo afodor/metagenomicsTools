@@ -16,7 +16,11 @@ package scripts.sequenceScripts;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+
+import fileAbstractions.PairedReads;
 
 import utils.ConfigReader;
 
@@ -29,6 +33,38 @@ public class CreateSNPPivotTable
 	{
 		HashSet<Long> ids = getSnpIds();
 		System.out.println(ids.size());
+		
+		
+	}
+	
+	private static HashMap<Long,HashMap<String,Holder>> getPivotMap(HashSet<Long> ids)
+		throws Exception
+	{
+		HashMap<Long,HashMap<String,Holder>> map = new HashMap<>();
+		
+		List<PairedReads> pairedList = DoAllBurkComparisons.getAllBurkholderiaPairs();
+		
+		for(PairedReads pr : pairedList)
+		{
+			System.out.println(pr.getFirstFileName());
+			System.out.println(pr.getSecondFileName());
+		}		
+		
+		return map;
+	}
+	
+	private static class Holder
+	{
+		int a=0;
+		int c=0;
+		int g=0;
+		int t=0;
+		
+		@Override
+		public String toString()
+		{
+			return "[" + a + "," + c + "," + g + "," + t + "]";
+		}
 	}
 	
 	private static HashSet<Long> getSnpIds() throws Exception

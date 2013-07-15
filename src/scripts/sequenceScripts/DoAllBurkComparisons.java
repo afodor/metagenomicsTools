@@ -74,8 +74,8 @@ public class DoAllBurkComparisons
 		{
 			PairedReads pr = pairedList.get(x);
 			
-			File countFile1 = FileUtils.getCountsFile(pr.getFirstRead());
-			File countFile2 = FileUtils.getCountsFile(pr.getSecondRead());
+			File countFile1 = FileUtils.getCountsFile(pr.getFirstFileName());
+			File countFile2 = FileUtils.getCountsFile(pr.getSecondFileName());
 			
 			if( countFile1.exists() && countFile2.exists())
 			{
@@ -88,8 +88,8 @@ public class DoAllBurkComparisons
 				for( int y=x+1; y < pairedList.size(); y++)
 				{
 					PairedReads pr2 = pairedList.get(y);
-					File countFile2_1 = FileUtils.getCountsFile(pr2.getFirstRead());
-					File countFile2_2 = FileUtils.getCountsFile(pr2.getSecondRead());
+					File countFile2_1 = FileUtils.getCountsFile(pr2.getFirstFileName());
+					File countFile2_2 = FileUtils.getCountsFile(pr2.getSecondFileName());
 					
 					if( countFile2_1.exists() && countFile2_2.exists())
 					{
@@ -133,8 +133,8 @@ public class DoAllBurkComparisons
 		
 		for(PairedReads pr : list)
 		{
-			StringTokenizer sToken1= new StringTokenizer(pr.getFirstRead().getName(), "_");
-			StringTokenizer sToken2 = new StringTokenizer(pr.getSecondRead().getName(), "_");
+			StringTokenizer sToken1= new StringTokenizer(pr.getFirstFileName().getName(), "_");
+			StringTokenizer sToken2 = new StringTokenizer(pr.getSecondFileName().getName(), "_");
 			
 			String s1 = sToken1.nextToken() + "_" + sToken1.nextToken();
 			String s2 = sToken2.nextToken() + "_" + sToken2.nextToken();
@@ -154,13 +154,13 @@ public class DoAllBurkComparisons
 		{
 			
 			@Override
-			public File getSecondRead()
+			public File getSecondFileName()
 			{
 				return new File(filepath2);
 			}
 			
 			@Override
-			public File getFirstRead()
+			public File getFirstFileName()
 			{
 				return new File(filepath1);
 			}

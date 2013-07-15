@@ -17,6 +17,6 @@ import java.io.File;
 
 public interface PairedReads
 {
-	public File getFirstRead();
-	public File getSecondRead();
+	public File getFirstFileName();
+	public File getSecondFileName();
 }

@@ -22,11 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import utils.ChisquareTest;
-import utils.ConfigReader;
-
-import coPhylog.CoPhylogBinaryFileReader;
 import coPhylog.ContextCount;
-import fileAbstractions.FileUtils;
 
 
 /*

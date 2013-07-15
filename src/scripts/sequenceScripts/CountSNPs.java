@@ -135,37 +135,37 @@ public class CountSNPs
 		{
 			PairedReads prx = pairedList.get(x);
 			
-			if( FileUtils.getCountsFile(prx.getFirstRead()).exists() && 
-					FileUtils.getCountsFile(prx.getSecondRead()).exists())
+			if( FileUtils.getCountsFile(prx.getFirstFileName()).exists() && 
+					FileUtils.getCountsFile(prx.getSecondFileName()).exists())
 			{
 				for( int y=x+1; y < pairedList.size(); y++)
 				{
 					PairedReads pry = pairedList.get(y);
 					
-					if( FileUtils.getCountsFile(pry.getFirstRead()).exists() 
-							&& FileUtils.getCountsFile(pry.getSecondRead()).exists())
+					if( FileUtils.getCountsFile(pry.getFirstFileName()).exists() 
+							&& FileUtils.getCountsFile(pry.getSecondFileName()).exists())
 					{
 						HashMap<Long, SnpResultFileLine> map1 = SnpResultFileLine.parseFile(
-								FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getFirstRead())
-														, FileUtils.getCountsFile(pry.getFirstRead()))	);
+								FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getFirstFileName())
+														, FileUtils.getCountsFile(pry.getFirstFileName()))	);
 						map1 = SnpResultFileLine.filter(map1, MIN_PVALUE);
 							
 
 						HashMap<Long, SnpResultFileLine> map2 = SnpResultFileLine.parseFile(
-									FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getFirstRead())
-															, FileUtils.getCountsFile(pry.getSecondRead()))	);
+									FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getFirstFileName())
+															, FileUtils.getCountsFile(pry.getSecondFileName()))	);
 						map2 = SnpResultFileLine.filter(map2, MIN_PVALUE);
 							
 
 						HashMap<Long, SnpResultFileLine> map3 = SnpResultFileLine.parseFile(
-										FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getSecondRead())
-																, FileUtils.getCountsFile(pry.getFirstRead()))	);
+										FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getSecondFileName())
+																, FileUtils.getCountsFile(pry.getFirstFileName()))	);
 						map3 = SnpResultFileLine.filter(map3, MIN_PVALUE);
 						
 
 						HashMap<Long, SnpResultFileLine> map4 = SnpResultFileLine.parseFile(
-										FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getSecondRead())
-																, FileUtils.getCountsFile(pry.getSecondRead()))	);
+										FileUtils.getSNPResultsFile(  FileUtils.getCountsFile(prx.getSecondFileName())
+																, FileUtils.getCountsFile(pry.getSecondFileName()))	);
 						map4 = SnpResultFileLine.filter(map4, MIN_PVALUE);
 						
 						HashSet<Long> commonLongs = new HashSet<>();
@@ -178,19 +178,19 @@ public class CountSNPs
 						System.out.println(map1.size() +  " " + map2.size() + " " + map3.size() + " " 
 								+ map4.size() + " " + commonLongs.size());
 						
-						writer.write(prx.getFirstRead().getName() + "\t" + 
-										pry.getSecondRead().getName() + "\t" + 
+						writer.write(prx.getFirstFileName().getName() + "\t" + 
+										pry.getSecondFileName().getName() + "\t" + 
 											commonLongs.size() + "\t" + 
-												getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t"	
-												 + getYears(prx.getFirstRead().getName(), pry.getSecondRead().getName()) +  "\n");
+												getCode(prx.getFirstFileName().getName(), pry.getSecondFileName().getName()) + "\t"	
+												 + getYears(prx.getFirstFileName().getName(), pry.getSecondFileName().getName()) +  "\n");
 						
 						for(Long longID : commonLongs)
 						{
-							detailedWriter.write(prx.getFirstRead().getName() + "\t" + 
-									pry.getSecondRead().getName() + "\t" + 
+							detailedWriter.write(prx.getFirstFileName().getName() + "\t" + 
+									pry.getSecondFileName().getName() + "\t" + 
 										commonLongs.size() + "\t" + 
-											getCode(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t"	
-											 + getYears(prx.getFirstRead().getName(), pry.getSecondRead().getName()) + "\t");
+											getCode(prx.getFirstFileName().getName(), pry.getSecondFileName().getName()) + "\t"	
+											 + getYears(prx.getFirstFileName().getName(), pry.getSecondFileName().getName()) + "\t");
 							
 							detailedWriter.write(longID +"\t" );
 							detailedWriter.write(map1.get(	longID).getCounts1() + "\t");
