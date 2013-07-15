@@ -16,8 +16,13 @@ package parsers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
+
+import coPhylog.ContextCount;
 
 public class SnpResultFileLine
 {
@@ -32,6 +37,33 @@ public class SnpResultFileLine
 	private final String counts2;
 	private final String list1;
 	private final String list2;
+	
+	public ContextCount getContextCount(boolean firstList) throws Exception
+	{
+		List<Integer> list= getAsInts(firstList);
+		
+		return new ContextCount(list.get(0), list.get(1), list.get(2),list.get(3));
+	}
+	
+	public List<Integer> getAsInts(boolean firstlist) throws Exception
+	{
+		String s1 = firstlist ? counts1 : counts2;
+		
+		s1 = s1.replace("[", "");
+		s1 = s1.replace("]", "");
+		
+		StringTokenizer sToken = new StringTokenizer(s1, ",");
+		
+		List<Integer> list = new ArrayList<>();
+		
+		for( int x=0; x < 4; x++)
+			list.add(Integer.parseInt(sToken.nextToken()));
+		
+		if( sToken.hasMoreTokens())
+			throw new Exception("Unexpected token " + sToken.nextToken());
+		
+		return list;
+	}
 	
 	public long getLongID()
 	{

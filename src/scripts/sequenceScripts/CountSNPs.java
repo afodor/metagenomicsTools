@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
+
+import coPhylog.ContextCount;
 
 
 import parsers.SnpResultFileLine;
@@ -124,9 +127,10 @@ public class CountSNPs
 		writer.write("fileA\tfileB\tnumInCommon\tkey\ttime\n");
 		
 		BufferedWriter detailedWriter = new BufferedWriter(new FileWriter(new File( 
-				ConfigReader.getBurkholderiaDir() + File.separator + "details.txt"	)));
+				ConfigReader.getBurkholderiaDir() + File.separator + "summary" + File.separator + 
+				"details.txt"	)));
 		
-		detailedWriter.write("fileA\tfileB\tnumInCommon\tkey\ttime\tlongID\taCounts1\taCounts2\taCounts3\taCounts4\tbCounts1\tbCounts2\tbCounts3\tbCounts4\n");
+		detailedWriter.write("fileA\tfileB\tnumInCommon\tkey\ttime\tlongID\taCounts1\taCounts2\taCounts3\taCounts4\tbCounts1\tbCounts2\tbCounts3\tbCounts4\tconsensusA\tconsensusB\n");
 		
 		List<PairedReads> pairedList = DoAllBurkComparisons.getAllBurkholderiaPairs();
 		for(int x=0; x < pairedList.size()-1; x++)
@@ -199,7 +203,9 @@ public class CountSNPs
 							detailedWriter.write(map1.get(	longID).getCounts2() + "\t");
 							detailedWriter.write(map2.get(	longID).getCounts2() + "\t");
 							detailedWriter.write(map3.get(	longID).getCounts2() + "\t");
-							detailedWriter.write(map4.get(	longID).getCounts2() + "\n");
+							detailedWriter.write(map4.get(	longID).getCounts2() + "\t");
+							detailedWriter.write(getConsensus(longID, map1, map2, map3, map4, true) + "\t");
+							detailedWriter.write(getConsensus(longID, map1, map2, map3, map4, false) + "\n");
 							detailedWriter.flush();
 					
 						}
@@ -214,5 +220,22 @@ public class CountSNPs
 		
 		detailedWriter.flush();  detailedWriter.close();
 		writer.flush(); writer.close();
+	}
+	
+	private static TreeSet<Character> getConsensus( long aLong, HashMap<Long, SnpResultFileLine> map1,  
+			HashMap<Long, SnpResultFileLine> map2, 
+				HashMap<Long, SnpResultFileLine> map3, HashMap<Long, SnpResultFileLine> map4, boolean first)
+					throws Exception
+	{
+		TreeSet<Character> set = new TreeSet<>();
+	
+		
+		set.addAll(map1.get(aLong).getContextCount(first).getHighest());
+		set.addAll(map2.get(aLong).getContextCount(first).getHighest());
+		set.addAll(map3.get(aLong).getContextCount(first).getHighest());
+		set.addAll(map4.get(aLong).getContextCount(first).getHighest());
+		
+		return set;
+		
 	}
 }

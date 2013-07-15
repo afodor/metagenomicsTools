@@ -30,6 +30,22 @@ public class ContextCount
 		this.numT = numT;
 	}
 	
+	public ContextCount( int numA, int numC, int numG, int numT) throws Exception
+	{
+		if( (numA-128) > Byte.MAX_VALUE  || (numC-128) > Byte.MAX_VALUE 
+				|| (numG-128) > Byte.MAX_VALUE || (numT-128) > Byte.MAX_VALUE)
+			throw new Exception("All must be below " +  Byte.MAX_VALUE + " " + numA + " " + numC + " " + numG + " "+ numT);
+		
+
+		if( numA < 0|| numC < 0|| numG < 0|| numT < 0)
+			throw new Exception("No negative numbers");
+		
+		this.numA = (byte) (numA - 128);
+		this.numC = (byte) (numC - 128);
+		this.numG = (byte) (numG - 128);
+		this.numT = (byte) (numT - 128);
+	}
+	
 	public double getRawDistance(ContextCount other)
 	{
 		double sum =0;
