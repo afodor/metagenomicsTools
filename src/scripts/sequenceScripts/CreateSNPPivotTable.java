@@ -105,46 +105,47 @@ public class CreateSNPPivotTable
 		{
 			String strainName = FileUtils.getCommonNameForPairs(pr);
 			System.out.println(strainName + " "+ pr.getFirstFileName() + " " + pr.getSecondFileName());
-			addToMap(map, pr.getFirstFileName(), strainName);
-			addToMap(map, pr.getSecondFileName(), strainName);
+			addToMap(map, pr.getFirstFileName(), strainName, ids);
+			addToMap(map, pr.getSecondFileName(), strainName, ids);
+			return map;
 		}		
 		
 		return map;
 	}
 	
 	private static void addToMap(HashMap<Long,HashMap<String,Holder>> map, File sequenceFile, 
-			String strainName) throws Exception
+			String strainName, HashSet<Long> includedIds) throws Exception
 	{
 		HashMap<Long, ContextCount> fileMap = 
 				CoPhylogBinaryFileReader.readBinaryFile(FileUtils.getCountsFile(sequenceFile));
 		
 		for(Long aLong : fileMap.keySet())
-		{
-			ContextCount cc = fileMap.get(aLong);
-			
-			HashMap<String, Holder> innerMap = map.get(aLong);
-			
-			if( innerMap == null)
+			if( includedIds.contains(aLong))
 			{
-				innerMap = new HashMap<String,Holder>();
+				ContextCount cc = fileMap.get(aLong);
 				
-				map.put( aLong, innerMap);
+				HashMap<String, Holder> innerMap = map.get(aLong);
+				
+				if( innerMap == null)
+				{
+					innerMap = new HashMap<String,Holder>();
+					
+					map.put( aLong, innerMap);
+				}
+				
+				Holder h = innerMap.get(strainName);
+				
+				if( h == null)
+				{
+					h = new Holder();
+					innerMap.put(strainName, h);
+				}
+				
+				h.a += cc.getNumA();
+				h.c += cc.getNumC();
+				h.g += cc.getNumG();
+				h.t+= cc.getNumT();
 			}
-			
-			Holder h = innerMap.get(strainName);
-			
-			if( h == null)
-			{
-				h = new Holder();
-				innerMap.put(strainName, h);
-			}
-			
-			h.a += cc.getNumA();
-			h.c += cc.getNumC();
-			h.g += cc.getNumG();
-			h.t+= cc.getNumT();
-		}
-		
 	}
 	
 	private static class Holder
