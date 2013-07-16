@@ -20,6 +20,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -86,7 +89,9 @@ public class SnpTableToFasta
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getBurkholderiaDir() + File.separator + "summary" + 
-						File.separator + "summaryFasta.txt")));
+						File.separator + "summaryFastaNoSingletons.txt")));
+		
+		//list = excludeSingetonColumns(list);
 		
 		for(Holder h : list)
 		{
@@ -99,6 +104,65 @@ public class SnpTableToFasta
 		reader.close();
 		
 	}
+	
+	/*
+	private static List<Holder> excludeSingetonColumns(List<Holder> inList)
+		throws Exception
+	{
+		HashSet<Integer> excludedColumns = new LinkedHashSet<>();
+		
+		int length = inList.get(0).buff.length();
+		
+		for(Holder h : inList)
+			if( h.buff.length() != length)
+				throw new Exception("Logic error");
+		
+		for( int x=0; x < length; x++)
+		{
+			HashMap<Character,Integer> map = new HashMap<>();
+			
+			for(Holder h : inList)
+			{
+				Integer i = map.get(h.buff.charAt(x) );
+				
+				if( i == null )
+				{
+					i = 0;
+				}
+				
+				i++;
+				map.put(h.buff.charAt(x) , i);
+			}
+			System.out.println(x + " " + map);
+			
+			if( map.size() == 2)
+			{
+				List<Integer> numbers = new ArrayList<>(map.values());
+				Collections.sort(numbers);
+				
+				if( numbers.get(0) <= 2)
+					excludedColumns.add(x);
+			}
+		}
+		
+		System.out.println(excludedColumns);
+		
+		List<Holder> newList = new ArrayList<>();
+		
+		for( Holder h : inList)
+		{
+			Holder newHolder = new Holder();
+			newList.add(newHolder);
+			newHolder.strainName = h.strainName;
+			
+			for( int x=0; x < length; x++)
+				if(! excludedColumns.contains(x))
+					newHolder.buff.append(h.buff.charAt(x));
+		}
+		
+		return newList;
+	}
+	*/
 	
 	private static char getMaxChar( List<Integer> list )
 		throws Exception
