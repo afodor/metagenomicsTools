@@ -14,8 +14,10 @@
 package scripts.sequenceScripts;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +55,7 @@ public class SnpTableToFasta
 		{
 			Holder h = new Holder();
 			h.strainName = sToken.nextToken();
+			list.add(h);
 		}
 		
 		int numOk=0;
@@ -62,10 +65,18 @@ public class SnpTableToFasta
 			if(lineIsOk(s))
 			{
 				numOk++;
+				
+				sToken = new StringTokenizer(s);
+				sToken.nextToken();
+				
+				for(int x=0; x < list.size(); x++)
+				{
+					List<Integer> cellList = SnpResultFileLine.parseTextList(sToken.nextToken());
+					list.get(x).buff.append(getMaxChar(cellList));
+				}
 			}
 			else
 			{
-				System.out.println(s);
 				numNotOk++;
 			}
 				
@@ -73,8 +84,53 @@ public class SnpTableToFasta
 		
 		System.out.println(numOk + " " + numNotOk);
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
+				ConfigReader.getBurkholderiaDir() + File.separator + "summary" + 
+						File.separator + "summaryFasta.txt")));
+		
+		for(Holder h : list)
+		{
+			writer.write(">" + h.strainName + "\n");
+			writer.write(h.buff.toString() + "\n");
+		}
+		
+		writer.flush();  writer.close();
+		
 		reader.close();
 		
+	}
+	
+	private static char getMaxChar( List<Integer> list )
+		throws Exception
+	{
+		char maxChar = '-';
+		int max =-1;
+		
+		if( list.get(0) > max )
+		{
+			maxChar = 'A';
+			max = list.get(0);
+		}
+		
+		if( list.get(1) >= max)
+		{
+			maxChar = 'C';
+			max = list.get(1);
+		}
+		
+		if( list.get(2) >= max)
+		{
+			maxChar = 'G';
+			max = list.get(2);
+		}
+		
+		if( list.get(3) >= max)
+		{
+			maxChar = 'T';
+			max = list.get(3);
+		}
+		
+		return maxChar;
 	}
 	
 	private static boolean lineIsOk(String s ) throws Exception
