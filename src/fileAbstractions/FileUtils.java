@@ -51,7 +51,7 @@ public class FileUtils
 	
 	public static File getSNPResultsFile( File file1, File file2 ) throws Exception
 	{
-		List<String> names = new ArrayList<>();
+		List<String> names = new ArrayList<String>();
 		names.add(file1.getName());
 		names.add(file2.getName());
 		Collections.sort(names);

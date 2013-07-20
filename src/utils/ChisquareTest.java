@@ -24,8 +24,8 @@ public class ChisquareTest
 		if( list1.size() != list2.size())
 			throw new Exception("No");
 		
-		List<Double> rowSums = new ArrayList<>();
-		List<Double> colSums= new ArrayList<>();
+		List<Double> rowSums = new ArrayList<Double>();
+		List<Double> colSums= new ArrayList<Double>();
 		
 		for( int x=0; x <list1.size(); x++)
 			rowSums.add(list1.get(x) + list2.get(x));
@@ -73,10 +73,10 @@ public class ChisquareTest
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<Double> list1 = new ArrayList<>();
+		List<Double> list1 = new ArrayList<Double>();
 		list1.add(762.0); list1.add(327.0); list1.add(468.0);
 		
-		List<Double> list2 = new ArrayList<>();
+		List<Double> list2 = new ArrayList<Double>();
 		list2.add(484.0);  list2.add(239.0); list2.add(477.0);
 		
 		// from R should be 2.953589e-07

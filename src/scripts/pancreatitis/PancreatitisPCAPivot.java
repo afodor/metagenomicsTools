@@ -33,7 +33,7 @@ public class PancreatitisPCAPivot
 		
 		double[][] d=  wrapper.getUnnorlalizedAsArray();
 		
-		List<String> keys = new ArrayList<>();
+		List<String> keys = new ArrayList<String>();
 		for( String s : wrapper.getSampleNames() )
 		{
 			keys.add(s.replace("human", ""));

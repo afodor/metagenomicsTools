@@ -94,7 +94,7 @@ public class Dirchlet
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<Double> list1 = new ArrayList<>();
+		List<Double> list1 = new ArrayList<Double>();
 		
 		list1.add(217.70117659936497);
 		list1.add(1.2988234466047284);

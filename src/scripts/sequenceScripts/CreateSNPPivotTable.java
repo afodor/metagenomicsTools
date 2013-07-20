@@ -55,7 +55,7 @@ public class CreateSNPPivotTable
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBurkholderiaDir()+
 				File.separator + "summary" + File.separator + "pivotedSNPS.txt")));
 		
-		HashSet<String> strains= new HashSet<>();
+		HashSet<String> strains= new HashSet<String>();
 		
 		for( Long aLong : map.keySet() )
 		{
@@ -65,7 +65,7 @@ public class CreateSNPPivotTable
 				strains.add(s);
 		}
 		
-		List<String> strainList = new ArrayList<>();
+		List<String> strainList = new ArrayList<String>();
 		
 		for(String s : strains)
 			strainList.add(s);
@@ -97,7 +97,7 @@ public class CreateSNPPivotTable
 	private static HashMap<Long,HashMap<String,Holder>> getPivotMap(HashSet<Long> ids)
 		throws Exception
 	{
-		HashMap<Long,HashMap<String,Holder>> map = new HashMap<>();
+		HashMap<Long,HashMap<String,Holder>> map = new HashMap<Long,HashMap<String,Holder>>();
 		
 		List<PairedReads> pairedList = DoAllBurkComparisons.getAllBurkholderiaPairs();
 		System.out.println(pairedList.size());
@@ -164,7 +164,7 @@ public class CreateSNPPivotTable
 	
 	private static HashSet<Long> getSnpIds() throws Exception
 	{
-		HashSet<Long> set = new HashSet<>();
+		HashSet<Long> set = new HashSet<Long>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File( 
 				ConfigReader.getBurkholderiaDir() + File.separator + "summary" +

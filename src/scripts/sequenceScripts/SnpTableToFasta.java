@@ -43,7 +43,7 @@ public class SnpTableToFasta
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		List<Holder> list = new ArrayList<>();
+		List<Holder> list = new ArrayList<Holder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getBurkholderiaDir() + 
 				File.separator + "summary" + File.separator + "pivotedSNPS.txt")));

@@ -23,7 +23,7 @@ public class TestDirichlet extends TestCase
 {
 	public void test() throws Exception
 	{
-		List<Double> list = new ArrayList<>();
+		List<Double> list = new ArrayList<Double>();
 		list.add(2.0);list.add(1.0);list.add(0.8);list.add(0.4);
 		
 		

@@ -63,7 +63,7 @@ public class MakeContextMap
 		getContextMap( File fastQFile, int leftHashLength, 
 						int rightHashLength) throws Exception
 	{
-		HashMap<String, ContextCount> map = new HashMap<>();
+		HashMap<String, ContextCount> map = new HashMap<String, ContextCount>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(fastQFile));
 		

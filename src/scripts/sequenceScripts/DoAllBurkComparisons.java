@@ -67,7 +67,7 @@ public class DoAllBurkComparisons
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<Long, ContextCount>> outerMap = new HashMap<>();
+		HashMap<String, HashMap<Long, ContextCount>> outerMap = new HashMap<String, HashMap<Long, ContextCount>>();
 		List<PairedReads> pairedList = getAllBurkholderiaPairs();
 		
 		for(int x=0; x < pairedList.size(); x++)
@@ -109,14 +109,14 @@ public class DoAllBurkComparisons
 	
 	public static List<PairedReads> getAllBurkholderiaPairs() throws Exception
 	{
-		List<PairedReads> list = new ArrayList<>();
+		List<PairedReads> list = new ArrayList<PairedReads>();
 		
 		System.out.println("scanning " + ConfigReader.getBurkholderiaDir());
 		File dir = new File(ConfigReader.getBurkholderiaDir());
 		
 		
 		String[] files= dir.list();
-		List<String> fileNames = new ArrayList<>();
+		List<String> fileNames = new ArrayList<String>();
 		
 		for( String s : files)
 		{

@@ -73,7 +73,7 @@ public class ContextCount
 	
 	public HashSet<Character> getHighest()
 	{
-		HashSet<Character> set = new HashSet<>();
+		HashSet<Character> set = new HashSet<Character>();
 		int val = -128;
 		
 		if( numA > val )

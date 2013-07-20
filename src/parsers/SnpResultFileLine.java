@@ -51,7 +51,7 @@ public class SnpResultFileLine
 		
 		StringTokenizer sToken = new StringTokenizer(s1, ",");
 		
-		List<Integer> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<Integer>();
 		
 		for( int x=0; x < 4; x++)
 			list.add(Integer.parseInt(sToken.nextToken()));
@@ -134,7 +134,7 @@ public class SnpResultFileLine
 	
 	public static HashMap<Long, SnpResultFileLine> parseFile(File file) throws Exception
 	{
-		HashMap<Long, SnpResultFileLine> map = new HashMap<>();
+		HashMap<Long, SnpResultFileLine> map = new HashMap<Long, SnpResultFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
@@ -155,7 +155,7 @@ public class SnpResultFileLine
 	
 	public static HashMap<Long, SnpResultFileLine> filter(HashMap<Long, SnpResultFileLine> map, double minPValue ) throws Exception
 	{
-		HashMap<Long, SnpResultFileLine> returnMap = new HashMap<>();
+		HashMap<Long, SnpResultFileLine> returnMap = new HashMap<Long, SnpResultFileLine>();
 		
 		for( Long l : map.keySet() )
 		{

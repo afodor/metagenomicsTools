@@ -50,7 +50,7 @@ public class MergePairedEnds
 		
 		List<String> forwardKeys= new ArrayList<String>( forwardMap.keySet());
 		
-		HashMap<String, Integer> backwardMap = new HashMap<>(); // FirstParse.getReversePrimers();
+		HashMap<String, Integer> backwardMap = new HashMap<String,Integer>(); // FirstParse.getReversePrimers();
 		List<String> reverseKeys = new ArrayList<String>(backwardMap.keySet());
 		
 		Semaphore s = new Semaphore(NUM_PERMIT);

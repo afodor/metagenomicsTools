@@ -32,7 +32,7 @@ public class TestContextHash extends TestCase
 	{
 		String s= "AACAATTAACAA";
 		
-		HashMap<Long, ContextCount> map = new LinkedHashMap<>();
+		HashMap<Long, ContextCount> map = new LinkedHashMap<Long, ContextCount>();
 		
 		ContextHash.addToHash(s, map, 2);
 		

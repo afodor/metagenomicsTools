@@ -35,7 +35,7 @@ public class CountSNPs
 	
 	public static int getYear(String s) throws Exception
 	{
-		HashSet<String> s2010 = new HashSet<>();
+		HashSet<String> s2010 = new HashSet<String>();
 		s2010.add("136");  s2010.add("137");  s2010.add("138");  s2010.add("139");  
 		s2010.add("130");  s2010.add("131");  s2010.add("132");  s2010.add("133");  s2010.add("134");
 
@@ -43,7 +43,7 @@ public class CountSNPs
 			if(s.indexOf(s2)!=-1)
 				return 2010;
 		
-		HashSet<String> s2009 = new HashSet<>();
+		HashSet<String> s2009 = new HashSet<String>();
 		
 		s2009.add("142");  s2009.add("143");  s2009.add("144");  s2009.add("147");  
 		
@@ -51,7 +51,7 @@ public class CountSNPs
 			if(s.indexOf(s2)!=-1)
 				return 2009;
 		
-		HashSet<String> s2011 = new HashSet<>();
+		HashSet<String> s2011 = new HashSet<String>();
 		
 		s2011.add("148"); s2011.add("149"); s2011.add("150"); s2011.add("152");
 		s2011.add("154"); s2011.add("155"); s2011.add("156"); s2011.add("157");s2011.add("158");
@@ -67,7 +67,7 @@ public class CountSNPs
 	
 	public static String getAssignment(String s) throws Exception
 	{
-		HashSet<String> sensitive = new HashSet<>();
+		HashSet<String> sensitive = new HashSet<String>();
 		sensitive.add("137");sensitive.add("139");sensitive.add("142");sensitive.add("144");
 		sensitive.add("149");sensitive.add("150");
 		
@@ -75,7 +75,7 @@ public class CountSNPs
 			if(s.indexOf(s2)!=-1)
 				return "sensitive";
 	
-		HashSet<String> resistant = new HashSet<>();
+		HashSet<String> resistant = new HashSet<String>();
 		
 		resistant.add("130"); 
 		resistant.add("131"); 
@@ -94,7 +94,7 @@ public class CountSNPs
 	
 	public static String getCode(String s1,String s2) throws Exception
 	{
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		list.add(getAssignment(s1));
 		list.add(getAssignment(s2));
 		Collections.sort(list);
@@ -106,7 +106,7 @@ public class CountSNPs
 
 	public static String getYears(String s1,String s2) throws Exception
 	{
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		list.add("" + getYear(s1));
 		list.add("" + getYear(s2));
 		Collections.sort(list);
@@ -168,7 +168,7 @@ public class CountSNPs
 																, FileUtils.getCountsFile(pry.getSecondFileName()))	);
 						map4 = SnpResultFileLine.filter(map4, MIN_PVALUE);
 						
-						HashSet<Long> commonLongs = new HashSet<>();
+						HashSet<Long> commonLongs = new HashSet<Long>();
 						commonLongs.addAll(map1.keySet());
 						
 						commonLongs.retainAll(map2.keySet());
@@ -225,7 +225,7 @@ public class CountSNPs
 				HashMap<Long, SnpResultFileLine> map3, HashMap<Long, SnpResultFileLine> map4, boolean first)
 					throws Exception
 	{
-		TreeSet<Character> set = new TreeSet<>();
+		TreeSet<Character> set = new TreeSet<Character>();
 	
 		
 		set.addAll(map1.get(aLong).getContextCount(first).getHighest());

@@ -105,7 +105,7 @@ public class ApplyWeightedChiSquare
 		countAverage.fractionT = (prior1.fractionT + prior2.fractionT) /2;
 		
 		System.out.println("Staring bVal = " +  bVal);
-		List<Holder> pValues = new ArrayList<>();
+		List<Holder> pValues = new ArrayList<Holder>();
 		
 		for( Long aLong : map1.keySet() )
 		{
@@ -115,14 +115,14 @@ public class ApplyWeightedChiSquare
 			if( cc2 != null && cc1.isDifferentInHighest(cc2) && cc1.getMax() >= MIN_NUM_READS &&
 								cc2.getMax() >= MIN_NUM_READS)
 			{	
-				List<Double> list1 = new ArrayList<>();
+				List<Double> list1 = new ArrayList<Double>();
 				list1.add( cc1.getNumA() + bVal * countAverage.fractionA );
 				list1.add( cc1.getNumC() + bVal * countAverage.fractionC );
 				list1.add( cc1.getNumG() + bVal * countAverage.fractionG );
 				list1.add( cc1.getNumT() + bVal * countAverage.fractionT );
 				
 
-				List<Double> list2 = new ArrayList<>();
+				List<Double> list2 = new ArrayList<Double>();
 				list2.add( cc2.getNumA() + bVal * countAverage.fractionA );
 				list2.add( cc2.getNumC() + bVal * countAverage.fractionC );
 				list2.add( cc2.getNumG() + bVal * countAverage.fractionG );

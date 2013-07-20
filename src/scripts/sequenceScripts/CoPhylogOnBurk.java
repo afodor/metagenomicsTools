@@ -105,7 +105,7 @@ public class CoPhylogOnBurk
 	public static void runAFile(File inFile, File outFile, BufferedWriter log) throws Exception
 	{	
 		log("Starting " + inFile.getPath(),log);
-		HashMap<Long, ContextCount> map = new HashMap<>();
+		HashMap<Long, ContextCount> map = new HashMap<Long, ContextCount>();
 		
 		int contextSize = 13;
 		
