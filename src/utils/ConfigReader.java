@@ -36,6 +36,8 @@ public class ConfigReader
 	
 	public static final String BURKHOLDERIA_DIR = "BURKHOLDERIA_DIR";
 	
+	public static final String BLAST_DIR = "BLAST_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -70,6 +72,11 @@ public class ConfigReader
 					+ " in " + PROPERTIES_FILE);
 
 		return obj.toString();
+	}
+	
+	public static String getBlastDirectory() throws Exception
+	{
+		return getConfigReader().getAProperty(BLAST_DIR);
 	}
 	
 	public static String getBurkholderiaDir() throws Exception
