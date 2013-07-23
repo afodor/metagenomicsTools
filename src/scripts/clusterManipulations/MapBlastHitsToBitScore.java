@@ -61,7 +61,7 @@ public class MapBlastHitsToBitScore
 				for( int x=0; x < 11; x++)
 					sToken.nextToken();
 				
-				addToMap(counts, Integer.parseInt(sToken.nextToken()));
+				addToMap(counts, Float.parseFloat(sToken.nextToken()));
 				
 				if( sToken.hasMoreTokens())
 					throw new Exception("Unexpected token " + sToken.nextToken());
