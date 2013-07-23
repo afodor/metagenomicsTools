@@ -39,7 +39,7 @@ public class GenerateCountSHFiles
 		
 		for( int x=1; x <=20; x++)
 		{
-			writer.write("qsub -q \"viper\" -N \"CountJob" + x + "\" runCount" + x + ".sh"  );
+			writer.write("qsub -q \"viper\" -N \"CountJob" + x + "\" runCount" + x + ".sh\n"  );
 		}
 		
 		writer.flush();  writer.close();
