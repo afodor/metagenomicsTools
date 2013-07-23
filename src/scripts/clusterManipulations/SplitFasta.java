@@ -22,17 +22,17 @@ import parsers.FastaSequenceOneAtATime;
 
 public class SplitFasta
 {
-	public static final int SPLIT_SIZE = 1000;
 	
 	public static void main(String[] args) throws Exception
 	{
 		if( args.length != 1)
 		{
-			System.out.println("Usage SplitFasta fileToSplit");
+			System.out.println("Usage SplitFasta fileToSplit numSequencesPerSplit");
 			System.exit(1);
 		}
 		
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(args[0]);
+		int splitSize = Integer.parseInt(args[1]);
 		
 		int count=0;
 		int file =1;
@@ -43,7 +43,7 @@ public class SplitFasta
 		{
 			count++;
 			
-			if( count == SPLIT_SIZE)
+			if( count == splitSize)
 			{
 				writer.flush();  writer.close();
 				count =0;
@@ -52,7 +52,7 @@ public class SplitFasta
 				System.out.println("Finished " + args[0] + "_FILE_" + file);
 			}
 			
-			writer.write(">" + fs.getHeader() + "\n");
+			writer.write(fs.getHeader() + "\n");
 			writer.write(fs.getSequence() + "\n");
 			
 		}
