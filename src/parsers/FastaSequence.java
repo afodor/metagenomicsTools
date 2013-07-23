@@ -336,6 +336,7 @@ public class FastaSequence implements Comparable<FastaSequence>
 		return readFastaFile(file, -1);
 	}
 	
+	@SuppressWarnings("unused")
 	public static List<FastaSequence> readFastaFile( File file, int limit ) throws Exception
 	{
 		List<FastaSequence> list = new ArrayList<FastaSequence>();
