@@ -54,9 +54,10 @@ public class SplitFasta
 			
 			writer.write(">" + fs.getHeader() + "\n");
 			writer.write(fs.getSequence() + "\n");
-			System.out.println("Finished");
+			
 		}
 		
+		System.out.println("Finished");
 		writer.flush();  writer.close();
 	}
 }
