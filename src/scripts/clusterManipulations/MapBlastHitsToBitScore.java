@@ -31,7 +31,7 @@ import java.util.zip.GZIPInputStream;
 
 public class MapBlastHitsToBitScore
 {
-	public static HashMap<Integer, Integer> mapHitsToScore(File inputFile) throws Exception
+	public static HashMap<Float, Integer> mapHitsToScore(File inputFile) throws Exception
 	{
 		System.out.println("PARSING: " + inputFile.getAbsolutePath());
 		BufferedReader reader = 
@@ -41,12 +41,13 @@ public class MapBlastHitsToBitScore
 				:
 					new BufferedReader(new FileReader(inputFile));
 			
-		HashMap<Integer, Integer> counts = new HashMap<Integer, Integer>();
+		HashMap<Float, Integer> counts = new HashMap<Float, Integer>();
 		
 		
 		for( String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			s = s.trim();
+			System.out.println(s);
 			
 			if( s.endsWith("0 hits found"))
 			{
@@ -73,7 +74,7 @@ public class MapBlastHitsToBitScore
 	
 	private static void mapAndReduce( String inputPath, String outputPath)	throws Exception
 	{
-		HashMap<Integer, Integer> map = mapHitsToScore( new File( inputPath));
+		HashMap<Float, Integer> map = mapHitsToScore( new File( inputPath));
 		
 		File outFile = new File(outputPath);
 		
@@ -84,17 +85,17 @@ public class MapBlastHitsToBitScore
 		
 		writer.write("bitScore\tcounts\n");
 		
-		List<Integer> list = new ArrayList<Integer>(map.keySet());
+		List<Float> list = new ArrayList<Float>(map.keySet());
 		Collections.sort(list);
 		Collections.reverse(list);
 		
-		for(Integer i : list)
-			writer.write(i  +"\t" + map.get(i) + "\n");
+		for(Float f : list)
+			writer.write(f  +"\t" + map.get(f) + "\n");
 		
 		writer.flush();  writer.close();
 	}
 	
-	private static void addToMap(HashMap<Integer, Integer> map, int bitScore)
+	private static void addToMap(HashMap<Float, Integer> map, float bitScore)
 	{
 		Integer count = map.get(bitScore);
 		
