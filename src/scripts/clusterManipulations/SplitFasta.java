@@ -22,7 +22,9 @@ import parsers.FastaSequenceOneAtATime;
 
 public class SplitFasta
 {
-	
+	/*
+	 * This assumes a 200 basepair read which will be split into each paired end
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		if( args.length != 2)
@@ -36,6 +38,7 @@ public class SplitFasta
 		
 		int count=0;
 		int file =1;
+		long seqNum =0;
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(args[0] + "_FILE_" + file)));
 		
@@ -43,17 +46,25 @@ public class SplitFasta
 		{
 			count++;
 			
+			if( fs.getSequence().length() != 200 )
+				throw new Exception("Expecting a 200 basepair length");
+			
 			if( count == splitSize)
 			{
 				writer.flush();  writer.close();
 				count =0;
-				file++;
 				writer = new BufferedWriter(new FileWriter(new File(args[0] + "_FILE_" + file)));
 				System.out.println("Finished " + args[0] + "_FILE_" + file);
+				file++;
 			}
 			
-			writer.write(fs.getHeader() + "\n");
-			writer.write(fs.getSequence() + "\n");
+			writer.write(">A" + seqNum + "\n");
+			seqNum++;
+			writer.write(fs.getSequence().substring(0, 100) + "\n");
+			
+			seqNum++;
+			writer.write(">A" + seqNum + "\n");
+			writer.write(fs.getSequence().substring(100, fs.getSequence().length()) + "\n");
 			
 		}
 		
