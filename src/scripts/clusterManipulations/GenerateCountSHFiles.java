@@ -21,15 +21,25 @@ public class GenerateCountSHFiles
 {
 	public static void main(String[] args) throws Exception
 	{
+		for( int x=1; x < 20; x++)
+		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter(
+					new File("/projects/afodor/shotgunSequences/runCount" + x + ".sh")));
+			
+			writer.write("java -cp /users/afodor/metagenomicsTools/bin " + 
+					"scripts.clusterManipulations.MapBlastHitsToBitScore " + 
+				"/projects/afodor/shotgunSequences/SRR061115.fasta_FILE_" + x + "_TO_NCBI.txt.gz " + 
+					"/projects/afodor/shotgunSequences/SRR061115_fasta_bitScoreCounts_" + x + ".txt\n");
+			
+			writer.flush();  writer.close();
+		}
+		
 		BufferedWriter writer = new BufferedWriter(
 				new FileWriter(new File("/projects/afodor/shotgunSequences/runManyCounts.sh")));
 		
 		for( int x=1; x <=20; x++)
 		{
-			writer.write("qsub -q \"viper\" -N \"CountJob" + x + "\" java -cp /users/afodor/metagenomicsTools/bin " + 
-						"scripts.clusterManipulations.MapBlastHitsToBitScore " + 
-					"/projects/afodor/shotgunSequences/SRR061115.fasta_FILE_" + x + "_TO_NCBI.txt.gz " + 
-						"/projects/afodor/shotgunSequences/SRR061115_fasta_bitScoreCounts_" + x + ".txt\n");
+			writer.write("qsub -q \"viper\" -N \"CountJob" + x + "\" runCount" + x + ".sh"  );
 		}
 		
 		writer.flush();  writer.close();
