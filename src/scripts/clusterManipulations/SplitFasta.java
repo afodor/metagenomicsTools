@@ -51,11 +51,11 @@ public class SplitFasta
 			
 			if( count == splitSize)
 			{
+				System.out.println("Finished " + args[0] + "_FILE_" + file);
 				writer.flush();  writer.close();
 				count =0;
-				writer = new BufferedWriter(new FileWriter(new File(args[0] + "_FILE_" + file)));
-				System.out.println("Finished " + args[0] + "_FILE_" + file);
 				file++;
+				writer = new BufferedWriter(new FileWriter(new File(args[0] + "_FILE_" + file)));
 			}
 			
 			seqNum++;
