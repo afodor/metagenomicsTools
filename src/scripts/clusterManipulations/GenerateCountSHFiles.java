@@ -21,7 +21,7 @@ public class GenerateCountSHFiles
 {
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=1; x < 20; x++)
+		for( int x=1; x <= 20; x++)
 		{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(
 					new File("/projects/afodor/shotgunSequences/runCount" + x + ".sh")));
