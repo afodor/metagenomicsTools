@@ -47,7 +47,6 @@ public class MapBlastHitsToBitScore
 		for( String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			s = s.trim();
-			System.out.println(s);
 			
 			if( s.endsWith("0 hits found"))
 			{
