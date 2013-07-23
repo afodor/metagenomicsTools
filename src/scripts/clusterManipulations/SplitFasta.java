@@ -58,8 +58,8 @@ public class SplitFasta
 				file++;
 			}
 			
-			writer.write(">A" + seqNum + "\n");
 			seqNum++;
+			writer.write(">A" + seqNum + "\n");
 			writer.write(fs.getSequence().substring(0, 100) + "\n");
 			
 			seqNum++;
