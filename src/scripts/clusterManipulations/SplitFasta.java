@@ -49,10 +49,12 @@ public class SplitFasta
 				count =0;
 				file++;
 				writer = new BufferedWriter(new FileWriter(new File(args[0] + "_FILE_" + file)));
+				System.out.println("Finished " + args[0] + "_FILE_" + file);
 			}
 			
 			writer.write(">" + fs.getHeader() + "\n");
 			writer.write(fs.getSequence() + "\n");
+			System.out.println("Finished");
 		}
 		
 		writer.flush();  writer.close();
