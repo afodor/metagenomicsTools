@@ -29,7 +29,7 @@ public class GenerateCountSHFiles
 			writer.write("qsub -q \"viper\" -N \"CountJob" + x + " java -cp /users/afodor/metagenomicsTools/bin " + 
 						"scripts.clusterManipulations.MapBlastHitsToBitScore " + 
 					"/projects/afodor/shotgunSequences/SRR061115.fasta_FILE_" + x + "_TO_NCBI.txt.gz " + 
-						"/projects/afodor/shotgunSequences/SRR061115_fasta_bitScoreCounts_" + x + ".txt");
+						"/projects/afodor/shotgunSequences/SRR061115_fasta_bitScoreCounts_" + x + ".txt\n");
 		}
 		
 		writer.flush();  writer.close();
