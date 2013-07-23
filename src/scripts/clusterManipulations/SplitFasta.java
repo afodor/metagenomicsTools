@@ -25,7 +25,7 @@ public class SplitFasta
 	
 	public static void main(String[] args) throws Exception
 	{
-		if( args.length != 1)
+		if( args.length != 2)
 		{
 			System.out.println("Usage SplitFasta fileToSplit numSequencesPerSplit");
 			System.exit(1);
