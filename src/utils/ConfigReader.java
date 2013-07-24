@@ -35,6 +35,9 @@ public class ConfigReader
 	public static final String MACHINE_LEARNING_DIR = "MACHINE_LEARNING_DIR";
 	
 	public static final String BURKHOLDERIA_DIR = "BURKHOLDERIA_DIR";
+	public static final String BIG_BLAST_DIR = "BIG_BLAST_DIR";
+	
+	public static final String GENBANK_CACHE_DIR = "GENBANK_CACHE_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
 	
@@ -87,6 +90,16 @@ public class ConfigReader
 	public static String getPancreatitisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(PANCREATITIS_DIR);
+	}
+	
+	public static String getBigBlastDir() throws Exception
+	{
+		return getConfigReader().getAProperty(BIG_BLAST_DIR);
+	}
+	
+	public static String getGenbankCacheDir() throws Exception
+	{
+		return getConfigReader().getAProperty(GENBANK_CACHE_DIR);
 	}
 	
 	private ConfigReader() throws Exception
