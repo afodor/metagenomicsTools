@@ -82,15 +82,25 @@ public class MapBlastHitsToBitScore
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(  outputPath));
 		
-		writer.write("bitScore\tcounts\n");
+		writer.write("bitScore\tcounts\tfraction\tcumulativeTotal\n");
 		
 		List<Float> list = new ArrayList<Float>(map.keySet());
 		Collections.sort(list);
 		Collections.reverse(list);
 		
-		for(Float f : list)
-			writer.write(f  +"\t" + map.get(f) + "\n");
+		long sum =0;
+		double cumulative =0;
 		
+		for( Float f : list)
+			sum += map.get(f);
+		
+		for(Float f : list)
+		{
+			cumulative += ((double)map.get(f))/sum;
+			writer.write(f  +"\t" + map.get(f) + "\t" + ((double)map.get(f))/sum + "\t" + cumulative + "\n");
+			
+		}
+			
 		writer.flush();  writer.close();
 	}
 	
