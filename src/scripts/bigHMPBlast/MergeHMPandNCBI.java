@@ -48,7 +48,7 @@ public class MergeHMPandNCBI
 	{
 		HashMap<Float, Holder> map = new HashMap<Float, Holder>();
 		
-		for( int x=1; x <=1; x++)
+		for( int x=1; x <=20; x++)
 			addToMap(x, map);
 		
 		writeResults(map);
@@ -109,7 +109,7 @@ public class MergeHMPandNCBI
 		
 		BufferedReader ncbiReader = new BufferedReader(new InputStreamReader( 
 				new GZIPInputStream( new FileInputStream((new File(ConfigReader.getBigBlastDir()+ 
-				File.separator + "SRR061115.fasta_FILE_1_TO_NCBI.txt.gz"))))));
+				File.separator + "SRR061115.fasta_FILE_" + x + "_TO_NCBI.txt.gz"))))));
 		
 		while(true)
 		{
