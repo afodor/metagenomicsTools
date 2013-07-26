@@ -50,6 +50,11 @@ public class HashHolder
 	private static final Long G_LONG = new Long(0x0002l);
 	private static final Long T_LONG = new Long(0x0003l);
 	
+	private final Long A_SHIFT;
+	private final Long C_SHIFT;
+	private final Long G_SHIFT;
+	private final Long T_SHIFT;	
+	
 	public boolean setToString(String s) throws Exception
 	{
 		return setToString(s, true);
@@ -97,29 +102,27 @@ public class HashHolder
 	{
 		StringBuffer buff = new StringBuffer();
 		
-		long mask = 0x3l << (32-1)*2;
+		long val = bits;
 		
-		for( int x=0; x <= wordSize; x++)
+		for( int x=0; x < wordSize; x++)
 		{
-			long val = (bits & mask) >> ( (wordSize-x-1) *2);
-			
-			buff.append(getChar(val) );
-			mask = mask >> 2;
+			buff.append( getChar(val& this.T_SHIFT) );
+			val = val << 2;
 		}
 		
 		return buff.toString();
 	}
 	
 	
-	private static char getChar(long val) throws Exception
+	private char getChar(long val) throws Exception
 	{
-		if( val==0)
+		if( val==this.A_SHIFT)
 			return 'A';
-		if( val == 1)
+		if( val == this.C_SHIFT)
 			return 'C';
-		if( val == 2)
+		if( val == this.G_SHIFT)
 			return 'G';
-		if(val== 3)
+		if(val== this.T_SHIFT)
 			return 'T';
 		
 		throw new Exception("Unknown " + val);
@@ -148,6 +151,13 @@ public class HashHolder
 	{
 		if(wordSize> 32 || wordSize< 2)
 			throw new Exception("Expecting word size between 2 and 32");
+		
+		int shift = (wordSize-1) * 2;
+		
+		this.A_SHIFT = A_LONG << shift;
+		this.C_SHIFT = C_LONG << shift;
+		this.G_SHIFT = G_LONG << shift;
+		this.T_SHIFT = T_LONG << shift;
 			
 		this.wordSize= wordSize;
 	}
@@ -162,7 +172,6 @@ public class HashHolder
 		bits = bits << 2;
 		
 		bits = bits | mask;
-		System.out.println(Long.toBinaryString(bits));
 		
 		return true;
 	}
