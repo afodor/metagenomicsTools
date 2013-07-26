@@ -95,7 +95,7 @@ public class HashHolder
 	
 	private boolean canStillRead()
 	{
-		return index <= s.length();
+		return index < s.length();
 	}
 	
 	public String getSequence() throws Exception
