@@ -38,6 +38,7 @@ public class ConfigReader
 	public static final String BIG_BLAST_DIR = "BIG_BLAST_DIR";
 	
 	public static final String GENBANK_CACHE_DIR = "GENBANK_CACHE_DIR";
+	public static final String REDUCE_OTU_DIR = "REDUCE_OTU_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
 	
@@ -65,6 +66,10 @@ public class ConfigReader
 		return false;
 	}
 	
+	public static String getReducedOTUDir() throws Exception
+	{
+		return getConfigReader().getAProperty(REDUCE_OTU_DIR);
+	}
 
 	private static String getAProperty(String namedProperty) throws Exception
 	{
