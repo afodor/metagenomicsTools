@@ -126,6 +126,9 @@ public class MergeHMPandNCBI
 				return;
 			}
 			
+			if( ! hmpScore.query.equals(ncbiScore.query))
+				throw new Exception("Mismatch " + hmpScore.query + " " + ncbiScore.query);
+			
 			Holder h = getOrAdd(map, hmpScore.bitScore);
 			h.numHMP++;
 			

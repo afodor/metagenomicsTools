@@ -31,6 +31,8 @@ public class GenerateWGETs
 		
 		reader.readLine();
 		
+		int count =0;
+		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
 			TabReader tr = new TabReader(s);
@@ -41,8 +43,13 @@ public class GenerateWGETs
 			String genbankID = tr.nextToken().trim();
 			
 			if(genbankID.length() > 0)
+			{
 				System.out.println("nice wget http://www.ncbi.nlm.nih.gov/Traces/wgs/?download=" + 
 						genbankID.substring(0,4) + 	"01.fsa.1.gz");
+				count++;
+			}
 		}
+		
+		System.out.println(count);
 	}
 }
