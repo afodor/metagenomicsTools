@@ -16,7 +16,6 @@ package reduceOTU;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Reader;
 import java.util.HashMap;
 
 import parsers.FastaSequence;
