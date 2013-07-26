@@ -81,11 +81,34 @@ public class TestHashHolder extends TestCase
 			else if ( val == 3)
 				buff.append("T");
 			else throw new Exception("No");
-			
-				
 		}
 		
 		return buff.toString();
+	}
+	
+	public void testMultipleStops() throws Exception
+	{
+		String s1 = getRandomString(3);
+		String s2 = getRandomString(3);
+		String s3 = getRandomString(3);
+		
+		String allString = s1 + "X" + s2 + "XX" + s3;
+		
+		HashHolder hh = new HashHolder(3);
+		assertTrue(hh.setToString(allString));
+		assertEquals(hh.getSequence(), s1);
+		assertEquals(hh.getIndex(), 2);
+
+		assertTrue(hh.advance());
+		assertEquals(hh.getSequence(), s2);
+		assertEquals(hh.getIndex(), 6);
+		
+		assertTrue(hh.advance());
+		assertEquals(hh.getSequence(), s3);
+		assertEquals(hh.getIndex(), allString.length()-1);
+		
+		assertFalse(hh.advance());
+		
 	}
 	
 }
