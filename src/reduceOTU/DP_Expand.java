@@ -93,14 +93,14 @@ public class DP_Expand
 		String fragS1 = s1.substring(leftBoundS1, leftIndex_S1+1);
 		String fragS2 = s2.substring(leftBoundS2,leftIndex_S2+1);
 		
-		System.out.println("In " + fragS1 + " " + leftBoundS1 + " "+ leftIndex_S1);
-		System.out.println("In " + fragS2 + " " + leftBoundS2 + " " + leftIndex_S2);
+		//System.out.println("In " + fragS1 + " " + leftBoundS1 + " "+ leftIndex_S1);
+		//System.out.println("In " + fragS2 + " " + leftBoundS2 + " " + leftIndex_S2);
 		
 		PairedAlignment pa = NeedlemanWunsch.globalAlignTwoSequences(
 				fragS1, fragS2, 
 				MATRIX, GAP_PENALTY, 100, false);
 		
-		System.out.println(pa.toString());
+		//System.out.println(pa.toString());
 		
 		if( pa.getAlignmentScore() <= 0 )
 		{
@@ -123,7 +123,6 @@ public class DP_Expand
 		}
 		else if( c1 == '-' )
 		{
-			System.out.println("HERE");
 			this.leftIndex_S1++;
 			
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,

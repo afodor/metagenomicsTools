@@ -43,6 +43,50 @@ public class TestBandwithConstrainedAligner extends TestCase
 		assertTrue(dp.alignmentWasSuccesful());
 	}
 	
+	public void testDoubleLeftAlignmentDeltionInString2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "AAATTT" + common;
+		String s2 = "AAATTTTT" + common;
+		
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		assertEquals(list.size(),2);
+		assertEquals( list.get(0).toString(), "D4T" );
+		assertEquals( list.get(1).toString(), "D3T" );
+		assertTrue( dp.alignmentWasSuccesful());
+	}
+	
+	public void testSingleLeftAlignmentDeletionInString2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "ACTGACT" + common;
+		String s2 = "ACTGACTG" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+						32, 3);
+		
+		List<IndividualEdit> list = dp.getEditList();
+		assertEquals(list.size(),1);
+		System.out.println(list);
+		assertEquals(list.get(0).toString(),"D7G" );
+		assertTrue(dp.alignmentWasSuccesful());
+	}
+
 	public void testDoubleLeftAlignmentInsertionInString2() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
