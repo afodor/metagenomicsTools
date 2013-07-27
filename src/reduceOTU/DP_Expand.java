@@ -102,17 +102,9 @@ public class DP_Expand
 		
 		//System.out.println(pa.toString());
 		
-		if( pa.getAlignmentScore() <= 0 )
-		{
-			if( editList.size() + Math.min(leftIndex_S1, leftIndex_S2) - pa.getNumMatchesExcludingNs() 
-					> numAllowedEdits)
-				return false;
-			else
-				return true;
-		}
-		
 		char c1 = pa.getFirstSequence().charAt(pa.getFirstSequence().length()-1);
 		char c2 = pa.getSecondSequence().charAt(pa.getSecondSequence().length()-1);
+		//System.out.println( c1 + " "+ c2);
 		
 		if(c1 == '-' && c2 == '-')
 			throw new Exception("Alignment error");

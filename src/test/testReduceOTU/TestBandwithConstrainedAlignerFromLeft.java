@@ -19,7 +19,7 @@ import reduceOTU.DP_Expand;
 import reduceOTU.IndividualEdit;
 import junit.framework.TestCase;
 
-public class TestBandwithConstrainedAligner extends TestCase
+public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 {
 	public void testSingleMisMatch() throws Exception
 	{
@@ -38,11 +38,34 @@ public class TestBandwithConstrainedAligner extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"S6T" );
 		assertTrue(dp.alignmentWasSuccesful());
 	}
 	
+	public void testFailedAlignment()  throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "AAAA" + common;
+		String s2 = "CCCC" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+		System.out.println(dp.getEditList());
+		assertFalse(dp.alignmentWasSuccesful());
+		List<IndividualEdit> list = dp.getEditList();
+		
+		assertEquals(list.get(0).toString(), "S3C");
+		assertEquals(list.get(1).toString(), "S2C");
+		assertEquals(list.get(2).toString(), "S1C");
+		assertEquals(list.get(3).toString(), "S0C");
+	}
+
 	public void testSingleLeftAlignmentInsertionInString2() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
