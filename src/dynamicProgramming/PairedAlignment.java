@@ -12,4 +12,23 @@ public abstract class PairedAlignment
 		return getFirstSequence() + "\n" + getSecondSequence() + "\n" +
 					getAlignmentScore();
 	}
+	
+	public int getNumMatchesExcludingNs()
+	{
+		int sum =0;
+		
+		String s1 = getFirstSequence();
+		String s2 = getSecondSequence();
+		
+		for( int x=0; x < s1.length(); x++)
+		{
+			char c1 = s1.charAt(x);
+			char c2 = s2.charAt(x);
+			
+			if( c1 != '-' && c1 != 'N' && c1 == c2)
+				sum++;
+		}
+		
+		return sum;
+	}
 }

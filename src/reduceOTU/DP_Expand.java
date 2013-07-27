@@ -104,7 +104,7 @@ public class DP_Expand
 		
 		if( pa.getAlignmentScore() <= 0 )
 		{
-			if( editList.size() + Math.min(leftIndex_S1, leftIndex_S2)  
+			if( editList.size() + Math.min(leftIndex_S1, leftIndex_S2) - pa.getNumMatchesExcludingNs() 
 					> numAllowedEdits)
 				return false;
 			else

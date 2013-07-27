@@ -38,7 +38,7 @@ public class TestBandwithConstrainedAligner extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"I6G" );
 		assertTrue(dp.alignmentWasSuccesful());
 	}
@@ -59,7 +59,7 @@ public class TestBandwithConstrainedAligner extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.size(),2);
 		assertEquals( list.get(0).toString(), "D4T" );
 		assertEquals( list.get(1).toString(), "D3T" );
@@ -82,7 +82,7 @@ public class TestBandwithConstrainedAligner extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"D7G" );
 		assertTrue(dp.alignmentWasSuccesful());
 	}
@@ -102,7 +102,7 @@ public class TestBandwithConstrainedAligner extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.size(),2);
 		assertEquals( list.get(0).toString(), "I2T" );
 		assertEquals( list.get(1).toString(), "I2T" );
