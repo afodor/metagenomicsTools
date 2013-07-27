@@ -21,6 +21,28 @@ import junit.framework.TestCase;
 
 public class TestBandwithConstrainedAligner extends TestCase
 {
+	public void testSingleMisMatch() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "ACTGACG" + common;
+		String s2 = "ACTGACT" + common;
+		
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+						32, 3);
+		
+		List<IndividualEdit> list = dp.getEditList();
+		assertEquals(list.size(),1);
+		System.out.println(list);
+		assertEquals(list.get(0).toString(),"S6T" );
+		assertTrue(dp.alignmentWasSuccesful());
+	}
+	
 	public void testSingleLeftAlignmentInsertionInString2() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
