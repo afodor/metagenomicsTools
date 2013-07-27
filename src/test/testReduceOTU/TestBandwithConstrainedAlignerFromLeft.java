@@ -56,10 +56,23 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		
 		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
 				32, 3);
-		System.out.println(dp.getEditList());
+		//System.out.println(dp.getEditList());
 		assertFalse(dp.alignmentWasSuccesful());
 		List<IndividualEdit> list = dp.getEditList();
 		
+		assertEquals(list.size(),4);
+		assertEquals(list.get(0).toString(), "S3C");
+		assertEquals(list.get(1).toString(), "S2C");
+		assertEquals(list.get(2).toString(), "S1C");
+		assertEquals(list.get(3).toString(), "S0C");
+		
+		dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 4);
+		//System.out.println(dp.getEditList());
+		assertTrue(dp.alignmentWasSuccesful());
+		list = dp.getEditList();
+		
+		assertEquals(list.size(),4);
 		assertEquals(list.get(0).toString(), "S3C");
 		assertEquals(list.get(1).toString(), "S2C");
 		assertEquals(list.get(2).toString(), "S1C");
