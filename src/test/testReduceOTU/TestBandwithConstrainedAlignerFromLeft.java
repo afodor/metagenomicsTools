@@ -38,6 +38,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
+		assertEquals(dp.getNumErrors(),1);
 		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"S6T" );
 		assertTrue(dp.alignmentWasSuccesful());
@@ -61,6 +62,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		List<IndividualEdit> list = dp.getEditList();
 		
 		assertEquals(list.size(),4);
+		assertEquals(dp.getNumErrors(),4);
 		assertEquals(list.get(0).toString(), "S3C");
 		assertEquals(list.get(1).toString(), "S2C");
 		assertEquals(list.get(2).toString(), "S1C");
@@ -73,6 +75,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		list = dp.getEditList();
 		
 		assertEquals(list.size(),4);
+		assertEquals(dp.getNumErrors(),4);
 		assertEquals(list.get(0).toString(), "S3C");
 		assertEquals(list.get(1).toString(), "S2C");
 		assertEquals(list.get(2).toString(), "S1C");
@@ -96,6 +99,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
+		assertEquals(dp.getNumErrors(),1);
 		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"I6G" );
 		assertTrue(dp.alignmentWasSuccesful());
@@ -119,6 +123,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		List<IndividualEdit> list = dp.getEditList();
 		//System.out.println(list);
 		assertEquals(list.size(),2);
+		assertEquals(dp.getNumErrors(),2);
 		assertEquals( list.get(0).toString(), "D4T" );
 		assertEquals( list.get(1).toString(), "D3T" );
 		assertTrue( dp.alignmentWasSuccesful());
@@ -140,6 +145,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
+		assertEquals(dp.getNumErrors(),1);
 		//System.out.println(list);
 		assertEquals(list.get(0).toString(),"D7G" );
 		assertTrue(dp.alignmentWasSuccesful());
@@ -160,10 +166,32 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		//System.out.println(list);
+		System.out.println(list);
 		assertEquals(list.size(),2);
+		assertEquals(dp.getNumErrors(),2);
 		assertEquals( list.get(0).toString(), "I2T" );
 		assertEquals( list.get(1).toString(), "I2T" );
+		assertTrue( dp.alignmentWasSuccesful());
+	}
+	
+	public void testTrailingNotCountingAsErrors() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "AAAAAATTTTTTTG" + common;
+		String s2 = "AAAAAAAAAATTTTTTTC" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		assertEquals(list.size(),4);
+		assertEquals(dp.getNumErrors(),1);
 		assertTrue( dp.alignmentWasSuccesful());
 	}
 }

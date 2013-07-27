@@ -39,6 +39,14 @@ public class DP_Expand
 	
 	private final boolean wasSuccesful;
 	
+	//gaps and insertions at the beginning or end of a sequence don't count to this total
+	private int numErrors=0;
+	
+	public int getNumErrors()
+	{
+		return numErrors;
+	}
+	
 	public boolean alignmentWasSuccesful()
 	{
 		return wasSuccesful;
@@ -119,20 +127,28 @@ public class DP_Expand
 			
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
 					this.leftIndex_S2, this.s2.charAt(leftIndex_S2)));
+			
+			if( leftIndex_S1 > 0 && leftIndex_S2> 0  )
+				numErrors++;
 		}
 		else if( c2 == '-')
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
 					this.leftIndex_S2, this.s1.charAt(leftIndex_S1)));
 			this.leftIndex_S2++;
+			
+			if( leftIndex_S1> 0 && leftIndex_S2> 0  )
+				numErrors++;
 		}
 		else
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.SUBSTITUITION,
 					this.leftIndex_S2, c2));
+			
+			numErrors++;
 		}
 		
-		if( editList.size() > numAllowedEdits )
+		if( numErrors > numAllowedEdits )
 			return false;
 		else
 			return expandLeft();
