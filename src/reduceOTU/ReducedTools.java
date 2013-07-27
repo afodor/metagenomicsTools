@@ -40,30 +40,21 @@ public class ReducedTools
 		
 		for( IndividualEdit ie : edits)
 		{
-			
+			if( ie.getPostion() - 1 > index)
+			{
+				String s = s1.substring(index, ie.getPostion());
+				top.append(s);
+				bottom.append(s);
+			}
 			
 			if(ie.getEditType().equals(IndividualEdit.EDIT_TYPE.SUBSTITUITION))
 			{
-				if( ie.getPostion() - 1 > index)
-				{
-					String s = s1.substring(index, ie.getPostion());
-					top.append(s);
-					bottom.append(s);
-				}
-				
 				top.append(s1.charAt(ie.getPostion()));
 				bottom.append(ie.getBase());
 				index = ie.getPostion()+1;
 			}
 			else if( ie.getEditType().equals(IndividualEdit.EDIT_TYPE.DELETION))
 			{
-				if( ie.getPostion() - 1 > index)
-				{
-					String s = s1.substring(index, ie.getPostion());
-					top.append(s);
-					bottom.append(s);
-				}
-				
 				top.append(s1.charAt(ie.getPostion()));
 				bottom.append("-");
 				index = ie.getPostion()+1;
@@ -72,6 +63,7 @@ public class ReducedTools
 			{
 				bottom.append( ie.getBase());
 				top.append("-");
+				index = ie.getPostion();
 			}
 			else throw new Exception("Illegal type " + ie.getEditType());
 			

@@ -221,5 +221,6 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		System.out.println(pa.toString());
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 	}
 }
