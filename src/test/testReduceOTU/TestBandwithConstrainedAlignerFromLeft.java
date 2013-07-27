@@ -166,7 +166,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.size(),2);
 		assertEquals(dp.getNumErrors(),2);
 		assertEquals( list.get(0).toString(), "I2T" );
@@ -189,9 +189,28 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		assertEquals(list.size(),5);
 		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
+	}
+	
+	public void testSomeSequence() throws Exception
+	{
+
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "CTTTTAAAAGGGG" + common;
+		String s2 = "CCCCCTTTAAAAAGGG" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
 	}
 }
