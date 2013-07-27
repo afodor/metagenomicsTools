@@ -40,14 +40,15 @@ public class Dereplicate
 		
 		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
 		{
-			Integer i = dereps.get(fs.getSequence());
+			String upperCaseSeq = fs.getSequence().toUpperCase();
+			Integer i = dereps.get(upperCaseSeq);
 			
 			if( i == null)
 				i =0;
 			
 			i++;
 			
-			dereps.put(fs.getSequence(),i);
+			dereps.put(upperCaseSeq,i);
 		}
 		
 		fsoat.close();

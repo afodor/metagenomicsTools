@@ -34,7 +34,7 @@ public class Cluster implements Comparable<Cluster>
 	
 	private String consensusSequence;
 	
-	private List<CigarRepresentation> cigarList = new ArrayList<CigarRepresentation>();
+	private List<EditRepresentation> cigarList = new ArrayList<EditRepresentation>();
 	
 	private HashMap<Long, Integer> hashes = new HashMap<Long, Integer>();
 	
@@ -42,7 +42,7 @@ public class Cluster implements Comparable<Cluster>
 	{
 		int sum=0;
 		
-		for( CigarRepresentation cr : cigarList)
+		for( EditRepresentation cr : cigarList)
 			sum += cr.getNumCopies();
 		
 		return sum;
@@ -85,7 +85,7 @@ public class Cluster implements Comparable<Cluster>
 			if( sToken.hasMoreTokens())
 				throw new Exception("Unexpected line "  + s);
 			
-			CigarRepresentation cr = new CigarRepresentation( c.consensusSequence.length() + "M" , numCopies);
+			EditRepresentation cr = new EditRepresentation( numCopies);
 			c.cigarList.add(cr);
 			
 			list.add(c);
@@ -101,7 +101,7 @@ public class Cluster implements Comparable<Cluster>
 		StringBuffer buff = new StringBuffer();
 		buff.append(consensusSequence + "\n");
 		
-		for(CigarRepresentation cr : cigarList)
+		for(EditRepresentation cr : cigarList)
 			buff.append("\t" + cr.toString() + "\n");
 		
 		return buff.toString();

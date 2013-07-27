@@ -40,7 +40,7 @@ public class NeedlemanWunsch
 	public static PairedAlignment globalAlignTwoSequences(String s1, 
 										String s2, 
 											SubstitutionMatrix sm, 
-											int gapPenalty, int affinePenalty,
+											float gapPenalty, int affinePenalty,
 											boolean noPenaltyForBeginningOrEndingGaps ) throws Exception
 	{   
 		if( gapPenalty > 0 )
@@ -169,7 +169,7 @@ public class NeedlemanWunsch
 	private static void fillArray( String s1, 
 									String s2, 
 									SubstitutionMatrix sm, 
-									int gapPenalty, 
+									float gapPenalty, 
 									int affinePenalty, 
 									boolean noPenaltyForBeginningOrEndingGaps,
 									AlignmentCell[][] cels )
@@ -177,7 +177,7 @@ public class NeedlemanWunsch
 	{
 		cels[0][0] = new AlignmentCell(START, 0); 
 		
-		if( !noPenaltyForBeginningOrEndingGaps )
+		if( noPenaltyForBeginningOrEndingGaps )
 		{
 			for( int x=1; x <= s1.length(); x++)
 				cels[x][0] = new AlignmentCell(LEFT, 0);

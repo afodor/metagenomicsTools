@@ -13,27 +13,19 @@
 
 package reduceOTU;
 
-public class CigarRepresentation implements Comparable<CigarRepresentation>
+import java.util.ArrayList;
+import java.util.List;
+
+public class EditRepresentation implements Comparable<EditRepresentation>
 {
-	private String cigar;
+	private final List<IndividualEdit> list = new ArrayList<IndividualEdit>();
 	private int numCopies;
 	
-	
-	public CigarRepresentation(String cigar, int numCopies)
+	public EditRepresentation(int numCopies)
 	{
-		this.cigar = cigar;
 		this.numCopies = numCopies;
 	}
 
-	public String getCigar()
-	{
-		return cigar;
-	}
-	
-	public void setCigar(String cigar)
-	{
-		this.cigar = cigar;
-	}
 	
 	public int getNumCopies()
 	{
@@ -46,7 +38,7 @@ public class CigarRepresentation implements Comparable<CigarRepresentation>
 	}
 	
 	@Override
-	public int compareTo(CigarRepresentation o)
+	public int compareTo(EditRepresentation o)
 	{
 		return o.numCopies - this.numCopies;
 	}
@@ -54,6 +46,6 @@ public class CigarRepresentation implements Comparable<CigarRepresentation>
 	@Override
 	public String toString()
 	{
-		return this.cigar + " * " + this.numCopies;
+		return list.toString();
 	}
 }

@@ -11,7 +11,7 @@ public class DNASubstitutionMatrix implements SubstitutionMatrix
 		if( c1 == c2)
 			return 1;
 		
-		return -3;
+		return 0;
 	}
 	
 	private static boolean isValidDnaChar(char c)

@@ -13,6 +13,9 @@
 
 package test.testReduceOTU;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 import junit.framework.TestCase;
@@ -72,7 +75,7 @@ public class TestHashHolder extends TestCase
 		assertEquals(hh.getSequence(), null);
 	}
 	
-	private String getRandomString(int length) throws Exception
+	static String getRandomString(int length) throws Exception
 	{
 		Random random = new Random();
 		StringBuffer buff = new StringBuffer();
@@ -93,6 +96,46 @@ public class TestHashHolder extends TestCase
 		}
 		
 		return buff.toString();
+	}
+	
+	public void testHash() throws Exception
+	{
+		String common = getRandomString(32);
+		String s1 = "AGG" + common;
+		String s2 = "GT" + common;
+		
+		HashMap<Long, Integer> map1 = new LinkedHashMap<Long, Integer>();
+		HashMap<Long, Integer> map2= new LinkedHashMap<Long, Integer>();
+		
+		HashHolder hh1 = new HashHolder(32);
+		hh1.setToString(s1);
+		map1.put(hh1.getBits(), hh1.getStringIndex());
+		
+		while(hh1.advance())
+			map1.put(hh1.getBits(), hh1.getStringIndex());
+		
+		hh1.setToString(s2);
+		
+		map2.put(hh1.getBits(), hh1.getStringIndex());
+		
+		while(hh1.advance())
+			map2.put(hh1.getBits(), hh1.getStringIndex());
+		
+		System.out.println(map1); 
+		System.out.println(map2); 
+		
+		assertEquals(map1.size(), 4);
+		assertEquals(map2.size(), 3);
+		
+		HashSet<Long> set1 = new HashSet<Long>(map1.keySet());
+		set1.retainAll(map2.keySet());
+		
+		assertEquals(set1.size(), 1);
+		
+		Long key = set1.iterator().next();
+		
+		assertEquals(map1.get(key), new Integer( 3));
+		assertEquals(map2.get(key), new Integer( 2));
 	}
 	
 	public void testMultipleStops() throws Exception

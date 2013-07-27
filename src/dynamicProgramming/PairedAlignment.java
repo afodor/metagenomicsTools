@@ -1,8 +1,15 @@
 package dynamicProgramming;
 
-public interface PairedAlignment
+public abstract class PairedAlignment
 {  
-    public String getFirstSequence();
-	public String getSecondSequence();
-	public float getAlignmentScore();
+    abstract public String getFirstSequence();
+	abstract public String getSecondSequence();
+	abstract public float getAlignmentScore();
+	
+	@Override
+	public String toString()
+	{
+		return getFirstSequence() + "\n" + getSecondSequence() + "\n" +
+					getAlignmentScore();
+	}
 }
