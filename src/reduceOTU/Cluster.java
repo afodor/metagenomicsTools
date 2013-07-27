@@ -27,13 +27,16 @@ import utils.ConfigReader;
 public class Cluster implements Comparable<Cluster>
 {
 	// todo: This should be a usable adjustable parameter
-	public static final int HASH_SIZE = 40;
+	// in current implementation can't be set above 32
+	// (since we use a long as the key and 32 nucleotides can be encoded in the 64
+	// bits of the long
+	public static final int WORD_SIZE = 32;
 	
 	private String consensusSequence;
 	
 	private List<CigarRepresentation> cigarList = new ArrayList<CigarRepresentation>();
 	
-	private HashMap<String, Integer> hashes = new HashMap<String, Integer>();
+	private HashMap<Long, Integer> hashes = new HashMap<Long, Integer>();
 	
 	public int getTotalNum()
 	{
@@ -48,14 +51,11 @@ public class Cluster implements Comparable<Cluster>
 	/*
 	 * As a side-effect re-hashes.  Not even remotely thread safe.
 	 */
-	public void setConsensusSequence(String s)
+	public void setConsensusSequence(String s) throws Exception
 	{
-		hashes = new HashMap<String, Integer>();
-		
-		for( int x=0; x < HASH_SIZE; x++)
-		{
-			
-		}
+		hashes = new HashMap<Long, Integer>();
+		HashHolder hh = new HashHolder(WORD_SIZE);
+		hh.setToString(s);
 	}
 	
 	@Override

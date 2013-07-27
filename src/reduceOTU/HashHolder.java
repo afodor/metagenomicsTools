@@ -28,19 +28,38 @@ public class HashHolder
 		return bits;
 	}
 	
-	// the index of the current string
+	// the index of the current string - this is the last character to 
+	// have been fed to the hash
 	private int index =0;
 	
-	public int getIndex()
+	
+	/*
+	 * Points to the last character in the String that was encoded into the bits.
+	 * For the Java equivalent of index() call getStringIndex()
+	 */
+	public int getHashHolderIndex()
 	{
 		return index;
 	}
 	
-	private int numValidChars=0;
-	
-	public int getNumValidChars()
+	/*
+	 * Returns the java based index of the current hash or -1 if this object 
+	 * is not currently pointing to a valid word.
+	 */
+	public int getStringIndex()
 	{
-		return numValidChars;
+		if( ! canStillRead())
+			return -1;
+		
+		return index - wordSize +1;
+	}
+	
+	private int numValidChars=0;
+	private int numInvalidChars=0;
+	
+	public int getNumInvalidChars()
+	{
+		return numInvalidChars;
 	}
 	
 	private String s = null;
@@ -67,6 +86,8 @@ public class HashHolder
 		if(startAtZero)
 		{
 			index=-1;
+			numValidChars=0;
+			numInvalidChars=0;
 		}
 		
 		while( canStillRead() && numValidChars < wordSize)
@@ -81,6 +102,7 @@ public class HashHolder
 				{
 					numValidChars=0;
 					bits = 0x0000;
+					numInvalidChars++;
 				}
 				else
 				{
@@ -98,8 +120,16 @@ public class HashHolder
 		return index < s.length();
 	}
 	
+	/*
+	 * Gets the current word pointed to by this object or 
+	 * null if there is no current word (if the end of the 
+	 * sequence has already been read)
+	 */
 	public String getSequence() throws Exception
 	{
+		if( ! canStillRead())
+			return null;
+		
 		StringBuffer buff = new StringBuffer();
 		
 		long val = bits;
@@ -141,6 +171,7 @@ public class HashHolder
 			return true;
 		}
 			
+		numInvalidChars++;
 		numValidChars=0;
 		bits=0x0000;
 		

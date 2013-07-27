@@ -23,24 +23,28 @@ public class TestHashHolder extends TestCase
 {
 	public void forAHash( int hash) throws Exception
 	{
-		System.out.println(hash);
 		String s = getRandomString(100);
 		HashHolder hh = new HashHolder(hash);
 		
 		assertTrue( hh.setToString(s));
-		assertEquals(hh.getNumValidChars(),hash);
 		assertEquals(hh.getSequence(), s.substring(0, hash));
-		assertEquals(hh.getIndex(), hash-1);
+		assertEquals(hh.getHashHolderIndex(), hash-1);
+		assertEquals(hh.getNumInvalidChars(),0);
+		assertEquals(hh.getStringIndex(),0);
 		
 		int numCalls =0;
 		while( hh.advance() )
 		{
 			numCalls++;
-			assertEquals(hh.getIndex(), hash -1 + numCalls);
+			assertEquals(hh.getHashHolderIndex(), hash -1 + numCalls);
 			assertEquals(hh.getSequence(), s.substring(numCalls, numCalls + hash));
+			assertEquals(hh.getNumInvalidChars(),0);
+			assertEquals(hh.getStringIndex(), numCalls);
 		}
 		
-		assertEquals(hh.getIndex(), hash + numCalls);
+		assertEquals(hh.getSequence(), null);
+		assertEquals(hh.getHashHolderIndex(), s.length());
+		assertEquals(hh.getStringIndex(), -1);
 	}
 	
 	public void testHashes() throws Exception
@@ -59,8 +63,13 @@ public class TestHashHolder extends TestCase
 		hh = new HashHolder(5);
 		assertTrue(hh.setToString(s1));
 		assertEquals("AAACC",hh.getSequence());
-		assertEquals(hh.getIndex(), s1.indexOf("AAACC") + "AAACC".length() - 1);
-		
+		assertEquals(hh.getHashHolderIndex(), s1.indexOf("AAACC") + "AAACC".length() - 1);
+		assertEquals(hh.getStringIndex(), s1.indexOf("AAACC"));
+		assertEquals(hh.getNumInvalidChars(),2);
+		assertFalse(hh.advance());
+		assertEquals(hh.getHashHolderIndex(), s1.length());
+		assertEquals(hh.getStringIndex(), -1);
+		assertEquals(hh.getSequence(), null);
 	}
 	
 	private String getRandomString(int length) throws Exception
@@ -89,25 +98,54 @@ public class TestHashHolder extends TestCase
 	public void testMultipleStops() throws Exception
 	{
 		String s1 = getRandomString(3);
+		
 		String s2 = getRandomString(3);
+		
+		while( s2.equals(s1))
+			s2 = getRandomString(3);
+		
 		String s3 = getRandomString(3);
 		
-		String allString = s1 + "X" + s2 + "XX" + s3;
+		while( s3.equals(s1) || s3.equals(s2))
+			s3 = getRandomString(3);
+		
+		String s4 = getRandomString(3);
+		
+		while( s4.equals(s1) || s4.equals(s2) || s4.equals(s3))
+			s4 = getRandomString(3);
+		
+		String allString = s1 + "X" + s2 + "XX" + s3 + "X" + s4 + "X";
 		
 		HashHolder hh = new HashHolder(3);
 		assertTrue(hh.setToString(allString));
 		assertEquals(hh.getSequence(), s1);
-		assertEquals(hh.getIndex(), 2);
+		assertEquals(hh.getHashHolderIndex(), 2);
+		assertEquals(hh.getNumInvalidChars(),0);
+		assertEquals(hh.getStringIndex(), allString.indexOf(s1));
 
 		assertTrue(hh.advance());
 		assertEquals(hh.getSequence(), s2);
-		assertEquals(hh.getIndex(), 6);
+		assertEquals(hh.getHashHolderIndex(), 6);
+		assertEquals(hh.getNumInvalidChars(),1);
+		assertEquals(hh.getStringIndex(), allString.indexOf(s2));
 		
 		assertTrue(hh.advance());
 		assertEquals(hh.getSequence(), s3);
-		assertEquals(hh.getIndex(), allString.length()-1);
+		assertEquals(hh.getHashHolderIndex(), 11);
+		assertEquals(hh.getNumInvalidChars(),3);
+		assertEquals(hh.getStringIndex(), allString.indexOf(s3));
+		
+		assertTrue(hh.advance());
+		assertEquals(hh.getSequence(), s4);
+		assertEquals(hh.getHashHolderIndex(), 15);
+		assertEquals(hh.getNumInvalidChars(),4);
+		assertEquals(hh.getStringIndex(), allString.indexOf(s4));
+		
 		
 		assertFalse(hh.advance());
+		assertEquals(hh.getHashHolderIndex(), allString.length());
+		assertEquals(hh.getStringIndex(), -1);
+		assertEquals(hh.getSequence(), null);
 		
 	}
 	
