@@ -190,8 +190,8 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 
 		List<IndividualEdit> list = dp.getEditList();
 		System.out.println(list);
-		assertEquals(list.size(),4);
-		assertEquals(dp.getNumErrors(),1);
+		assertEquals(list.size(),5);
+		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
 	}
 }

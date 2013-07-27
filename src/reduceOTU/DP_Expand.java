@@ -32,6 +32,8 @@ public class DP_Expand
 	
 	private final int numAllowedEdits;
 	
+	private boolean paddingLeft = false;
+	
 	private int leftIndex_S1;
 	private int leftIndex_S2;
 	//private int rightIndex_S1;
@@ -89,12 +91,49 @@ public class DP_Expand
 		this.leftIndex_S1--;
 		this.leftIndex_S2--;
 		
-		if( this.leftIndex_S1 <0 || this.leftIndex_S2 <0)
+		if( this.leftIndex_S1 <0 && this.leftIndex_S2 <0)
 			return true;
 		
-		if( this.s1.charAt(leftIndex_S1) == this.s2.charAt(leftIndex_S2) )
+		if( leftIndex_S1 >=0 && leftIndex_S2 >=0 && this.s1.charAt(leftIndex_S1) == this.s2.charAt(leftIndex_S2) )
 			return expandLeft();
 		
+		// second sequence is longer - 1 error to open but we can extend this without penalty
+		if( leftIndex_S1 < 0 )
+		{
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION, leftIndex_S2, 
+											s2.charAt(leftIndex_S2)));
+			
+			if( ! paddingLeft)
+			{
+				paddingLeft = true;
+				numErrors++;
+			}
+				
+			if( numErrors > numAllowedEdits )
+				return false;
+			else
+				return expandLeft();
+		}
+		
+		// first sequence is longer - 1 error to open but we can extend this without penalty
+		if( leftIndex_S2 < 0 )
+		{
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION, leftIndex_S1, 
+					s1.charAt(leftIndex_S1)));
+			
+			if( ! paddingLeft)
+			{
+				paddingLeft = true;
+				numErrors++;
+			}
+
+			if( numErrors > numAllowedEdits )
+				return false;
+			else
+				return expandLeft();
+		}
+		
+		// still here - do NW alignment
 		int leftBoundS1 = Math.max(leftIndex_S1-BANDWITH+1, 0);
 		int leftBoundS2 = Math.max(leftIndex_S2-BANDWITH+1,0);
 		
@@ -128,8 +167,7 @@ public class DP_Expand
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
 					this.leftIndex_S2, this.s2.charAt(leftIndex_S2)));
 			
-			if( leftIndex_S1 > 0 && leftIndex_S2> 0  )
-				numErrors++;
+			numErrors++;
 		}
 		else if( c2 == '-')
 		{
@@ -137,8 +175,7 @@ public class DP_Expand
 					this.leftIndex_S2, this.s1.charAt(leftIndex_S1)));
 			this.leftIndex_S2++;
 			
-			if( leftIndex_S1> 0 && leftIndex_S2> 0  )
-				numErrors++;
+			numErrors++;
 		}
 		else
 		{
