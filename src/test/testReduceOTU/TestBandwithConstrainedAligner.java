@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 public class TestBandwithConstrainedAligner extends TestCase
 {
-	public void testLeftAlignmentInsertionInString2() throws Exception
+	public void testSingleLeftAlignmentInsertionInString2() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
 		
@@ -38,7 +38,30 @@ public class TestBandwithConstrainedAligner extends TestCase
 		
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
+		System.out.println(list);
 		assertEquals(list.get(0).toString(),"I6G" );
 		assertTrue(dp.alignmentWasSuccesful());
+	}
+	
+	public void testDoubleLeftAlignmentInsertionInString2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 = "AAATTTTT" + common;
+		String s2 = "AAATTT" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		assertEquals(list.size(),2);
+		assertEquals( list.get(0).toString(), "I2T" );
+		assertEquals( list.get(1).toString(), "I2T" );
+		assertTrue( dp.alignmentWasSuccesful());
 	}
 }

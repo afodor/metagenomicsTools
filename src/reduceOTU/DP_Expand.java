@@ -34,8 +34,8 @@ public class DP_Expand
 	
 	private int leftIndex_S1;
 	private int leftIndex_S2;
-	private int rightIndex_S1;
-	private int rightIndex_S2;
+	//private int rightIndex_S1;
+	//private int rightIndex_S2;
 	
 	private final boolean wasSuccesful;
 	
@@ -62,8 +62,8 @@ public class DP_Expand
 		
 		this.leftIndex_S1 = s1WordIndex;
 		this.leftIndex_S2 = s2WordIndex;
-		this.rightIndex_S1 = s1WordIndex + wordSize -1;
-		this.rightIndex_S2 = s2WordIndex + wordSize -1;
+		//this.rightIndex_S1 = s1WordIndex + wordSize -1;
+		//this.rightIndex_S2 = s2WordIndex + wordSize -1;
 		this.wasSuccesful = expand();
 		
 	}
@@ -81,20 +81,20 @@ public class DP_Expand
 		this.leftIndex_S1--;
 		this.leftIndex_S2--;
 		
-		if( this.leftIndex_S1 <0 || this.rightIndex_S2 <0)
+		if( this.leftIndex_S1 <0 || this.leftIndex_S2 <0)
 			return true;
 		
 		if( this.s1.charAt(leftIndex_S1) == this.s2.charAt(leftIndex_S2) )
 			return expandLeft();
 		
-		int leftBoundS1 = Math.max(leftIndex_S1-BANDWITH, 0);
-		int leftBoundS2 = Math.max(leftIndex_S2-BANDWITH,0);
+		int leftBoundS1 = Math.max(leftIndex_S1-BANDWITH+1, 0);
+		int leftBoundS2 = Math.max(leftIndex_S2-BANDWITH+1,0);
 		
-		String fragS1 = s1.substring(leftBoundS1, leftIndex_S1);
-		String fragS2 = s2.substring(leftBoundS2,leftIndex_S2);
+		String fragS1 = s1.substring(leftBoundS1, leftIndex_S1+1);
+		String fragS2 = s2.substring(leftBoundS2,leftIndex_S2+1);
 		
-		System.out.println("In " + fragS1);
-		System.out.println("In " + fragS2 );
+		System.out.println("In " + fragS1 + " " + leftBoundS1 + " "+ leftIndex_S1);
+		System.out.println("In " + fragS2 + " " + leftBoundS2 + " " + leftIndex_S2);
 		
 		PairedAlignment pa = NeedlemanWunsch.globalAlignTwoSequences(
 				fragS1, fragS2, 
@@ -104,7 +104,7 @@ public class DP_Expand
 		
 		if( pa.getAlignmentScore() <= 0 )
 		{
-			if( editList.size() + Math.min(leftIndex_S1, rightIndex_S1)  
+			if( editList.size() + Math.min(leftIndex_S1, leftIndex_S2)  
 					> numAllowedEdits)
 				return false;
 			else
@@ -123,6 +123,7 @@ public class DP_Expand
 		}
 		else if( c1 == '-' )
 		{
+			System.out.println("HERE");
 			this.leftIndex_S1++;
 			
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
