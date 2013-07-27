@@ -57,6 +57,8 @@ public class Cluster implements Comparable<Cluster>
 		HashHolder hh = new HashHolder(WORD_SIZE);
 		hh.setToString(s);
 		
+		hashes.put(hh.getBits(), hh.getStringIndex());
+		
 		while( hh.advance() )
 			hashes.put(hh.getBits(), hh.getStringIndex());
 	}
