@@ -15,12 +15,17 @@ package test.testReduceOTU;
 
 import java.util.List;
 
+import dynamicProgramming.PairedAlignment;
+
 import reduceOTU.DP_Expand;
 import reduceOTU.IndividualEdit;
+import reduceOTU.Reduce;
+import reduceOTU.ReducedTools;
 import junit.framework.TestCase;
 
 public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 {
+	/*
 	public void testSingleMisMatch() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
@@ -194,23 +199,27 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
 	}
+	*/
 	
 	public void testSomeSequence() throws Exception
 	{
-
 		StringBuffer buff = new StringBuffer();
 		
 		for( int x=0; x < 32; x++)
 			buff.append("X");
 		
 		String common = buff.toString();
-		String s1 = "CTTTTAAAAGGGG" + common;
-		String s2 = "CCCCCTTTAAAAAGGG" + common;
+		String s1 =  "AAACCGGTTAAGGGGTTA" + common;
+		String s2 =  "AAGGGTTGGGGCTTG" + common;
 		
 		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
-				32, 3);
+				32, 20);
 
 		List<IndividualEdit> list = dp.getEditList();
 		System.out.println(list);
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		System.out.println(pa.toString());
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 	}
 }

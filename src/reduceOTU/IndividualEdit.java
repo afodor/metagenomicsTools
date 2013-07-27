@@ -59,6 +59,6 @@ public class IndividualEdit implements Comparable<IndividualEdit>
 		else if ( this.editType.equals(EDIT_TYPE.SUBSTITUITION))
 			s = "S";
 		
-		return s + postion + base;
+		return s + postion + (base == '-' ? "" : base);
 	}
 }

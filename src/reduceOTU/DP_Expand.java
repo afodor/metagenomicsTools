@@ -14,6 +14,7 @@
 package reduceOTU;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import dynamicProgramming.DNASubstitutionMatrix;
@@ -82,6 +83,8 @@ public class DP_Expand
 	{
 		if( ! expandLeft())
 			return false;
+		
+		Collections.reverse(this.editList);
 		
 		return true;
 	}
@@ -164,15 +167,15 @@ public class DP_Expand
 		{
 			this.leftIndex_S1++;
 			
-			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
-					this.leftIndex_S2, this.s2.charAt(leftIndex_S2)));
+			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
+					this.leftIndex_S1, this.s2.charAt(leftIndex_S2)));
 			
 			numErrors++;
 		}
 		else if( c2 == '-')
 		{
-			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
-					this.leftIndex_S2, this.s1.charAt(leftIndex_S1)));
+			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
+					this.leftIndex_S1, '-'));
 			this.leftIndex_S2++;
 			
 			numErrors++;
@@ -180,7 +183,7 @@ public class DP_Expand
 		else
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.SUBSTITUITION,
-					this.leftIndex_S2, c2));
+					this.leftIndex_S1, c2));
 			
 			numErrors++;
 		}
