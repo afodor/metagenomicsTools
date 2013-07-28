@@ -275,7 +275,7 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		List<IndividualEdit> list = dp.getEditList();
 		//System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
-		System.out.println(pa);
+		//System.out.println(pa);
 		
 		//System.out.println(pa.getFirstSequence().replaceAll("-",""));
 		//System.out.println(s1);
@@ -284,5 +284,27 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 	}
 	
+	public void testASequence3() throws Exception
+	{
+		String common = "";
+		
+		for( int x=0; x < 32; x++)
+			common += "X";
+		
+		String s1 = common +  "CAC";
+		String s2 = common + "ACCCGTCGCCAC";
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 200);
+		
+		assertTrue(dp.alignmentWasSuccesful());
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		System.out.println(pa);
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+	}
 	
 }

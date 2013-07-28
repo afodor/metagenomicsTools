@@ -57,9 +57,6 @@ public class TestOnRealOTUs extends TestCase
 				
 				numSearched++;
 				
-				System.out.println("\tSearched for words : " 
-							+ numSearched + " aligned " + numAligned );
-				
 				HashSet<Long> xSet = new HashSet<Long>(xMap.keySet());
 				HashSet<Long> ySet = new HashSet<Long>(yMap.keySet());
 				
@@ -74,6 +71,10 @@ public class TestOnRealOTUs extends TestCase
 					assertTrue(dp.alignmentWasSuccesful());
 					List<IndividualEdit> list = dp.getEditList();
 					System.out.println(list);
+					System.out.println(xSeq);
+					System.out.println(ySeq);
+					System.out.println(dp.getNumErrors() + " " + 
+							((double)dp.getNumErrors()) / Math.min(xSeq.length(), ySeq.length()) );
 					PairedAlignment pa = ReducedTools.getAlignment(xSeq, list);
 					System.out.println(pa);
 					
@@ -81,6 +82,10 @@ public class TestOnRealOTUs extends TestCase
 					assertEquals( pa.getSecondSequence().replaceAll("-",""), ySeq);
 					
 					numAligned++;
+					
+					System.out.println("\tSearched for words : " 
+							+ numSearched + " aligned " + numAligned );
+				
 				}
 			}
 		}

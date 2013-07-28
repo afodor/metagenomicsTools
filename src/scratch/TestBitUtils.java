@@ -17,13 +17,8 @@ public class TestBitUtils
 {
 	public static void main(String[] args) throws Exception
 	{
-		long mask = 0x3l << (32-1)*2;
-		
-		for( int x=31; x>=0; x--)
-		{
-			System.out.println( Long.toBinaryString(mask));
-			mask= mask >>> 2;
-		}
+		String s = "CTGGGCCGTATCTCAGTCCCAATGTGACCGGTCACCCTCTCAGGCCGGCTACCCGTCAAAGCCTTGGTAGGCCATCACCCCACCAACAAGCTGATAGGCCGCGAGCCCATCCCCCACCAGAACAAACCTTTCCACCAACCCCCATGCGAAGGCAAGTGAATATCCAGTATTAGCACCCGTTTCCGGGCGTTATCCCAAAGAAGAGGGCAGGTTACTCACGTGTTACTCACCCGTTCGCCACT";
+		System.out.println(s.length());
 			
 	}
 }
