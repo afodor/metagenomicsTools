@@ -252,10 +252,9 @@ public class Cluster implements Comparable<Cluster>
 						
 						if( key != null)
 						{
-							int numErrors = (int) 
-								(0.03 *	
-								Math.min(xCluster.consensusSequence.length(), yCluster.consensusSequence.length()) 
-									+ 0.51);
+							int max = Math.max(xCluster.consensusSequence.length(), yCluster.consensusSequence.length());
+							int numErrors = (int) (0.03 * max+ 1 );
+								
 							
 							DP_Expand expand = new DP_Expand(xCluster.consensusSequence, 
 									yCluster.consensusSequence, xCluster.hashes.get(key), 
