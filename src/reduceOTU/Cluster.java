@@ -178,7 +178,7 @@ public class Cluster implements Comparable<Cluster>
 					{
 						EditRepresentation er = c.clusteredSequences.get(x);
 						writer.write("\t"  + er.getNumCopies() + " with distance " + er.getDistance() + "\n");
-						
+						writer.write("\t" + er.getEditList().toString() + "\n");
 						
 						if( x==0)
 						{
