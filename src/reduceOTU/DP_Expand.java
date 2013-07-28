@@ -78,11 +78,11 @@ public class DP_Expand
 		this.leftIndex_S2 = s2WordIndex;
 		this.rightIndex_S1 = s1WordIndex + wordSize -2;
 		this.rightIndex_S2 = s2WordIndex + wordSize -2;
-		this.wasSuccesful = expand();
 		this.s1IndexEnd = s1.length() -1;
 		this.s2IndexEnd = s2.length() -1;	
 		
-		expand();
+		this.wasSuccesful = expand();
+		
 	}
 	
 	private boolean expand() throws Exception
