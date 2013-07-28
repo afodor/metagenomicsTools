@@ -212,8 +212,8 @@ public class Cluster implements Comparable<Cluster>
 		{
 			if( ! c.yMerged)
 			{
-				writer.write(">repOTU" + otuNum + " numSeqs=" + c.getTotalNum() + " length="  + 
-							c.consensusSequence.length() + "\n");
+				writer.write(">repOTU" + otuNum + " length="  + 
+							c.consensusSequence.length() + " numSeqs=" + c.getTotalNum() +  "\n");
 				writer.write( c.consensusSequence + "\n" );
 				otuNum++;
 			}
