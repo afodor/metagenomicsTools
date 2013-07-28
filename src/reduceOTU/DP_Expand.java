@@ -169,7 +169,7 @@ public class DP_Expand
 		else if( c1 == '-' )
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
-					this.rightIndex_S1-1, c2));
+					this.rightIndex_S1, c2));
 			this.rightIndex_S1--;
 					
 			numErrors++;
@@ -178,7 +178,7 @@ public class DP_Expand
 		{
 			this.rightIndex_S2--;
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
-							this.rightIndex_S1-1, '-'));
+							this.rightIndex_S1, '-'));
 			
 					
 			numErrors++;

@@ -273,12 +273,12 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		
 		assertTrue(dp.alignmentWasSuccesful());
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
 		System.out.println(pa);
 		
-		System.out.println(pa.getFirstSequence().replaceAll("-",""));
-		System.out.println(s1);
+		//System.out.println(pa.getFirstSequence().replaceAll("-",""));
+		//System.out.println(s1);
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);

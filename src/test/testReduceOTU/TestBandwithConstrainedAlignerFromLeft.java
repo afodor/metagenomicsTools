@@ -312,4 +312,31 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
 	}
+	
+	public void testASequence() throws Exception
+	{
+		String common = "";
+		
+		for( int x=0; x < 32; x++)
+			common += "X";
+		
+		String s1 ="GGGAGG" + common;
+		String s2 ="ACCGAG" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 200);
+		
+		assertTrue(dp.alignmentWasSuccesful());
+		List<IndividualEdit> list = dp.getEditList();
+		//System.out.println(list);
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		//System.out.println(pa);
+		
+		//System.out.println(pa.getFirstSequence().replaceAll("-",""));
+		//System.out.println(s1);
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+	}
+	
 }

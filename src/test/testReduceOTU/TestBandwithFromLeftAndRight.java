@@ -38,42 +38,28 @@ public class TestBandwithFromLeftAndRight extends TestCase
 		
 		assertTrue(dp.alignmentWasSuccesful());
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
-		System.out.println(pa);
-		
-		System.out.println(pa.getFirstSequence().replaceAll("-",""));
-		System.out.println(s1);
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 	}
 	
-	/*  TEST CASE FAILING !!!! 
 	public void test1() throws Exception
 	{
 		String common ="GTCTCAGTCCCAGTGTGGCTGGTCGTCCTCTCAGACCAGCTACTGATCGTCGCCTTG";
 		String s1 = "NNAAGGGACCCANN" + common + "ACCGTT" + common;
 		String s2 = "ACCGGAC" + common + "AGGN";
 		
-		System.out.println(  s1.indexOf(common));
-		System.out.println(  s2.indexOf(common));
 		
 		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
 				32, 200);
 		
 		assertTrue(dp.alignmentWasSuccesful());
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
-		System.out.println(pa);
-		
-		System.out.println(pa.getFirstSequence().replaceAll("-",""));
-		System.out.println(s1);
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 		
 	}
-	*/
 }
