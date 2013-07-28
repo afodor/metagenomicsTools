@@ -13,6 +13,7 @@
 package reduceOTU;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class HashHolder
 {
@@ -84,7 +85,7 @@ public class HashHolder
 	public static HashMap<Long, Integer> getWordIndex( String s, int wordSize ) 
 		throws Exception
 	{
-		HashMap<Long,Integer> map =  new HashMap<Long, Integer>();
+		HashMap<Long,Integer> map =  new LinkedHashMap<Long, Integer>();
 		HashHolder hh = new HashHolder(wordSize);
 		hh.setToString(s);
 		

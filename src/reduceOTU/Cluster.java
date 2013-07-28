@@ -34,9 +34,31 @@ public class Cluster implements Comparable<Cluster>
 	
 	private String consensusSequence;
 	
+	private boolean merged =false;
+	
+	public boolean isMerged()
+	{
+		return merged;
+	}
+	
 	private List<EditRepresentation> cigarList = new ArrayList<EditRepresentation>();
 	
-	private HashMap<Long, Integer> hashes = new HashMap<Long, Integer>();
+	private HashMap<Long, Integer> hashes;
+	
+	public HashMap<Long, Integer> getHashes()
+	{
+		return hashes;
+	}
+	
+	public static Long findFirstMatch( HashMap<Long, Integer> map1, HashMap<Long, Integer> map2 )
+		throws Exception
+	{
+		for( Long l : map1.keySet() )
+			if( map2.containsKey(l))
+				return l;
+			
+		return null;
+	}
 	
 	public int getTotalNum()
 	{
@@ -74,7 +96,7 @@ public class Cluster implements Comparable<Cluster>
 		{
 			Cluster c= new Cluster();
 			StringTokenizer sToken = new StringTokenizer(s);
-			c.consensusSequence = new String( sToken.nextToken());
+			c.setConsensusSequence(new String( sToken.nextToken()));
 			int numCopies = Integer.parseInt(sToken.nextToken());
 			
 			if( sToken.hasMoreTokens())
@@ -107,7 +129,18 @@ public class Cluster implements Comparable<Cluster>
 		List<Cluster> list = getInitialListFromDereplicatedFile(new File(
 				ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt"));
 		
-		for(int x=0; x < 100; x++)
-			System.out.println(list.get(x).toString());
+		System.out.println(list.size());
+		
+		list.get(0).merged = true;
+		
+		for( int x=0; x < list.size() -1; x++)
+		{
+			Cluster xCluster = list.get(x);
+			
+			for( int y=x+1; y < list.size(); y++)
+			{
+				Cluster yCluster = list.get(y);
+			}
+		}
 	}
 } 
