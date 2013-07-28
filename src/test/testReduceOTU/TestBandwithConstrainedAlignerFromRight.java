@@ -24,7 +24,6 @@ import dynamicProgramming.PairedAlignment;
 
 public class TestBandwithConstrainedAlignerFromRight extends TestCase
 {
-	/*
 	public void testSingleMisMatch() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
@@ -136,13 +135,13 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		//System.out.println(list);
+		System.out.println(list);
 		
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
-		//System.out.println(pa.toString());
+		System.out.println(pa.toString());
 		
 		assertEquals(list.size(),2);
 		assertEquals(dp.getNumErrors(),1);
@@ -176,7 +175,6 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 		//System.out.println(pa.toString());
 	}
-	*/
 	
 	public void testTrailingNotCountingAsErrors() throws Exception
 	{
@@ -193,19 +191,15 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
-		System.out.println(pa.toString());
+		//System.out.println(pa.toString());
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 		
-		
-		assertEquals(list.size(),5);
+		assertEquals(list.size(),2);
 		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
-		
-		
-		
 	}
 	
 	/*

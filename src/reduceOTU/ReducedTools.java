@@ -39,9 +39,9 @@ public class ReducedTools
 		
 		for( IndividualEdit ie : edits)
 		{
-			if( ie.getPostion() - 1 > index)
+			if( ie.getPostion() - 1 >= index )
 			{
-				String s = s1.substring(index, ie.getPostion());
+				String s = s1.substring(index, Math.min(ie.getPostion(),s1.length()));
 				top.append(s);
 				bottom.append(s);
 			}

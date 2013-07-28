@@ -152,12 +152,12 @@ public class DP_Expand
 						fragS1, fragS2, 
 						MATRIX, GAP_PENALTY, 100, false);
 
-		System.out.println(fragS1 + " " + fragS2);
-		System.out.println(pa.toString());
+		//System.out.println(fragS1 + " " + fragS2);
+		//System.out.println(pa.toString());
 				
 		char c1 = pa.getFirstSequence().charAt(0);
 		char c2 = pa.getSecondSequence().charAt(0);
-		System.out.println( c1 + " "+ c2);
+		//System.out.println( c1 + " "+ c2);
 				
 		if(c1 == '-' && c2 == '-')
 			throw new Exception("Alignment error");
@@ -169,17 +169,17 @@ public class DP_Expand
 		else if( c1 == '-' )
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
-					this.rightIndex_S1, c2));
-
+					this.rightIndex_S1-1, c2));
 			this.rightIndex_S1--;
 					
 			numErrors++;
 		}
 		else if( c2 == '-')
 		{
-			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
-							this.rightIndex_S1, '-'));
 			this.rightIndex_S2--;
+			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
+							this.rightIndex_S1-1, '-'));
+			
 					
 			numErrors++;
 		}
