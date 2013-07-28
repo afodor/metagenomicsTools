@@ -121,8 +121,8 @@ public class TestHashHolder extends TestCase
 		while(hh1.advance())
 			map2.put(hh1.getBits(), hh1.getStringIndex());
 		
-		System.out.println(map1); 
-		System.out.println(map2); 
+		//System.out.println(map1); 
+		//System.out.println(map2); 
 		
 		assertEquals(map1.size(), 4);
 		assertEquals(map2.size(), 3);

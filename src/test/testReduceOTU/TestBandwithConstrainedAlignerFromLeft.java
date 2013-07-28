@@ -83,7 +83,6 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		assertEquals(list.size(),4);
 		assertEquals(dp.getNumErrors(),4);
 		
-
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
