@@ -41,7 +41,7 @@ public abstract class PairedAlignment
 			if( getFirstSequence().charAt(x) == getSecondSequence().charAt(x) )
 				buff.append("|");
 			else 
-				buff.append(" ");
+				buff.append("*");
 		}
 		
 		return buff.toString();

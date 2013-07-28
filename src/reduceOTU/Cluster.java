@@ -194,15 +194,15 @@ public class Cluster implements Comparable<Cluster>
 							for( int y=0; y < c.consensusSequence.length(); y++)
 								writer.write("|");
 							
-							writer.write(c.consensusSequence + "\n");
+							writer.write("\n" + c.consensusSequence + "\n");
 						}
 						else
 						{
-							writer.write("\t" + er.getEditList().toString() + "\n");
+							writer.write(er.getEditList().toString() + "\n");
 							PairedAlignment pa = ReducedTools.getAlignment(c.consensusSequence, er.getEditList());
 							writer.write( pa.getFirstSequence() + "\n");
 							writer.write(pa.getMiddleString() + "\n");
-							writer.write( "\t" + pa.getSecondSequence() + "\n");
+							writer.write(pa.getSecondSequence() + "\n");
 						}	
 					}
 
