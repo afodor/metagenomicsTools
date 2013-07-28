@@ -178,7 +178,6 @@ public class Cluster implements Comparable<Cluster>
 					{
 						EditRepresentation er = c.clusteredSequences.get(x);
 						writer.write("\t"  + er.getNumCopies() + " with distance " + er.getDistance() + "\n");
-						writer.write("\t" + er.getEditList().toString() + "\n");
 						
 						if( x==0)
 						{
@@ -187,6 +186,7 @@ public class Cluster implements Comparable<Cluster>
 						}
 						else
 						{
+							writer.write("\t" + er.getEditList().toString() + "\n");
 							PairedAlignment pa = ReducedTools.getAlignment(c.consensusSequence, er.getEditList());
 							writer.write( "\t" +  pa.getFirstSequence() + "\n");
 							writer.write( "\t" + pa.getSecondSequence() + "\n");
@@ -276,7 +276,9 @@ public class Cluster implements Comparable<Cluster>
 								xCluster.clusteredSequences.add(er);
 								yCluster.hashes = null;
 								numMerged++;
-								System.out.println("Merged " + x + " with " + y  +" as merge # " + numMerged);
+								
+								if( numMerged %100 == 0 )
+									System.out.println("Merged " + x + " with " + y  +" as merge # " + numMerged);
 							}
 						}
 					}
