@@ -13,20 +13,19 @@
 
 package reduceOTU;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EditRepresentation implements Comparable<EditRepresentation>
 {
-	private final List<IndividualEdit> list = new ArrayList<IndividualEdit>();
+	private final List<IndividualEdit> list;
 	private int numCopies;
 	
-	public EditRepresentation(int numCopies)
+	public EditRepresentation(int numCopies, List<IndividualEdit> list)
 	{
+		this.list = list;
 		this.numCopies = numCopies;
 	}
 
-	
 	public int getNumCopies()
 	{
 		return numCopies;

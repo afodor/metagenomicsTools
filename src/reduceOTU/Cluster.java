@@ -41,7 +41,7 @@ public class Cluster implements Comparable<Cluster>
 		return merged;
 	}
 	
-	private List<EditRepresentation> cigarList = new ArrayList<EditRepresentation>();
+	private List<EditRepresentation> clusteredSequences = new ArrayList<EditRepresentation>();
 	
 	private HashMap<Long, Integer> hashes;
 	
@@ -50,6 +50,7 @@ public class Cluster implements Comparable<Cluster>
 		return hashes;
 	}
 	
+
 	public static Long findFirstMatch( HashMap<Long, Integer> map1, HashMap<Long, Integer> map2 )
 		throws Exception
 	{
@@ -64,7 +65,7 @@ public class Cluster implements Comparable<Cluster>
 	{
 		int sum=0;
 		
-		for( EditRepresentation cr : cigarList)
+		for( EditRepresentation cr : clusteredSequences)
 			sum += cr.getNumCopies();
 		
 		return sum;
@@ -102,8 +103,8 @@ public class Cluster implements Comparable<Cluster>
 			if( sToken.hasMoreTokens())
 				throw new Exception("Unexpected line "  + s);
 			
-			EditRepresentation cr = new EditRepresentation( numCopies);
-			c.cigarList.add(cr);
+			EditRepresentation cr = new EditRepresentation( numCopies, null);
+			c.clusteredSequences.add(cr);
 			
 			list.add(c);
 		}
@@ -118,7 +119,7 @@ public class Cluster implements Comparable<Cluster>
 		StringBuffer buff = new StringBuffer();
 		buff.append(consensusSequence + "\n");
 		
-		for(EditRepresentation cr : cigarList)
+		for(EditRepresentation cr : clusteredSequences)
 			buff.append("\t" + cr.toString() + "\n");
 		
 		return buff.toString();
@@ -126,21 +127,67 @@ public class Cluster implements Comparable<Cluster>
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<Cluster> list = getInitialListFromDereplicatedFile(new File(
+		List<Cluster> getClusteredList = getClusteredList(
+				new File(
 				ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt"));
 		
-		System.out.println(list.size());
 		
-		list.get(0).merged = true;
+	}
+	
+	private static void writeRepresentativeFiles(List<Cluster> cluuster, File outFile)
+	{
+		
+	}
+	
+	public static List<Cluster> getClusteredList(File dereppedFile) throws Exception
+	{
+		List<Cluster> list = getInitialListFromDereplicatedFile(dereppedFile);
+		
+		System.out.println(list.size());
+		int numMerged =0;
 		
 		for( int x=0; x < list.size() -1; x++)
 		{
 			Cluster xCluster = list.get(x);
+			System.out.println("Trying " + (x+1) + " with " + numMerged + " merged ");
 			
-			for( int y=x+1; y < list.size(); y++)
+			if( xCluster.merged == false )
 			{
-				Cluster yCluster = list.get(y);
-			}
+				xCluster.merged = true;
+				for( int y=x+1; y < list.size(); y++)
+				{
+					Cluster yCluster = list.get(y);
+					
+					if( yCluster.merged == false)
+					{
+						Long key = findFirstMatch(xCluster.getHashes(), yCluster.getHashes());
+						
+						if( key != null)
+						{
+							int numErrors = (int) 
+								(0.03 *	
+								Math.min(xCluster.consensusSequence.length(), yCluster.consensusSequence.length()) 
+									+ 0.51);
+							
+							DP_Expand expand = new DP_Expand(xCluster.consensusSequence, 
+									yCluster.consensusSequence, xCluster.hashes.get(key), 
+											yCluster.hashes.get(key), WORD_SIZE, numErrors);
+							
+							if( expand.alignmentWasSuccesful())
+							{
+								yCluster.merged = true;
+								EditRepresentation er = new EditRepresentation(yCluster.getTotalNum(),
+													expand.getEditList());
+								
+								xCluster.clusteredSequences.add(er);
+								numMerged++;
+							}
+						}
+					}
+				}
+			}	
 		}
+		
+		return list;
 	}
 } 
