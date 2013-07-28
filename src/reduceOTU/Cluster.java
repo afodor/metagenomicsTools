@@ -48,13 +48,21 @@ public class Cluster implements Comparable<Cluster>
 	
 	private List<EditRepresentation> clusteredSequences = new ArrayList<EditRepresentation>();
 	
-	private HashMap<Long, Integer> hashes;
 	
-	public HashMap<Long, Integer> getHashes()
+	public static HashHolder getMatchPosition( HashMap<Long, Integer> map1, String s ) throws Exception
 	{
-		return hashes;
+		HashHolder hh = new HashHolder(WORD_SIZE);
+		hh.setToString(s);
+		
+		if( map1.containsKey(hh.getBits()) )
+			return hh;
+		
+		while( hh.advance())
+			if( map1.containsKey(hh.getBits()) )
+				return hh;
+			
+		return null;
 	}
-	
 
 	public static Long findFirstMatch( HashMap<Long, Integer> map1, HashMap<Long, Integer> map2 )
 		throws Exception
@@ -233,32 +241,27 @@ public class Cluster implements Comparable<Cluster>
 		{
 			Cluster xCluster = list.get(x);
 			
-			if( xCluster.hashes == null)
-				xCluster.hashes = HashHolder.getWordIndex(xCluster.consensusSequence, WORD_SIZE);
-			
 			if( xCluster.merged == false )
 			{
+				HashMap<Long, Integer> xMap = HashHolder.getWordIndex(xCluster.consensusSequence, WORD_SIZE);
 				xCluster.merged = true;
 				for( int y=x+1; y < list.size(); y++)
 				{
 					Cluster yCluster = list.get(y);
 					
 					if( yCluster.merged == false)
-					{
-						if( yCluster.hashes == null)
-							yCluster.hashes = HashHolder.getWordIndex(yCluster.consensusSequence, WORD_SIZE);
+					{	
+						HashHolder yPosition = getMatchPosition(xMap, yCluster.consensusSequence);
 						
-						Long key = findFirstMatch(xCluster.getHashes(), yCluster.getHashes());
-						
-						if( key != null)
+						if( yPosition != null)
 						{
 							int max = Math.max(xCluster.consensusSequence.length(), yCluster.consensusSequence.length());
 							int numErrors = (int) (0.03 * max+ 1 );
 								
 							
 							DP_Expand expand = new DP_Expand(xCluster.consensusSequence, 
-									yCluster.consensusSequence, xCluster.hashes.get(key), 
-											yCluster.hashes.get(key), WORD_SIZE, numErrors);
+									yCluster.consensusSequence, xMap.get(yPosition.getBits()), 
+											yPosition.getStringIndex(), WORD_SIZE, numErrors);
 							
 							if( expand.alignmentWasSuccesful())
 							{
@@ -273,10 +276,9 @@ public class Cluster implements Comparable<Cluster>
 													expand.getEditList(), distance);
 								
 								xCluster.clusteredSequences.add(er);
-								yCluster.hashes = null;
 								numMerged++;
 								
-								if( numMerged %100 == 0 )
+								if( numMerged %10000 == 0 )
 									System.out.println("Merged " + x + " with " + y  +" as merge # " + numMerged);
 							}
 						}
