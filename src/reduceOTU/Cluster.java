@@ -98,7 +98,7 @@ public class Cluster implements Comparable<Cluster>
 		return o.getTotalNum() - this.getTotalNum();
 	}
 	
-	public static List<Cluster> getInitialListFromDereplicatedFile(File file) throws Exception
+	public static List<Cluster> getInitialListFromDereplicatedFile(File file, int minNumRequired) throws Exception
 	{
 		List<Cluster> list = new ArrayList<Cluster>();
 		
@@ -120,7 +120,8 @@ public class Cluster implements Comparable<Cluster>
 			EditRepresentation cr = new EditRepresentation( numCopies, null,0);
 			c.clusteredSequences.add(cr);
 			
-			list.add(c);
+			if(numCopies >= minNumRequired)
+				list.add(c);
 			
 			numRead++;
 			
@@ -150,7 +151,7 @@ public class Cluster implements Comparable<Cluster>
 		
 		List<Cluster> list = getClusteredList(
 				new File(
-				ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt"));
+				ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt"), 1);
 
 		double seconds = ((System.currentTimeMillis()) - startTime ) / 1000.0;
 
@@ -235,9 +236,9 @@ public class Cluster implements Comparable<Cluster>
 		writer.flush();  writer.close();
 	}
 	
-	public static List<Cluster> getClusteredList(File dereppedFile) throws Exception
+	public static List<Cluster> getClusteredList(File dereppedFile, int minNumRequired) throws Exception
 	{
-		List<Cluster> list = getInitialListFromDereplicatedFile(dereppedFile);
+		List<Cluster> list = getInitialListFromDereplicatedFile(dereppedFile, minNumRequired);
 		
 		System.out.println(list.size());
 		int numMerged =0;
