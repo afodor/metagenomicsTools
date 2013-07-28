@@ -31,4 +31,19 @@ public abstract class PairedAlignment
 		
 		return sum;
 	}
+	
+	public String getMiddleString()
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < getFirstSequence().length();x++)
+		{
+			if( getFirstSequence().charAt(x) == getSecondSequence().charAt(x) )
+				buff.append("|");
+			else 
+				buff.append(" ");
+		}
+		
+		return buff.toString();
+	}
 }
