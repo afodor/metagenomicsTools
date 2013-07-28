@@ -17,13 +17,25 @@ import java.util.List;
 
 public class EditRepresentation implements Comparable<EditRepresentation>
 {
-	private final List<IndividualEdit> list;
+	private final List<IndividualEdit> editList;
 	private int numCopies;
+	private final double distance;
 	
-	public EditRepresentation(int numCopies, List<IndividualEdit> list)
+	public List<IndividualEdit> getEditList()
 	{
-		this.list = list;
+		return editList;
+	}
+	
+	public double getDistance()
+	{
+		return distance;
+	}
+	
+	public EditRepresentation(int numCopies, List<IndividualEdit> list, double distance)
+	{
+		this.editList = list;
 		this.numCopies = numCopies;
+		this.distance = distance;
 	}
 
 	public int getNumCopies()
@@ -45,6 +57,6 @@ public class EditRepresentation implements Comparable<EditRepresentation>
 	@Override
 	public String toString()
 	{
-		return list.toString();
+		return editList.toString();
 	}
 }

@@ -14,13 +14,17 @@
 package reduceOTU;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import dynamicProgramming.PairedAlignment;
 
 import utils.ConfigReader;
 
@@ -35,6 +39,7 @@ public class Cluster implements Comparable<Cluster>
 	private String consensusSequence;
 	
 	private boolean merged =false;
+	private boolean yMerged = false;
 	
 	public boolean isMerged()
 	{
@@ -105,7 +110,7 @@ public class Cluster implements Comparable<Cluster>
 			if( sToken.hasMoreTokens())
 				throw new Exception("Unexpected line "  + s);
 			
-			EditRepresentation cr = new EditRepresentation( numCopies, null);
+			EditRepresentation cr = new EditRepresentation( numCopies, null,0);
 			c.clusteredSequences.add(cr);
 			
 			list.add(c);
@@ -134,16 +139,86 @@ public class Cluster implements Comparable<Cluster>
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<Cluster> getClusteredList = getClusteredList(
+		long startTime = System.currentTimeMillis();
+		
+		List<Cluster> list = getClusteredList(
 				new File(
 				ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt"));
+
+		double seconds = ((System.currentTimeMillis()) - startTime ) / 1000.0;
+
+		System.out.println(   seconds + "seconds");
 		
+		writeRepresentativeFiles(list, new File(ConfigReader.getReducedOTUDir() +
+				File.separator + "repOTU.fasta"));
+		
+		writeAlignentFile(list, new File(ConfigReader.getReducedOTUDir() +
+				File.separator + "repOTU.summary"));
 		
 	}
 	
-	private static void writeRepresentativeFiles(List<Cluster> cluuster, File outFile)
-	{
+	private static void writeAlignentFile(List<Cluster> clusters, File outFile)
+			throws Exception
+		{
+			System.out.println("Writing alignment " + outFile.getAbsolutePath());
 		
+			BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+			
+			int otuNum =1;
+			
+			for(Cluster c : clusters)
+			{
+				if( ! c.yMerged)
+				{
+					writer.write("#\n");
+					writer.write("repOTU" + otuNum  + " with " + c.getTotalNum() + " sequences \n");
+					writer.write(c.consensusSequence + "\n");
+					
+					for( int x=0; x < c.clusteredSequences.size(); x++)
+					{
+						EditRepresentation er = c.clusteredSequences.get(x);
+						writer.write("\t"  + er.getNumCopies() + " with distance " + er.getDistance());
+						
+						
+						if( x==0)
+						{
+							writer.write("\t" + c.consensusSequence + "\n");
+							writer.write("\t" + c.consensusSequence + "\n");
+						}
+						else
+						{
+							PairedAlignment pa = ReducedTools.getAlignment(c.consensusSequence, er.getEditList());
+							writer.write( "\t" +  pa.getFirstSequence() + "\n");
+							writer.write( "\t" + pa.getSecondSequence() + "\n");
+						}	
+					}
+
+					otuNum++;
+				}
+			}
+			
+			writer.flush();  writer.close();
+		}
+	
+	private static void writeRepresentativeFiles(List<Cluster> clusters, File outFile)
+		throws Exception
+	{
+		System.out.println("Writing fasta " + outFile.getAbsolutePath());
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		int otuNum =1;
+		
+		for(Cluster c : clusters)
+		{
+			if( ! c.yMerged)
+			{
+				writer.write(">repOTU" + otuNum + " " + c.getTotalNum() + "\n");
+				writer.write( c.consensusSequence + "\n" );
+				otuNum++;
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	public static List<Cluster> getClusteredList(File dereppedFile) throws Exception
@@ -183,8 +258,14 @@ public class Cluster implements Comparable<Cluster>
 							if( expand.alignmentWasSuccesful())
 							{
 								yCluster.merged = true;
+								yCluster.yMerged = true;
+								
+								double distance = 
+									((double)expand.getNumErrors()) 
+									/ Math.min(xCluster.consensusSequence.length(), yCluster.consensusSequence.length());
+								
 								EditRepresentation er = new EditRepresentation(yCluster.getTotalNum(),
-													expand.getEditList());
+													expand.getEditList(), distance);
 								
 								xCluster.clusteredSequences.add(er);
 								numMerged++;
