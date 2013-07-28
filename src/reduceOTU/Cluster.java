@@ -177,7 +177,7 @@ public class Cluster implements Comparable<Cluster>
 					for( int x=0; x < c.clusteredSequences.size(); x++)
 					{
 						EditRepresentation er = c.clusteredSequences.get(x);
-						writer.write("\t"  + er.getNumCopies() + " with distance " + er.getDistance());
+						writer.write("\t"  + er.getNumCopies() + " with distance " + er.getDistance() + "\n");
 						
 						
 						if( x==0)
@@ -275,6 +275,8 @@ public class Cluster implements Comparable<Cluster>
 				}
 			}	
 		}
+		
+		Collections.sort(list);
 		
 		return list;
 	}
