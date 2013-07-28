@@ -107,7 +107,7 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		List<IndividualEdit> list = dp.getEditList();
 		assertEquals(list.size(),1);
 		assertEquals(dp.getNumErrors(),1);
-		System.out.println(list);
+		//System.out.println(list);
 		assertTrue(dp.alignmentWasSuccesful());
 		
 
@@ -115,6 +115,125 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
-		System.out.println(pa.toString());
+		//System.out.println(pa.toString());
 	}
+	
+
+	public void testDoubleRightAlignmentDeltionInString2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("I");
+		
+		String common = buff.toString();
+		String s1 = common + "AAATTT";
+		String s2 = common + "AAATTTTT";
+		
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		//System.out.println(list);
+		
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+		//System.out.println(pa.toString());
+		
+		assertEquals(list.size(),2);
+		assertEquals(dp.getNumErrors(),1);
+		assertTrue( dp.alignmentWasSuccesful());
+	}
+
+	public void testSingleLeftAlignmentDeletionInString2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 =  common + "ACTGACT";
+		String s2 =  common + "ACTGACTG" ;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+						32, 3);
+		
+		List<IndividualEdit> list = dp.getEditList();
+		assertEquals(list.size(),1);
+		assertEquals(dp.getNumErrors(),1);
+		//System.out.println(list);
+		assertTrue(dp.alignmentWasSuccesful());
+		
+
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+		//System.out.println(pa.toString());
+	}
+	
+	public void testTrailingNotCountingAsErrors() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+		String s1 =  common +    "AAAAAATTTTTTTG";
+		String s2 = common + "AAAAAAAAAATTTTTTTC";
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		System.out.println(pa.toString());
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+		
+		
+		assertEquals(list.size(),5);
+		assertEquals(dp.getNumErrors(),2);
+		assertTrue( dp.alignmentWasSuccesful());
+		
+		
+		
+	}
+	
+	/*
+	public void testTrailingNotCountingAsErrors2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+
+		String s1 = common + "AAAAAAAAAATTTTTTTC" ;
+		String s2 =  common + "AAAAAATTTTTTTG" ;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		//System.out.println(list);
+		assertEquals(list.size(),5);
+		assertEquals(dp.getNumErrors(),2);
+		assertTrue( dp.alignmentWasSuccesful());
+		
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		//System.out.println(pa.toString());
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+	}
+	*/
+	
 }
