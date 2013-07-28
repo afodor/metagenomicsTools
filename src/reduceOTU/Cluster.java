@@ -82,7 +82,6 @@ public class Cluster implements Comparable<Cluster>
 	public void setConsensusSequence(String s) throws Exception
 	{
 		this.consensusSequence = s;
-		hashes = HashHolder.getWordIndex(s, WORD_SIZE);
 	}
 	
 	@Override
@@ -171,7 +170,8 @@ public class Cluster implements Comparable<Cluster>
 				if( ! c.yMerged)
 				{
 					writer.write("#\n");
-					writer.write("repOTU" + otuNum  + " with " + c.getTotalNum() + " sequences \n");
+					writer.write("repOTU" + otuNum  + " with numSeqs=" + c.getTotalNum() 
+							+ " length=" + c.consensusSequence.length() + "\n");
 					writer.write(c.consensusSequence + "\n");
 					
 					for( int x=0; x < c.clusteredSequences.size(); x++)
@@ -212,7 +212,8 @@ public class Cluster implements Comparable<Cluster>
 		{
 			if( ! c.yMerged)
 			{
-				writer.write(">repOTU" + otuNum + " " + c.getTotalNum() + "\n");
+				writer.write(">repOTU" + otuNum + " numSeqs=" + c.getTotalNum() + " length="  + 
+							c.consensusSequence.length() + "\n");
 				writer.write( c.consensusSequence + "\n" );
 				otuNum++;
 			}
@@ -231,7 +232,9 @@ public class Cluster implements Comparable<Cluster>
 		for( int x=0; x < list.size() -1; x++)
 		{
 			Cluster xCluster = list.get(x);
-			System.out.println("Trying " + (x+1) + " with " + numMerged + " merged ");
+			
+			if( xCluster.hashes == null)
+				xCluster.hashes = HashHolder.getWordIndex(xCluster.consensusSequence, WORD_SIZE);
 			
 			if( xCluster.merged == false )
 			{
@@ -242,6 +245,9 @@ public class Cluster implements Comparable<Cluster>
 					
 					if( yCluster.merged == false)
 					{
+						if( yCluster.hashes == null)
+							yCluster.hashes = HashHolder.getWordIndex(yCluster.consensusSequence, WORD_SIZE);
+						
 						Long key = findFirstMatch(xCluster.getHashes(), yCluster.getHashes());
 						
 						if( key != null)
@@ -268,7 +274,9 @@ public class Cluster implements Comparable<Cluster>
 													expand.getEditList(), distance);
 								
 								xCluster.clusteredSequences.add(er);
+								yCluster.hashes = null;
 								numMerged++;
+								System.out.println("Merged " + x + " with " + y  +" as merge # " + numMerged);
 							}
 						}
 					}
