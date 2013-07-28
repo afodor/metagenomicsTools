@@ -76,6 +76,7 @@ public class Cluster implements Comparable<Cluster>
 	 */
 	public void setConsensusSequence(String s) throws Exception
 	{
+		this.consensusSequence = s;
 		hashes = HashHolder.getWordIndex(s, WORD_SIZE);
 	}
 	
@@ -93,6 +94,7 @@ public class Cluster implements Comparable<Cluster>
 		
 		reader.readLine();
 		
+		int numRead=0;
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			Cluster c= new Cluster();
@@ -107,6 +109,11 @@ public class Cluster implements Comparable<Cluster>
 			c.clusteredSequences.add(cr);
 			
 			list.add(c);
+			
+			numRead++;
+			
+			if(numRead %1000 ==0)
+				System.out.println("Read " + numRead);
 		}
 		
 		Collections.sort(list);
