@@ -178,6 +178,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		assertEquals( list.get(1).toString(), "I2T" );
 		assertTrue( dp.alignmentWasSuccesful());
 	}
+	*/
 	
 	public void testTrailingNotCountingAsErrors() throws Exception
 	{
@@ -194,12 +195,18 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 				32, 3);
 
 		List<IndividualEdit> list = dp.getEditList();
-		//System.out.println(list);
+		System.out.println(list);
 		assertEquals(list.size(),5);
 		assertEquals(dp.getNumErrors(),2);
 		assertTrue( dp.alignmentWasSuccesful());
+		
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		System.out.println(pa.toString());
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 	}
-	*/
+	
 	
 	public void testSomeSequence() throws Exception
 	{
@@ -216,9 +223,9 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 				32, 20);
 
 		List<IndividualEdit> list = dp.getEditList();
-		System.out.println(list);
+		//System.out.println(list);
 		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
-		System.out.println(pa.toString());
+		//System.out.println(pa.toString());
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);

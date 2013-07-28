@@ -103,7 +103,7 @@ public class DP_Expand
 		// second sequence is longer - 1 error to open but we can extend this without penalty
 		if( leftIndex_S1 < 0 )
 		{
-			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION, leftIndex_S2, 
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION, 0, 
 											s2.charAt(leftIndex_S2)));
 			
 			if( ! paddingLeft)
@@ -121,8 +121,8 @@ public class DP_Expand
 		// first sequence is longer - 1 error to open but we can extend this without penalty
 		if( leftIndex_S2 < 0 )
 		{
-			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION, leftIndex_S1, 
-					s1.charAt(leftIndex_S1)));
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION, leftIndex_S1, 
+					'-'));
 			
 			if( ! paddingLeft)
 			{
