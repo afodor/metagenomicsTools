@@ -39,16 +39,11 @@ public class ReducedTools
 		
 		for( IndividualEdit ie : edits)
 		{
-			if( ie.getPostion()  > index && index < s1.length()-1 )
+			if( ie.getPostion() > index && index < s1.length() )
 			{
 				String s = s1.substring(index, Math.min(ie.getPostion(),s1.length()));
 				top.append(s);
 				bottom.append(s);
-			}
-			else if ( ie.getPostion() == s1.length())
-			{
-				top.append(s1.charAt(s1.length()-1));
-				bottom.append(s1.charAt(s1.length()-1));
 			}
 			
 			if(ie.getEditType().equals(IndividualEdit.EDIT_TYPE.SUBSTITUITION))
@@ -74,7 +69,7 @@ public class ReducedTools
 			
 		}
 		
-		if( index < s1.length() -1)
+		if( index < s1.length())
 		{
 			String s= s1.substring(index, s1.length());
 			top.append(s);
