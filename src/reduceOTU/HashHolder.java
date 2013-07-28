@@ -12,6 +12,8 @@
 
 package reduceOTU;
 
+import java.util.HashMap;
+
 public class HashHolder
 {
 	private final int wordSize;
@@ -77,6 +79,21 @@ public class HashHolder
 	public boolean setToString(String s) throws Exception
 	{
 		return setToString(s, true);
+	}
+	
+	public static HashMap<Long, Integer> getWordIndex( String s, int wordSize ) 
+		throws Exception
+	{
+		HashMap<Long,Integer> map =  new HashMap<Long, Integer>();
+		HashHolder hh = new HashHolder(wordSize);
+		hh.setToString(s);
+		
+		map.put(hh.getBits(), hh.getStringIndex());
+		
+		while( hh.advance() )
+			map.put(hh.getBits(), hh.getStringIndex());
+		
+		return map;
 	}
 	
 	private boolean setToString(String s, boolean startAtZero) throws Exception

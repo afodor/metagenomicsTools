@@ -53,14 +53,7 @@ public class Cluster implements Comparable<Cluster>
 	 */
 	public void setConsensusSequence(String s) throws Exception
 	{
-		hashes = new HashMap<Long, Integer>();
-		HashHolder hh = new HashHolder(WORD_SIZE);
-		hh.setToString(s);
-		
-		hashes.put(hh.getBits(), hh.getStringIndex());
-		
-		while( hh.advance() )
-			hashes.put(hh.getBits(), hh.getStringIndex());
+		hashes = HashHolder.getWordIndex(s, WORD_SIZE);
 	}
 	
 	@Override
