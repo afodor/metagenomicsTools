@@ -26,6 +26,8 @@ public class TestSuite1
 		suite.addTest(new TestSuite(TestHashHolder.class));
 		suite.addTest(new TestSuite(TestBandwithConstrainedAlignerFromLeft.class));
 		suite.addTest(new TestSuite(TestBandwithConstrainedAlignerFromRight.class));
+		suite.addTest(new TestSuite(TestBandwithFromLeftAndRight.class));
+		
 		
 		//$JUnit-END$
 		return suite;
