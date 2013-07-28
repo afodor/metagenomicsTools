@@ -207,6 +207,34 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 	}
 	
+	public void testTrailingNotCountingAsErrors2() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < 32; x++)
+			buff.append("X");
+		
+		String common = buff.toString();
+
+		String s1 = "AAAAAAAAAATTTTTTTC" + common;
+		String s2 = "AAAAAATTTTTTTG" + common;
+		
+		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
+				32, 3);
+
+		List<IndividualEdit> list = dp.getEditList();
+		System.out.println(list);
+		assertEquals(list.size(),5);
+		assertEquals(dp.getNumErrors(),2);
+		assertTrue( dp.alignmentWasSuccesful());
+		
+		PairedAlignment pa = ReducedTools.getAlignment(s1, list);
+		System.out.println(pa.toString());
+		
+		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
+		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
+	}
+	
 	
 	public void testSomeSequence() throws Exception
 	{
