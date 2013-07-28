@@ -13,7 +13,6 @@
 
 package reduceOTU;
 
-import java.util.Collections;
 import java.util.List;
 
 import dynamicProgramming.PairedAlignment;

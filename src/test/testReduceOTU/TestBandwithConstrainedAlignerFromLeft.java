@@ -51,7 +51,7 @@ public class TestBandwithConstrainedAlignerFromLeft extends TestCase
 		
 		assertEquals( pa.getFirstSequence().replaceAll("-",""), s1);
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
-		System.out.println(pa);
+		//System.out.println(pa);
 	}
 	
 	public void testFailedAlignment()  throws Exception

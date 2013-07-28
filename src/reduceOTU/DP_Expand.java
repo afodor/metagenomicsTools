@@ -34,11 +34,14 @@ public class DP_Expand
 	private final int numAllowedEdits;
 	
 	private boolean paddingLeft = false;
+	private boolean paddingRight = false;
 	
 	private int leftIndex_S1;
 	private int leftIndex_S2;
-	//private int rightIndex_S1;
-	//private int rightIndex_S2;
+	private int rightIndex_S1;
+	private int rightIndex_S2;
+	private final int s1IndexEnd;
+	private final int s2IndexEnd;
 	
 	private final boolean wasSuccesful;
 	
@@ -73,10 +76,13 @@ public class DP_Expand
 		
 		this.leftIndex_S1 = s1WordIndex;
 		this.leftIndex_S2 = s2WordIndex;
-		//this.rightIndex_S1 = s1WordIndex + wordSize -1;
-		//this.rightIndex_S2 = s2WordIndex + wordSize -1;
+		this.rightIndex_S1 = s1WordIndex + wordSize -2;
+		this.rightIndex_S2 = s2WordIndex + wordSize -2;
 		this.wasSuccesful = expand();
+		this.s1IndexEnd = s1.length() -1;
+		this.s2IndexEnd = s2.length() -1;	
 		
+		expand();
 	}
 	
 	private boolean expand() throws Exception
@@ -86,7 +92,108 @@ public class DP_Expand
 		
 		Collections.reverse(this.editList);
 		
-		return true;
+		return expandRight();
+	}
+	
+	private boolean expandRight() throws Exception
+	{
+		this.rightIndex_S1++;
+		this.rightIndex_S2++;
+		
+		if( this.rightIndex_S1 > s1IndexEnd && this.rightIndex_S2 > s2IndexEnd)
+			return true;
+		
+		if( rightIndex_S1 <= s1IndexEnd && rightIndex_S2 <= s2IndexEnd &&
+				this.s1.charAt(rightIndex_S1) == this.s2.charAt(rightIndex_S2) )
+			return expandRight();
+		
+		if( this.rightIndex_S1 > s1IndexEnd)
+		{
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION, rightIndex_S1, 
+					s2.charAt(rightIndex_S2)));
+
+			if( ! paddingRight)
+				{
+				paddingRight= true;
+				numErrors++;
+				}
+			
+			if( numErrors > numAllowedEdits )
+				return false;
+			else
+				return expandRight();
+		}
+		
+		if( rightIndex_S2 > s2IndexEnd )
+		{
+			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION, rightIndex_S1, 
+							'-'));
+					
+			if( ! paddingRight)
+			{
+				paddingRight= true;
+				numErrors++;
+			}
+
+			if( numErrors > numAllowedEdits )
+				return false;
+			else
+				return expandRight();
+		}
+		
+		// still here - do NW alignment
+		int rightBoundS1 = Math.min(rightIndex_S1+BANDWITH, s1.length());
+		int rightBoundS2 = Math.min(rightIndex_S2+BANDWITH,s2.length());
+				
+		String fragS1 = s1.substring(rightIndex_S1, rightBoundS1);
+		String fragS2 = s2.substring(rightIndex_S2,rightBoundS2);
+				
+		PairedAlignment pa = NeedlemanWunsch.globalAlignTwoSequences(
+						fragS1, fragS2, 
+						MATRIX, GAP_PENALTY, 100, false);
+		
+		//System.out.println(pa.toString());
+				
+		char c1 = pa.getFirstSequence().charAt(0);
+		char c2 = pa.getSecondSequence().charAt(0);
+		//System.out.println( c1 + " "+ c2);
+				
+		if(c1 == '-' && c2 == '-')
+			throw new Exception("Alignment error");
+				
+		if( c1 == c2)
+		{
+				return expandRight();
+		}
+		else if( c1 == '-' )
+		{
+			this.rightIndex_S1++;
+					
+			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
+							this.rightIndex_S1, this.s2.charAt(rightIndex_S2)));
+					
+			numErrors++;
+		}
+		else if( c2 == '-')
+		{
+			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
+							this.rightIndex_S1, '-'));
+			this.rightIndex_S2++;
+					
+			numErrors++;
+		}
+		else
+		{
+				editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.SUBSTITUITION,
+							this.rightIndex_S1, c2));
+					
+				numErrors++;
+		}
+				
+		if( numErrors > numAllowedEdits )
+			return false;
+		else
+			return expandRight();
 	}
 	
 	private boolean expandLeft() throws Exception
