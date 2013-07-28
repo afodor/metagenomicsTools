@@ -76,8 +76,8 @@ public class DP_Expand
 		
 		this.leftIndex_S1 = s1WordIndex;
 		this.leftIndex_S2 = s2WordIndex;
-		this.rightIndex_S1 = s1WordIndex + wordSize -2;
-		this.rightIndex_S2 = s2WordIndex + wordSize -2;
+		this.rightIndex_S1 = s1WordIndex + wordSize -1;
+		this.rightIndex_S2 = s2WordIndex + wordSize -1;
 		this.s1IndexEnd = s1.length() -1;
 		this.s2IndexEnd = s2.length() -1;	
 		
@@ -124,7 +124,7 @@ public class DP_Expand
 				return expandRight();
 		}
 		
-		if( rightIndex_S2 > s2IndexEnd )
+		if( rightIndex_S2 > s2IndexEnd)
 		{
 			editList.add( new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION, rightIndex_S1, 
 							'-'));
@@ -151,26 +151,27 @@ public class DP_Expand
 		PairedAlignment pa = NeedlemanWunsch.globalAlignTwoSequences(
 						fragS1, fragS2, 
 						MATRIX, GAP_PENALTY, 100, false);
-		
-		//System.out.println(pa.toString());
+
+		System.out.println(fragS1 + " " + fragS2);
+		System.out.println(pa.toString());
 				
 		char c1 = pa.getFirstSequence().charAt(0);
 		char c2 = pa.getSecondSequence().charAt(0);
-		//System.out.println( c1 + " "+ c2);
+		System.out.println( c1 + " "+ c2);
 				
 		if(c1 == '-' && c2 == '-')
 			throw new Exception("Alignment error");
 				
 		if( c1 == c2)
 		{
-				return expandRight();
+			return expandRight();
 		}
 		else if( c1 == '-' )
 		{
-			this.rightIndex_S1++;
-					
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
-							this.rightIndex_S1, this.s2.charAt(rightIndex_S2)));
+					this.rightIndex_S1, c2));
+
+			this.rightIndex_S1--;
 					
 			numErrors++;
 		}
@@ -178,7 +179,7 @@ public class DP_Expand
 		{
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.DELETION,
 							this.rightIndex_S1, '-'));
-			this.rightIndex_S2++;
+			this.rightIndex_S2--;
 					
 			numErrors++;
 		}
@@ -275,7 +276,7 @@ public class DP_Expand
 			this.leftIndex_S1++;
 			
 			editList.add(new IndividualEdit(IndividualEdit.EDIT_TYPE.INSERTION,
-					this.leftIndex_S1, this.s2.charAt(leftIndex_S2)));
+					this.leftIndex_S1, c2));
 			
 			numErrors++;
 		}

@@ -24,6 +24,7 @@ import dynamicProgramming.PairedAlignment;
 
 public class TestBandwithConstrainedAlignerFromRight extends TestCase
 {
+	/*
 	public void testSingleMisMatch() throws Exception
 	{
 		StringBuffer buff = new StringBuffer();
@@ -175,6 +176,7 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 		assertEquals( pa.getSecondSequence().replaceAll("-",""), s2);
 		//System.out.println(pa.toString());
 	}
+	*/
 	
 	public void testTrailingNotCountingAsErrors() throws Exception
 	{
@@ -184,8 +186,8 @@ public class TestBandwithConstrainedAlignerFromRight extends TestCase
 			buff.append("X");
 		
 		String common = buff.toString();
-		String s1 =  common +    "AAAAAATTTTTTTG";
-		String s2 = common + "AAAAAAAAAATTTTTTTC";
+		String s1 =  common + "ATG";
+		String s2 = common + "AATC";
 		
 		DP_Expand dp = new DP_Expand(s1, s2, s1.indexOf(common), s2.indexOf(common), 
 				32, 3);
