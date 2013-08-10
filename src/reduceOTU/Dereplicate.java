@@ -20,22 +20,39 @@ import java.util.HashMap;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
-import utils.ConfigReader;
 
 public class Dereplicate
 {
 	public static void main(String[] args) throws Exception
 	{
-		File inputFasta = new File(ConfigReader.getReducedOTUDir() + File.separator + "postLucyFiltering.txt");
-		File derepFile = new File(ConfigReader.getReducedOTUDir() + File.separator + "derepped.txt");
+		if(args.length != 2)
+		{
+			System.out.println( "Usage: Dereplicate inFile outFile" );
+			System.exit(1);
+		}
 		
-		writeDeReplicateFile(inputFasta, derepFile);
+		File inputFasta = new File(args[0]);
+		
+		File outputFile = new File(args[1]);
+		
+		if(outputFile.exists())
+		{
+			System.out.println(outputFile.getAbsolutePath() + " already exits!  Exiting" );
+			System.exit(1);
+		}
+		
+		writeDeReplicateFile(inputFasta, outputFile);
 	}
 	
 	public static void writeDeReplicateFile(File inputFasta, File outputFile )
 		throws Exception
 	{
-		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFasta);
+		boolean zipped = false;
+		
+		if(inputFasta.getName().toLowerCase().endsWith("gz"))
+			zipped = true;
+			
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFasta, zipped);
 		HashMap<String, Integer> dereps = new HashMap<String,Integer>();
 		
 		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
