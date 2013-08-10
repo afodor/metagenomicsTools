@@ -15,7 +15,7 @@ public class FastaSequenceOneAtATime
 	
 	public FastaSequenceOneAtATime(String filePath) throws Exception
 	{
-		this(new File(filePath),false);
+		this(new File(filePath),filePath.toLowerCase().endsWith("gz"));
 	}
 	
 	public FastaSequenceOneAtATime(File file) throws Exception
