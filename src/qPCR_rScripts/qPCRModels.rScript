@@ -1,7 +1,11 @@
 
+rm(list=ls())
 setwd("D:\\JoshManuscript\\R_Code_And_Data")
 
 myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
+treatments <- factor( myT$treatmentStatus)
+treatments <- relevel( treatments, ref="stable" ) 
+
 
 timeRegressionBurk <- lm( myT$LogBurk ~ myT$sampleDays, x=TRUE)
 
@@ -40,8 +44,10 @@ anova( timeConditionBurk)
 timeCondition16S <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
 
 anova( timeCondition16S)
+summary(timeCondition16S  )
 
 pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
 
 anova(pseudTimeSquared ) 
+
 
