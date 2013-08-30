@@ -25,8 +25,23 @@ timeConditionInteractionBurk <-  lm( myT$LogBurk ~ myT$sampleDays * treatments)
 
 anova(timeConditionInteractionBurk)
 
+timeConditionInteraction16S <-  lm( myT$Log16S~ myT$sampleDays * treatments) 
 
+anova(timeConditionInteraction16S )
 
+pseudInteractions <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) * treatments, x=TRUE)
 
+anova(pseudInteractions)
 
+timeConditionBurk <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
+
+anova( timeConditionBurk)
+
+timeCondition16S <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
+
+anova( timeCondition16S)
+
+pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
+
+anova(pseudTimeSquared ) 
 
