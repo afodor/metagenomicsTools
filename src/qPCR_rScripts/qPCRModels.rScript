@@ -23,6 +23,15 @@ myLm <- lm( myT$Log16S ~ myT$sampleDays, x=TRUE)
 
 myLm <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2), x=TRUE)
 
+treatments <- factor( myT$treatmentStatus)
+
+
+myLm <- lm( myT$LogBurk ~ myT$sampleDays + treatments) # no interaction
+
+myLm <- lm( myT$LogPseudo ~ myT$sampleDays + treatments) # no interaction
+
+
+
 
 
 
