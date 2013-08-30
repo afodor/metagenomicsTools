@@ -1,34 +1,29 @@
 
 setwd("D:\\JoshManuscript\\R_Code_And_Data")
 
-myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE );
+myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
 
-# model1 
+timeRegressionBurk <- lm( myT$LogBurk ~ myT$sampleDays, x=TRUE)
 
+anova(timeRegressionBurk)
 
+timeRegressionPseud <- lm( myT$LogPseudo ~ myT$sampleDays, x=TRUE)
 
-myLm <- lm( myT$LogBurk ~ myT$sampleDays, x=TRUE)
+anova(timeRegressionPseud)
 
-myLm <- lm( myT$LogPseudo ~ myT$sampleDays, x=TRUE)
+timeRegression16S <- lm( myT$Log16S ~ myT$sampleDays, x=TRUE)
 
-myLm <- lm( myT$Log16S ~ myT$sampleDays, x=TRUE)
+anova(timeRegression16S)
 
+time2ndOrderPseud <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2), x=TRUE)
 
-
-#formula for p-value
-(1 - pt(12.73,128) ) *2
-
-
-# model 2
-
-myLm <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2), x=TRUE)
+anova(time2ndOrderPseud)
 
 treatments <- factor( myT$treatmentStatus)
 
+timeConditionInteractionBurk <-  lm( myT$LogBurk ~ myT$sampleDays * treatments) 
 
-myLm <- lm( myT$LogBurk ~ myT$sampleDays + treatments) # no interaction
-
-myLm <- lm( myT$LogPseudo ~ myT$sampleDays + treatments) # no interaction
+anova(timeConditionInteractionBurk)
 
 
 
