@@ -6,6 +6,22 @@ myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
 treatments <- factor( myT$treatmentStatus)
 treatments <- relevel( treatments, ref="stable" ) 
 
+boxplot( myT$LogBurk[which(myT$treatmentStatus=="stable")],
+			myT$LogBurk[which(myT$treatmentStatus=="Before Treament")],
+			myT$LogBurk[which(myT$treatmentStatus=="Treatment")],
+			myT$LogBurk[which(myT$treatmentStatus=="Recovery")])
+
+boxplot( myT$LogPseud[which(myT$treatmentStatus=="stable")],
+			myT$LogPseud[which(myT$treatmentStatus=="Before Treament")],
+			myT$LogPseud[which(myT$treatmentStatus=="Treatment")],
+			myT$LogPseud[which(myT$treatmentStatus=="Recovery")])
+			
+			
+boxplot( myT$Log16S[which(myT$treatmentStatus=="stable")],
+			myT$Log16S[which(myT$treatmentStatus=="Before Treament")],
+			myT$Log16S[which(myT$treatmentStatus=="Treatment")],
+			myT$Log16S[which(myT$treatmentStatus=="Recovery")])
+			
 
 timeRegressionBurk <- lm( myT$LogBurk ~ myT$sampleDays, x=TRUE)
 
@@ -40,8 +56,9 @@ anova(pseudInteractions)
 timeConditionBurk <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
 
 anova( timeConditionBurk)
+summary( timeConditionBurk)
 
-timeCondition16S <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
+timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments) 
 
 anova( timeCondition16S)
 summary(timeCondition16S  )
@@ -49,5 +66,5 @@ summary(timeCondition16S  )
 pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
 
 anova(pseudTimeSquared ) 
-
+summary(pseudTimeSquared )
 
