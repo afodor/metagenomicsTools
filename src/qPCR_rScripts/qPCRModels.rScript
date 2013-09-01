@@ -11,6 +11,7 @@ boxplot( myT$LogBurk[which(myT$treatmentStatus=="stable")],
 			myT$LogBurk[which(myT$treatmentStatus=="Before Treament")],
 			myT$LogBurk[which(myT$treatmentStatus=="Treatment")],
 			myT$LogBurk[which(myT$treatmentStatus=="Recovery")])
+ 
 
 boxplot( myT$LogPseud[which(myT$treatmentStatus=="stable")],
 			myT$LogPseud[which(myT$treatmentStatus=="Before Treament")],
@@ -102,3 +103,27 @@ summary(pseudTimeSquared )
 treatments <- relevel( treatments, ref="Treatment" ) 
 pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
 summary(pseudTimeSquared )
+
+BurkToPseudRatio <- myT$LogBurk / myT$LogPseud
+plot(myT$sampleDays, BurkToPseudRatio)
+
+boxplot( BurkToPseudRatio[which(myT$treatmentStatus=="stable")],
+			BurkToPseudRatio[which(myT$treatmentStatus=="Before Treament")],
+			BurkToPseudRatio[which(myT$treatmentStatus=="Treatment")],
+			BurkToPseudRatio[which(myT$treatmentStatus=="Recovery")])
+			
+treatments <- relevel( treatments, ref="stable" ) 			
+timeConditionRatio <-  lm( BurkToPseudRatio ~ myT$sampleDays + treatments) 
+summary(timeConditionRatio)
+
+treatments <- relevel( treatments, ref="Before Treament" ) 		
+timeConditionRatio <-  lm( BurkToPseudRatio ~ myT$sampleDays + treatments) 
+summary(timeConditionRatio)
+
+treatments <- relevel( treatments, ref="Treatment" ) 
+timeConditionRatio <-  lm( BurkToPseudRatio ~ myT$sampleDays + treatments) 
+summary(timeConditionRatio)
+
+	
+
+
