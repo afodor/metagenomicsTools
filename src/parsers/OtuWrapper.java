@@ -1072,12 +1072,12 @@ public class OtuWrapper
 		return -sum;
 	}
 	
-	public double getSimpsonsDiversity(String sample) throws Exception
+	public double getSimpsonsIndex(String sample) throws Exception
 	{
-		return getSimpsonsDiversity(getIndexForSampleName(sample));
+		return getSimpsonsIndex(getIndexForSampleName(sample));
 	}
 
-	public double getSimpsonsDiversity(int sampleIndex)
+	public double getSimpsonsIndex(int sampleIndex)
 	{
 		double sum = 0;
 
