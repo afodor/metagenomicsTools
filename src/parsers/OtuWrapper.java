@@ -29,6 +29,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import utils.ConfigReader;
+import utils.ProcessWrapper;
 import utils.TabReader;
 
 public class OtuWrapper
@@ -655,6 +657,41 @@ public class OtuWrapper
 		writer.flush();  writer.close();
 	}
 
+	/*
+	 * Not thread safe even from separate VMs
+	 */
+	public File createMothurBrayCutris(boolean log) throws Exception
+	{	
+		File outFile = new File(ConfigReader.getMothurDir() + File.separator + "brayCurtForMothur.txt");
+		
+		outFile.delete();
+		
+		if( outFile.exists())
+			throw new Exception("Could not delete " + outFile.getAbsolutePath());
+		
+		writeBrayCurtisForMothur(outFile.getAbsolutePath(),true);
+	
+		File batchFile =new File(ConfigReader.getMothurDir() + File.separator + "batchForMothur.txt");
+		
+		batchFile.delete();
+		
+		if(batchFile.exists())
+			throw new Exception("Could not delete " + batchFile.getAbsolutePath());
+		
+		BufferedWriter writer =new BufferedWriter(new FileWriter(batchFile));
+		
+		writer.write("pcoa(phylip=" + outFile.getAbsolutePath() + ")\n");
+		
+		writer.flush();  writer.close();
+	
+		
+		String[] cmdArgs = new String[2];
+		cmdArgs[0] = ConfigReader.getMothurDir() + File.separator + "mothur";
+		cmdArgs[1] = batchFile.getAbsolutePath();
+		
+		new ProcessWrapper(cmdArgs);
+		return new File( ConfigReader.getMothurDir() + File.separator + "brayCurtForMothur.pcoa.axes");
+	}
 	
 	public void writeLoggedDataWithTaxaAsColumns(File file) throws Exception
 	{
