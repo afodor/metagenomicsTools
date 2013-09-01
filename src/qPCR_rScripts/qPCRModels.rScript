@@ -1,7 +1,7 @@
 
 
 rm(list=ls())
-setwd("D:\\JoshManuscript\\R_Code_And_Data")
+setwd("G:\\JoshManuscript\\R_Code_And_Data")
 
 myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
 treatments <- factor( myT$treatmentStatus)
@@ -124,6 +124,11 @@ treatments <- relevel( treatments, ref="Treatment" )
 timeConditionRatio <-  lm( BurkToPseudRatio ~ myT$sampleDays + treatments) 
 summary(timeConditionRatio)
 
-	
+bigT <- read.table("annotatedOTUsAsColumns.txt",sep="\t", header=TRUE)
+seqRatio <- bigT$Consensus2 / bigT$Consensus1
+plot( bigT$sampleDays , seqRatio )  
 
+summary ( lm( seqRatio  ~ bigT$sampleDays ) ) 
 
+seqRatioTreatment <- lm(seqRatio  ~ bigT$sampleDays + bigT$treatmentString)
+anova(seqRatioTreatment)
