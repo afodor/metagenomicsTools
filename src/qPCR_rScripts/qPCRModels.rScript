@@ -53,18 +53,51 @@ pseudInteractions <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) * treatments, x
 
 anova(pseudInteractions)
 
+treatments <- relevel( treatments, ref="stable" ) 
 timeConditionBurk <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
 
 anova( timeConditionBurk)
 summary( timeConditionBurk)
 
-timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments) 
+# pick up additional pairwise comparisons
+# that don't involve stable timepoints
+treatments <- relevel( treatments, ref="Before Treament" ) 
+timeConditionBurk <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
+summary( timeConditionBurk)
 
+treatments <- relevel( treatments, ref="Treatment" ) 
+timeConditionBurk <-  lm( myT$LogBurk ~ myT$sampleDays + treatments) 
+summary( timeConditionBurk)
+
+
+treatments <- relevel( treatments, ref="stable" ) 
+timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments) 
 anova( timeCondition16S)
 summary(timeCondition16S  )
 
-pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
+# pick up additional pairwise comparisons
+# that don't involve stable timepoints
+treatments <- relevel( treatments, ref="Before Treament" ) 
+timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments) 
+summary(timeCondition16S  )
 
+treatments <- relevel( treatments, ref="Treatment" ) 
+timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments) 
+summary(timeCondition16S  )
+
+
+
+treatments <- relevel( treatments, ref="stable" ) 
+pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
 anova(pseudTimeSquared ) 
 summary(pseudTimeSquared )
 
+# pick up additional pairwise comparisons
+# that don't involve stable timepoints
+treatments <- relevel( treatments, ref="Before Treament" ) 
+pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
+summary(pseudTimeSquared )
+
+treatments <- relevel( treatments, ref="Treatment" ) 
+pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
+summary(pseudTimeSquared )
