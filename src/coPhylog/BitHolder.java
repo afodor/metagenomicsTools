@@ -16,7 +16,7 @@ package coPhylog;
 public class BitHolder
 {
 	// the leftmost 32 bits hold the left context
-	// the rightmost 32 bits hold the right context
+	// the rightmost 32 bits hold the right context 
 	private long bits = 0x0l;
 	
 	public long getBits()
