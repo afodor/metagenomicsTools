@@ -40,6 +40,8 @@ public class ConfigReader
 	public static final String GENBANK_CACHE_DIR = "GENBANK_CACHE_DIR";
 	public static final String REDUCE_OTU_DIR = "REDUCE_OTU_DIR";
 	
+	public static final String SACCHARINE_RAT_DIR = "SACCHARINE_RAT_DIR";
+	
 	public static final String MOTHUR_DIR = "MOTHUR_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
@@ -53,6 +55,12 @@ public class ConfigReader
 	{
 		return getConfigReader().getAProperty(MACHINE_LEARNING_DIR);
 	}
+	
+	public static String getSaccharineRatDir() throws Exception
+	{
+		return getConfigReader().getAProperty(SACCHARINE_RAT_DIR);
+	}
+	
 	
 	private boolean isSetToTrue(String namedProperty)
 	{

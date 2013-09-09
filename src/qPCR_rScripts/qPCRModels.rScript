@@ -87,7 +87,6 @@ timeCondition16S <-  lm( myT$Log16S ~ myT$sampleDays + treatments)
 summary(timeCondition16S  )
 
 
-
 treatments <- relevel( treatments, ref="stable" ) 
 pseudTimeSquared <- lm( myT$LogPseudo ~ poly( myT$sampleDays,2) + treatments, x=TRUE)
 anova(pseudTimeSquared ) 

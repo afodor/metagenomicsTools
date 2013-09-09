@@ -130,8 +130,7 @@ public class CoPhylogOnBurk
 				log( numRemoved + " " +  numDone + " " + map.size() + " " + (((float)map.size())/numDone) + " "+ 
 				Runtime.getRuntime().freeMemory() + " " + Runtime.getRuntime().totalMemory() +  " " + Runtime.getRuntime().maxMemory() 
 				+ " " + ((double)Runtime.getRuntime().freeMemory())/Runtime.getRuntime().maxMemory(),log );
-				
-				
+					
 				double fractionFree= 1- (Runtime.getRuntime().totalMemory()- ((double)Runtime.getRuntime().freeMemory() ))
 								/Runtime.getRuntime().totalMemory();
 				
