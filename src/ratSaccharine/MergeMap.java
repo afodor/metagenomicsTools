@@ -14,8 +14,10 @@
 package ratSaccharine;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -50,9 +52,62 @@ public class MergeMap
 		return map;
 	}
 	
+	private static String getFirstLineOfMap() throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
+				"mapOut.txt")));
+		
+		String aString = reader.readLine();
+		
+		reader.close();
+		
+		return aString;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, String> mapLines = readMapFile();
+		System.out.println(mapLines);
+		
+		BufferedReader reader=  new BufferedReader(new FileReader(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
+				"unweighted_unifrac_pc.txt")));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
+				"mergedMapUnweightedUnifrac.txt")));
+		
+		writer.write("id");
+		
+		writer.write(getFirstLineOfMap());
+		
+		for( int x=1; x <=3; x++)
+			writer.write("\taxis" + x);
+		
+		writer.write("\n");
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+			if( ! s.startsWith("#"))
+			{
+				StringTokenizer sToken = new StringTokenizer(s, "\t");
+				String key = "\"" +  sToken.nextToken() + "\"";
+				
+				String mapLine= mapLines.get(key);
+				
+				if( mapLine == null)
+					throw new Exception("No " + key);
+				
+				writer.write(mapLine);
+				
+				for( int x=1; x <=3; x++)
+					writer.write("\t" + sToken.nextToken());
+				
+				writer.write("\n");
+			}
+		
+		writer.flush();  writer.close();
+		
+		reader.close();
 		
 	}
 }
