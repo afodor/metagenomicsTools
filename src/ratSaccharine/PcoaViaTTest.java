@@ -30,7 +30,7 @@ public class PcoaViaTTest
 	public static void main(String[] args) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
-				"pcoaAxes.txt")));
+				"pcoaAxesUnweightedUnifrac.txt")));
 		
 		writer.write("axis\tcecum\tcolon\tstool\n");
 		
@@ -54,7 +54,9 @@ public class PcoaViaTTest
 	private static double getPValue( String tissue, int axisNum ) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File( 
-			ConfigReader.getSaccharineRatDir() + File.separator + "mergedMapBrayCurtisPCOA.txt"	)));
+			ConfigReader.getSaccharineRatDir() + File.separator 
+			+ "mergedUnweightedUnifrac.txt")));
+			//+ "mergedMapBrayCurtisPCOA.txt"	)));
 		
 		HashMap<String, List<Double>> highCages = new HashMap<String, List<Double>>();
 		HashMap<String, List<Double>> lowCages = new HashMap<String, List<Double>>();

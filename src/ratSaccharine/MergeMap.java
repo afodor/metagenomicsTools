@@ -37,6 +37,7 @@ public class MergeMap
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
+			s = s.replaceAll("\"", "");
 			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			
 			String firstToken = sToken.nextToken();
@@ -70,11 +71,11 @@ public class MergeMap
 		System.out.println(mapLines);
 		
 		BufferedReader reader=  new BufferedReader(new FileReader(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
-				"ttuLyte_70_mergedReads_logNorm_counts.bc.pcoa.axes")));
-				//"unweighted_unifrac_pc.txt")));
+				//"ttuLyte_70_mergedReads_logNorm_counts.bc.pcoa.axes")));
+				"unweighted_unifrac_pc.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
-				"mergedMapBrayCurtisPCOA.txt")));
+				"mergedUnweightedUnifrac.txt")));
 		
 		writer.write("id\t");
 		
@@ -90,6 +91,7 @@ public class MergeMap
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 			if( ! s.startsWith("#"))
 			{
+				s = s.replaceAll("\"", "");
 				StringTokenizer sToken = new StringTokenizer(s, "\t");
 				String key = sToken.nextToken();
 				
