@@ -118,7 +118,7 @@ public class FastQ
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				"D:\\classes\\undergradProgramming_2013\\example.fastq")));
 		
-		FastQ fastq = readOneOrNull(reader);
+		//FastQ fastq = readOneOrNull(reader);
 		
 		reader.close();
 	}

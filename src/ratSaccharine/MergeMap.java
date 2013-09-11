@@ -44,7 +44,7 @@ public class MergeMap
 			if( map.containsKey( firstToken))
 				throw new Exception("Duplicate");
 			
-			map.put(firstToken, s);
+			map.put(firstToken, s.replaceAll("\"", ""));
 		}
 		
 		reader.close();
@@ -70,16 +70,17 @@ public class MergeMap
 		System.out.println(mapLines);
 		
 		BufferedReader reader=  new BufferedReader(new FileReader(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
-				"unweighted_unifrac_pc.txt")));
+				"ttuLyte_70_mergedReads_logNorm_counts.bc.pcoa.axes")));
+				//"unweighted_unifrac_pc.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getSaccharineRatDir() + File.separator + 
-				"mergedMapUnweightedUnifrac.txt")));
+				"mergedMapBrayCurtisPCOA.txt")));
 		
-		writer.write("id");
+		writer.write("id\t");
 		
 		writer.write(getFirstLineOfMap());
 		
-		for( int x=1; x <=3; x++)
+		for( int x=1; x <=40; x++)
 			writer.write("\taxis" + x);
 		
 		writer.write("\n");
@@ -90,7 +91,7 @@ public class MergeMap
 			if( ! s.startsWith("#"))
 			{
 				StringTokenizer sToken = new StringTokenizer(s, "\t");
-				String key = "\"" +  sToken.nextToken() + "\"";
+				String key = sToken.nextToken();
 				
 				String mapLine= mapLines.get(key);
 				
@@ -99,8 +100,8 @@ public class MergeMap
 				
 				writer.write(mapLine);
 				
-				for( int x=1; x <=3; x++)
-					writer.write("\t" + sToken.nextToken());
+				for( int x=1; x <=40; x++)
+					writer.write("\t" + sToken.nextToken().replaceAll("\"", ""));
 				
 				writer.write("\n");
 			}
