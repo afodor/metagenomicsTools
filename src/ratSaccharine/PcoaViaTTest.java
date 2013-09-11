@@ -67,7 +67,7 @@ public class PcoaViaTTest
 			
 			if(splits[3].equals(tissue))
 			{
-				double val = Double.parseDouble(splits[20+axisNum]);
+				double val = Double.parseDouble(splits[23+axisNum]);
 				
 				String cage = splits[8];
 				
