@@ -33,14 +33,31 @@ public class PairedTTests
 		Double time2 = null;
 	}
 	
+	private static List<FileManager> getFileManagers() throws Exception
+	{
+		List<FileManager> list = new ArrayList<FileManager>();
+		
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "unweightedUNIFRAC.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"unweightedUNIFRACPairedTTests.txt"));
+		
+		return list;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getIanAnorexiaDir() + File.separator + 
-				"unweightedUNIFRACPairedTTests.txt")));
+		for( FileManager fm : getFileManagers())
+			runPairedTTest(fm);
+	}
+	
+	private static void runPairedTTest(FileManager fm) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fm.getPairedTTestFile()));
 		
 		writer.write("axis\tpairedPValue\n");
 		
-		File inFile = new File(ConfigReader.getIanAnorexiaDir() + File.separator + "unweightedUNIFRAC.txt");
+		File inFile = fm.getDataFile();
 		
 		for( int x=2; x < 12; x++)
 		{
