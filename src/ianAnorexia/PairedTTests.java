@@ -43,6 +43,38 @@ public class PairedTTests
 				ConfigReader.getIanAnorexiaDir() + File.separator + 
 				"unweightedUNIFRACPairedTTests.txt"));
 		
+
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "familyData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"familyPairedTTests.txt"));
+		
+
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "genusData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"genusPairedTTests.txt"));
+
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "phylumData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"phylumPairedTTests.txt"));
+
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "richnessData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"richnessPairedTTests.txt"));
+
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "shannonData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"shannonPairedTTests.txt"));
+		
+		list.add(new FileManager(
+				ConfigReader.getIanAnorexiaDir() + File.separator + "weightedData.txt",
+				ConfigReader.getIanAnorexiaDir() + File.separator + 
+				"weightedDataPairedTTests.txt"));
+
 		return list;
 	}
 	
@@ -107,7 +139,16 @@ public class PairedTTests
 			}
 		}
 		
-		return TTest.pairedTTest(list1, list2).getPValue();
+		try
+		{
+			return TTest.pairedTTest(list1, list2).getPValue();
+		}
+		catch(Exception ex)
+		{
+			return 1;
+		}
+		
+		
 	}
 	
 	private static HashMap<Integer, Holder> getMap(File file, int dataColNum) throws Exception
@@ -117,7 +158,7 @@ public class PairedTTests
 		
 		reader.readLine();
 		
-		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0 ; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
