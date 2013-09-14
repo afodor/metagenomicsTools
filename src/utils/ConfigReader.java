@@ -42,6 +42,8 @@ public class ConfigReader
 	
 	public static final String SACCHARINE_RAT_DIR = "SACCHARINE_RAT_DIR";
 	
+	public static final String IAN_ANOREXIA_DIR = "IAN_ANOREXIA_DIR";
+	
 	public static final String MOTHUR_DIR = "MOTHUR_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
@@ -59,6 +61,11 @@ public class ConfigReader
 	public static String getSaccharineRatDir() throws Exception
 	{
 		return getConfigReader().getAProperty(SACCHARINE_RAT_DIR);
+	}
+	
+	public static String getIanAnorexiaDir() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_ANOREXIA_DIR);
 	}
 	
 	
