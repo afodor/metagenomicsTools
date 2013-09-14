@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 import utils.TTest;
@@ -51,6 +52,24 @@ public class PairedTTests
 			runPairedTTest(fm);
 	}
 	
+	private static List<String> getColumnNames(File inFile) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		
+		List<String> list =new ArrayList<String>();
+		
+		StringTokenizer sToken = new StringTokenizer(reader.readLine(), "\t");
+		
+		sToken.nextToken();  sToken.nextToken();
+		
+		while( sToken.hasMoreTokens())
+			list.add(sToken.nextToken());
+		
+		reader.close();
+		
+		return list;
+	}
+	
 	private static void runPairedTTest(FileManager fm) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(fm.getPairedTTestFile()));
@@ -58,12 +77,13 @@ public class PairedTTests
 		writer.write("axis\tpairedPValue\n");
 		
 		File inFile = fm.getDataFile();
+		List<String> columnNames = getColumnNames(inFile);
 		
-		for( int x=2; x < 12; x++)
+		for( int x=0; x < columnNames.size(); x++)
 		{
-			writer.write((x-1) + "\t");
+			writer.write(columnNames.get(x) + "\t");
 			
-			HashMap<Integer, Holder> map = getMap(inFile, x);
+			HashMap<Integer, Holder> map = getMap(inFile, x+2);
 			
 			writer.write(getPairedTTest(map) + "\n");
 		}
