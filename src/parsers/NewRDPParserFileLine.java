@@ -242,6 +242,12 @@ public class NewRDPParserFileLine
 		return getRdpList(rdpFile, numCPUs);
 	}
 	
+
+	public static List<NewRDPParserFileLine> getRdpList(String rdpFilePath) throws Exception
+	{
+		return getRdpList(new File(rdpFilePath));
+	}
+	
 	public static List<NewRDPParserFileLine> getRdpListSingleThread(String rdpFilePath)
 		throws Exception
 	{
