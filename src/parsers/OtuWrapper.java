@@ -693,6 +693,63 @@ public class OtuWrapper
 		return new File( ConfigReader.getMothurDir() + File.separator + "brayCurtForMothur.pcoa.axes");
 	}
 	
+	public static void assertTwoWrappersEqual( OtuWrapper wrapper1, OtuWrapper wrapper2 ) throws Exception
+	{
+		if( wrapper1.getSampleNames().size() != wrapper2.getSampleNames().size()  )
+			throw new Exception("Unexpected sample sizes");
+		
+		if( wrapper1.getOtuNames().size() != wrapper2.getOtuNames().size())
+			throw new Exception("Unexpected taxa sizes");
+		
+		List<String> sampleList1 = new ArrayList<String>();
+		List<String> sampleList2 = new ArrayList<String>();
+		
+		for( String s : wrapper1.getSampleNames() )
+			sampleList1.add(s);
+		
+		for( String s: wrapper2.getSampleNames())
+			sampleList2.add(s);
+		
+		Collections.sort(sampleList1);
+		Collections.sort(sampleList2);
+		
+		for( int x=0; x < wrapper1.getSampleNames().size(); x++)
+			if( ! sampleList1.get(x).equals(sampleList2.get(x)) )
+				throw new Exception("No match in list");
+		
+		List<String> taxaList1 = new ArrayList<String>();
+		List<String> taxaList2 = new ArrayList<String>();
+		
+		for( String s: wrapper1.getOtuNames())
+			taxaList1.add(s);
+		
+		for( String s : wrapper2.getOtuNames())
+			taxaList2.add(s);
+		
+		Collections.sort(taxaList1);
+		Collections.sort(taxaList2);
+		
+		for( int x=0; x < wrapper1.getOtuNames().size(); x++)
+			if( ! taxaList1.get(x).equals(taxaList2.get(x)) )
+				throw new Exception("No match in list");
+		
+		for( int x=0; x < sampleList1.size(); x++)
+			for( int y=0; y < taxaList1.size(); y++)
+			{
+				String sampleName = sampleList1.get(x);
+				String otuName = taxaList1.get(x);
+				double dataPoint1= wrapper1.getDataPointsUnnormalized().get(wrapper1.getIndexForSampleName(sampleName)).
+										get(wrapper1.getIndexForOtuName(otuName));
+				
+				double dataPoint2= wrapper2.getDataPointsUnnormalized().get(wrapper2.getIndexForSampleName(sampleName)).
+						get(wrapper2.getIndexForOtuName(otuName));
+				
+				if( dataPoint1 != dataPoint2)
+					throw new Exception("No " + dataPoint1 + " " + dataPoint2);
+				
+			}
+	}
+	
 	public void writeLoggedDataWithTaxaAsColumns(File file) throws Exception
 	{
 		writeLoggedDataWithTaxaAsColumns(file, this.sampleNames, this.otuNames);

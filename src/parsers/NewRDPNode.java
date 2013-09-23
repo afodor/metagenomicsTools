@@ -52,6 +52,8 @@ public class NewRDPNode
 			if( ! scoreString.startsWith("0.") )
 				throw new Exception("Unexpected score string "+ scoreString);
 			
+			if(scoreString.length() == 3)
+				scoreString = scoreString + "0";
 			
 			this.score = Integer.parseInt(scoreString.substring(2));
 		}

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -63,13 +64,21 @@ public class PivotOTUs
 		
 		writer.write("sample");
 		List<String> otuList = getOTUSAtThreshold(map, 0);
+		Collections.sort(otuList);
 		
 		for( String s : otuList)
 			writer.write("\t" +  s);
 		
 		writer.write("\n");
 		
+		List<String> samples = new ArrayList<String>();
+		
 		for( String s : map.keySet())
+			samples.add(s);
+		
+		Collections.sort(samples);
+		
+		for( String s : samples)
 		{
 			//String expandedString = PivotRDPs.getExpandedString( s);
 			//writer.write( expandedString );

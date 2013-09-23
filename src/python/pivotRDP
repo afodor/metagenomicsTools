@@ -1,0 +1,88 @@
+
+def getSampleMap(filepath):
+	f = open(filepath)
+	
+	outerMap = {}
+	
+	for line in f:
+		splits = line.replace("\n","").split("\t")
+		
+		index = 6
+		gotGenus = False
+		
+		while not gotGenus:
+			#print(splits[index])
+			if splits[index] == "genus":
+				gotGenus= True
+				if float(splits[index+1]) >= (0.8 - 0.001):
+					sample = splits[0].partition("_")[2]
+					innerMap = outerMap.setdefault(sample, {})
+					innerMap.setdefault(splits[index-1], 0)
+					innerMap[ splits[index-1]] += 1
+			else:
+				index = index + 3
+		
+	f.close()
+	
+	return outerMap
+
+
+def getSortedTaxaKeys( outerMap ):
+	allKeys = set()
+	
+	for innerMap in outerMap.values():
+		for genus in innerMap.keys():
+			allKeys.add(genus)
+			
+	keyList = []
+	
+	for s in allKeys:
+		#if getTotalNumber(outerMap, s) > 200:
+		keyList.append(s)
+		
+	keyList.sort()
+	
+	return keyList
+
+def getTotalNumber(outerMap, key):
+	sum =0
+	
+	for innerMap in outerMap.values():
+		sum += innerMap.get(key,0)
+		
+	return sum
+	
+
+def writePivotFile( outerMap, filepath):
+	
+	keyList = getSortedTaxaKeys(outerMap)
+	f = open(filepath, "w")
+	
+	f.write("sample")
+	
+	for key in keyList:
+		f.write("\t" + key )
+		
+	f.write("\n")
+	
+	samples = []
+	
+	for sample in outerMap:
+		samples.append(sample)
+		
+	samples.sort()
+	
+	for sample in samples:
+		f.write(sample)
+		
+		innerMap =outerMap[sample]
+		
+		for key in keyList:
+			f.write("\t" + str( innerMap.get(key,0) ))
+			
+		f.write("\n")
+	
+	f.close()
+			
+outerMap = getSampleMap("C:\\classes\\undergradProgramming_2013\\fattyLiverMaterials\\rdpOutFromLength200")
+writePivotFile(outerMap,"C:\\classes\\undergradProgramming_2013\\fattyLiverMaterials\\rdpGenusPivot")
