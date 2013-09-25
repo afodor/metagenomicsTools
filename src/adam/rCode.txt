@@ -1,0 +1,33 @@
+setwd("D:\\adam")
+myT <-read.table("pivoted.txt", header=TRUE, sep="\t")
+
+boxplot(myT$normalizedSequenceCount[which(myT$prediction==0)], myT$normalizedSequenceCount[which(myT$prediction==1)],
+myT$normalizedSequenceCount[which(myT$prediction==2)] )
+
+
+
+boxplot(myT$normalizedSequenceCount[which(myT$prediction==0)], myT$normalizedSequenceCount[which(myT$prediction==1)],
+myT$normalizedSequenceCount[which(myT$prediction==2)] )
+
+
+wilcox.test(myT$normalizedSequenceCount[which(myT$prediction==1)],myT$normalizedSequenceCount[which(myT$prediction==2)] )
+
+boxplot(log10(myT$normalizedSequenceCount[which(myT$prediction==0)]+0.00001),
+log10(myT$normalizedSequenceCount[which(myT$prediction==1)]+0.00001),
+log10(myT$normalizedSequenceCount[which(myT$prediction==2)]+0.00001))
+
+predictionFactors <- factor( myT$prediction  )
+predictionFactors <- relevel( predictionFactors, ref = 1)
+
+myLm <- lm(myT$normalizedSequenceCount ~ myT$normalizedPosition  )
+summary(myLm)
+
+myLm <- lm(myT$normalizedSequenceCount ~ myT$normalizedPosition * predictionFactors)
+anova(myLm)
+summary(myLm)
+ 
+ 
+predictionFactors <- relevel( predictionFactors, ref = "1")
+myLm <- lm(myT$normalizedSequenceCount ~ myT$normalizedPosition * predictionFactors)
+anova(myLm)
+summary(myLm)
