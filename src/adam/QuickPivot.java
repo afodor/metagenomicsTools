@@ -21,23 +21,31 @@ import java.util.StringTokenizer;
 
 public class QuickPivot
 {
+	
 	public static void main(String[] args) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("D:\\adam\\pivoted.txt")));
 		
-		writer.write("gene\tposition\tsequenceCount\tprediction\n");
+		writer.write("gene\tposition\tnormalizedPosition\tsequenceCount\tnormalizedSequenceCount\tprediction\n");
 		
 		BufferedReader reader= new BufferedReader(new FileReader(new File("d:\\adam\\EX_CDS_dataframe_long.out")));
 		
-		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		int y=0;
+		for(String s= reader.readLine(); s != null && y < 1000; s = reader.readLine())
 		{
+			y++;
 			//System.out.println(s);
 			StringTokenizer sToken = new StringTokenizer(s);
 			
 			String name = sToken.nextToken();
 			String[] counts = sToken.nextToken().split(",");
-			String[] structures = sToken.nextToken().split(",");
 			
+			double sum = 0;
+			
+			for( String st : counts)
+				sum += Double.parseDouble(st);
+			
+			String[] structures = sToken.nextToken().split(",");
 			
 			if( counts.length != structures.length)
 				throw new Exception("No " + counts.length + " " + structures.length);
@@ -46,7 +54,9 @@ public class QuickPivot
 			{
 				writer.write(name + "\t");
 				writer.write( (x+1) + "\t");
+				writer.write( ((x+1) / ((double)counts.length)) + "\t" );
 				writer.write(counts[x] + "\t");
+				writer.write( (Double.parseDouble(counts[x]) / sum) + "\t");
 				writer.write( structures[x] + "\n");
 			}
 		}
