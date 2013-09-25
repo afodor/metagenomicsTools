@@ -17,7 +17,6 @@ log10(myT$normalizedSequenceCount[which(myT$prediction==1)]+0.00001),
 log10(myT$normalizedSequenceCount[which(myT$prediction==2)]+0.00001))
 
 predictionFactors <- factor( myT$prediction  )
-predictionFactors <- relevel( predictionFactors, ref = 1)
 
 myLm <- lm(myT$normalizedSequenceCount ~ myT$normalizedPosition  )
 summary(myLm)
