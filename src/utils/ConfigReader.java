@@ -45,6 +45,7 @@ public class ConfigReader
 	public static final String IAN_ANOREXIA_DIR = "IAN_ANOREXIA_DIR";
 	
 	public static final String MOTHUR_DIR = "MOTHUR_DIR";
+	public static final String CROSSOVER_EXERCISE_DIR = "CROSSOVER_EXERCISE_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
 	
@@ -127,6 +128,11 @@ public class ConfigReader
 	public static String getGenbankCacheDir() throws Exception
 	{
 		return getConfigReader().getAProperty(GENBANK_CACHE_DIR);
+	}
+	
+	public static String getCrossoverExerciseDir() throws Exception
+	{
+		return getConfigReader().getAProperty(CROSSOVER_EXERCISE_DIR);
 	}
 	
 	private ConfigReader() throws Exception

@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class QuickPivot
@@ -33,10 +32,10 @@ public class QuickPivot
 		BufferedReader reader= new BufferedReader(new FileReader(new File("d:\\adam\\EX_CDS_dataframe_long.out")));
 		
 		HashSet<String> names = new HashSet<String>();
-		int y=0;
+		//int y=0;
 		for(String s= reader.readLine(); s != null /*&& y < 1000*/; s = reader.readLine())
 		{
-			y++;
+			//y++;
 			//System.out.println(s);
 			StringTokenizer sToken = new StringTokenizer(s);
 			
