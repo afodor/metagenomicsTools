@@ -14,8 +14,10 @@
 package exerciseCrossover;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
+import utils.TTest;
 
 
 public class PrePostPairedTTest
@@ -84,9 +87,60 @@ public class PrePostPairedTTest
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashSet<Integer> placeboSet = new HashSet<Integer>();
-		HashMap<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
+		HashSet<Integer> placeboSet = getPlaceboSet();
+		HashMap<String, List<Double>> sampleMap = getsampleToPCOAMap();
+		System.out.println(sampleMap);
+		
+		BufferedWriter writer =  new BufferedWriter(new FileWriter(new File(ConfigReader.getCrossoverExerciseDir() +
+				File.separator + "pairedTTestTreatment.txt")));
+		
+		writer.write("axis\tlog10PValue\tsampleSize\tpre\tpost\n");
 		
 		
+		for( int pcoaAxis=0; pcoaAxis<=5; pcoaAxis++)
+		{
+			List<Double> pre = new ArrayList<Double>();
+			List<Double> post = new ArrayList<Double>();
+			
+			for(int x=1; x<=27;x++) if ( x != 8)
+			{
+				if(placeboSet.contains(x))
+				{
+					List<Double> aPre = sampleMap.get(x + "A");
+					List<Double> aPost = sampleMap.get(x + "B");
+					
+					if( aPre != null && aPost != null)
+					{
+						pre.add( aPre.get(pcoaAxis) );
+						post.add( aPost.get(pcoaAxis) );
+					}
+				}
+				else
+				{
+					List<Double> aPre = sampleMap.get(x + "D");
+					List<Double> aPost = sampleMap.get(x + "E");
+					
+					if( aPre != null && aPost != null)
+					{
+						pre.add( aPre.get(pcoaAxis) );
+						post.add( aPost.get(pcoaAxis) );
+					}
+				}
+			}
+			
+			writer.write((pcoaAxis+1) + "\t");
+			writer.write( TTest.pairedTTest(pre, post).getPValue() + "\t" );
+			
+			if(pre.size() != post.size())
+				throw new Exception("Logic error");
+			writer.write(pre.size() + "\t");
+			writer.write(pre + "\t");
+			writer.write(post + "\n");
+			
+		}
+		
+		writer.flush(); writer.close();
+	
 	}
+		
 }
