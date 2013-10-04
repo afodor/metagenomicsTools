@@ -45,7 +45,16 @@ public class PivotWithqPCRDATA
 		return map;
 	}
 	
-	
+	private static double getMax(OtuWrapper wrapper, String sampleID) throws Exception
+	{
+		int index = wrapper.getIndexForSampleName(sampleID);
+		double max =-1;
+		
+		for(int x=0; x < wrapper.getOtuNames().size();x++)
+			max = Math.max(max, wrapper.getDataPointsUnnormalized().get(index).get(x));
+		
+		return max / wrapper.getCountsForSample(sampleID);
+	}
 	
 	
 	public static void main(String[] args) throws Exception
@@ -56,7 +65,7 @@ public class PivotWithqPCRDATA
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getErinDataDir() + File.separator + 
 				"pivotedOut.txt")));
 		
-		writer.write("sample\tqPCR\tshannonDiveristy\tnumberOfSequences\trichness\n");
+		writer.write("sample\tqPCR\tshannonDiveristy\tnumberOfSequences\trichness\tfractionMax\n");
 		
 		for(String s : wrapper.getSampleNames() )
 		{
@@ -65,7 +74,8 @@ public class PivotWithqPCRDATA
 			writer.write(getPRCData().get(key) + "\t");
 			writer.write(wrapper.getShannonEntropy(s) + "\t");
 			writer.write(wrapper.getCountsForSample(s) + "\t");
-			writer.write(wrapper.getRichness(s) + "\n");
+			writer.write(wrapper.getRichness(s) + "\t");
+			writer.write(getMax(wrapper, s) + "\n");
 		}
 		
 		writer.flush();  writer.close();
