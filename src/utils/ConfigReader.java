@@ -47,6 +47,8 @@ public class ConfigReader
 	public static final String MOTHUR_DIR = "MOTHUR_DIR";
 	public static final String CROSSOVER_EXERCISE_DIR = "CROSSOVER_EXERCISE_DIR";
 	
+	public static final String ERIN_DATA_DIR = "ERIN_DATA_DIR";
+	
 	public static final String BLAST_DIR = "BLAST_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
@@ -123,6 +125,11 @@ public class ConfigReader
 	public static String getMothurDir() throws Exception
 	{
 		return getConfigReader().getAProperty(MOTHUR_DIR);
+	}
+	
+	public static String getErinDataDir() throws Exception
+	{
+		return getConfigReader().getAProperty(ERIN_DATA_DIR);
 	}
 	
 	public static String getGenbankCacheDir() throws Exception
