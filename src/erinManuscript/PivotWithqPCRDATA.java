@@ -45,37 +45,58 @@ public class PivotWithqPCRDATA
 		return map;
 	}
 	
-	private static double getMax(OtuWrapper wrapper, String sampleID) throws Exception
+	private static class Holder
+	{
+		double counts;
+		String identifier;
+	}
+	
+	private static Holder getMax(OtuWrapper wrapper, String sampleID) throws Exception
 	{
 		int index = wrapper.getIndexForSampleName(sampleID);
-		double max =-1;
+		Holder max = null;
 		
 		for(int x=0; x < wrapper.getOtuNames().size();x++)
-			max = Math.max(max, wrapper.getDataPointsUnnormalized().get(index).get(x));
+		{
+			double newVal = wrapper.getDataPointsUnnormalized().get(index).get(x);
+			
+			if( max == null || newVal > max.counts)
+			{
+				max = new Holder();
+				max.counts = newVal;
+				max.identifier = wrapper.getOtuNames().get( Math.max(0,x));
+			}
+			
+		}
 		
-		return max / wrapper.getCountsForSample(sampleID);
+		max.counts /= wrapper.getCountsForSample(sampleID);
+		
+		return max;
 	}
 	
 	
 	public static void main(String[] args) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper( ConfigReader.getErinDataDir() + File.separator + 
-						"erinHannaHuman_raw_counts.txt");
+						"erinHannaHuman_raw_ord.txt");
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getErinDataDir() + File.separator + 
-				"pivotedOut.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getErinDataDir() 
+				+ File.separator + 
+				"pivotedOutOrd.txt")));
 		
-		writer.write("sample\tqPCR\tshannonDiveristy\tnumberOfSequences\trichness\tfractionMax\n");
+		writer.write("sample\tqPCR\tshannonDiveristy\tnumberOfSequences\trichness\tfractionMax\tidentityMax\n");
 		
 		for(String s : wrapper.getSampleNames() )
 		{
-			writer.write(s + "\t");
+			writer.write(s.replaceAll("human","") + "\t");
 			int key = Integer.parseInt(s.replaceAll("human", ""));
 			writer.write(getPRCData().get(key) + "\t");
 			writer.write(wrapper.getShannonEntropy(s) + "\t");
 			writer.write(wrapper.getCountsForSample(s) + "\t");
 			writer.write(wrapper.getRichness(s) + "\t");
-			writer.write(getMax(wrapper, s) + "\n");
+			Holder h = getMax(wrapper, s);
+			writer.write( h.counts  + "\t");
+			writer.write( h.identifier + "\n");
 		}
 		
 		writer.flush();  writer.close();
