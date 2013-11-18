@@ -19,7 +19,12 @@ import java.util.List;
 public class ProbSequence
 {
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
-	int n=0;
+	private int n=0;
+	
+	public int getNumRepresentedSequenes()
+	{
+		return n;
+	}
 	
 	/*
 	 * Not thread safe and client should not modify contents (but is not prevented from doing so)
@@ -38,6 +43,16 @@ public class ProbSequence
 			this.columns.add(new ProbColumn(c));
 		
 		n=1;
+	}
+	
+	/*
+	 * Does not make a defensive copy of the ProbColumn and is therefore not thread-safe
+	 * or immune to client tampering
+	 */
+	public ProbSequence( List<ProbColumn> columns, int n)
+	{
+			this.columns = columns;
+			this.n = n;
 	}
 	
 	public String toString()

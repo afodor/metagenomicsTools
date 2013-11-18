@@ -39,6 +39,23 @@ public class ProbColumn
 		return score;
 	}
 	
+	/*
+	 * Makes and returns a new column based on a merge of this column and 
+	 * the otherColumn
+	 */
+	public ProbColumn merge( ProbColumn otherColumn)
+	{
+		ProbColumn pc = new ProbColumn();
+		
+		for( int x=0; x < 5; x++)
+		{
+			pc.counts[x] = (this.counts[x] * this.totalNum + otherColumn.counts[x] * otherColumn.totalNum ) 
+								/ ( this.totalNum + otherColumn.totalNum );
+		}
+		
+		return pc;
+	}
+	
 	public double getFractionA()
 	{
 		return counts[A_INDEX] / totalNum;

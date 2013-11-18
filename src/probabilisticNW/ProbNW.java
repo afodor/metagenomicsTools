@@ -13,6 +13,10 @@
 
 package probabilisticNW;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ProbNW
 {
 	private static final int MATCH_REWARD= 1;
@@ -22,8 +26,44 @@ public class ProbNW
 	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) throws Exception
 	{
 		NwCell[][] matrix = getMatrix(seq1, seq2);
-		printMatrix(matrix);
-		return null;
+		//printMatrix(matrix);
+		return traceback(seq1, seq2, matrix);
+	}
+	
+	private static ProbSequence traceback( ProbSequence seq1, ProbSequence seq2 , NwCell[][] matrix ) 
+			throws Exception
+	{
+		List<ProbColumn> list = new ArrayList<ProbColumn>();
+		
+		int y= seq1.getColumns().size();
+		int x = seq2.getColumns().size();
+		
+		while( x != 0 || y != 0)
+		{
+			//System.out.println(x + " " + y);
+			NwCell cell = matrix[x][y];
+			
+			if( cell.getDirection().equals( NwCell.Direction.DIAGNOL ) )
+			{
+				list.add( seq1.getColumns().get(y-1).merge(seq2.getColumns().get(x-1)));
+				x--;
+				y--;
+			}
+			else if ( cell.getDirection().equals(NwCell.Direction.UP))
+			{
+				list.add( new ProbColumn('-') );
+				x--;
+			}
+			else if( cell.getDirection().equals(NwCell.Direction.LEFT))
+			{
+				list.add( new ProbColumn('-') );
+				y--;
+			}
+			else throw new Exception("LOGIC ERROR "  + x + " " + y);
+		}
+		
+		Collections.reverse(list);
+		return new ProbSequence(list, seq1.getNumRepresentedSequenes() + seq2.getNumRepresentedSequenes());
 	}
 	
 	public static void printMatrix( NwCell[][] matrix )
@@ -94,6 +134,8 @@ public class ProbNW
 		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
 		ProbSequence probSeq2 = new ProbSequence("ACCA");
 		
-		align(probSeq1, probSeq2);
+		ProbSequence aligned =  align(probSeq1, probSeq2);
+		
+		System.out.println( aligned);
 	}
 }
