@@ -51,6 +51,14 @@ public class ProbNW
 		for (int x=1; x <= seq2.getColumns().size(); x++)
 			matrix[x][0] = new NwCell( x * 1 * MISMATCH_PENALTY, NwCell.Direction.UP);
 		
+		for( int y=1; y <= seq1.getColumns().size(); y++)
+		{
+			for( int x=1; x < seq2.getColumns().size(); x++)
+			{
+				matrix[x][y] = new NwCell( x * 1 + y /10.0f, NwCell.Direction.DIAGNOL );
+			}
+		}
+		
 		
 		return matrix;
 	}
