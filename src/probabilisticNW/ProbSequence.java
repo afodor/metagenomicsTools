@@ -22,6 +22,14 @@ public class ProbSequence
 	int n=0;
 	
 	/*
+	 * Not thread safe and client should not modify contents (but is not prevented from doing so)
+	 */
+	public List<ProbColumn> getColumns()
+	{
+		return columns;
+	}
+	
+	/*
 	 * Non A,C,G,T and - are ignored
 	 */
 	public ProbSequence( String s)

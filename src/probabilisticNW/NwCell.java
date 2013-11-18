@@ -17,7 +17,7 @@ public class NwCell
 {
 	private float score;
 	
-	public enum Direction { DIAGNOL, UP, LEFT };
+	public enum Direction { DIAGNOL, UP, LEFT, INIT };
 	
 	private final Direction direction;
 	
@@ -25,6 +25,21 @@ public class NwCell
 	{
 		this.score = score;
 		this.direction = direction;
+	}
+	
+	public float getScore()
+	{
+		return score;
+	}
+	
+	public Direction getDirection()
+	{
+		return direction;
+	}
+	
+	public String toString()
+	{
+		return direction + "_" + score;
 	}
 	
 }
