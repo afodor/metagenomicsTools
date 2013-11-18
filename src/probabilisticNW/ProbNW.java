@@ -19,7 +19,7 @@ public class ProbNW
 	private static final int MISMATCH_PENALTY = -3;
 	private static final int GAP_PENALTY =-2;
 	
-	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) 
+	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) throws Exception
 	{
 		NwCell[][] matrix = getMatrix(seq1, seq2);
 		printMatrix(matrix);
@@ -39,7 +39,7 @@ public class ProbNW
 		}
 	}
 	
-	public static NwCell[][] getMatrix( ProbSequence seq1, ProbSequence seq2   ) 
+	public static NwCell[][] getMatrix( ProbSequence seq1, ProbSequence seq2   ) throws Exception
 	{
 		NwCell[][] matrix  = new NwCell[seq2.getColumns().size() + 1][seq1.getColumns().size() + 1  ];
 		
@@ -53,11 +53,35 @@ public class ProbNW
 		
 		for( int y=1; y <= seq1.getColumns().size(); y++)
 		{
-			for( int x=1; x < seq2.getColumns().size(); x++)
+			ProbColumn seq1Col = seq1.getColumns().get(y-1);
+			
+			for( int x=1; x <= seq2.getColumns().size(); x++)
 			{
+				ProbColumn seq2Cole = seq2.getColumns().get(x-1);
 				
+				double diagScore = seq1Col.getScoreDiag(seq2Cole, MATCH_REWARD, MISMATCH_PENALTY) + 
+							matrix[x-1][y-1].getScore()	;
 				
-				matrix[x][y] = new NwCell( x * 1 + y /10.0f, NwCell.Direction.DIAGNOL );
+				double upScore = matrix[x-1][y].getScore() + GAP_PENALTY;
+				double leftScore = matrix[x][y-1].getScore() + GAP_PENALTY;
+				
+				double max = Math.max(diagScore, upScore);
+				max = Math.max(max, leftScore);
+				
+				if( max == diagScore)
+				{
+					matrix[x][y] = new NwCell( diagScore, NwCell.Direction.DIAGNOL );
+				}
+				else if ( max == leftScore)
+				{
+					matrix[x][y] = new NwCell( leftScore, NwCell.Direction.LEFT);
+				}
+				else if ( max == upScore)
+				{
+					matrix[x][y] = new NwCell(upScore, NwCell.Direction.UP);
+				}
+				else throw new Exception("Logic error");
+				
 			}
 		}
 		
@@ -65,7 +89,7 @@ public class ProbNW
 		return matrix;
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
 		ProbSequence probSeq2 = new ProbSequence("ACCA");

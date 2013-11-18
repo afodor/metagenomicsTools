@@ -15,19 +15,19 @@ package probabilisticNW;
 
 public class NwCell
 {
-	private float score;
+	private double score;
 	
 	public enum Direction { DIAGNOL, UP, LEFT, INIT };
 	
 	private final Direction direction;
 	
-	public NwCell( float score, Direction direction )
+	public NwCell( double score, Direction direction )
 	{
 		this.score = score;
 		this.direction = direction;
 	}
 	
-	public float getScore()
+	public double getScore()
 	{
 		return score;
 	}
