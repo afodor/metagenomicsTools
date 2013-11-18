@@ -10,74 +10,66 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package probabilisticNW;
 
 public class ProbColumn
 {
-	private int numA=0;
-	private int numC=0;
-	private int numG=0;
-	private int numT=0;
-	private int numGap=0;
-	private int totalNum =0;
+	private static final int A_INDEX =0;
+	private static final int C_INDEX =1;
+	private static final int G_INDEX =2;
+	private static final int T_INDEX =3;
+	private static final int GAP_INDEX =4;
+	private double counts[] = new double[5];
 	
-	public float getFractionA()
+	private double totalNum =0;
+	
+	public double getScoreDiag(ProbColumn other, double match, double mismatch)
 	{
-		return ((float)numA) / totalNum;
+		double score =0;
+		
+		
+		for (int x=0; x<= 3; x++)
+			score += this.counts[x] * other.counts[x] * match;
+		
+		for( int x=0; x <=2; x++)
+			for( int y=x+1; y <=3; y++)
+				if( x != y)
+					score += this.counts[x] * other.counts[y] * mismatch;
+		
+		return score;
 	}
 	
-	public float getFractionC()
+	public double getFractionA()
 	{
-		return ((float)numC) / totalNum;
+		return counts[A_INDEX] / totalNum;
 	}
 	
-	public float getFractionG()
+	public double getFractionC()
 	{
-		return ((float)numG) / totalNum;
+		return counts[C_INDEX]  / totalNum;
 	}
 	
-	public float getFractionT()
+	public double getFractionG()
 	{
-		return ((float)numT) / totalNum;
+		return counts[G_INDEX]  / totalNum;
+	}
+	
+	public double getFractionT()
+	{
+		return counts[T_INDEX]  / totalNum;
 	}
 	
 
-	public float getFractionGap()
+	public double getFractionGap()
 	{
-		return ((float)numGap) / totalNum;
+		return counts[GAP_INDEX] / totalNum;
 	}
 	
-	public int getTotalNum()
+	public double getTotalNum()
 	{
 		return totalNum;
 	}
 	
-	public int getNumA()
-	{
-		return numA;
-	}
-
-	public int getNumC()
-	{
-		return numC;
-	}
-
-	public int getNumG()
-	{
-		return numG;
-	}
-
-	public int getNumT()
-	{
-		return numT;
-	}
-
-	public int getNumGap()
-	{
-		return numGap;
-	}
-
 	public ProbColumn()
 	{
 		
@@ -103,15 +95,15 @@ public class ProbColumn
 		totalNum++;
 		
 		if( c == 'A')
-			numA++;
+			counts[A_INDEX]++;
 		else if ( c == 'C')
-			numC++;
+			counts[C_INDEX]++;
 		else if ( c == 'G')
-			numG++;
+			counts[G_INDEX]++;
 		else if ( c == 'T')
-			numT++;
+			counts[T_INDEX]++;
 		else if ( c == '-')
-			numGap++;
+			counts[GAP_INDEX]++;
 	}
 	
 	

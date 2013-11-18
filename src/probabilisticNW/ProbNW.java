@@ -55,6 +55,8 @@ public class ProbNW
 		{
 			for( int x=1; x < seq2.getColumns().size(); x++)
 			{
+				
+				
 				matrix[x][y] = new NwCell( x * 1 + y /10.0f, NwCell.Direction.DIAGNOL );
 			}
 		}
