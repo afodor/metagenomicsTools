@@ -57,6 +57,7 @@ public class ProbSequence
 	
 	public String toString()
 	{
+		System.out.println(this.n + " sequences ");
 		StringBuffer buff = new StringBuffer();
 		
 		for( int x=0; x < columns.size(); x++)

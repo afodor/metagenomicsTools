@@ -46,14 +46,11 @@ public class ProbColumn
 	public ProbColumn merge( ProbColumn otherColumn)
 	{
 		ProbColumn pc = new ProbColumn();
-		
+		pc.totalNum = this.totalNum + otherColumn.totalNum;
 		for( int x=0; x < 5; x++)
 		{
-			pc.counts[x] = (this.counts[x] * this.totalNum + otherColumn.counts[x] * otherColumn.totalNum ) 
-								/ ( this.totalNum + otherColumn.totalNum );
-			System.out.println(pc.counts[x]);
+			pc.counts[x] = this.counts[x] + otherColumn.counts[x];
 		}
-		
 		
 		return pc;
 	}

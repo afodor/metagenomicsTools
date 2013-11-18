@@ -139,6 +139,15 @@ public class ProbNW
 		
 		ProbSequence aligned =  align(probSeq1, probSeq2);
 		
-		System.out.println( aligned);
+		System.out.println( aligned );
+		
+		ProbSequence probSeq3 = new ProbSequence("ACCGGA");
+		aligned =  align(aligned, probSeq3);
+		System.out.println( aligned );
+		
+		ProbSequence probSeq4 = new ProbSequence("ACCGTA");
+		aligned =  align(aligned, probSeq4);
+		System.out.println( aligned );
+		
 	}
 }
