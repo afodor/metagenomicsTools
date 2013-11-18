@@ -134,6 +134,9 @@ public class ProbNW
 		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
 		ProbSequence probSeq2 = new ProbSequence("ACCA");
 		
+		System.out.println(probSeq1);
+		System.out.println(probSeq2);
+		
 		ProbSequence aligned =  align(probSeq1, probSeq2);
 		
 		System.out.println( aligned);

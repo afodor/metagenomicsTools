@@ -51,7 +51,9 @@ public class ProbColumn
 		{
 			pc.counts[x] = (this.counts[x] * this.totalNum + otherColumn.counts[x] * otherColumn.totalNum ) 
 								/ ( this.totalNum + otherColumn.totalNum );
+			System.out.println(pc.counts[x]);
 		}
+		
 		
 		return pc;
 	}
