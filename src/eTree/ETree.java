@@ -46,6 +46,7 @@ public class ETree
 		for( ENode node : parent.getDaughters() )
 		{
 			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
+			System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getSumDistance() <= node.getLevel())
 			{
 				node.setProbSequence(possibleAlignment);
@@ -131,7 +132,7 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 100; x++)
+		for( int x=0; x < 200; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);

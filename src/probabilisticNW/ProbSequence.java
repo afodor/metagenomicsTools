@@ -26,6 +26,7 @@ public class ProbSequence
 	public double getSumDistance()
 	{
 		double sum =0;
+		double n=0;
 		
 		int startPosition=0;
 		int endPosition = columns.size()-1;
@@ -37,9 +38,12 @@ public class ProbSequence
 			endPosition--;
 		
 		for( int x=startPosition; x <= endPosition; x++)
+		{
 			sum += columns.get(x).getDistance();
-		
-		return sum;
+			n++;
+		}
+			
+		return sum/n;
 	}
 	
 	public int getNumRepresentedSequenes()
