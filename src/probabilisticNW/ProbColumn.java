@@ -107,6 +107,13 @@ public class ProbColumn
 		this.addChar(c);
 	}
 	
+	//todo: Make this more efficient
+	public ProbColumn(char c, int n)
+	{
+		for( int x=0; x <  n; x++)
+			this.addChar(c);
+	}
+	
 	@Override
 	public String toString()
 	{

@@ -51,12 +51,12 @@ public class ProbNW
 			}
 			else if ( cell.getDirection().equals(NwCell.Direction.UP))
 			{
-				list.add( new ProbColumn('-').merge(seq2.getColumns().get(x-1)) );
+				list.add( new ProbColumn('-', seq1.getNumRepresentedSequences()).merge(seq2.getColumns().get(x-1)) );
 				x--;
 			}
 			else if( cell.getDirection().equals(NwCell.Direction.LEFT))
 			{
-				list.add( new ProbColumn('-').merge(seq1.getColumns().get(y-1)) );
+				list.add( new ProbColumn('-', seq2.getNumRepresentedSequences()).merge(seq1.getColumns().get(y-1)) );
 				y--;
 			}
 			else throw new Exception("LOGIC ERROR "  + x + " " + y);
