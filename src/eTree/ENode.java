@@ -22,7 +22,7 @@ public class ENode
 {
 	private ProbSequence probSequence;
 	private ENode parent;
-	private float level;
+	private double level;
 	private List<ENode> daughters =new ArrayList<ENode>();
 	
 	public ProbSequence getProbSequence()
@@ -35,17 +35,29 @@ public class ENode
 		return parent;
 	}
 
-	public float getLevel()
+	public double getLevel()
 	{
 		return level;
+	}
+	
+	public void setProbSequence(ProbSequence probSequence)
+	{
+		this.probSequence = probSequence;
 	}
 
 	public List<ENode> getDaughters()
 	{
 		return daughters;
 	}
+	
+	public ENode( ProbSequence probSequence, double level, ENode parent )
+	{
+		this.probSequence = probSequence;
+		this.parent = parent;
+		this.level = level;
+	}
 
-	public ENode( String sequence, float level, ENode parent )
+	public ENode( String sequence, double level, ENode parent )
 	{
 		if( level !=0 )
 			this.probSequence = new ProbSequence(sequence);

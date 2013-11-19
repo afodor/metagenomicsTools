@@ -18,17 +18,45 @@ import java.io.File;
 import java.io.FileWriter;
 
 import parsers.FastaSequenceOneAtATime;
+import probabilisticNW.ProbNW;
+import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
 public class ETree
 {
-	public static final float[] LEVELS = {0.0f,  0.1f, 0.07f, 0.04f, 0.03f, 0.02f, 0.01f };
+	public static final double[] LEVELS = {0.0,  0.1, 0.07, 0.05, 0.04, 0.03};
 	
 	private final ENode topNode;
 	
-	public void addSequence(String sequence)
+	public void addSequence(String sequence) throws Exception
 	{
+		ProbSequence probSeq = new ProbSequence(sequence);
 		
+		ENode index = addToOrCreateNode(topNode, probSeq);
+		
+		while( index != null)
+			index = addToOrCreateNode(index, probSeq);
+	}
+	
+	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq) throws Exception
+	{
+		if( parent.getDaughters().size() == 0 )
+			return null;
+		
+		for( ENode node : parent.getDaughters() )
+		{
+			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
+			if( possibleAlignment.getSumDistance() <= node.getLevel())
+			{
+				node.setProbSequence(possibleAlignment);
+				return node;
+			}
+		}
+		
+		// still here - no matches - add a new node
+		ENode newNode = new ENode(newSeq, parent.getDaughters().get(0).getLevel(), parent);
+		parent.getDaughters().add(newNode);
+		return newNode;
 	}
 	
 	public ETree(String starterSequence)
@@ -76,14 +104,14 @@ public class ETree
 		
 		if( level > 1 )
 		{
-			float branchLength = LEVELS[level] - LEVELS[level-1];
+			double branchLength = LEVELS[level] - LEVELS[level-1];
 			writer.write(tabString + "\t<branch_length>" + branchLength +  "</branch_length>\n");
 		}
 			
 		writer.write(tabString + "\t<taxonomy>\n");
 		
 		// obviously, just a stub at this point
-		writer.write(tabString + "\t<scientific_name>taxa" + level + "</scientific_name>\n");
+		writer.write(tabString + "\t<scientific_name>taxa with " + node.getDaughters().size() + " seqs </scientific_name>\n");
 		
 		writer.write(tabString + "\t</taxonomy>\n");
 		
@@ -103,6 +131,12 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
+		for( int x=0; x < 100; x++)
+		{
+			eTree.addSequence(fsoat.getNextSequence().getSequence());
+			System.out.println("Adding " + x);
+		}
+			
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"testXML.xml");
 	}
