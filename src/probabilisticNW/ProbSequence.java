@@ -82,7 +82,7 @@ public class ProbSequence
 	
 	public String toString()
 	{
-		System.out.println(this.n + " sequences ");
+		System.out.println(this.n + " sequences with distance " + this.getSumDistance());
 		StringBuffer buff = new StringBuffer();
 		
 		for( int x=0; x < columns.size(); x++)
@@ -109,6 +109,9 @@ public class ProbSequence
 			buff.append( columns.get(x).getFractionGap() + " " );
 		
 		buff.append("\n");
+		
+		for( int x=0; x < columns.size(); x++)
+			buff.append(columns.get(x).getDistance() + " " );
 		
 		return buff.toString();
 		

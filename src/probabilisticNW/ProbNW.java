@@ -133,7 +133,7 @@ public class ProbNW
 	public static void main(String[] args) throws Exception
 	{
 		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
-		ProbSequence probSeq2 = new ProbSequence("ACCA");
+		ProbSequence probSeq2 = new ProbSequence("ACCTTA");
 		
 		System.out.println(probSeq1);
 		System.out.println(probSeq2);

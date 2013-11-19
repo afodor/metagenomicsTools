@@ -58,18 +58,10 @@ public class ProbColumn
 			pc.counts[x] = this.counts[x] + otherColumn.counts[x];
 		}
 		
-		pc.distance = 1;
-		
 		for( int x=0; x < 5; x++)
 			for (int y= 0; y < 5; y++)
 				if( x != y )
-					pc.distance -= this.counts[x]/this.totalNum * otherColumn.counts[y]/otherColumn.totalNum;
-		
-		if( pc.distance != 0 && pc.distance != 1)
-		{
-			System.out.println("Returning distance " + pc.distance);
-			System.exit(1);
-		}
+					pc.distance += (this.counts[x]/this.totalNum) * (otherColumn.counts[y]/otherColumn.totalNum);
 		
 		return pc;
 	}
