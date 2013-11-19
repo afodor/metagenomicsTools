@@ -63,7 +63,7 @@ public class ProbNW
 		}
 		
 		Collections.reverse(list);
-		return new ProbSequence(list, seq1.getNumRepresentedSequenes() + seq2.getNumRepresentedSequenes());
+		return new ProbSequence(list, seq1.getNumRepresentedSequences() + seq2.getNumRepresentedSequences());
 	}
 	
 	public static void printMatrix( NwCell[][] matrix )

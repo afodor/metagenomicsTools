@@ -71,11 +71,12 @@ public class ETree
 		
 		for( int x=index +1; x < LEVELS.length; x++)
 		{
-			newNode = new ENode(newSeq, LEVELS[index], newNode);
-			parent.getDaughters().add(newNode);
+			ENode previousNode =newNode;
+			newNode = new ENode(newSeq, LEVELS[x], previousNode);
+			previousNode.getDaughters().add(newNode);
 		}
 		
-		return newNode;
+		return null;
 	}
 	
 	public ETree(String starterSequence)
@@ -130,7 +131,7 @@ public class ETree
 		writer.write(tabString + "\t<taxonomy>\n");
 		
 		// obviously, just a stub at this point
-		writer.write(tabString + "\t<scientific_name>taxa " + node.getLevel() + " with " + node.getDaughters().size() + " sub-seqs </scientific_name>\n");
+		writer.write(tabString + "\t<scientific_name>taxa " + node.getLevel() + " with " + node.getNumOfSequencesAtTip() + " sequences </scientific_name>\n");
 		
 		writer.write(tabString + "\t</taxonomy>\n");
 		
@@ -150,7 +151,7 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 20; x++)
+		for( int x=0; x < 4; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);

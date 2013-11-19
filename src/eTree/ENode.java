@@ -29,6 +29,29 @@ public class ENode
 	{
 		return probSequence;
 	}
+	
+	public int getNumOfAllDaughters()
+	{
+		int sum =daughters.size();
+		
+		for( ENode subNode : daughters)
+			sum += subNode.getNumOfAllDaughters();
+		
+		return sum;
+	}
+	
+	public int getNumOfSequencesAtTip()
+	{
+		int sum =0;
+		
+		if( daughters.size() == 0 )
+			sum = this.probSequence.getNumRepresentedSequences();
+		
+		for( ENode subNode : daughters)
+			sum += subNode.getNumOfSequencesAtTip();
+		
+		return sum;
+	}
 
 	public ENode getParent()
 	{

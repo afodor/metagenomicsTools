@@ -46,7 +46,7 @@ public class ProbSequence
 		return sum/n;
 	}
 	
-	public int getNumRepresentedSequenes()
+	public int getNumRepresentedSequences()
 	{
 		return n;
 	}
