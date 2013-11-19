@@ -38,6 +38,15 @@ public class ETree
 			index = addToOrCreateNode(index, probSeq);
 	}
 	
+	private int getIndex(double level) throws Exception
+	{
+		for( int i =0; i < LEVELS.length; i++)
+			if( LEVELS[i] == level)
+				return i;
+		
+		throw new Exception("Could not find " + level);
+	}
+	
 	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
@@ -46,7 +55,7 @@ public class ETree
 		for( ENode node : parent.getDaughters() )
 		{
 			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
-			System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
+			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getSumDistance() <= node.getLevel())
 			{
 				node.setProbSequence(possibleAlignment);
@@ -57,6 +66,15 @@ public class ETree
 		// still here - no matches - add a new node
 		ENode newNode = new ENode(newSeq, parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
+		
+		int index = getIndex(newNode.getLevel());
+		
+		for( int x=index +1; x < LEVELS.length; x++)
+		{
+			newNode = new ENode(newSeq, LEVELS[index], newNode);
+			parent.getDaughters().add(newNode);
+		}
+		
 		return newNode;
 	}
 	
@@ -112,7 +130,7 @@ public class ETree
 		writer.write(tabString + "\t<taxonomy>\n");
 		
 		// obviously, just a stub at this point
-		writer.write(tabString + "\t<scientific_name>taxa with " + node.getDaughters().size() + " seqs </scientific_name>\n");
+		writer.write(tabString + "\t<scientific_name>taxa " + node.getLevel() + " with " + node.getDaughters().size() + " sub-seqs </scientific_name>\n");
 		
 		writer.write(tabString + "\t</taxonomy>\n");
 		
@@ -132,7 +150,7 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 200; x++)
+		for( int x=0; x < 20; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);

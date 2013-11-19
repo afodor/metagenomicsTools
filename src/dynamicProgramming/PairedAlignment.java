@@ -9,8 +9,13 @@ public abstract class PairedAlignment
 	@Override
 	public String toString()
 	{
-		return getFirstSequence() + "\n" + getSecondSequence() + "\n" +
-					getAlignmentScore();
+		return getFirstSequence() + "\n" + getMiddleString() + "\n" +  getSecondSequence() + "\n" +
+					getAlignmentScore() + " " + getDistance();
+	}
+	
+	public double getDistance() 
+	{
+		return 1 - ((double)getNumMatchesExcludingNs()) / getFirstSequence().length();
 	}
 	
 	public int getNumMatchesExcludingNs()
