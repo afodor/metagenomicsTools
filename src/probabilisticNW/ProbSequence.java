@@ -18,8 +18,29 @@ import java.util.List;
 
 public class ProbSequence
 {
+	public static double TRIM_INITIAL_GAP_THREHSOLD = 0.5;
+	
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
+	
+	public double getSumDistance()
+	{
+		double sum =0;
+		
+		int startPosition=0;
+		int endPosition = columns.size()-1;
+		
+		while( columns.get(startPosition).getFractionGap() >= TRIM_INITIAL_GAP_THREHSOLD && startPosition < columns.size()-1 )
+			startPosition++;
+		
+		while( columns.get(endPosition).getFractionGap() >= TRIM_INITIAL_GAP_THREHSOLD && endPosition>0)
+			endPosition--;
+		
+		for( int x=startPosition; x <= endPosition; x++)
+			sum += columns.get(x).getDistance();
+		
+		return sum;
+	}
 	
 	public int getNumRepresentedSequenes()
 	{

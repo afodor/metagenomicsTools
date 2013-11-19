@@ -22,6 +22,12 @@ public class ProbColumn
 	private double counts[] = new double[5];
 	
 	private double totalNum =0;
+	private double distance =0;
+	
+	public double getDistance()
+	{
+		return distance;
+	}
 	
 	public double getScoreDiag(ProbColumn other, double match, double mismatch)
 	{
@@ -50,6 +56,7 @@ public class ProbColumn
 		for( int x=0; x < 5; x++)
 		{
 			pc.counts[x] = this.counts[x] + otherColumn.counts[x];
+			pc.distance += Math.abs( this.counts[x]/this.totalNum - otherColumn.counts[x]/this.totalNum);
 		}
 		
 		return pc;

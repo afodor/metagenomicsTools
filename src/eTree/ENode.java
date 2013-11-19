@@ -47,7 +47,11 @@ public class ENode
 
 	public ENode( String sequence, float level, ENode parent )
 	{
-		this.probSequence = new ProbSequence(sequence);
+		if( level !=0 )
+			this.probSequence = new ProbSequence(sequence);
+		else
+			this.probSequence = null;
+		
 		this.parent = parent;
 		this.level = level;
 	}

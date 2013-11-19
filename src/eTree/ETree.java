@@ -22,7 +22,7 @@ import utils.ConfigReader;
 
 public class ETree
 {
-	public static final float[] LEVELS = { 0.1f, 0.07f, 0.04f, 0.03f, 0.02f, 0.01f };
+	public static final float[] LEVELS = {0.0f,  0.1f, 0.07f, 0.04f, 0.03f, 0.02f, 0.01f };
 	
 	private final ENode topNode;
 	
@@ -57,7 +57,7 @@ public class ETree
 		writer.write("<phyloxml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd\" xmlns=\"http://www.phyloxml.org\">\n");
 		writer.write("<phylogeny rooted=\"true\" rerootable=\"false\">\n");
 		
-		addNodeAndDaughters(this.topNode,writer,0);
+		addNodeAndDaughtersToXML(this.topNode,writer,0);
 		
 		writer.write("</phylogeny>\n");
 		writer.write("</phyloxml>\n");
@@ -65,7 +65,7 @@ public class ETree
 		writer.flush();  writer.close();
 	}
 	
-	private void addNodeAndDaughters( ENode node, BufferedWriter writer, int level ) throws Exception
+	private void addNodeAndDaughtersToXML( ENode node, BufferedWriter writer, int level ) throws Exception
 	{
 		String tabString = "";
 		
@@ -74,7 +74,7 @@ public class ETree
 		
 		writer.write(tabString + "<clade>\n");
 		
-		if( level > 0 )
+		if( level > 1 )
 		{
 			float branchLength = LEVELS[level] - LEVELS[level-1];
 			writer.write(tabString + "\t<branch_length>" + branchLength +  "</branch_length>\n");
@@ -90,7 +90,7 @@ public class ETree
 		level++;
 		
 		for( ENode daughter: node.getDaughters() )
-			addNodeAndDaughters(daughter, writer, level);
+			addNodeAndDaughtersToXML(daughter, writer, level);
 		
 		writer.write(tabString + "</clade>\n");
 	}
