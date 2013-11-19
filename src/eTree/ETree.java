@@ -25,6 +25,7 @@ import utils.ConfigReader;
 public class ETree
 {
 	public static final double[] LEVELS = {0.0,  0.1, 0.07, 0.05, 0.04, 0.03};
+	private static int node_number =1;
 	
 	private final ENode topNode;
 	
@@ -64,7 +65,7 @@ public class ETree
 		}
 		
 		// still here - no matches - add a new node
-		ENode newNode = new ENode(newSeq, parent.getDaughters().get(0).getLevel(), parent);
+		ENode newNode = new ENode(newSeq, "Node" +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
 		
 		int index = getIndex(newNode.getLevel());
@@ -72,7 +73,7 @@ public class ETree
 		for( int x=index +1; x < LEVELS.length; x++)
 		{
 			ENode previousNode =newNode;
-			newNode = new ENode(newSeq, LEVELS[x], previousNode);
+			newNode = new ENode(newSeq, "Node" + node_number++, LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
 		}
 		
@@ -81,12 +82,12 @@ public class ETree
 	
 	public ETree(String starterSequence)
 	{
-		this.topNode = new ENode(starterSequence, LEVELS[0], null);
+		this.topNode = new ENode(starterSequence, "root", LEVELS[0], null);
 		ENode lastNode = topNode;
 		
 		for( int x=1; x < LEVELS.length; x++)
 		{
-			ENode nextNode = new ENode(starterSequence, LEVELS[x], lastNode);
+			ENode nextNode = new ENode(starterSequence, "Node" + node_number++ , LEVELS[x], lastNode);
 			lastNode.getDaughters().add(nextNode);
 			lastNode = nextNode;
 		}
@@ -111,6 +112,30 @@ public class ETree
 		writer.write("</phyloxml>\n");
 		
 		writer.flush();  writer.close();
+	}
+	
+	public void writeUngappedConsensusSequences(String filePath) throws Exception
+	{
+		writeUngappedConsensusSequences(new File(filePath));
+	}
+	
+	public void writeUngappedConsensusSequences(File outFile) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		for( ENode node : topNode.getDaughters() )
+			writeUngappedSequenceAndSubSequences(writer, node);
+			
+		writer.close(); writer.close();
+	}
+	
+	private void writeUngappedSequenceAndSubSequences( BufferedWriter writer, ENode node) throws Exception
+	{
+		writer.write(">" + node.getNodeName() + "\n");
+		writer.write(">" + node.getProbSequence().getConsensus().replaceAll("-", "") + "\n");
+		
+		for( ENode subNode : node.getDaughters() )
+			writeUngappedSequenceAndSubSequences(writer, subNode);
 	}
 	
 	private void addNodeAndDaughtersToXML( ENode node, BufferedWriter writer, int level ) throws Exception
@@ -164,5 +189,7 @@ public class ETree
 			
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"testXML.xml");
+		
+		eTree.writeUngappedConsensusSequences(ConfigReader.getErinDataDir() + File.separator + "consensusSequences.txt");
 	}
 }

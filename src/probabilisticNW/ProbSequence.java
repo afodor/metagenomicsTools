@@ -81,6 +81,18 @@ public class ProbSequence
 			this.n = n;
 	}
 	
+	public String getConsensus() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x  < columns.size(); x++)
+		{
+			buff.append( columns.get(x).getMostFrequentChar() );
+		}
+		
+		return buff.toString();
+	}
+	
 	public String toString()
 	{
 		NumberFormat nf = NumberFormat.getInstance();

@@ -29,6 +29,27 @@ public class ProbColumn
 		return distance;
 	}
 	
+	public char getMostFrequentChar() throws Exception
+	{
+		double max = Math.max(counts[A_INDEX], counts[C_INDEX]);
+		max = Math.max(max, counts[G_INDEX]);
+		max = Math.max(max, counts[T_INDEX]);
+		max = Math.max(max, counts[GAP_INDEX]);
+		
+		if( max == counts[A_INDEX])
+			return 'A';
+		else if( max == counts[C_INDEX])
+			return 'C';
+		else if (max == counts[G_INDEX])
+			return 'G';
+		else if( max == counts[T_INDEX])
+			return 'T';
+		else if( max == counts[GAP_INDEX])
+			return '-';
+		
+		throw new Exception("Logic error");
+	}
+	
 	public double getScoreDiag(ProbColumn other, double match, double mismatch)
 	{
 		double score =0;
