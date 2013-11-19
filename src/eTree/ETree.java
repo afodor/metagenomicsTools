@@ -13,6 +13,8 @@
 
 package eTree;
 
+import parsers.FastaSequenceOneAtATime;
+
 public class ETree
 {
 	public static final float[] LEVELS = { 0.1f, 0.07f, 0.04f, 0.03f, 0.02f, 0.01f };
@@ -31,5 +33,14 @@ public class ETree
 		}
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		FastaSequenceOneAtATime fsoat = 
+				new FastaSequenceOneAtATime("G:\\wolfgangIrishOnlyAbundantOTU\\postLucyFiltering.txt");
+		
+		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
+		
+		
+	}
 	
 }
