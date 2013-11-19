@@ -12,6 +12,18 @@
 	    <taxonomy>
 		    <scientific_name>taxa1</scientific_name>
 	    </taxonomy>
+	    		<clade>
+	    				<branch_length>0.02</branch_length>
+	    				<taxonomy>
+		    			<scientific_name>taxa3</scientific_name>
+	    				</taxonomy>
+	    		</clade>
+	    		<clade>
+	    				<branch_length>0.02</branch_length>
+	    				<taxonomy>
+		    			<scientific_name>taxa3</scientific_name>
+	    				</taxonomy>
+	    		</clade>
     </clade>
 	<clade>
 	    <branch_length>0.03</branch_length>
@@ -19,10 +31,6 @@
 		    <scientific_name>taxa2</scientific_name>
 	    </taxonomy>
     	</clade>
-
-	<clade>	    
-        <branch_length>0.01</branch_length>
-	</clade>
   </clade>
 </phylogeny>
 </phyloxml>
