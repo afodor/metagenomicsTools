@@ -125,9 +125,10 @@ public class ProbNW
 			}
 		}
 		
-		
 		return matrix;
 	}
+	
+	
 	
 	public static void main(String[] args) throws Exception
 	{

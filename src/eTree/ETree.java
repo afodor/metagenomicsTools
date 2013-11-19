@@ -26,6 +26,11 @@ public class ETree
 	
 	private final ENode topNode;
 	
+	public void addSequence(String sequence)
+	{
+		
+	}
+	
 	public ETree(String starterSequence)
 	{
 		this.topNode = new ENode(starterSequence, LEVELS[0], null);
