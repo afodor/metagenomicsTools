@@ -16,11 +16,14 @@ package eTree;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import parsers.FastaSequenceOneAtATime;
+import parsers.NewRDPParserFileLine;
 import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
+import utils.ProcessWrapper;
 
 public class ETree
 {
@@ -100,13 +103,16 @@ public class ETree
 	
 	public void writeAsXML(File xmlFile) throws Exception
 	{
+
+		HashMap<String, NewRDPParserFileLine> rdpMap =  tryForRDPMap();
+			
 		BufferedWriter writer = new BufferedWriter(new FileWriter(xmlFile));
 		
 		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		writer.write("<phyloxml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd\" xmlns=\"http://www.phyloxml.org\">\n");
 		writer.write("<phylogeny rooted=\"true\" rerootable=\"false\">\n");
 		
-		addNodeAndDaughtersToXML(this.topNode,writer,0);
+		addNodeAndDaughtersToXML(this.topNode,writer,0, rdpMap);
 		
 		writer.write("</phylogeny>\n");
 		writer.write("</phyloxml>\n");
@@ -129,6 +135,56 @@ public class ETree
 		writer.close(); writer.close();
 	}
 	
+	private HashMap<String, NewRDPParserFileLine> tryForRDPMap()
+	{
+		try
+		{
+			File seqFile = new File( ConfigReader.getETreeTestDir() + File.separator + "consensusSequences.txt");
+			
+			if( seqFile.exists())
+				seqFile.delete();
+			
+			if( seqFile.exists())
+				throw new Exception("Could not delete " + seqFile.getAbsolutePath());
+			
+			File rdpFile = new File(ConfigReader.getETreeTestDir() + File.separator + "rdpSeqFile.txt");
+			
+			if( rdpFile.exists())
+				rdpFile.delete();
+			
+			if( rdpFile.exists())
+				throw new Exception("Could not delete " + rdpFile.getAbsolutePath());
+			
+			writeUngappedConsensusSequences(seqFile);
+			
+			String[] args = new String[7];
+			
+			args[0] = "java";
+			args[1] = "-jar";
+			args[2] = ConfigReader.getRDPJarPath();
+			args[3] = "-q";
+			args[4] = seqFile.getAbsolutePath();
+			args[5] = "-o";
+			args[6] = rdpFile.getAbsolutePath();
+			
+			System.out.println();
+			for(String s : args)
+				System.out.print(s + " " );
+			System.out.println();
+			
+			new ProcessWrapper(args);
+			
+			return NewRDPParserFileLine.getAsMapFromSingleThread(rdpFile.getAbsolutePath());
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Could not get RDP map");
+			ex.getMessage();
+		}
+		
+		return null;
+	}
+	
 	private void writeUngappedSequenceAndSubSequences( BufferedWriter writer, ENode node) throws Exception
 	{
 		writer.write(">" + node.getNodeName() + "\n");
@@ -138,7 +194,7 @@ public class ETree
 			writeUngappedSequenceAndSubSequences(writer, subNode);
 	}
 	
-	private void addNodeAndDaughtersToXML( ENode node, BufferedWriter writer, int level ) throws Exception
+	private void addNodeAndDaughtersToXML( ENode node, BufferedWriter writer, int level, HashMap<String, NewRDPParserFileLine> rdpMap ) throws Exception
 	{
 		String tabString = "";
 		
@@ -161,14 +217,24 @@ public class ETree
 		writer.write(tabString + "\t<taxonomy>\n");
 		
 		// obviously, just a stub at this point
-		writer.write(tabString + "\t<scientific_name>taxa " + node.getLevel() + " with " + node.getNumOfSequencesAtTip() + " sequences </scientific_name>\n");
+		String taxaName = "" + node.getLevel();
+		
+		if( rdpMap != null )
+		{
+			NewRDPParserFileLine line = rdpMap.get( node.getNodeName() );
+			
+			if( line != null)
+				taxaName = line.getSummaryString() + " " + taxaName;
+		}
+		
+		writer.write(tabString + "\t<scientific_name>" + taxaName + " with " + node.getNumOfSequencesAtTip() + " sequences </scientific_name>\n");
 		
 		writer.write(tabString + "\t</taxonomy>\n");
 		
 		level++;
 		
 		for( ENode daughter: node.getDaughters() )
-			addNodeAndDaughtersToXML(daughter, writer, level);
+			addNodeAndDaughtersToXML(daughter, writer, level, rdpMap);
 		
 		writer.write(tabString + "</clade>\n");
 	}
@@ -181,15 +247,15 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 500; x++)
+		for( int x=0; x < 50; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);
 		}
-			
+		
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"testXML.xml");
 		
-		eTree.writeUngappedConsensusSequences(ConfigReader.getETreeTestDir() + File.separator + "consensusSequences.txt");
+		
 	}
 }

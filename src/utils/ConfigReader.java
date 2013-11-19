@@ -52,6 +52,8 @@ public class ConfigReader
 	public static final String BLAST_DIR = "BLAST_DIR";
 	public static final String E_TREE_TEST_DIR = "E_TREE_TEST_DIR";
 	
+	public static final String RDP_JAR_PATH= "RDP_JAR_PATH";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -70,6 +72,11 @@ public class ConfigReader
 	public static String getETreeTestDir() throws Exception
 	{
 		return getConfigReader().getAProperty(E_TREE_TEST_DIR);
+	}
+	
+	public static String getRDPJarPath() throws Exception
+	{
+		return getConfigReader().getAProperty(RDP_JAR_PATH);
 	}
 	
 	public static String getIanAnorexiaDir() throws Exception
