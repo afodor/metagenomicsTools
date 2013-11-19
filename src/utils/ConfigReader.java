@@ -50,6 +50,7 @@ public class ConfigReader
 	public static final String ERIN_DATA_DIR = "ERIN_DATA_DIR";
 	
 	public static final String BLAST_DIR = "BLAST_DIR";
+	public static final String E_TREE_TEST_DIR = "E_TREE_TEST_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -64,6 +65,11 @@ public class ConfigReader
 	public static String getSaccharineRatDir() throws Exception
 	{
 		return getConfigReader().getAProperty(SACCHARINE_RAT_DIR);
+	}
+	
+	public static String getETreeTestDir() throws Exception
+	{
+		return getConfigReader().getAProperty(E_TREE_TEST_DIR);
 	}
 	
 	public static String getIanAnorexiaDir() throws Exception
