@@ -26,7 +26,7 @@ public class ProbNW
 	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) throws Exception
 	{
 		NwCell[][] matrix = getMatrix(seq1, seq2);
-		printMatrix(matrix);
+		//printMatrix(matrix);
 		return traceback(seq1, seq2, matrix);
 	}
 	
@@ -86,10 +86,10 @@ public class ProbNW
 		matrix[0][0] = new NwCell(0, NwCell.Direction.INIT);
 		
 		for (int x=1; x <= seq1.getColumns().size(); x++)
-			matrix[0][x] = new NwCell( x * 1 * MISMATCH_PENALTY, NwCell.Direction.LEFT );
+			matrix[0][x] = new NwCell( 0, NwCell.Direction.LEFT );
 		
 		for (int x=1; x <= seq2.getColumns().size(); x++)
-			matrix[x][0] = new NwCell( x * 1 * MISMATCH_PENALTY, NwCell.Direction.UP);
+			matrix[x][0] = new NwCell( 0, NwCell.Direction.UP);
 		
 		for( int y=1; y <= seq1.getColumns().size(); y++)
 		{
@@ -145,6 +145,11 @@ public class ProbNW
 		ProbSequence probSeq3 = new ProbSequence("ACT");
 		aligned =  align(aligned, probSeq3);
 		System.out.println( aligned );
+		
+		ProbSequence probSeq4 = new ProbSequence("TGGC");
+		aligned =  align(aligned, probSeq4);
+		System.out.println( aligned );
+
 		
 		/*
 		ProbSequence probSeq3 = new ProbSequence("ACCGGA");
