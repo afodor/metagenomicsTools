@@ -51,12 +51,12 @@ public class ProbNW
 			}
 			else if ( cell.getDirection().equals(NwCell.Direction.UP))
 			{
-				list.add( new ProbColumn('-').merge(seq1.getColumns().get(y-1)) );
+				list.add( new ProbColumn('-').merge(seq2.getColumns().get(x-1)) );
 				x--;
 			}
 			else if( cell.getDirection().equals(NwCell.Direction.LEFT))
 			{
-				list.add( new ProbColumn('-').merge(seq2.getColumns().get(x-1)) );
+				list.add( new ProbColumn('-').merge(seq1.getColumns().get(y-1)) );
 				y--;
 			}
 			else throw new Exception("LOGIC ERROR "  + x + " " + y);
@@ -132,8 +132,8 @@ public class ProbNW
 	
 	public static void main(String[] args) throws Exception
 	{
-		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
-		ProbSequence probSeq2 = new ProbSequence("AGGCTTA");
+		ProbSequence probSeq1 = new ProbSequence("ACC");
+		ProbSequence probSeq2 = new ProbSequence("AGGC");
 		
 		System.out.println(probSeq1);
 		System.out.println(probSeq2);
