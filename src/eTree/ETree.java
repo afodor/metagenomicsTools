@@ -124,7 +124,12 @@ public class ETree
 		
 		if( level > 1 )
 		{
-			double branchLength = LEVELS[level] - LEVELS[level-1];
+			double branchLength = LEVELS[level-1] - LEVELS[level];
+			writer.write(tabString + "\t<branch_length>" + branchLength +  "</branch_length>\n");
+		}
+		else
+		{
+			double branchLength = 0.01;
 			writer.write(tabString + "\t<branch_length>" + branchLength +  "</branch_length>\n");
 		}
 			
@@ -151,7 +156,7 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 4; x++)
+		for( int x=0; x < 200; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);
