@@ -132,7 +132,7 @@ public class ETree
 	private void writeUngappedSequenceAndSubSequences( BufferedWriter writer, ENode node) throws Exception
 	{
 		writer.write(">" + node.getNodeName() + "\n");
-		writer.write(">" + node.getProbSequence().getConsensus().replaceAll("-", "") + "\n");
+		writer.write(node.getProbSequence().getConsensus().replaceAll("-", "") + "\n");
 		
 		for( ENode subNode : node.getDaughters() )
 			writeUngappedSequenceAndSubSequences(writer, subNode);
@@ -190,6 +190,6 @@ public class ETree
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"testXML.xml");
 		
-		eTree.writeUngappedConsensusSequences(ConfigReader.getErinDataDir() + File.separator + "consensusSequences.txt");
+		eTree.writeUngappedConsensusSequences(ConfigReader.getETreeTestDir() + File.separator + "consensusSequences.txt");
 	}
 }
