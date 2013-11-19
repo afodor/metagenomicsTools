@@ -142,6 +142,10 @@ public class ProbNW
 		
 		System.out.println( aligned );
 		
+		ProbSequence probSeq3 = new ProbSequence("ACT");
+		aligned =  align(aligned, probSeq3);
+		System.out.println( aligned );
+		
 		/*
 		ProbSequence probSeq3 = new ProbSequence("ACCGGA");
 		aligned =  align(aligned, probSeq3);

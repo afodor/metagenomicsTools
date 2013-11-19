@@ -13,6 +13,7 @@
 
 package probabilisticNW;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,36 +83,39 @@ public class ProbSequence
 	
 	public String toString()
 	{
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
 		System.out.println(this.n + " sequences with distance " + this.getSumDistance());
 		StringBuffer buff = new StringBuffer();
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append( columns.get(x).getFractionA() + " " );
+			buff.append( nf.format(columns.get(x).getFractionA()) + " " );
 		
 		buff.append("\n");
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append( columns.get(x).getFractionC() + " " );
+			buff.append( nf.format(columns.get(x).getFractionC()) + " " );
 		
 		buff.append("\n");
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append( columns.get(x).getFractionG() + " " );
+			buff.append( nf.format(columns.get(x).getFractionG()) + " " );
 		
 		buff.append("\n");
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append( columns.get(x).getFractionT() + " " );
+			buff.append( nf.format(columns.get(x).getFractionT()) + " " );
 		
 		buff.append("\n");
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append( columns.get(x).getFractionGap() + " " );
+			buff.append( nf.format(columns.get(x).getFractionGap()) + " " );
 		
 		buff.append("\n");
 		
 		for( int x=0; x < columns.size(); x++)
-			buff.append(columns.get(x).getDistance() + " " );
+			buff.append( nf.format(columns.get(x).getDistance()) + " " );
 		
 		return buff.toString();
 		
