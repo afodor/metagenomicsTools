@@ -117,10 +117,9 @@ public class ProbSequence
 		
 	}
 	
-	
 	public static void main(String[] args) throws Exception
 	{
 		ProbSequence probSeq = new ProbSequence("ACGT-");
-		System.out.println(probSeq.toString());
+		System.out.println(probSeq);
 	}
 }

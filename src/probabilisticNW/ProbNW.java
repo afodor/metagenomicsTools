@@ -26,7 +26,7 @@ public class ProbNW
 	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) throws Exception
 	{
 		NwCell[][] matrix = getMatrix(seq1, seq2);
-		//printMatrix(matrix);
+		printMatrix(matrix);
 		return traceback(seq1, seq2, matrix);
 	}
 	
@@ -51,12 +51,12 @@ public class ProbNW
 			}
 			else if ( cell.getDirection().equals(NwCell.Direction.UP))
 			{
-				list.add( new ProbColumn('-') );
+				list.add( new ProbColumn('-').merge(seq1.getColumns().get(y-1)) );
 				x--;
 			}
 			else if( cell.getDirection().equals(NwCell.Direction.LEFT))
 			{
-				list.add( new ProbColumn('-') );
+				list.add( new ProbColumn('-').merge(seq2.getColumns().get(x-1)) );
 				y--;
 			}
 			else throw new Exception("LOGIC ERROR "  + x + " " + y);
@@ -133,7 +133,7 @@ public class ProbNW
 	public static void main(String[] args) throws Exception
 	{
 		ProbSequence probSeq1 = new ProbSequence("ACCTTA");
-		ProbSequence probSeq2 = new ProbSequence("ACCTTA");
+		ProbSequence probSeq2 = new ProbSequence("AGGCTTA");
 		
 		System.out.println(probSeq1);
 		System.out.println(probSeq2);
@@ -142,6 +142,7 @@ public class ProbNW
 		
 		System.out.println( aligned );
 		
+		/*
 		ProbSequence probSeq3 = new ProbSequence("ACCGGA");
 		aligned =  align(aligned, probSeq3);
 		System.out.println( aligned );
@@ -149,6 +150,7 @@ public class ProbNW
 		ProbSequence probSeq4 = new ProbSequence("ACCGTA");
 		aligned =  align(aligned, probSeq4);
 		System.out.println( aligned );
+		*/
 		
 	}
 }
