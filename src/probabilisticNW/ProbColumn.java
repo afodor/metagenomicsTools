@@ -125,14 +125,12 @@ public class ProbColumn
 	
 	public ProbColumn(char c)
 	{
-		this.addChar(c);
+		this.addChar(c,1);
 	}
 	
-	//todo: Make this more efficient
 	public ProbColumn(char c, int n)
 	{
-		for( int x=0; x <  n; x++)
-			this.addChar(c);
+		this.addChar(c,n);
 	}
 	
 	@Override
@@ -145,20 +143,20 @@ public class ProbColumn
 	/*
 	 * Non A,C,G,T and - are ignored
 	 */
-	public void addChar(char c)
+	public void addChar(char c, int n)
 	{
-		totalNum++;
+		totalNum+=n;
 		
 		if( c == 'A')
-			counts[A_INDEX]++;
+			counts[A_INDEX]+=n;
 		else if ( c == 'C')
-			counts[C_INDEX]++;
+			counts[C_INDEX]+=n;
 		else if ( c == 'G')
-			counts[G_INDEX]++;
+			counts[G_INDEX]+=n;
 		else if ( c == 'T')
-			counts[T_INDEX]++;
+			counts[T_INDEX]+=n;
 		else if ( c == '-')
-			counts[GAP_INDEX]++;
+			counts[GAP_INDEX]+=n;
 	}
 	
 	

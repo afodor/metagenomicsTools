@@ -17,7 +17,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
+import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
@@ -34,9 +36,9 @@ public class ETree
 	
 	private final ENode topNode;
 	
-	public void addSequence(String sequence) throws Exception
+	public void addSequence(String sequence, int numDereplicatedSequences) throws Exception
 	{
-		ProbSequence probSeq = new ProbSequence(sequence);
+		ProbSequence probSeq = new ProbSequence(sequence, numDereplicatedSequences);
 		
 		ENode index = addToOrCreateNode(topNode, probSeq);
 		
@@ -85,14 +87,15 @@ public class ETree
 		return null;
 	}
 	
-	public ETree(String starterSequence)
+	public ETree(String starterSequence, int numDereplicateSequences)
 	{
-		this.topNode = new ENode(starterSequence, "root", LEVELS[0], null);
+		ProbSequence aSeq = new ProbSequence(starterSequence, numDereplicateSequences);
+		this.topNode = new ENode(aSeq, "root", LEVELS[0], null);
 		ENode lastNode = topNode;
 		
 		for( int x=1; x < LEVELS.length; x++)
 		{
-			ENode nextNode = new ENode(starterSequence, "Node" + node_number++ , LEVELS[x], lastNode);
+			ENode nextNode = new ENode(aSeq, "Node" + node_number++ , LEVELS[x], lastNode);
 			lastNode.getDaughters().add(nextNode);
 			lastNode = nextNode;
 		}
@@ -252,23 +255,37 @@ public class ETree
 		writer.write(tabString + "</clade>\n");
 	}
 	
+	private static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
+	{
+		StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");
+		header.nextToken();
+		header.nextToken();
+		
+		int returnVal = Integer.parseInt(header.nextToken());
+		
+		if( header.hasMoreTokens())
+			throw new Exception("Parsign error");
+		
+		return returnVal;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		FastaSequenceOneAtATime fsoat = 
 				new FastaSequenceOneAtATime( ConfigReader.getETreeTestDir() + 
-						File.separator + "postLucyFiltering.txt");
+						File.separator + "gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX39D1");
 		
-		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
+		FastaSequence firstSeq = fsoat.getNextSequence();
+		ETree eTree = new ETree(firstSeq.getSequence(), getNumberOfDereplicatedSequences(firstSeq));
 		
-		for( int x=0; x < 200; x++)
+		int x=1;
+		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
-			eTree.addSequence(fsoat.getNextSequence().getSequence());
-			System.out.println("Adding " + x);
+			eTree.addSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs));
+			System.out.println(++x);
 		}
 		
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"testXML.xml");
-		
-		
 	}
 }

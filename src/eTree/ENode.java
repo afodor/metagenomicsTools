@@ -86,16 +86,4 @@ public class ENode
 		this.parent = parent;
 		this.level = level;
 	}
-
-	public ENode( String sequence, String name, double level, ENode parent )
-	{
-		if( level !=0 )
-			this.probSequence = new ProbSequence(sequence);
-		else
-			this.probSequence = null;
-		
-		this.nodeName = name;
-		this.parent = parent;
-		this.level = level;
-	}
 }

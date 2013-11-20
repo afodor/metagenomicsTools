@@ -60,15 +60,17 @@ public class ProbSequence
 		return columns;
 	}
 	
-	/*
-	 * Non A,C,G,T and - are ignored
-	 */
-	public ProbSequence( String s)
+	public ProbSequence(String s)
+	{
+		this(s,1);
+	}
+	
+	public ProbSequence(String s, int numCopiesDereplicatedSequence)
 	{
 		for( char c : s.toCharArray())
-			this.columns.add(new ProbColumn(c));
+			this.columns.add(new ProbColumn(c, numCopiesDereplicatedSequence));
 		
-		n=1;
+		n=numCopiesDereplicatedSequence;
 	}
 	
 	/*
