@@ -62,6 +62,17 @@ public class NewRDPParserFileLine
 		return returnNode;
 	}
 	
+	public String getLowestRankThreshold(int threshold)
+	{
+		String returnNode = null;
+		
+		for( String rank : this.taxaMap.keySet())
+			if( this.taxaMap.get(rank).getScore() >= threshold)
+				returnNode = rank;
+		
+		return returnNode;
+	}
+	
 	public static NewRDPParserFileLine newRDPParserFileLineFromPatrickHmpString(String s )
 		throws Exception
 	{
