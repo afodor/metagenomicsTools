@@ -218,6 +218,7 @@ public class ETree
 		// obviously, just a stub at this point
 		String taxaName = "" + node.getLevel();
 		String rank = null;
+		String commonName = null;
 		
 		if( rdpMap != null )
 		{
@@ -228,11 +229,15 @@ public class ETree
 				NewRDPNode rdpNode = line.getLowestNodeAtThreshold(RDP_THRESHOLD);
 				taxaName = rdpNode.getTaxaName() + " " + taxaName;
 				rank = line.getLowestRankThreshold(RDP_THRESHOLD);
+				commonName = tabString + "\t<common_name>" + line.getSummaryString()+"</common_name>\n";
 			}
 				
 		}
 		
 		writer.write(tabString + "\t<scientific_name>" + taxaName + "(" + rank + ")" +"</scientific_name>\n");
+		
+		if( commonName != null)
+			writer.write(commonName);
 		
 		if( rank != null)
 			writer.write(tabString + "\t<rank>" + rank + "</rank>\n");
@@ -255,7 +260,7 @@ public class ETree
 		
 		ETree eTree = new ETree(fsoat.getNextSequence().getSequence());
 		
-		for( int x=0; x < 500; x++)
+		for( int x=0; x < 200; x++)
 		{
 			eTree.addSequence(fsoat.getNextSequence().getSequence());
 			System.out.println("Adding " + x);
