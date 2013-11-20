@@ -135,7 +135,6 @@ public class ETree
 		writer.close(); writer.close();
 	}
 	
-	
 	private HashMap<String, NewRDPParserFileLine> tryForRDPMap()
 	{
 		try
