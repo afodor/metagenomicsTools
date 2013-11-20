@@ -200,6 +200,9 @@ public class ETree
 		
 		writer.write(tabString + "<clade>\n");
 		
+		writer.write( tabString + "\t<name>" + node.getNodeName() 
+				+ "(" + node.getNumOfSequencesAtTip() + "seqs)</name>\n");
+		
 		if( level > 1 )
 		{
 			double branchLength = LEVELS[level-1] - LEVELS[level];
@@ -210,9 +213,8 @@ public class ETree
 			double branchLength = 0.01;
 			writer.write(tabString + "\t<branch_length>" + branchLength +  "</branch_length>\n");
 		}
-			
-		writer.write(tabString + "\t<taxonomy>\n");
 		
+		writer.write(tabString + "\t<taxonomy>");
 		// obviously, just a stub at this point
 		String taxaName = "" + node.getLevel();
 		String rank = null;
