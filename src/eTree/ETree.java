@@ -30,7 +30,8 @@ import utils.ProcessWrapper;
 
 public class ETree
 {
-	public static final double[] LEVELS = {0.0, 0.5,0.4,0.35, 0.3,0.2, 0.1, 0.07, 0.05, 0.04, 0.03};
+	public static final double[] LEVELS = {0.0, 0.20,0.19,0.18, 0.17,0.16, 0.15, 0.14, 0.13, 0.12, 0.11,0.10,0.09,
+		0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
 	private static int node_number =1;
 	public static final int RDP_THRESHOLD = 80;
 	
@@ -216,7 +217,7 @@ public class ETree
 				NewRDPNode rdpNode = line.getLowestNodeAtThreshold(RDP_THRESHOLD);
 				taxaName = rdpNode.getTaxaName() + " " + taxaName;
 				rank = line.getLowestRankThreshold(RDP_THRESHOLD);
-				commonName = tabString + "\t<common_name>" + line.getSummaryString(2)+"</common_name>\n";
+				commonName = tabString + "\t<common_name>" + line.getSummaryStringNoScore(50, 2)+"</common_name>\n";
 				//NewRDPNode phylaNode = line.getTaxaMap().get(NewRDPParserFileLine.PHYLUM);
 				
 				//if( phylaNode != null)
