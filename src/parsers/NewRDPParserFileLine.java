@@ -478,6 +478,31 @@ public class NewRDPParserFileLine
 		return buff.toString();
 	}
 	
+	public String getSummaryString(int skip)
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( Iterator<NewRDPNode> i = this.taxaMap.values().iterator(); i.hasNext(); )
+		{
+		
+			NewRDPNode node = i.next();
+			
+			if( skip <=0)
+			{
+				buff.append(node.getTaxaName() + "(");
+				buff.append(node.getScore() + ")");
+				
+				if( i.hasNext())
+					buff.append(";");
+				
+			}
+			
+			skip--;
+		}
+		
+		return buff.toString();
+	}
+	
 	public String getSummaryStringNoScore(float threshold, int skip)
 	{
 		StringBuffer buff = new StringBuffer();

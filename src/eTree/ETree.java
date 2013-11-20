@@ -196,15 +196,41 @@ public class ETree
 	
 	private void addNodeAndDaughtersToXML( ENode node, BufferedWriter writer, int level, HashMap<String, NewRDPParserFileLine> rdpMap ) throws Exception
 	{
+		
 		String tabString = "";
 		
 		for( int x=0; x <= level; x++ )
 			tabString += "\t";
 		
+		String taxaName = "" + node.getLevel();
+		String rank = null;
+		String commonName = null;
+		//String phylaName = null;
+		
+		if( rdpMap != null )
+		{
+			NewRDPParserFileLine line = rdpMap.get( node.getNodeName() );
+			
+			if( line != null)
+			{
+				NewRDPNode rdpNode = line.getLowestNodeAtThreshold(RDP_THRESHOLD);
+				taxaName = rdpNode.getTaxaName() + " " + taxaName;
+				rank = line.getLowestRankThreshold(RDP_THRESHOLD);
+				commonName = tabString + "\t<common_name>" + line.getSummaryString(2)+"</common_name>\n";
+				//NewRDPNode phylaNode = line.getTaxaMap().get(NewRDPParserFileLine.PHYLUM);
+				
+				//if( phylaNode != null)
+				//	phylaName = tabString + "\t<accession>" + phylaNode.getTaxaName() + "</accession>\n";
+			}
+				
+		}
+		
 		writer.write(tabString + "<clade>\n");
 		
+		//if( phylaName != null)
+		//	writer.write(phylaName);
 		writer.write( tabString + "\t<name>" + node.getNodeName() 
-				+ "(" + node.getNumOfSequencesAtTip() + "seqs)</name>\n");
+				+ "(" + node.getNumOfSequencesAtTip() + "seqs) level " + node.getLevel() +"</name>\n");
 		
 		if( level > 1 )
 		{
@@ -219,23 +245,7 @@ public class ETree
 		
 		writer.write(tabString + "\t<taxonomy>");
 		// obviously, just a stub at this point
-		String taxaName = "" + node.getLevel();
-		String rank = null;
-		String commonName = null;
 		
-		if( rdpMap != null )
-		{
-			NewRDPParserFileLine line = rdpMap.get( node.getNodeName() );
-			
-			if( line != null)
-			{
-				NewRDPNode rdpNode = line.getLowestNodeAtThreshold(RDP_THRESHOLD);
-				taxaName = rdpNode.getTaxaName() + " " + taxaName;
-				rank = line.getLowestRankThreshold(RDP_THRESHOLD);
-				commonName = tabString + "\t<common_name>" + line.getSummaryString()+"</common_name>\n";
-			}
-				
-		}
 		
 		writer.write(tabString + "\t<scientific_name>" + taxaName + "(" + rank + ")" +"</scientific_name>\n");
 		
