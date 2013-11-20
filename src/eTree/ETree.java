@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.FastaSequenceOneAtATime;
+import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
 import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
@@ -29,6 +30,7 @@ public class ETree
 {
 	public static final double[] LEVELS = {0.0,  0.1, 0.07, 0.05, 0.04, 0.03};
 	private static int node_number =1;
+	public static final int RDP_THRESHOLD = 80;
 	
 	private final ENode topNode;
 	
@@ -167,11 +169,6 @@ public class ETree
 			args[5] = "-o";
 			args[6] = rdpFile.getAbsolutePath();
 			
-			System.out.println();
-			for(String s : args)
-				System.out.print(s + " " );
-			System.out.println();
-			
 			new ProcessWrapper(args);
 			
 			return NewRDPParserFileLine.getAsMapFromSingleThread(rdpFile.getAbsolutePath());
@@ -179,7 +176,7 @@ public class ETree
 		catch(Exception ex)
 		{
 			System.out.println("Could not get RDP map");
-			ex.getMessage();
+			ex.printStackTrace();
 		}
 		
 		return null;
@@ -224,7 +221,11 @@ public class ETree
 			NewRDPParserFileLine line = rdpMap.get( node.getNodeName() );
 			
 			if( line != null)
-				taxaName = line.getSummaryString() + " " + taxaName;
+			{
+				NewRDPNode rdpNode = line.getLowestNodeAtThreshold(RDP_THRESHOLD);
+				taxaName = rdpNode.getTaxaName() + " " + taxaName;
+			}
+				
 		}
 		
 		writer.write(tabString + "\t<scientific_name>" + taxaName + " with " + node.getNumOfSequencesAtTip() + " sequences </scientific_name>\n");

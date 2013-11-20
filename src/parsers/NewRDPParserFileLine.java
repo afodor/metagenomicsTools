@@ -51,6 +51,17 @@ public class NewRDPParserFileLine
 		DOMAIN, PHYLUM, CLASS, ORDER, FAMILY, GENUS
 	};
 	
+	public NewRDPNode getLowestNodeAtThreshold(int threshold)
+	{
+		NewRDPNode returnNode = null;
+		
+		for( NewRDPNode node : this.taxaMap.values())
+			if( node.getScore() >= threshold)
+				returnNode = node;
+		
+		return returnNode;
+	}
+	
 	public static NewRDPParserFileLine newRDPParserFileLineFromPatrickHmpString(String s )
 		throws Exception
 	{
