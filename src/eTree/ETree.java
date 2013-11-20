@@ -28,7 +28,7 @@ import utils.ProcessWrapper;
 
 public class ETree
 {
-	public static final double[] LEVELS = {0.0, 0.5,0.4, 0.3,0.2, 0.1, 0.07, 0.05, 0.04, 0.03};
+	public static final double[] LEVELS = {0.0, 0.5,0.4,0.35, 0.3,0.2, 0.1, 0.07, 0.05, 0.04, 0.03};
 	private static int node_number =1;
 	public static final int RDP_THRESHOLD = 80;
 	
