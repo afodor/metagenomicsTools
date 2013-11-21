@@ -16,6 +16,7 @@ package probabilisticNW;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,14 @@ public class ProbSequence implements Serializable
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
 	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
+	
+	/*
+	 * Clients should not modify the map but are not prevented from doing so
+	 */
+	public HashMap<String, Integer> getSampleCounts()
+	{
+		return sampleCounts;
+	}
 	
 	public double getSumDistance()
 	{

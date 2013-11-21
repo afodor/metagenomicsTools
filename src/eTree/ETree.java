@@ -46,6 +46,11 @@ public class ETree implements Serializable
 	
 	private ENode topNode=null;
 	
+	public ENode getTopNode()
+	{
+		return topNode;
+	}
+	
 	public void addSequence(String sequence, int numDereplicatedSequences, String sampleID) throws Exception
 	{
 		if( topNode == null )
