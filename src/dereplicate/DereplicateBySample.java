@@ -28,8 +28,8 @@ import utils.ConfigReader;
 
 public class DereplicateBySample
 {
-	private static String REP_PREFIX = "REP_SAMP_PREFIX_";
-	private static String DEREP_PREFIX = "DEREP_SAMP_PREFIX";
+	public static String REP_PREFIX = "REP_SAMP_PREFIX_";
+	public static String DEREP_PREFIX = "DEREP_SAMP_PREFIX";
 	
 	private static void splitBySample(String inFile) throws Exception
 	{

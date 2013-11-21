@@ -44,16 +44,23 @@ public class ETree implements Serializable
 	private static int node_number =1;
 	public static final int RDP_THRESHOLD = 80;
 	
-	private final ENode topNode;
+	private ENode topNode=null;
 	
-	public void addSequence(String sequence, int numDereplicatedSequences) throws Exception
+	public void addSequence(String sequence, int numDereplicatedSequences, String sampleID) throws Exception
 	{
-		ProbSequence probSeq = new ProbSequence(sequence, numDereplicatedSequences);
-		
-		ENode index = addToOrCreateNode(topNode, probSeq);
-		
-		while( index != null)
-			index = addToOrCreateNode(index, probSeq);
+		if( topNode == null )
+		{
+			initialize(sequence, numDereplicatedSequences, sampleID);
+		}
+		else
+		{
+			ProbSequence probSeq = new ProbSequence(sequence, numDereplicatedSequences, sampleID);
+			
+			ENode index = addToOrCreateNode(topNode, probSeq);
+			
+			while( index != null)
+				index = addToOrCreateNode(index, probSeq);
+		}
 	}
 	
 	private int getIndex(double level) throws Exception
@@ -76,6 +83,7 @@ public class ETree implements Serializable
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getSumDistance() <= node.getLevel())
 			{
+				possibleAlignment.setMapCount(node.getProbSequence(), newSeq);
 				node.setProbSequence(possibleAlignment);
 				return node;
 			}
@@ -97,9 +105,15 @@ public class ETree implements Serializable
 		return null;
 	}
 	
-	public ETree(String starterSequence, int numDereplicateSequences)
+	public ETree()
 	{
-		ProbSequence aSeq = new ProbSequence(starterSequence, numDereplicateSequences);
+		
+	}
+	
+	private void initialize(String starterSequence, int numDereplicateSequences, String sampleID)
+		throws Exception
+	{
+		ProbSequence aSeq = new ProbSequence(starterSequence, numDereplicateSequences, sampleID);
 		this.topNode = new ENode(aSeq, "root", LEVELS[0], null);
 		ENode lastNode = topNode;
 		
@@ -275,7 +289,7 @@ public class ETree implements Serializable
 		writer.write(tabString + "</clade>\n");
 	}
 	
-	private static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
+	static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
 	{
 		StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");
 		header.nextToken();
@@ -313,13 +327,12 @@ public class ETree implements Serializable
 				new FastaSequenceOneAtATime( ConfigReader.getETreeTestDir() + 
 						File.separator + "gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX39D1");
 		
-		FastaSequence firstSeq = fsoat.getNextSequence();
-		ETree eTree = new ETree(firstSeq.getSequence(), getNumberOfDereplicatedSequences(firstSeq));
+		ETree eTree = new ETree();
 		
-		int x=1;
+		int x=0;
 		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
-			eTree.addSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs));
+			eTree.addSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),"39D1");
 			System.out.println(++x);
 		}
 		
@@ -333,7 +346,7 @@ public class ETree implements Serializable
 				File.separator + "sampleBinaryTree.etree");
 		
 		eTreeCopy.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-			"testXML2.xml");
+			"testXML3.xml");
 	
 	}
 }

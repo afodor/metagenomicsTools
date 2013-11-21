@@ -132,8 +132,8 @@ public class ProbNW
 	
 	public static void main(String[] args) throws Exception
 	{
-		ProbSequence probSeq1 = new ProbSequence("ACC");
-		ProbSequence probSeq2 = new ProbSequence("AGGC");
+		ProbSequence probSeq1 = new ProbSequence("ACC","Sample1");
+		ProbSequence probSeq2 = new ProbSequence("AGGC","Sample1");
 		
 		System.out.println(probSeq1);
 		System.out.println(probSeq2);
@@ -142,11 +142,11 @@ public class ProbNW
 		
 		System.out.println( aligned );
 		
-		ProbSequence probSeq3 = new ProbSequence("ACT");
+		ProbSequence probSeq3 = new ProbSequence("ACT","Sample1");
 		aligned =  align(aligned, probSeq3);
 		System.out.println( aligned );
 		
-		ProbSequence probSeq4 = new ProbSequence("TGGC");
+		ProbSequence probSeq4 = new ProbSequence("TGGC","Sample1");
 		aligned =  align(aligned, probSeq4);
 		System.out.println( aligned );
 

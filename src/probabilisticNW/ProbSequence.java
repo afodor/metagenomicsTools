@@ -16,6 +16,8 @@ package probabilisticNW;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class ProbSequence implements Serializable
@@ -26,6 +28,7 @@ public class ProbSequence implements Serializable
 	
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
+	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
 	
 	public double getSumDistance()
 	{
@@ -55,6 +58,25 @@ public class ProbSequence implements Serializable
 		return n;
 	}
 	
+	public void setMapCount(ProbSequence oldParentSequence1, ProbSequence oldParentSequence2)
+	{
+		HashSet<String> keys = new HashSet<String>(oldParentSequence1.sampleCounts.keySet());
+		keys.addAll(oldParentSequence2.sampleCounts.keySet());
+		
+		for(String s : keys)
+		{
+			Integer count1 = oldParentSequence1.sampleCounts.get(s);
+			if (count1 == null)
+				count1 = 0;
+			
+			Integer count2 = oldParentSequence2.sampleCounts.get(s);
+			if (count2 == null)
+				count2 = 0;
+			
+			this.sampleCounts.put(s, count1 + count2);
+		}
+	}
+	
 	/*
 	 * Not thread safe and client should not modify contents (but is not prevented from doing so)
 	 */
@@ -63,17 +85,18 @@ public class ProbSequence implements Serializable
 		return columns;
 	}
 	
-	public ProbSequence(String s)
+	public ProbSequence(String s, String sampleID)
 	{
-		this(s,1);
+		this(s,1, sampleID);
 	}
 	
-	public ProbSequence(String s, int numCopiesDereplicatedSequence)
+	public ProbSequence(String s, int numCopiesDereplicatedSequence, String sampleID)
 	{
 		for( char c : s.toCharArray())
 			this.columns.add(new ProbColumn(c, numCopiesDereplicatedSequence));
 		
 		n=numCopiesDereplicatedSequence;
+		this.sampleCounts.put(sampleID, numCopiesDereplicatedSequence);
 	}
 	
 	/*
@@ -140,7 +163,7 @@ public class ProbSequence implements Serializable
 	
 	public static void main(String[] args) throws Exception
 	{
-		ProbSequence probSeq = new ProbSequence("ACGT-");
+		ProbSequence probSeq = new ProbSequence("ACGT-", "Sample1");
 		System.out.println(probSeq);
 	}
 }
