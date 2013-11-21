@@ -15,12 +15,16 @@ package eTree;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
@@ -287,11 +291,20 @@ public class ETree implements Serializable
 	
 	public void writeAsSerializedObject(String outFilePath) throws Exception
 	{
-		ObjectOutputStream out =new ObjectOutputStream(new FileOutputStream(new File(outFilePath)));
+		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
+				new FileOutputStream(new File(outFilePath))));
 		
 		out.writeObject(this);
 		
 		out.close();
+	}
+	
+	public static ETree readAsSerializedObject( String inFilePath) throws Exception
+	{
+		ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(inFilePath)));
+		ETree etree = (ETree) in.readObject();
+		in.close();
+		return etree;
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -315,5 +328,12 @@ public class ETree implements Serializable
 		
 		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + 
 						File.separator + "sampleBinaryTree.etree");
+		
+		ETree eTreeCopy = readAsSerializedObject(ConfigReader.getETreeTestDir() + 
+				File.separator + "sampleBinaryTree.etree");
+		
+		eTreeCopy.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
+			"testXML2.xml");
+	
 	}
 }
