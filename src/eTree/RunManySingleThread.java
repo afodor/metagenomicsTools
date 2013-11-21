@@ -53,11 +53,11 @@ public class RunManySingleThread
 						s.replace(DereplicateBySample.DEREP_PREFIX, ""));
 					System.out.print(" " + ++x);
 				}
-				System.out.println("Finished " + numDone);
+				System.out.println("\nFinished " + numDone);
 			}
 		
 		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74tree.etree");
-		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74phyloXML.txt");
+		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74phyloXML.xml");
 
 	}
 }
