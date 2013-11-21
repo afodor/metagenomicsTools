@@ -70,4 +70,5 @@ public class RunManySingleThread
 		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74phyloXML.xml");
 
 	}
+	
 }
