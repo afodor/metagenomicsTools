@@ -64,8 +64,8 @@ public class ProbColumn implements Serializable
 		for (int x=0; x<= 3; x++)
 			score += (this.counts[x] / this.totalNum ) * (other.counts[x]/ other.totalNum) * match;
 		
-		for( int x=0; x <=2; x++)
-			for( int y=x+1; y <=3; y++)
+		for( int x=0; x <=3; x++)
+			for( int y=0; y <=3; y++)
 				if( x != y)
 					score += (this.counts[x]/this.totalNum) * (other.counts[y]/other.totalNum) * mismatch;
 		
