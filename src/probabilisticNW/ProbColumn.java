@@ -69,7 +69,7 @@ public class ProbColumn implements Serializable
 				if( x != y)
 					score += (this.counts[x]/this.totalNum) * (other.counts[y]/other.totalNum) * mismatch;
 		
-		score += (this.counts[GAP_INDEX] / this.totalNum + other.counts[GAP_INDEX] / other.totalNum) * gapPenalty;
+		score += (this.counts[GAP_INDEX] / this.totalNum + other.counts[GAP_INDEX] / other.totalNum) * gapPenalty /2;
 		return score;
 	}
 	
