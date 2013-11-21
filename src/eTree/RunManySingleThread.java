@@ -14,6 +14,9 @@
 package eTree;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
@@ -35,8 +38,15 @@ public class RunManySingleThread
 		ETree eTree = new ETree();
 		
 		int numDone =0;
-		for(String s : dir.list())
-			if( s.startsWith(DereplicateBySample.DEREP_PREFIX) )
+		
+		List<String> fileNames = new ArrayList<String>();
+		for( String s : dir.list())
+			fileNames.add(s);
+		
+		Collections.shuffle(fileNames);
+		
+		for(String s : fileNames)
+			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
 			{
 				numDone++;
 				File file = new File(dir.getAbsolutePath() + File.separator + s);

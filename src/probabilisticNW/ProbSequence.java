@@ -16,7 +16,6 @@ package probabilisticNW;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ProbSequence implements Serializable
 {
 	private static final long serialVersionUID = -8572579288693934310L;
 
-	public static double TRIM_INITIAL_GAP_THREHSOLD = 0.5;
+	public static double TRIM_INITIAL_GAP_THREHSOLD = 0.25;
 	
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
@@ -47,10 +46,10 @@ public class ProbSequence implements Serializable
 		int startPosition=0;
 		int endPosition = columns.size()-1;
 		
-		while( columns.get(startPosition).getFractionGap() >= TRIM_INITIAL_GAP_THREHSOLD && startPosition < columns.size()-1 )
+		while( columns.get(startPosition).getDistance() >= TRIM_INITIAL_GAP_THREHSOLD && startPosition < columns.size()-1 )
 			startPosition++;
 		
-		while( columns.get(endPosition).getFractionGap() >= TRIM_INITIAL_GAP_THREHSOLD && endPosition>0)
+		while( columns.get(endPosition).getDistance() >= TRIM_INITIAL_GAP_THREHSOLD && endPosition>0)
 			endPosition--;
 		
 		for( int x=startPosition; x <= endPosition; x++)

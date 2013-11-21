@@ -13,30 +13,32 @@
 
 package eTree.test;
 
-import java.io.File;
 
+import probabilisticNW.ProbNW;
+import probabilisticNW.ProbSequence;
 import dynamicProgramming.DNASubstitutionMatrix;
 import dynamicProgramming.NeedlemanWunsch;
 import dynamicProgramming.PairedAlignment;
 
-import parsers.FastaSequenceOneAtATime;
-import utils.ConfigReader;
 
 public class TestProbNW
 {
 	public static void main(String[] args) throws Exception
 	{
-		FastaSequenceOneAtATime fsoat = 
-				new FastaSequenceOneAtATime( ConfigReader.getETreeTestDir() + 
-						File.separator + "postLucyFiltering.txt");
 		
-		String seq1 = fsoat.getNextSequence().getSequence();
-		String seq2 = fsoat.getNextSequence().getSequence();
+		String seq1 = "TTTTTTAAAAAAAAAAAAAAAAAAACCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAATTTTT";
+		String seq2 = "TTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATTTTT";
 		
 		PairedAlignment pa = 
 		NeedlemanWunsch.globalAlignTwoSequences(seq1, seq2, new DNASubstitutionMatrix(), -3, 99, true);
 		
 		System.out.println(pa);
 		
+		ProbSequence probSeq1 = new ProbSequence(seq1, 1, "Sample1");
+		ProbSequence probSeq2 = new ProbSequence(seq2, 1, "Sample1");
+		
+		ProbSequence align = ProbNW.align(probSeq1, probSeq2);
+		System.out.println(align);
+		System.out.println(align.getSumDistance());
 	}
 }
