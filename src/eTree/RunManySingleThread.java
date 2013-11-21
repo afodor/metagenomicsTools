@@ -34,9 +34,11 @@ public class RunManySingleThread
 		
 		ETree eTree = new ETree();
 		
+		int numDone =0;
 		for(String s : dir.list())
-			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
+			if( s.startsWith(DereplicateBySample.DEREP_PREFIX) )
 			{
+				numDone++;
 				File file = new File(dir.getAbsolutePath() + File.separator + s);
 				System.out.println(file.getAbsolutePath());
 				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(file);
@@ -51,7 +53,7 @@ public class RunManySingleThread
 						s.replace(DereplicateBySample.DEREP_PREFIX, ""));
 					System.out.print(" " + ++x);
 				}
-				System.out.println();
+				System.out.println("Finished " + numDone);
 			}
 		
 		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74tree.etree");
