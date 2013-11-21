@@ -13,13 +13,18 @@
 
 package eTree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import probabilisticNW.ProbSequence;
 
-public class ENode
+public class ENode implements Serializable
 {
+	
+	
+	private static final long serialVersionUID = -3274141668372679156L;
+	
 	private ProbSequence probSequence;
 	private ENode parent;
 	private double level;

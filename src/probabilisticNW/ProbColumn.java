@@ -12,8 +12,14 @@
 
 package probabilisticNW;
 
-public class ProbColumn
+import java.io.Serializable;
+
+public class ProbColumn implements Serializable
 {
+	
+	
+	private static final long serialVersionUID = 397594062593525001L;
+	
 	private static final int A_INDEX =0;
 	private static final int C_INDEX =1;
 	private static final int G_INDEX =2;

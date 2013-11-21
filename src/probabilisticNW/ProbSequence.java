@@ -13,12 +13,15 @@
 
 package probabilisticNW;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProbSequence
+public class ProbSequence implements Serializable
 {
+	private static final long serialVersionUID = -8572579288693934310L;
+
 	public static double TRIM_INITIAL_GAP_THREHSOLD = 0.5;
 	
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();

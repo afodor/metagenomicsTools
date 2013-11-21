@@ -15,7 +15,10 @@ package eTree;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -28,8 +31,10 @@ import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 import utils.ProcessWrapper;
 
-public class ETree
+public class ETree implements Serializable
 {
+	private static final long serialVersionUID = 8463272194826212918L;
+	
 	public static final double[] LEVELS = {0.0, 0.20,0.19,0.18, 0.17,0.16, 0.15, 0.14, 0.13, 0.12, 0.11,0.10,0.09,
 		0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
 	private static int node_number =1;
@@ -280,6 +285,15 @@ public class ETree
 		return returnVal;
 	}
 	
+	public void writeAsSerializedObject(String outFilePath) throws Exception
+	{
+		ObjectOutputStream out =new ObjectOutputStream(new FileOutputStream(new File(outFilePath)));
+		
+		out.writeObject(this);
+		
+		out.close();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		FastaSequenceOneAtATime fsoat = 
@@ -296,7 +310,10 @@ public class ETree
 			System.out.println(++x);
 		}
 		
-		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-				"testXML.xml");
+		//eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
+			//	"testXML.xml");
+		
+		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + 
+						File.separator + "sampleBinaryTree.etree");
 	}
 }
