@@ -99,7 +99,7 @@ public class ProbNW
 			{
 				ProbColumn seq2Cole = seq2.getColumns().get(x-1);
 				
-				double diagScore = seq1Col.getScoreDiag(seq2Cole, MATCH_REWARD, MISMATCH_PENALTY) + 
+				double diagScore = seq1Col.getScoreDiag(seq2Cole, MATCH_REWARD, MISMATCH_PENALTY, GAP_PENALTY) + 
 							matrix[x-1][y-1].getScore()	;
 				
 				double upScore = matrix[x-1][y].getScore() + GAP_PENALTY;

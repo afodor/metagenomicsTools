@@ -56,19 +56,20 @@ public class ProbColumn implements Serializable
 		throw new Exception("Logic error");
 	}
 	
-	public double getScoreDiag(ProbColumn other, double match, double mismatch)
+	public double getScoreDiag(ProbColumn other, double match, double mismatch, double gapPenalty)
 	{
 		double score =0;
 		
 		
 		for (int x=0; x<= 3; x++)
-			score += this.counts[x] * other.counts[x] * match;
+			score += (this.counts[x] / this.totalNum ) * (other.counts[x]/ other.totalNum) * match;
 		
 		for( int x=0; x <=2; x++)
 			for( int y=x+1; y <=3; y++)
 				if( x != y)
-					score += this.counts[x] * other.counts[y] * mismatch;
+					score += (this.counts[x]/this.totalNum) * (other.counts[y]/other.totalNum) * mismatch;
 		
+		score += (this.counts[GAP_INDEX] / this.totalNum + other.counts[GAP_INDEX] / other.totalNum) * gapPenalty;
 		return score;
 	}
 	
