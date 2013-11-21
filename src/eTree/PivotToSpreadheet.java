@@ -61,17 +61,17 @@ public class PivotToSpreadheet
 			h.nodeName = s;
 			samples.addAll(outerMap.get(s).keySet());
 			
-			//int numSamples =0;
+			int numSamples =0;
 			
 			for( int i : outerMap.get(s).values() )
 			{
 				h.totalNumOfSequences += i;
 				
-				//if( i > 0 )
-				//	numSamples++;
+				if( i > 0 )
+					numSamples++;
 			}
 			
-			//if( h.totalNumOfSequences >= 10 && numSamples >= 15)
+			if( h.totalNumOfSequences >= 10 && numSamples >= 15)
 				nodes.add(h);
 		}
 		 
