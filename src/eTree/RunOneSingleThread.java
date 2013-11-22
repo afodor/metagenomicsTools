@@ -10,7 +10,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package eTree;
 
 import java.io.File;
@@ -66,6 +65,7 @@ public class RunOneSingleThread
 		}
 		
 		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74withsingletonsChimeraChecked.etree");
+		eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74withsingletonsPhyloxml.xml");
 	}
 	
 	private static HashMap<String, Integer> getSampleMap(StringTokenizer sToken) throws Exception
