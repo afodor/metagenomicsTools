@@ -5,6 +5,7 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="MetagenomicTools">
     <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../eclipse"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
@@ -70,6 +71,26 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="Cluster">
+        <java classname="reduceOTU.Cluster" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="CompareReduceAndAbundanOTU">
+        <java classname="scripts.compareOTUs.CompareReduceAndAbundanOTU" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="CompareTwoFastaSequenceFiles">
+        <java classname="pythonVerification.CompareTwoFastaSequenceFiles" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="CompareTwoWrappers">
+        <java classname="scratch.CompareTwoWrappers" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="CoPhylogBinaryFileReader">
         <java classname="coPhylog.CoPhylogBinaryFileReader" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -78,6 +99,11 @@
     <target name="CoPhylogOnBurk">
         <java classname="scripts.sequenceScripts.CoPhylogOnBurk" failonerror="true" fork="yes">
             <jvmarg line="-mx14000m"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="Counts">
+        <java classname="exerciseCrossover.Counts" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -92,8 +118,23 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="Dereplicate">
+        <java classname="reduceOTU.Dereplicate" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="DereplicateBySample">
+        <java classname="dereplicate.DereplicateBySample" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="Dirchlet">
         <java classname="probDensity.Dirchlet" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="ETree">
+        <java classname="eTree.ETree" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -103,13 +144,94 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="GenerateWGETs">
+        <java classname="hmpReferenceGenomes.GenerateWGETs" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="MakeContextMapBits">
         <java classname="coPhylog.MakeContextMapBits" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="MapBlastHitsToBitScore">
+        <java classname="scripts.clusterManipulations.MapBlastHitsToBitScore" failonerror="true" fork="yes">
+            <arg line="D:\AshleeToddBigBlast\SRR061115.fasta_FILE_10_TO_NCBI.txt.gz D:\AshleeToddBigBlast\SRR061115_ncbi_bitScoreCounts_10.txt"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MedianOfCage">
+        <java classname="ratSaccharine.MedianOfCage" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MergeHMPandNCBI">
+        <java classname="scripts.bigHMPBlast.MergeHMPandNCBI" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MergeMap">
+        <java classname="ratSaccharine.MergeMap" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MergeSpreadsheets">
+        <java classname="exerciseCrossover.MergeSpreadsheets" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PairedTTests">
+        <java classname="ianAnorexia.PairedTTests" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="PancreatitisPCAPivot">
         <java classname="scripts.pancreatitis.PancreatitisPCAPivot" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PcoaViaTTest">
+        <java classname="ratSaccharine.PcoaViaTTest" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PivotOTUs (1)">
+        <java classname="parsers.PivotOTUs" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PivotToSpreadheet">
+        <java classname="eTree.PivotToSpreadheet" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PivotWithqPCRDATA">
+        <java classname="erinManuscript.PivotWithqPCRDATA" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PrePostPairedTTest">
+        <java classname="exerciseCrossover.PrePostPairedTTest" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="ProbNW">
+        <java classname="probabilisticNW.ProbNW" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="ProbSequence">
+        <java classname="probabilisticNW.ProbSequence" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="QuickGenusCheck">
+        <java classname="scratch.QuickGenusCheck" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="QuickPivot">
+        <java classname="adam.QuickPivot" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -124,10 +246,24 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
-    <target name="SnpTableToFasta">
-        <java classname="scripts.sequenceScripts.SnpTableToFasta" failonerror="true" fork="yes">
+    <target name="RunManySingleThread">
+        <java classname="eTree.RunManySingleThread" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
+    </target>
+    <target name="SnpTableToFasta">
+        <java classname="scripts.sequenceScripts.SnpTableToFasta" failonerror="true" fork="yes">
+            <arg line="c:\temp\gzFiles\SRR061115.fasta_FILE_10_TO_NCBI.txt.gz c:\temp\gzFile\out.txt"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="TestBandwithConstrainedAlignerFromLeft">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.testReduceOTU.TestBandwithConstrainedAlignerFromLeft" todir="${junit.output.dir}"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </junit>
     </target>
     <target name="TestBitCounter">
         <mkdir dir="${junit.output.dir}"/>
@@ -136,6 +272,11 @@
             <test name="test.testCoPhylog.TestBitCounter" todir="${junit.output.dir}"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </junit>
+    </target>
+    <target name="TestBitUtils">
+        <java classname="scratch.TestBitUtils" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
     </target>
     <target name="TestContextCount">
         <mkdir dir="${junit.output.dir}"/>
@@ -163,6 +304,61 @@
     </target>
     <target name="TestFastQ">
         <java classname="scratch.TestFastQ" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="TestHashHolder">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.testReduceOTU.TestHashHolder" todir="${junit.output.dir}"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </junit>
+    </target>
+    <target name="TestOnRealOTUs">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.testReduceOTU.TestOnRealOTUs" todir="${junit.output.dir}"/>
+            <jvmarg line="-mx14000m"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </junit>
+    </target>
+    <target name="TestPivot">
+        <java classname="scratch.TestPivot" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="TestProbNW">
+        <java classname="eTree.test.TestProbNW" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="TestSuite1 (4)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.testReduceOTU.TestSuite1" todir="${junit.output.dir}"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </junit>
+    </target>
+    <target name="VerifyPrimerPicks">
+        <java classname="pythonVerification.VerifyPrimerPicks" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="WriteOnePercent">
+        <java classname="erinManuscript.WriteOnePercent" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="DereplicateBySampleIntoOneFile">
+        <java classname="dereplicate.DereplicateBySampleIntoOneFile" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="RunOneSingleThread">
+        <java classname="eTree.RunOneSingleThread" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
