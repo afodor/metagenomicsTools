@@ -20,6 +20,7 @@ import java.util.List;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
+import probabilisticNW.ProbSequence;
 
 import dereplicate.DereplicateBySample;
 
@@ -58,9 +59,11 @@ public class RunManySingleThread
 						fs != null; 
 							fs = fsoat.getNextSequence())
 				{
-					eTree.addSequence(fs.getSequence(), 
-						ETree.getNumberOfDereplicatedSequences(fs), 
-						s.replace(DereplicateBySample.DEREP_PREFIX, ""));
+					ProbSequence probSeq = new ProbSequence(fs.getSequence(), 
+							ETree.getNumberOfDereplicatedSequences(fs), 
+							s.replace(DereplicateBySample.DEREP_PREFIX, ""));
+					
+					eTree.addSequence(probSeq);
 					System.out.print(" " + ++x);
 				}
 				System.out.println("\nFinished " + numDone);

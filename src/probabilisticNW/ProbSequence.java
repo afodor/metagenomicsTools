@@ -107,6 +107,23 @@ public class ProbSequence implements Serializable
 		this.sampleCounts.put(sampleID, numCopiesDereplicatedSequence);
 	}
 	
+	public ProbSequence(String s, int numCopiesDereplicatedSequence, HashMap<String, Integer> sampleMap)
+		throws Exception
+	{
+		for( char c : s.toCharArray())
+			this.columns.add(new ProbColumn(c, numCopiesDereplicatedSequence));
+		
+		n=numCopiesDereplicatedSequence;
+		this.sampleCounts = sampleMap;
+		
+		int n=0;
+		for( String key : sampleMap.keySet())
+			n+= sampleMap.get(key);
+		
+		if( n != numCopiesDereplicatedSequence)
+			throw new Exception("numCopiesDereplicatedSequence must equal sum of sample map");
+	}
+	
 	/*
 	 * Does not make a defensive copy of the ProbColumn and is therefore not thread-safe
 	 * or immune to client tampering

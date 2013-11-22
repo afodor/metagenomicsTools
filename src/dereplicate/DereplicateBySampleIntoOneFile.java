@@ -97,7 +97,7 @@ public class DereplicateBySampleIntoOneFile
 		
 		for(Holder h : list)
 		{
-			writer.write(">" + id + " " + h.map.toString() + "\n");
+			writer.write(">" + id + ";size=" + h.count + " "  + h.map.toString() + "\n");
 			id++;
 			writer.write(h.sequence+ "\n");
 		}

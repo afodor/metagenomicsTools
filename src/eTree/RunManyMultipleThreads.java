@@ -20,6 +20,7 @@ import java.util.concurrent.Semaphore;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
+import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 import dereplicate.DereplicateBySample;
 
@@ -49,9 +50,11 @@ public class RunManyMultipleThreads
 						fs != null; 
 							fs = fsoat.getNextSequence())
 				{
-					eTree.addSequence(fs.getSequence(), 
-						ETree.getNumberOfDereplicatedSequences(fs), 
-						inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, ""));
+					ProbSequence probSeq = new ProbSequence(fs.getSequence(), 
+							ETree.getNumberOfDereplicatedSequences(fs), 
+							inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, ""));
+					
+					eTree.addSequence(probSeq);
 				}
 				
 				eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator +  DereplicateBySample.DEREP_PREFIX + 
