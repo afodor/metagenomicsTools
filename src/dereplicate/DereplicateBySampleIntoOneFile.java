@@ -16,7 +16,10 @@ package dereplicate;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
@@ -57,17 +60,46 @@ public class DereplicateBySampleIntoOneFile
 		return map;
 	}
 	
+	private static class Holder implements Comparable<Holder>
+	{
+		String sequence;
+		HashMap<String, Integer> map;
+		int count=0;
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return o.count - this.count;
+		}
+	}
+	
 	private static void writeResults(String outFilePath, HashMap<String, HashMap<String, Integer>> map) throws Exception
 	{
+		List<Holder> list = new ArrayList<Holder>();
+		
+		for(String s : map.keySet())
+		{
+			Holder h = new Holder();
+			h.sequence = s;
+			h.map = map.get(s);
+			
+			for( String sample : h.map.keySet())
+				h.count += h.map.get(sample);
+			
+			list.add(h);
+		}
+		
+		Collections.sort(list);
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outFilePath)));
 		
 		int id =1;
 		
-		for(String seq : map.keySet())
+		for(Holder h : list)
 		{
-			writer.write(">" + id + " " + map.get(seq) + "\n");
+			writer.write(">" + id + " " + h.map.toString() + "\n");
 			id++;
-			writer.write(seq + "\n");
+			writer.write(h.sequence+ "\n");
 		}
 		
 		writer.flush();  writer.close();
