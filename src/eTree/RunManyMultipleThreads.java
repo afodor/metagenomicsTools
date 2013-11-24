@@ -45,12 +45,13 @@ public class RunManyMultipleThreads
 				ETree eTree = new ETree();
 				System.out.println(inputFile.getAbsolutePath());
 				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFile);
-						
+					
+				String sampleName = inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, "");
+				
 				for( FastaSequence fs = fsoat.getNextSequence(); 
 						fs != null; 
 							fs = fsoat.getNextSequence())
 				{
-					String sampleName = inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, "");
 					ProbSequence probSeq = new ProbSequence(fs.getSequence(), 
 							ETree.getNumberOfDereplicatedSequences(fs), 
 							sampleName);
@@ -58,8 +59,11 @@ public class RunManyMultipleThreads
 					eTree.addSequence(probSeq, sampleName);
 				}
 				
-				eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator +  DereplicateBySample.DEREP_PREFIX + 
+				eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator +
+						"gastro454DataSet"  + File.separator + "etrees" + File.separator + 
+						sampleName+ 
 						".etree");
+				
 				semaphore.release();
 			}
 			catch(Exception ex)
