@@ -71,7 +71,7 @@ public class PivotToSpreadheet
 					numSamples++;
 			}
 			
-			if( h.totalNumOfSequences >= 10 && numSamples >= 15)
+			//if( h.totalNumOfSequences >= 10 && numSamples >= 15)
 				nodes.add(h);
 		}
 		 
@@ -137,7 +137,7 @@ public class PivotToSpreadheet
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		ETree etree = ETree.readAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74tree.etree");
+		ETree etree = ETree.readAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74withsingletonsChimeraChecked.etree");
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		
@@ -146,6 +146,11 @@ public class PivotToSpreadheet
 			File outFile =new File( ConfigReader.getETreeTestDir() + File.separator + "level" + nf.format(ETree.LEVELS[x]));
 			
 			pivotToSpreasheet(ETree.LEVELS[x], etree, outFile );
+			System.out.println(outFile);
 		}
+		
+		etree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74withSingletons.xml");
+		
+		
 	}
 }
