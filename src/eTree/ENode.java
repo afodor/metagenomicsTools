@@ -22,8 +22,6 @@ import probabilisticNW.ProbSequence;
 
 public class ENode implements Serializable
 {
-	
-	
 	private static final long serialVersionUID = -3274141668372679156L;
 	
 	private ProbSequence probSequence;
@@ -66,6 +64,7 @@ public class ENode implements Serializable
 		
 		if( possibleSeq.getAverageDistance() <= this.level)
 		{
+			possibleSeq.setMapCount(this.getProbSequence(), otherNode.getProbSequence());
 			this.setProbSequence(possibleSeq);
 			for( ENode otherDaughter : otherNode.daughters )
 			{

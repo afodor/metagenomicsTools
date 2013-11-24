@@ -183,6 +183,23 @@ public class ETree implements Serializable
 		writer.close(); writer.close();
 	}
 	
+	public static ETree getEtreeFromFasta(String fastaFilePath, String sampleName) throws Exception
+	{
+		ETree eTree = new ETree();
+		
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaFilePath);
+		
+		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
+		{
+			ProbSequence probSeq = new ProbSequence(fs.getSequence(), 1, sampleName);
+			eTree.addSequence(probSeq);
+		}
+		
+		fsoat.close();
+		
+		return eTree;
+	}
+	
 	private HashMap<String, NewRDPParserFileLine> tryForRDPMap()
 	{
 		try
