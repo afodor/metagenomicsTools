@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
 
 public class ENode implements Serializable
@@ -49,6 +50,41 @@ public class ENode implements Serializable
 			sum += subNode.getNumOfAllDaughters();
 		
 		return sum;
+	}
+	
+	/*
+	 * Attempts to merge this node to otherNode.
+	 * If succesful, daughter nodes are added recursively and true is returned
+	 * If unsuccesful, this node is not altered and false is returned
+	 */
+	public boolean attemptMergeToOtherNode( ENode otherNode ) throws Exception
+	{
+		if( this.level != otherNode.level )
+			throw new Exception("Two nodes must be at same level " + this.level + " " + otherNode.level);
+		
+		ProbSequence possibleSeq = ProbNW.align(this.probSequence, otherNode.probSequence);
+		
+		if( possibleSeq.getAverageDistance() <= this.level)
+		{
+			for( ENode otherDaughter : otherNode.daughters )
+			{
+				for( ENode thisDaughter : this.daughters )
+				{
+					boolean merged = false;
+					if( ! merged)
+					{
+						merged = thisDaughter.attemptMergeToOtherNode(otherDaughter);
+					}
+					
+					if( ! merged)
+						this.daughters.add(otherDaughter);
+				}
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public int getNumOfSequencesAtTip()

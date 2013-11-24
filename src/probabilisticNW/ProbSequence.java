@@ -38,7 +38,7 @@ public class ProbSequence implements Serializable
 		return sampleCounts;
 	}
 	
-	public double getSumDistance()
+	public double getAverageDistance()
 	{
 		double sum =0;
 		double n=0;
@@ -151,7 +151,7 @@ public class ProbSequence implements Serializable
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);
-		System.out.println(this.n + " sequences with distance " + this.getSumDistance());
+		System.out.println(this.n + " sequences with distance " + this.getAverageDistance());
 		StringBuffer buff = new StringBuffer();
 		
 		for( int x=0; x < columns.size(); x++)

@@ -75,6 +75,17 @@ public class ETree implements Serializable
 		throw new Exception("Could not find " + level);
 	}
 	
+	public void addOtherTree(ETree otherTree) throws Exception
+	{
+		for( ENode otherNode : otherTree.getTopNode().getDaughters() )
+		{
+			for( ENode thisNode : otherTree.getTopNode().getDaughters())
+			{
+			}
+		}
+	}
+	
+	
 	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
@@ -84,7 +95,7 @@ public class ETree implements Serializable
 		{
 			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
-			if( possibleAlignment.getSumDistance() <= node.getLevel())
+			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
 				possibleAlignment.setMapCount(node.getProbSequence(), newSeq);
 				node.setProbSequence(possibleAlignment);

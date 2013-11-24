@@ -39,6 +39,6 @@ public class TestProbNW
 		
 		ProbSequence align = ProbNW.align(probSeq1, probSeq2);
 		System.out.println(align);
-		System.out.println(align.getSumDistance());
+		System.out.println(align.getAverageDistance());
 	}
 }
