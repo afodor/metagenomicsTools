@@ -112,6 +112,17 @@ public class FastaSequence implements Comparable<FastaSequence>
 		return s;
 	}
 	
+	public static HashSet<String> getSeqsAsHashSet( String filePath ) throws Exception
+	{
+		List<FastaSequence> list= FastaSequence.readFastaFile(filePath);
+		HashSet<String> set = new HashSet<String>();
+		
+		for(FastaSequence fs : list)
+			set.add(fs.getSequence());
+		
+		return set;
+	}
+	
 	/**  Not thread safe even from separate VMs
 	 */
 	public synchronized File ensureBlastDatabaseForNucleotideSequence() throws Exception

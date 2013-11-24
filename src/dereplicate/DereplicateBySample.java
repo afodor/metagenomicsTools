@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -31,9 +32,9 @@ public class DereplicateBySample
 	public static String REP_PREFIX = "REP_SAMP_PREFIX_";
 	public static String DEREP_PREFIX = "DEREP_SAMP_PREFIX";
 	
-	private static void splitBySample(String inFile) throws Exception
+	private static void splitBySample(String inFile, HashSet<String> goodSeqs) throws Exception
 	{
-		splitBySample(new File(inFile));
+		splitBySample(new File(inFile), goodSeqs);
 	}
 	
 	private static class Holder implements Comparable<Holder>
@@ -90,16 +91,16 @@ public class DereplicateBySample
 				
 				for( Holder h : list)
 				{
-					if( h.num > 1)
+					//if( h.num > 1)
 					{
 						writer.write(">" + s.replace(REP_PREFIX, "") + "_" + numWritten + "_" + h.num + "\n" );
 						writer.write(h.sequence + "\n");
 						totalSequences += h.num;
 						numWritten++;
 					}
-					else
+					//else
 					{
-						numSingletons++;
+						//numSingletons++;
 					}
 				}
 				
@@ -108,7 +109,7 @@ public class DereplicateBySample
 			}
 	}
 	
-	private static void splitBySample(File inFile ) throws Exception
+	private static void splitBySample(File inFile, HashSet<String> goodSeqs ) throws Exception
 	{
 		HashMap<String, BufferedWriter> map = new HashMap<String, BufferedWriter>();
 		
@@ -116,21 +117,28 @@ public class DereplicateBySample
 		
 		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
-			String sample = fs.getFirstTokenOfHeader();
-			sample = new StringTokenizer(sample, "_").nextToken();
-			
-			BufferedWriter writer = map.get(sample);
-			
-			if( writer == null)
+			if( goodSeqs.contains(fs.getSequence()))
 			{
-				writer = new BufferedWriter(new FileWriter(new File(inFile.getParentFile() + File.separator+ REP_PREFIX + sample)));
+				String sample = fs.getFirstTokenOfHeader();
+				sample = new StringTokenizer(sample, "_").nextToken();
 				
-				map.put(sample, writer);
+				BufferedWriter writer = map.get(sample);
+				
+				if( writer == null)
+				{
+					writer = new BufferedWriter(new FileWriter(new File(inFile.getParentFile() + File.separator+ REP_PREFIX + sample)));
+					
+					map.put(sample, writer);
+				}
+				
+				writer.write(fs.getHeader() + "\n");
+				writer.write(fs.getSequence() +"\n");
+				writer.flush();
 			}
-			
-			writer.write(fs.getHeader() + "\n");
-			writer.write(fs.getSequence() +"\n");
-			writer.flush();
+			else
+			{
+				System.out.println("Skipping chimera " + fs.getHeader());
+			}
 		}
 		
 		for(BufferedWriter writer : map.values())
@@ -141,7 +149,13 @@ public class DereplicateBySample
 	
 	public static void main(String[] args) throws Exception
 	{
-		splitBySample(ConfigReader.getETreeTestDir() + File.separator + "gastro454DataSet" + File.separator + "mels74samples.fna");
+		HashSet<String> goodSeqs = FastaSequence.getSeqsAsHashSet(
+				ConfigReader.getETreeTestDir() + File.separator + "gastro454DataSet" + File.separator +
+				"melUchimeClean.fasta");
+		
+		splitBySample(
+				ConfigReader.getETreeTestDir() + File.separator + "gastro454DataSet" + File.separator + "mels74samples.fna",
+								goodSeqs);
 		writeDereplicateFiles(new File(ConfigReader.getETreeTestDir() + File.separator + "gastro454DataSet" ));
 	}
 }
