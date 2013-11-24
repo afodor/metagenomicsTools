@@ -50,11 +50,12 @@ public class RunManyMultipleThreads
 						fs != null; 
 							fs = fsoat.getNextSequence())
 				{
+					String sampleName = inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, "");
 					ProbSequence probSeq = new ProbSequence(fs.getSequence(), 
 							ETree.getNumberOfDereplicatedSequences(fs), 
-							inputFile.getName().replace(DereplicateBySample.DEREP_PREFIX, ""));
+							sampleName);
 					
-					eTree.addSequence(probSeq);
+					eTree.addSequence(probSeq, sampleName);
 				}
 				
 				eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator +  DereplicateBySample.DEREP_PREFIX + 

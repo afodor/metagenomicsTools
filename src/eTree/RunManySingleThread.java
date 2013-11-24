@@ -59,11 +59,12 @@ public class RunManySingleThread
 						fs != null; 
 							fs = fsoat.getNextSequence())
 				{
+					String sampleName = s.replace(DereplicateBySample.DEREP_PREFIX, "");
 					ProbSequence probSeq = new ProbSequence(fs.getSequence(), 
 							ETree.getNumberOfDereplicatedSequences(fs), 
-							s.replace(DereplicateBySample.DEREP_PREFIX, ""));
+							sampleName);
 					
-					eTree.addSequence(probSeq);
+					eTree.addSequence(probSeq, sampleName);
 					System.out.print(" " + ++x);
 				}
 				System.out.println("\nFinished " + numDone);

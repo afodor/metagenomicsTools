@@ -38,7 +38,14 @@ public class TestEtreeMerge
 		
 		etree2.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "3B2.etree");
-
 		
+		System.out.println("Merging...");
+		etree1.addOtherTree(etree2);
+		
+		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
+				"gastro454DataSet" + File.separator + "merged.etree");
+		
+		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
+				"gastro454DataSet" + File.separator + "mergedXML.etree");
 	}
 }

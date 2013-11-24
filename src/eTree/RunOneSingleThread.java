@@ -57,7 +57,7 @@ public class RunOneSingleThread
 					throw new Exception("No " + sum + " " + n);
 				
 				ProbSequence probSeq = new ProbSequence( fs.getSequence(), n, map );
-				eTree.addSequence(probSeq);
+				eTree.addSequence(probSeq, "Node");
 				x++;
 				if( x% 10 ==0)
 					System.out.println("Finished " + x);

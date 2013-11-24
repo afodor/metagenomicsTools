@@ -51,18 +51,18 @@ public class ETree implements Serializable
 		return topNode;
 	}
 	
-	public void addSequence(ProbSequence probSeq) throws Exception
+	public void addSequence(ProbSequence probSeq, String sampleName) throws Exception
 	{	
 		if( topNode == null )
 		{
-			initialize(probSeq);
+			initialize(probSeq, sampleName);
 		}
 		else
 		{
-			ENode index = addToOrCreateNode(topNode, probSeq);
+			ENode index = addToOrCreateNode(topNode, probSeq, sampleName);
 			
 			while( index != null)
-				index = addToOrCreateNode(index, probSeq);
+				index = addToOrCreateNode(index, probSeq, sampleName);
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class ETree implements Serializable
 	}
 	
 	
-	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq) throws Exception
+	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String sampleName) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
 			return null;
@@ -111,14 +111,14 @@ public class ETree implements Serializable
 		}
 		
 		// still here - no matches - add a new node
-		ENode newNode = new ENode(newSeq, "Node" +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
+		ENode newNode = new ENode(newSeq, sampleName +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
 				int index = getIndex(newNode.getLevel());
 		
 		for( int x=index +1; x < LEVELS.length; x++)
 		{
 			ENode previousNode =newNode;
-			newNode = new ENode(newSeq, "Node" + node_number++, LEVELS[x], previousNode);
+			newNode = new ENode(newSeq, sampleName + node_number++, LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
 		}
 		
@@ -130,7 +130,7 @@ public class ETree implements Serializable
 		
 	}
 	
-	private void initialize(ProbSequence aSeq)
+	private void initialize(ProbSequence aSeq, String sampleName)
 		throws Exception
 	{
 		this.topNode = new ENode(aSeq, "root", LEVELS[0], null);
@@ -138,7 +138,7 @@ public class ETree implements Serializable
 		
 		for( int x=1; x < LEVELS.length; x++)
 		{
-			ENode nextNode = new ENode(aSeq, "Node" + node_number++ , LEVELS[x], lastNode);
+			ENode nextNode = new ENode(aSeq, sampleName + node_number++ , LEVELS[x], lastNode);
 			lastNode.getDaughters().add(nextNode);
 			lastNode = nextNode;
 		}
@@ -193,7 +193,7 @@ public class ETree implements Serializable
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
 			ProbSequence probSeq = new ProbSequence(fs.getSequence(), 1, sampleName);
-			eTree.addSequence(probSeq);
+			eTree.addSequence(probSeq, sampleName);
 			
 			numDone++;
 			
@@ -375,7 +375,7 @@ public class ETree implements Serializable
 		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
 			ProbSequence probSeq = new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),"39D1");
-			eTree.addSequence(probSeq);
+			eTree.addSequence(probSeq, "39D1");
 			System.out.println(++x);
 		}
 		
