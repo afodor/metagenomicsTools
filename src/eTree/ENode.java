@@ -66,6 +66,7 @@ public class ENode implements Serializable
 		
 		if( possibleSeq.getAverageDistance() <= this.level)
 		{
+			this.setProbSequence(possibleSeq);
 			for( ENode otherDaughter : otherNode.daughters )
 			{
 				for( ENode thisDaughter : this.daughters )

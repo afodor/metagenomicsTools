@@ -86,6 +86,9 @@ public class ETree implements Serializable
 				if( !merged)
 					merged = thisNode.attemptMergeToOtherNode(otherNode);
 			}
+			
+			if( ! merged)
+				this.topNode.getDaughters().add(otherNode);
 		}
 	}
 	
