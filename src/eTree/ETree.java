@@ -363,7 +363,7 @@ public class ETree implements Serializable
 		
 		out.writeObject(this);
 		
-		out.close();
+		out.flush(); out.close();
 	}
 	
 	public static ETree readAsSerializedObject( String inFilePath) throws Exception
