@@ -53,11 +53,11 @@ public class ENode implements Serializable
 	}
 	
 	/*
-	 * Attempts to merge this node to otherNode.
+	 * Attempts to merge the other node to thisNode.
 	 * If succesful, daughter nodes are added recursively and true is returned
 	 * If unsuccesful, this node is not altered and false is returned
 	 */
-	public boolean attemptMergeToOtherNode( ENode otherNode ) throws Exception
+	public boolean attemptToMergeOtherNodeToThisNode( ENode otherNode ) throws Exception
 	{
 		if( this.level != otherNode.level )
 			throw new Exception("Two nodes must be at same level " + this.level + " " + otherNode.level);
@@ -69,17 +69,18 @@ public class ENode implements Serializable
 			this.setProbSequence(possibleSeq);
 			for( ENode otherDaughter : otherNode.daughters )
 			{
+				boolean merged = false;
+				
 				for( ENode thisDaughter : this.daughters )
 				{
-					boolean merged = false;
 					if( ! merged)
 					{
-						merged = thisDaughter.attemptMergeToOtherNode(otherDaughter);
+						merged = thisDaughter.attemptToMergeOtherNodeToThisNode(otherDaughter);
 					}
-					
-					if( ! merged)
-						this.daughters.add(otherDaughter);
 				}
+				
+				if( ! merged)
+					this.daughters.add(otherDaughter);
 				
 				return true;
 			}
