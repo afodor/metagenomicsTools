@@ -79,8 +79,12 @@ public class ETree implements Serializable
 	{
 		for( ENode otherNode : otherTree.getTopNode().getDaughters() )
 		{
-			for( ENode thisNode : otherTree.getTopNode().getDaughters())
+			boolean merged = false;
+			
+			for( ENode thisNode : this.getTopNode().getDaughters())
 			{
+				if( !merged)
+					merged = thisNode.attemptMergeToOtherNode(otherNode);
 			}
 		}
 	}
