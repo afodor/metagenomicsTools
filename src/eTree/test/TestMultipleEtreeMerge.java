@@ -35,11 +35,12 @@ public class TestMultipleEtreeMerge
 			if(s.endsWith("etree"))
 				files.add(new File(startDir.getAbsolutePath() + File.separator + s));
 		
+		System.out.println("Reading first tree");
 		ETree firstTree = ETree.readAsSerializedObject(files.get(0).getAbsolutePath());
 		
 		for( int x=1; x < files.size(); x++)
 		{
-			System.out.println("Reading " + files.get(x).getAbsolutePath());
+			System.out.println("Reading " + files.get(x).getAbsolutePath() + " file " + x);
 			ETree otherTree = ETree.readAsSerializedObject(files.get(x).getAbsolutePath());
 			System.out.println("Merging ");
 			firstTree.addOtherTree(otherTree);

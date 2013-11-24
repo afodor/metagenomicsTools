@@ -191,7 +191,14 @@ public class ETree implements Serializable
 		int numDone=0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
-			ProbSequence probSeq = new ProbSequence(fs.getSequence(), 1, sampleName);
+			StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");
+			
+			if( header.countTokens() != 3)
+				throw new Exception("Error; expectng header in the format of >Name_aNum_321 where last # of time is the # of times dereplicated sample is observed");
+			
+			header.nextToken();  header.nextToken();
+			
+			ProbSequence probSeq = new ProbSequence(fs.getSequence(), Integer.parseInt(header.nextToken()), sampleName);
 			eTree.addSequence(probSeq, sampleName);
 			
 			numDone++;
