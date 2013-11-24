@@ -91,8 +91,7 @@ public class ETree implements Serializable
 				this.topNode.getDaughters().add(otherNode);
 		}
 	}
-	
-	
+
 	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String sampleName) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )

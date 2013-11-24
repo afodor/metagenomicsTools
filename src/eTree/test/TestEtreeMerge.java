@@ -20,6 +20,9 @@ import eTree.ETree;
 
 public class TestEtreeMerge
 {
+	/*
+	 * An example of reading and merging two trees
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		ETree etree1 = 
@@ -48,4 +51,5 @@ public class TestEtreeMerge
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
 	}
+	
 }
