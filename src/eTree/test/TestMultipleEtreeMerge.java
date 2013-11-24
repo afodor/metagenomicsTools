@@ -39,10 +39,13 @@ public class TestMultipleEtreeMerge
 		
 		for( int x=1; x < files.size(); x++)
 		{
+			System.out.println("Reading " + files.get(x).getAbsolutePath());
+			ETree otherTree = ETree.readAsSerializedObject(files.get(x).getAbsolutePath());
 			System.out.println("Merging ");
-			firstTree.addOtherTree(ETree.readAsSerializedObject(files.get(x).getAbsolutePath()));
+			firstTree.addOtherTree(otherTree);
 		}
-		
+	
+		System.out.println("Writing final tree");
 		firstTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallel.etree");
 		firstTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallelXML.xml");
 	}
