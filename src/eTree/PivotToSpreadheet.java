@@ -132,7 +132,8 @@ public class PivotToSpreadheet
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		ETree etree = ETree.readAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "mel74withsingletonsChimeraChecked.etree");
+		ETree etree = ETree.readAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator 
+				+ "melmergedFromParallel.etree");
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		

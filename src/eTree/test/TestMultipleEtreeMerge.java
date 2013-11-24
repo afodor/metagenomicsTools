@@ -14,10 +14,12 @@
 package eTree.test;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import eTree.ETree;
+import eTree.PivotToSpreadheet;
 
 import utils.ConfigReader;
 
@@ -45,7 +47,18 @@ public class TestMultipleEtreeMerge
 			System.out.println("Merging ");
 			firstTree.addOtherTree(otherTree);
 		}
+		
+		NumberFormat nf = NumberFormat.getInstance();
 	
+		System.out.println("Writing otu tables");
+		for( int x=1; x < ETree.LEVELS.length; x++)
+		{
+			File outFile =new File( ConfigReader.getETreeTestDir() + File.separator + "level" + nf.format(ETree.LEVELS[x]));
+			
+			PivotToSpreadheet.pivotToSpreasheet(ETree.LEVELS[x], firstTree, outFile );
+			System.out.println(outFile);
+		}
+		
 		System.out.println("Writing final tree");
 		firstTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallel.etree");
 		firstTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallelXML.xml");
