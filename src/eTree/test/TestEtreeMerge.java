@@ -25,5 +25,20 @@ public class TestEtreeMerge
 		ETree etree1 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
+		
+		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
+				"gastro454DataSet" + File.separator + "3B1.etree");
+
+		ETree etree2 = 
+				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
+						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2");
+		
+		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
+				"gastro454DataSet" + File.separator + "3B2.etree");
+		
+		etree2.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
+				"gastro454DataSet" + File.separator + "3B2.etree");
+
+		
 	}
 }

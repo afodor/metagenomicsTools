@@ -186,13 +186,19 @@ public class ETree implements Serializable
 	public static ETree getEtreeFromFasta(String fastaFilePath, String sampleName) throws Exception
 	{
 		ETree eTree = new ETree();
-		
+		System.out.println(sampleName);
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaFilePath);
 		
+		int numDone=0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
 			ProbSequence probSeq = new ProbSequence(fs.getSequence(), 1, sampleName);
 			eTree.addSequence(probSeq);
+			
+			numDone++;
+			
+			if( numDone % 20 ==0)
+				System.out.println(numDone);
 		}
 		
 		fsoat.close();
