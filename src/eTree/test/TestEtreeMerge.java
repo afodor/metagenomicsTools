@@ -46,6 +46,6 @@ public class TestEtreeMerge
 				"gastro454DataSet" + File.separator + "merged.etree");
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-				"gastro454DataSet" + File.separator + "mergedXML.etree");
+				"gastro454DataSet" + File.separator + "mergedXML.xml");
 	}
 }
