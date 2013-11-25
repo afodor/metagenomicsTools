@@ -13,6 +13,7 @@
 
 package probabilisticNW;
 
+import java.io.BufferedWriter;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -29,6 +30,18 @@ public class ProbSequence implements Serializable
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
 	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
+	
+	/*
+	 * tabString is prefixed to each output line (to allow for consistent tabing).
+	 * (Set tabString to "" disable)
+	 */
+	public void writeThisSequenceToText( BufferedWriter writer,  String tabString )
+		throws Exception
+	{
+		writer.write(tabString + this.toString() + "\n");
+		writer.write(tabString + sampleCounts.toString() + "\n");
+		writer.write(tabString + getConsensus().toString() + "\n");
+	}
 	
 	/*
 	 * Clients should not modify the map but are not prevented from doing so
@@ -151,8 +164,9 @@ public class ProbSequence implements Serializable
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);
-		System.out.println(this.n + " sequences with distance " + this.getAverageDistance());
 		StringBuffer buff = new StringBuffer();
+		buff.append(this.n + " sequences with distance " + this.getAverageDistance());
+		
 		
 		for( int x=0; x < columns.size(); x++)
 			buff.append( nf.format(columns.get(x).getFractionA()) + " " );

@@ -66,7 +66,7 @@ public class ETree implements Serializable
 		}
 	}
 	
-	private int getIndex(double level) throws Exception
+	public static int getIndex(double level) throws Exception
 	{
 		for( int i =0; i < LEVELS.length; i++)
 			if( LEVELS[i] == level)
@@ -146,6 +146,20 @@ public class ETree implements Serializable
 	public void writeAsXML(String xmlFilePath) throws Exception
 	{
 		writeAsXML(new File(xmlFilePath));
+	}
+	
+	public void writeAsText(String textFile) throws Exception
+	{
+		writeAsText(new File(textFile));
+	}
+	
+	public void writeAsText(File textFile) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
+		
+		this.topNode.writeNodeAndDaughters(writer);
+		
+		writer.flush();  writer.close();
 	}
 	
 	public void writeAsXML(File xmlFile) throws Exception

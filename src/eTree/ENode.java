@@ -13,6 +13,7 @@
 
 package eTree;
 
+import java.io.BufferedWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,22 @@ public class ENode implements Serializable
 		}
 		
 		return false;
+	}
+	
+	public void writeNodeAndDaughters(BufferedWriter writer) throws Exception
+	{
+		int level = ETree.getIndex(this.level);
+		String tabString ="";
+		
+		for (int x=1; x <= level; x++)
+			tabString += "\t";
+		writer.write(tabString +  this.nodeName + " (" + level + ") " + this.level + " " +  this.daughters.size() + " children ");
+		
+		this.probSequence.writeThisSequenceToText(writer, "\t" + tabString);
+		
+		for( ENode enode : daughters)
+			enode.writeNodeAndDaughters(writer);
+		
 	}
 	
 	public int getNumOfSequencesAtTip()

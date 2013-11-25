@@ -17,6 +17,7 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
+import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {
@@ -44,6 +45,10 @@ public class TestEtreeMerge
 		
 		System.out.println("Merging...");
 		etree1.addOtherTree(etree2);
+		
+		PivotToSpreadheet.pivotToSpreasheet(0.03, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "twoTrees0_03.txt"));
+		
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt");
 		
 		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "merged.etree");
