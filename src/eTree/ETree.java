@@ -51,6 +51,11 @@ public class ETree implements Serializable
 		return topNode;
 	}
 	
+	public int getTotalNumberOfSequences()
+	{
+		return this.topNode.getNumOfSequencesAtTips();
+	}
+	
 	public void addSequence(ProbSequence probSeq, String sampleName) throws Exception
 	{	
 		if( topNode == null )
@@ -321,7 +326,7 @@ public class ETree implements Serializable
 		//if( phylaName != null)
 		//	writer.write(phylaName);
 		writer.write( tabString + "\t<name>" + node.getNodeName() 
-				+ "(" + node.getNumOfSequencesAtTip() + "seqs) level " + node.getLevel() +"</name>\n");
+				+ "(" + node.getNumOfSequencesAtTips() + "seqs) level " + node.getLevel() +"</name>\n");
 		
 		if( level > 1 )
 		{

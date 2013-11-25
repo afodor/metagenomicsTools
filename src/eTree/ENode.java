@@ -105,7 +105,7 @@ public class ENode implements Serializable
 		
 	}
 	
-	public int getNumOfSequencesAtTip()
+	public int getNumOfSequencesAtTips()
 	{
 		int sum =0;
 		
@@ -113,7 +113,7 @@ public class ENode implements Serializable
 			sum = this.probSequence.getNumRepresentedSequences();
 		
 		for( ENode subNode : daughters)
-			sum += subNode.getNumOfSequencesAtTip();
+			sum += subNode.getNumOfSequencesAtTips();
 		
 		return sum;
 	}
