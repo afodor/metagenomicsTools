@@ -35,6 +35,14 @@ public class ProbColumn implements Serializable
 		return distance;
 	}
 	
+	/*
+	 * Client should not modify this but is not prohibited from doing so
+	 */
+	double[] getCounts()
+	{
+		return counts;
+	}
+	
 	public char getMostFrequentChar() throws Exception
 	{
 		double max = Math.max(counts[A_INDEX], counts[C_INDEX]);

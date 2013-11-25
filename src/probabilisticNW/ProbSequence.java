@@ -38,9 +38,32 @@ public class ProbSequence implements Serializable
 	public void writeThisSequenceToText( BufferedWriter writer,  String tabString )
 		throws Exception
 	{
-		writer.write(tabString + this.toString() + "\n");
-		writer.write(tabString + sampleCounts.toString() + "\n");
+		writer.write(tabString +  sampleCounts.toString() + "\n");
 		writer.write(tabString + getConsensus().toString() + "\n");
+		
+		for( int x=0; x < this.columns.size(); x++)
+		{
+			ProbColumn probC = this.columns.get(x);
+			boolean foundNonOneZero = false;
+			
+			for( int y=0;y <=4; y++)
+			{
+				boolean zeroOrOne = 
+						Math.abs( probC.getCounts()[y] - 0) <= 0.00000000001 
+								|| Math.abs( probC.getCounts()[y] - probC.getTotalNum()) <= 0.00000000001 ;
+				if( ! zeroOrOne  )  
+					foundNonOneZero = true;
+			}
+				
+			if( foundNonOneZero )
+			{
+				writer.write( probC.getTotalNum() + " divided as " +  "char " + x + " " + probC.getCounts()[0]  + " " + probC.getCounts()[1]  
+						+ " " + probC.getCounts()[2] + " " + probC.getCounts()[3] + " " + probC.getCounts()[4] 
+								+ " " + probC.getFractionGap() + " " + probC.getDistance() + "\n");
+			}
+		}
+		
+		writer.write("\n");
 	}
 	
 	/*
