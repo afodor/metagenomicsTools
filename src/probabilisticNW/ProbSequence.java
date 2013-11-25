@@ -35,33 +35,39 @@ public class ProbSequence implements Serializable
 	 * tabString is prefixed to each output line (to allow for consistent tabing).
 	 * (Set tabString to "" disable)
 	 */
-	public void writeThisSequenceToText( BufferedWriter writer,  String tabString )
+	public void writeThisSequenceToText( BufferedWriter writer,  String tabString , boolean detailed)
 		throws Exception
 	{
 		writer.write(tabString +  sampleCounts.toString() + "\n");
-		writer.write(tabString + getConsensus().toString() + "\n");
 		
-		for( int x=0; x < this.columns.size(); x++)
+		if(detailed) 
 		{
-			ProbColumn probC = this.columns.get(x);
-			boolean foundNonOneZero = false;
+			writer.write(tabString + getConsensus().toString() + "\n");
 			
-			for( int y=0;y <=4; y++)
+			for( int x=0; x < this.columns.size(); x++)
 			{
-				boolean zeroOrOne = 
-						Math.abs( probC.getCounts()[y] - 0) <= 0.00000000001 
-								|| Math.abs( probC.getCounts()[y] - probC.getTotalNum()) <= 0.00000000001 ;
-				if( ! zeroOrOne  )  
-					foundNonOneZero = true;
-			}
+				ProbColumn probC = this.columns.get(x);
+				boolean foundNonOneZero = false;
 				
-			if( foundNonOneZero )
-			{
-				writer.write( probC.getTotalNum() + " divided as " +  "char " + x + " " + probC.getCounts()[0]  + " " + probC.getCounts()[1]  
-						+ " " + probC.getCounts()[2] + " " + probC.getCounts()[3] + " " + probC.getCounts()[4] 
-								+ " " + probC.getFractionGap() + " " + probC.getDistance() + "\n");
+				for( int y=0;y <=4; y++)
+				{
+					boolean zeroOrOne = 
+							Math.abs( probC.getCounts()[y] - 0) <= 0.00000000001 
+									|| Math.abs( probC.getCounts()[y] - probC.getTotalNum()) <= 0.00000000001 ;
+					if( ! zeroOrOne  )  
+						foundNonOneZero = true;
+				}
+					
+				if( foundNonOneZero )
+				{
+					writer.write( probC.getTotalNum() + " divided as " +  "char " + x + " " + probC.getCounts()[0]  + " " + probC.getCounts()[1]  
+							+ " " + probC.getCounts()[2] + " " + probC.getCounts()[3] + " " + probC.getCounts()[4] 
+									+ " " + probC.getFractionGap() + " " + probC.getDistance() + "\n");
+				}
 			}
+			
 		}
+		
 		
 		writer.write("\n");
 	}

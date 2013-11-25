@@ -153,16 +153,16 @@ public class ETree implements Serializable
 		writeAsXML(new File(xmlFilePath));
 	}
 	
-	public void writeAsText(String textFile) throws Exception
+	public void writeAsText(String textFile, boolean detailed) throws Exception
 	{
-		writeAsText(new File(textFile));
+		writeAsText(new File(textFile), detailed);
 	}
 	
-	public void writeAsText(File textFile) throws Exception
+	public void writeAsText(File textFile, boolean detailed) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
 		
-		this.topNode.writeNodeAndDaughters(writer);
+		this.topNode.writeNodeAndDaughters(writer,detailed);
 		
 		writer.flush();  writer.close();
 	}
@@ -201,7 +201,13 @@ public class ETree implements Serializable
 		writer.close(); writer.close();
 	}
 	
+	
 	public static ETree getEtreeFromFasta(String fastaFilePath, String sampleName) throws Exception
+	{
+		return getEtreeFromFasta(fastaFilePath, sampleName,-1);
+	}
+	
+	public static ETree getEtreeFromFasta(String fastaFilePath, String sampleName, int maxSamples) throws Exception
 	{
 		ETree eTree = new ETree();
 		System.out.println(sampleName);
@@ -209,27 +215,29 @@ public class ETree implements Serializable
 		
 		int numDone=0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
-		{
-			int numDereplicatedSamples = 1;
-			
-			try
+			if( maxSamples <0 || numDone < maxSamples)
 			{
-				numDereplicatedSamples = getNumberOfDereplicatedSequences(fs);
+				System.out.println(fs.getFirstTokenOfHeader());
+				int numDereplicatedSamples = 1;
+				
+				try
+				{
+					numDereplicatedSamples = getNumberOfDereplicatedSequences(fs);
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+					throw new Exception("Expectng header in the format of >Name_aNum_321 where last # of time is the # of times dereplicated sample is observed");
+				}
+				
+				ProbSequence probSeq = new ProbSequence(fs.getSequence(), numDereplicatedSamples, sampleName);
+				eTree.addSequence(probSeq, sampleName);
+				
+				numDone++;
+				
+				if( numDone % 20 ==0)
+					System.out.println(numDone);
 			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-				throw new Exception("Expectng header in the format of >Name_aNum_321 where last # of time is the # of times dereplicated sample is observed");
-			}
-			
-			ProbSequence probSeq = new ProbSequence(fs.getSequence(), numDereplicatedSamples, sampleName);
-			eTree.addSequence(probSeq, sampleName);
-			
-			numDone++;
-			
-			if( numDone % 20 ==0)
-				System.out.println(numDone);
-		}
 		
 		fsoat.close();
 		

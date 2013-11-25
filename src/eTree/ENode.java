@@ -89,19 +89,19 @@ public class ENode implements Serializable
 		return false;
 	}
 	
-	public void writeNodeAndDaughters(BufferedWriter writer) throws Exception
+	public void writeNodeAndDaughters(BufferedWriter writer, boolean detailed) throws Exception
 	{
 		int level = ETree.getIndex(this.level);
 		String tabString ="";
 		
 		for (int x=1; x <= level; x++)
-			tabString += "\t";
+			tabString += " ";
 		writer.write(tabString +  this.nodeName + " (" + level + ") " + this.level + " " +  this.daughters.size() + " children ");
 		
-		this.probSequence.writeThisSequenceToText(writer, "\t" + tabString);
+		this.probSequence.writeThisSequenceToText(writer, "\t" + tabString, detailed);
 		
 		for( ENode enode : daughters)
-			enode.writeNodeAndDaughters(writer);
+			enode.writeNodeAndDaughters(writer, detailed);
 		
 	}
 	
