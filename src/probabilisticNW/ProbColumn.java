@@ -30,6 +30,22 @@ public class ProbColumn implements Serializable
 	private double totalNum =0;
 	private double distance =0;
 	
+	public static ProbColumn deepCopy(ProbColumn probCol)
+	{
+		double newCounts[] = new double[5];
+		for(int x=0;x  < 5; x++)
+			newCounts[x] = probCol.counts[x];
+		
+		ProbColumn newProbCol = new ProbColumn();
+		newProbCol.counts = newCounts;
+		newProbCol.totalNum = probCol.totalNum;
+		newProbCol.distance = probCol.distance;
+		
+		return newProbCol;
+	}
+	
+	
+	
 	public double getDistance()
 	{
 		return distance;

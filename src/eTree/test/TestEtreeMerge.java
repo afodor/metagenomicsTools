@@ -30,10 +30,14 @@ public class TestEtreeMerge
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1",2);
 		
+
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",false);
+		
+		
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
-		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
-				"gastro454DataSet" + File.separator + "3B1.etree");
+		System.out.println(tree1Seqs);
+		/*
 
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "aTrees0_03.txt"));
 		
@@ -41,6 +45,10 @@ public class TestEtreeMerge
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2",2);
+		
+
+		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",false);
+		
 		
 		int tree2Seqs = etree2.getTotalNumberOfSequences();
 		
@@ -71,6 +79,7 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
+				*/
 	}
 	
 }

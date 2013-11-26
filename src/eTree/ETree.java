@@ -64,6 +64,7 @@ public class ETree implements Serializable
 		}
 		else
 		{
+			topNode.getProbSequence().setMapCount(topNode.getProbSequence(), probSeq);
 			ENode index = addToOrCreateNode(topNode, probSeq, sampleName);
 			
 			while( index != null)
@@ -108,21 +109,24 @@ public class ETree implements Serializable
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
-				possibleAlignment.setMapCount(node.getProbSequence(), newSeq);
+				possibleAlignment = ProbSequence.makeDeepCopy(possibleAlignment);
+				possibleAlignment.setMapCount(possibleAlignment, newSeq);
 				node.setProbSequence(possibleAlignment);
 				return node;
 			}
 		}
 		
 		// still here - no matches - add a new node
+		newSeq = ProbSequence.makeDeepCopy(newSeq);
 		ENode newNode = new ENode(newSeq, sampleName +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
-				int index = getIndex(newNode.getLevel());
+		int index = getIndex(newNode.getLevel());
 		
 		for( int x=index +1; x < LEVELS.length; x++)
 		{
 			ENode previousNode =newNode;
-			newNode = new ENode(newSeq, sampleName + node_number++, LEVELS[x], previousNode);
+			newSeq = ProbSequence.makeDeepCopy(newSeq);
+			newNode = new ENode( newSeq, sampleName + node_number++, LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
 		}
 		
@@ -142,6 +146,7 @@ public class ETree implements Serializable
 		
 		for( int x=1; x < LEVELS.length; x++)
 		{
+			aSeq = ProbSequence.makeDeepCopy(aSeq);
 			ENode nextNode = new ENode(aSeq, sampleName + node_number++ , LEVELS[x], lastNode);
 			lastNode.getDaughters().add(nextNode);
 			lastNode = nextNode;
@@ -237,6 +242,8 @@ public class ETree implements Serializable
 				
 				if( numDone % 20 ==0)
 					System.out.println(numDone);
+				
+				eTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText_" + numDone +".txt", false);
 			}
 		
 		fsoat.close();

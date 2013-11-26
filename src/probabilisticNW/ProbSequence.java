@@ -31,6 +31,22 @@ public class ProbSequence implements Serializable
 	private int n=0;
 	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
 	
+	public static ProbSequence makeDeepCopy(ProbSequence probSequence)
+	{
+		List<ProbColumn> list= new ArrayList<ProbColumn>();
+		
+		for( ProbColumn pc : probSequence.columns)
+			list.add(pc.deepCopy(pc));
+		
+		ProbSequence ps = new ProbSequence(list, probSequence.n);
+		
+		HashMap<String,Integer> newMap = new HashMap<String, Integer>();
+		for(String s: probSequence.sampleCounts.keySet())
+			newMap.put(s, probSequence.sampleCounts.get(s));
+		ps.sampleCounts = newMap;
+		return ps;
+	}
+	
 	/*
 	 * tabString is prefixed to each output line (to allow for consistent tabing).
 	 * (Set tabString to "" disable)
