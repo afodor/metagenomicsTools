@@ -37,10 +37,8 @@ public class TestEtreeMerge
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
 		System.out.println(tree1Seqs);
-		/*
-
-		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "aTrees0_03.txt"));
 		
+		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "aTrees0_03.txt"));
 		
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
@@ -49,10 +47,10 @@ public class TestEtreeMerge
 
 		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",false);
 		
-		
 		int tree2Seqs = etree2.getTotalNumberOfSequences();
 		
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree2, new File(ConfigReader.getETreeTestDir() +File.separator + "anotherTrees0_03.txt"));
+		
 		
 		
 		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
@@ -79,7 +77,5 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
-				*/
 	}
-	
 }

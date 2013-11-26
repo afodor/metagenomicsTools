@@ -126,6 +126,7 @@ public class ProbSequence implements Serializable
 	
 	public void setMapCount(ProbSequence oldParentSequence1, ProbSequence oldParentSequence2)
 	{
+		HashMap<String, Integer> newMap = new HashMap<String, Integer>();
 		HashSet<String> keys = new HashSet<String>(oldParentSequence1.sampleCounts.keySet());
 		keys.addAll(oldParentSequence2.sampleCounts.keySet());
 		
@@ -139,8 +140,10 @@ public class ProbSequence implements Serializable
 			if (count2 == null)
 				count2 = 0;
 			
-			this.sampleCounts.put(s, count1 + count2);
+			newMap.put(s, count1 + count2);
 		}
+		
+		this.sampleCounts = newMap;
 	}
 	
 	/*

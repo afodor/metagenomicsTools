@@ -81,9 +81,9 @@ public class ENode implements Serializable
 				
 				if( ! merged)
 					this.daughters.add(otherDaughter);
-				
-				return true;
 			}
+			
+			return true;
 		}
 		
 		return false;

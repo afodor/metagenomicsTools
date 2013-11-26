@@ -83,6 +83,7 @@ public class ETree implements Serializable
 	
 	public void addOtherTree(ETree otherTree) throws Exception
 	{
+		this.getTopNode().getProbSequence().setMapCount(this.getTopNode().getProbSequence(), otherTree.getTopNode().getProbSequence());
 		for( ENode otherNode : otherTree.getTopNode().getDaughters() )
 		{
 			boolean merged = false;
@@ -110,7 +111,7 @@ public class ETree implements Serializable
 			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
 				possibleAlignment = ProbSequence.makeDeepCopy(possibleAlignment);
-				possibleAlignment.setMapCount(possibleAlignment, newSeq);
+				possibleAlignment.setMapCount(node.getProbSequence(), newSeq);
 				node.setProbSequence(possibleAlignment);
 				return node;
 			}
@@ -243,7 +244,7 @@ public class ETree implements Serializable
 				if( numDone % 20 ==0)
 					System.out.println(numDone);
 				
-				eTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText_" + numDone +".txt", false);
+				//eTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText_" + numDone +".txt", false);
 			}
 		
 		fsoat.close();
