@@ -23,6 +23,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
@@ -82,11 +83,30 @@ public class ETree implements Serializable
 		}
 	}
 	
+	
+	private static int getLeastCommonDistance(  ENode aNode, ENode anotherNode)
+		throws Exception
+	{
+		if( aNode.getLevel() != anotherNode.getLevel())
+			throw new Exception("Logic error");
+		
+		int x=0;
+		
+		while( ! aNode.getParent().getNodeName().equals(anotherNode.getParent().getNodeName()))
+		{
+			aNode = aNode.getParent();
+			anotherNode = anotherNode.getParent();
+			x++;
+		}
+		
+		return x;
+	}
+	
 	public void writePairedNodeInformation( String filepath ) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
 		
-		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\ttotalSeqs\n");
+		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\tleastCommonDistnace\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\ttotalSeqs\n");
 		
 		List<ENode> list = getAllNodes();
 		
@@ -109,6 +129,7 @@ public class ETree implements Serializable
 							writer.write( bNode.getParent().getNodeName() + "\t");
 							writer.write( aNode.getLevel()+ "\t");
 							writer.write(aNode.getParent().getNodeName().equals(bNode.getParent().getNodeName()) + "\t");
+							writer.write( getLeastCommonDistance(aNode, bNode) + "\t");
 							ProbSequence probSeq = ProbNW.align(aNode.getProbSequence(), bNode.getProbSequence());
 							writer.write(probSeq.getAverageDistance() + "\t");
 							writer.write((probSeq.getAverageDistance() - aNode.getLevel()) + "\t" );
@@ -147,6 +168,36 @@ public class ETree implements Serializable
 				return i;
 		
 		throw new Exception("Could not find " + level);
+	}
+	
+	/*
+	 * NOT YET FUNCTIONAL!!!!
+	 */
+	public boolean attemptAMerge() throws Exception
+	{
+		for( Iterator<ENode> i = this.topNode.getDaughters().iterator(); i.hasNext(); )
+		{
+			ENode daughter = i.next();
+			boolean merged = false;
+			
+			for( ENode thisNode : this.getTopNode().getDaughters())
+			{
+				if( !merged)
+				{
+					merged = thisNode.attemptToMergeOtherNodeToThisNode(daughter);
+					
+
+					if( merged)
+					{
+						System.out.println("Node reduction succesful");
+						return true;
+					}
+				}
+			}
+			
+		}
+		
+		return false;
 	}
 	
 	public void addOtherTree(ETree otherTree) throws Exception

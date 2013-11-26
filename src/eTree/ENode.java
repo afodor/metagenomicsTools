@@ -40,7 +40,7 @@ public class ENode implements Serializable
 	{
 		return probSequence;
 	}
-	
+
 	public void validateNodeAndDaughters() throws Exception
 	{
 		System.out.println(this.nodeName);
