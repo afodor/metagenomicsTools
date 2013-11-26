@@ -107,6 +107,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="CountSequences">
+        <java classname="scratch.CountSequences" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="CountSNPs">
         <java classname="scripts.sequenceScripts.CountSNPs" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -125,6 +130,11 @@
     </target>
     <target name="DereplicateBySample">
         <java classname="dereplicate.DereplicateBySample" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="DereplicateBySampleIntoOneFile">
+        <java classname="dereplicate.DereplicateBySampleIntoOneFile" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -202,6 +212,7 @@
     </target>
     <target name="PivotToSpreadheet">
         <java classname="eTree.PivotToSpreadheet" failonerror="true" fork="yes">
+            <jvmarg line="-mx8000m"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -230,6 +241,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="QuickNW">
+        <java classname="scratch.QuickNW" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="QuickPivot">
         <java classname="adam.QuickPivot" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -246,8 +262,19 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="RunManyMultipleThreads">
+        <java classname="eTree.RunManyMultipleThreads" failonerror="true" fork="yes">
+            <jvmarg line="-mx8000m"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="RunManySingleThread">
         <java classname="eTree.RunManySingleThread" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="RunOneSingleThread">
+        <java classname="eTree.RunOneSingleThread" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -302,6 +329,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </junit>
     </target>
+    <target name="TestEtreeMerge">
+        <java classname="eTree.test.TestEtreeMerge" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="TestFastQ">
         <java classname="scratch.TestFastQ" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -314,6 +346,12 @@
             <test name="test.testReduceOTU.TestHashHolder" todir="${junit.output.dir}"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </junit>
+    </target>
+    <target name="TestMultipleEtreeMerge">
+        <java classname="eTree.test.TestMultipleEtreeMerge" failonerror="true" fork="yes">
+            <jvmarg line="-mx8000m"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
     </target>
     <target name="TestOnRealOTUs">
         <mkdir dir="${junit.output.dir}"/>
@@ -349,16 +387,6 @@
     </target>
     <target name="WriteOnePercent">
         <java classname="erinManuscript.WriteOnePercent" failonerror="true" fork="yes">
-            <classpath refid="MetagenomicTools.classpath"/>
-        </java>
-    </target>
-    <target name="DereplicateBySampleIntoOneFile">
-        <java classname="dereplicate.DereplicateBySampleIntoOneFile" failonerror="true" fork="yes">
-            <classpath refid="MetagenomicTools.classpath"/>
-        </java>
-    </target>
-    <target name="RunOneSingleThread">
-        <java classname="eTree.RunOneSingleThread" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>

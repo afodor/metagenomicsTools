@@ -60,6 +60,7 @@ public class TestMultipleEtreeMerge
 		}
 		
 		System.out.println("Writing final tree");
+		firstTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallel.txt", false);
 		firstTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallel.etree");
 		firstTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "melmergedFromParallelXML.xml");
 	}

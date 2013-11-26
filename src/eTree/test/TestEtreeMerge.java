@@ -28,7 +28,7 @@ public class TestEtreeMerge
 	{
 		ETree etree1 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
-						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1",2);
+						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
 		
 
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",false);
@@ -42,7 +42,7 @@ public class TestEtreeMerge
 		
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
-						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2",2);
+						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2");
 		
 
 		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",false);
