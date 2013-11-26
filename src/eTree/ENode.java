@@ -50,14 +50,27 @@ public class ENode implements Serializable
 		for( ENode d : daughters )
 			d.validateNodeAndDaughters();
 		
+		
 		if( daughters.size() > 0)
 		{
+			double sum =0;
+			
+			
 			double aLevel = daughters.get(0).getLevel();
 			
 			for( ENode d : daughters)
+			{
 				if( aLevel != d.level)
 					throw new Exception("Unexpected level");
+				
+				sum += d.getProbSequence().getNumRepresentedSequences();
+			}
+			
+
+			if( Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
+				throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
 		}
+		
 	}
 	
 	public int getNumOfAllDaughters()
