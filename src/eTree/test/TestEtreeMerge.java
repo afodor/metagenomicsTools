@@ -31,8 +31,7 @@ public class TestEtreeMerge
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
 		
 
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",false);
-		
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",true);
 		
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
@@ -45,7 +44,7 @@ public class TestEtreeMerge
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2");
 		
 
-		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",false);
+		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",true);
 		
 		int tree2Seqs = etree2.getTotalNumberOfSequences();
 		
@@ -70,7 +69,7 @@ public class TestEtreeMerge
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "twoTrees0_03.txt"));
 		
 		
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt",false);
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt",true);
 		
 		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "merged.etree");
