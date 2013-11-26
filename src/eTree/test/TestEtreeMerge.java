@@ -37,7 +37,6 @@ public class TestEtreeMerge
 		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
 							"tree1UnMergedPairs.txt");
 				
-		/*
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
 		System.out.println(tree1Seqs);
@@ -47,7 +46,9 @@ public class TestEtreeMerge
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B2", "3B2");
-		
+
+		etree2.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
+				"tree2UnMergedPairs.txt");
 
 		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",true);
 		etree2.validateTree();
@@ -55,8 +56,6 @@ public class TestEtreeMerge
 		int tree2Seqs = etree2.getTotalNumberOfSequences();
 		
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree2, new File(ConfigReader.getETreeTestDir() +File.separator + "anotherTrees0_03.txt"));
-		
-		
 		
 		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "3B2.etree");
@@ -70,11 +69,12 @@ public class TestEtreeMerge
 		System.out.println("Expected # of seqs = " + tree1Seqs + " " + tree2Seqs + " " + (tree1Seqs + tree2Seqs));
 		System.out.println("Actual seqs = " + etree1.getTotalNumberOfSequences());
 		
-		
-
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "twoTrees0_03.txt"));
 		
 		etree1.validateTree();
+		
+		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
+				"tree1mergedPairs.txt");
 		
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt",true);
 		
@@ -83,6 +83,5 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
-				*/
 	}
 }
