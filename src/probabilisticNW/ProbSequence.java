@@ -47,6 +47,22 @@ public class ProbSequence implements Serializable
 		return ps;
 	}
 	
+	public void validateProbSequence() throws Exception
+	{
+		int aSum =0;
+		
+		for(  String s: sampleCounts.keySet())
+			aSum += sampleCounts.get(s);
+		
+		if( aSum != n)
+			throw new Exception("Wrong number of sequences " + n + " " + aSum);
+		
+		for( ProbColumn pc : columns )
+			if(  Math.abs(pc.getTotalNum() -aSum) > 0.0000001 )
+				throw new Exception("Wrong number of sequences " + n + " " + pc.getTotalNum());
+	}
+	
+	
 	/*
 	 * tabString is prefixed to each output line (to allow for consistent tabing).
 	 * (Set tabString to "" disable)

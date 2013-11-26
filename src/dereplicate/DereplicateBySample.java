@@ -91,14 +91,14 @@ public class DereplicateBySample
 				
 				for( Holder h : list)
 				{
-					if( h.num > 1)
+					//if( h.num > 1)
 					{
 						writer.write(">" + s.replace(REP_PREFIX, "") + "_" + numWritten + "_" + h.num + "\n" );
 						writer.write(h.sequence + "\n");
 						totalSequences += h.num;
 						numWritten++;
 					}
-					else
+					//else
 					{
 						numSingletons++;
 					}

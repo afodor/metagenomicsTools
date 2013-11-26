@@ -30,6 +30,9 @@ public class TestEtreeMerge
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
 		
+		etree1.validateTree();
+
+		/*
 
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",true);
 		
@@ -76,5 +79,6 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
+				*/
 	}
 }

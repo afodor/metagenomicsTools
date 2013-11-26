@@ -16,6 +16,7 @@ package eTree;
 import java.io.BufferedWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import probabilisticNW.ProbNW;
@@ -39,6 +40,23 @@ public class ENode implements Serializable
 	public ProbSequence getProbSequence()
 	{
 		return probSequence;
+	}
+	
+	public void validateNodeAndDaughters() throws Exception
+	{
+		this.probSequence.validateProbSequence();
+		
+		for( ENode d : daughters )
+			d.validateNodeAndDaughters();
+		
+		if( daughters.size() > 0)
+		{
+			double aLevel = daughters.get(0).getLevel();
+			
+			for( ENode d : daughters)
+				if( aLevel != d.level)
+					throw new Exception("Unexpected level");
+		}
 	}
 	
 	public int getNumOfAllDaughters()
