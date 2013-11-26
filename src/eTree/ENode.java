@@ -44,6 +44,7 @@ public class ENode implements Serializable
 	
 	public void validateNodeAndDaughters() throws Exception
 	{
+		System.out.println(this.nodeName);
 		this.probSequence.validateProbSequence();
 		
 		for( ENode d : daughters )
@@ -114,7 +115,7 @@ public class ENode implements Serializable
 		
 		for (int x=1; x <= level; x++)
 			tabString += " ";
-		writer.write(tabString +  this.nodeName + " (" + level + ") " + this.level + " " +  this.daughters.size() + " children ");
+		writer.write(tabString +  this.nodeName + " (" + level + ") " + this.level + " " + this.probSequence.getNumRepresentedSequences() + " seqs with " +  this.daughters.size() + " children ");
 		
 		this.probSequence.writeThisSequenceToText(writer, "\t" + tabString, detailed);
 		

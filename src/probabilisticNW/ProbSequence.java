@@ -59,7 +59,7 @@ public class ProbSequence implements Serializable
 		
 		for( ProbColumn pc : columns )
 			if(  Math.abs(pc.getTotalNum() -aSum) > 0.0000001 )
-				throw new Exception("Wrong number of sequences " + n + " " + pc.getTotalNum());
+				throw new Exception( "Wrong number of sequences " + n + " " + pc.getTotalNum());
 	}
 	
 	
@@ -142,6 +142,7 @@ public class ProbSequence implements Serializable
 	
 	public void setMapCount(ProbSequence oldParentSequence1, ProbSequence oldParentSequence2)
 	{
+		int sum =0;
 		HashMap<String, Integer> newMap = new HashMap<String, Integer>();
 		HashSet<String> keys = new HashSet<String>(oldParentSequence1.sampleCounts.keySet());
 		keys.addAll(oldParentSequence2.sampleCounts.keySet());
@@ -156,10 +157,13 @@ public class ProbSequence implements Serializable
 			if (count2 == null)
 				count2 = 0;
 			
-			newMap.put(s, count1 + count2);
+			int added = count1 + count2;
+			sum+=added;
+			newMap.put(s, added);
 		}
 		
 		this.sampleCounts = newMap;
+		this.n = sum;
 	}
 	
 	/*

@@ -25,20 +25,18 @@ public class ProbColumn implements Serializable
 	private static final int G_INDEX =2;
 	private static final int T_INDEX =3;
 	private static final int GAP_INDEX =4;
-	private double counts[] = new double[5];
+	private int counts[] = new int[5];
 	
-	private double totalNum =0;
 	private double distance =0;
 	
 	public static ProbColumn deepCopy(ProbColumn probCol)
 	{
-		double newCounts[] = new double[5];
+		int newCounts[] = new int[5];
 		for(int x=0;x  < 5; x++)
 			newCounts[x] = probCol.counts[x];
 		
 		ProbColumn newProbCol = new ProbColumn();
 		newProbCol.counts = newCounts;
-		newProbCol.totalNum = probCol.totalNum;
 		newProbCol.distance = probCol.distance;
 		
 		return newProbCol;
@@ -54,7 +52,7 @@ public class ProbColumn implements Serializable
 	/*
 	 * Client should not modify this but is not prohibited from doing so
 	 */
-	double[] getCounts()
+	int[] getCounts()
 	{
 		return counts;
 	}
@@ -84,16 +82,18 @@ public class ProbColumn implements Serializable
 	{
 		double score =0;
 		
+		double thisNum = this.getTotalNum();
+		double otherNum = other.getTotalNum();
 		
 		for (int x=0; x<= 3; x++)
-			score += (this.counts[x] / this.totalNum ) * (other.counts[x]/ other.totalNum) * match;
+			score += (this.counts[x] / thisNum) * (other.counts[x]/ otherNum) * match;
 		
 		for( int x=0; x <=3; x++)
 			for( int y=0; y <=3; y++)
 				if( x != y)
-					score += (this.counts[x]/this.totalNum) * (other.counts[y]/other.totalNum) * mismatch;
+					score += (this.counts[x]/thisNum) * (other.counts[y]/otherNum) * mismatch;
 		
-		score += (this.counts[GAP_INDEX] / this.totalNum + other.counts[GAP_INDEX] / other.totalNum) * gapPenalty /2;
+		score += (this.counts[GAP_INDEX] / thisNum + other.counts[GAP_INDEX] / otherNum) * gapPenalty /2;
 		return score;
 	}
 	
@@ -104,7 +104,6 @@ public class ProbColumn implements Serializable
 	public ProbColumn merge( ProbColumn otherColumn)
 	{
 		ProbColumn pc = new ProbColumn();
-		pc.totalNum = this.totalNum + otherColumn.totalNum;
 		for( int x=0; x < 5; x++)
 		{
 			pc.counts[x] = this.counts[x] + otherColumn.counts[x];
@@ -113,40 +112,45 @@ public class ProbColumn implements Serializable
 		for( int x=0; x < 5; x++)
 			for (int y= 0; y < 5; y++)
 				if( x != y )
-					pc.distance += (this.counts[x]/this.totalNum) * (otherColumn.counts[y]/otherColumn.totalNum);
+					pc.distance += (this.counts[x]/this.getTotalNum()) * (otherColumn.counts[y]/otherColumn.getTotalNum());
 		
 		return pc;
 	}
 	
 	public double getFractionA()
 	{
-		return counts[A_INDEX] / totalNum;
+		return counts[A_INDEX] / getTotalNum();
 	}
 	
 	public double getFractionC()
 	{
-		return counts[C_INDEX]  / totalNum;
+		return counts[C_INDEX]  / getTotalNum();
 	}
 	
 	public double getFractionG()
 	{
-		return counts[G_INDEX]  / totalNum;
+		return counts[G_INDEX]  / getTotalNum();
 	}
 	
 	public double getFractionT()
 	{
-		return counts[T_INDEX]  / totalNum;
+		return counts[T_INDEX]  / getTotalNum();
 	}
 	
 
 	public double getFractionGap()
 	{
-		return counts[GAP_INDEX] / totalNum;
+		return counts[GAP_INDEX] / getTotalNum();
 	}
 	
 	public double getTotalNum()
 	{
-		return totalNum;
+		int sum=0; 
+		
+		for( int x=0; x < 5; x++ )
+			sum += counts[x];
+		
+		return sum;
 	}
 	
 	public ProbColumn()
@@ -176,8 +180,6 @@ public class ProbColumn implements Serializable
 	 */
 	public void addChar(char c, int n)
 	{
-		totalNum+=n;
-		
 		if( c == 'A')
 			counts[A_INDEX]+=n;
 		else if ( c == 'C')

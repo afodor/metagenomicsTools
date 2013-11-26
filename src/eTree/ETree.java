@@ -69,7 +69,9 @@ public class ETree implements Serializable
 		}
 		else
 		{
-			topNode.getProbSequence().setMapCount(topNode.getProbSequence(), probSeq);
+			ProbSequence newSeq = ProbNW.align(topNode.getProbSequence(), probSeq);
+			newSeq.setMapCount(topNode.getProbSequence(), probSeq);
+			topNode.setProbSequence( newSeq);
 			ENode index = addToOrCreateNode(topNode, probSeq, sampleName);
 			
 			while( index != null)
