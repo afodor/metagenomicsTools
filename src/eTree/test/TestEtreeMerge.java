@@ -17,6 +17,7 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
+import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {
@@ -33,10 +34,7 @@ public class TestEtreeMerge
 		
 		etree1.validateTree();
 
-		/*
-
-		
-		
+				
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
 		System.out.println(tree1Seqs);
@@ -49,6 +47,7 @@ public class TestEtreeMerge
 		
 
 		etree2.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText.txt",true);
+		etree2.validateTree();
 		
 		int tree2Seqs = etree2.getTotalNumberOfSequences();
 		
@@ -72,6 +71,7 @@ public class TestEtreeMerge
 
 		PivotToSpreadheet.pivotToSpreasheet(0.18, etree1, new File(ConfigReader.getETreeTestDir() +File.separator + "twoTrees0_03.txt"));
 		
+		etree1.validateTree();
 		
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt",true);
 		
@@ -80,6 +80,5 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
-				*/
 	}
 }

@@ -90,7 +90,10 @@ public class ETree implements Serializable
 	
 	public void addOtherTree(ETree otherTree) throws Exception
 	{
-		this.getTopNode().getProbSequence().setMapCount(this.getTopNode().getProbSequence(), otherTree.getTopNode().getProbSequence());
+		ProbSequence newSeq = ProbNW.align(topNode.getProbSequence(), otherTree.topNode.getProbSequence());
+		newSeq.setMapCount(topNode.getProbSequence(), otherTree.topNode.getProbSequence());
+		topNode.setProbSequence( newSeq);
+		
 		for( ENode otherNode : otherTree.getTopNode().getDaughters() )
 		{
 			boolean merged = false;
