@@ -21,7 +21,9 @@ import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -38,6 +40,7 @@ import utils.ProcessWrapper;
 public class ETree implements Serializable
 {
 	private static final long serialVersionUID = 8463272194826212918L;
+	public static final String ROOT_NAME = "root";
 	
 	public static final double[] LEVELS = {0.0, 0.20,0.19,0.18, 0.17,0.16, 0.15, 0.14, 0.13, 0.12, 0.11,0.10,0.09,
 		0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
@@ -77,6 +80,63 @@ public class ETree implements Serializable
 			while( index != null)
 				index = addToOrCreateNode(index, probSeq, sampleName);
 		}
+	}
+	
+	public void writePairedNodeInformation( String filepath ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
+		
+		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\talignmentDistance\tnumSequencesA\tnumSequencesB\ttotalSeqs\n");
+		
+		List<ENode> list = getAllNodes();
+		
+		for( int x=0; x < list.size()-1; x++)
+		{
+			System.out.println("Writing outer node " + x + " Of " + list.size());
+			ENode aNode = list.get(x);
+			
+			if( aNode.getParent() != null && ! aNode.getParent().getNodeName().equals(ROOT_NAME)) 
+				for( int y=x+1; y <list.size(); y++)
+				{
+					ENode bNode = list.get(y);
+					
+					if( bNode.getParent() != null && ! bNode.getParent().getNodeName().equals(ROOT_NAME) &&
+							aNode.getLevel() == bNode.getLevel()) 
+						{
+							writer.write( aNode.getNodeName() + "\t" );
+							writer.write( bNode.getNodeName() + "\t" );
+							writer.write( aNode.getParent().getNodeName() + "\t");
+							writer.write( bNode.getParent().getNodeName() + "\t");
+							writer.write( aNode.getLevel()+ "\t");
+							writer.write(aNode.getParent().getNodeName().equals(bNode.getParent().getNodeName()) + "\t");
+							ProbSequence probSeq = ProbNW.align(aNode.getProbSequence(), bNode.getProbSequence());
+							writer.write(probSeq.getAverageDistance() + "\t");
+							writer.write( aNode.getProbSequence().getNumRepresentedSequences() + "\t");
+							writer.write( bNode.getProbSequence().getNumRepresentedSequences() + "\t");
+							int totalNum = aNode.getProbSequence().getNumRepresentedSequences() + 
+									bNode.getProbSequence().getNumRepresentedSequences();
+							writer.write(totalNum + "\n");
+						}
+				}
+			writer.flush();
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	public List<ENode> getAllNodes()
+	{
+		List<ENode> list = new ArrayList<ENode>();
+		addNodeAndDaughters(this.topNode, list);
+		return list;
+	}
+	
+	private void addNodeAndDaughters(ENode node, List<ENode> list)
+	{
+		list.add(node);
+		
+		for( ENode d : node.getDaughters())
+			addNodeAndDaughters(d, list);
 	}
 	
 	public static int getIndex(double level) throws Exception
@@ -152,7 +212,7 @@ public class ETree implements Serializable
 	private void initialize(ProbSequence aSeq, String sampleName)
 		throws Exception
 	{
-		this.topNode = new ENode(aSeq, "root", LEVELS[0], null);
+		this.topNode = new ENode(aSeq, ROOT_NAME, LEVELS[0], null);
 		ENode lastNode = topNode;
 		
 		for( int x=1; x < LEVELS.length; x++)

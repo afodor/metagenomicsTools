@@ -34,7 +34,10 @@ public class TestEtreeMerge
 		
 		etree1.validateTree();
 
+		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
+							"tree1UnMergedPairs.txt");
 				
+		/*
 		int tree1Seqs = etree1.getTotalNumberOfSequences();
 		
 		System.out.println(tree1Seqs);
@@ -80,5 +83,6 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
+				*/
 	}
 }
