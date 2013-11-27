@@ -171,8 +171,8 @@ public class ProbColumn implements Serializable
 	@Override
 	public String toString()
 	{
-		return "["+ getFractionA() + "," + getFractionC() + "," + getFractionG() + "," + getFractionT() + "," + 
-						getFractionGap() + "]";
+		return "["+ counts[0] + "," + counts[1] + "," + counts[2] + "," + counts[3]+ "," + 
+						counts[4] + "]";
 	}
 	
 	/*

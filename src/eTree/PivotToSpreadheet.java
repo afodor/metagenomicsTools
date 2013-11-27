@@ -27,6 +27,11 @@ import utils.ConfigReader;
 
 public class PivotToSpreadheet
 {
+	public static void pivotToSpreasheet( double level, ETree etree, String outFile ) throws Exception
+	{
+		pivotToSpreasheet( level, etree, new File(outFile) ); 
+	}
+	
 	public static void pivotToSpreasheet( double level, ETree etree, File outFile ) throws Exception
 	{
 	

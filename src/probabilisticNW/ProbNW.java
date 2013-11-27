@@ -97,9 +97,9 @@ public class ProbNW
 			
 			for( int x=1; x <= seq2.getColumns().size(); x++)
 			{
-				ProbColumn seq2Cole = seq2.getColumns().get(x-1);
+				ProbColumn seq2Col = seq2.getColumns().get(x-1);
 				
-				double diagScore = seq1Col.getScoreDiag(seq2Cole, MATCH_REWARD, MISMATCH_PENALTY, GAP_PENALTY) + 
+				double diagScore = seq1Col.getScoreDiag(seq2Col, MATCH_REWARD, MISMATCH_PENALTY, GAP_PENALTY) + 
 							matrix[x-1][y-1].getScore()	;
 				
 				double upScore = matrix[x-1][y].getScore() + GAP_PENALTY;
@@ -120,7 +120,7 @@ public class ProbNW
 				{
 					matrix[x][y] = new NwCell(upScore, NwCell.Direction.UP);
 				}
-				else throw new Exception("Logic error");
+				else throw new Exception("Logic error " + max + " " + diagScore + " " + leftScore + "  " + upScore + " " + seq1Col + "  " + seq2Col);
 				
 			}
 		}

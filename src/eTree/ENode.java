@@ -53,7 +53,7 @@ public class ENode implements Serializable
 		for(int x=0; x < this.daughters.size()-1; x++)
 		{
 			ENode xNode = this.daughters.get(x);
-			System.out.println("Attempting daughter merge for " + xNode.level + " " + xNode.nodeName);
+			//System.out.println("Attempting daughter merge for " + xNode.level + " " + xNode.nodeName);
 			
 			if( ! xNode.markedForDeletion)  for( int y=x+1; y < this.daughters.size(); y++)
 			{

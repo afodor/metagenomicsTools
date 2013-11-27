@@ -90,6 +90,17 @@ public class FastaSequence implements Comparable<FastaSequence>
 		return map;
 	}
 	
+	public boolean isOnlyACGT()
+	{
+		for (char c : this.sequence.toString().toCharArray())
+		{
+			if ( c != 'A' &&  c != 'C' && c != 'G' && c != 'T')
+				return false;
+		}
+		
+		return true;
+	}
+	
 	public String getSecondTokenOfHeader()
 	{
 		StringTokenizer sToken = new StringTokenizer(header);

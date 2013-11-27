@@ -42,8 +42,7 @@ public class ETree implements Serializable
 	private static final long serialVersionUID = 8463272194826212918L;
 	public static final String ROOT_NAME = "root";
 	
-	public static final double[] LEVELS = {0.0, 0.20,0.19,0.18, 0.17,0.16, 0.15, 0.14, 0.13, 0.12, 0.11,0.10,0.09,
-		0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
+	public static final double[] LEVELS = {0.0, 0.20,0.19,0.18,0.17,0.16,0.15, 0.14, 0.13, 0.12, 0.11,0.10,0.09,0.08,0.07,0.06,0.05,0.04,0.03,0.02,0.01};
 	private int node_number =1;
 	public static final int RDP_THRESHOLD = 80;
 	
@@ -321,14 +320,15 @@ public class ETree implements Serializable
 	public static ETree getEtreeFromFasta(String fastaFilePath, String sampleName, int maxSamples) throws Exception
 	{
 		ETree eTree = new ETree();
-		System.out.println(sampleName);
+		//System.out.println(sampleName);
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaFilePath);
 		
 		int numDone=0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
+			if( fs.isOnlyACGT())
 			if( maxSamples <0 || numDone < maxSamples)
 			{
-				System.out.println(fs.getFirstTokenOfHeader());
+				//System.out.println(fs.getFirstTokenOfHeader());
 				int numDereplicatedSamples = 1;
 				
 				try
@@ -516,31 +516,11 @@ public class ETree implements Serializable
 	
 	public static void main(String[] args) throws Exception
 	{
-		FastaSequenceOneAtATime fsoat = 
-				new FastaSequenceOneAtATime( ConfigReader.getETreeTestDir() + 
-						File.separator + "gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX39D1");
-		
-		ETree eTree = new ETree();
-		
-		int x=0;
-		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
+		if( args.length !=1)
 		{
-			ProbSequence probSeq = new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),"39D1");
-			eTree.addSequence(probSeq, "39D1");
-			System.out.println(++x);
+			System.out.println("Usage Etree inFastaFile");
+			System.exit(1);
 		}
 		
-		//eTree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-			//	"testXML.xml");
-		
-		eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + 
-						File.separator + "sampleBinaryTree.etree");
-		
-		ETree eTreeCopy = readAsSerializedObject(ConfigReader.getETreeTestDir() + 
-				File.separator + "sampleBinaryTree.etree");
-		
-		eTreeCopy.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-			"testXML3.xml");
-	
 	}
 }
