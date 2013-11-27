@@ -17,7 +17,6 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
-import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {
@@ -30,10 +29,18 @@ public class TestEtreeMerge
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
 		
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsText.txt",false);
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsTextPreMerge.txt",false);
 		
 		etree1.validateTree();
+		
+		etree1.mergeAllDaughters();
+		
+		etree1.validateTree();
+		
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "firstTreeAsTextPostMerge.txt",false);
+		
 
+		/*
 		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
 							"tree1UnMergedPairs.txt");
 				
@@ -83,5 +90,6 @@ public class TestEtreeMerge
 		
 		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
 				"gastro454DataSet" + File.separator + "mergedXML.xml");
+				*/
 	}
 }

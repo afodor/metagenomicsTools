@@ -23,7 +23,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
@@ -170,34 +169,17 @@ public class ETree implements Serializable
 		throw new Exception("Could not find " + level);
 	}
 	
-	/*
-	 * NOT YET FUNCTIONAL!!!!
-	 */
-	public boolean attemptAMerge() throws Exception
+	public void mergeAllDaughters() throws Exception
 	{
-		for( Iterator<ENode> i = this.topNode.getDaughters().iterator(); i.hasNext(); )
+		while( true)
 		{
-			ENode daughter = i.next();
-			boolean merged = false;
+			int numMerged = this.topNode.attemptDaughterMerge();
 			
-			for( ENode thisNode : this.getTopNode().getDaughters())
-			{
-				if( !merged)
-				{
-					merged = thisNode.attemptToMergeOtherNodeToThisNode(daughter);
-					
-
-					if( merged)
-					{
-						System.out.println("Node reduction succesful");
-						return true;
-					}
-				}
-			}
+			System.out.println("Merged " + numMerged + " with total nodes " + getAllNodes().size());
 			
+			if(numMerged == 0 )
+				return;
 		}
-		
-		return false;
 	}
 	
 	public void addOtherTree(ETree otherTree) throws Exception

@@ -16,6 +16,7 @@ package eTree;
 import java.io.BufferedWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import probabilisticNW.ProbNW;
@@ -30,6 +31,7 @@ public class ENode implements Serializable
 	private double level;
 	private String nodeName;
 	private List<ENode> daughters =new ArrayList<ENode>();
+	private boolean markedForDeletion = false;
 	
 	public String getNodeName()
 	{
@@ -40,11 +42,56 @@ public class ENode implements Serializable
 	{
 		return probSequence;
 	}
+	
+	/*
+	 * Wildly un-thread safe!
+	 */
+	public int attemptDaughterMerge() throws Exception
+	{
+		int numMerged=0;
+		
+		for(int x=0; x < this.daughters.size()-1; x++)
+		{
+			ENode xNode = this.daughters.get(x);
+			System.out.println("Attempting daughter merge for " + xNode.level + " " + xNode.nodeName);
+			
+			if( ! xNode.markedForDeletion)  for( int y=x+1; y < this.daughters.size(); y++)
+			{
+				ENode yNode = this.daughters.get(y);
+				
+				if( ! yNode.markedForDeletion)
+				{
+					ProbSequence possibleAlignment = ProbNW.align(xNode.getProbSequence(), yNode.getProbSequence());
+					
+					if( possibleAlignment.getAverageDistance() <= xNode.getLevel() )
+					{
+						numMerged++;
+						yNode.markedForDeletion = true;
+						xNode.daughters.addAll(yNode.daughters);
+						numMerged += xNode.attemptDaughterMerge();
+					}
+				}
+			}
+		}
+		
+		if( numMerged >0)
+		{
+			for( Iterator<ENode> i = this.daughters.iterator(); i.hasNext(); )
+			{
+				if( i.next().markedForDeletion)
+					i.remove();
+			}
+		}
+		
+		return numMerged;
+	}
 
 	public void validateNodeAndDaughters() throws Exception
 	{
-		System.out.println(this.nodeName);
 		this.probSequence.validateProbSequence();
+		
+		if( markedForDeletion)
+			throw new Exception("Node should be deleted " + this.nodeName);
 		
 		for( ENode d : daughters )
 			d.validateNodeAndDaughters();
