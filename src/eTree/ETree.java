@@ -171,6 +171,7 @@ public class ETree implements Serializable
 	
 	public void mergeAllDaughters() throws Exception
 	{
+		
 		while( true)
 		{
 			int numMerged = this.topNode.attemptDaughterMerge();

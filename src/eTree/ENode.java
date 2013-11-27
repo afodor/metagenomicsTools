@@ -68,26 +68,29 @@ public class ENode implements Serializable
 						numMerged++;
 						yNode.markedForDeletion = true;
 						xNode.daughters.addAll(yNode.daughters);
-						numMerged += xNode.attemptDaughterMerge();
+						possibleAlignment.setMapCount(xNode.getProbSequence(), yNode.getProbSequence());
+						xNode.setProbSequence(possibleAlignment);
 					}
 				}
 			}
 		}
 		
-		if( numMerged >0)
+		for( ENode d: this.daughters)
+			numMerged += d.attemptDaughterMerge();
+		
+		for( Iterator<ENode> i = this.daughters.iterator(); i.hasNext(); )
 		{
-			for( Iterator<ENode> i = this.daughters.iterator(); i.hasNext(); )
-			{
-				if( i.next().markedForDeletion)
-					i.remove();
-			}
+			if( i.next().markedForDeletion)
+				i.remove();
 		}
+		
 		
 		return numMerged;
 	}
 
 	public void validateNodeAndDaughters() throws Exception
 	{
+		//System.out.println("Validating " + this.nodeName);
 		this.probSequence.validateProbSequence();
 		
 		if( markedForDeletion)
