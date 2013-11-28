@@ -347,20 +347,15 @@ public class ETree implements Serializable
 		
 		for( ENode node : parent.getDaughters() )
 		{
-			if( chosenNode == null)
+			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
+			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
+			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
-				ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
-				//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
-				if( possibleAlignment.getAverageDistance() <= node.getLevel())
-				{
-					//if(chosenNode == null  || possibleAlignment.getAlignmentScoreAveragedByCol() > chosenSequence.getAlignmentScoreAveragedByCol())
+					if(chosenNode == null  || possibleAlignment.getAlignmentScoreAveragedByCol() > chosenSequence.getAlignmentScoreAveragedByCol())
 					{
 						chosenNode= node;
 						chosenSequence = possibleAlignment;
 					}
-						
-				}
-
 			}
 			
 		}
