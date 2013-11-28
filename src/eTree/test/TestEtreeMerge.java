@@ -36,13 +36,18 @@ public class TestEtreeMerge
 		
 
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
-				File.separator + "tree1preCall.txt", false);
+				File.separator + "tree1preCall.txt", true);
 		
+/*
+		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
+				"tree1PairsPreMerged.txt");
+		
+		/*
 		etree1.attemptRerunOfErrorsAtTips();
 		System.out.println("Validating with " + etree1.getAllNodes().size());
 		
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
-				File.separator + "tree1Bugged.txt", false);
+				File.separator + "tree1Bugged.txt", true);
 		
 		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
 				"tree1Pairs.txt");

@@ -357,7 +357,7 @@ public class ETree implements Serializable
 		
 		// still here - no matches - add a new node
 		newSeq = ProbSequence.makeDeepCopy(newSeq);
-		ENode newNode = new ENode(newSeq, nodePrefixName +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
+		ENode newNode = new ENode(newSeq, nodePrefixName +node_number++ + "_",  parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
 		int index = getIndex(newNode.getLevel());
 		
@@ -365,7 +365,7 @@ public class ETree implements Serializable
 		{
 			ENode previousNode =newNode;
 			newSeq = ProbSequence.makeDeepCopy(newSeq);
-			newNode = new ENode( newSeq, nodePrefixName + node_number++, LEVELS[x], previousNode);
+			newNode = new ENode( newSeq, nodePrefixName + node_number++ + "_", LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
 		}
 		
