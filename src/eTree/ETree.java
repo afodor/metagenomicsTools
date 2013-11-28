@@ -22,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -82,9 +83,23 @@ public class ETree implements Serializable
 		}
 	}
 	
+	private void trimSingletonsAtTop(  ) throws Exception
+	{	
+		while(this.topNode.getDaughters().size() ==1)
+		{
+			ENode daugtherNode = this.topNode.getDaughters().get(0);
+			this.topNode.setDaughters(daugtherNode.getDaughters());
+			for(ENode d : this.topNode.getDaughters())
+				d.setParent(this.topNode);
+			System.out.println("Removed level " + daugtherNode.getLevel());
+		}
+	}
+	
 	private List<ENode> deleteTopBranchesAndGetTipBrancesToRerun() throws Exception
 	{
-		List<ENode> tips = getAllNodes();
+		trimSingletonsAtTop();
+		
+		List<ENode> tips = getAllNodesAtTips();
 		
 		List<ENode> toRerun = new ArrayList<ENode>();
 		
@@ -101,7 +116,7 @@ public class ETree implements Serializable
 							&& ! xNode.getParent().equals(yNode))
 					{
 						ProbSequence align = ProbNW.align(xNode.getProbSequence(), yNode.getProbSequence());
-						if( align.getAverageDistance() > xNode.getLevel())
+						if( align.getAverageDistance() < xNode.getLevel())
 						{
 							ENode aNode = xNode;
 							
@@ -127,6 +142,7 @@ public class ETree implements Serializable
 			if( i.next().isMarkedForDeletion() )
 				i.remove();
 		
+		Collections.sort(toRerun);
 		return toRerun;
 	}
 	
@@ -137,14 +153,19 @@ public class ETree implements Serializable
 	 */
 	public void attemptRerunOfErrorsAtTips() throws Exception
 	{
+		System.out.println("pre-tri with " + this.topNode.getDaughters().size() + " nodes ");
 		List<ENode> toRerun = deleteTopBranchesAndGetTipBrancesToRerun();
+		System.out.println("post-tri with " + this.topNode.getDaughters().size() + " nodes ");
+		
+		System.out.println("Attempting to re-add " + toRerun.size() + " nodes ");
 		
 		for(ENode node : toRerun)
 		{
-			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), node.getNodeName());
+			System.out.println("Adding " + node.getNodeName());
+			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), "NEW_" +  node.getNodeName() +"_");
 			
 			while( index != null)
-				index = addToOrCreateNode(index, node.getProbSequence(), node.getNodeName());
+				index = addToOrCreateNode(index, node.getProbSequence(), "NEW_" + node.getNodeName()+ "_");
 		}
 	}
 	

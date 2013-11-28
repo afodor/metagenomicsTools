@@ -22,7 +22,7 @@ import java.util.List;
 import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
 
-public class ENode implements Serializable
+public class ENode implements Serializable, Comparable<ENode>
 {
 	private static final long serialVersionUID = -3274141668372679156L;
 	
@@ -36,6 +36,22 @@ public class ENode implements Serializable
 	public void setMarkedForDeletion(boolean markedForDeletion)
 	{
 		this.markedForDeletion = markedForDeletion;
+	}
+	
+	public void setParent(ENode parent)
+	{
+		this.parent = parent;
+	}
+	
+	public void setDaughters(List<ENode> daughters)
+	{
+		this.daughters = daughters;
+	}
+	
+	@Override
+	public int compareTo(ENode o)
+	{
+		return o.getProbSequence().getNumRepresentedSequences() - this.getProbSequence().getNumRepresentedSequences();
 	}
 	
 	public boolean isMarkedForDeletion()
@@ -94,7 +110,6 @@ public class ENode implements Serializable
 				i.remove();
 		}
 		
-		
 		return numMerged;
 	}
 
@@ -105,6 +120,27 @@ public class ENode implements Serializable
 		
 		if( markedForDeletion)
 			throw new Exception("Node should be deleted " + this.nodeName);
+		
+		if( ! nodeName.equals(ETree.ROOT_NAME))
+		{
+			if(  this.parent == null)
+				throw new Exception("Parent not defined");
+			
+			boolean foundSelf =false;
+			
+			for( ENode enode : this.parent.daughters )
+				if( enode == this)
+					foundSelf = true;
+			
+			if( ! foundSelf)
+				throw new Exception("Self not found amoung the children of this's parent!");
+		}
+		else
+		{
+			if( this.parent != null)
+				throw new Exception("Root parent should be null");
+		}
+		
 		
 		for( ENode d : daughters )
 			d.validateNodeAndDaughters();
