@@ -44,10 +44,11 @@ public class TestEtreeMerge
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
 				File.separator + "tree1Bugged.txt", false);
 		
-		etree1.validateTree();
-		
 		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
 				"tree1Pairs.txt");
+		
+		etree1.validateTree();
+		
 		
 		/*
 		

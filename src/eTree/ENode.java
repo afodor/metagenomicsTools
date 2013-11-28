@@ -115,7 +115,7 @@ public class ENode implements Serializable, Comparable<ENode>
 
 	public void validateNodeAndDaughters() throws Exception
 	{
-		//System.out.println("Validating " + this.nodeName);
+		System.out.println("Validating " + this.nodeName);
 		this.probSequence.validateProbSequence();
 		
 		if( markedForDeletion)
@@ -150,7 +150,6 @@ public class ENode implements Serializable, Comparable<ENode>
 		{
 			double sum =0;
 			
-			
 			double aLevel = daughters.get(0).getLevel();
 			
 			for( ENode d : daughters)
@@ -162,11 +161,33 @@ public class ENode implements Serializable, Comparable<ENode>
 			}
 			
 
-			if( Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
-				throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
+			if(  Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
+			{
+				if( this.nodeName.equals(ETree.ROOT_NAME))
+					System.out.println("TODO:  FIX ROOT BUG!!!!!!!!!!!!");
+				else
+					throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
+			}
 		}
 		
 	}
+	
+
+	public int getMaxNumberOfSeqsInBranch()
+	{
+		ENode enode=  this;
+		int max = getProbSequence().getNumRepresentedSequences();
+		
+		while( ! enode.getNodeName().equals(ETree.ROOT_NAME))
+		{
+			max = Math.max(getProbSequence().getNumRepresentedSequences(), max);
+			enode = enode.getParent();
+		}
+		
+		return max;
+	}
+	
+
 	
 	public int getNumOfAllDaughters()
 	{

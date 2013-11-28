@@ -120,8 +120,8 @@ public class ETree implements Serializable
 						{
 							ENode aNode = xNode;
 							
-							if( yNode.getProbSequence().getNumRepresentedSequences()< 
-									xNode.getProbSequence().getNumRepresentedSequences())
+							if( yNode.getMaxNumberOfSeqsInBranch()< 
+									xNode.getMaxNumberOfSeqsInBranch()) 
 								aNode = yNode;
 							
 							toRerun.add(aNode);
@@ -191,7 +191,7 @@ public class ETree implements Serializable
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
 		
-		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\tleastCommonDistnace\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\ttotalSeqs\n");
+		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\tleastCommonDistnace\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\tmaxTreeSeqsA\tmaxTreeSeqsB\ttotalSeqs\n");
 		
 		List<ENode> list = getAllNodes();
 		
@@ -220,6 +220,9 @@ public class ETree implements Serializable
 							writer.write((probSeq.getAverageDistance() - aNode.getLevel()) + "\t" );
 							writer.write( aNode.getProbSequence().getNumRepresentedSequences() + "\t");
 							writer.write( bNode.getProbSequence().getNumRepresentedSequences() + "\t");
+							writer.write( aNode.getMaxNumberOfSeqsInBranch() + "\t");
+							writer.write( bNode.getMaxNumberOfSeqsInBranch()+ "\t");
+							
 							int totalNum = aNode.getProbSequence().getNumRepresentedSequences() + 
 									bNode.getProbSequence().getNumRepresentedSequences();
 							writer.write(totalNum + "\n");

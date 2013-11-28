@@ -44,6 +44,7 @@ public class ProbSequence implements Serializable
 		for(String s: probSequence.sampleCounts.keySet())
 			newMap.put(s, probSequence.sampleCounts.get(s));
 		ps.sampleCounts = newMap;
+		ps.n = probSequence.n;
 		return ps;
 	}
 	
