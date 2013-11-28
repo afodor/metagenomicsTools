@@ -35,6 +35,13 @@ public class TestEtreeMerge
 		etree1.mergeAllDaughters();
 		
 		etree1.validateTree();
+		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
+				File.separator + "tree1.txt", true);
+		
+		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
+				"tree1Pairs.txt");
+		
+		/*
 		
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
