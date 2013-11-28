@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -101,7 +102,7 @@ public class ETree implements Serializable
 		
 		List<ENode> tips = getAllNodesAtTips();
 		
-		List<ENode> toRerun = new ArrayList<ENode>();
+		HashSet<ENode> toRerun = new HashSet<ENode>();
 		
 		for( int x=0; x < tips.size()-1; x++)
 		{
@@ -126,24 +127,56 @@ public class ETree implements Serializable
 							
 							toRerun.add(aNode);
 							
+							ENode lastNode = aNode;
 							while( ! aNode.getNodeName().equals(ROOT_NAME))
 							{
 								aNode.setMarkedForDeletion(true);
+								lastNode = aNode;
 								aNode = aNode.getParent();
 							}
+							
+							extendDeletionDown(lastNode, toRerun);
 						}
 					}
 				}
 			}	
 		}
 		
-
+		for( ENode node : this.topNode.getDaughters())
+			extendDeletionDown(node, toRerun);
+		
 		for( Iterator<ENode> i= this.topNode.getDaughters().iterator(); i.hasNext();  )
 			if( i.next().isMarkedForDeletion() )
+			{
 				i.remove();
+			}
 		
-		Collections.sort(toRerun);
-		return toRerun;
+		List<ENode> list = new ArrayList<ENode>(toRerun);
+				
+		Collections.sort(list);
+		return list;
+	}
+	
+	private void extendDeletionDown(ENode enode, HashSet<ENode> marked)
+	{
+		if( ! enode.isMarkedForDeletion() ) 
+			return;
+		
+		for( ENode d : enode.getDaughters() )
+		{
+			d.setMarkedForDeletion(true);
+		}
+		
+		for( ENode d : enode.getDaughters())
+		{
+			if( d.getDaughters().size() == 0 )
+				marked.add(d);
+		}
+		
+		for( ENode d : enode.getDaughters())
+		{
+			extendDeletionDown(d, marked);
+		}
 	}
 	
 	/*

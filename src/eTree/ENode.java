@@ -42,6 +42,7 @@ public class ENode implements Serializable, Comparable<ENode>
 	{
 		this.parent = parent;
 	}
+
 	
 	public void setDaughters(List<ENode> daughters)
 	{
@@ -162,12 +163,7 @@ public class ENode implements Serializable, Comparable<ENode>
 			
 
 			if(  Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
-			{
-				if( this.nodeName.equals(ETree.ROOT_NAME))
-					System.out.println("TODO:  FIX ROOT BUG!!!!!!!!!!!!");
-				else
-					throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
-			}
+				throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
 		}
 		
 	}
