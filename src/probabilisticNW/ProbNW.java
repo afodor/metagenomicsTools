@@ -38,6 +38,8 @@ public class ProbNW
 		int y= seq1.getColumns().size();
 		int x = seq2.getColumns().size();
 		
+		double score = matrix[x][y].getScore();
+		
 		while( x != 0 || y != 0)
 		{
 			//System.out.println(x + " " + y);
@@ -63,7 +65,9 @@ public class ProbNW
 		}
 		
 		Collections.reverse(list);
-		return new ProbSequence(list, seq1.getNumRepresentedSequences() + seq2.getNumRepresentedSequences());
+		ProbSequence probSeq = new ProbSequence(list, seq1.getNumRepresentedSequences() + seq2.getNumRepresentedSequences());
+		probSeq.setAlignmentScore(score);
+		return probSeq;
 	}
 	
 	public static void printMatrix( NwCell[][] matrix )

@@ -240,7 +240,7 @@ public class ENode implements Serializable, Comparable<ENode>
 		
 		for (int x=1; x <= level; x++)
 			tabString += " ";
-		writer.write(tabString +  this.nodeName + " (" + (this.parent == null ? "root" : this.parent.nodeName) + ") " + this.level + " " + this.probSequence.getNumRepresentedSequences() + " seqs with " +  this.daughters.size() + " children ");
+		writer.write(tabString +  this.nodeName + " (" + (this.parent == null ? "root" : this.parent.nodeName) + ") level=" + this.level + " " + this.probSequence.getNumRepresentedSequences() + " seqs with " +  this.daughters.size() + " children and score= " + this.probSequence.getAlignmentScore());
 		
 		this.probSequence.writeThisSequenceToText(writer, "\t" + tabString, detailed);
 		

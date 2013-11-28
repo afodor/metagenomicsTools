@@ -30,6 +30,7 @@ public class ProbSequence implements Serializable
 	private List<ProbColumn> columns = new ArrayList<ProbColumn>();
 	private int n=0;
 	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
+	private double alignmentScore = Double.MIN_VALUE;
 	
 	public static ProbSequence makeDeepCopy(ProbSequence probSequence)
 	{
@@ -45,7 +46,23 @@ public class ProbSequence implements Serializable
 			newMap.put(s, probSequence.sampleCounts.get(s));
 		ps.sampleCounts = newMap;
 		ps.n = probSequence.n;
+		ps.alignmentScore = probSequence.alignmentScore;
 		return ps;
+	}
+	
+	public double getAlignmentScore()
+	{
+		return alignmentScore;
+	}
+	
+	public double getAlignmentScoreAveragedByCol()
+	{
+		return alignmentScore/this.columns.size();
+	}
+	
+	public void setAlignmentScore(double alignmentScore)
+	{
+		this.alignmentScore = alignmentScore;
 	}
 	
 	public void validateProbSequence() throws Exception

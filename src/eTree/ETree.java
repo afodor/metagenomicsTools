@@ -342,18 +342,37 @@ public class ETree implements Serializable
 		if( parent.getDaughters().size() == 0 )
 			return null;
 		
+		ENode chosenNode= null;
+		ProbSequence chosenSequence = null;
+		
 		for( ENode node : parent.getDaughters() )
 		{
-			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
-			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
-			if( possibleAlignment.getAverageDistance() <= node.getLevel())
+			if( chosenNode == null)
 			{
-				possibleAlignment = ProbSequence.makeDeepCopy(possibleAlignment);
-				possibleAlignment.setMapCount(node.getProbSequence(), newSeq);
-				node.setProbSequence(possibleAlignment);
-				return node;
+				ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
+				//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
+				if( possibleAlignment.getAverageDistance() <= node.getLevel())
+				{
+					//if(chosenNode == null  || possibleAlignment.getAlignmentScoreAveragedByCol() > chosenSequence.getAlignmentScoreAveragedByCol())
+					{
+						chosenNode= node;
+						chosenSequence = possibleAlignment;
+					}
+						
+				}
+
 			}
+			
 		}
+		
+		if( chosenNode!= null )
+		{
+			chosenSequence= ProbSequence.makeDeepCopy(chosenSequence);
+			chosenSequence.setMapCount(chosenNode.getProbSequence(), newSeq);
+			chosenNode.setProbSequence(chosenSequence);
+			return chosenNode;
+		}
+		
 		
 		// still here - no matches - add a new node
 		newSeq = ProbSequence.makeDeepCopy(newSeq);
@@ -407,6 +426,30 @@ public class ETree implements Serializable
 		BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
 		
 		this.topNode.writeNodeAndDaughters(writer,detailed);
+		
+		writer.flush();  writer.close();
+	}
+	
+	public void writeNodesInTabularFormat( String outFile) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("nodeName\tlevel\tparentName\tnumberSequences\tmaxNumberSequencesInBranch\talignmentScore\t"  +
+		"alignmentScoreAverage\talignmentLength\tconsensusSequence\n");
+		
+		for( ENode node : getAllNodes() )
+		{
+			writer.write(node.getNodeName() + "\t");
+			writer.write(node.getLevel() + "\t");
+			writer.write((node.getParent() == null ? ROOT_NAME : node.getParent().getNodeName()) + "\t");
+			writer.write( node.getNumOfSequencesAtTips() +"\t" );
+			writer.write(node.getMaxNumberOfSeqsInBranch() + "\t");
+			writer.write(node.getProbSequence().getAlignmentScore() + "\t");
+			writer.write(node.getProbSequence().getAlignmentScoreAveragedByCol() + "\t");
+			writer.write(node.getProbSequence().getColumns().size() + "\t");
+			writer.write(node.getProbSequence().getConsensus() + "\n");
+			
+		}
 		
 		writer.flush();  writer.close();
 	}

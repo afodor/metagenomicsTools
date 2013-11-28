@@ -38,7 +38,10 @@ public class TestEtreeMerge
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
 				File.separator + "tree1preCall.txt", true);
 		
-/*
+		etree1.writeNodesInTabularFormat(ConfigReader.getETreeTestDir() + File.separator + 
+				File.separator + "tree1preCallTabbed.txt");
+		
+		
 		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
 				"tree1PairsPreMerged.txt");
 		
