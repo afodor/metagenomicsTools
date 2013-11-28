@@ -17,7 +17,6 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
-import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {
@@ -33,7 +32,8 @@ public class TestEtreeMerge
 		etree1.validateTree();
 		
 		etree1.mergeAllDaughters();
-		
+		etree1.attemptRerunOfErrorsAtTips();
+		System.out.println("Validating with " + etree1.getAllNodes().size());
 		etree1.validateTree();
 		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
 				File.separator + "tree1.txt", true);

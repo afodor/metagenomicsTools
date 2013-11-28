@@ -33,6 +33,16 @@ public class ENode implements Serializable
 	private List<ENode> daughters =new ArrayList<ENode>();
 	private boolean markedForDeletion = false;
 	
+	public void setMarkedForDeletion(boolean markedForDeletion)
+	{
+		this.markedForDeletion = markedForDeletion;
+	}
+	
+	public boolean isMarkedForDeletion()
+	{
+		return markedForDeletion;
+	}
+	
 	public String getNodeName()
 	{
 		return nodeName;

@@ -23,6 +23,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
@@ -81,6 +82,71 @@ public class ETree implements Serializable
 		}
 	}
 	
+	private List<ENode> deleteTopBranchesAndGetTipBrancesToRerun() throws Exception
+	{
+		List<ENode> tips = getAllNodes();
+		
+		List<ENode> toRerun = new ArrayList<ENode>();
+		
+		for( int x=0; x < tips.size()-1; x++)
+		{
+			ENode xNode = tips.get(x);
+			if( ! xNode.isMarkedForDeletion())
+			{
+				for( int y=x+1; y < tips.size(); y++)
+				{
+					ENode yNode = tips.get(y);
+					
+					if( ! yNode.isMarkedForDeletion()
+							&& ! xNode.getParent().equals(yNode))
+					{
+						ProbSequence align = ProbNW.align(xNode.getProbSequence(), yNode.getProbSequence());
+						if( align.getAverageDistance() > xNode.getLevel())
+						{
+							ENode aNode = xNode;
+							
+							if( yNode.getProbSequence().getNumRepresentedSequences()< 
+									xNode.getProbSequence().getNumRepresentedSequences())
+								aNode = yNode;
+							
+							toRerun.add(aNode);
+							
+							while( ! aNode.getNodeName().equals(ROOT_NAME))
+							{
+								aNode.setMarkedForDeletion(true);
+								aNode = aNode.getParent();
+							}
+						}
+					}
+				}
+			}	
+		}
+		
+
+		for( Iterator<ENode> i= this.topNode.getDaughters().iterator(); i.hasNext();  )
+			if( i.next().isMarkedForDeletion() )
+				i.remove();
+		
+		return toRerun;
+	}
+	
+	/*
+	 * wildly unthread safe.
+	 * 
+	 * 
+	 */
+	public void attemptRerunOfErrorsAtTips() throws Exception
+	{
+		List<ENode> toRerun = deleteTopBranchesAndGetTipBrancesToRerun();
+		
+		for(ENode node : toRerun)
+		{
+			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), node.getNodeName());
+			
+			while( index != null)
+				index = addToOrCreateNode(index, node.getProbSequence(), node.getNodeName());
+		}
+	}
 	
 	private static int getLeastCommonDistance(  ENode aNode, ENode anotherNode)
 		throws Exception
@@ -151,6 +217,17 @@ public class ETree implements Serializable
 		return list;
 	}
 	
+	public List<ENode> getAllNodesAtTips()
+	{
+		List<ENode> allNodes = getAllNodes();
+		
+		for( Iterator<ENode> i = allNodes.iterator(); i.hasNext();)
+			if( i.next().getDaughters().size() >0)
+				i.remove();
+				
+		return allNodes;
+	}
+	
 	private void addNodeAndDaughters(ENode node, List<ENode> list)
 	{
 		list.add(node);
@@ -203,7 +280,7 @@ public class ETree implements Serializable
 		}
 	}
 
-	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String sampleName) throws Exception
+	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String nodePrefixName) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
 			return null;
@@ -223,7 +300,7 @@ public class ETree implements Serializable
 		
 		// still here - no matches - add a new node
 		newSeq = ProbSequence.makeDeepCopy(newSeq);
-		ENode newNode = new ENode(newSeq, sampleName +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
+		ENode newNode = new ENode(newSeq, nodePrefixName +node_number++,  parent.getDaughters().get(0).getLevel(), parent);
 		parent.getDaughters().add(newNode);
 		int index = getIndex(newNode.getLevel());
 		
@@ -231,7 +308,7 @@ public class ETree implements Serializable
 		{
 			ENode previousNode =newNode;
 			newSeq = ProbSequence.makeDeepCopy(newSeq);
-			newNode = new ENode( newSeq, sampleName + node_number++, LEVELS[x], previousNode);
+			newNode = new ENode( newSeq, nodePrefixName + node_number++, LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
 		}
 		
