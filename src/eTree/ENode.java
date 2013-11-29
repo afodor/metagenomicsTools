@@ -281,10 +281,17 @@ public class ENode implements Serializable, Comparable<ENode>
 		
 	}
 	
+	/*
+	 * Including this node if this node is a tip node
+	 */
 	public List<ENode> getAllNodesAtTips()
 	{
 		List<ENode> list = new ArrayList<ENode>();
 		this.addTipsOfAllDaughters(list);
+		
+		if( this.daughters.size() == 0 )
+			list.add(this);
+		
 		return list;
 	}
 	

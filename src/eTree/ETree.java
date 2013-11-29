@@ -391,9 +391,7 @@ public class ETree implements Serializable
 		if( targetList.size() > 0 )
 		{
 			parent.incrementNumChoices( targetList.size() -1);
-			
 			ENode chosenNode =  ( targetList.size() == 1 ? targetList.get(0) : getBestMatchToTips(newSeq, targetList));
-		
 			ProbSequence chosenSequence= ProbSequence.makeDeepCopy(newSeq);
 			chosenSequence.setMapCount(chosenNode.getProbSequence(), newSeq);
 			chosenNode.setProbSequence(chosenSequence);
@@ -552,7 +550,7 @@ public class ETree implements Serializable
 				
 				numDone++;
 				
-				if( numDone % 20 ==0)
+				//if( numDone % 20 ==0)
 					System.out.println(numDone);
 				
 				//eTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "secondTreeAsText_" + numDone +".txt", false);
