@@ -32,6 +32,22 @@ public class ENode implements Serializable, Comparable<ENode>
 	private String nodeName;
 	private List<ENode> daughters =new ArrayList<ENode>();
 	private boolean markedForDeletion = false;
+	private int numChoices =0;
+	
+	public int getNumChoices()
+	{
+		return numChoices;
+	}
+	
+	public void incrementNumChoices()
+	{
+		numChoices++;
+	}
+	
+	public void setNumChoices(int numChoices)
+	{
+		this.numChoices = numChoices;
+	}
 	
 	public void setMarkedForDeletion(boolean markedForDeletion)
 	{
@@ -95,6 +111,7 @@ public class ENode implements Serializable, Comparable<ENode>
 						numMerged++;
 						yNode.markedForDeletion = true;
 						xNode.daughters.addAll(yNode.daughters);
+						xNode.setNumChoices(xNode.getNumChoices() + yNode.getNumChoices()); 
 						possibleAlignment.setMapCount(xNode.getProbSequence(), yNode.getProbSequence());
 						xNode.setProbSequence(possibleAlignment);
 					}
@@ -176,13 +193,28 @@ public class ENode implements Serializable, Comparable<ENode>
 		
 		while( ! enode.getNodeName().equals(ETree.ROOT_NAME))
 		{
-			max = Math.max(getProbSequence().getNumRepresentedSequences(), max);
+			max = Math.max(enode.getProbSequence().getNumRepresentedSequences(), max);
 			enode = enode.getParent();
 		}
 		
 		return max;
 	}
 	
+
+	public int getMaxNumberOfChoicesInBranch()
+	{
+		ENode enode=  this;
+		int max = enode.getNumChoices();
+		
+		while( ! enode.getNodeName().equals(ETree.ROOT_NAME))
+		{
+			max = Math.max(enode.getNumChoices(), max);
+			enode = enode.getParent();
+		}
+		
+		return max;
+	}
+
 
 	
 	public int getNumOfAllDaughters()

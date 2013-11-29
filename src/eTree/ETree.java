@@ -45,9 +45,9 @@ public class ETree implements Serializable
 	private static final long serialVersionUID = 8463272194826212918L;
 	public static final String ROOT_NAME = "root";
 	
-	public static final double[] LEVELS = {0.0, 0.05,0.04,0.03,0.02,0.01};
+	public static final double[] LEVELS = {0.0, 0.15,0.14,0.13,0.12,0.11,0.10,0.09,0.08,0.07,0.06, 0.05,0.04,0.03,0.02,0.01};
 	private int node_number =1;
-	public static final int RDP_THRESHOLD = 80;
+	public static final int RDP_THRESHOLD = 80;	
 	
 	private ENode topNode=null;
 	
@@ -224,7 +224,8 @@ public class ETree implements Serializable
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
 		
-		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\tleastCommonDistnace\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\tmaxTreeSeqsA\tmaxTreeSeqsB\ttotalSeqs\n");
+		writer.write("nodeA\tnodeB\tparentA\tparentB\tnodeLevel\tsameParents\tleastCommonDistnace\talignmentDistance\talignmentDistanceMinusPredictedDistance\tnumSequencesA\tnumSequencesB\tmaxTreeSeqsA\tmaxTreeSeqsB\ttotalSeqs\t");
+		writer.write("numChoicesA\tnumChoicesB\tmaxNumberChoicesA\tmaxNumberChoicesB\n");
 		
 		List<ENode> list = getAllNodes();
 		
@@ -258,7 +259,11 @@ public class ETree implements Serializable
 							
 							int totalNum = aNode.getProbSequence().getNumRepresentedSequences() + 
 									bNode.getProbSequence().getNumRepresentedSequences();
-							writer.write(totalNum + "\n");
+							writer.write(totalNum + "\t");
+							writer.write(aNode.getNumChoices() + "\t");
+							writer.write(bNode.getNumChoices() + "\t");
+							writer.write(aNode.getMaxNumberOfChoicesInBranch() + "\t");
+							writer.write(bNode.getMaxNumberOfChoicesInBranch() + "\n");
 						}
 				}
 			writer.flush();
@@ -351,6 +356,11 @@ public class ETree implements Serializable
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
+					if( chosenNode != null)
+					{
+						parent.incrementNumChoices();
+					}
+				
 					if(chosenNode == null  || possibleAlignment.getAlignmentScoreAveragedByCol() > chosenSequence.getAlignmentScoreAveragedByCol())
 					{
 						chosenNode= node;
@@ -429,13 +439,15 @@ public class ETree implements Serializable
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("nodeName\tlevel\tparentName\tnumberSequences\tmaxNumberSequencesInBranch\talignmentScore\t"  +
+		writer.write("nodeName\tlevel\tnumChoices\tmaxNumChoices\tparentName\tnumberSequences\tmaxNumSequences\talignmentScore\t"  +
 		"alignmentScoreAverage\talignmentLength\tconsensusSequence\n");
 		
 		for( ENode node : getAllNodes() )
 		{
 			writer.write(node.getNodeName() + "\t");
 			writer.write(node.getLevel() + "\t");
+			writer.write(node.getNumChoices() + "\t");
+			writer.write(node.getMaxNumberOfChoicesInBranch() + "\t");
 			writer.write((node.getParent() == null ? ROOT_NAME : node.getParent().getNodeName()) + "\t");
 			writer.write( node.getNumOfSequencesAtTips() +"\t" );
 			writer.write(node.getMaxNumberOfSeqsInBranch() + "\t");

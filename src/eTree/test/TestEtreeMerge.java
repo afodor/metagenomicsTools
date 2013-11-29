@@ -17,9 +17,23 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
+import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {
+	private static void writeTreeFiles( ETree etree, String prefix ) throws Exception
+	{
+
+		etree.writeNodesInTabularFormat(ConfigReader.getETreeTestDir() + File.separator + 
+				File.separator + prefix +  "treeTabbed.txt");
+		
+		etree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
+				File.separator +  prefix + "treeAsTxt.txt", true);
+		
+		etree.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
+				prefix +  "treesPaired.txt");
+	}
+	
 	/*
 	 * An example of reading and merging two trees
 	 */
@@ -30,35 +44,9 @@ public class TestEtreeMerge
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
 		
 		etree1.validateTree();
-		
 		etree1.mergeAllDaughters();
 		etree1.validateTree();
-		
-
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
-				File.separator + "tree1preCall.txt", true);
-		
-		etree1.writeNodesInTabularFormat(ConfigReader.getETreeTestDir() + File.separator + 
-				File.separator + "tree1preCallTabbed.txt");
-		
-		
-		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
-				"tree1PairsPreMerged.txt");
-		
-		/*
-		etree1.attemptRerunOfErrorsAtTips();
-		System.out.println("Validating with " + etree1.getAllNodes().size());
-		
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + 
-				File.separator + "tree1Bugged.txt", true);
-		
-		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator+ 
-				"tree1Pairs.txt");
-		
-		etree1.validateTree();
-		
-		
-		/*
+		writeTreeFiles(etree1, "tree1Pre");
 		
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
@@ -66,24 +54,13 @@ public class TestEtreeMerge
 
 		etree2.mergeAllDaughters();
 		etree2.validateTree();
+		writeTreeFiles(etree2, "tree2Pre");
 		
 		etree1.addOtherTree(etree2);
 		etree1.mergeAllDaughters();
 		etree1.validateTree();
 		
 		PivotToSpreadheet.pivotToSpreasheet(0.03, etree1, ConfigReader.getETreeTestDir() + File.separator + "twoTrees_003_AsText.txt");
-		etree1.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "twoTreesAsText.txt",false);
-		etree1.writePairedNodeInformation(ConfigReader.getETreeTestDir() + File.separator + 
-				"mergedPairedTree.txt");
-		
-		/*
-		etree1.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator + 
-				"gastro454DataSet" + File.separator + "merged.etree");
-		
-		
-		etree1.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + 
-				"gastro454DataSet" + File.separator + "mergedXML.xml");
-				*/
-		
+		writeTreeFiles(etree1, "mergedTree");
 	}
 }
