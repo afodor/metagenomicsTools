@@ -341,14 +341,41 @@ public class ETree implements Serializable
 				this.topNode.getDaughters().add(otherNode);
 		}
 	}
+	
+	private ENode getBestMatchToTips(ProbSequence querySequence, List<ENode> targets) throws Exception
+	{
+		if( targets.size() < 2)
+			throw new Exception("Logic error: getBestMatchToTip called on list of size " + targets.size());
+		
+		ENode node = null;
+		Double maxVal = null;
+		
+		for( ENode target : targets )
+		{
+			List<ENode> tips = target.getAllNodesAtTips();
+			
+			for( ENode tip : tips )
+			{
+				ProbSequence alignment = ProbNW.align(querySequence, tip.getProbSequence());
+				
+				double distance = alignment.getAverageDistance();
+				if( node == null ||  distance < maxVal.doubleValue())
+				{
+					node = target;
+					maxVal = distance;
+				}
+			}
+		}
+		
+		return node;
+	}
 
 	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String nodePrefixName) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
 			return null;
 		
-		ENode chosenNode= null;
-		ProbSequence chosenSequence = null;
+		List<ENode> targetList =new ArrayList<ENode>();
 		
 		for( ENode node : parent.getDaughters() )
 		{
@@ -356,23 +383,18 @@ public class ETree implements Serializable
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
-					if( chosenNode != null)
-					{
-						parent.incrementNumChoices();
-					}
-				
-					if(chosenNode == null  || possibleAlignment.getAlignmentScoreAveragedByCol() > chosenSequence.getAlignmentScoreAveragedByCol())
-					{
-						chosenNode= node;
-						chosenSequence = possibleAlignment;
-					}
+				targetList.add(node);
 			}
 			
 		}
 		
-		if( chosenNode!= null )
+		if( targetList.size() > 0 )
 		{
-			chosenSequence= ProbSequence.makeDeepCopy(chosenSequence);
+			parent.incrementNumChoices( targetList.size() -1);
+			
+			ENode chosenNode =  ( targetList.size() == 1 ? targetList.get(0) : getBestMatchToTips(newSeq, targetList));
+		
+			ProbSequence chosenSequence= ProbSequence.makeDeepCopy(newSeq);
 			chosenSequence.setMapCount(chosenNode.getProbSequence(), newSeq);
 			chosenNode.setProbSequence(chosenSequence);
 			return chosenNode;

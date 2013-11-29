@@ -44,9 +44,9 @@ public class ENode implements Serializable, Comparable<ENode>
 		numChoices++;
 	}
 	
-	public void setNumChoices(int numChoices)
+	public void incrementNumChoices(int numberToAdd)
 	{
-		this.numChoices = numChoices;
+		this.numChoices += numberToAdd;
 	}
 	
 	public void setMarkedForDeletion(boolean markedForDeletion)
@@ -111,7 +111,7 @@ public class ENode implements Serializable, Comparable<ENode>
 						numMerged++;
 						yNode.markedForDeletion = true;
 						xNode.daughters.addAll(yNode.daughters);
-						xNode.setNumChoices(xNode.getNumChoices() + yNode.getNumChoices()); 
+						xNode.incrementNumChoices(yNode.getNumChoices()); 
 						possibleAlignment.setMapCount(xNode.getProbSequence(), yNode.getProbSequence());
 						xNode.setProbSequence(possibleAlignment);
 					}
@@ -279,6 +279,24 @@ public class ENode implements Serializable, Comparable<ENode>
 		for( ENode enode : daughters)
 			enode.writeNodeAndDaughters(writer, detailed);
 		
+	}
+	
+	public List<ENode> getAllNodesAtTips()
+	{
+		List<ENode> list = new ArrayList<ENode>();
+		this.addTipsOfAllDaughters(list);
+		return list;
+	}
+	
+	private void addTipsOfAllDaughters(List<ENode> list)
+	{
+		for( ENode d :this.daughters )
+		{
+			if( d.daughters.size() == 0)
+				list.add(d);
+			else for ( ENode d2 : this.daughters)
+				d2.addTipsOfAllDaughters(list);
+		}
 	}
 	
 	public int getNumOfSequencesAtTips()
