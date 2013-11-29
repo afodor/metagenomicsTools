@@ -13,6 +13,9 @@
 
 package kmerDatabase;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+
 public class KmerToBits
 {
 	private static final int A_INT = 0x0000;
@@ -84,17 +87,69 @@ public class KmerToBits
 		throw new Exception("Invalid char " + c);
 	}
 	
+	private static char getChar( int i) throws Exception
+	{
+		if( i == A_INT  )
+			return 'A';
+			
+		if( i == C_INT )
+			return 'C';
+			
+		if( i == G_INT)
+			return 'G';
+			
+		if( i == T_INT)
+			return 'T';
+			
+		throw new Exception("Invalid hash " + i);
+	}
+	
+	public HashSet<Integer> getAllRemainingHashes() throws Exception
+	{
+		HashSet<Integer> set = new LinkedHashSet<Integer>();
+		
+		set.add( getHashAtCurrentPosition());
+		
+		while( canAdvance())
+		{
+			advance();
+			set.add( getHashAtCurrentPosition());
+		}
+		
+		return set;
+	}
+	
+	public static String getKmer(int hash) throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < KMER_SIZE; x++)
+		{
+			buff.append ( getChar(T_INT & hash));
+			hash = hash >> 2;
+		}
+		
+		return buff.toString();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
-		String s = "ACCAAGGGGAACCCGGTTTTAAAATTTTA";
+		String s1 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATTTCTTGTTTTTAAT";
 		
-		KmerToBits kmers = new KmerToBits(s);
+		KmerToBits kmers = new KmerToBits(s1);
 		
-		System.out.println( kmers.getHashAtCurrentPosition());
+		HashSet<Integer> set1 = new HashSet<Integer>();
+		
+		set1.add( kmers.getHashAtCurrentPosition());
 		while( kmers.canAdvance())
 		{
 			kmers.advance();
-			System.out.println( kmers.getHashAtCurrentPosition());
+			set1.add( kmers.getHashAtCurrentPosition());
 		}
+		
+		System.out.println(set1);
+		
+		for( int i: set1 )
+			System.out.println(getKmer(i));
 	}
 }
