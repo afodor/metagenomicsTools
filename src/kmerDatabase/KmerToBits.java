@@ -50,7 +50,7 @@ public class KmerToBits
 	
 	public boolean canAdvance()
 	{
-		return index < s.length()-1;
+		return index < s.length();
 	}
 	
 	public int getCurrentIndex()
@@ -128,28 +128,19 @@ public class KmerToBits
 			buff.append ( getChar(T_INT & hash));
 			hash = hash >> 2;
 		}
-		
+		buff.reverse();
 		return buff.toString();
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		String s1 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATTTCTTGTTTTTAAT";
+		String s1 = "CCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGAAAAAAAAAAAAAAAATTTTTTTTTTTTTTTT";
 		
 		KmerToBits kmers = new KmerToBits(s1);
+		HashSet<Integer> set = kmers.getAllRemainingHashes();
+		System.out.println(set);
 		
-		HashSet<Integer> set1 = new HashSet<Integer>();
-		
-		set1.add( kmers.getHashAtCurrentPosition());
-		while( kmers.canAdvance())
-		{
-			kmers.advance();
-			set1.add( kmers.getHashAtCurrentPosition());
-		}
-		
-		System.out.println(set1);
-		
-		for( int i: set1 )
+		for( int i: set )
 			System.out.println(getKmer(i));
 	}
 }
