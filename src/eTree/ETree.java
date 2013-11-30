@@ -379,7 +379,6 @@ public class ETree implements Serializable
 	
 	private void markNodeUpForDeletion(String nodeName) throws Exception
 	{
-		tipDatabase.removeFromDatabase(nodeName);
 		List<ENode> list = getAllNodesAtTips();
 		
 		ENode node = null;
@@ -392,9 +391,14 @@ public class ETree implements Serializable
 		
 		}
 			
+		//todo: this should never happen
 		if( node == null)
-			throw new Exception("Logic error " + nodeName);
+		{
+			System.out.println("Can't find " + nodeName);
+			return;
+		}
 		
+		tipDatabase.removeFromDatabase(nodeName);
 		node.setMarkedForDeletion(true);
 		
 		ENode aNode = node;
@@ -503,7 +507,7 @@ public class ETree implements Serializable
 			chosenSequence.setMapCount(chosenNode.enode.getProbSequence(), newSeq);
 			chosenNode.enode.setProbSequence(chosenSequence);
 			
-			if( chosenNode.enode.getDaughters().size() == 0)
+			if( chosenNode.enode.getLevel() == LEVELS[LEVELS.length-1])
 				tipDatabase.addSequenceToDatabase(chosenNode.enode.getProbSequence().getConsensusUngapped(), chosenNode.enode.getNodeName());
 			
 			return chosenNode.enode;
