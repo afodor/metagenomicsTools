@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import parsers.FastaSequence;
+
 public class KmerDatabase
 {
 	private HashMap<Integer, HashSet<String>> kmerMap =
@@ -110,6 +112,21 @@ public class KmerDatabase
 			toBits.advance();
 			addHash(toBits.getHashAtCurrentPosition(), id);
 		}
+	}
+	
+	/*
+	 * Any sequence with non ACGT is ignored
+	 */
+	public static KmerDatabase buildDatabase(List<FastaSequence> fastaSeqs) throws Exception
+	{
+		KmerDatabase db = new KmerDatabase();
+		
+		for( FastaSequence fs : fastaSeqs)
+		{
+			if( fs.isOnlyACGT())
+				db.addSequenceToDatabase(fs.getSequence(), fs.getFirstTokenOfHeader());
+		}		
+		return db;
 	}
 	
 	public static void main(String[] args) throws Exception

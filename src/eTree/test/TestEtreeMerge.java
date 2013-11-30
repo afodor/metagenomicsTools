@@ -17,7 +17,6 @@ import java.io.File;
 
 import utils.ConfigReader;
 import eTree.ETree;
-import eTree.PivotToSpreadheet;
 
 public class TestEtreeMerge
 {

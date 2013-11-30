@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+/*
+ * Do not override equals or hashmap (will break KmerDatabaseFroProbSeq)
+ */
 public class ProbSequence implements Serializable
 {
 	private static final long serialVersionUID = -8572579288693934310L;
@@ -266,7 +269,8 @@ public class ProbSequence implements Serializable
 		StringBuffer buff = new StringBuffer();
 		buff.append(this.n + " sequences with distance " + this.getAverageDistance());
 		
-		
+	
+		/*
 		for( int x=0; x < columns.size(); x++)
 			buff.append( nf.format(columns.get(x).getFractionA()) + " " );
 		
@@ -294,6 +298,7 @@ public class ProbSequence implements Serializable
 		
 		for( int x=0; x < columns.size(); x++)
 			buff.append( nf.format(columns.get(x).getDistance()) + " " );
+		*/
 		
 		return buff.toString();
 		
