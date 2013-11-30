@@ -174,7 +174,6 @@ public class ETree implements Serializable
 		for( ENode node : getAllNodesAtTips())
 			if( node.isMarkedForDeletion())
 				toRerun.add(node);
-	
 		
 		for( Iterator<ENode> i= this.topNode.getDaughters().iterator(); i.hasNext();  )
 			if( i.next().isMarkedForDeletion() )
@@ -199,22 +198,20 @@ public class ETree implements Serializable
 	
 	private void extendDeletionDown(ENode enode, HashSet<ENode> marked)
 	{
-		
 		for( ENode d : enode.getDaughters() )
 		{
 			d.setMarkedForDeletion(true);
-			tipDatabase.removeFromDatabase(d.getNodeName());
-		}
-		
-		for( ENode d : enode.getDaughters())
-		{
+
 			if( d.getDaughters().size() == 0 )
+			{
 				marked.add(d);
-		}
-		
-		for( ENode d : enode.getDaughters())
-		{
-			extendDeletionDown(d, marked);
+				tipDatabase.removeFromDatabase(d.getNodeName());
+			}
+			else
+			{
+				extendDeletionDown(d, marked);
+			}
+				
 		}
 	}
 	
@@ -399,15 +396,23 @@ public class ETree implements Serializable
 			throw new Exception("Logic error " + nodeName);
 		
 		node.setMarkedForDeletion(true);
-		tipDatabase.removeFromDatabase(nodeName);
 		
 		ENode aNode = node;
+		ENode lastNode = node;
 		while( ! aNode.getNodeName().equals(ROOT_NAME))
 		{
 			aNode.setMarkedForDeletion(true);
+			lastNode =aNode;
 			aNode = aNode.getParent();
 		}
 		
+		lastNode.markNodeAndDaughtersForDeletion();	
+		
+		for( ENode enode : lastNode.getAllNodesAtTips())
+		{
+			tipDatabase.removeFromDatabase(enode.getNodeName());
+		}
+			
 	}
 	
 	private Holder getBestMatchToTips(ProbSequence querySequence, List<Holder> targets, boolean markErrorsForDeletion) throws Exception
@@ -425,7 +430,6 @@ public class ETree implements Serializable
 					if( result.getId().equals(tip.getNodeName()))
 						return target;
 			}
-			
 			
 			// a high scoring result that is likely in the wrong place in the tree
 			if( markErrorsForDeletion)

@@ -27,6 +27,7 @@ public class KmerDatabase
 	
 	public void removeFromDatabase( String target)
 	{
+		System.out.println("Removing " + target);
 		for(int key : kmerMap.keySet())
 		{
 			for( Iterator<String> i = kmerMap.get(key).iterator(); i.hasNext();)

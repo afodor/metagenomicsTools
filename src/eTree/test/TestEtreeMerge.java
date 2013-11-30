@@ -39,6 +39,7 @@ public class TestEtreeMerge
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		ETree etree1 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
 						"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1", "3B1");
@@ -47,6 +48,7 @@ public class TestEtreeMerge
 		etree1.mergeAllDaughters();
 		etree1.validateTree();
 		writeTreeFiles(etree1, "tree1Pre");
+		*/
 		
 		ETree etree2 = 
 				ETree.getEtreeFromFasta(ConfigReader.getETreeTestDir() + File.separator + 
@@ -56,11 +58,13 @@ public class TestEtreeMerge
 		etree2.validateTree();
 		writeTreeFiles(etree2, "tree2Pre");
 		
+		/*
 		etree1.addOtherTree(etree2);
 		etree1.mergeAllDaughters();
 		etree1.validateTree();
 		
 		PivotToSpreadheet.pivotToSpreasheet(0.03, etree1, ConfigReader.getETreeTestDir() + File.separator + "twoTrees_003_AsText.txt");
 		writeTreeFiles(etree1, "mergedTree");
+		*/
 	}
 }

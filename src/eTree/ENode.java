@@ -133,7 +133,7 @@ public class ENode implements Serializable, Comparable<ENode>
 
 	public void validateNodeAndDaughters() throws Exception
 	{
-		System.out.println("Validating " + this.nodeName);
+		//System.out.println("Validating " + this.nodeName);
 		this.probSequence.validateProbSequence();
 		
 		if( markedForDeletion)
@@ -180,7 +180,7 @@ public class ENode implements Serializable, Comparable<ENode>
 			
 
 			if(  Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
-				System.out.println( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
+				throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
 		}
 		
 	}
@@ -225,6 +225,14 @@ public class ENode implements Serializable, Comparable<ENode>
 			sum += subNode.getNumOfAllDaughters();
 		
 		return sum;
+	}
+	
+	public void markNodeAndDaughtersForDeletion()
+	{
+		setMarkedForDeletion(true);
+		
+		for( ENode node : this.daughters )
+			node.markNodeAndDaughtersForDeletion();
 	}
 	
 	/*
@@ -287,10 +295,11 @@ public class ENode implements Serializable, Comparable<ENode>
 	public List<ENode> getAllNodesAtTips()
 	{
 		List<ENode> list = new ArrayList<ENode>();
-		this.addTipsOfAllDaughters(list);
 		
 		if( this.daughters.size() == 0 )
 			list.add(this);
+		else
+			this.addTipsOfAllDaughters(list);
 		
 		return list;
 	}
@@ -299,10 +308,10 @@ public class ENode implements Serializable, Comparable<ENode>
 	{
 		for( ENode d :this.daughters )
 		{
-			if( d.daughters.size() == 0)
+			if( d.daughters.size() == 0  )
 				list.add(d);
-			else for ( ENode d2 : this.daughters)
-				d2.addTipsOfAllDaughters(list);
+			
+			d.addTipsOfAllDaughters(list);
 		}
 	}
 	
