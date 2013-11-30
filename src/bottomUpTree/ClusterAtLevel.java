@@ -116,11 +116,12 @@ public class ClusterAtLevel
 			if( fs.isOnlyACGT())
 			{
 				expectedSum += getNumberOfDereplicatedSequences(fs);
+				System.out.println(getNumberOfDereplicatedSequences(fs));
 				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),
 						"3B1"));
 			}
 		
-		List<ProbSequence> clustered = clusterAtLevel(probSeqs, 0.03f, 0.05f);
+		List<ProbSequence> clustered = clusterAtLevel(probSeqs, 0.03f, 0.06f);
 		
 		int numClustered = 0;
 		for(ProbSequence ps : clustered)
@@ -132,6 +133,7 @@ public class ClusterAtLevel
 		System.out.println("Expecting " + expectedSum);
 		System.out.println("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
 	}
+	
 	
 	
 }
