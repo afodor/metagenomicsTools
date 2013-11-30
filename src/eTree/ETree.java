@@ -166,7 +166,7 @@ public class ETree implements Serializable
 	 * This can be called mutliple times;
 	 * but the final call (or if one call the only call) must call with remarkForDeletion = false;
 	 */
-	private void rerunDeletedTips(boolean remarkForDeletion) throws Exception
+	private int rerunDeletedTips(boolean remarkForDeletion) throws Exception
 	{
 		System.out.println("Rerunning deleted tips");
 		List<ENode> toRerun = new ArrayList<ENode>();
@@ -175,6 +175,7 @@ public class ETree implements Serializable
 			if( node.isMarkedForDeletion())
 				toRerun.add(node);
 	
+		
 		for( Iterator<ENode> i= this.topNode.getDaughters().iterator(); i.hasNext();  )
 			if( i.next().isMarkedForDeletion() )
 			{
@@ -192,6 +193,8 @@ public class ETree implements Serializable
 			while( index != null)
 				index = addToOrCreateNode(index, node.getProbSequence(), "NEW_" + node.getNodeName()+ "_",remarkForDeletion);
 		}
+		
+		return toRerun.size();
 	}
 	
 	private void extendDeletionDown(ENode enode, HashSet<ENode> marked)
@@ -345,7 +348,6 @@ public class ETree implements Serializable
 	
 	public void mergeAllDaughters() throws Exception
 	{
-		
 		while( true)
 		{
 			int numMerged = this.topNode.attemptDaughterMerge();
@@ -667,10 +669,18 @@ public class ETree implements Serializable
 		
 		fsoat.close();
 		
-		//for( int x=0; x< 5; x++)
-		//	eTree.rerunDeletedTips(true);
+		int numToTry =5;
+		int numDeleted = 1;
 		
-		eTree.rerunDeletedTips(false);
+		while( numToTry > 0 && numDeleted > 0)
+		{
+			numDeleted = eTree.rerunDeletedTips(true);
+			System.out.println(" re-ran " + numDeleted + " trying " + numToTry + " more times");
+			numToTry--;
+		}
+		
+		if( numDeleted > 0 )
+			eTree.rerunDeletedTips(false);
 		
 		return eTree;
 	}
