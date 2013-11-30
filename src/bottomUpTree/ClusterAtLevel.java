@@ -13,7 +13,6 @@
 
 package bottomUpTree;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,11 +25,8 @@ import probabilisticNW.KmerQueryResultForProbSeq;
 import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
 
-import utils.ConfigReader;
-
 public class ClusterAtLevel
 {
-	
 	/*
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
@@ -103,13 +99,12 @@ public class ClusterAtLevel
 		return returnVal;
 	}
 	
-	public static void main(String[] args) throws Exception
+	public static List<ProbSequence> getInitialSequencesFromFasta(String fastaPath, String sampleId,
+			float threshold, float stopThreshold) throws Exception
 	{
 		List<ProbSequence> probSeqs = new ArrayList<ProbSequence>();
 		
-		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(		
-				ConfigReader.getETreeTestDir() + File.separator + 
-		"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1");
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaPath);
 	
 		int expectedSum =0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
@@ -117,23 +112,20 @@ public class ClusterAtLevel
 			{
 				expectedSum += getNumberOfDereplicatedSequences(fs);
 				System.out.println(getNumberOfDereplicatedSequences(fs));
-				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),
-						"3B1"));
+				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),sampleId));
 			}
 		
-		List<ProbSequence> clustered = clusterAtLevel(probSeqs, 0.03f, 0.06f);
+		List<ProbSequence> clustered = clusterAtLevel(probSeqs, threshold, stopThreshold);
 		
 		int numClustered = 0;
 		for(ProbSequence ps : clustered)
 		{
-			System.out.println(ps);
+			//System.out.println(ps);
 			numClustered += ps.getNumRepresentedSequences();
 		}
 			
 		System.out.println("Expecting " + expectedSum);
 		System.out.println("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
+		return probSeqs;
 	}
-	
-	
-	
 }
