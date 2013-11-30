@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import kmerDatabase.KmerDatabase;
 
@@ -90,6 +91,21 @@ public class ClusterAtLevel
 		return clusters;
 	}
 	
+
+	static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
+	{
+		StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");
+		header.nextToken();
+		header.nextToken();
+		
+		int returnVal = Integer.parseInt(header.nextToken());
+		
+		if( header.hasMoreTokens())
+			throw new Exception("Parsing error");
+		
+		return returnVal;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		List<ProbSequence> probSeqs = new ArrayList<ProbSequence>();
@@ -97,18 +113,27 @@ public class ClusterAtLevel
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(		
 				ConfigReader.getETreeTestDir() + File.separator + 
 		"gastro454DataSet" + File.separator + "DEREP_SAMP_PREFIX3B1");
-		
+	
+		int expectedSum =0;
 		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 			if( fs.isOnlyACGT())
 			{
-				
-				probSeqs.add(new ProbSequence(fs.getSequence(), "3B1"));
+				expectedSum += getNumberOfDereplicatedSequences(fs);
+				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),
+						"3B1"));
 			}
 		
 		List<ProbSequence> clustered = clusterAtLevel(probSeqs, 0.03f, 0.05f);
 		
+		int numClustered = 0;
 		for(ProbSequence ps : clustered)
+		{
 			System.out.println(ps);
+			numClustered += ps.getNumRepresentedSequences();
+		}
+			
+		System.out.println("Expecting " + expectedSum);
+		System.out.println("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
 	}
 	
 	
