@@ -17,12 +17,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class KmerDatabase
 {
 	private HashMap<Integer, HashSet<String>> kmerMap =
 			new HashMap<Integer, HashSet<String>>();
+	
+	public void removeFromDatabase( String target)
+	{
+		for(int key : kmerMap.keySet())
+		{
+			for( Iterator<String> i = kmerMap.get(key).iterator(); i.hasNext();)
+			{
+				if( i.next().equals(target))
+					i.remove();
+			}
+		}
+	}
 	
 	public KmerDatabase()
 	{

@@ -64,7 +64,7 @@ public class RunManySingleThread
 							ETree.getNumberOfDereplicatedSequences(fs), 
 							sampleName);
 					
-					eTree.addSequence(probSeq, sampleName);
+					eTree.addSequence(probSeq, sampleName,false);
 					System.out.print(" " + ++x);
 				}
 				System.out.println("\nFinished " + numDone);

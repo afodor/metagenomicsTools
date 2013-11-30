@@ -56,7 +56,7 @@ public class RunManyMultipleThreads
 							ETree.getNumberOfDereplicatedSequences(fs), 
 							sampleName);
 					
-					eTree.addSequence(probSeq, sampleName);
+					eTree.addSequence(probSeq, sampleName,false);
 				}
 				
 				eTree.writeAsSerializedObject(ConfigReader.getETreeTestDir() + File.separator +

@@ -31,6 +31,9 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import kmerDatabase.KmerDatabase;
+import kmerDatabase.KmerQueryResult;
+
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 import parsers.NewRDPNode;
@@ -51,6 +54,8 @@ public class ETree implements Serializable
 	
 	private ENode topNode=null;
 	
+	private KmerDatabase tipDatabase = new KmerDatabase();
+	
 	public void validateTree() throws Exception
 	{
 		this.topNode.validateNodeAndDaughters();
@@ -66,7 +71,7 @@ public class ETree implements Serializable
 		return this.topNode.getNumOfSequencesAtTips();
 	}
 	
-	public void addSequence(ProbSequence probSeq, String sampleName) throws Exception
+	public void addSequence(ProbSequence probSeq, String sampleName, boolean markErrorsForDeletion) throws Exception
 	{	
 		if( topNode == null )
 		{
@@ -77,14 +82,14 @@ public class ETree implements Serializable
 			ProbSequence newSeq = ProbNW.align(topNode.getProbSequence(), probSeq);
 			newSeq.setMapCount(topNode.getProbSequence(), probSeq);
 			topNode.setProbSequence( newSeq);
-			ENode index = addToOrCreateNode(topNode, probSeq, sampleName);
+			ENode index = addToOrCreateNode(topNode, probSeq, sampleName, markErrorsForDeletion);
 			
 			while( index != null)
-				index = addToOrCreateNode(index, probSeq, sampleName);
+				index = addToOrCreateNode(index, probSeq, sampleName, markErrorsForDeletion);
 		}
 	}
 	
-	private void trimSingletonsAtTop(  ) throws Exception
+	private void trimSingletonsAtTop() throws Exception
 	{	
 		while(this.topNode.getDaughters().size() ==1)
 		{
@@ -157,14 +162,45 @@ public class ETree implements Serializable
 		return list;
 	}
 	
+	/*
+	 * This can be called mutliple times;
+	 * but the final call (or if one call the only call) must call with remarkForDeletion = false;
+	 */
+	private void rerunDeletedTips(boolean remarkForDeletion) throws Exception
+	{
+		System.out.println("Rerunning deleted tips");
+		List<ENode> toRerun = new ArrayList<ENode>();
+		
+		for( ENode node : getAllNodesAtTips())
+			if( node.isMarkedForDeletion())
+				toRerun.add(node);
+	
+		for( Iterator<ENode> i= this.topNode.getDaughters().iterator(); i.hasNext();  )
+			if( i.next().isMarkedForDeletion() )
+			{
+				i.remove();
+			}
+		
+		Collections.sort(toRerun);
+		System.out.println("Rerunning " + toRerun.size());
+
+		for(ENode node : toRerun)
+		{
+			System.out.println("Adding " + node.getNodeName());
+			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), "NEW_" +  node.getNodeName() +"_",remarkForDeletion);
+			
+			while( index != null)
+				index = addToOrCreateNode(index, node.getProbSequence(), "NEW_" + node.getNodeName()+ "_",remarkForDeletion);
+		}
+	}
+	
 	private void extendDeletionDown(ENode enode, HashSet<ENode> marked)
 	{
-		if( ! enode.isMarkedForDeletion() ) 
-			return;
 		
 		for( ENode d : enode.getDaughters() )
 		{
 			d.setMarkedForDeletion(true);
+			tipDatabase.removeFromDatabase(d.getNodeName());
 		}
 		
 		for( ENode d : enode.getDaughters())
@@ -195,10 +231,10 @@ public class ETree implements Serializable
 		for(ENode node : toRerun)
 		{
 			System.out.println("Adding " + node.getNodeName());
-			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), "NEW_" +  node.getNodeName() +"_");
+			ENode index = addToOrCreateNode(topNode, node.getProbSequence(), "NEW_" +  node.getNodeName() +"_",false);
 			
 			while( index != null)
-				index = addToOrCreateNode(index, node.getProbSequence(), "NEW_" + node.getNodeName()+ "_");
+				index = addToOrCreateNode(index, node.getProbSequence(), "NEW_" + node.getNodeName()+ "_",false);
 		}
 	}
 	
@@ -342,48 +378,113 @@ public class ETree implements Serializable
 		}
 	}
 	
-	private ENode getBestMatchToTips(ProbSequence querySequence, List<ENode> targets) throws Exception
+	private void markNodeUpForDeletion(String nodeName) throws Exception
+	{
+		tipDatabase.removeFromDatabase(nodeName);
+		List<ENode> list = getAllNodesAtTips();
+		
+		ENode node = null;
+		
+		for( ENode e : list )
+		{
+			//System.out.println("SEARCHING " + nodeName);
+			if( e.getNodeName().equals(nodeName))
+				node = e;
+		
+		}
+			
+		if( node == null)
+			throw new Exception("Logic error " + nodeName);
+		
+		node.setMarkedForDeletion(true);
+		tipDatabase.removeFromDatabase(nodeName);
+		
+		ENode aNode = node;
+		while( ! aNode.getNodeName().equals(ROOT_NAME))
+		{
+			aNode.setMarkedForDeletion(true);
+			aNode = aNode.getParent();
+		}
+		
+	}
+	
+	private Holder getBestMatchToTips(ProbSequence querySequence, List<Holder> targets, boolean markErrorsForDeletion) throws Exception
 	{
 		if( targets.size() < 2)
 			throw new Exception("Logic error: getBestMatchToTip called on list of size " + targets.size());
 		
-		ENode node = null;
+		List<KmerQueryResult> kmerList = tipDatabase.queryDatabase(querySequence.getConsensusUngapped());
+		
+		for( KmerQueryResult result : kmerList)
+		{
+			for( Holder target : targets)
+			{
+				for( ENode tip : target.enode.getAllNodesAtTips())
+					if( result.getId().equals(tip.getNodeName()))
+						return target;
+			}
+			
+			
+			// a high scoring result that is likely in the wrong place in the tree
+			if( markErrorsForDeletion)
+			{
+				markNodeUpForDeletion(result.getId());
+			}
+			else
+			{
+				System.out.println("Warning error likely for " + result.getId());
+			}
+				
+		}
+		
+		System.out.println("Couldn't find kmer hit ; resorting to Needlman Wusch");
+		
+		Holder h= null;
 		Double maxVal = null;
 		
-		for( ENode target : targets )
+		for( Holder target : targets )
 		{
-			List<ENode> tips = target.getAllNodesAtTips();
+			List<ENode> tips = target.enode.getAllNodesAtTips();
 			
 			for( ENode tip : tips )
 			{
 				ProbSequence alignment = ProbNW.align(querySequence, tip.getProbSequence());
 				
 				double distance = alignment.getAverageDistance();
-				if( node == null ||  distance < maxVal.doubleValue())
+				if( h== null ||  distance < maxVal.doubleValue())
 				{
-					node = target;
+					h= target;
 					maxVal = distance;
 				}
 			}
 		}
 		
-		return node;
+		return h;
+	}
+	
+	private static class Holder
+	{
+		ENode enode;
+		ProbSequence possibleAligment;
 	}
 
-	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String nodePrefixName) throws Exception
+	private ENode addToOrCreateNode( ENode parent , ProbSequence newSeq, String nodePrefixName, boolean markErrorsForDeletion) throws Exception
 	{
 		if( parent.getDaughters().size() == 0 )
 			return null;
 		
-		List<ENode> targetList =new ArrayList<ENode>();
+		List<Holder> targetList =new ArrayList<Holder>();
 		
-		for( ENode node : parent.getDaughters() )
+		for( ENode node : parent.getDaughters() ) if( ! node.isMarkedForDeletion() )
 		{
 			ProbSequence possibleAlignment= ProbNW.align(node.getProbSequence(), newSeq);
 			//System.out.println( possibleAlignment.getSumDistance()  + "  " + node.getLevel()  );
 			if( possibleAlignment.getAverageDistance() <= node.getLevel())
 			{
-				targetList.add(node);
+				Holder h = new Holder();
+				h.enode = node;
+				h.possibleAligment = possibleAlignment;
+				targetList.add(h);
 			}
 			
 		}
@@ -391,11 +492,15 @@ public class ETree implements Serializable
 		if( targetList.size() > 0 )
 		{
 			parent.incrementNumChoices( targetList.size() -1);
-			ENode chosenNode =  ( targetList.size() == 1 ? targetList.get(0) : getBestMatchToTips(newSeq, targetList));
-			ProbSequence chosenSequence= ProbSequence.makeDeepCopy(newSeq);
-			chosenSequence.setMapCount(chosenNode.getProbSequence(), newSeq);
-			chosenNode.setProbSequence(chosenSequence);
-			return chosenNode;
+			Holder chosenNode =  ( targetList.size() == 1 ? targetList.get(0) : getBestMatchToTips(newSeq, targetList, markErrorsForDeletion));
+			ProbSequence chosenSequence= ProbSequence.makeDeepCopy(chosenNode.possibleAligment);
+			chosenSequence.setMapCount(chosenNode.enode.getProbSequence(), newSeq);
+			chosenNode.enode.setProbSequence(chosenSequence);
+			
+			if( chosenNode.enode.getDaughters().size() == 0)
+				tipDatabase.addSequenceToDatabase(chosenNode.enode.getProbSequence().getConsensusUngapped(), chosenNode.enode.getNodeName());
+			
+			return chosenNode.enode;
 		}
 		
 		
@@ -411,6 +516,10 @@ public class ETree implements Serializable
 			newSeq = ProbSequence.makeDeepCopy(newSeq);
 			newNode = new ENode( newSeq, nodePrefixName + node_number++ + "_", LEVELS[x], previousNode);
 			previousNode.getDaughters().add(newNode);
+			
+			if( x == LEVELS.length -1 )
+				tipDatabase.addSequenceToDatabase(newNode.getProbSequence().getConsensusUngapped(), newNode.getNodeName());
+			
 		}
 		
 		return null;
@@ -546,7 +655,7 @@ public class ETree implements Serializable
 				}
 				
 				ProbSequence probSeq = new ProbSequence(fs.getSequence(), numDereplicatedSamples, sampleName);
-				eTree.addSequence(probSeq, sampleName);
+				eTree.addSequence(probSeq, sampleName,true);
 				
 				numDone++;
 				
@@ -557,6 +666,11 @@ public class ETree implements Serializable
 			}
 		
 		fsoat.close();
+		
+		//for( int x=0; x< 5; x++)
+		//	eTree.rerunDeletedTips(true);
+		
+		eTree.rerunDeletedTips(false);
 		
 		return eTree;
 	}

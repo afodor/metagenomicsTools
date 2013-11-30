@@ -180,7 +180,7 @@ public class ENode implements Serializable, Comparable<ENode>
 			
 
 			if(  Math.abs(sum - this.getProbSequence().getNumRepresentedSequences()) > 0.0000001 )
-				throw new Exception( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
+				System.out.println( this.nodeName +  " Unexpected # sequences " + sum + " " + this.getProbSequence().getNumRepresentedSequences());
 		}
 		
 	}

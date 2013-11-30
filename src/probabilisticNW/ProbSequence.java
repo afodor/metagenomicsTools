@@ -245,6 +245,19 @@ public class ProbSequence implements Serializable
 		return buff.toString();
 	}
 	
+
+	public String getConsensusUngapped() throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x  < columns.size(); x++)
+		{
+			buff.append( columns.get(x).getMostFrequentChar() );
+		}
+		
+		return buff.toString().replaceAll("-", "");
+	}
+	
 	public String toString()
 	{
 		NumberFormat nf = NumberFormat.getInstance();

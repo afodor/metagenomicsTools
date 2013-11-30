@@ -37,8 +37,8 @@ public class TestWithSmallTree
 				System.out.println(pa.toString());
 				
 		ETree eTree = new ETree();
-		eTree.addSequence(new ProbSequence(s3B1568, "S1"), "S1");
-		eTree.addSequence(new ProbSequence(s3B1842, "S2"), "S2");
+		eTree.addSequence(new ProbSequence(s3B1568, "S1"), "S1",false);
+		eTree.addSequence(new ProbSequence(s3B1842, "S2"), "S2",false);
 		
 		eTree.writeAsText(ConfigReader.getETreeTestDir() + File.separator + "smallTree.txt", true);
 	}
