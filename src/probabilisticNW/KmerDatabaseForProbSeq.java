@@ -89,7 +89,7 @@ public class KmerDatabaseForProbSeq
 	public void addSequenceToDatabase(ProbSequence probSeq)
 		throws Exception
 	{
-		KmerToBits toBits = new KmerToBits(probSeq.getConsensus());
+		KmerToBits toBits = new KmerToBits(probSeq.getConsensusUngapped());
 		
 		addHash(toBits.getHashAtCurrentPosition(), probSeq);
 		
