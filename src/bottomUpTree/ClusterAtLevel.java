@@ -15,12 +15,9 @@ package bottomUpTree;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import kmerDatabase.KmerDatabase;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
@@ -68,7 +65,7 @@ public class ClusterAtLevel
 				{
 					ProbSequence oldSeq = seedSeq;
 					seedSeq = possibleAlignment;
-					seedSeq.setMapCount(oldSeq, possibleAlignment);
+					seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
 					possibleMatch.getProbSeq().setMarkedForRemoval(true);
 				}
 				else if( distance <= stopSearchThreshold)
