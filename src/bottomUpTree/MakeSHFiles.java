@@ -43,7 +43,7 @@ public class MakeSHFiles
 				File shFile = 
 						new File( 
 							ConfigReader.getETreeTestDir() + File.separator + 
-							"gastro454DataSet" + File.separator + "run" + s.replace(DereplicateBySample.DEREP_PREFIX, ""));
+							"gastro454DataSet" + File.separator + "run" + s.replace(DereplicateBySample.DEREP_PREFIX, "") + ".sh");
 				
 				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
 				
