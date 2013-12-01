@@ -14,6 +14,7 @@
 package bottomUpTree;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -39,11 +40,12 @@ public class ClusterAtLevel
 			throw new Exception("Illegal arguments ");
 		
 		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
+		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
+		HashSet<ProbSequence> removed = new HashSet<ProbSequence>();
 		
 		while( ! seqstoCluster.isEmpty())
 		{
 			ProbSequence seedSeq = seqstoCluster.remove(0);
-			KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 			List<KmerQueryResultForProbSeq> targets = 
 					db.queryDatabase(seedSeq.getConsensusUngapped());
 			
@@ -53,31 +55,43 @@ public class ClusterAtLevel
 			while(keepGoing && targetIndex < targets.size())
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
-				ProbSequence possibleAlignment = 
-						ProbNW.align(seedSeq, possibleMatch.getProbSeq());
-				double distance =possibleAlignment.getAverageDistance();
 				
-				if(distance <= levelToCluster)
+				if( removed.contains(possibleMatch.getProbSeq()))
 				{
-					ProbSequence oldSeq = seedSeq;
-					seedSeq = possibleAlignment;
-					seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
-					possibleMatch.getProbSeq().setMarkedForRemoval(true);
+					ProbSequence possibleAlignment = 
+							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
+					double distance =possibleAlignment.getAverageDistance();
+					
+					if(distance <= levelToCluster)
+					{
+						ProbSequence oldSeq = seedSeq;
+						seedSeq = possibleAlignment;
+						seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
+						possibleMatch.getProbSeq().setMarkedForRemoval(true);
+					}
+					else if( distance <= stopSearchThreshold)
+					{
+						keepGoing = false;
+					}
+
 				}
-				else if( distance <= stopSearchThreshold)
-				{
-					keepGoing = false;
-				}
-				
+								
 				targetIndex++;
 			}
 			
 			clusters.add(seedSeq);
 			
 			for( Iterator<ProbSequence> i = seqstoCluster.iterator(); i.hasNext(); )
-				if( i.next().isMarkedForRemoval())
-					i.remove();
-			
+			{
+					ProbSequence aSeq = i.next();
+					if( aSeq.isMarkedForRemoval())
+					{
+						i.remove();
+						removed.add(aSeq);
+					}
+						
+			}
+					
 			//System.out.println("Have " + clusters.size() + " with " + seqstoCluster.size() + " left ");
 		}
 		
