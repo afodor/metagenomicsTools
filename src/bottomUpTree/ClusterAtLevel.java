@@ -40,7 +40,9 @@ public class ClusterAtLevel
 			throw new Exception("Illegal arguments ");
 		
 		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
+		System.out.println("Building database");
 		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
+		System.out.println("Finished");
 		HashSet<ProbSequence> removed = new HashSet<ProbSequence>();
 		
 		while( ! seqstoCluster.isEmpty())
