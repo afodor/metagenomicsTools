@@ -55,7 +55,7 @@ public class PivotToSpreadheet
 		}
 	}
 	
-	private static void writeResults( File outFile, HashMap<String, HashMap<String, Integer>> outerMap ) throws Exception
+	public static void writeResults( File outFile, HashMap<String, HashMap<String, Integer>> outerMap ) throws Exception
 	{
 		HashSet<String> samples = new HashSet<String>();
 		List<Holder> nodes = new ArrayList<Holder>();

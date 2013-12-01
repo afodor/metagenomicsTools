@@ -43,7 +43,6 @@ public class ClusterAtLevel
 		System.out.println("Building database");
 		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 		System.out.println("Finished");
-		HashSet<ProbSequence> removed = new HashSet<ProbSequence>();
 		
 		while( ! seqstoCluster.isEmpty())
 		{
@@ -58,41 +57,32 @@ public class ClusterAtLevel
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				
-				if( removed.contains(possibleMatch.getProbSeq()))
-				{
-					ProbSequence possibleAlignment = 
-							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
+				ProbSequence possibleAlignment = 
+						ProbNW.align(seedSeq, possibleMatch.getProbSeq());
 					double distance =possibleAlignment.getAverageDistance();
 					
-					if(distance <= levelToCluster)
-					{
-						ProbSequence oldSeq = seedSeq;
-						seedSeq = possibleAlignment;
-						seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
-						possibleMatch.getProbSeq().setMarkedForRemoval(true);
-					}
-					else if( distance <= stopSearchThreshold)
-					{
-						keepGoing = false;
-					}
-
+				if(distance <= levelToCluster)
+				{
+					ProbSequence oldSeq = seedSeq;
+					seedSeq = possibleAlignment;
+					seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
+					possibleMatch.getProbSeq().setMarkedForRemoval(true);
 				}
-								
+				else if( distance <= stopSearchThreshold)
+				{
+					keepGoing = false;
+				}
+				
 				targetIndex++;
 			}
 			
 			clusters.add(seedSeq);
 			
 			for( Iterator<ProbSequence> i = seqstoCluster.iterator(); i.hasNext(); )
-			{
-					ProbSequence aSeq = i.next();
-					if( aSeq.isMarkedForRemoval())
-					{
-						i.remove();
-						removed.add(aSeq);
-					}
-						
-			}
+				if( i.next().isMarkedForRemoval())
+					i.remove();
+			
+			db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 					
 			//System.out.println("Have " + clusters.size() + " with " + seqstoCluster.size() + " left ");
 		}
