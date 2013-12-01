@@ -16,8 +16,6 @@ import java.io.Serializable;
 
 public class ProbColumn implements Serializable
 {
-	
-	
 	private static final long serialVersionUID = 397594062593525001L;
 	
 	private static final int A_INDEX =0;
@@ -25,24 +23,24 @@ public class ProbColumn implements Serializable
 	private static final int G_INDEX =2;
 	private static final int T_INDEX =3;
 	private static final int GAP_INDEX =4;
-	private int counts[] = new int[5];
+	private final int counts[];
 	
 	private double distance =0;
 	
-	public static ProbColumn deepCopy(ProbColumn probCol)
+	
+	/*
+	 * Makes a deep copy
+	 */
+	public ProbColumn(ProbColumn otherColumn)
 	{
-		int newCounts[] = new int[5];
-		for(int x=0;x  < 5; x++)
-			newCounts[x] = probCol.counts[x];
-		
-		ProbColumn newProbCol = new ProbColumn();
-		newProbCol.counts = newCounts;
-		newProbCol.distance = probCol.distance;
-		
-		return newProbCol;
+		this(otherColumn.getCounts(), otherColumn.distance);
 	}
 	
-	
+	private ProbColumn(int[] counts, double distance)
+	{
+		this.counts = counts;
+		this.distance = distance;
+	}
 	
 	public double getDistance()
 	{
@@ -50,11 +48,16 @@ public class ProbColumn implements Serializable
 	}
 	
 	/*
-	 * Client should not modify this but is not prohibited from doing so
+	 * Makes a copy of the counts array, so is potentially expensive
 	 */
-	int[] getCounts()
+	public int[] getCounts()
 	{
-		return counts;
+		int[] newArray = new int[counts.length];
+		
+		for( int x=0 ; x < newArray.length; x++)
+			newArray[x] = counts[x];
+		
+		return  newArray;
 	}
 	
 	public char getMostFrequentChar() throws Exception
@@ -103,18 +106,19 @@ public class ProbColumn implements Serializable
 	 */
 	public ProbColumn merge( ProbColumn otherColumn)
 	{
-		ProbColumn pc = new ProbColumn();
+		int[] counts = new int[5];
+		double distance = 0;
 		for( int x=0; x < 5; x++)
 		{
-			pc.counts[x] = this.counts[x] + otherColumn.counts[x];
+			counts[x] = counts[x] + counts[x];
 		}
 		
 		for( int x=0; x < 5; x++)
 			for (int y= 0; y < 5; y++)
 				if( x != y )
-					pc.distance += (this.counts[x]/this.getTotalNum()) * (otherColumn.counts[y]/otherColumn.getTotalNum());
+					distance += (this.counts[x]/this.getTotalNum()) * (otherColumn.counts[y]/otherColumn.getTotalNum());
 		
-		return pc;
+		return new ProbColumn(counts, distance);
 	}
 	
 	public double getFractionA()
@@ -153,18 +157,19 @@ public class ProbColumn implements Serializable
 		return sum;
 	}
 	
-	public ProbColumn()
+	
+	public ProbColumn(char c) throws Exception
 	{
+		this(c,1);
+	}
+	
+	public ProbColumn(char c, int n) throws Exception
+	{
+		if( n < 0 )
+			throw new Exception("Can't make column with count " + n);
 		
-	}
-	
-	public ProbColumn(char c)
-	{
-		this.addChar(c,1);
-	}
-	
-	public ProbColumn(char c, int n)
-	{
+		counts= new int[5];
+		
 		this.addChar(c,n);
 	}
 	
@@ -191,6 +196,4 @@ public class ProbColumn implements Serializable
 		else if ( c == '-')
 			counts[GAP_INDEX]+=n;
 	}
-	
-	
 }

@@ -51,7 +51,7 @@ public class ProbSequence implements Serializable
 		List<ProbColumn> list= new ArrayList<ProbColumn>();
 		
 		for( ProbColumn pc : probSequence.columns)
-			list.add(pc.deepCopy(pc));
+			list.add(new ProbColumn(pc));
 		
 		ProbSequence ps = new ProbSequence(list, probSequence.n);
 		
@@ -206,12 +206,12 @@ public class ProbSequence implements Serializable
 		return columns;
 	}
 	
-	public ProbSequence(String s, String sampleID)
+	public ProbSequence(String s, String sampleID) throws Exception
 	{
 		this(s,1, sampleID);
 	}
 	
-	public ProbSequence(String s, int numCopiesDereplicatedSequence, String sampleID)
+	public ProbSequence(String s, int numCopiesDereplicatedSequence, String sampleID) throws Exception
 	{
 		for( char c : s.toCharArray())
 			this.columns.add(new ProbColumn(c, numCopiesDereplicatedSequence));
