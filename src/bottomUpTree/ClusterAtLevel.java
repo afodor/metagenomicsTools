@@ -75,6 +75,7 @@ public class ClusterAtLevel
 				targetIndex++;
 			}
 			
+			seedSeq.validateProbSequence();
 			clusters.add(seedSeq);
 			
 			for( Iterator<ProbSequence> i = seqstoCluster.iterator(); i.hasNext(); )

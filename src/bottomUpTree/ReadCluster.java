@@ -39,6 +39,9 @@ public class ReadCluster
 				if( i.next().getNumRepresentedSequences() == 1)
 					i.remove();
 		
+		for( ProbSequence probSeq : list )
+			probSeq.validateProbSequence();
+		
 		return list;
 	}
 	

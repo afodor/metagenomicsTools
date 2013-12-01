@@ -81,6 +81,9 @@ public class ProbSequence implements Serializable
 	
 	public void validateProbSequence() throws Exception
 	{
+		if( n < 1)
+			throw new Exception("ProbSequence must represent at least one sequence " + n);
+		
 		int aSum =0;
 		
 		for(  String s: sampleCounts.keySet())
