@@ -98,7 +98,7 @@ public class ClusterAtLevel
 			
 			removedMarkSeqs(seqstoCluster);			
 		}
-
+ 
 		int gottenSeqs = getNumExpected(clusters);
 		
 		if( expectedSeq != gottenSeqs)
