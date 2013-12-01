@@ -43,10 +43,10 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		int numDone =1;
 		List<ProbSequence> finalClusterList = null;
 		for(String s : fileNames)
-			if( s.endsWith(".clust") && numDone < 5)
+			if( s.endsWith(".clust") /*&& numDone < 3*/)
 			{
 				List<ProbSequence> fileCluster = 
-						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, true);
+						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
 				
 				if( finalClusterList == null)
 				{
