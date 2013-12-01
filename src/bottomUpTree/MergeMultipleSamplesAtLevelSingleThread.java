@@ -40,33 +40,25 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		
 		Collections.shuffle(fileNames);
 		
-		int numDone =1;
-		List<ProbSequence> finalClusterList = null;
+		int numDone =0;
+		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
+		
 		for(String s : fileNames)
 			if( s.endsWith(".clust") /*&& numDone < 3*/)
 			{
 				List<ProbSequence> fileCluster = 
 						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
 				
-				if( finalClusterList == null)
-				{
-					finalClusterList = fileCluster;
-				}
-				else
-				{
-					numDone++;
-					System.out.println("Starting " + numDone);
-					List<ProbSequence> newList = new ArrayList<ProbSequence>(finalClusterList);
-					newList.addAll(fileCluster);
-					finalClusterList = ClusterAtLevel.clusterAtLevel(newList, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
-					System.out.println("Finished with " + finalClusterList.size() );
-				}
+				numDone++;
+				System.out.println("Starting " + numDone);;
+				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
+				System.out.println("Finished with " + clusters.size() );
 			}
 		
 		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
 				new FileOutputStream(new File(ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged"))));
 		
-		out.writeObject(finalClusterList);
+		out.writeObject(clusters);
 		
 		out.flush(); out.close();
 	}

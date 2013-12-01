@@ -44,16 +44,15 @@ public class ClusterAtLevel
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
 	 */
-	public static List<ProbSequence> clusterAtLevel( List<ProbSequence> seqstoCluster, 
+	public static void clusterAtLevel( List<ProbSequence> alreadyClustered,
+					List<ProbSequence> seqstoCluster, 
 								float levelToCluster, float stopSearchThreshold) throws Exception
 	{
 		if( stopSearchThreshold < levelToCluster)
 			throw new Exception("Illegal arguments ");
 		
-		int expectedSeq = getNumExpected(seqstoCluster);
+		int expectedSeq = getNumExpected(seqstoCluster) + getNumExpected(alreadyClustered);
 			
-		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
-		
 		while( seqstoCluster.size() > 0)
 		{
 			ProbSequence seedSeq = seqstoCluster.remove(0);
@@ -94,17 +93,17 @@ public class ClusterAtLevel
 				targetIndex++;	
 			}
 			
-			clusters.add(seedSeq);
+			alreadyClustered.add(seedSeq);
+			//System.out.println("SWITCH");
 			
 			removedMarkSeqs(seqstoCluster);			
 		}
  
-		int gottenSeqs = getNumExpected(clusters);
+		int gottenSeqs = getNumExpected(alreadyClustered);
 		
 		if( expectedSeq != gottenSeqs)
-			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs + " in " + clusters.size() + " clusters ");
+			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs + " in " + alreadyClustered.size() + " clusters ");
 		
-		return clusters;
 	}
 	
 	private static void removedMarkSeqs(List<ProbSequence> list)
@@ -154,7 +153,9 @@ public class ClusterAtLevel
 				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),sampleId));
 			}
 		
-		List<ProbSequence> clustered = clusterAtLevel(probSeqs, threshold, stopThreshold);
+		List<ProbSequence> clustered = new ArrayList<ProbSequence>();
+		
+		clusterAtLevel(clustered, probSeqs, threshold, stopThreshold);
 		
 		int numClustered = 0;
 		for(ProbSequence ps : clustered)
