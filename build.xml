@@ -76,6 +76,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="ClusterAtLevel">
+        <java classname="bottomUpTree.ClusterAtLevel" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="CompareReduceAndAbundanOTU">
         <java classname="scripts.compareOTUs.CompareReduceAndAbundanOTU" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -182,6 +187,11 @@
     </target>
     <target name="MergeMap">
         <java classname="ratSaccharine.MergeMap" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MergeMultipleSamplesAtLevelSingleThread">
+        <java classname="bottomUpTree.MergeMultipleSamplesAtLevelSingleThread" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -380,6 +390,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </junit>
     </target>
+    <target name="TestWithSmallTree">
+        <java classname="eTree.test.TestWithSmallTree" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="VerifyPrimerPicks">
         <java classname="pythonVerification.VerifyPrimerPicks" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -387,6 +402,11 @@
     </target>
     <target name="WriteOnePercent">
         <java classname="erinManuscript.WriteOnePercent" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="ReadCluster">
+        <java classname="bottomUpTree.ReadCluster" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
