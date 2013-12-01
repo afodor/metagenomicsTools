@@ -57,7 +57,7 @@ public class MergeMultipleSamplesAtLevelSingleThread
 					System.out.println("Starting " + numDone);
 					finalClusterList.addAll(fileCluster);
 					finalClusterList = ClusterAtLevel.clusterAtLevel(finalClusterList, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
-					System.out.println("Finished with " + finalClusterList);
+					System.out.println("Finished with " + finalClusterList.size() + " " + finalClusterList);
 				}
 			}
 		
