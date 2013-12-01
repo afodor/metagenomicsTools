@@ -38,6 +38,14 @@ public class ClusterAtLevel
 		if( stopSearchThreshold < levelToCluster)
 			throw new Exception("Illegal arguments ");
 		
+		int expectedSeq =0;
+		
+		for( ProbSequence probSeq : seqstoCluster )
+		{
+			//System.out.println(expectedSeq + " " + probSeq.getNumRepresentedSequences());
+			expectedSeq += probSeq.getNumRepresentedSequences();
+		}
+			
 		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
 		System.out.println("Building database");
 		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
@@ -56,20 +64,23 @@ public class ClusterAtLevel
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				
-				ProbSequence possibleAlignment = 
-						ProbNW.align(seedSeq, possibleMatch.getProbSeq());
+				if( seedSeq != possibleMatch.getProbSeq() && !possibleMatch.getProbSeq().isMarkedForRemoval())
+				{
+					ProbSequence possibleAlignment = 
+							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
 					double distance =possibleAlignment.getAverageDistance();
-					
-				if(distance <= levelToCluster)
-				{
-					ProbSequence oldSeq = seedSeq;
-					seedSeq = possibleAlignment;
-					seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
-					possibleMatch.getProbSeq().setMarkedForRemoval(true);
-				}
-				else if( distance <= stopSearchThreshold)
-				{
-					keepGoing = false;
+						
+					if(distance <= levelToCluster)
+					{
+						ProbSequence oldSeq = seedSeq;
+						seedSeq = possibleAlignment;
+						seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
+						possibleMatch.getProbSeq().setMarkedForRemoval(true);
+					}
+					else if( distance <= stopSearchThreshold)
+					{
+						keepGoing = false;
+					}
 				}
 				
 				targetIndex++;
@@ -83,9 +94,16 @@ public class ClusterAtLevel
 					i.remove();
 			
 			db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
-					
-			//System.out.println("Have " + clusters.size() + " with " + seqstoCluster.size() + " left ");
+			
 		}
+
+		int gottenSeqs = 0;
+		
+		for( ProbSequence ps : clusters)
+			gottenSeqs += ps.getNumRepresentedSequences();
+		
+		if( expectedSeq != gottenSeqs)
+			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs);
 		
 		return clusters;
 	}
@@ -134,7 +152,11 @@ public class ClusterAtLevel
 		}
 			
 		System.out.println("Expecting " + expectedSum);
-		System.out.println("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
+		System.out.println();
+		
+		if( numClustered != expectedSum )
+			throw new Exception("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
+		
 		return clustered;
 	}
 }
