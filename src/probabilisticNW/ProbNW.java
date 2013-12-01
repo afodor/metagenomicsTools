@@ -27,6 +27,7 @@ public class ProbNW
 	{
 		NwCell[][] matrix = getMatrix(seq1, seq2);
 		//printMatrix(matrix);
+		//System.out.println("SUCCESFUL ALIGN" );
 		return traceback(seq1, seq2, matrix);
 	}
 	
@@ -79,7 +80,7 @@ public class ProbNW
 				System.out.print( matrix[x][y] + "\t");
 			}
 			
-			System.out.println();
+			System.out.println("");
 		}
 	}
 	
@@ -124,7 +125,7 @@ public class ProbNW
 				{
 					matrix[x][y] = new NwCell(upScore, NwCell.Direction.UP);
 				}
-				else throw new Exception("Logic error " + max + " " + diagScore + " " + leftScore + "  " + upScore + " " + seq1Col + "  " + seq2Col);
+				else throw new Exception(x + " " + y + " " + seq1.toString() + " " + seq2.toString() + " " +  "Logic error " + max + " " + diagScore + " " + leftScore + "  " + upScore + " " + seq1Col + "  " + seq2Col);
 				
 			}
 		}

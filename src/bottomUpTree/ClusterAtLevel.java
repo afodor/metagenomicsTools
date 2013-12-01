@@ -99,7 +99,10 @@ public class ClusterAtLevel
 		int returnVal = Integer.parseInt(header.nextToken());
 		
 		if( header.hasMoreTokens())
-			throw new Exception("Parsing error");
+			throw new Exception("Parsing error " + fs.getHeader());
+		
+		if( returnVal <= 0)
+			throw new Exception("Parsing error " + fs.getHeader());
 		
 		return returnVal;
 	}

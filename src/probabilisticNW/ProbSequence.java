@@ -279,9 +279,8 @@ public class ProbSequence implements Serializable
 		nf.setMinimumFractionDigits(2);
 		StringBuffer buff = new StringBuffer();
 		buff.append(this.n + " sequences with distance " + this.getAverageDistance());
-		
+		//buff.append( getConsensus());
 	
-		/*
 		for( int x=0; x < columns.size(); x++)
 			buff.append( nf.format(columns.get(x).getFractionA()) + " " );
 		
@@ -309,7 +308,6 @@ public class ProbSequence implements Serializable
 		
 		for( int x=0; x < columns.size(); x++)
 			buff.append( nf.format(columns.get(x).getDistance()) + " " );
-		*/
 		
 		return buff.toString();
 		

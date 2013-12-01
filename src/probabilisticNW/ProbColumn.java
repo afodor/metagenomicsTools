@@ -108,9 +108,10 @@ public class ProbColumn implements Serializable
 	{
 		int[] counts = new int[5];
 		double distance = 0;
+		
 		for( int x=0; x < 5; x++)
 		{
-			counts[x] = counts[x] + counts[x];
+			counts[x] = this.counts[x] + otherColumn.counts[x];
 		}
 		
 		for( int x=0; x < 5; x++)
@@ -183,7 +184,7 @@ public class ProbColumn implements Serializable
 	/*
 	 * Non A,C,G,T and - are ignored
 	 */
-	public void addChar(char c, int n)
+	public void addChar(char c, int n) throws Exception
 	{
 		if( c == 'A')
 			counts[A_INDEX]+=n;
@@ -195,5 +196,6 @@ public class ProbColumn implements Serializable
 			counts[T_INDEX]+=n;
 		else if ( c == '-')
 			counts[GAP_INDEX]+=n;
+		else throw new Exception("Invalid character");
 	}
 }
