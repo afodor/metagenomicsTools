@@ -53,12 +53,12 @@ public class ClusterAtLevel
 		int expectedSeq = getNumExpected(seqstoCluster);
 			
 		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
-		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 		
 		while( seqstoCluster.size() > 0)
 		{
 			ProbSequence seedSeq = seqstoCluster.remove(0);
 			
+			KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 			List<KmerQueryResultForProbSeq> targets = 
 					db.queryDatabase(seedSeq.getConsensusUngapped());
 			
@@ -69,7 +69,7 @@ public class ClusterAtLevel
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				
-				if( possibleMatch.getProbSeq() != seedSeq)
+				if( possibleMatch.getProbSeq() != seedSeq && ! possibleMatch.getProbSeq().isMarkedForRemoval())
 				{
 					ProbSequence possibleAlignment = 
 							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
@@ -94,12 +94,9 @@ public class ClusterAtLevel
 				targetIndex++;	
 			}
 			
-			seedSeq.validateProbSequence();
 			clusters.add(seedSeq);
+			
 			removedMarkSeqs(seqstoCluster);			
-			//System.out.println("Building database with " + seqstoCluster.size());
-			db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
-			//System.out.println("Finished ");
 		}
 
 		int gottenSeqs = getNumExpected(clusters);

@@ -55,7 +55,6 @@ public class RunOne
 		
 		System.out.println("Finished with " + initialCluster.size() + " in " + numAttempts + " attempts");
 		
-
 		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
 				new FileOutputStream(new File(args[1]))));
 		
