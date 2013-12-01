@@ -14,13 +14,15 @@
 package bottomUpTree;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
-import dereplicate.DereplicateBySample;
 
 public class MergeMultipleSamplesAtLevelSingleThread
 {
@@ -40,23 +42,28 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		
 		List<ProbSequence> finalClusterList = null;
 		for(String s : fileNames)
-			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
+			if( s.endsWith(".clust"))
 			{
-				String sampleName = s.replace(DereplicateBySample.DEREP_PREFIX, "");
-				File file = new File(dir.getAbsolutePath() + File.separator + s);
-				List<ProbSequence> initialCluster = ClusterAtLevel. getInitialSequencesFromFasta(file.getAbsolutePath(), sampleName,0.03f, 0.06f);
+				List<ProbSequence> fileCluster = ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s);
 				
 				if( finalClusterList == null)
 				{
-					finalClusterList = initialCluster;
+					finalClusterList = fileCluster;
 				}
 				else
 				{
-					finalClusterList.addAll(initialCluster);
-					finalClusterList = ClusterAtLevel.clusterAtLevel(finalClusterList, 0.03f, 0.06f);
+					finalClusterList.addAll(fileCluster);
+					finalClusterList = ClusterAtLevel.clusterAtLevel(finalClusterList, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
 					System.out.println("Finished with " + finalClusterList);
 				}
 			}
+		
+		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
+				new FileOutputStream(new File(ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged"))));
+		
+		out.writeObject(finalClusterList);
+		
+		out.flush(); out.close();
 	}
 
 }

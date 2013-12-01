@@ -23,18 +23,17 @@ import probabilisticNW.ProbSequence;
 
 public class ReadCluster
 {
-	public static void main(String[] args) throws Exception
+	public static List<ProbSequence> readFromFile(String filePath) throws Exception
 	{
 		ObjectInputStream in =new ObjectInputStream(new GZIPInputStream(new 
-				FileInputStream("D:\\E_Tree_TestDir\\bottomClusters\\31R")));
+				FileInputStream(filePath)));
 		
 		@SuppressWarnings("unchecked")
 		List<ProbSequence> list = (List<ProbSequence>) in.readObject();
 		
 		in.close();
 		
-		for(ProbSequence ps : list)
-			System.out.println(ps);
+		return list;
 	}
 	
 }
