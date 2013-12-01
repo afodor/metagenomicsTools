@@ -40,12 +40,18 @@ public class MakeSHFiles
 		for(String s : fileNames)
 			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
 			{
-				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(new File( 
-						ConfigReader.getETreeTestDir() + File.separator + 
-						"gastro454DataSet" + File.separator )));
+				File shFile = 
+						new File( 
+							ConfigReader.getETreeTestDir() + File.separator + 
+							"gastro454DataSet" + File.separator + "run" + s.replace(DereplicateBySample.DEREP_PREFIX, ""));
+				
+				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
 				
 				aSHWriter.write("java -mx3000m /users/afodor/metagenomicsTools/bin/bottomUpTree/RunOne " + 
 				dir.getAbsolutePath() + File.separator + s + " " + s +"_CLUST.clust");
+				
+				mainBatFile.write("qsub -N \"" + s.replace(DereplicateBySample.DEREP_PREFIX, "")
+								+ "\"  -q \"viper\" " + shFile.getAbsolutePath());
 				
 				aSHWriter.flush();  aSHWriter.close();
 			}

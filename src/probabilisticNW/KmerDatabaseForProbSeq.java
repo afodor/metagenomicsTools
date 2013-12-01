@@ -17,19 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
-import kmerDatabase.KmerDatabase;
-import kmerDatabase.KmerQueryResult;
 import kmerDatabase.KmerToBits;
-import parsers.FastaSequence;
 
 public class KmerDatabaseForProbSeq
 {
 	private HashMap<Integer, HashSet<ProbSequence>> kmerMap =
 			new HashMap<Integer, HashSet<ProbSequence>>();
-	
 	
 	private void addHash(int i, ProbSequence probSeq)
 	{
