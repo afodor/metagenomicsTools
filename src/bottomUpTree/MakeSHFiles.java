@@ -51,7 +51,7 @@ public class MakeSHFiles
 				dir.getAbsolutePath() + File.separator + s + " " + s +"_CLUST.clust");
 				
 				mainBatFile.write("qsub -N \"" + s.replace(DereplicateBySample.DEREP_PREFIX, "")
-								+ "\"  -q \"viper\" " + shFile.getAbsolutePath());
+								+ "\"  -q \"viper\" " + shFile.getAbsolutePath() + "\n");
 				
 				aSHWriter.flush();  aSHWriter.close();
 			}
