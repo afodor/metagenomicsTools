@@ -40,6 +40,7 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		
 		Collections.shuffle(fileNames);
 		
+		int numDone =1;
 		List<ProbSequence> finalClusterList = null;
 		for(String s : fileNames)
 			if( s.endsWith(".clust"))
@@ -52,6 +53,8 @@ public class MergeMultipleSamplesAtLevelSingleThread
 				}
 				else
 				{
+					numDone++;
+					System.out.println("Starting " + numDone);
 					finalClusterList.addAll(fileCluster);
 					finalClusterList = ClusterAtLevel.clusterAtLevel(finalClusterList, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
 					System.out.println("Finished with " + finalClusterList);
