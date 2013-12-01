@@ -27,6 +27,19 @@ import probabilisticNW.ProbSequence;
 
 public class ClusterAtLevel
 {
+	private static int getNumExpected(List<ProbSequence> list ) 
+	{
+		int expectedSeq =0;
+		
+		for( ProbSequence probSeq : list)
+		{
+			//System.out.println(expectedSeq + " " + probSeq.getNumRepresentedSequences());
+			expectedSeq += probSeq.getNumRepresentedSequences();
+		}
+		
+		return expectedSeq;
+	}
+	
 	/*
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
@@ -34,27 +47,20 @@ public class ClusterAtLevel
 	public static List<ProbSequence> clusterAtLevel( List<ProbSequence> seqstoCluster, 
 								float levelToCluster, float stopSearchThreshold) throws Exception
 	{
-
 		if( stopSearchThreshold < levelToCluster)
 			throw new Exception("Illegal arguments ");
 		
-		int expectedSeq =0;
-		
-		for( ProbSequence probSeq : seqstoCluster )
-		{
-			//System.out.println(expectedSeq + " " + probSeq.getNumRepresentedSequences());
-			expectedSeq += probSeq.getNumRepresentedSequences();
-		}
+		int expectedSeq = getNumExpected(seqstoCluster);
 			
 		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
 		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 		
-		while( ! seqstoCluster.isEmpty())
+		while( seqstoCluster.size() > 0)
 		{
 			ProbSequence seedSeq = seqstoCluster.remove(0);
+			
 			List<KmerQueryResultForProbSeq> targets = 
 					db.queryDatabase(seedSeq.getConsensusUngapped());
-			seedSeq.setMarkedForRemoval(true);
 			
 			boolean keepGoing = true;
 			int targetIndex =0;
@@ -63,51 +69,60 @@ public class ClusterAtLevel
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				
-				if( !possibleMatch.getProbSeq().isMarkedForRemoval())
+				if( possibleMatch.getProbSeq() != seedSeq)
 				{
 					ProbSequence possibleAlignment = 
 							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
 					double distance =possibleAlignment.getAverageDistance();
+
+					//System.out.println("ALIGN " + distance +  " "+ targetIndex + " " + 
+						//			seedSeq.getNumRepresentedSequences() + " " + seqstoCluster.size());
 						
-					if(distance <= levelToCluster)
+					if(  distance <= levelToCluster)
 					{
 						ProbSequence oldSeq = seedSeq;
 						seedSeq = possibleAlignment;
 						seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
 						possibleMatch.getProbSeq().setMarkedForRemoval(true);
 					}
-					else if( distance <= stopSearchThreshold)
+					else if( distance >= stopSearchThreshold)
 					{
 						keepGoing = false;
 					}
 				}
 				
-				targetIndex++;
+				targetIndex++;	
 			}
 			
 			seedSeq.validateProbSequence();
 			clusters.add(seedSeq);
-			
-			for( Iterator<ProbSequence> i = seqstoCluster.iterator(); i.hasNext(); )
-				if( i.next().isMarkedForRemoval())
-					i.remove();
-			
+			removedMarkSeqs(seqstoCluster);			
 			//System.out.println("Building database with " + seqstoCluster.size());
 			db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 			//System.out.println("Finished ");
 		}
 
-		int gottenSeqs = 0;
-		
-		for( ProbSequence ps : clusters)
-			gottenSeqs += ps.getNumRepresentedSequences();
+		int gottenSeqs = getNumExpected(clusters);
 		
 		if( expectedSeq != gottenSeqs)
-			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs);
+			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs + " in " + clusters.size() + " clusters ");
 		
 		return clusters;
 	}
 	
+	private static void removedMarkSeqs(List<ProbSequence> list)
+	{
+		for( Iterator<ProbSequence> i = list.iterator(); i.hasNext(); )
+		{
+			ProbSequence probSeq = i.next();
+			
+			if( probSeq.isMarkedForRemoval())
+			{
+				probSeq.setMarkedForRemoval(false);
+				i.remove();	
+			}
+		}
+	}
 
 	static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
 	{
