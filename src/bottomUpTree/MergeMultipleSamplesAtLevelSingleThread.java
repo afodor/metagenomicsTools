@@ -45,7 +45,8 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		for(String s : fileNames)
 			if( s.endsWith(".clust"))
 			{
-				List<ProbSequence> fileCluster = ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s);
+				List<ProbSequence> fileCluster = 
+						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
 				
 				if( finalClusterList == null)
 				{

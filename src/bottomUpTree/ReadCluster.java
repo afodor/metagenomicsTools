@@ -15,6 +15,7 @@ package bottomUpTree;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -23,7 +24,7 @@ import probabilisticNW.ProbSequence;
 
 public class ReadCluster
 {
-	public static List<ProbSequence> readFromFile(String filePath) throws Exception
+	public static List<ProbSequence> readFromFile(String filePath, boolean removeSingletons) throws Exception
 	{
 		ObjectInputStream in =new ObjectInputStream(new GZIPInputStream(new 
 				FileInputStream(filePath)));
@@ -32,6 +33,11 @@ public class ReadCluster
 		List<ProbSequence> list = (List<ProbSequence>) in.readObject();
 		
 		in.close();
+		
+		if( removeSingletons)
+			for(Iterator<ProbSequence> i = list.iterator(); i.hasNext(); )
+				if( i.next().getNumRepresentedSequences() == 1)
+					i.remove();
 		
 		return list;
 	}
