@@ -78,7 +78,7 @@ public class ClusterAtLevel
 				if( i.next().isMarkedForRemoval())
 					i.remove();
 			
-			System.out.println("Have " + clusters.size() + " with " + seqstoCluster.size() + " left ");
+			//System.out.println("Have " + clusters.size() + " with " + seqstoCluster.size() + " left ");
 		}
 		
 		return clusters;
@@ -111,7 +111,7 @@ public class ClusterAtLevel
 			if( fs.isOnlyACGT())
 			{
 				expectedSum += getNumberOfDereplicatedSequences(fs);
-				System.out.println(getNumberOfDereplicatedSequences(fs));
+				//System.out.println(getNumberOfDereplicatedSequences(fs));
 				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),sampleId));
 			}
 		
@@ -126,6 +126,6 @@ public class ClusterAtLevel
 			
 		System.out.println("Expecting " + expectedSum);
 		System.out.println("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
-		return probSeqs;
+		return clustered;
 	}
 }
