@@ -14,6 +14,7 @@
 package bottomUpTree;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,8 +29,15 @@ public class PivotOut
 {
 	public static void main(String[] args) throws Exception
 	{
-		List<ProbSequence> list = ReadCluster.readFromFile(
+		List<ProbSequence> inList = ReadCluster.readFromFile(
 				ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged", false);
+		
+		//try one clean up
+		List<ProbSequence> list = new ArrayList<ProbSequence>();
+		System.out.println("Starting with " + inList.size());
+		ClusterAtLevel.clusterAtLevel(list, inList, 0.10f, 0.20f);
+		System.out.println("Endig with " + list.size());
+		
 		
 		int otuNum =1;
 		
@@ -42,7 +50,7 @@ public class PivotOut
 			otuNum++;
 		}
 		
-		PivotToSpreadheet.writeResults(new File(ConfigReader.getETreeTestDir() + File.separator + "mergedTaxaAsColumns.txt"), 
+		PivotToSpreadheet.writeResults(new File(ConfigReader.getETreeTestDir() + File.separator + "mergedTaxaAsColumns03Then010.txt"), 
 				outerMap);
 	}
 }
