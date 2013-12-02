@@ -40,7 +40,7 @@ public class ETree implements Serializable
 	private static final long serialVersionUID = 8463272194826212918L;
 	public static final String ROOT_NAME = "root";
 	
-	public static final float[] LEVELS = {0.15f,0.14f,0.13f,0.12f,0.11f,0.10f,0.09f,0.08f,0.07f,0.06f, 0.05f,0.04f,0.03f};
+	public static final float[] LEVELS = {0.40f, 0.30f, 0.20f,0.15f,0.14f,0.13f,0.12f,0.11f,0.10f,0.09f,0.08f,0.07f,0.06f, 0.05f,0.04f,0.03f};
 	public static final int RDP_THRESHOLD = 80;	
 	
 	private ENode topNode=null;
