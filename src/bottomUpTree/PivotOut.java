@@ -14,41 +14,32 @@
 package bottomUpTree;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import eTree.PivotToSpreadheet;
 
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
-
-
 public class PivotOut
 {
-	public static void main(String[] args) throws Exception
+	public static void writeBinaryFile(String outPath, List<ProbSequence> list ) throws Exception
 	{
-		List<ProbSequence> inList = ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged", false);
+		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
+				new FileOutputStream(new File(outPath))));
 		
-		//try one clean up
-		List<ProbSequence> list = new ArrayList<ProbSequence>();
-		System.out.println("Starting with " + inList.size());
-		ClusterAtLevel.clusterAtLevel(list, inList, 0.10f, 0.20f);
-		System.out.println("Endig with " + list.size());
+		out.writeObject(list);
 		
-		
-		int otuNum =1;
-		
+		out.flush(); out.close();
+	}
+	
+	public static void pivotOut(List<ProbSequence> list , String outPath) throws Exception
+	{	
 		HashMap<String, HashMap<String, Integer>> outerMap = new HashMap<String, HashMap<String,Integer>>();
-		
-		for( ProbSequence probSeq : list)
-		{
-			outerMap.put("OTU" + otuNum, probSeq.getSampleCounts());
-			System.out.println(otuNum + ":" + probSeq.getSampleCounts());
-			otuNum++;
-		}
 		
 		PivotToSpreadheet.writeResults(new File(ConfigReader.getETreeTestDir() + File.separator + "mergedTaxaAsColumns03Then010.txt"), 
 				outerMap);

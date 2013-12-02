@@ -16,7 +16,6 @@ package eTree;
 import java.io.BufferedWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import probabilisticNW.ProbNW;
@@ -31,35 +30,12 @@ public class ENode implements Serializable, Comparable<ENode>
 	private double level;
 	private String nodeName;
 	private List<ENode> daughters =new ArrayList<ENode>();
-	private boolean markedForDeletion = false;
-	private int numChoices =0;
-	
-	public int getNumChoices()
-	{
-		return numChoices;
-	}
-	
-	public void incrementNumChoices()
-	{
-		numChoices++;
-	}
-	
-	public void incrementNumChoices(int numberToAdd)
-	{
-		this.numChoices += numberToAdd;
-	}
-	
-	public void setMarkedForDeletion(boolean markedForDeletion)
-	{
-		this.markedForDeletion = markedForDeletion;
-	}
 	
 	public void setParent(ENode parent)
 	{
 		this.parent = parent;
 	}
 
-	
 	public void setDaughters(List<ENode> daughters)
 	{
 		this.daughters = daughters;
@@ -70,12 +46,7 @@ public class ENode implements Serializable, Comparable<ENode>
 	{
 		return o.getProbSequence().getNumRepresentedSequences() - this.getProbSequence().getNumRepresentedSequences();
 	}
-	
-	public boolean isMarkedForDeletion()
-	{
-		return markedForDeletion;
-	}
-	
+		
 	public String getNodeName()
 	{
 		return nodeName;
@@ -86,58 +57,11 @@ public class ENode implements Serializable, Comparable<ENode>
 		return probSequence;
 	}
 	
-	/*
-	 * Wildly un-thread safe!
-	 */
-	public int attemptDaughterMerge() throws Exception
-	{
-		int numMerged=0;
-		
-		for(int x=0; x < this.daughters.size()-1; x++)
-		{
-			ENode xNode = this.daughters.get(x);
-			//System.out.println("Attempting daughter merge for " + xNode.level + " " + xNode.nodeName);
-			
-			if( ! xNode.markedForDeletion)  for( int y=x+1; y < this.daughters.size(); y++)
-			{
-				ENode yNode = this.daughters.get(y);
-				
-				if( ! yNode.markedForDeletion)
-				{
-					ProbSequence possibleAlignment = ProbNW.align(xNode.getProbSequence(), yNode.getProbSequence());
-					
-					if( possibleAlignment.getAverageDistance() <= xNode.getLevel() )
-					{
-						numMerged++;
-						yNode.markedForDeletion = true;
-						xNode.daughters.addAll(yNode.daughters);
-						xNode.incrementNumChoices(yNode.getNumChoices()); 
-						possibleAlignment.setMapCount(xNode.getProbSequence(), yNode.getProbSequence());
-						xNode.setProbSequence(possibleAlignment);
-					}
-				}
-			}
-		}
-		
-		for( ENode d: this.daughters)
-			numMerged += d.attemptDaughterMerge();
-		
-		for( Iterator<ENode> i = this.daughters.iterator(); i.hasNext(); )
-		{
-			if( i.next().markedForDeletion)
-				i.remove();
-		}
-		
-		return numMerged;
-	}
-
+	
 	public void validateNodeAndDaughters() throws Exception
 	{
 		//System.out.println("Validating " + this.nodeName);
 		this.probSequence.validateProbSequence();
-		
-		if( markedForDeletion)
-			throw new Exception("Node should be deleted " + this.nodeName);
 		
 		if( ! nodeName.equals(ETree.ROOT_NAME))
 		{
@@ -200,23 +124,6 @@ public class ENode implements Serializable, Comparable<ENode>
 		return max;
 	}
 	
-
-	public int getMaxNumberOfChoicesInBranch()
-	{
-		ENode enode=  this;
-		int max = enode.getNumChoices();
-		
-		while( ! enode.getNodeName().equals(ETree.ROOT_NAME))
-		{
-			max = Math.max(enode.getNumChoices(), max);
-			enode = enode.getParent();
-		}
-		
-		return max;
-	}
-
-
-	
 	public int getNumOfAllDaughters()
 	{
 		int sum =daughters.size();
@@ -225,14 +132,6 @@ public class ENode implements Serializable, Comparable<ENode>
 			sum += subNode.getNumOfAllDaughters();
 		
 		return sum;
-	}
-	
-	public void markNodeAndDaughtersForDeletion()
-	{
-		setMarkedForDeletion(true);
-		
-		for( ENode node : this.daughters )
-			node.markNodeAndDaughtersForDeletion();
 	}
 	
 	/*

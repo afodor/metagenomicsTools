@@ -14,12 +14,9 @@
 package bottomUpTree;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
@@ -55,12 +52,8 @@ public class MergeMultipleSamplesAtLevelSingleThread
 				System.out.println("Finished with " + clusters.size() );
 			}
 		
-		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
-				new FileOutputStream(new File(ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged"))));
+		PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged", clusters);
 		
-		out.writeObject(clusters);
-		
-		out.flush(); out.close();
 	}
 
 }

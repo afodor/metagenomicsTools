@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import eTree.ETree;
+
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 import probabilisticNW.KmerDatabaseForProbSeq;
@@ -47,6 +49,7 @@ public class ClusterAtLevel
 					List<ProbSequence> seqstoCluster, 
 								float levelToCluster, float stopSearchThreshold) throws Exception
 	{
+		
 		if( stopSearchThreshold < levelToCluster)
 			throw new Exception("Illegal arguments ");
 		
@@ -73,9 +76,6 @@ public class ClusterAtLevel
 				
 				double distance =possibleAlignment.getAverageDistance();		
 				
-				//System.out.println("ALIGN " +  distance +  " "+ targetIndex + " " + 
-					//	alreadyClustered.size());
-		
 				if(  distance <= levelToCluster)
 				{
 					targetSequence = possibleMatch.getProbSeq();
@@ -97,6 +97,8 @@ public class ClusterAtLevel
 				alreadyClustered.add(querySeq);
 				db.addSequenceToDatabase(querySeq);
 			}
+			if( alreadyClustered.size() %250 ==0 )
+				System.out.println(alreadyClustered.size());
 		}
 		
 		if( seqstoCluster.size() != 0)
@@ -153,9 +155,6 @@ public class ClusterAtLevel
 			numClustered += ps.getNumRepresentedSequences();
 		}
 			
-		System.out.println("Expecting " + expectedSum);
-		System.out.println();
-		
 		if( numClustered != expectedSum )
 			throw new Exception("Finished with " + clustered.size()  + " clusters with " + numClustered + " sequences");
 		
