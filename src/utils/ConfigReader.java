@@ -53,6 +53,7 @@ public class ConfigReader
 	public static final String E_TREE_TEST_DIR = "E_TREE_TEST_DIR";
 	
 	public static final String RDP_JAR_PATH= "RDP_JAR_PATH";
+	public static final String MOCK_SEQ_DIR="MOCK_SEQ_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -72,6 +73,11 @@ public class ConfigReader
 	public static String getETreeTestDir() throws Exception
 	{
 		return getConfigReader().getAProperty(E_TREE_TEST_DIR);
+	}
+	
+	public static String getMockSeqDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MOCK_SEQ_DIR);
 	}
 	
 	public static String getRDPJarPath() throws Exception
