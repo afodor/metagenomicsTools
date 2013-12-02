@@ -38,7 +38,16 @@ public class PivotOut
 	
 	public static void pivotOut(List<ProbSequence> list , String outPath) throws Exception
 	{	
+		int otuNum = 1;
+		System.out.println("Writing "  + outPath);
 		HashMap<String, HashMap<String, Integer>> outerMap = new HashMap<String, HashMap<String,Integer>>();
+		
+		for( ProbSequence probSeq : list)
+		{
+			outerMap.put("OTU" + otuNum, probSeq.getSampleCounts());
+			otuNum++;
+		}
+		
 		
 		PivotToSpreadheet.writeResults( new File(outPath), outerMap);
 	}
