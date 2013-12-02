@@ -23,7 +23,6 @@ import java.util.zip.GZIPOutputStream;
 import eTree.PivotToSpreadheet;
 
 import probabilisticNW.ProbSequence;
-import utils.ConfigReader;
 
 public class PivotOut
 {
@@ -41,7 +40,6 @@ public class PivotOut
 	{	
 		HashMap<String, HashMap<String, Integer>> outerMap = new HashMap<String, HashMap<String,Integer>>();
 		
-		PivotToSpreadheet.writeResults(new File(ConfigReader.getETreeTestDir() + File.separator + "mergedTaxaAsColumns03Then010.txt"), 
-				outerMap);
+		PivotToSpreadheet.writeResults( new File(outPath), outerMap);
 	}
 }
