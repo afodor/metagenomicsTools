@@ -14,7 +14,6 @@
 package bottomUpTree;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -52,52 +51,56 @@ public class ClusterAtLevel
 			throw new Exception("Illegal arguments ");
 		
 		int expectedSeq = getNumExpected(seqstoCluster) + getNumExpected(alreadyClustered);
-			
+
+		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(alreadyClustered);
+		
 		while( seqstoCluster.size() > 0)
 		{
-			ProbSequence seedSeq = seqstoCluster.remove(0);
+			ProbSequence querySeq = seqstoCluster.remove(0);
 			
-			KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(seqstoCluster);
 			List<KmerQueryResultForProbSeq> targets = 
-					db.queryDatabase(seedSeq.getConsensusUngapped());
+					db.queryDatabase(querySeq.getConsensusUngapped());
 			
+			ProbSequence targetSequence = null;
 			boolean keepGoing = true;
 			int targetIndex =0;
 			
-			while(keepGoing && targetIndex < targets.size())
+			while( targetSequence == null &&  keepGoing && targetIndex < targets.size())
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
+				ProbSequence possibleAlignment = 
+							ProbNW.align(querySeq, possibleMatch.getProbSeq());
 				
-				if( possibleMatch.getProbSeq() != seedSeq && ! possibleMatch.getProbSeq().isMarkedForRemoval())
+				double distance =possibleAlignment.getAverageDistance();		
+				
+				//System.out.println("ALIGN " +  distance +  " "+ targetIndex + " " + 
+					//	alreadyClustered.size());
+		
+				if(  distance <= levelToCluster)
 				{
-					ProbSequence possibleAlignment = 
-							ProbNW.align(seedSeq, possibleMatch.getProbSeq());
-					double distance =possibleAlignment.getAverageDistance();
-
-					//System.out.println("ALIGN " + distance +  " "+ targetIndex + " " + 
-						//			seedSeq.getNumRepresentedSequences() + " " + seqstoCluster.size());
-						
-					if(  distance <= levelToCluster)
-					{
-						ProbSequence oldSeq = seedSeq;
-						seedSeq = possibleAlignment;
-						seedSeq.setMapCount(oldSeq, possibleMatch.getProbSeq());
-						possibleMatch.getProbSeq().setMarkedForRemoval(true);
-					}
-					else if( distance >= stopSearchThreshold)
-					{
-						keepGoing = false;
-					}
+					targetSequence = possibleMatch.getProbSeq();
+					possibleAlignment.setMapCount(targetSequence, querySeq);
+					targetSequence.replaceWithDeepCopy(possibleAlignment);
+					// pick up any new kmers that we migtht have acquired
+					db.addSequenceToDatabase(targetSequence);
 				}
-				
+				else if( distance >= stopSearchThreshold)
+				{
+					keepGoing = false;
+				}
+					
 				targetIndex++;	
 			}
 			
-			alreadyClustered.add(seedSeq);
-			//System.out.println("SWITCH");
-			
-			removedMarkSeqs(seqstoCluster);			
+			if( targetSequence == null)
+			{
+				alreadyClustered.add(querySeq);
+				db.addSequenceToDatabase(querySeq);
+			}
 		}
+		
+		if( seqstoCluster.size() != 0)
+			throw new Exception("Expecting 0 for " + seqstoCluster.size());
  
 		int gottenSeqs = getNumExpected(alreadyClustered);
 		
@@ -106,20 +109,6 @@ public class ClusterAtLevel
 		
 	}
 	
-	private static void removedMarkSeqs(List<ProbSequence> list)
-	{
-		for( Iterator<ProbSequence> i = list.iterator(); i.hasNext(); )
-		{
-			ProbSequence probSeq = i.next();
-			
-			if( probSeq.isMarkedForRemoval())
-			{
-				probSeq.setMarkedForRemoval(false);
-				i.remove();	
-			}
-		}
-	}
-
 	static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
 	{
 		StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");

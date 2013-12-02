@@ -34,16 +34,14 @@ public class ProbSequence implements Serializable
 	private int n=0;
 	private HashMap<String, Integer> sampleCounts= new HashMap<String, Integer>();
 	private double alignmentScore = Double.MIN_VALUE;
-	private boolean markedForRemoval = false;
 	
-	public boolean isMarkedForRemoval()
+	public void replaceWithDeepCopy(ProbSequence otherSequence)
 	{
-		return markedForRemoval;
-	}
-	
-	public void setMarkedForRemoval(boolean markedForRemoval)
-	{
-		this.markedForRemoval = markedForRemoval;
+		otherSequence = makeDeepCopy(otherSequence);
+		this.columns = otherSequence.columns;
+		this.n = otherSequence.n;
+		this.sampleCounts = otherSequence.sampleCounts;
+		this.alignmentScore = otherSequence.alignmentScore;
 	}
 	
 	public static ProbSequence makeDeepCopy(ProbSequence probSequence)
