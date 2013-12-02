@@ -97,7 +97,7 @@ public class ClusterAtLevel
 				alreadyClustered.add(querySeq);
 				db.addSequenceToDatabase(querySeq);
 			}
-			if( alreadyClustered.size() %250 ==0 )
+			if( alreadyClustered.size() %1000 ==0 )
 				System.out.println(alreadyClustered.size());
 		}
 		
