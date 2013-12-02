@@ -64,12 +64,12 @@ public class ETreeFromBottom
 			List<ProbSequence> newList2 = new ArrayList<ProbSequence>();
 			System.out.println("First round " + newList.size());
 			ClusterAtLevel.clusterAtLevel(newList2, newList, etree.LEVELS[x], etree.LEVELS[x] + 0.05f);
-			System.out.println("Writing " + newList.size() );
+			System.out.println("Writing " + newList2.size() );
 			PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged"+ 
-					etree.LEVELS[x] + ".merged", newList);
-			PivotOut.pivotOut(newList, ConfigReader.getETreeTestDir() + File.separator + "bottomUpMel740" + 
+					etree.LEVELS[x] + ".merged", newList2);
+			PivotOut.pivotOut(newList2, ConfigReader.getETreeTestDir() + File.separator + "bottomUpMel740" + 
 					etree.LEVELS[x] + ".txt");
-			list = newList;
+			list = newList2;
 		}
 		
 		//try one clean up

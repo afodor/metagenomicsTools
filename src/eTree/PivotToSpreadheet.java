@@ -90,7 +90,8 @@ public class PivotToSpreadheet
 		
 		for( String s : sampleList)
 		{
-			writer.write(s);
+			//todo:  Remove this hack...
+			writer.write(s.replaceAll("/users/afodor/etreetest/gastro454DataSet/", ""));
 			
 			for(Holder h : nodes)
 			{
