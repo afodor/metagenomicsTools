@@ -44,7 +44,7 @@ public class MakeSHFiles
 				
 				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
 				
-				aSHWriter.write("java -classpath /users/afodor/metagenomicsTools/bin/ -mx3000m bottomUpTree.RunOne " + 
+				aSHWriter.write("java -classpath /users/afodor/metagenomicsTools/bin/ -mx20000m bottomUpTree.RunOne " + 
 				dir.getAbsolutePath() + File.separator + s + " " + dir.getAbsolutePath() + File.separator +  s +"_CLUST.clust");
 				
 				mainBatFile.write("qsub -N \"RunClust" + s.replace(DereplicateBySample.DEREP_PREFIX, "")
