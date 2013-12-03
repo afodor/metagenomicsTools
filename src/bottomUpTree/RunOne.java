@@ -45,7 +45,7 @@ public class RunOne
 		int numAttempts = 1;
 		int newClusterSize = initialSeqs.size()+1;
 		
-		while( numAttempts <=10 && newClusterSize > initialSeqs.size())
+		//while( numAttempts <=10 && newClusterSize > initialSeqs.size())
 		{
 			System.out.println("Got " + initialSeqs.size() + " trying attempt " + numAttempts );
 			newClusterSize = initialSeqs.size();
