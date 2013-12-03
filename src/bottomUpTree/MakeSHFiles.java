@@ -10,7 +10,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package bottomUpTree;
 
 import java.io.BufferedWriter;
@@ -24,6 +23,45 @@ import dereplicate.DereplicateBySample;
 
 public class MakeSHFiles
 {
+	public static void main(String[] args) throws Exception
+	{
+		File dir = new File(ConfigReader.getMockSeqDir());
+		
+		List<String> fileNames = new ArrayList<String>();
+		for( String s : dir.list())
+			fileNames.add(s);
+		
+		BufferedWriter mainBatFile = new BufferedWriter(new FileWriter(new File( 
+				ConfigReader.getMockSeqDir() + File.separator + "runAll.sh")));
+		
+		for(String s : fileNames)
+			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
+			{
+				File shFile = 
+						new File( 
+							ConfigReader.getMockSeqDir() + File.separator + 
+								"run" + s.replace(DereplicateBySample.DEREP_PREFIX, "") + ".sh");
+				
+				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
+				
+				aSHWriter.write("java -classpath /users/afodor/metagenomicsTools/bin/ -mx3000m bottomUpTree.RunOne " + 
+				dir.getAbsolutePath() + File.separator + s + " " + dir.getAbsolutePath() + File.separator +  s +"_CLUST.clust");
+				
+				mainBatFile.write("qsub -N \"RunClust" + s.replace(DereplicateBySample.DEREP_PREFIX, "")
+								+ "\"  -q \"viper\" " + shFile.getAbsolutePath() + "\n");
+				
+				aSHWriter.flush();  aSHWriter.close();
+			}
+		
+		mainBatFile.flush();  mainBatFile.close();
+	}
+	
+	/*
+	 * For the 74 sample dataset.
+	 * 
+	 * Todo: Build some abstract classes to allow these things to be switched back and forth with 1 line of code
+	 */
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		File dir = new File(ConfigReader.getETreeTestDir() + File.separator + 
@@ -57,5 +95,5 @@ public class MakeSHFiles
 			}
 		
 		mainBatFile.flush();  mainBatFile.close();
-	}
+	}*/
 }
