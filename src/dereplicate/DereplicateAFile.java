@@ -21,8 +21,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import eTree.ENode;
+import eTree.ETree;
+
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
+import utils.ConfigReader;
 
 public class DereplicateAFile
 {
@@ -50,7 +54,7 @@ public class DereplicateAFile
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaFilePath);
 		
-		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; )
+		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
 		{
 			if( fs.isOnlyACGT())
 			{
@@ -80,16 +84,38 @@ public class DereplicateAFile
 	
 	private static void dereplicateFile(String inFile, String outFile, String sampleName) throws Exception
 	{
+		System.out.println("Starting " + outFile);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outFile)));
 		
+		List<Holder> list = getSequenceAndCounts(inFile);
+		int seqNum =1;
 		
+		for( Holder h : list)
+		{
+			writer.write(">" + sampleName + "_" + seqNum + "_" + h.count + "\n");
+			writer.write(h.sequence + "\n");
+		}
 		
 		writer.flush();  writer.close();
+		System.out.println("Finished " + outFile);
 		
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
+		File directory= new File(ConfigReader.getMockSeqDir() + File.separator + "illumina_mock" );
 		
+		String[] names = directory.list();
+		
+		for( String s : names)
+		{
+			if( s.endsWith("fa"))
+			{
+				File inFile = new File(directory.getAbsolutePath() + File.separator + s);
+				String sampleName = s.substring(0, s.indexOf("ready")).replaceAll("_","");
+				File outFile = new File(ConfigReader.getMockSeqDir() + File.separator + DereplicateBySample.DEREP_PREFIX + sampleName + ".FASTA");
+				dereplicateFile(inFile.getAbsolutePath(), outFile.getAbsolutePath(), sampleName);
+			}
+		}
 	}
 }
