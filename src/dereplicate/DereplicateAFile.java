@@ -91,6 +91,7 @@ public class DereplicateAFile
 		{
 			writer.write(">" + sampleName + "_" + seqNum + "_" + h.count + "\n");
 			writer.write(h.sequence + "\n");
+			seqNum++;
 		}
 		
 		writer.flush();  writer.close();

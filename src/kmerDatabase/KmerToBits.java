@@ -35,7 +35,7 @@ public class KmerToBits
 		if(s.length() < KMER_SIZE)
 			throw new Exception("String must be longer than " + KMER_SIZE);
 		
-		for( int x=0; x < 16; x++)
+		for( int x=0; x < KMER_SIZE; x++)
 		{
 			addChar(s.charAt(x));
 			index++;

@@ -13,6 +13,9 @@
 
 package bottomUpTree;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -23,9 +26,12 @@ import probabilisticNW.KmerDatabaseForProbSeq;
 import probabilisticNW.KmerQueryResultForProbSeq;
 import probabilisticNW.ProbNW;
 import probabilisticNW.ProbSequence;
+import utils.ConfigReader;
 
 public class ClusterAtLevel
 {
+	public static final boolean LOG = true;
+	
 	private static int getNumExpected(List<ProbSequence> list ) 
 	{
 		int expectedSeq =0;
@@ -39,6 +45,21 @@ public class ClusterAtLevel
 		return expectedSeq;
 	}
 	
+	private static void writeToLog(int numberAlignmentPeformed, int targetIndex, int numQuerySequences, BufferedWriter logWriter, ProbSequence possibleAlignment, ProbSequence querySequence,
+				KmerQueryResultForProbSeq kmerResult) throws Exception
+	{
+		logWriter.write( numberAlignmentPeformed + "\t");
+		logWriter.write((targetIndex + 1)  +"\t");
+		logWriter.write( numQuerySequences + "\t");
+		logWriter.write(  kmerResult.getCounts() + "\t"  );
+		logWriter.write( querySequence.getNumRepresentedSequences() + "\t");
+		logWriter.write( kmerResult.getProbSeq().getNumRepresentedSequences() + "\t");
+		logWriter.write( (querySequence.getNumRepresentedSequences()  + kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" );
+		logWriter.write( possibleAlignment.getAverageDistance() + "\t");
+		logWriter.write( possibleAlignment.getAlignmentScoreAveragedByCol() + "\n");
+		logWriter.flush();
+	}
+	
 	/*
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
@@ -47,6 +68,18 @@ public class ClusterAtLevel
 					List<ProbSequence> seqstoCluster, 
 								float levelToCluster, float stopSearchThreshold) throws Exception
 	{
+		BufferedWriter logWriter = null;
+		
+		if( LOG)
+		{
+			logWriter= new BufferedWriter( new FileWriter(new File(ConfigReader.getETreeTestDir() + 
+					File.separator + "log" + System.currentTimeMillis() + ".txt")));
+			logWriter.write("alignmentPerformed\talignmentInSeries\tnumberOfQuerySequences\tkmersInCommon\tnumSeqsQuery\tnumSeqsPossibleTarget\t" + 
+					"totalNumSequences\tprobAlignmentDistnace\taverageAlignmentScore\n");
+			logWriter.flush();
+			
+		}
+		
 		
 		if( stopSearchThreshold < levelToCluster)
 			throw new Exception("Illegal arguments ");
@@ -54,9 +87,12 @@ public class ClusterAtLevel
 		int expectedSeq = getNumExpected(seqstoCluster) + getNumExpected(alreadyClustered);
 
 		KmerDatabaseForProbSeq db = KmerDatabaseForProbSeq.buildDatabase(alreadyClustered);
+		int numAlignmentsPerformed =0;
+		int originalQuerySize = seqstoCluster.size();
 		
 		while( seqstoCluster.size() > 0)
 		{
+			numAlignmentsPerformed++;
 			ProbSequence querySeq = seqstoCluster.remove(0);
 			
 			List<KmerQueryResultForProbSeq> targets = 
@@ -71,6 +107,11 @@ public class ClusterAtLevel
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				ProbSequence possibleAlignment = 
 							ProbNW.align(querySeq, possibleMatch.getProbSeq());
+				
+				
+				if(LOG)
+					writeToLog(numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
+							logWriter, possibleAlignment, querySeq, possibleMatch);
 				
 				double distance =possibleAlignment.getAverageDistance();		
 				
@@ -95,6 +136,7 @@ public class ClusterAtLevel
 				alreadyClustered.add(querySeq);
 				db.addSequenceToDatabase(querySeq);
 			}
+			
 			if( alreadyClustered.size() %1000 ==0 )
 				System.out.println(alreadyClustered.size());
 		}
@@ -106,6 +148,11 @@ public class ClusterAtLevel
 		
 		if( expectedSeq != gottenSeqs)
 			throw new Exception("Expecting " + expectedSeq + " but got " + gottenSeqs + " in " + alreadyClustered.size() + " clusters ");
+		
+		if( LOG)
+		{
+			logWriter.flush(); logWriter.close();
+		}
 		
 	}
 	

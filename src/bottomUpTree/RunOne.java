@@ -50,7 +50,7 @@ public class RunOne
 			System.out.println("Got " + initialSeqs.size() + " trying attempt " + numAttempts );
 			newClusterSize = initialSeqs.size();
 			List<ProbSequence> newCluster = new ArrayList<ProbSequence>();
-			ClusterAtLevel.clusterAtLevel(newCluster, initialSeqs, INITIAL_THRESHOLD, EXCEED_THRESHOLD);
+			ClusterAtLevel.clusterAtLevel(newCluster, initialSeqs, INITIAL_THRESHOLD, 1.0f);
 			initialSeqs = newCluster;
 			numAttempts++;
 		}
