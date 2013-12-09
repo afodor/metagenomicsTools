@@ -63,11 +63,10 @@ public static final boolean LOG = true;
 		return returnVal;
 	}
 	
-	private static void writeToLog(String type, int numberAlignmentPeformed, int targetIndex, int numQuerySequences,
+	private static void writeToLog(int numberAlignmentPeformed, int targetIndex, int numQuerySequences,
 			BufferedWriter logWriter, ProbSequence possibleAlignment, ProbSequence querySequence,
 				KmerQueryResultForProbSeq kmerResult) throws Exception
 	{
-		logWriter.write(type + "\t");
 		logWriter.write( numberAlignmentPeformed + "\t");
 		logWriter.write((targetIndex + 1)  +"\t");
 		logWriter.write( numQuerySequences + "\t");
@@ -130,7 +129,7 @@ public static final boolean LOG = true;
 							ProbNW.align(querySeq, possibleMatch.getProbSeq());
 				
 				if(LOG)
-					writeToLog("primary", numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
+					writeToLog(numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
 							logWriter, possibleAlignment, querySeq, possibleMatch);
 				
 				double distance =possibleAlignment.getAverageDistance();		
