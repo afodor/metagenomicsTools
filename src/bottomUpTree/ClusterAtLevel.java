@@ -143,27 +143,35 @@ public class ClusterAtLevel
 			List<KmerQueryResultForProbSeq> matchingList =new ArrayList<KmerQueryResultForProbSeq>();
 			int targetIndex =0;
 			boolean keepGoing =true;
+			int mostNumSequences = -1;
 			
 			while( targetIndex < targets.size() && keepGoing)
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
-				ProbSequence possibleAlignment = 
+				
+				// don't need to run the alignment if the possible match has fewer sequences than best hit
+				if( possibleMatch.getProbSeq().getNumRepresentedSequences() > mostNumSequences)
+				{
+					ProbSequence possibleAlignment = 
 							ProbNW.align(querySeq, possibleMatch.getProbSeq());
 				
-				if(LOG)
-					writeToLog(numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
+					if(LOG)
+						writeToLog(numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
 							logWriter, possibleAlignment, querySeq, possibleMatch);
 				
-				double distance =possibleAlignment.getAverageDistance();		
+					double distance =possibleAlignment.getAverageDistance();		
 				
-				if(  distance <= levelToCluster)
-				{
-					matchingList.add(possibleMatch);
-					possibleMatch.setAlignSeq(possibleAlignment);
-				}
-				else if (distance >= stopSearchThreshold)
-				{
-					keepGoing = false;
+					if(  distance <= levelToCluster)
+					{
+						matchingList.add(possibleMatch);
+						possibleMatch.setAlignSeq(possibleAlignment);
+						mostNumSequences = Math.max(
+						possibleMatch.getProbSeq().getNumRepresentedSequences(), mostNumSequences);
+					}
+					else if (distance >= stopSearchThreshold)
+					{
+						keepGoing = false;
+					}
 				}
 			
 				targetIndex++;	
@@ -183,10 +191,7 @@ public class ClusterAtLevel
 			{
 				alreadyClustered.add(querySeq);
 				db.addSequenceToDatabase(querySeq);
-			}
-			
-			if( alreadyClustered.size() %1000 ==0 )
-				System.out.println(alreadyClustered.size());
+			}			
 		}
 		
 		if( seqstoCluster.size() != 0)
