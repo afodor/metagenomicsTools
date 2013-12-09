@@ -25,7 +25,7 @@ import dereplicate.DereplicateBySample;
 public class RunOne
 {
 	public static final float INITIAL_THRESHOLD = 0.03f;
-	public static final float EXCEED_THRESHOLD = 1.00f;
+	public static final float EXCEED_THRESHOLD = 0.09f;
 	
 	public static void main(String[] args) throws Exception
 	{
