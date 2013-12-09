@@ -16,7 +16,6 @@ package bottomUpTree;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -45,6 +44,7 @@ public class RunOne
 				ClusterAtLevel.getInitialSequencesFromFasta(
 						file.getAbsolutePath(), sampleName,INITIAL_THRESHOLD, EXCEED_THRESHOLD,sampleName);
 		
+		/*
 		System.out.println("GOT SEQS");
 		int numAttempts = 1;
 		int newClusterSize = initialSeqs.size()+1;
@@ -61,6 +61,7 @@ public class RunOne
 		}
 		
 		System.out.println("Finished with " + initialSeqs.size() + " in " + numAttempts + " attempts");
+		*/
 		
 		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
 				new FileOutputStream(new File(args[1]))));

@@ -162,9 +162,6 @@ public class ClusterAtLevel
 				targetIndex++;	
 			}
 			
-			if( matchingList.size() > 1) 
-			System.out.println("MATHCING LIST=" + matchingList.size() );
-			
 			if( matchingList.size() >= 1)
 			{
 				Collections.sort(matchingList, new KmerQueryResultForProbSeq.SortByNumSequences());
@@ -177,7 +174,6 @@ public class ClusterAtLevel
 			}
 			else if( targetSequence == null)
 			{
-				System.out.println("Adding new");
 				alreadyClustered.add(querySeq);
 				db.addSequenceToDatabase(querySeq);
 			}
