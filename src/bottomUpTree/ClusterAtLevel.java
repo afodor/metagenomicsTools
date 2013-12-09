@@ -74,7 +74,8 @@ public static final boolean LOG = true;
 		logWriter.write( (kmerResult== null ? "-1" :  kmerResult.getCounts()) + "\t"  );
 		logWriter.write( querySequence.getNumRepresentedSequences() + "\t");
 		logWriter.write( (kmerResult == null ? "-1" :  kmerResult.getProbSeq().getNumRepresentedSequences()) + "\t");
-		logWriter.write( (querySequence.getNumRepresentedSequences()  + kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" );
+		logWriter.write( (querySequence.getNumRepresentedSequences()  + 
+				(kmerResult == null ? 0 :  kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" ));
 		logWriter.write( possibleAlignment.getAverageDistance() + "\t");
 		logWriter.write( possibleAlignment.getAlignmentScoreAveragedByCol() + "\n");
 		logWriter.flush();
