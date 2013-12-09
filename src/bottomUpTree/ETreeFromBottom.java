@@ -34,9 +34,9 @@ public class ETreeFromBottom
 		ETree etree = new ETree();
 		
 		List<ProbSequence> list= ReadCluster.readFromFile(
-		ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMergedStartingCleanedOnce"+ 
-				"0.03.merged",false);
-		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator + "bottomUpMel740.03.txt");
+		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",false);
+		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator +  "bottomUpMelMerged"+ 
+				File.separator + "bottomUpMel740.03.txt");
 		
 		
 		/* run the first time to produce the required input file (which takes awhile)
@@ -71,10 +71,5 @@ public class ETreeFromBottom
 					etree.LEVELS[x] + ".txt");
 			list = newList2;
 		}
-		
-		//try one clean up
-		/*
-		*/
-	
 	}
 }
