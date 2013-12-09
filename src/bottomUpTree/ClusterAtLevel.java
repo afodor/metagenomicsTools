@@ -155,42 +155,7 @@ public static final boolean LOG = true;
 				targetSequence.replaceWithDeepCopy(matchingList.get(0).getAlignSeq());
 				// pick up any new kmers that we migtht have acquired
 				db.addSequenceToDatabase(targetSequence);
-				
-				//get all vs. all merge
-				//System.out.println("GOT " + matchingList.size() + " possibles ");
-				
-				// now check to see if we should merge any of the OTUs that had good matches to the target
-				numAlignmentsPerformed=0;
-				boolean mergedOne = false;
-				for( int x=0; x < matchingList.size()-1 && ! mergedOne; x++)
-				{
-					ProbSequence xSeq = matchingList.get(x).getProbSeq();
-					
-					for( int y=x+1; y < matchingList.size() && ! mergedOne; y++)
-					{
-						ProbSequence ySeq = matchingList.get(y).getProbSeq();
-						ProbSequence possibleAlignment = ProbNW.align(xSeq, ySeq);
-						
-						numAlignmentsPerformed++;
-						
-						if( possibleAlignment.getAverageDistance() <= levelToCluster )
-						{
-							mergedOne = true;
-							xSeq.setMapCount(xSeq, ySeq);
-							xSeq.replaceWithDeepCopy(possibleAlignment);
-							if ( ! alreadyClustered.remove(ySeq))
-								throw new Exception("Could not remove object");
-							
-							db = KmerDatabaseForProbSeq.buildDatabase(alreadyClustered);
-						}
-						
-						if(LOG)
-							writeToLog("secondary", numAlignmentsPerformed, targetIndex, xSeq.getNumRepresentedSequences(), 
-									logWriter, possibleAlignment, ySeq, null);
-						
-					}
-				}
-					
+									
 			}
 			else if( targetSequence == null)
 			{
