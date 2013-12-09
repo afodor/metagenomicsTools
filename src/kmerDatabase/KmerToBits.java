@@ -26,7 +26,8 @@ public class KmerToBits
 	private final String s;
 	private int index=0;
 	
-	public static float KMER_SIZE =16;
+	public static final int KMER_SIZE =8;
+	public static final int KMER_BIT_MASK= 0xFFFF0000; 
 	
 	public KmerToBits(String stringToHash) throws Exception
 	{
@@ -68,6 +69,7 @@ public class KmerToBits
 		int mask = getMask(c);
 		bits = bits << 2;
 		bits = bits | mask;
+		bits = bits | KMER_BIT_MASK;
 	}
 	
 	private int getMask(char c) throws Exception
@@ -134,6 +136,7 @@ public class KmerToBits
 	
 	public static void main(String[] args) throws Exception
 	{
+		System.out.println(Integer.toBinaryString(KMER_BIT_MASK));
 		String s1 = "CCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGAAAAAAAAAAAAAAAATTTTTTTTTTTTTTTT";
 		
 		KmerToBits kmers = new KmerToBits(s1);
