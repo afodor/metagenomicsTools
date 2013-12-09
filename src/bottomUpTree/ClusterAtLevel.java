@@ -71,7 +71,7 @@ public static final boolean LOG = true;
 		logWriter.write( numberAlignmentPeformed + "\t");
 		logWriter.write((targetIndex + 1)  +"\t");
 		logWriter.write( numQuerySequences + "\t");
-		logWriter.write(  kmerResult.getCounts() + "\t"  );
+		logWriter.write( (kmerResult== null ? "-1" :  kmerResult.getCounts()) + "\t"  );
 		logWriter.write( querySequence.getNumRepresentedSequences() + "\t");
 		logWriter.write( (kmerResult == null ? "-1" :  kmerResult.getProbSeq().getNumRepresentedSequences()) + "\t");
 		logWriter.write( (querySequence.getNumRepresentedSequences()  + kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" );
