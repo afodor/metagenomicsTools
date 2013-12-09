@@ -36,7 +36,9 @@ public class RunOne
 			System.exit(1);
 		}
 		
-		String sampleName = args[0].replace(DereplicateBySample.DEREP_PREFIX, "");
+		File f = new File(args[0]);
+		
+		String sampleName = f.getName().replace(DereplicateBySample.DEREP_PREFIX, "").replace("clust", "");
 		File file = new File(args[0]);
 		List<ProbSequence> initialSeqs= 
 				ClusterAtLevel.getInitialSequencesFromFasta(
