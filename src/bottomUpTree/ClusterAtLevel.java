@@ -37,7 +37,7 @@ import utils.ConfigReader;
 public class ClusterAtLevel
 {
 	public static final boolean LOG = true;
-	public static final boolean CALCULATE_CANNONICAL_NW= true;
+	public static final boolean CALCULATE_CANNONICAL_NW= false;
 	
 	private static int getNumExpected(List<ProbSequence> list ) 
 	{
