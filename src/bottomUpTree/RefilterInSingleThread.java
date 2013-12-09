@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dereplicate.DereplicateBySample;
+
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
@@ -45,12 +47,10 @@ public class RefilterInSingleThread
 				
 				numDone++;
 				System.out.println("Starting " + numDone + " with " + fileCluster.size());;
-				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
+				String sampleName = s.replace(".clust", "").replace(DereplicateBySample.DEREP_PREFIX, "") + "refilter_";
+				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD, sampleName);
 				System.out.println("Finished with " + clusters.size() );
 				PivotOut.writeBinaryFile(ConfigReader.getMockSeqDir()+ File.separator + s + "_REFILTERED", clusters);
 			}
-		
-		
-		
 	}
 }

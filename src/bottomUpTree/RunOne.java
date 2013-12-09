@@ -16,7 +16,6 @@ package bottomUpTree;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -30,6 +29,7 @@ public class RunOne
 	
 	public static void main(String[] args) throws Exception
 	{
+		System.out.println("STARTING");
 		if( args.length != 2)
 		{
 			System.out.println("Usage RunOne inputFasta outputClusterFile");
@@ -40,20 +40,24 @@ public class RunOne
 		File file = new File(args[0]);
 		List<ProbSequence> initialSeqs= 
 				ClusterAtLevel.getInitialSequencesFromFasta(
-						file.getAbsolutePath(), sampleName,INITIAL_THRESHOLD, EXCEED_THRESHOLD);
+						file.getAbsolutePath(), sampleName,INITIAL_THRESHOLD, 1.0f,sampleName);
 		
+		System.out.println("GOT SEQS");
 		int numAttempts = 1;
 		int newClusterSize = initialSeqs.size()+1;
 		
+		/*
 		//while( numAttempts <=10 && newClusterSize > initialSeqs.size())
 		{
 			System.out.println("Got " + initialSeqs.size() + " trying attempt " + numAttempts );
 			newClusterSize = initialSeqs.size();
 			List<ProbSequence> newCluster = new ArrayList<ProbSequence>();
-			ClusterAtLevel.clusterAtLevel(newCluster, initialSeqs, INITIAL_THRESHOLD, 1.0f);
+			//ClusterAtLevel.clusterAtLevel(newCluster, initialSeqs, INITIAL_THRESHOLD, 1.0f);
+			LogMultiple.clusterAtLevel(newCluster, initialSeqs, INITIAL_THRESHOLD, 1.0f);
 			initialSeqs = newCluster;
 			numAttempts++;
 		}
+		*/
 		
 		System.out.println("Finished with " + initialSeqs.size() + " in " + numAttempts + " attempts");
 		

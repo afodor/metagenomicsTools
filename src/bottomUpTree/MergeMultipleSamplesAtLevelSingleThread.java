@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dereplicate.DereplicateBySample;
+
 import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
@@ -48,7 +50,8 @@ public class MergeMultipleSamplesAtLevelSingleThread
 				
 				numDone++;
 				System.out.println("Starting " + numDone);;
-				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD);
+				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD,
+						s.replace(".clust", "").replace(DereplicateBySample.DEREP_PREFIX,"") + "merge");
 				System.out.println("Finished with " + clusters.size() );
 			}
 		

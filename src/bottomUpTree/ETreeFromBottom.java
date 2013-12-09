@@ -60,10 +60,10 @@ public class ETreeFromBottom
 		{
 			System.out.println(etree.LEVELS[x]);
 			List<ProbSequence> newList = new ArrayList<ProbSequence>();
-			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x], etree.LEVELS[x] + 0.05f);
+			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x], etree.LEVELS[x] + 0.05f, "mel74" + etree.LEVELS[x] + "_round1");
 			List<ProbSequence> newList2 = new ArrayList<ProbSequence>();
 			System.out.println("First round " + newList.size());
-			ClusterAtLevel.clusterAtLevel(newList2, newList, etree.LEVELS[x], etree.LEVELS[x] + 0.05f);
+			ClusterAtLevel.clusterAtLevel(newList2, newList, etree.LEVELS[x], etree.LEVELS[x] + 0.05f,"mel74" + etree.LEVELS[x] + "_round2");
 			System.out.println("Writing " + newList2.size() );
 			PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged"+ 
 					etree.LEVELS[x] + ".merged", newList2);

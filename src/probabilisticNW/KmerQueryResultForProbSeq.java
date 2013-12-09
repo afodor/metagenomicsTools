@@ -13,10 +13,23 @@
 
 package probabilisticNW;
 
+import java.util.Comparator;
+
 public class KmerQueryResultForProbSeq implements Comparable<KmerQueryResultForProbSeq>
 {
+	private ProbSequence alignSeq;
 	private final ProbSequence probSeq;
 	private final int counts;
+	
+	public void setAlignSeq(ProbSequence alignSeq)
+	{
+		this.alignSeq = alignSeq;
+	}
+	
+	public ProbSequence getAlignSeq()
+	{
+		return alignSeq;
+	}
 	
 	public ProbSequence getProbSeq()
 	{
@@ -26,6 +39,16 @@ public class KmerQueryResultForProbSeq implements Comparable<KmerQueryResultForP
 	public int getCounts()
 	{
 		return counts;
+	}
+	
+	public static class SortByNumSequences implements Comparator<KmerQueryResultForProbSeq>
+	{
+		@Override
+		public int compare(KmerQueryResultForProbSeq arg0,
+				KmerQueryResultForProbSeq arg1)
+		{
+			return arg1.getProbSeq().getNumRepresentedSequences() - arg0.getProbSeq().getNumRepresentedSequences();
+		}
 	}
 	
 	public KmerQueryResultForProbSeq(ProbSequence probSeq, int counts)
