@@ -21,6 +21,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import dynamicProgramming.DNASubstitutionMatrix;
+import dynamicProgramming.NeedlemanWunsch;
+import dynamicProgramming.PairedAlignment;
+import dynamicProgramming.SubstitutionMatrix;
+
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 import probabilisticNW.KmerDatabaseForProbSeq;
@@ -31,7 +36,8 @@ import utils.ConfigReader;
 
 public class ClusterAtLevel
 {
-public static final boolean LOG = true;
+	public static final boolean LOG = true;
+	public static final boolean CALCULATE_CANNONICAL_NW= true;
 	
 	private static int getNumExpected(List<ProbSequence> list ) 
 	{
@@ -67,14 +73,23 @@ public static final boolean LOG = true;
 			BufferedWriter logWriter, ProbSequence possibleAlignment, ProbSequence querySequence,
 				KmerQueryResultForProbSeq kmerResult) throws Exception
 	{
+		
+		if( CALCULATE_CANNONICAL_NW)
+		{
+			SubstitutionMatrix sm = new DNASubstitutionMatrix();
+			PairedAlignment pa = NeedlemanWunsch.globalAlignTwoSequences(querySequence.getConsensus(), 
+					kmerResult.getProbSeq().getConsensus(),sm, ProbNW.GAP_PENALTY, 99, true);
+			logWriter.write(pa.getDistance() + "\t");
+		}
+		
 		logWriter.write( numberAlignmentPeformed + "\t");
 		logWriter.write((targetIndex + 1)  +"\t");
 		logWriter.write( numQuerySequences + "\t");
-		logWriter.write( (kmerResult== null ? "-1" :  kmerResult.getCounts()) + "\t"  );
+		logWriter.write( kmerResult.getCounts() + "\t"  );
 		logWriter.write( querySequence.getNumRepresentedSequences() + "\t");
-		logWriter.write( (kmerResult == null ? "-1" :  kmerResult.getProbSeq().getNumRepresentedSequences()) + "\t");
-		logWriter.write( (querySequence.getNumRepresentedSequences()  + 
-				(kmerResult == null ? 0 :  kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" ));
+		logWriter.write( kmerResult.getProbSeq().getNumRepresentedSequences() + "\t");
+		logWriter.write( (querySequence.getNumRepresentedSequences()  
+		+  kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" );
 		logWriter.write( possibleAlignment.getAverageDistance() + "\t");
 		logWriter.write( possibleAlignment.getAlignmentScoreAveragedByCol() + "\n");
 		logWriter.flush();
@@ -95,6 +110,10 @@ public static final boolean LOG = true;
 		{
 			logWriter= new BufferedWriter( new FileWriter(new File(ConfigReader.getETreeTestDir() + 
 					File.separator + "log_" + runID + "_"+  System.currentTimeMillis() + ".txt")));
+			
+			if( CALCULATE_CANNONICAL_NW)
+				logWriter.write("cannonicalNW\t");
+			
 			logWriter.write("alignmentPerformed\talignmentInSeries\tnumberOfQuerySequences\tkmersInCommon\tnumSeqsQuery\tnumSeqsPossibleTarget\t" + 
 					"totalNumSequences\tprobAlignmentDistnace\taverageAlignmentScore\n");
 			logWriter.flush();

@@ -19,9 +19,9 @@ import java.util.List;
 
 public class ProbNW
 {
-	private static final int MATCH_REWARD= 1;
-	private static final int MISMATCH_PENALTY = -3;
-	private static final int GAP_PENALTY =-2;
+	public static final int MATCH_REWARD= 1;
+	public static final int MISMATCH_PENALTY = -3;
+	public static final int GAP_PENALTY =-2;
 	
 	public static ProbSequence align( ProbSequence seq1, ProbSequence seq2  ) throws Exception
 	{

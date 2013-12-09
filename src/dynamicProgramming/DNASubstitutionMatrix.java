@@ -6,7 +6,7 @@ public class DNASubstitutionMatrix implements SubstitutionMatrix
 	{
 		
 		if( ! isValidDnaChar(c1) || ! isValidDnaChar(c2) )
-			return 0;
+			return -3;
 		
 		if( c1 == c2)
 			return 1;
