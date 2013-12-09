@@ -91,7 +91,9 @@ public class ClusterAtLevel
 		logWriter.write( (querySequence.getNumRepresentedSequences()  
 		+  kmerResult.getProbSeq().getNumRepresentedSequences() ) + "\t" );
 		logWriter.write( possibleAlignment.getAverageDistance() + "\t");
-		logWriter.write( possibleAlignment.getAlignmentScoreAveragedByCol() + "\n");
+		logWriter.write( possibleAlignment.getAlignmentScoreAveragedByCol() + "\t");
+		float kMerDistance = kmerResult.getCounts() / ((float)querySequence.getConsensusUngapped().length());
+		logWriter.write( kMerDistance + "\n" );
 		logWriter.flush();
 	}
 	
@@ -115,7 +117,7 @@ public class ClusterAtLevel
 				logWriter.write("cannonicalNW\t");
 			
 			logWriter.write("alignmentPerformed\talignmentInSeries\tnumberOfQuerySequences\tkmersInCommon\tnumSeqsQuery\tnumSeqsPossibleTarget\t" + 
-					"totalNumSequences\tprobAlignmentDistnace\taverageAlignmentScore\n");
+					"totalNumSequences\tprobAlignmentDistnace\taverageAlignmentScore\tkmerDistance\n");
 			logWriter.flush();
 			
 		}
@@ -140,8 +142,9 @@ public class ClusterAtLevel
 			ProbSequence targetSequence = null;
 			List<KmerQueryResultForProbSeq> matchingList =new ArrayList<KmerQueryResultForProbSeq>();
 			int targetIndex =0;
+			boolean keepGoing =true;
 			
-			while( targetIndex < targets.size())
+			while( targetIndex < targets.size() && keepGoing)
 			{
 				KmerQueryResultForProbSeq possibleMatch = targets.get(targetIndex);
 				ProbSequence possibleAlignment = 
@@ -157,6 +160,10 @@ public class ClusterAtLevel
 				{
 					matchingList.add(possibleMatch);
 					possibleMatch.setAlignSeq(possibleAlignment);
+				}
+				else if (distance >= stopSearchThreshold)
+				{
+					keepGoing = false;
 				}
 			
 				targetIndex++;	
