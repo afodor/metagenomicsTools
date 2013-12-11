@@ -102,7 +102,7 @@ function update() {
   text=vis.selectAll("text").data(nodes, function(d) { return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
-		 .text( function (d) { return d.level})
+		 .text( function (d) { return d.name})
                  .attr("font-family", "sans-serif")
                  .attr("font-size", "20px")
                  .attr("fill", "red").call(force.drag)

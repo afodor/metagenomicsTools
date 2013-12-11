@@ -151,7 +151,7 @@ public class PivotToSpreadheet
 			System.out.println(outFile);
 		}
 		
-		etree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74withSingletons.xml");
+		//etree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "mel74withSingletons.xml");
 		
 		
 	}

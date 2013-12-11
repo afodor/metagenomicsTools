@@ -406,7 +406,7 @@ public class NewRDPParserFileLine
 				key = key.substring(1);
 			
 			if( map.containsKey(key) )
-				System.out.println("WARNING: Duplicate key " + key);
+				throw new Exception("WARNING: Duplicate key " + key);
 			
 			map.put(key, rdp);
 		}

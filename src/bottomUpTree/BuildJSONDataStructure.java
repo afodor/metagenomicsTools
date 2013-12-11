@@ -17,9 +17,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import parsers.NewRDPNode;
+import parsers.NewRDPParserFileLine;
 import probabilisticNW.ProbSequence;
 
 import utils.ConfigReader;
@@ -32,13 +35,13 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true, false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",true, false);
 		
 		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null);
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=500)
+			if( node.getNumOfSequencesAtTips()>=1)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -48,20 +51,40 @@ public class BuildJSONDataStructure
 		System.out.println("Proceeding with " + numNodes);
 		
 		rootNode.validateNodeAndDaughters(true);
-			
+		
+		ETree etree = new ETree();
+		etree.setTopNode(rootNode);
+		
+		File rdpFile = new File(ConfigReader.getETreeTestDir() + File.separator +  "mel04RDPFfile.txt");
+		//etree.writeAsXML(ConfigReader.getETreeTestDir() + File.separator + "fullMel74PhyloXML.txt", rdpFile);
+		HashMap<String, NewRDPParserFileLine> rdpMap = NewRDPParserFileLine.getAsMapFromSingleThread(rdpFile);
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,500);
-		
+		writeNodeAndChildren(writer, rootNode,500, rdpMap);
+		 
 		writer.flush();  writer.close();
+		
 	}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,
-					ENode enode, int cutoff) throws Exception
+					ENode enode, int cutoff, HashMap<String, NewRDPParserFileLine> rdpMap) throws Exception
 	{
+		NewRDPParserFileLine fileLine = rdpMap.get(enode.getNodeName());
+		
+		String genusName = "none";
+		NewRDPNode genus = null;
+		
+		if( fileLine != null)
+			genus = fileLine.getTaxaMap().get(NewRDPParserFileLine.GENUS);
+		
+		if( genus != null)
+			genusName = genus.getTaxaName();
+		
+		
 		writer.write("{\n");
-		writer.write("\"name\": \"" + enode.getNodeName() + "\",\n" );
+		writer.write("\"name\": \"" + genusName + "\",\n" );
 		
 		int level = 0;
 		
@@ -69,6 +92,9 @@ public class BuildJSONDataStructure
 			level = ETree.getIndexForLevel(enode.getLevel()) + 1;
 		
 		writer.write("\"level\": " +  level + ",\n");
+		
+		
+		//writer.write("\"genus\": " +  genusName+ ",\n");
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
@@ -84,7 +110,7 @@ public class BuildJSONDataStructure
 			
 			for( Iterator<ENode> i = daughters.iterator(); i.hasNext();)
 			{
-				writeNodeAndChildren(writer,i.next(), cutoff);
+				writeNodeAndChildren(writer,i.next(), cutoff, rdpMap);
 				if( i.hasNext())
 					writer.write(",");
 				

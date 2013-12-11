@@ -64,6 +64,11 @@ public class ETree implements Serializable
 		return topNode;
 	}
 	
+	public void setTopNode(ENode topNode)
+	{
+		this.topNode = topNode;
+	}
+	
 	public int getTotalNumberOfSequences()
 	{
 		return this.topNode.getNumOfSequencesAtTips();
@@ -168,9 +173,9 @@ public class ETree implements Serializable
 		
 	}
 	
-	public void writeAsXML(String xmlFilePath) throws Exception
+	public void writeAsXML(String xmlFilePath, File rdpFile) throws Exception
 	{
-		writeAsXML(new File(xmlFilePath));
+		writeAsXML(new File(xmlFilePath), rdpFile);
 	}
 	
 	public void writeAsText(String textFile, boolean detailed) throws Exception
@@ -211,10 +216,10 @@ public class ETree implements Serializable
 		writer.flush();  writer.close();
 	}
 	
-	public void writeAsXML(File xmlFile) throws Exception
+	public void writeAsXML(File xmlFile, File rdpFile) throws Exception
 	{
 
-		HashMap<String, NewRDPParserFileLine> rdpMap =  tryForRDPMap();
+		HashMap<String, NewRDPParserFileLine> rdpMap =  tryForRDPMap(rdpFile);
 			
 		BufferedWriter writer = new BufferedWriter(new FileWriter(xmlFile));
 		
@@ -246,10 +251,13 @@ public class ETree implements Serializable
 	}
 	
 	
-	private HashMap<String, NewRDPParserFileLine> tryForRDPMap()
+	private HashMap<String, NewRDPParserFileLine> tryForRDPMap(File rdpFile)
 	{
 		try
 		{
+			if( rdpFile.exists())
+				return NewRDPParserFileLine.getAsMapFromSingleThread(rdpFile.getAbsolutePath());
+		
 			File seqFile = new File( ConfigReader.getETreeTestDir() + File.separator + "consensusSequences.txt");
 			
 			if( seqFile.exists())
@@ -257,8 +265,6 @@ public class ETree implements Serializable
 			
 			if( seqFile.exists())
 				throw new Exception("Could not delete " + seqFile.getAbsolutePath());
-			
-			File rdpFile = new File(ConfigReader.getETreeTestDir() + File.separator + "rdpSeqFile.txt");
 			
 			if( rdpFile.exists())
 				rdpFile.delete();

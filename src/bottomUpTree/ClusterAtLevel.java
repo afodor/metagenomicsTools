@@ -39,6 +39,7 @@ public class ClusterAtLevel
 {
 	public static final boolean LOG = false;
 	public static final boolean CALCULATE_CANNONICAL_NW= false;
+	private static int nodeSerialNum= 1;
 	
 	private static int getNumExpected(List<ENode> list ) 
 	{
@@ -197,7 +198,7 @@ public class ClusterAtLevel
 			else
 			{
 				newNode = new ENode(ProbSequence.makeDeepCopy(querySeq.getProbSequence()), 
-						querySeq.getNodeName() +"_" + levelToCluster, 
+						querySeq.getNodeName() +"_" + runID+ "_" + ++nodeSerialNum, 
 						levelToCluster, null);
 				
 				alreadyClustered.add(newNode);
