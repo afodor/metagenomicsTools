@@ -27,13 +27,16 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",false);
 		
 		ENode rootNode = new ENode(null, "aTree", 0, null);
 		
 		for( ENode node : list)
+		{
 			node.setParent(rootNode);
-		
+			rootNode.getDaughters().add(node);
+		}
+			
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getETreeTestDir() + File.separator + "aTree.json"	)));
 		
