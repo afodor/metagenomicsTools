@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import dereplicate.DereplicateBySample;
+import eTree.ENode;
 
-import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
 public class MergeMultipleSamplesAtLevelSingleThread
@@ -40,18 +40,19 @@ public class MergeMultipleSamplesAtLevelSingleThread
 		Collections.shuffle(fileNames);
 		
 		int numDone =0;
-		List<ProbSequence> clusters = new ArrayList<ProbSequence>();
+		List<ENode> clusters = new ArrayList<ENode>();
 		
 		for(String s : fileNames)
 			if( s.endsWith(".clust") /*&& numDone < 3*/)
 			{
-				List<ProbSequence> fileCluster = 
+				List<ENode> fileCluster = 
 						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
 				
 				numDone++;
 				System.out.println("Starting " + numDone);;
 				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD,
-						s.replace(".clust", "").replace(DereplicateBySample.DEREP_PREFIX,"") + "merge");
+						s.replace(".clust", "").replace(DereplicateBySample.DEREP_PREFIX,"") + "merge",
+						ClusterAtLevel.MODE.BOTTOM_LEVEL);
 				System.out.println("Finished with " + clusters.size() );
 			}
 		

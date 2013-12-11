@@ -19,8 +19,8 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
-import probabilisticNW.ProbSequence;
 import dereplicate.DereplicateBySample;
+import eTree.ENode;
 
 public class RunOne
 {
@@ -40,7 +40,7 @@ public class RunOne
 		
 		String sampleName = f.getName().replace(DereplicateBySample.DEREP_PREFIX, "").replace("clust", "");
 		File file = new File(args[0]);
-		List<ProbSequence> initialSeqs= 
+		List<ENode> initialSeqs= 
 				ClusterAtLevel.getInitialSequencesFromFasta(
 						file.getAbsolutePath(), sampleName,INITIAL_THRESHOLD, EXCEED_THRESHOLD,sampleName);
 		

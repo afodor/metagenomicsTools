@@ -15,10 +15,12 @@ package probabilisticNW;
 
 import java.util.Comparator;
 
+import eTree.ENode;
+
 public class KmerQueryResultForProbSeq implements Comparable<KmerQueryResultForProbSeq>
 {
+	private final ENode eNode;
 	private ProbSequence alignSeq;
-	private final ProbSequence probSeq;
 	private final int counts;
 	
 	public void setAlignSeq(ProbSequence alignSeq)
@@ -28,12 +30,17 @@ public class KmerQueryResultForProbSeq implements Comparable<KmerQueryResultForP
 	
 	public ProbSequence getAlignSeq()
 	{
-		return alignSeq;
+		return this.alignSeq;
+	}
+	
+	public ENode getEnode()
+	{
+		return this.eNode;
 	}
 	
 	public ProbSequence getProbSeq()
 	{
-		return probSeq;
+		return this.eNode.getProbSequence();
 	}
 	
 	public int getCounts()
@@ -47,20 +54,21 @@ public class KmerQueryResultForProbSeq implements Comparable<KmerQueryResultForP
 		public int compare(KmerQueryResultForProbSeq arg0,
 				KmerQueryResultForProbSeq arg1)
 		{
-			return arg1.getProbSeq().getNumRepresentedSequences() - arg0.getProbSeq().getNumRepresentedSequences();
+			return arg1.getProbSeq().getNumRepresentedSequences() 
+					- arg0.getProbSeq().getNumRepresentedSequences();
 		}
 	}
 	
-	public KmerQueryResultForProbSeq(ProbSequence probSeq, int counts)
+	public KmerQueryResultForProbSeq(ENode eNode, int counts)
 	{
-		this.probSeq=probSeq;
+		this.eNode=eNode;
 		this.counts = counts;
 	}
 
 	@Override
 	public String toString()
 	{
-		return this.probSeq.toString() + " " + this.counts + "  hits ";
+		return this.eNode.getNodeName()+ " " + this.counts + "  hits ";
 	}
 	
 	@Override

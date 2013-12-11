@@ -25,6 +25,7 @@ import dynamicProgramming.DNASubstitutionMatrix;
 import dynamicProgramming.NeedlemanWunsch;
 import dynamicProgramming.PairedAlignment;
 import dynamicProgramming.SubstitutionMatrix;
+import eTree.ENode;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
@@ -36,17 +37,17 @@ import utils.ConfigReader;
 
 public class ClusterAtLevel
 {
-	public static final boolean LOG = true;
+	public static final boolean LOG = false;
 	public static final boolean CALCULATE_CANNONICAL_NW= false;
 	
-	private static int getNumExpected(List<ProbSequence> list ) 
+	private static int getNumExpected(List<ENode> list ) 
 	{
 		int expectedSeq =0;
 		
-		for( ProbSequence probSeq : list)
+		for( ENode eNode: list)
 		{
 			//System.out.println(expectedSeq + " " + probSeq.getNumRepresentedSequences());
-			expectedSeq += probSeq.getNumRepresentedSequences();
+			expectedSeq += eNode.getProbSequence().getNumRepresentedSequences();
 		}
 		
 		return expectedSeq;
@@ -97,13 +98,16 @@ public class ClusterAtLevel
 		logWriter.flush();
 	}
 	
+	public enum MODE { SISTER_MERGE, PARENT_MERGE, BOTTOM_LEVEL}
+	
 	/*
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
 	 */
-	public static void clusterAtLevel( List<ProbSequence> alreadyClustered,
-					List<ProbSequence> seqstoCluster, 
-								float levelToCluster, float stopSearchThreshold, String runID) throws Exception
+	public static void clusterAtLevel( List<ENode> alreadyClustered,
+					List<ENode> seqstoCluster, 
+								float levelToCluster, float stopSearchThreshold, 
+								String runID, MODE daughterRefOption) throws Exception
 	{
 		System.out.println("STARTING");
 		BufferedWriter logWriter = null;
@@ -134,12 +138,11 @@ public class ClusterAtLevel
 		while( seqstoCluster.size() > 0)
 		{
 			numAlignmentsPerformed++;
-			ProbSequence querySeq = seqstoCluster.remove(0);
+			ENode querySeq = seqstoCluster.remove(0);
 			
 			List<KmerQueryResultForProbSeq> targets = 
-					db.queryDatabase(querySeq.getConsensusUngapped());
+					db.queryDatabase(querySeq.getProbSequence().getConsensusUngapped());
 			
-			ProbSequence targetSequence = null;
 			List<KmerQueryResultForProbSeq> matchingList =new ArrayList<KmerQueryResultForProbSeq>();
 			int targetIndex =0;
 			boolean keepGoing =true;
@@ -153,11 +156,11 @@ public class ClusterAtLevel
 				if( possibleMatch.getProbSeq().getNumRepresentedSequences() > mostNumSequences)
 				{
 					ProbSequence possibleAlignment = 
-							ProbNW.align(querySeq, possibleMatch.getProbSeq());
+							ProbNW.align(querySeq.getProbSequence(), possibleMatch.getProbSeq());
 				
 					if(LOG)
 						writeToLog(numAlignmentsPerformed, targetIndex, originalQuerySize-seqstoCluster.size(), 
-							logWriter, possibleAlignment, querySeq, possibleMatch);
+							logWriter, possibleAlignment, querySeq.getProbSequence(), possibleMatch);
 				
 					double distance =possibleAlignment.getAverageDistance();		
 				
@@ -177,21 +180,39 @@ public class ClusterAtLevel
 				targetIndex++;	
 			}
 			
+			ENode newNode = null;
 			if( matchingList.size() >= 1)
 			{
 				Collections.sort(matchingList, new KmerQueryResultForProbSeq.SortByNumSequences());
-				targetSequence = matchingList.get(0).getProbSeq();
-				matchingList.get(0).getAlignSeq().setMapCount(targetSequence, querySeq);
-				targetSequence.replaceWithDeepCopy(matchingList.get(0).getAlignSeq());
+				ENode targetNode = matchingList.get(0).getEnode();
+				matchingList.get(0).getAlignSeq().setMapCount(
+						targetNode.getProbSequence(), querySeq.getProbSequence());
+				targetNode.setProbSequence(matchingList.get(0).getAlignSeq());
 				// pick up any new kmers that we migtht have acquired
-				db.addSequenceToDatabase(targetSequence);
+				db.addSequenceToDatabase(targetNode);
+				
+				newNode = targetNode;
 									
 			}
-			else if( targetSequence == null)
+			else
 			{
-				alreadyClustered.add(querySeq);
-				db.addSequenceToDatabase(querySeq);
-			}			
+				newNode = new ENode(ProbSequence.makeDeepCopy(querySeq.getProbSequence()), 
+						querySeq.getNodeName() +"_" + levelToCluster, 
+						levelToCluster, null);
+				
+				alreadyClustered.add(newNode);
+				db.addSequenceToDatabase(newNode);
+			}	
+			
+			if( daughterRefOption == MODE.SISTER_MERGE)
+			{
+				newNode.setDaughters( new ArrayList<ENode>( querySeq.getDaughters()));
+			} 
+			else if ( daughterRefOption == MODE.PARENT_MERGE)
+			{
+				newNode.getDaughters().add(querySeq);
+				querySeq.setParent(newNode);
+			}
 		}
 		
 		if( seqstoCluster.size() != 0)
@@ -209,10 +230,11 @@ public class ClusterAtLevel
 		
 	}
 	
-	public static List<ProbSequence> getInitialSequencesFromFasta(String fastaPath, String sampleId,
+	public static List<ENode> getInitialSequencesFromFasta(String fastaPath, String sampleId,
 			float threshold, float stopThreshold, String runID) throws Exception
 	{
-		List<ProbSequence> probSeqs = new ArrayList<ProbSequence>();
+		int index=1;
+		List<ENode> probSeqs = new ArrayList<ENode>();
 		
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(fastaPath);
 	
@@ -221,19 +243,20 @@ public class ClusterAtLevel
 			if( fs.isOnlyACGT())
 			{
 				expectedSum += getNumberOfDereplicatedSequences(fs);
-				//System.out.println(getNumberOfDereplicatedSequences(fs));
-				probSeqs.add(new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),sampleId));
+				ProbSequence ps = new ProbSequence(fs.getSequence(), getNumberOfDereplicatedSequences(fs),sampleId);
+				ENode eNode = new ENode(ps, runID + "_" + index, threshold, null);
+				probSeqs.add(eNode);
 			}
 		
-		List<ProbSequence> clustered = new ArrayList<ProbSequence>();
+		List<ENode> clustered = new ArrayList<ENode>();
 		
-		clusterAtLevel(clustered, probSeqs, threshold, stopThreshold, runID);
+		clusterAtLevel(clustered, probSeqs, threshold, stopThreshold, runID, MODE.BOTTOM_LEVEL);
 		
 		int numClustered = 0;
-		for(ProbSequence ps : clustered)
+		for(ENode ps : clustered)
 		{
 			//System.out.println(ps);
-			numClustered += ps.getNumRepresentedSequences();
+			numClustered += ps.getProbSequence().getNumRepresentedSequences();
 		}
 			
 		if( numClustered != expectedSum )

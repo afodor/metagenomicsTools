@@ -19,31 +19,33 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import eTree.ENode;
+
 import kmerDatabase.KmerToBits;
 
 public class KmerDatabaseForProbSeq
 {
-	private HashMap<Integer, HashSet<ProbSequence>> kmerMap =
-			new HashMap<Integer, HashSet<ProbSequence>>();
+	private HashMap<Integer, HashSet<ENode>> kmerMap =
+			new HashMap<Integer, HashSet<ENode>>();
 	
-	private void addHash(int i, ProbSequence probSeq)
+	private void addHash(int i, ENode eNode)
 	{
-		HashSet<ProbSequence> set = kmerMap.get(i);
+		HashSet<ENode> set = kmerMap.get(i);
 		
 		if( set == null)
 		{
-			set = new HashSet<ProbSequence>();
+			set = new HashSet<ENode>();
 			kmerMap.put(i,set);
 		}
 		
-		set.add(probSeq);
+		set.add(eNode);
 	}
 	
 	public List<KmerQueryResultForProbSeq> queryDatabase(String query) throws Exception
 	{
 		List<KmerQueryResultForProbSeq> list = new ArrayList<KmerQueryResultForProbSeq>();
 		
-		HashMap<ProbSequence, Integer> countMap = new HashMap<ProbSequence, Integer>();
+		HashMap<ENode, Integer> countMap = new HashMap<ENode, Integer>();
 		
 		KmerToBits toBits = new KmerToBits(query);
 		addToCountMap(toBits.getHashAtCurrentPosition(), countMap);
@@ -54,57 +56,57 @@ public class KmerDatabaseForProbSeq
 			addToCountMap(toBits.getHashAtCurrentPosition(), countMap);
 		}
 		
-		for(ProbSequence probSeq : countMap.keySet())
-			list.add( new KmerQueryResultForProbSeq(probSeq, countMap.get(probSeq)) );
+		for(ENode eNode: countMap.keySet())
+			list.add( new KmerQueryResultForProbSeq(eNode, countMap.get(eNode)) );
 		
 		Collections.sort(list);
 		return list;
 	}
 	
-	private void addToCountMap( int hash,  HashMap<ProbSequence, Integer> countMap)
+	private void addToCountMap( int hash,  HashMap<ENode, Integer> countMap)
 	{
-		HashSet<ProbSequence> samples = kmerMap.get(hash);
+		HashSet<ENode> samples = kmerMap.get(hash);
 		
 		if( samples != null)
 		{
-			for(ProbSequence probSeq : samples)
+			for(ENode eNode: samples)
 			{
-				Integer count = countMap.get(probSeq);
+				Integer count = countMap.get(eNode);
 				
 				if( count == null)
 					count=0;
 				
 				count++;
 				
-				countMap.put(probSeq, count);
+				countMap.put(eNode, count);
 			}
 		}
 	}
 	
-	public void addSequenceToDatabase(ProbSequence probSeq)
+	public void addSequenceToDatabase(ENode eNode)
 		throws Exception
 	{
-		KmerToBits toBits = new KmerToBits(probSeq.getConsensusUngapped());
+		KmerToBits toBits = new KmerToBits(eNode.getProbSequence().getConsensusUngapped());
 		
-		addHash(toBits.getHashAtCurrentPosition(), probSeq);
+		addHash(toBits.getHashAtCurrentPosition(), eNode);
 		
 		while(toBits.canAdvance())
 		{
 			toBits.advance();
-			addHash(toBits.getHashAtCurrentPosition(), probSeq);
+			addHash(toBits.getHashAtCurrentPosition(), eNode);
 		}
 	}
 	
 	/*
 	 * Any sequence with non ACGT is ignored
 	 */
-	public static KmerDatabaseForProbSeq buildDatabase(List<ProbSequence> list) throws Exception
+	public static KmerDatabaseForProbSeq buildDatabase(List<ENode> list) throws Exception
 	{
 		KmerDatabaseForProbSeq db = new KmerDatabaseForProbSeq();
 		
-		for( ProbSequence probSeq : list)
+		for( ENode eNode : list)
 		{	
-			db.addSequenceToDatabase(probSeq);
+			db.addSequenceToDatabase(eNode);
 		}		
 		return db;
 	}

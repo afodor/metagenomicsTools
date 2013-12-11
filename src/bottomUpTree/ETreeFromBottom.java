@@ -17,8 +17,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
+import eTree.ENode;
 import eTree.ETree;
 
 public class ETreeFromBottom
@@ -33,25 +33,10 @@ public class ETreeFromBottom
 	{
 		ETree etree = new ETree();
 		
-		List<ProbSequence> list= ReadCluster.readFromFile(
+		List<ENode> list= ReadCluster.readFromFile(
 		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",false);
 		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator +  "bottomUpMelMerged"+ 
 				File.separator + "bottomUpMel740.03.txt");
-		
-		
-		/* run the first time to produce the required input file (which takes awhile)
-		List<ProbSequence> inList = ReadCluster.readFromFile(
-			ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged", false);
-		
-		List<ProbSequence> list = new ArrayList<ProbSequence>();
-		System.out.println("Starting with " + inList.size());
-		ClusterAtLevel.clusterAtLevel(list, inList, 0.03f, 0.09f);
-		System.out.println("Endig with " + list.size());
-		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator + "bottomUpMel740.03.txt");
-		
-		PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMergedStartingCleanedOnce"+ 
-				"0.03.merged", list);
-				*/
 		
 		if( etree.LEVELS[etree.LEVELS.length-1] != 0.03f)
 			throw new Exception("Expecting bottom of 0.03 " + etree.LEVELS[etree.LEVELS.length-1]);
@@ -59,11 +44,13 @@ public class ETreeFromBottom
 		for( int x=etree.LEVELS.length-2; x >=0; x--)
 		{
 			System.out.println(etree.LEVELS[x]);
-			List<ProbSequence> newList = new ArrayList<ProbSequence>();
-			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x], etree.LEVELS[x] + 0.05f, "mel74" + etree.LEVELS[x] + "_round1");
-			List<ProbSequence> newList2 = new ArrayList<ProbSequence>();
+			List<ENode> newList = new ArrayList<ENode>();
+			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x], etree.LEVELS[x] + 0.05f, 
+					"mel74" + etree.LEVELS[x] + "_round1",  ClusterAtLevel.MODE.SISTER_MERGE);
+			List<ENode> newList2 = new ArrayList<ENode>();
 			System.out.println("First round " + newList.size());
-			ClusterAtLevel.clusterAtLevel(newList2, newList, etree.LEVELS[x], etree.LEVELS[x] + 0.05f,"mel74" + etree.LEVELS[x] + "_round2");
+			ClusterAtLevel.clusterAtLevel(newList2, newList, etree.LEVELS[x], 
+					etree.LEVELS[x] + 0.05f,"mel74" + etree.LEVELS[x] + "_round2", ClusterAtLevel.MODE.PARENT_MERGE);
 			System.out.println("Writing " + newList2.size() );
 			PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged"+ 
 					etree.LEVELS[x] + ".merged", newList2);
@@ -71,5 +58,12 @@ public class ETreeFromBottom
 					etree.LEVELS[x] + ".txt");
 			list = newList2;
 		}
+		
+		ENode rootNode = new ENode(null, "root", 0, null);
+		for(ENode enode : list)
+			enode.setParent(rootNode);
+		
+		PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged"+ 
+				"finalTree.merged", list);		
 	}
 }

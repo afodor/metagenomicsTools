@@ -19,28 +19,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import probabilisticNW.ProbSequence;
+import eTree.ENode;
 
 
 public class ReadCluster
 {
-	public static List<ProbSequence> readFromFile(String filePath, boolean removeSingletons) throws Exception
+	public static List<ENode> readFromFile(String filePath, boolean removeSingletons) throws Exception
 	{
 		ObjectInputStream in =new ObjectInputStream(new GZIPInputStream(new 
 				FileInputStream(filePath)));
 		
 		@SuppressWarnings("unchecked")
-		List<ProbSequence> list = (List<ProbSequence>) in.readObject();
+		List<ENode> list = (List<ENode>) in.readObject();
 		
 		in.close();
 		
 		if( removeSingletons)
-			for(Iterator<ProbSequence> i = list.iterator(); i.hasNext(); )
-				if( i.next().getNumRepresentedSequences() == 1)
+			for(Iterator<ENode> i = list.iterator(); i.hasNext(); )
+				if( i.next().getProbSequence().getNumRepresentedSequences() == 1)
 					i.remove();
 		
-		for( ProbSequence probSeq : list )
-			probSeq.validateProbSequence();
+		for( ENode enode : list)
+			enode.validateNodeAndDaughters();
 		
 		return list;
 	}

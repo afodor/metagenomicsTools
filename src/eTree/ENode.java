@@ -27,7 +27,7 @@ public class ENode implements Serializable, Comparable<ENode>
 	
 	private ProbSequence probSequence;
 	private ENode parent;
-	private double level;
+	private float level;
 	private String nodeName;
 	private List<ENode> daughters =new ArrayList<ENode>();
 	
@@ -232,7 +232,7 @@ public class ENode implements Serializable, Comparable<ENode>
 		return parent;
 	}
 
-	public double getLevel()
+	public float getLevel()
 	{
 		return level;
 	}
@@ -247,7 +247,7 @@ public class ENode implements Serializable, Comparable<ENode>
 		return daughters;
 	}
 	
-	public ENode( ProbSequence probSequence, String name, double level, ENode parent )
+	public ENode( ProbSequence probSequence, String name, float level, ENode parent )
 	{
 		this.probSequence = probSequence;
 		this.nodeName = name;

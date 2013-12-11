@@ -10,7 +10,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package bottomUpTree;
 
 import java.io.File;
@@ -20,13 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
+import eTree.ENode;
 import eTree.PivotToSpreadheet;
-
-import probabilisticNW.ProbSequence;
 
 public class PivotOut
 {
-	public static void writeBinaryFile(String outPath, List<ProbSequence> list ) throws Exception
+	public static void writeBinaryFile(String outPath, List<ENode> list ) throws Exception
 	{
 		ObjectOutputStream out =new ObjectOutputStream( new GZIPOutputStream(
 				new FileOutputStream(new File(outPath))));
@@ -36,15 +34,15 @@ public class PivotOut
 		out.flush(); out.close();
 	}
 	
-	public static void pivotOut(List<ProbSequence> list , String outPath) throws Exception
+	public static void pivotOut(List<ENode> list , String outPath) throws Exception
 	{	
 		int otuNum = 1;
 		System.out.println("Writing "  + outPath);
 		HashMap<String, HashMap<String, Integer>> outerMap = new HashMap<String, HashMap<String,Integer>>();
 		
-		for( ProbSequence probSeq : list)
+		for( ENode probSeq : list)
 		{
-			outerMap.put("OTU" + otuNum, probSeq.getSampleCounts());
+			outerMap.put("OTU" + otuNum, probSeq.getProbSequence().getSampleCounts());
 			otuNum++;
 		}
 		

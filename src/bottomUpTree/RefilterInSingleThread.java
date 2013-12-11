@@ -18,8 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 import dereplicate.DereplicateBySample;
+import eTree.ENode;
 
-import probabilisticNW.ProbSequence;
 import utils.ConfigReader;
 
 public class RefilterInSingleThread
@@ -40,15 +40,16 @@ public class RefilterInSingleThread
 			if( s.endsWith(".clust") /*&& numDone < 3*/)
 			{
 				System.out.println(s);
-				List<ProbSequence> clusters = new ArrayList<ProbSequence>();
+				List<ENode> clusters = new ArrayList<ENode>();
 				
-				List<ProbSequence> fileCluster = 
+				List<ENode> fileCluster = 
 						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
 				
 				numDone++;
 				System.out.println("Starting " + numDone + " with " + fileCluster.size());;
 				String sampleName = s.replace(".clust", "").replace(DereplicateBySample.DEREP_PREFIX, "") + "refilter_";
-				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD, sampleName);
+				ClusterAtLevel.clusterAtLevel(clusters,fileCluster, 
+						RunOne.INITIAL_THRESHOLD, RunOne.EXCEED_THRESHOLD, sampleName, ClusterAtLevel.MODE.BOTTOM_LEVEL);
 				System.out.println("Finished with " + clusters.size() );
 				PivotOut.writeBinaryFile(ConfigReader.getMockSeqDir()+ File.separator + s + "_REFILTERED", clusters);
 			}
