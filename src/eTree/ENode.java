@@ -178,7 +178,7 @@ public class ENode implements Serializable, Comparable<ENode>
 	
 	public void writeNodeAndDaughters(BufferedWriter writer, boolean detailed) throws Exception
 	{
-		int level = ETree.getIndex(this.level);
+		int level = ETree.getIndexForLevel(this.level);
 		String tabString ="";
 		
 		for (int x=1; x <= level; x++)

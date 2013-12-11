@@ -45,6 +45,15 @@ public class ETree implements Serializable
 	
 	private ENode topNode=null;
 	
+	public static int getIndexForLevel(float f) throws Exception
+	{
+		for( int x=0; x < LEVELS.length; x++)
+			if( f == LEVELS[x])
+				return x;
+		
+		throw new Exception("Could not find " + f);
+	}
+	
 	public void validateTree() throws Exception
 	{
 		this.topNode.validateNodeAndDaughters(true);
@@ -149,15 +158,6 @@ public class ETree implements Serializable
 		
 		for( ENode d : node.getDaughters())
 			addNodeAndDaughters(d, list);
-	}
-	
-	public static int getIndex(double level) throws Exception
-	{
-		for( int i =0; i < LEVELS.length; i++)
-			if( LEVELS[i] == level)
-				return i;
-		
-		throw new Exception("Could not find " + level);
 	}
 	
 	

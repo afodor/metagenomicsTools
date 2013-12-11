@@ -37,7 +37,7 @@ public class BuildJSONDataStructure
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=500)
+			if( node.getNumOfSequencesAtTips()>=50)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -61,7 +61,16 @@ public class BuildJSONDataStructure
 	{
 		writer.write("{\n");
 		writer.write("\"name\": \"" + enode.getNodeName() + "\",\n" );
+		
+		int level = 0;
+		
+		if( ! enode.getNodeName().equals(ETree.ROOT_NAME))
+			level = ETree.getIndexForLevel(enode.getLevel()) + 1;
+		
+		writer.write("\"level\": " +  level + ",\n");
+		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
+		
 		
 		if( enode.getDaughters().size() >0 )
 		{
