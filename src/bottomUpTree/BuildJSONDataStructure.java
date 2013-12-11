@@ -16,6 +16,7 @@ package bottomUpTree;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import utils.ConfigReader;
@@ -27,15 +28,16 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true);
 		
 		ENode rootNode = new ENode(null, "aTree", 0, null);
 		
 		for( ENode node : list)
-		{
-			node.setParent(rootNode);
-			rootNode.getDaughters().add(node);
-		}
+			if( node.getNumOfSequencesAtTips()>=500)
+			{
+				node.setParent(rootNode);
+				rootNode.getDaughters().add(node);
+			}
 			
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getETreeTestDir() + File.separator + "aTree.json"	)));
@@ -51,18 +53,27 @@ public class BuildJSONDataStructure
 					ENode enode) throws Exception
 	{
 		writer.write("{\n");
-		writer.write("\"name\": \"" + enode.getNodeName() + "\"," );
+		writer.write("\"name\": \"" + enode.getNodeName() + "\",\n" );
 		
 		if( enode.getDaughters().size() >0 )
 		{
 			writer.write("\"children\": [\n");
 			
-			for( ENode d: enode.getDaughters())
-				writeNodeAndChildren(writer,d);
-			
+			for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
+			{
+				writeNodeAndChildren(writer,i.next());
+				if( i.hasNext())
+					writer.write(",");
+				
+			}
+				
 			writer.write("]\n");
 		}
 		
-		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "}\n");
+		if( enode.getDaughters().size() == 0)
+		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
+		
+		
+		writer.write("}\n");
 	}
 }
