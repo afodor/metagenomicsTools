@@ -42,7 +42,7 @@ var force = d3.layout.force()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 160]);
     
-var drag = force.drag().on("drag", function(d) { d.fixed=true });
+var drag = force.drag().on("dragstart", function(d) { d.fixed=true });
     
 
 var vis = d3.select("body").append("svg:svg")
@@ -142,14 +142,14 @@ function color(d) {
 
 // Toggle children on click.
 function click(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  update();
+ // if (d.children) {
+  //  d._children = d.children;
+  //  d.children = null;
+  //} else {
+   // d.children = d._children;
+   // d._children = null;
+ // }
+ // update();
 }
 
 
