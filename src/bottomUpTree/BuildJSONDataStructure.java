@@ -41,7 +41,7 @@ public class BuildJSONDataStructure
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=1)
+			if( node.getNumOfSequencesAtTips()>=500)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -62,7 +62,7 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,500, rdpMap);
+		writeNodeAndChildren(writer, rootNode,50, rdpMap);
 		 
 		writer.flush();  writer.close();
 		
@@ -92,9 +92,7 @@ public class BuildJSONDataStructure
 			level = ETree.getIndexForLevel(enode.getLevel()) + 1;
 		
 		writer.write("\"level\": " +  level + ",\n");
-		
-		
-		//writer.write("\"genus\": " +  genusName+ ",\n");
+		writer.write("\"otuLevel\": " +  enode.getLevel()+ ",\n");
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
