@@ -24,7 +24,7 @@ import eTree.ENode;
 
 public class ReadCluster
 {
-	public static List<ENode> readFromFile(String filePath, boolean removeSingletons) throws Exception
+	public static List<ENode> readFromFile(String filePath, boolean removeSingletons, boolean validateDaughterAndParents) throws Exception
 	{
 		ObjectInputStream in =new ObjectInputStream(new GZIPInputStream(new 
 				FileInputStream(filePath)));
@@ -40,7 +40,7 @@ public class ReadCluster
 					i.remove();
 		
 		for( ENode enode : list)
-			enode.validateNodeAndDaughters();
+			enode.validateNodeAndDaughters(validateDaughterAndParents);
 		
 		return list;
 	}

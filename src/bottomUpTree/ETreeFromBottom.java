@@ -34,7 +34,7 @@ public class ETreeFromBottom
 		ETree etree = new ETree();
 		
 		List<ENode> list= ReadCluster.readFromFile(
-		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",false);
+		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",false,false);
 		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator +  "bottomUpMelMerged"+ 
 				File.separator + "bottomUpMel740.03.txt");
 		

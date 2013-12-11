@@ -47,7 +47,7 @@ public class ETree implements Serializable
 	
 	public void validateTree() throws Exception
 	{
-		this.topNode.validateNodeAndDaughters();
+		this.topNode.validateNodeAndDaughters(true);
 	}
 	
 	public ENode getTopNode()

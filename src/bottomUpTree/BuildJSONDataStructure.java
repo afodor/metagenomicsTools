@@ -19,34 +19,41 @@ import java.io.FileWriter;
 import java.util.Iterator;
 import java.util.List;
 
+import probabilisticNW.ProbSequence;
+
 import utils.ConfigReader;
 
 import eTree.ENode;
+import eTree.ETree;
 
 public class BuildJSONDataStructure
 {
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",true, false);
 		
-		ENode rootNode = new ENode(null, "aTree", 0, null);
+		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null);
 		
+		int numNodes=0;
 		for( ENode node : list)
 			if( node.getNumOfSequencesAtTips()>=500)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
+				numNodes++;
 			}
+		
+		System.out.println("Proceeding with " + numNodes);
+		
+		rootNode.validateNodeAndDaughters(true);
 			
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
-			ConfigReader.getETreeTestDir() + File.separator + "aTree.json"	)));
+			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
 		writeNodeAndChildren(writer, rootNode);
 		
 		writer.flush();  writer.close();
-		
-		
 	}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,

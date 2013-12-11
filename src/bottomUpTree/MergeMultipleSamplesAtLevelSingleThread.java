@@ -46,7 +46,7 @@ public class MergeMultipleSamplesAtLevelSingleThread
 			if( s.endsWith(".clust") /*&& numDone < 3*/)
 			{
 				List<ENode> fileCluster = 
-						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
+						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false,false);
 				
 				numDone++;
 				System.out.println("Starting " + numDone);;

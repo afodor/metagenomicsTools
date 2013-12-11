@@ -47,7 +47,7 @@ var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
-d3.json("/data/aTree.json", function(json) {
+d3.json("aTree.json", function(json) {
   root = json;
   root.fixed = true;
   root.x = w / 2;
@@ -65,7 +65,7 @@ function update() {
       .links(links)
       .start();
 
-  // Update the links…
+  // Update the linksï¿½
   link = vis.selectAll("line.link")
       .data(links, function(d) { return d.target.id; });
 
@@ -80,7 +80,7 @@ function update() {
   // Exit any old links.
   link.exit().remove();
 
-  // Update the nodes…
+  // Update the nodesï¿½
   node = vis.selectAll("circle.node")
       .data(nodes, function(d) { return d.id; })
       .style("fill", color);

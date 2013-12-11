@@ -43,7 +43,7 @@ public class RefilterInSingleThread
 				List<ENode> clusters = new ArrayList<ENode>();
 				
 				List<ENode> fileCluster = 
-						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false);
+						ReadCluster.readFromFile(dir.getAbsolutePath() + File.separator + s, false,false);
 				
 				numDone++;
 				System.out.println("Starting " + numDone + " with " + fileCluster.size());;

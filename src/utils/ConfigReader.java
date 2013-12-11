@@ -55,6 +55,8 @@ public class ConfigReader
 	public static final String RDP_JAR_PATH= "RDP_JAR_PATH";
 	public static final String MOCK_SEQ_DIR="MOCK_SEQ_DIR";
 	
+	public static final String D3_DIR = "D3_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -68,6 +70,11 @@ public class ConfigReader
 	public static String getSaccharineRatDir() throws Exception
 	{
 		return getConfigReader().getAProperty(SACCHARINE_RAT_DIR);
+	}
+	
+	public static String getD3Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(D3_DIR);
 	}
 	
 	public static String getETreeTestDir() throws Exception
