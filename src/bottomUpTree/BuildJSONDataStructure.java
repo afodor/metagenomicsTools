@@ -61,10 +61,11 @@ public class BuildJSONDataStructure
 	{
 		writer.write("{\n");
 		writer.write("\"name\": \"" + enode.getNodeName() + "\",\n" );
+		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
 		if( enode.getDaughters().size() >0 )
 		{
-			writer.write("\"children\": [\n");
+			writer.write(",\"children\": [\n");
 			
 			for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
 			{
@@ -77,8 +78,7 @@ public class BuildJSONDataStructure
 			writer.write("]\n");
 		}
 		
-		if( enode.getDaughters().size() == 0)
-		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
+		
 		
 		
 		writer.write("}\n");
