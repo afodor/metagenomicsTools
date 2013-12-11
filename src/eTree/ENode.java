@@ -63,30 +63,9 @@ public class ENode implements Serializable, Comparable<ENode>
 		//System.out.println("Validating " + this.nodeName);
 		this.probSequence.validateProbSequence();
 		
-		if( ! nodeName.equals(ETree.ROOT_NAME))
-		{
-			if(  this.parent == null)
-				throw new Exception("Parent not defined");
-			
-			boolean foundSelf =false;
-			
-			for( ENode enode : this.parent.daughters )
-				if( enode == this)
-					foundSelf = true;
-			
-			if( ! foundSelf)
-				throw new Exception("Self not found amoung the children of this's parent!");
-		}
-		else
-		{
-			if( this.parent != null)
-				throw new Exception("Root parent should be null");
-		}
-		
 		
 		for( ENode d : daughters )
 			d.validateNodeAndDaughters();
-		
 		
 		if( daughters.size() > 0)
 		{

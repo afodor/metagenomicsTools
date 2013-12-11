@@ -206,7 +206,7 @@ public class ClusterAtLevel
 			
 			if( daughterRefOption == MODE.SISTER_MERGE)
 			{
-				newNode.setDaughters( new ArrayList<ENode>( querySeq.getDaughters()));
+				newNode.getDaughters().addAll( new ArrayList<ENode>( querySeq.getDaughters()));
 			} 
 			else if ( daughterRefOption == MODE.PARENT_MERGE)
 			{
