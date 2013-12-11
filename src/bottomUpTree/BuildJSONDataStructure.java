@@ -35,7 +35,7 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",true, false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true, false);
 		
 		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null);
 		
@@ -104,7 +104,7 @@ public class BuildJSONDataStructure
 			if( d.getNumOfSequencesAtTips() >= cutoff)
 				daughters.add(d);
 		
-		if( daughters.size() >0 )
+		if( daughters.size() >1 )
 		{
 			writer.write(",\"children\": [\n");
 			

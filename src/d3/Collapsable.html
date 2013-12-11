@@ -36,12 +36,16 @@ var w = 1280,
     node,
     link,
     root;
-
+    
+ 
 var force = d3.layout.force()
     .on("tick", tick)
     .charge(function(d) { return d._children ? -(d.level-16)*100 / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 160]);
+    
+var drag = force.drag().on("dragstart", dragstart);
+    
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
@@ -102,7 +106,7 @@ function update() {
   text=vis.selectAll("text").data(nodes, function(d) { return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
-		 .text( function (d) { return d.name})
+		 .text( function (d) { return d.level })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", "20px")
                  .attr("fill", "red").call(force.drag)
@@ -149,6 +153,11 @@ function click(d) {
   }
   update();
 }
+
+function dragstart(d) {
+  d.fixed = true;
+}
+
 
 // Returns a list of all nodes under the root.
 function flatten(root) {
