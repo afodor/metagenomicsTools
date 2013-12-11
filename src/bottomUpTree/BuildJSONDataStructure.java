@@ -16,6 +16,7 @@ package bottomUpTree;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,13 +32,13 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.04.merged",true, false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true, false);
 		
 		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null);
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=50)
+			if( node.getNumOfSequencesAtTips()>=500)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -51,13 +52,13 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode);
+		writeNodeAndChildren(writer, rootNode,500);
 		
 		writer.flush();  writer.close();
 	}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,
-					ENode enode) throws Exception
+					ENode enode, int cutoff) throws Exception
 	{
 		writer.write("{\n");
 		writer.write("\"name\": \"" + enode.getNodeName() + "\",\n" );
@@ -71,14 +72,19 @@ public class BuildJSONDataStructure
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
+		List<ENode> daughters =new ArrayList<ENode>();
 		
-		if( enode.getDaughters().size() >0 )
+		for( ENode d : enode.getDaughters() )
+			if( d.getNumOfSequencesAtTips() >= cutoff)
+				daughters.add(d);
+		
+		if( daughters.size() >0 )
 		{
 			writer.write(",\"children\": [\n");
 			
-			for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
+			for( Iterator<ENode> i = daughters.iterator(); i.hasNext();)
 			{
-				writeNodeAndChildren(writer,i.next());
+				writeNodeAndChildren(writer,i.next(), cutoff);
 				if( i.hasNext())
 					writer.write(",");
 				
