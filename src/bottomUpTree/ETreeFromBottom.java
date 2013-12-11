@@ -34,7 +34,7 @@ public class ETreeFromBottom
 		ETree etree = new ETree();
 		
 		List<ENode> list= ReadCluster.readFromFile(
-		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",false,false);
+		ConfigReader.getETreeTestDir() + File.separator + "Merged74At03.merged",true,false);
 		PivotOut.pivotOut(list, ConfigReader.getETreeTestDir() + File.separator +  "bottomUpMelMerged"+ 
 				File.separator + "bottomUpMel740.03.txt");
 		
@@ -45,7 +45,7 @@ public class ETreeFromBottom
 		{
 			System.out.println(etree.LEVELS[x]);
 			List<ENode> newList = new ArrayList<ENode>();
-			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x], etree.LEVELS[x] + 0.05f, 
+			ClusterAtLevel.clusterAtLevel(newList, list, etree.LEVELS[x+1], etree.LEVELS[x+1] + 0.05f, 
 					"mel74" + etree.LEVELS[x] + "_round1",  ClusterAtLevel.MODE.SISTER_MERGE);
 			List<ENode> newList2 = new ArrayList<ENode>();
 			System.out.println("First round " + newList.size());
@@ -58,12 +58,5 @@ public class ETreeFromBottom
 					etree.LEVELS[x] + ".txt");
 			list = newList2;
 		}
-		
-		ENode rootNode = new ENode(null, "root", 0, null);
-		for(ENode enode : list)
-			enode.setParent(rootNode);
-		
-		PivotOut.writeBinaryFile(ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged"+ 
-				"finalTree.merged", list);		
 	}
 }
