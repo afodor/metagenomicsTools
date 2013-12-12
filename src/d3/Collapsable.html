@@ -33,8 +33,10 @@ line.link {
   
   
   <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels</input><br>
-  <input type="checkbox" id="showNumberOfSequences" onchange=update() checked=true>
+  <input type="checkbox" id="showNumberOfSequences" onchange=update() >
   					Show number of Sequences</input><br>
+  <input type="checkbox" id="showOTULevel" onchange=update() checked=true>
+  					Show otu level</input><br>
   <input type="checkbox" id="showTaxonomy" onchange=update() checked=true>
   					Show taxonomy</input><br>
   					
@@ -76,8 +78,8 @@ line.link {
     <script type="text/javascript" src="d3.v3.js"></script>
     <script type="text/javascript">
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
-var w = window.innerWidth,
-    h = window.innerHeight,
+var w = 1200,
+    h = 800,
     node,
     link,
     root;
@@ -87,7 +89,7 @@ var force = d3.layout.force()
     .on("tick", tick)
     .charge(function(d) { return d._children ? -(d.level-16)*100 / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
-    .size([w-200, h - 200]);
+    .size([w, h - 60]);
     
 var drag = force.drag().on("dragstart", function(d) { d.fixed=true });
     
@@ -155,6 +157,12 @@ function update() {
 		 	
 		if (! aBox.checked)
 			return "";
+		
+		aBox =document.getElementById("showOTULevel");
+		
+		if (aBox.checked)
+			returnString = returnString + d.otuLevel+ " ";
+			
 			
 		aBox =document.getElementById("showNumberOfSequences");
 		
