@@ -16,6 +16,7 @@ package bottomUpTree;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.2.merged",true, false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.2.merged",false, false);
 		
 		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null) ;
 		
@@ -61,7 +62,7 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,0.5, rdpMap);
+		writeNodeAndChildren(writer, rootNode,10, rdpMap);
 		 
 		writer.flush();  writer.close();
 		
@@ -113,14 +114,17 @@ public class BuildJSONDataStructure
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
-		double numSequencesAccountedForByOneBranch = 
-				((double) enode.getGreedyMax()) / enode.getNumOfSequencesAtTips();
+		List<ENode> toAdd = new ArrayList<ENode>();
 		
-		if ( numSequencesAccountedForByOneBranch  <= cutoff) 
+		for( ENode d : enode.getDaughters())
+			if(d.getNumOfSequencesAtTips() >= cutoff)
+				toAdd.add(d);
+		
+		if ( toAdd.size() > 0) 
 		{
 			writer.write(",\"children\": [\n");
 				
-			for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
+			for( Iterator<ENode> i = toAdd.iterator(); i.hasNext();)
 			{
 				writeNodeAndChildren(writer,i.next(), cutoff, rdpMap);
 				if( i.hasNext())

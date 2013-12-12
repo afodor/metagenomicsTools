@@ -29,7 +29,6 @@ line.link {
   <body>
   <aside id="sidebar">
   
-  <aside id="sidebar">
   
   
   <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels</input><br>
@@ -70,16 +69,12 @@ line.link {
   Node Adjust
   <input type="range" id="nodesToShow" min="-100" max="40000" value="1" onchange=update()></input>
   
-  </aside>
+   <br>
+  Font Adjust
+  <input type="range" id="fontAdjust" min="5" max="25" value="15" onchange=update()></input>
   
-  
-  
-  
-  <input type="checkbox" id="doesClickcollapse" onchange=update()>
+   <br><input type="checkbox" id="doesClickcollapse" onchange=update()>
   					click collapses/uncollapses</input><br>
-  					
-  
-  
   </aside>
   <section>
     <script type="text/javascript" src="d3.v3.js"></script>
@@ -230,7 +225,7 @@ function update() {
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
-                 .attr("font-size", "20px")
+                 .attr("font-size", document.getElementById("fontAdjust").value + "px")
                  .attr("fill", "red")
   
 force.on("tick", function() {
