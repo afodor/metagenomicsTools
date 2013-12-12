@@ -31,7 +31,7 @@ line.link {
   
   <aside id="sidebar">
   <script type="text/javascript" src="d3.v3.js"></script>
-    <select id="rdpSelect" onClick=doSomething()>
+    <select id="rdpSelect" onchange=doSomething()>
   	<option value="genus">genus</option>
     <option value="family">family</option>
     <option value="class">class</option>
@@ -43,13 +43,8 @@ line.link {
   <button onclick=doSomething()>try me</button>
   </aside>
   
-  <script> 
-  	document.getElementById("rdpSelect").removeAttribute("disabled")
-  	function doSomething()
-  	{
-  		alert("Hello")
-  	}
-  </script>
+  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show labels<br>
+  
   
   </aside>
   <section>
@@ -85,6 +80,8 @@ d3.json("aTree.json", function(json) {
 });
 
 function update() {
+	console.log("In update");
+
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
 
@@ -94,7 +91,7 @@ function update() {
       .links(links)
       .start();
 
-  // Update the links�
+  // Update the links
   link = vis.selectAll("line.link")
       .data(links, function(d) { return d.target.id; });
 
@@ -109,7 +106,7 @@ function update() {
   // Exit any old links.
   link.exit().remove();
 
-  // Update the nodes�
+  // Update the nodes1
   node = vis.selectAll("circle.node")
       .data(nodes, function(d) { return d.id; })
       .style("fill", color);
@@ -127,14 +124,29 @@ function update() {
       .on("click", click)
       .call(force.drag);
 
+	var x=0;
+	function getLabelText(d)
+	{
+		x = x+1
+		var aBox =document.getElementById("showLabels");
+		 console.log("In getLabelText " + x)
+		 console.log(aBox.checked)
+		 	
+		if (aBox.checked)
+			return (d.level);
+			
+		return "";	
+	}
+	
+	vis.selectAll("text").remove()
 
   text=vis.selectAll("text").data(nodes, function(d) { return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
-		 .text( function (d) { return d.level })
+		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", "20px")
-                 .attr("fill", "red").call(force.drag)
+                 .attr("fill", "red")
   
 force.on("tick", function() {
 		text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -169,14 +181,14 @@ function color(d) {
 
 // Toggle children on click.
 function click(d) {
- // if (d.children) {
-  //  d._children = d.children;
-  //  d.children = null;
-  //} else {
-   // d.children = d._children;
-   // d._children = null;
- // }
- // update();
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update();
 }
 
 
