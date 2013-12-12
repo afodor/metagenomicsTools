@@ -43,7 +43,9 @@ line.link {
   <button onclick=doSomething()>try me</button>
   </aside>
   
-  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show labels<br>
+  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels<br>
+  <input type="checkbox" id="showNumberOfSequences" onchange=update() checked=true>
+  					Show number of Sequences<br>
   
   
   </aside>
@@ -80,8 +82,7 @@ d3.json("aTree.json", function(json) {
 });
 
 function update() {
-	console.log("In update");
-
+	
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
 
@@ -124,18 +125,22 @@ function update() {
       .on("click", click)
       .call(force.drag);
 
-	var x=0;
 	function getLabelText(d)
 	{
-		x = x+1
+		var returnString = ""
 		var aBox =document.getElementById("showLabels");
-		 console.log("In getLabelText " + x)
-		 console.log(aBox.checked)
 		 	
-		if (aBox.checked)
-			return (d.level);
+		if (! aBox.checked)
+			return "";
 			
-		return "";	
+		aBox =document.getElementById("showNumberOfSequences");
+		
+		if (aBox.checked)
+			returnString = returnString + d.size + " ";
+		
+		
+			
+		return returnString;	
 	}
 	
 	vis.selectAll("text").remove()
