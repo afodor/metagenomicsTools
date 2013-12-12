@@ -49,7 +49,7 @@ public class NumNodesVsGreedyMax
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File(
 				ConfigReader.getETreeTestDir() + File.separator + 
 				"numNodesVsThreshold.txt")));
-		writer.write("d\tnumSeqs\tfractionSeqs\tnumNodes\n");
+		writer.write("d\tnumSeqs\tfractionSeqs\tnumNodes\tnumSingletons\tnumNonSingletons\tnumGreater25\n");
 		for( double d = 0.99; d >=0.00; d = d - 0.01)
 		{
 			System.out.println(d);
@@ -60,11 +60,20 @@ public class NumNodesVsGreedyMax
 				addNodeAndChildren(eNode, d, outList,counts);
 			
 			int numSeqs =0;
+			int numSingles =0;
+			int numGreater25 = 0;
 			
 			for( Integer i : counts)
-					numSeqs += i;
-			
-			writer.write(d + "\t" + numSeqs + "\t" + (numSeqs/totalSeqs) + "\t" + outList.size() + "\n");
+			{
+				numSeqs += i;
+				numSingles++;
+				
+				if( i > 25)
+					numGreater25++;
+			}
+				
+			writer.write(d + "\t" + numSeqs + "\t" + (numSeqs/totalSeqs) + "\t" + outList.size() + "\t" + numSingles + "\t" + 
+			( outList.size() - numSingles )  +"\t" + numGreater25 + "\n" );
 			writer.flush();
 			
 		}
