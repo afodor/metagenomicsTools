@@ -61,7 +61,11 @@ line.link {
   					
   <input type="checkbox" id="showSummaryRDP" onchange=update()>
   					show summaryRDP string</input><br>
+  					
+  <input type="checkbox" id="showSummaryRDP" onchange=update()>
+  					show summaryRDP string</input><br>
   
+  <input type="range" id="seqsToShow" min="5" max="10000" value="50" onchange=update()></input>
   
   </aside>
   
@@ -107,6 +111,8 @@ d3.json("aTree.json", function(json) {
 });
 
 function update() {
+
+	console.log(document.getElementById("seqsToShow").value)
 	
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
@@ -134,7 +140,7 @@ function update() {
 
   // Update the nodes1
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) { return d.id; })
+      .data(nodes, function(d) {  return d.id; })
       .style("fill", color);
 
   node.transition()
@@ -209,7 +215,7 @@ function update() {
 	
 	vis.selectAll("text").remove()
 
-  text=vis.selectAll("text").data(nodes, function(d) { return d.id; }).enter().append("svg:text").
+  text=vis.selectAll("text").data(nodes, function(d) { if( d.size > document.getElementById("seqsToShow").value)  return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
