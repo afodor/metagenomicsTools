@@ -46,6 +46,7 @@ public class BuildJSONDataStructure
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
 				numNodes++;
+				rootNode.getProbSequence().setMapCount(rootNode.getProbSequence(), node.getProbSequence());
 			}
 		
 		System.out.println("Proceeding with " + numNodes);
@@ -68,23 +69,35 @@ public class BuildJSONDataStructure
 		
 	}
 	
+	private static String getRDPString(String rdpLevel, String eNodeName,HashMap<String, NewRDPParserFileLine> rdpMap )
+		throws Exception
+		{
+			String returnString = "unclassified";
+			NewRDPParserFileLine fileLine = rdpMap.get(eNodeName);
+			
+			if( fileLine != null)
+			{
+				NewRDPNode node = fileLine.getTaxaMap().get(rdpLevel);
+				if ( node != null)
+					returnString = node.getTaxaName();
+			}
+			
+			return returnString;
+			
+		}
+	
 	private static void writeNodeAndChildren( BufferedWriter writer,
 					ENode enode, int cutoff, HashMap<String, NewRDPParserFileLine> rdpMap) throws Exception
 	{
 		NewRDPParserFileLine fileLine = rdpMap.get(enode.getNodeName());
 		
-		String genusName = "none";
-		NewRDPNode genus = null;
+		String rdpString = "NotClassified";
 		
 		if( fileLine != null)
-			genus = fileLine.getTaxaMap().get(NewRDPParserFileLine.GENUS);
-		
-		if( genus != null)
-			genusName = genus.getTaxaName();
+			rdpString = fileLine.getSummaryString().replaceAll(";", " ");
 		
 		
 		writer.write("{\n");
-		writer.write("\"name\": \"" + genusName + "\",\n" );
 		
 		int level = 0;
 		
@@ -93,6 +106,13 @@ public class BuildJSONDataStructure
 		
 		writer.write("\"level\": " +  level + ",\n");
 		writer.write("\"otuLevel\": " +  enode.getLevel()+ ",\n");
+		writer.write("\"rdpString\": \"" +  rdpString+ "\",\n");
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			String valString = getRDPString(NewRDPParserFileLine.TAXA_ARRAY[x], enode.getNodeName(), rdpMap);
+			writer.write("\"" + NewRDPParserFileLine.TAXA_ARRAY[x]+ "\": \"" +  valString+ "\",\n");
+		}
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		

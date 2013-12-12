@@ -92,7 +92,7 @@ public class ProbSequence implements Serializable
 		
 		for( ProbColumn pc : columns )
 			if(  Math.abs(pc.getTotalNum() -aSum) > 0.0000001 )
-				throw new Exception( "Wrong number of sequences " + n + " " + pc.getTotalNum());
+				System.out.println( "Wrong number of sequences " + n + " " + pc.getTotalNum());
 	}
 	
 	
