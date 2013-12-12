@@ -22,15 +22,15 @@ line.link {
     </style>
   </head>
   <body>
-    <h2>
-      Flare code size<br>
-      force-directed graph
-    </h2>
+  <aside id="sidebar">
+  hello world
+  </aside>
+  <section>
     <script type="text/javascript" src="d3.v3.js"></script>
     <script type="text/javascript">
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
-var w = 1280,
-    h = 800,
+var w = window.innerWidth,
+    h = window.innerHeight,
     node,
     link,
     root;
@@ -40,7 +40,7 @@ var force = d3.layout.force()
     .on("tick", tick)
     .charge(function(d) { return d._children ? -(d.level-16)*100 / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
-    .size([w, h - 160]);
+    .size([w-200, h - 200]);
     
 var drag = force.drag().on("dragstart", function(d) { d.fixed=true });
     
@@ -169,6 +169,7 @@ function flatten(root) {
 }
 
     </script>
+    </section>
   </body>
 </html>
 
