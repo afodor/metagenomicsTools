@@ -64,7 +64,11 @@ line.link {
   
   <br>
   Label Adjust
-  <input type="range" id="seqsToShow" min="-100" max="20000" value="1" onchange=update()></input>
+  <input type="range" id="seqsToShow" min="-100" max="40000" value="1" onchange=update()></input>
+  
+  <br>
+  Node Adjust
+  <input type="range" id="nodesToShow" min="-100" max="40000" value="1" onchange=update()></input>
   
   </aside>
   
@@ -124,7 +128,14 @@ function update() {
 
   // Update the links
   link = vis.selectAll("line.link")
-      .data(links, function(d) { return d.target.id; });
+      .data(links, function(d) {  
+      aVal = document.getElementById("nodesToShow").value;
+      if( d.source.size > aVal && d.target.size > aVal)
+      	{
+      		return d.target.id; 
+      	}
+      		}
+      		);
 
   // Enter any new links.
   link.enter().insert("svg:line", ".node")
@@ -139,7 +150,7 @@ function update() {
 
   // Update the nodes1
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) {  return d.id; })
+      .data(nodes, function(d) {  if( d.size > document.getElementById("nodesToShow").value)  return d.id;  })
       .style("fill", color);
 
   node.transition()
