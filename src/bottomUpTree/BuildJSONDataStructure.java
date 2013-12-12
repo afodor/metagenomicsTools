@@ -35,13 +35,13 @@ public class BuildJSONDataStructure
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
-				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",true, false);
+				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.4.merged",false, false);
 		
 		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null);
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=2)
+			if( node.getNumOfSequencesAtTips()>=0)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -63,7 +63,7 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,2, rdpMap);
+		writeNodeAndChildren(writer, rootNode,0, rdpMap);
 		 
 		writer.flush();  writer.close();
 		

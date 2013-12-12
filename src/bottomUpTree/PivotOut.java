@@ -42,7 +42,8 @@ public class PivotOut
 		
 		for( ENode probSeq : list)
 		{
-			outerMap.put("OTU" + otuNum, probSeq.getProbSequence().getSampleCounts());
+			outerMap.put("OTU" + otuNum + "_" + probSeq.getIntLevelString(), 
+										probSeq.getProbSequence().getSampleCounts());
 			otuNum++;
 		}
 		

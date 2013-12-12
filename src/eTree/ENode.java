@@ -35,6 +35,18 @@ public class ENode implements Serializable, Comparable<ENode>
 	{
 		this.parent = parent;
 	}
+	
+	public String getIntLevelString()
+	{
+		int val = (int) (level * 100.00001);
+		
+		String aString = "" + val;
+		
+		if( aString.length() == 1)
+			aString = "0" + aString;
+		
+		return aString;
+	}
 
 	public void setDaughters(List<ENode> daughters)
 	{
