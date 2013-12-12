@@ -43,9 +43,12 @@ line.link {
   <button onclick=doSomething()>try me</button>
   </aside>
   
-  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels<br>
+  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels</input><br>
   <input type="checkbox" id="showNumberOfSequences" onchange=update() checked=true>
-  					Show number of Sequences<br>
+  					Show number of Sequences</input><br>
+  <input type="checkbox" id="showTaxonomy" onchange=update() checked=true>
+  					Show taxonomy</input><br>
+  					
   
   
   </aside>
@@ -138,8 +141,11 @@ function update() {
 		if (aBox.checked)
 			returnString = returnString + d.size + " ";
 		
+		aBox =document.getElementById("showTaxonomy");
 		
-			
+		if (aBox.checked)
+			returnString = returnString + d.name+ " ";
+		
 		return returnString;	
 	}
 	
