@@ -198,7 +198,7 @@ public class ClusterAtLevel
 			else
 			{
 				newNode = new ENode(ProbSequence.makeDeepCopy(querySeq.getProbSequence()), 
-						querySeq.getNodeName() +"_" + runID+ "_" + ++nodeSerialNum, 
+						"merged" +"_" + runID+ "_" + ++nodeSerialNum, 
 						levelToCluster, null);
 				
 				alreadyClustered.add(newNode);
