@@ -4,7 +4,6 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <link type="text/css" rel="stylesheet" href="style.css"/>
     <style type="text/css">
 
 circle.node {
@@ -19,11 +18,39 @@ line.link {
   stroke-width: 1.5px;
 }
 
+#sidebar {
+    float: right;
+      border: 1px solid red;
+      width: 200px;
+    }
+
     </style>
   </head>
   <body>
   <aside id="sidebar">
-  hello world
+  
+  <aside id="sidebar">
+  <script type="text/javascript" src="d3.v3.js"></script>
+    <select id="rdpSelect" onClick=doSomething()>
+  	<option value="genus">genus</option>
+    <option value="family">family</option>
+    <option value="class">class</option>
+	<option value="order">order</option>
+	<option value="phylum">phylum</option>
+	<option value="kingdom">kingdom</option>
+	<option value="rdpString">all</option>
+  </select>
+  <button onclick=doSomething()>try me</button>
+  </aside>
+  
+  <script> 
+  	document.getElementById("rdpSelect").removeAttribute("disabled")
+  	function doSomething()
+  	{
+  		alert("Hello")
+  	}
+  </script>
+  
   </aside>
   <section>
     <script type="text/javascript" src="d3.v3.js"></script>
