@@ -69,6 +69,46 @@ public class ENode implements Serializable, Comparable<ENode>
 		return probSequence;
 	}
 	
+	public boolean hasAFork(int cutoff)
+	{
+	
+		int numAboveCutoff = 0;
+		
+		for (ENode d : daughters)
+		{
+			if( d.hasAFork(cutoff))
+				return true;
+			
+			if( d.getNumOfAllDaughters()> cutoff)
+				numAboveCutoff++;
+			
+			if( numAboveCutoff >1)
+				return true;
+		}
+				
+		return false;
+	}
+	
+	public int getGreedyMax()
+	{
+		if( this.daughters.size() == 0 )
+			return getNumOfSequencesAtTips();
+		
+		ENode maxNode = null;
+		int maxVal = -1;
+		
+		for( ENode d : this.daughters)
+		{
+			int aNum = d.getNumOfSequencesAtTips();
+			if( aNum > maxVal)
+			{
+				maxVal = aNum;
+				maxNode = d;
+			}
+		}
+		
+		return maxNode.getGreedyMax();
+	}
 	
 	public void validateNodeAndDaughters(boolean validateDaughterAndParents) throws Exception
 	{

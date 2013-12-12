@@ -16,7 +16,6 @@ package bottomUpTree;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,13 +40,12 @@ public class BuildJSONDataStructure
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=0)
-			{
-				node.setParent(rootNode);
-				rootNode.getDaughters().add(node);
-				numNodes++;
-				rootNode.getProbSequence().setMapCount(rootNode.getProbSequence(), node.getProbSequence());
-			}
+		{
+			node.setParent(rootNode);
+			rootNode.getDaughters().add(node);
+			numNodes++;
+			rootNode.getProbSequence().setMapCount(rootNode.getProbSequence(), node.getProbSequence());
+		}
 		
 		System.out.println("Proceeding with " + numNodes);
 		
@@ -63,7 +61,7 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,0, rdpMap);
+		writeNodeAndChildren(writer, rootNode,0.99, rdpMap);
 		 
 		writer.flush();  writer.close();
 		
@@ -87,7 +85,7 @@ public class BuildJSONDataStructure
 		}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,
-					ENode enode, int cutoff, HashMap<String, NewRDPParserFileLine> rdpMap) throws Exception
+					ENode enode, double cutoff, HashMap<String, NewRDPParserFileLine> rdpMap) throws Exception
 	{
 		NewRDPParserFileLine fileLine = rdpMap.get(enode.getNodeName());
 		
@@ -95,7 +93,6 @@ public class BuildJSONDataStructure
 		
 		if( fileLine != null)
 			rdpString = fileLine.getSummaryString().replaceAll(";", " ");
-		
 		
 		writer.write("{\n");
 		
@@ -116,28 +113,21 @@ public class BuildJSONDataStructure
 		
 		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
-		List<ENode> daughters =new ArrayList<ENode>();
+		double numSequencesAccountedForByOneBranch = 
+				((double) enode.getGreedyMax()) / enode.getNumOfSequencesAtTips();
 		
-		for( ENode d : enode.getDaughters() )
-			if( d.getNumOfSequencesAtTips() >= cutoff)
-				daughters.add(d);
-		
-		if( daughters.size() >1 )
+		if ( numSequencesAccountedForByOneBranch  <= cutoff) 
 		{
 			writer.write(",\"children\": [\n");
-			
-			for( Iterator<ENode> i = daughters.iterator(); i.hasNext();)
+				
+			for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
 			{
 				writeNodeAndChildren(writer,i.next(), cutoff, rdpMap);
 				if( i.hasNext())
 					writer.write(",");
-				
 			}
-				
-			writer.write("]\n");
+					writer.write("]\n");
 		}
-		
-		
 		
 		
 		writer.write("}\n");
