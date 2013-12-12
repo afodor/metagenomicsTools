@@ -54,15 +54,15 @@ public class NumNodesVsGreedyMax
 		{
 			System.out.println(d);
 			List<ENode> outList = new ArrayList<ENode>();
+			List<Integer> counts = new ArrayList<Integer>();
 			
 			for( ENode eNode : rootNode.getDaughters())
-				addNodeAndChildren(eNode, d, outList);
+				addNodeAndChildren(eNode, d, outList,counts);
 			
 			int numSeqs =0;
 			
-			for( ENode node : outList)
-				if( node.getDaughters().size() == 0 )
-					numSeqs += node.getNumOfSequencesAtTips();
+			for( Integer i : counts)
+					numSeqs += i;
 			
 			writer.write(d + "\t" + numSeqs + "\t" + (numSeqs/totalSeqs) + "\t" + outList.size() + "\n");
 			writer.flush();
@@ -73,21 +73,31 @@ public class NumNodesVsGreedyMax
 	}
 	
 	private static void addNodeAndChildren(
-			ENode enode, double cutoff, List<ENode> list) throws Exception
+			ENode enode, double cutoff, List<ENode> list, List<Integer> counts) throws Exception
 			{
-				list.add(enode);
-		
-				double numSequencesAccountedForByOneBranch = 
-						((double) enode.getGreedyMax()) / enode.getNumOfSequencesAtTips();
-				System.out.println(enode.getGreedyMax() + " " +  enode.getNumOfSequencesAtTips());
-
-				if ( numSequencesAccountedForByOneBranch  <= cutoff) 
+				list.add(  enode);
+				
+				if( enode.getDaughters().size()==0)
 				{
-					for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
+					counts.add(enode.getNumOfSequencesAtTips());
+				}
+				else
+				{
+					double numSequencesAccountedForByOneBranch = 
+							((double) enode.getGreedyMax()) / enode.getNumOfSequencesAtTips();
+					System.out.println(enode.getGreedyMax() + " " +  enode.getNumOfSequencesAtTips());
+
+					if ( numSequencesAccountedForByOneBranch  <= cutoff) 
 					{
-						addNodeAndChildren(i.next(), cutoff, list);
+						for( Iterator<ENode> i = enode.getDaughters().iterator(); i.hasNext();)
+						{
+							addNodeAndChildren(i.next(), cutoff, list,counts);
+						}
+					}
+					else
+					{
+						counts.add(enode.getGreedyMax());
 					}
 				}
-
 			}
 }
