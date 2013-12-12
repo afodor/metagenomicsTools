@@ -41,7 +41,7 @@ public class BuildJSONDataStructure
 		
 		int numNodes=0;
 		for( ENode node : list)
-			if( node.getNumOfSequencesAtTips()>=500)
+			if( node.getNumOfSequencesAtTips()>=2)
 			{
 				node.setParent(rootNode);
 				rootNode.getDaughters().add(node);
@@ -63,7 +63,7 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,50, rdpMap);
+		writeNodeAndChildren(writer, rootNode,2, rdpMap);
 		 
 		writer.flush();  writer.close();
 		
