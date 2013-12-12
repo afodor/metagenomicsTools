@@ -151,9 +151,16 @@ function update() {
 		
 			if( taxBox.value == "genus" ) 
 				returnString = returnString + d.genus + " ";
-			else if ( taxBox.value = "family") 
+			else if ( taxBox.value == "family") 
 					returnString = returnString + d.family+ " ";
-			
+			else if ( taxBox.value == "class") 
+					returnString = returnString + d.class+ " ";
+			else if ( taxBox.value == "order") 
+					returnString = returnString + d.order+ " ";
+			else if ( taxBox.value == "phylum") 
+					returnString = returnString + d.phylum+ " ";
+			else if ( taxBox.value == "rdpString") 
+					returnString = returnString + d.rdpString+ " ";		
 	
 		}
 			
