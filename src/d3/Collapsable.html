@@ -76,6 +76,18 @@ var w = 1200,
     node,
     link,
     root;
+ 
+ // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+	var stringToColour = function(str) {
+
+    // str to hash
+    for (var i = 0, hash = 0; i < str.length; hash = str.charCodeAt(i++) + ((hash << 5) - hash));
+
+    // int/hash to hex
+    for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
+
+    return colour;
+}
     
  var colorBranches = true;
     
@@ -239,7 +251,8 @@ function update() {
 		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", document.getElementById("fontAdjust").value + "px")
-                 .attr("fill", "red")
+                 .attr("fill", function(d) {return stringToColour(d.genus)} )
+  
   
 force.on("tick", function() {
 		text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -269,7 +282,6 @@ function tick() {
 
 // Color leaf nodes orange, and packages white or blue.
 function color(d) {
-
 
 	if(  d.marked )
 		return "#000000";
