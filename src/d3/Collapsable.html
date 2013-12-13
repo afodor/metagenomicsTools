@@ -31,13 +31,10 @@ line.link {
   
   
   
-  <input type="checkbox" id="showLabels" onchange=update() checked=true>Show any labels</input><br>
   <input type="checkbox" id="showNumberOfSequences" onchange=update() >
   					Show number of Sequences</input><br>
   <input type="checkbox" id="showOTULevel" onchange=update() checked=true>
   					Show otu level</input><br>
-  <input type="checkbox" id="showTaxonomy" onchange=update() checked=true>
-  					Show taxonomy</input><br>
   					
   
   <input type="checkbox" id="showGenus" onchange=update() >
@@ -61,9 +58,6 @@ line.link {
   <input type="checkbox" id="showSummaryRDP" onchange=update()>
   					show summaryRDP string</input><br>
   
-  <br>
-  Label Adjust
-  <input type="range" id="seqsToShow" min="-100" max="40000" value="1" onchange=update()></input>
   
   <br>
   Node Adjust
@@ -110,7 +104,6 @@ d3.json("aTree.json", function(json) {
 
 function update() {
 
-	console.log(document.getElementById("seqsToShow").value)
 	
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
@@ -164,12 +157,7 @@ function update() {
 	function getLabelText(d)
 	{	
 		var returnString = ""
-		var aBox =document.getElementById("showLabels");
-		 	
-		if (! aBox.checked)
-			return "";
-		
-		aBox =document.getElementById("showOTULevel");
+		var aBox =document.getElementById("showOTULevel");
 		
 		if (aBox.checked)
 			returnString = returnString + d.otuLevel+ " ";
@@ -179,48 +167,43 @@ function update() {
 		
 		if (aBox.checked)
 			returnString = returnString + d.size + " ";
-		
-		aBox =document.getElementById("showTaxonomy");
-		
-		if (aBox.checked)
-		{
 				aBox =document.getElementById("showGenus");
 				
-				if (aBox.checked)
+		if (aBox.checked)
 			returnString = returnString + d.genus+ " ";
 		
-			aBox =document.getElementById("showFamily");
+		aBox =document.getElementById("showFamily");
 				
-				if (aBox.checked)
+		if (aBox.checked)
 			returnString = returnString + d.family+ " ";
 			
-			aBox =document.getElementById("showOrder");
+		aBox =document.getElementById("showOrder");
 				
-				if (aBox.checked)
+		if (aBox.checked)
 			returnString = returnString + d.order+ " ";
 			
-				aBox =document.getElementById("showClass");
+		aBox =document.getElementById("showClass");
 				
-				if (aBox.checked)
+		if (aBox.checked)
 			returnString = returnString + d.class+ " ";
 		
-			aBox =document.getElementById("showPhylum");
+		aBox =document.getElementById("showPhylum");
 				
-				if (aBox.checked)
+		if (aBox.checked)
 			returnString = returnString + d.phylum+ " ";
 		
-				aBox =document.getElementById("showSummaryRDP");
+		aBox =document.getElementById("showSummaryRDP");
 				
-			if (aBox.checked)
+		if (aBox.checked)
 				returnString = returnString + d.rdpString+ " ";	
-		}
+		
 			
 		return returnString;	
 	}
 	
 	vis.selectAll("text").remove()
 
-  text=vis.selectAll("text").data(nodes, function(d) { if( d.size > document.getElementById("seqsToShow").value)  return d.id; }).enter().append("svg:text").
+  text=vis.selectAll("text").data(nodes, function(d) { if( d.size > document.getElementById("nodesToShow").value)  return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
