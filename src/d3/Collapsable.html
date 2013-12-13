@@ -53,8 +53,7 @@ line.link {
   				
   <input type="checkbox" id="showSummaryRDP" onchange=update()>
   					show summaryRDP string</input><br>
-  
-  
+  					
   <br>
   Node Adjust
   <input type="range" id="nodesToShow" min="10" max="20000" value="10" onchange=updateNums()></input>
@@ -65,8 +64,12 @@ line.link {
   <input type="range" id="fontAdjust" min="5" max="25" value="15" onchange=update()></input>
   
    <br><input type="checkbox" id="doesClickcollapse" onchange=update()>
+  
+  <br><br>
+  <table id ="tNodeTable" border="1"> <tr><td>Number of TNodes</td><td id="numTNodes">100</td></tr> </table>
   					click collapses/uncollapses</input><br>
   </aside>
+  
   <section>
     <script type="text/javascript" src="d3.v3.js"></script>
     <script type="text/javascript">
@@ -128,6 +131,7 @@ function update() {
   
   if( colorBranches) 
   {
+  		var numMarked =0;
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
 	 		nodes[i].marked = true;
@@ -139,14 +143,18 @@ function update() {
 	 			
 	 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
 	 				{
-	 			
 	 					nodes[i].marked=false;
 	 				}
 	 			}
 	 		}
+	 		
+	 		if( nodes[i].marked == true) 
+	 			numMarked = numMarked + 1
 	 	}
 	 	
+	 	console.log(numMarked)
 	 	colorBranches = false
+	 	document.getElementById("numTNodes").value = numMarked
 	}
       
   // Restart the force layout.
