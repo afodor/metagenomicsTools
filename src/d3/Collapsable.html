@@ -77,6 +77,8 @@ var w = 1200,
     link,
     root;
     
+ var colorBranches = true;
+    
  
 var force = d3.layout.force()
     .on("tick", tick)
@@ -101,7 +103,7 @@ d3.json("aTree.json", function(json) {
 
  function updateNums()
   {
-  	
+  	colorBranches = true;
   	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
   	update();
   }
@@ -112,10 +114,28 @@ function update() {
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
   
-  for (var i = 0; i < nodes.length; i++){
-        if (nodes[i].numSeqs < 3000) 
-            nodes[i].marked = true;
-            }
+  if( colorBranches) 
+  {
+	 	for (var i = 0; i < nodes.length; i++)
+	 	{
+	 		nodes[i].marked = true;
+	 		
+	 		if( nodes[i].children != null) 
+	 		{
+	 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+	 			{
+	 			
+	 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+	 				{
+	 			
+	 					nodes[i].marked=false;
+	 				}
+	 			}
+	 		}
+	 	}
+	 	
+	 	colorBranches = false
+	}
       
   // Restart the force layout.
   force
@@ -145,9 +165,10 @@ function update() {
   // Exit any old links.
   link.exit().remove();
 
-  // Update the nodes1
+  // Update the nodes
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) {  if( d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id;  })
+      .data(nodes, function(d) {  if( d.numSeqs > document.getElementById("numerNodesToShow").value)
+      									{   return d.id; } })
       .style("fill", color);
 
   node.transition()
