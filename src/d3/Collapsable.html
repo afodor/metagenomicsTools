@@ -29,6 +29,10 @@ line.link {
   <body>
   <aside id="sidebar">
   
+  <br>
+  <input type="checkbox" id="labelOnlyTNodes" onchange=update() checked=true >
+  					Label only T-Nodes</input><br>
+  
   <input type="checkbox" id="showNumberOfSequences" onchange=update() checked=true >
   					Show number of Sequences</input><br>
   <input type="checkbox" id="showOTULevel" onchange=update() >
@@ -50,7 +54,6 @@ line.link {
   <input type="checkbox" id="showPhylum" onchange=update()>
   					show phylum</input><br>
   					
-  				
   <input type="checkbox" id="showSummaryRDP" onchange=update()>
   					show summaryRDP string</input><br>
   					
@@ -187,7 +190,12 @@ function update() {
       
 	function getLabelText(d)
 	{	
+		if( d.marked == false && document.getElementById("labelOnlyTNodes").checked  )
+			return "";
+			
 		var returnString = ""
+		
+		
 		var aBox =document.getElementById("showOTULevel");
 		
 		if (aBox.checked)
@@ -240,7 +248,8 @@ function update() {
 		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", document.getElementById("fontAdjust").value + "px")
-                 .attr("fill", function(d) {return stringToColour(d.genus)} )
+                 .attr("fill", function(d) {return  "#000000" } )
+                 // stringToColour(d.genus)} )
   
   
 force.on("tick", function() {
