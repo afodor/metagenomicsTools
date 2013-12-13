@@ -63,11 +63,14 @@ line.link {
   Font Adjust
   <input type="range" id="fontAdjust" min="5" max="25" value="15" onchange=update()></input>
   
-   <br><input type="checkbox" id="doesClickcollapse" onchange=update()>
+   <br><input type="checkbox" id="doesClickcollapse" onchange=update()>click collapses/uncollapses</input><br>
   
   <br><br>
-  <table id ="tNodeTable" border="1"> <tr><td>Number of TNodes</td><td id="numTNodes">100</td></tr> </table>
-  					click collapses/uncollapses</input><br>
+  <table border=1 id ="tNodeTable"> 
+  <tr><td>Number of Visible Nodes</td><td></td></tr>
+  <tr><td>Number of TNodes</td><td></td></tr>
+   </table>
+  					
   </aside>
   
   <section>
@@ -134,43 +137,7 @@ function update() {
 	
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
-  
-  if( colorBranches) 
-  {
-  		var numMarked =0;
-	 	for (var i = 0; i < nodes.length; i++)
-	 	{
-	 		if( nodes[i].visible) 
-	 		{
-	 		
-		 		nodes[i].marked = true;
-		 		
-		 		if( nodes[i].children != null) 
-		 		{
-		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
-		 			{
-		 			
-		 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
-		 				{
-		 					nodes[i].marked=false;
-		 				}
-		 			}
-		 		}
-		 		
-		 		if( nodes[i].marked == true) 
-		 			numMarked = numMarked + 1
-	 		}
-	 		else
-	 		{
-	 			nodes[i].marked= false;
-	 		}
-	 	}
-	 	
-	 	console.log(numMarked)
-	 	colorBranches = false
-	 	document.getElementById("numTNodes").value = numMarked
-	}
-      
+    
   // Restart the force layout.
   force
       .nodes(nodes)
@@ -287,6 +254,45 @@ force.on("tick", function() {
       .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
   });
   
+  
+  if( colorBranches) 
+  {
+  		var numMarked =0;
+  		var numVisible=0;
+	 	for (var i = 0; i < nodes.length; i++)
+	 	{
+	 		nodes[i].marked= false;
+	 		if( nodes[i].visible) 
+	 		{
+	 			nodes[i].marked = true;
+		 		numVisible++;
+		 		
+		 		if( nodes[i].children != null) 
+		 		{
+		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+		 			{
+		 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+		 				{
+		 					nodes[i].marked=false;
+		 				}
+		 			}
+		 		}
+		 		
+		 		if( nodes[i].marked == true) 
+		 			numMarked = numMarked + 1
+	 		}
+	 	}
+	 	
+	 	colorBranches = false
+	 	var table = document.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
+	 	
+	 	table.rows[0].cells[1].innerHTML = "" + numVisible;
+	 	
+	 	var row = table.rows[1];
+	 	var cell =row.cells[1];
+	 	cell.innerHTML = "" + numMarked;
+	 }
+    
 
   // Exit any old nodes.
   node.exit().remove();
