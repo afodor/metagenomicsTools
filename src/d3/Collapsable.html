@@ -33,11 +33,9 @@ line.link {
   					Show number of Sequences</input><br>
   <input type="checkbox" id="showOTULevel" onchange=update() >
   					Show otu level</input><br>
-  					
   
   <input type="checkbox" id="showGenus" onchange=update() >
   					show genus</input><br>
-  
   
   <input type="checkbox" id="showFamily" onchange=update() >
   					show family</input><br>
@@ -82,7 +80,7 @@ var w = 1200,
  
 var force = d3.layout.force()
     .on("tick", tick)
-    .charge(function(d) { return d._children ? -d.size / 100 : -30; })
+    .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]);
     
@@ -103,6 +101,7 @@ d3.json("aTree.json", function(json) {
 
  function updateNums()
   {
+  	
   	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
   	update();
   }
@@ -112,7 +111,12 @@ function update() {
 	
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);
-
+  
+  for (var i = 0; i < nodes.length; i++){
+        if (nodes[i].numSeqs < 3000) 
+            nodes[i].marked = true;
+            }
+      
   // Restart the force layout.
   force
       .nodes(nodes)
@@ -123,7 +127,7 @@ function update() {
   link = vis.selectAll("line.link")
       .data(links, function(d) {  
       aVal = document.getElementById("numerNodesToShow").value;
-      if( d.source.size > aVal && d.target.size > aVal)
+      if( d.source.numSeqs > aVal && d.target.numSeqs> aVal)
       	{
       		return d.target.id; 
       	}
@@ -143,26 +147,22 @@ function update() {
 
   // Update the nodes1
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) {  if( d.size > document.getElementById("numerNodesToShow").value)  return d.id;  })
+      .data(nodes, function(d) {  if( d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id;  })
       .style("fill", color);
 
   node.transition()
-      .attr("r", function(d) { return  Math.sqrt(d.size) / 10; });
+      .attr("r", function(d) { return  Math.sqrt(d.numSeqs) / 10; });
 
   // Enter any new nodes.
   node.enter().append("svg:circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .attr("r", function(d) { return Math.sqrt(d.size) / 10; })
+      .attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; })
       .style("fill", color)
       .on("click", click)
       .call(force.drag);
-
-
- 
-  
-
+      
 	function getLabelText(d)
 	{	
 		var returnString = ""
@@ -175,7 +175,7 @@ function update() {
 		aBox =document.getElementById("showNumberOfSequences");
 		
 		if (aBox.checked)
-			returnString = returnString + d.size + " ";
+			returnString = returnString + d.numSeqs + " ";
 				aBox =document.getElementById("showGenus");
 				
 		if (aBox.checked)
@@ -212,7 +212,7 @@ function update() {
 	
 	vis.selectAll("text").remove()
 
-  text=vis.selectAll("text").data(nodes, function(d) { if( d.size > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
+  text=vis.selectAll("text").data(nodes, function(d) { if( d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
@@ -228,7 +228,7 @@ force.on("tick", function() {
       .attr("y2", function(d) { return d.target.y; });
 
   node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.size) / 10; });
+      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
   });
   
 
@@ -248,7 +248,17 @@ function tick() {
 
 // Color leaf nodes orange, and packages white or blue.
 function color(d) {
-  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+
+
+	if( ! d.marked )
+		
+	//if( nodes.children)
+	
+
+	//return "#fd8d3c"; orange
+	// return "#c6dbef"; background blue
+	//return "#3182bd"; bright blue
+ return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
 }
 
 // Toggle children on click.

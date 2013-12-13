@@ -112,7 +112,7 @@ public class BuildJSONDataStructure
 			writer.write("\"" + NewRDPParserFileLine.TAXA_ARRAY[x]+ "\": \"" +  valString+ "\",\n");
 		}
 		
-		writer.write("\"size\": " +  enode.getNumOfSequencesAtTips() + "\n");
+		writer.write("\"numSeqs\": " +  enode.getNumOfSequencesAtTips() + "\n");
 		
 		List<ENode> toAdd = new ArrayList<ENode>();
 		
