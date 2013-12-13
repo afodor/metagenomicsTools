@@ -271,15 +271,14 @@ function tick() {
 function color(d) {
 
 
-	if( ! d.marked )
+	if(  d.marked )
+		return "#000000";
 		
-	//if( nodes.children)
-	
-
-	//return "#fd8d3c"; orange
+		//return "#fd8d3c"; orange
 	// return "#c6dbef"; background blue
 	//return "#3182bd"; bright blue
- return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+	return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+		
 }
 
 // Toggle children on click.
