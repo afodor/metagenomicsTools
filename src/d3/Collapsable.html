@@ -57,7 +57,7 @@ line.link {
   <br>
   Node Adjust
   <input type="range" id="nodesToShow" min="10" max="20000" value="10" onchange=updateNums()></input>
-  <input type="number" id="numerNodesToShow" value="10" onchange=update()></input>
+  <input type="number" id="numerNodesToShow" value="10" onchange=updateNumNodes()></input>
   
    <br><br>
   Font Adjust
@@ -122,6 +122,12 @@ d3.json("aTree.json", function(json) {
   	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
   	update();
   }
+  
+  function updateNumNodes()
+  {
+  	colorBranches = true;
+  	update()
+  }
 
 function update() {
 
@@ -134,22 +140,30 @@ function update() {
   		var numMarked =0;
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
-	 		nodes[i].marked = true;
-	 		
-	 		if( nodes[i].children != null) 
+	 		if( nodes[i].visible) 
 	 		{
-	 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
-	 			{
-	 			
-	 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
-	 				{
-	 					nodes[i].marked=false;
-	 				}
-	 			}
-	 		}
 	 		
-	 		if( nodes[i].marked == true) 
-	 			numMarked = numMarked + 1
+		 		nodes[i].marked = true;
+		 		
+		 		if( nodes[i].children != null) 
+		 		{
+		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+		 			{
+		 			
+		 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+		 				{
+		 					nodes[i].marked=false;
+		 				}
+		 			}
+		 		}
+		 		
+		 		if( nodes[i].marked == true) 
+		 			numMarked = numMarked + 1
+	 		}
+	 		else
+	 		{
+	 			nodes[i].marked= false;
+	 		}
 	 	}
 	 	
 	 	console.log(numMarked)
@@ -187,8 +201,8 @@ function update() {
 
   // Update the nodes
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) {  if( d.numSeqs > document.getElementById("numerNodesToShow").value)
-      									{   return d.id; } })
+      .data(nodes, function(d) { if( d.numSeqs > document.getElementById("numerNodesToShow").value)
+      									{d.visible=true;   return d.id; } else {d.visible=false} })
       .style("fill", color);
 
   node.transition()
