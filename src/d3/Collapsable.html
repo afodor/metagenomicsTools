@@ -135,6 +135,59 @@ d3.json("aTree.json", function(json) {
   	update()
   }
 
+function getLabelText(d)
+	{	
+		if( d.marked == false && document.getElementById("labelOnlyTNodes").checked  )
+			return "";
+			
+		var returnString = ""
+		
+		
+		var aBox =document.getElementById("showOTULevel");
+		
+		if (aBox.checked)
+			returnString = returnString + d.otuLevel+ " ";
+			
+			
+		aBox =document.getElementById("showNumberOfSequences");
+		
+		if (aBox.checked)
+			returnString = returnString + d.numSeqs + " ";
+				aBox =document.getElementById("showGenus");
+				
+		if (aBox.checked)
+			returnString = returnString + d.genus+ " ";
+		
+		aBox =document.getElementById("showFamily");
+				
+		if (aBox.checked)
+			returnString = returnString + d.family+ " ";
+			
+		aBox =document.getElementById("showOrder");
+				
+		if (aBox.checked)
+			returnString = returnString + d.order+ " ";
+			
+		aBox =document.getElementById("showClass");
+				
+		if (aBox.checked)
+			returnString = returnString + d.class+ " ";
+		
+		aBox =document.getElementById("showPhylum");
+				
+		if (aBox.checked)
+			returnString = returnString + d.phylum+ " ";
+		
+		aBox =document.getElementById("showSummaryRDP");
+				
+		if (aBox.checked)
+				returnString = returnString + d.rdpString+ " ";	
+		
+			
+		return returnString;	
+	}
+
+
 function update() {
 
 	
@@ -188,58 +241,7 @@ function update() {
       .on("click", click)
       .call(force.drag);
       
-	function getLabelText(d)
-	{	
-		if( d.marked == false && document.getElementById("labelOnlyTNodes").checked  )
-			return "";
-			
-		var returnString = ""
 		
-		
-		var aBox =document.getElementById("showOTULevel");
-		
-		if (aBox.checked)
-			returnString = returnString + d.otuLevel+ " ";
-			
-			
-		aBox =document.getElementById("showNumberOfSequences");
-		
-		if (aBox.checked)
-			returnString = returnString + d.numSeqs + " ";
-				aBox =document.getElementById("showGenus");
-				
-		if (aBox.checked)
-			returnString = returnString + d.genus+ " ";
-		
-		aBox =document.getElementById("showFamily");
-				
-		if (aBox.checked)
-			returnString = returnString + d.family+ " ";
-			
-		aBox =document.getElementById("showOrder");
-				
-		if (aBox.checked)
-			returnString = returnString + d.order+ " ";
-			
-		aBox =document.getElementById("showClass");
-				
-		if (aBox.checked)
-			returnString = returnString + d.class+ " ";
-		
-		aBox =document.getElementById("showPhylum");
-				
-		if (aBox.checked)
-			returnString = returnString + d.phylum+ " ";
-		
-		aBox =document.getElementById("showSummaryRDP");
-				
-		if (aBox.checked)
-				returnString = returnString + d.rdpString+ " ";	
-		
-			
-		return returnString;	
-	}
-	
 	vis.selectAll("text").remove()
 
   text=vis.selectAll("text").data(nodes, function(d) { if( d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
