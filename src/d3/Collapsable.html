@@ -191,7 +191,6 @@ function getLabelText(d)
 function update() {
 
 	vis.selectAll("circle.node").remove()
-	vis.selectAll("text").remove()
 	vis.selectAll("line.link").remove()
 	
   var nodes = flatten(root),
@@ -207,7 +206,7 @@ function update() {
   link = vis.selectAll("line.link")
       .data(links, function(d) {  
       aVal = document.getElementById("numerNodesToShow").value;
-      if( d.source.numSeqs > aVal && d.target.numSeqs> aVal)
+      if( (! d.source.doNotDraw &&  d.source.numSeqs > aVal)  && (! d.target.doNotDraw &&  d.target.numSeqs> aVal ))
       	{
       		return d.target.id; 
       	}
@@ -225,7 +224,7 @@ function update() {
  
 
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) { if( d.numSeqs >= document.getElementById("numerNodesToShow").value)
+      .data(nodes, function(d) { if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
       									{d.visible=true;   return d.id; } else {d.visible=false} })
       .style("fill", color);
 
@@ -243,7 +242,7 @@ function update() {
       .call(force.drag);
       
   
-force.on("tick", function() {
+force.on("tick", function() { 
 		text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 		link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -252,8 +251,8 @@ force.on("tick", function() {
 
   node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
-      //update();
-  });
+    
+	});
   
   
   if( colorBranches) 
@@ -294,10 +293,8 @@ force.on("tick", function() {
 	 	cell.innerHTML = "" + numMarked;
 	 }
 	 
-	 	
-
-
-  text=vis.selectAll("text").data(nodes, function(d) { if( d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
+	vis.selectAll("text").remove()
+  text=vis.selectAll("text").data(nodes, function(d) { if( ! d.doNotDraw &&  d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
@@ -310,8 +307,8 @@ force.on("tick", function() {
  // cleanup
   link.exit().remove();
   node.exit().remove();
-  text.exit().remove();
 }
+
 
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
@@ -343,19 +340,55 @@ function click(d) {
 	
 	if (aBox.checked)
 	{
-  		if (d.children) {
-    	d._children = d.children;
-    	d.children = null;
+  		if (d.children) 
+  		{
+    		d._children = d.children;
+    		d.children = null;
   		} else 
-  	{
-    d.children = d._children;
-    d._children = null;
-  }
-  update();	
+  		{
+    		d.children = d._children;
+    		d._children = null;
+  		}
+	}
+	else
+	{
+		markAllChildren(d);
+		markAllParents(d);
 	}
 	
-
+	update();	
 }
+
+function markAllChildren(d)
+{
+	if( d== null)
+		return;
+
+	if( ! d.children || d.children == null)
+		return;	
+
+	d.doNotDraw = true;
+	for( x=0; x < d.children.length; x++) 
+	{
+		markAllChildren(d.children[x]);
+	}
+}
+
+function markAllParents(d)
+{
+	if ( d== null)
+		return;
+
+	d.doNotDraw = true;
+	if( ! d.aParentNode ||  d.aParentNode != null)
+	{
+		markAllParents(d.aParentNode);
+	}
+}
+
+
+
+
 
 // Returns a list of all nodes under the root.
 function flatten(root) {
@@ -363,12 +396,23 @@ function flatten(root) {
 
   function recurse(node) {
     if (node.children) node.size = node.children.reduce(function(p, v) { return p + recurse(v); }, 0);
+    
     if (!node.id) node.id = ++i;
     nodes.push(node);
+    
+    if( node.children)
+    { 
+    	for( j =0; j< node.children.length; j++)
+    	{
+    		node.children[j].aParentNode = node;
+    	}
+    }
+    
     return node.size;
   }
 
   root.size = recurse(root);
+  
   return nodes;
 }
 
