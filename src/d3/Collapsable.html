@@ -233,6 +233,7 @@ function update()
 	      .style("fill", color)
 	      .on("click", click)
 	      .on("mouseenter", myMouseEnter)
+	      .on("mouseleave", myMouseLeave)
 	      .call(force.drag);
 	       
 	force.on("tick", function() { 
@@ -307,6 +308,17 @@ function myMouseEnter()
 	for(x=0; x < nodes.length; x++) 
 	{
 		nodes[x].highlight = true;
+	}
+
+	dirty = true;
+	update();
+}
+
+function myMouseLeave()
+{
+	for(x=0; x < nodes.length; x++) 
+	{
+		nodes[x].highlight = false;
 	}
 
 	dirty = true;
