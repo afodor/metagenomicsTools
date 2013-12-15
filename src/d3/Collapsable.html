@@ -2,83 +2,71 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <style type="text/css">
-
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<style type="text/css">
 circle.node {
-  cursor: point;
-  stroke: #000;
-  stroke-width: .5px;
+	cursor: point;
+	stroke: #000;
+	stroke-width: .5px;
 }
 
 line.link {
-  fill: none;
-  stroke: #9ecae1;
-  stroke-width: 1.5px;
+	fill: none;
+	stroke: #9ecae1;
+	stroke-width: 1.5px;
 }
 
 #sidebar {
-    float: right;
-      border: 1px solid red;
-      width: 200px;
-    }
+	float: right;
+	border: 1px solid red;
+	width: 200px;
+}
+</style>
+</head>
+<body>
+	<aside id="sidebar">
 
-    </style>
-  </head>
-  <body>
-  <aside id="sidebar">
-  
-  <br>
-  <input type="checkbox" id="labelOnlyTNodes" onchange=redrawScreen() checked=true >
-  					Label only T-Nodes</input><br>
-  
-  <input type="checkbox" id="showNumberOfSequences" onchange=redrawScreen() checked=true >
-  					Show number of Sequences</input><br>
-  <input type="checkbox" id="showOTULevel" onchange=redrawScreen() >
-  					Show otu level</input><br>
-  
-  <input type="checkbox" id="showGenus" onchange=redrawScreen() >
-  					show genus</input><br>
-  
-  <input type="checkbox" id="showFamily" onchange=redrawScreen() >
-  					show family</input><br>
- 
-  <input type="checkbox" id="showOrder" onchange=redrawScreen() >
-  					show order</input><br>
-  
-   <input type="checkbox" id="showClass" onchange=redrawScreen()>
-  					show class</input><br>
-  					
-  
-  <input type="checkbox" id="showPhylum" onchange=redrawScreen()>
-  					show phylum</input><br>
-  					
-  <input type="checkbox" id="showSummaryRDP" onchange=redrawScreen()>
-  					show summaryRDP string</input><br>
-  					
-  <br>
-  Node Adjust
-  <input type="range" id="nodesToShow" min="10" max="20000" value="10" onchange=updateNums()></input>
-  <input type="number" id="numerNodesToShow" value="10" onchange=redrawScreenf()></input>
-  
-   <br><br>
-  Font Adjust
-  <input type="range" id="fontAdjust" min="5" max="25" value="15" onchange=redrawScreen()></input>
-  
-   <br><input type="checkbox" id="doesClickcollapse" onchange=redrawScreens()>click collapses/uncollapses</input><br>
-  
-  <br><br>
-  <table border=1 id ="tNodeTable"> 
-  <tr><td>Number of Visible Nodes</td><td></td></tr>
-  <tr><td>Number of TNodes</td><td></td></tr>
-   </table>
-  					
-  </aside>
-  
-  <section>
-    <script type="text/javascript" src="d3.v3.js"></script>
-    <script type="text/javascript">
+		<br> <input type="checkbox" id="labelOnlyTNodes"
+			onchange=redrawScreen() checked=true> Label only T-Nodes</input><br>
+
+		<input type="checkbox" id="showNumberOfSequences"
+			onchange=redrawScreen() checked=true> Show number of
+		Sequences</input><br> <input type="checkbox" id="showOTULevel"
+			onchange=redrawScreen()> Show otu level</input><br> <input
+			type="checkbox" id="showGenus" onchange=redrawScreen()> show
+		genus</input><br> <input type="checkbox" id="showFamily"
+			onchange=redrawScreen()> show family</input><br> <input
+			type="checkbox" id="showOrder" onchange=redrawScreen()> show
+		order</input><br> <input type="checkbox" id="showClass"
+			onchange=redrawScreen()> show class</input><br> <input
+			type="checkbox" id="showPhylum" onchange=redrawScreen()> show
+		phylum</input><br> <input type="checkbox" id="showSummaryRDP"
+			onchange=redrawScreen()> show summaryRDP string</input><br> <br>
+		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
+			value="10" onchange=updateNums()></input> <input type="number"
+			id="numerNodesToShow" value="10" onchange=redrawScreenf()></input> <br>
+		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
+			max="25" value="15" onchange=redrawScreen()></input> <br>
+		<input type="checkbox" id="doesClickcollapse" onchange=redrawScreens()>click
+		collapses/uncollapses</input><br> <br>
+		<br>
+		<table border=1 id="tNodeTable">
+			<tr>
+				<td>Number of Visible Nodes</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Number of TNodes</td>
+				<td></td>
+			</tr>
+		</table>
+
+	</aside>
+
+	<section>
+		<script type="text/javascript" src="d3.v3.js"></script>
+		<script type="text/javascript">
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w = 1200,
     h = 800,
@@ -188,6 +176,14 @@ function getLabelText(d)
 		return returnString;	
 	}
 
+function myFilterNodes(d)
+{
+	 if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
+	 	return true;
+	 	
+	 return false;
+}
+
 function update() 
 {
 	if( ! initHasRun )
@@ -197,6 +193,9 @@ function update()
 	{
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
+		
+		for( z=0; z < nodes.length; z++)
+			nodes[z].setVisible=false;
 		
 		// Update the links
   		link = vis.selectAll("line.link")
@@ -210,9 +209,9 @@ function update()
       		);
 	
 	  node = vis.selectAll("circle.node")
-	      .data(nodes, function(d) { if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
-	      									{d.visible=true;   return d.id; } else {d.visible=false} })
-	      .style("fill", color);
+	      .data(nodes.filter(myFilterNodes), function(d) {return d.id; } )
+	      .style("fill", color)
+	      .attr("visible", true);
 	
 	  // Enter any new nodes.
 	  node.enter().append("svg:circle")
@@ -451,7 +450,7 @@ function flatten(root) {
 }
 
     </script>
-    </section>
-  </body>
+	</section>
+</body>
 </html>
 
