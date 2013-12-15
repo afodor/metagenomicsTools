@@ -303,13 +303,18 @@ function update()
 	}
 }
 
-function myMouseEnter()
+function myMouseEnter(d)
 {
-	for(x=0; x < nodes.length; x++) 
+	d.highlight = true;
+	
+	if( d.children != null )
 	{
-		nodes[x].highlight = true;
+		for(x=0; x < d.children.length; x++) 
+		{
+			d.children[x].highlight = true;
+		}
 	}
-
+	
 	dirty = true;
 	update();
 }
