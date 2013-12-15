@@ -86,6 +86,8 @@ var w = 1200,
     links,
     link,
     root;
+    
+  var initHasRun = false;
  
  // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
 	var stringToColour = function(str) {
@@ -189,6 +191,9 @@ function getLabelText(d)
 
 function update() 
 {
+	if( ! initHasRun )
+		return;
+ 
 	if( dirty ) 
 	{
 		
@@ -307,6 +312,9 @@ function initialize() {
       .links(links)
       .start();
 
+	
+  initHasRun = true;
+ 
 	update();
 }
 

@@ -1,0 +1,9 @@
+<script>
+var obj = { f: sync(function () { 
+                    alert('I am synchronized!');
+               }
+          };
+
+// 'f' is a "synchronized" method.
+obj.f();
+</script> 
