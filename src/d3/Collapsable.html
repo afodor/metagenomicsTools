@@ -232,6 +232,7 @@ function update()
 	      .attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; })
 	      .style("fill", color)
 	      .on("click", click)
+	      .on("mouseenter", myMouseEnter)
 	      .call(force.drag);
 	       
 	force.on("tick", function() { 
@@ -301,6 +302,17 @@ function update()
 	}
 }
 
+function myMouseEnter()
+{
+	for(x=0; x < nodes.length; x++) 
+	{
+		nodes[x].highlight = true;
+	}
+
+	dirty = true;
+	update();
+}
+
 function initialize() {
 	
   nodes = flatten(root),
@@ -331,6 +343,9 @@ function tick() {
 
 // Color leaf nodes orange, and packages white or blue.
 function color(d) {
+
+	if ( d.highlight == true) 
+		return "#fd8d3c";
 
 	if(  d.marked )
 		return "#000000";
