@@ -195,12 +195,11 @@ function update()
  
 	if( dirty ) 
 	{
-		
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
 		
 		// Update the links
-  link = vis.selectAll("line.link")
+  		link = vis.selectAll("line.link")
       .data(links, function(d) {  
       aVal = document.getElementById("numerNodesToShow").value;
       if( (! d.source.doNotDraw &&  d.source.numSeqs > aVal)  && (! d.target.doNotDraw &&  d.target.numSeqs> aVal ))
@@ -209,14 +208,6 @@ function update()
       	}
       		}
       		);
-
-	  // Enter any new links.
-	  link.enter().insert("svg:line", ".node")
-	      .attr("class", "link")
-	      .attr("x1", function(d) { return d.source.x; })
-	      .attr("y1", function(d) { return d.source.y; })
-	      .attr("x2", function(d) { return d.target.x; })
-	      .attr("y2", function(d) { return d.target.y; });
 	
 	  node = vis.selectAll("circle.node")
 	      .data(nodes, function(d) { if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
@@ -234,6 +225,12 @@ function update()
 	      .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
 	      .call(force.drag);
+	      
+	   
+	  // Enter any new links.
+	  link.enter().insert("svg:line", ".node")
+	      .attr("class", "link")
+	   
 	       
 	force.on("tick", function() { 
 	  node.attr("cx", function(d) { return d.x; })
@@ -241,10 +238,11 @@ function update()
 	      
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			link.attr("x1", function(d) { return d.source.x; })
+	      .attr("x1", function(d) { return d.source.x; })
 	      .attr("y1", function(d) { return d.source.y; })
 	      .attr("x2", function(d) { return d.target.x; })
 	      .attr("y2", function(d) { return d.target.y; });
-	    
+	   
 		});
 	  
 	  	var numMarked =0;
