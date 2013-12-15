@@ -82,7 +82,6 @@ line.link {
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w = 1200,
     h = 800,
-    node,
     link,
     root;
  
@@ -221,15 +220,10 @@ function update() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
- 
-
   node = vis.selectAll("circle.node")
       .data(nodes, function(d) { if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
       									{d.visible=true;   return d.id; } else {d.visible=false} })
       .style("fill", color);
-
-  node.transition()
-      .attr("r", function(d) { return  Math.sqrt(d.numSeqs) / 10; });
 
   // Enter any new nodes.
   node.enter().append("svg:circle")
@@ -240,8 +234,7 @@ function update() {
       .style("fill", color)
       .on("click", click)
       .call(force.drag);
-      
-  
+       
 force.on("tick", function() { 
 		text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 		link.attr("x1", function(d) { return d.source.x; })
