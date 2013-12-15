@@ -105,7 +105,6 @@ var w = 1200,
     
  
 var force = d3.layout.force()
-    .on("tick", tick)
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]);
@@ -307,13 +306,19 @@ function myMouseEnter(d)
 {
 	d.highlight = true;
 	
-	if( d.children != null )
+	function recurse(d)
 	{
-		for(x=0; x < d.children.length; x++) 
+		if( d.children != null ) 
 		{
-			d.children[x].highlight = true;
+			for(x=0; x < d.children.length; x++) 
+			{
+				d.children[x].highlight = true;
+				recurse(d.children[x]);
+			}		
 		}
 	}
+	
+	recurse(d);
 	
 	dirty = true;
 	update();
@@ -331,7 +336,7 @@ function myMouseLeave()
 }
 
 function initialize() {
-	
+
   nodes = flatten(root),
   links = d3.layout.tree().links(nodes);
     
@@ -345,17 +350,6 @@ function initialize() {
   initHasRun = true;
  
 	update();
-}
-
-
-function tick() {
-  link.attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-
-  node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
 }
 
 // Color leaf nodes orange, and packages white or blue.
@@ -391,11 +385,12 @@ function click(d) {
     		d._children = null;
   		}
 	}
+	/*
 	else
 	{
 		markAllChildren(d);
 		markAllParents(d);
-	}
+	}*/
 	
 	update();	
 }
