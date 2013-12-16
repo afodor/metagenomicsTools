@@ -84,7 +84,6 @@ line.link {
 	<section>
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
-		"use strict";
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w = 1200,
     h = 800,
@@ -260,9 +259,9 @@ function update()
 	      .on("mouseleave", myMouseLeave)
 	      .call(force.drag);
 	      
-	      
-force.on("tick", function() { 
-	  node.attr("cx", function(d) { return d.x; })
+	      function updateNodesLinksText()
+	      {
+	      	node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
 	      
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -271,9 +270,11 @@ force.on("tick", function() {
 	      .attr("y1", function(d) { return d.source.y; })
 	      .attr("x2", function(d) { return d.target.x; })
 	      .attr("y2", function(d) { return d.target.y; });
-	   
-		});
-	  
+	      }
+	    
+		force.on("tick", updateNodesLinksText);
+		force.on("end", updateNodesLinksText);
+	    
 	      
 	      	// Update the links
   	link = vis.selectAll("line.link")
@@ -333,6 +334,9 @@ force.on("tick", function() {
  // cleanup
   link.exit().remove();
   node.exit().remove();
+  	
+  	if (! document.getElementById("animate").checked)
+  		force.stop();
   	
 	dirty = false;
 	}
