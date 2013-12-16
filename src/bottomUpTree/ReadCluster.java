@@ -15,6 +15,8 @@ package bottomUpTree;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -44,5 +46,35 @@ public class ReadCluster
 		
 		return list;
 	}
+	
+	public static HashMap<Float, List<ENode>> getMapByLevel(String filePath, boolean removeSingletons, boolean validateDaughterAndParents) throws Exception
+	{
+		ENode root = ReadCluster.readFromFile(filePath, removeSingletons, validateDaughterAndParents).get(0);
+		
+		HashMap<Float, List<ENode>> mapByLevel = new HashMap<Float, List<ENode>>();
+		addNodeAndChildren(root, mapByLevel);
+		
+		return mapByLevel;
+		
+	}
+	
+	private static void addNodeAndChildren( ENode node, HashMap<Float, List<ENode>> map)
+	{
+		List<ENode> innerList = map.get(node.getLevel());
+			
+		if( innerList == null)
+		{
+			innerList = new ArrayList<ENode>();
+			map.put(node.getLevel(), innerList);
+		}
+			
+		innerList.add(node);
+	
+		for( ENode d : node.getDaughters())
+			addNodeAndChildren(d, map);
+			
+		
+	}
+
 	
 }

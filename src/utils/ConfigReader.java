@@ -57,6 +57,8 @@ public class ConfigReader
 	
 	public static final String D3_DIR = "D3_DIR";
 	
+	public static final String R_DIRECTORY = "R_DIRECTORY";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -85,6 +87,11 @@ public class ConfigReader
 	public static String getMockSeqDir() throws Exception
 	{
 		return getConfigReader().getAProperty(MOCK_SEQ_DIR);
+	}
+	
+	public static String getRDirectory() throws Exception
+	{
+		return getConfigReader().getAProperty(R_DIRECTORY);
 	}
 	
 	public static String getRDPJarPath() throws Exception
