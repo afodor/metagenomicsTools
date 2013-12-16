@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import bottomUpTree.pvalues.GetOneWayAnovas;
+
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
 import probabilisticNW.ProbSequence;
@@ -38,7 +40,7 @@ public class BuildJSONDataStructure
 		List<ENode> list= ReadCluster.readFromFile(
 				ConfigReader.getETreeTestDir() + File.separator + "bottomUpMelMerged0.2.merged",false, false);
 		
-		ENode rootNode = new ENode(new ProbSequence("ACGT", "root"), ETree.ROOT_NAME, 0, null) ;
+		ENode rootNode = new ENode(new ProbSequence("ACGT", ETree.ROOT_NAME), ETree.ROOT_NAME, 0, null) ;
 		
 		int numNodes=0;
 		for( ENode node : list)
@@ -52,6 +54,7 @@ public class BuildJSONDataStructure
 		System.out.println("Proceeding with " + numNodes);
 		
 		rootNode.validateNodeAndDaughters(true);
+		HashMap<String, Double> pValueSubject = GetOneWayAnovas.getOneWayAnovaPValues(rootNode);
 		
 		ETree etree = new ETree();
 		etree.setTopNode(rootNode);
@@ -63,13 +66,14 @@ public class BuildJSONDataStructure
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
 		
-		writeNodeAndChildren(writer, rootNode,10, rdpMap);
+		writeNodeAndChildren(writer, rootNode,10, rdpMap,pValueSubject);
 		 
 		writer.flush();  writer.close();
 		
 	}
 	
-	private static String getRDPString(String rdpLevel, String eNodeName,HashMap<String, NewRDPParserFileLine> rdpMap )
+	private static String getRDPString(String rdpLevel, String eNodeName,
+			HashMap<String, NewRDPParserFileLine> rdpMap )
 		throws Exception
 		{
 			String returnString = "unclassified";
@@ -87,7 +91,8 @@ public class BuildJSONDataStructure
 		}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,
-					ENode enode, double cutoff, HashMap<String, NewRDPParserFileLine> rdpMap) throws Exception
+					ENode enode, double cutoff, HashMap<String, NewRDPParserFileLine> rdpMap,
+					HashMap<String, Double> pValuesSubject) throws Exception
 	{
 		NewRDPParserFileLine fileLine = rdpMap.get(enode.getNodeName());
 		
@@ -106,6 +111,7 @@ public class BuildJSONDataStructure
 		writer.write("\"level\": " +  level + ",\n");
 		writer.write("\"otuLevel\": " +  enode.getLevel()+ ",\n");
 		writer.write("\"rdpString\": \"" +  rdpString+ "\",\n");
+		writer.write("\"pvalueSubject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
 		nodeNumber++;
 		writer.write("\"nodeNum\": \"" +  nodeNumber+ "\",\n");
 		
@@ -130,7 +136,7 @@ public class BuildJSONDataStructure
 				
 			for( Iterator<ENode> i = toAdd.iterator(); i.hasNext();)
 			{
-				writeNodeAndChildren(writer,i.next(), cutoff, rdpMap);
+				writeNodeAndChildren(writer,i.next(), cutoff, rdpMap, pValuesSubject);
 				if( i.hasNext())
 					writer.write(",");
 			}

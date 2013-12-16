@@ -47,10 +47,8 @@ public class ReadCluster
 		return list;
 	}
 	
-	public static HashMap<Float, List<ENode>> getMapByLevel(String filePath, boolean removeSingletons, boolean validateDaughterAndParents) throws Exception
-	{
-		ENode root = ReadCluster.readFromFile(filePath, removeSingletons, validateDaughterAndParents).get(0);
-		
+	public static HashMap<Float, List<ENode>> getMapByLevel(ENode root) throws Exception
+	{	
 		HashMap<Float, List<ENode>> mapByLevel = new HashMap<Float, List<ENode>>();
 		addNodeAndChildren(root, mapByLevel);
 		
