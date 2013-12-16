@@ -114,7 +114,7 @@ var w = 1200,
 var force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
-    .size([w, h - 60]);
+    .size([w, h - 60]).gravity(0.3);
     
 var drag = force.drag().on("dragstart", function(d) { d.fixed=true;});
     
@@ -379,7 +379,7 @@ function myMouseLeave()
 
 function setInitialPositions( myNodes )
 {
-	var radius = Math.min(w,h)/2 - 100;
+	var radius = Math.min(w,h)/2 - 300;
 	
 	for( var x=0; x < myNodes.length; x++) 
 	{
@@ -388,7 +388,6 @@ function setInitialPositions( myNodes )
 		
 			myNodes[x].x = radius * Math.cos( (myNodes.length-x) / 360.0) + root.x;
 			myNodes[x].y = radius * Math.sin( (myNodes.length-x) / 360.0) + root.y
-			console.log( myNodes[x].x  + " " + myNodes[x].y );
 		}
 	}
 }
