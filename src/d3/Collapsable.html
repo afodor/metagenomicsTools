@@ -59,9 +59,9 @@ line.link {
 			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			value="30" onchange=updateNums()></input> 
 	
-			<br>   	<select id="sizeByWhat">
-    <option value="none">Size by # of sequences</option>
-		<option value="hides">Size by log10(pValue) subject</option></select> <br>
+			<br>   	<select id="sizeByWhat" onchange=updateNums()>
+    <option value="numSeqs">Size by # of sequences</option>
+		<option value="pValueBySubject">Size by log10(pValue) subject</option></select> <br>
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
 			value="100" onchange=updateNums()></input> <input type="number"
 			id="numerNodesToShow" value="100" onchange=redrawScreen()></input> <br>
@@ -227,6 +227,23 @@ function myFilterLinks(d)
       		
 }
 
+function getRadiusVal(d)
+{
+	if(document.getElementById("sizeByWhat").value == "pValueBySubject") 
+	{
+		val = -Math.log(d.pvalueSubject)/Math.LN10;
+		if( val <1) return 1;
+		
+		if( isNaN(val) ||  val > 30) 
+			return 30;
+		
+		console.log(val)
+		return val;
+	}
+	      					
+	return Math.sqrt(d.numSeqs) / 10; 
+}
+
 function update() 
 {
 	if( ! initHasRun )
@@ -263,7 +280,7 @@ function update()
 	      .attr("class", "node")
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
-	      .attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; })
+	      .attr("r", function(d) {  return getRadiusVal(d)})
 	      .style("fill", color)
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
@@ -272,7 +289,7 @@ function update()
 	      function updateNodesLinksText()
 	      {
 	      	node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
+	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) {return getRadiusVal(d)} );
 	      
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			link.attr("x1", function(d) { return d.source.x; })
