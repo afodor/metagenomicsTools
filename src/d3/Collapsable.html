@@ -101,6 +101,12 @@ var w = 1200,
     link,
     root;
     
+    // from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+    var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+    
+    
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
@@ -283,7 +289,17 @@ function update()
 	      .attr("r", function(d) {  return getRadiusVal(d)})
 	      .style("fill", color)
 	     .on("mouseenter", myMouseEnter)
-	      .on("mouseleave", myMouseLeave)
+	      .on("mouseleave", myMouseLeave).on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div.html(d.nodeNum + " "+  d.numSeqs + " "+ d.pvalueSubject+ " " + d.rdpString)  
+                .style("left", (d3.x) + "px")     
+                .style("top", (d3.y- 28) + "px");    
+            }).on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0)})                
 	      .call(force.drag);
 	      
 	      function updateNodesLinksText()
