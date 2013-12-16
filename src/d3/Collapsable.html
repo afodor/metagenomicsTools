@@ -269,13 +269,12 @@ force.on("tick", function() {
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
-	    
 	   	var numMarked =0;
   		var numVisible=0;
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
 	 		nodes[i].marked= false;
-	 		if( nodes[i].setVisible) 
+	 		if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
 	 		{
 	 			nodes[i].marked = true;
 		 		numVisible++;
@@ -284,7 +283,8 @@ force.on("tick", function() {
 		 		{
 		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
 		 			{
-		 				if( nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+		 				if( ! nodes[i].children[j].doNotShow && 
+		 						 nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
 		 				{
 		 					nodes[i].marked=false;
 		 				}
