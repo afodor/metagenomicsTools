@@ -308,6 +308,18 @@ function update()
 
 function myMouseEnter(d)
 {
+	function highlightNodeAndChildren(d2)
+	{
+		d2.highlight=true;
+	
+		if( d2.children != null ) 
+		{
+			for(x=0; x < d2.children.length; x++) 
+			{
+				highlightNodeAndChildren(d2.children[x]);
+			}		
+		}
+	}
 	
 	highlightNodeAndChildren(d);
 	
@@ -315,18 +327,7 @@ function myMouseEnter(d)
 	update();
 }
 
-function highlightNodeAndChildren(d)
-	{
-		d.highlight=true;
-	
-		if( d.children != null ) 
-		{
-			for(x=0; x < d.children.length; x++) 
-			{
-				highlightNodeAndChildren(d.children[x]);
-			}		
-		}
-	}
+
 
 function myMouseLeave()
 {
@@ -450,38 +451,31 @@ function flatten()
 {
   var myNodes = [];
   
-  addNodeAndChildren(root,myNodes);
+  function addNodeAndChildren( aNode) 
+	{
+		if( aNode != null) 
+		{
+			myNodes.push(aNode);
+	
+			if( aNode.children != null)
+				for( x=0; x < aNode.children.length; x++)
+					addNodeAndChildren(aNode.children[x])
+		}
+			
+	}
+  
+  addNodeAndChildren(root);
   
   for( i=0; i < myNodes.length; i++)
   {
   	if (!myNodes[i].id) myNodes[i].id = i+1;
-  }
+  }  
   
-  
-  for( x=0; x < root.children.length; x++)
-  		console.log("In flatten Root has child " + root.children[x].nodeNum );
-  
-  
+  console.log("Got " + myNodes.length)
   return myNodes;
 }
 
-function addNodeAndChildren( aNode, someNodes) 
-{
-	
-	if( aNode != null) 
-	{
-		someNodes.push(aNode);
-	
-		if( aNode.children != null)
-			for( x=0; x < aNode.children.length; x++)
-				addNodeAndChildren(aNode.children[x],someNodes)
-	}
-	
-	 for( x=0; x < root.children.length; x++)
-  		console.log("In recurse Root has child " + root.children[x].nodeNum );
-  
-			
-}
+
 
     </script>
 	</section>

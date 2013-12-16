@@ -1,20 +1,21 @@
 
 <body>
 Hello world
-<script type="text/javascript" src="d3.v3.js"></script>
+
     <script type="text/javascript">
 	
-	var dataset = [5,10,15,20,25]
+
+	function factorial(n)
+	{
+		console.log(n)
+		if( n <=1)
+		{
+			return 1;
+		}
+		
+		return n * factorial(n-1)
+	}
 	
-	myPs = d3.select("body").selectAll("p").data(dataset.filter(myFilter))
-	
-	console.log(myPs)
-	
-	myPs.enter().append("p").text(function(d) { return d;});
-	
-	
-	function myFilter(element) {
-  return element >= 5;
-}
+	console.log(factorial(5));
 </script> 
 </body>
