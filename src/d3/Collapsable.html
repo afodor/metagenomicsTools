@@ -31,9 +31,9 @@ line.link {
 			onchange=redrawScreen() checked=true> Label only T-Nodes</input><br>
 
 		<input type="checkbox" id="showNumberOfSequences"
-			onchange=redrawScreen() checked=true> Show number of
+			onchange=redrawScreen() > Show number of
 		Sequences</input><br> <input type="checkbox" id="showOTULevel"
-			onchange=redrawScreen()> Show otu level</input><br>
+			onchange=redrawScreen() checked=true> Show otu level</input><br>
 			
 			<input type="checkbox" id="showNodeNumber" onchange=redrawScreen()> Show node number</input>
 			
@@ -116,7 +116,7 @@ var force = d3.layout.force()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]).gravity(0.3);
     
-var drag = force.drag().on("dragstart", function(d) { d.fixed=true;});
+var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
     
 
 var vis = d3.select("body").append("svg:svg")
