@@ -109,6 +109,12 @@ d3.json("aTree.json", function(json) {
   root.fixed = true;
   root.x = w / 2;
   root.y = h / 2 - 80;
+  
+    
+  for( x=0; x < root.children.length; x++)
+  		console.log("Root has child " + root.children[x].nodeNum );
+  
+  
   initialize();
 });
   
@@ -415,46 +421,47 @@ function highlightAllChildren(d)
 	}
 }
 
+/*
 function highlightAllParents(d)
 {
 	if ( d== null)
 		return;
 
-	d.highligt= true;
+	d.highlight= true;
 	if( ! d.aParentNode ||  d.aParentNode != null)
 	{
 		markAllParents(d.aParentNode);
 	}
 }
-
-
-
+*/
 
 
 // Returns a list of all nodes under the root.
-function flatten(root) {
-  var nodes = [], i = 0;
-
-  function recurse(node) {
-    if (node.children) node.size = node.children.reduce(function(p, v) { return p + recurse(v); }, 0);
-    
-    if (!node.id) node.id = ++i;
-    nodes.push(node);
-    
-    if( node.children)
-    { 
-    	for( j =0; j< node.children.length; j++)
-    	{
-    		node.children[j].aParentNode = node;
-    	}
-    }
-    
-    return node.size;
-  }
-
-  root.size = recurse(root);
+function flatten() 
+{
+  var myNodes = [];
   
-  return nodes;
+  addNodeAndChildren(root,myNodes);
+  
+  for( i=0; i < myNodes.length; i++)
+  {
+  	if (!myNodes[i].id) myNodes[i].id = i+1;
+  }
+  return myNodes;
+}
+
+function addNodeAndChildren( aNode, someNodes) 
+{
+	
+	if( aNode != null) 
+	{
+		someNodes.push(aNode);
+	
+		if( aNode.children != null)
+			for( x=0; x < aNode.children.length; x++)
+				addNodeAndChildren(aNode.children[x],someNodes)
+	}
+			
 }
 
     </script>

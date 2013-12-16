@@ -32,6 +32,7 @@ import eTree.ETree;
 
 public class BuildJSONDataStructure
 {
+	private static int nodeNumber =0;
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
@@ -105,6 +106,9 @@ public class BuildJSONDataStructure
 		writer.write("\"level\": " +  level + ",\n");
 		writer.write("\"otuLevel\": " +  enode.getLevel()+ ",\n");
 		writer.write("\"rdpString\": \"" +  rdpString+ "\",\n");
+		nodeNumber++;
+		writer.write("\"nodeNum\": \"" +  nodeNumber+ "\",\n");
+		
 		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
