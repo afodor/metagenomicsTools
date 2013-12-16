@@ -52,8 +52,14 @@ line.link {
 			id="numerNodesToShow" value="10" onchange=redrawScreen()></input> <br>
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
-		<input type="checkbox" id="doesClickcollapse" onchange=redrawScreen()>click
-		collapses/uncollapses</input><br> <br>
+		
+		<select id="clickDoesWhat">
+		<option value="hides">Click shows/hides branch</option>
+  	<option value="collapses">Click collapses/uncollapses</option>
+    <option value="none">Has no action</option>
+</select>
+		
+		
 		<br>
 		<table border=1 id="tNodeTable">
 			<tr>
@@ -388,9 +394,9 @@ function color(d) {
 // Toggle children on click.
 var myClick= function (d) {
 
-	var aBox =document.getElementById("doesClickcollapse");
+	var aValue =document.getElementById("clickDoesWhat").value;
 	
-	if (aBox.checked)
+	if (aValue=="collapses")
 	{
   		if (d.children) 
   		{
@@ -402,7 +408,7 @@ var myClick= function (d) {
     		d._children = null;
   		}
 	}
-	else
+	else if ( aValue == "hides")
 	{
 		reverse = ! reverse;
 		
