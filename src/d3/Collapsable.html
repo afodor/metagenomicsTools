@@ -178,7 +178,7 @@ function getLabelText(d)
 
 function myFilterNodes(d)
 {
-	 if( ! d.doNotDraw && d.numSeqs >= document.getElementById("numerNodesToShow").value)
+	 if( d.numSeqs >= document.getElementById("numerNodesToShow").value)
 	 	return true;
 	 	
 	 return false;
@@ -186,8 +186,7 @@ function myFilterNodes(d)
 
 function myFilterLinks(d)
 {
-      aVal = document.getElementById("numerNodesToShow").value;
-      if( (! d.source.doNotDraw &&  d.source.numSeqs > aVal)  && (! d.target.doNotDraw &&  d.target.numSeqs> aVal ))
+     if( d.source.setVisible  && d.target.setVisible)
       		return true;
       	
       return false;
@@ -203,15 +202,17 @@ function update()
 	{
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
-		
-		
 		for( z=0; z < nodes.length; z++)
 			nodes[z].setVisible=false;
 		
+		filteredNodes = nodes.filter(myFilterNodes);
+		
+		for( z=0; z < nodes.length; z++)
+			nodes[z].setVisible=true;
+		
 	  node = vis.selectAll("circle.node")
-	      .data(nodes.filter(myFilterNodes), function(d) {return d.id; } )
-	      .style("fill", color)
-	      .attr("visible", true);
+	      .data(filteredNodes, function(d) {return d.id; } )
+	      .style("fill", color);
 	
 	  // Enter any new nodes.
 	 node.enter().append("svg:circle")
@@ -229,31 +230,18 @@ function update()
   	link = vis.selectAll("line.link")
       .data(links.filter(myFilterLinks), function(d) {  return d.target.id; }
       		);
-	
 	   
 	  // Enter any new links.
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
-	force.on("tick", function() { 
-	  node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
-	      
-			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-			link.attr("x1", function(d) { return d.source.x; })
-	      .attr("x1", function(d) { return d.source.x; })
-	      .attr("y1", function(d) { return d.source.y; })
-	      .attr("x2", function(d) { return d.target.x; })
-	      .attr("y2", function(d) { return d.target.y; });
-	   
-		});
-	  
-	  	var numMarked =0;
+	    
+	   	var numMarked =0;
   		var numVisible=0;
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
 	 		nodes[i].marked= false;
-	 		if( nodes[i].visible) 
+	 		if( nodes[i].setVisible) 
 	 		{
 	 			nodes[i].marked = true;
 		 		numVisible++;
@@ -284,7 +272,7 @@ function update()
 	 	
 	 	 
 	vis.selectAll("text").remove()
-  text=vis.selectAll("text").data(nodes, function(d) { if( ! d.doNotDraw &&  d.numSeqs > document.getElementById("numerNodesToShow").value)  return d.id; }).enter().append("svg:text").
+  text=vis.selectAll("text").data(filteredNodes, function(d) { return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
@@ -292,14 +280,14 @@ function update()
                  .attr("font-size", document.getElementById("fontAdjust").value + "px")
                  .attr("fill", function(d) {return  "#000000" } )
                  // stringToColour(d.genus)} )
-    
+	    
 
  // cleanup
   link.exit().remove();
   node.exit().remove();
-		
+  	
 	
-		dirty = false;
+	dirty = false;
 	}
 }
 
@@ -346,6 +334,22 @@ function initialize() {
       .nodes(nodes)
       .links(links)
       .start();
+      
+  node = nodes;
+
+force.on("tick", function() { 
+	  node.attr("cx", function(d) { return d.x; })
+	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
+	      
+			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			link.attr("x1", function(d) { return d.source.x; })
+	      .attr("x1", function(d) { return d.source.x; })
+	      .attr("y1", function(d) { return d.source.y; })
+	      .attr("x2", function(d) { return d.target.x; })
+	      .attr("y2", function(d) { return d.target.y; });
+	   
+		});
+	  
 
 	
   initHasRun = true;
@@ -389,14 +393,14 @@ function click(d) {
 	/*
 	else
 	{
-		markAllChildren(d);
-		markAllParents(d);
+		highlightAllChildren(d);
+		highlightAllParents(d);
 	}*/
 	
 	update();	
 }
 
-function markAllChildren(d)
+function highlightAllChildren(d)
 {
 	if( d== null)
 		return;
@@ -404,19 +408,19 @@ function markAllChildren(d)
 	if( ! d.children || d.children == null)
 		return;	
 
-	d.doNotDraw = true;
+	d.highlight= true;
 	for( x=0; x < d.children.length; x++) 
 	{
 		markAllChildren(d.children[x]);
 	}
 }
 
-function markAllParents(d)
+function highlightAllParents(d)
 {
 	if ( d== null)
 		return;
 
-	d.doNotDraw = true;
+	d.highligt= true;
 	if( ! d.aParentNode ||  d.aParentNode != null)
 	{
 		markAllParents(d.aParentNode);
