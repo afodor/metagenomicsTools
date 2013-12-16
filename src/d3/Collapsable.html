@@ -47,6 +47,12 @@ line.link {
 			type="checkbox" id="showPhylum" onchange=redrawScreen()> show
 		phylum</input><br> <input type="checkbox" id="showSummaryRDP"
 			onchange=redrawScreen()> show summaryRDP string</input><br> <br>
+			
+					<input type="checkbox" id="animate"
+			onchange=redrawScreen() checked=true> animate</input>
+			<br>
+	
+			
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
 			value="10" onchange=updateNums()></input> <input type="number"
 			id="numerNodesToShow" value="10" onchange=redrawScreen()></input> <br>
@@ -328,7 +334,6 @@ force.on("tick", function() {
   link.exit().remove();
   node.exit().remove();
   	
-	
 	dirty = false;
 	}
 }
