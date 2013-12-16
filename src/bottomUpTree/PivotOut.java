@@ -36,15 +36,12 @@ public class PivotOut
 	
 	public static void pivotOut(List<ENode> list , String outPath) throws Exception
 	{	
-		int otuNum = 1;
 		System.out.println("Writing "  + outPath);
 		HashMap<String, HashMap<String, Integer>> outerMap = new HashMap<String, HashMap<String,Integer>>();
 		
 		for( ENode probSeq : list)
 		{
-			outerMap.put("OTU" + otuNum + "_" + probSeq.getIntLevelString(), 
-										probSeq.getProbSequence().getSampleCounts());
-			otuNum++;
+			outerMap.put(probSeq.getNodeName(), probSeq.getProbSequence().getSampleCounts());
 		}
 		
 		

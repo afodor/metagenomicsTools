@@ -55,6 +55,7 @@ public class BuildJSONDataStructure
 		
 		rootNode.validateNodeAndDaughters(true);
 		HashMap<String, Double> pValueSubject = GetOneWayAnovas.getOneWayAnovaPValues(rootNode);
+		System.out.println(pValueSubject);
 		
 		ETree etree = new ETree();
 		etree.setTopNode(rootNode);
