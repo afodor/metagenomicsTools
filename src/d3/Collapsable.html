@@ -49,10 +49,10 @@ line.link {
 			onchange=redrawScreen()> show summaryRDP string</input><br> <br>
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
 			value="10" onchange=updateNums()></input> <input type="number"
-			id="numerNodesToShow" value="10" onchange=redrawScreenf()></input> <br>
+			id="numerNodesToShow" value="10" onchange=redrawScreen()></input> <br>
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
-		<input type="checkbox" id="doesClickcollapse" onchange=redrawScreens()>click
+		<input type="checkbox" id="doesClickcollapse" onchange=redrawScreen()>click
 		collapses/uncollapses</input><br> <br>
 		<br>
 		<table border=1 id="tNodeTable">
@@ -102,7 +102,7 @@ var force = d3.layout.force()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]);
     
-var drag = force.drag().on("dragstart", function(d) { d.fixed=true; dirty=true; update() });
+var drag = force.drag().on("dragstart", function(d) { d.fixed=true;});
     
 
 var vis = d3.select("body").append("svg:svg")
@@ -211,6 +211,7 @@ function update()
  
 	if( dirty ) 
 	{
+		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
 		for( var z=0; z < nodes.length; z++)
@@ -226,14 +227,13 @@ function update()
 	      .style("fill", color);
 	
 	  // Enter any new nodes.
-	 node.enter().append("svg:circle")
+	 node.enter().append("svg:circle").on("click", myClick)
 	      .attr("class", "node")
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; })
 	      .style("fill", color)
-	      .on("click", click)
-	      .on("mouseenter", myMouseEnter)
+	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
 	      .call(force.drag);
 	      
@@ -297,8 +297,7 @@ force.on("tick", function() {
 	 	cell.innerHTML = "" + numMarked;
 	 	
 	 	 
-	vis.selectAll("text").remove()
-  var text=vis.selectAll("text").data(filteredNodes, function(d) { return d.id; }).enter().append("svg:text").
+  var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
@@ -386,7 +385,7 @@ function color(d) {
 }
 
 // Toggle children on click.
-function click(d) {
+var myClick= function (d) {
 
 	var aBox =document.getElementById("doesClickcollapse");
 	
@@ -402,13 +401,13 @@ function click(d) {
     		d._children = null;
   		}
 	}
-	/*
 	else
 	{
 		highlightAllChildren(d);
 		highlightAllParents(d);
-	}*/
+	}
 	
+	dirty=true;
 	update();	
 }
 
@@ -421,13 +420,12 @@ function highlightAllChildren(d)
 		return;	
 
 	d.highlight= true;
-	for( x=0; x < d.children.length; x++) 
+	for( var x=0; x < d.children.length; x++) 
 	{
-		markAllChildren(d.children[x]);
+		highlightAllChildren(d.children[x]);
 	}
 }
 
-/*
 function highlightAllParents(d)
 {
 	if ( d== null)
@@ -436,10 +434,9 @@ function highlightAllParents(d)
 	d.highlight= true;
 	if( ! d.aParentNode ||  d.aParentNode != null)
 	{
-		markAllParents(d.aParentNode);
+		highlightAllParents(d.aParentNode);
 	}
 }
-*/
 
 
 // Returns a list of all nodes under the root.
@@ -458,6 +455,7 @@ function flatten()
 				for( var x=0; x < aNode.children.length; x++)
 				{
 					addNodeAndChildren(aNode.children[x])
+					aNode.children[x].aParentNode = aNode;
 				}
 					
 		}
