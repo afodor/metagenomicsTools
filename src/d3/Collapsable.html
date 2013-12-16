@@ -230,6 +230,15 @@ function update()
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
+		links = d3.layout.tree().links(nodes);
+    
+  	// Restart the force layout.
+ 	 force
+      .nodes(nodes)
+      .links(links)
+      .start();
+  
+		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.id; } )
 	      .style("fill", color);
@@ -359,13 +368,6 @@ function myMouseLeave()
 function initialize() {
 
   nodes = flatten(root),
-  links = d3.layout.tree().links(nodes);
-    
-  // Restart the force layout.
-  force
-      .nodes(nodes)
-      .links(links)
-      .start();
       
   initHasRun = true;
  
