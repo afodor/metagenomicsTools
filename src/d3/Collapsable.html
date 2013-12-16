@@ -115,11 +115,6 @@ d3.json("aTree.json", function(json) {
   root.x = w / 2;
   root.y = h / 2 - 80;
   
-    
-  for( var x=0; x < root.children.length; x++)
-  		console.log("Root has child " + root.children[x].nodeNum );
-  
-  
   initialize();
 });
   
@@ -462,7 +457,6 @@ function flatten()
 			if( aNode.children != null)
 				for( var x=0; x < aNode.children.length; x++)
 				{
-					console.log("Calling for child " + aNode.children[x].nodeNum);
 					addNodeAndChildren(aNode.children[x])
 				}
 					
@@ -477,12 +471,6 @@ function flatten()
   	if (!myNodes[i].id) myNodes[i].id = i+1;
   }  
   
-  for( i=0; i < myNodes.length; i++)
-  {
-  	console.log("Got " + myNodes[i].nodeNum);
-  }  
-  
-  console.log("Got " + myNodes.length)
   return myNodes;
 }
 
