@@ -102,7 +102,7 @@ var force = d3.layout.force()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]);
     
-var drag = force.drag().on("dragstart", function(d) { d.fixed=true });
+var drag = force.drag().on("dragstart", function(d) { d.fixed=true; dirty=true; update() });
     
 
 var vis = d3.select("body").append("svg:svg")
