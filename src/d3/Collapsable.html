@@ -80,6 +80,7 @@ var w = 1200,
     link,
     root;
     
+  var reverse =false;
   var initHasRun = false;
  
  // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
@@ -189,7 +190,7 @@ function getLabelText(d)
 
 function myFilterNodes(d)
 {
-	 if( d.numSeqs >= document.getElementById("numerNodesToShow").value)
+	 if( ! d.doNotShow &&  d.numSeqs >= document.getElementById("numerNodesToShow").value)
 	 	return true;
 	 	
 	 return false;
@@ -403,8 +404,22 @@ var myClick= function (d) {
 	}
 	else
 	{
-		highlightAllChildren(d);
-		highlightAllParents(d);
+		reverse = ! reverse;
+		
+		if( reverse == false)
+		{
+			for( var x =0; x < nodes.length; x++)
+				nodes[x].doNotShow=false;
+		}
+		else
+		{
+			for( var x =0; x < nodes.length; x++)
+				nodes[x].doNotShow=true;
+		
+			highlightAllChildren(d);
+			highlightAllParents(d);
+		}
+		
 	}
 	
 	dirty=true;
@@ -419,7 +434,7 @@ function highlightAllChildren(d)
 	if( ! d.children || d.children == null)
 		return;	
 
-	d.highlight= true;
+	d.doNotShow = false;
 	for( var x=0; x < d.children.length; x++) 
 	{
 		highlightAllChildren(d.children[x]);
@@ -431,7 +446,7 @@ function highlightAllParents(d)
 	if ( d== null)
 		return;
 
-	d.highlight= true;
+	d.doNotShow = false;
 	if( ! d.aParentNode ||  d.aParentNode != null)
 	{
 		highlightAllParents(d.aParentNode);
