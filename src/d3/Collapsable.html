@@ -366,10 +366,6 @@ function initialize() {
       .links(links)
       .start();
       
-  var node = nodes;
-
-
-	
   initHasRun = true;
  
 	update();
@@ -377,7 +373,11 @@ function initialize() {
 
 // Color leaf nodes orange, and packages white or blue.
 function color(d) {
-
+	
+	
+	if( d._children != null)
+		return  "#3182bd";
+	
 	if ( d.highlight == true) 
 		return "#fd8d3c";
 
@@ -398,15 +398,20 @@ var myClick= function (d) {
 	
 	if (aValue=="collapses")
 	{
-  		if (d.children) 
-  		{
-    		d._children = d.children;
-    		d.children = null;
-  		} else 
-  		{
-    		d.children = d._children;
-    		d._children = null;
-  		}
+		initHasRun = false;
+		
+		if( d._children == null)
+		{
+			d._children = d.children;
+			d.children =null;
+		}
+		else
+		{
+			d.children = d._children 
+			d._children = null;
+		}
+		
+		initialize();
 	}
 	else if ( aValue == "hides")
 	{
