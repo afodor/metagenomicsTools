@@ -205,10 +205,10 @@ function update()
 		for( z=0; z < nodes.length; z++)
 			nodes[z].setVisible=false;
 		
-		filteredNodes = nodes.filter(myFilterNodes);
+		var filteredNodes = nodes.filter(myFilterNodes);	
 		
-		for( z=0; z < nodes.length; z++)
-			nodes[z].setVisible=true;
+		for( z=0; z < filteredNodes .length; z++)
+			filteredNodes[z].setVisible=true;
 		
 	  node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.id; } )
@@ -293,25 +293,25 @@ function update()
 
 function myMouseEnter(d)
 {
-	d.highlight = true;
 	
-	function recurse(d)
-	{
-		if( d.children != null ) 
-		{
-			for(x=0; x < d.children.length; x++) 
-			{
-				d.children[x].highlight = true;
-				recurse(d.children[x]);
-			}		
-		}
-	}
-	
-	recurse(d);
+	highlightNodeAndChildren(d);
 	
 	dirty = true;
 	update();
 }
+
+function highlightNodeAndChildren(d)
+	{
+		d.highlight=true;
+	
+		if( d.children != null ) 
+		{
+			for(x=0; x < d.children.length; x++) 
+			{
+				highlightNodeAndChildren(d.children[x]);
+			}		
+		}
+	}
 
 function myMouseLeave()
 {
