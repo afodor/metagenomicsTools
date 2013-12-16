@@ -50,6 +50,11 @@ line.link {
 			
 					<input type="checkbox" id="animate"
 			onchange=redrawScreen() checked=true> animate</input>
+			
+			
+					<br><input type="checkbox" id="mouseOverHighlights"
+			onchange=redrawScreen()> mouse over highlights branches</input>
+			
 			<br>
 	
 			
@@ -60,10 +65,10 @@ line.link {
 			max="25" value="15" onchange=redrawScreen()></input> <br>
 		
 		<select id="clickDoesWhat">
+    <option value="none">Click has no action</option>
 		<option value="hides">Click shows/hides branch</option>
   	<option value="collapses">Click collapses/uncollapses</option>
-  	<option value="deletes">Delete sub-nodes</option>
-    <option value="none">Click has no action</option>
+  	<option value="deletes">Click delete sub-nodes</option>
 </select>
 		
 		
@@ -347,6 +352,9 @@ function update()
 
 function myMouseEnter(d)
 {
+	if (! document.getElementById("mouseOverHighlights").checked)
+		return;
+	
 	function highlightNodeAndChildren(d2)
 	{
 		d2.highlight=true;
@@ -368,6 +376,10 @@ function myMouseEnter(d)
 
 function myMouseLeave()
 {
+	
+	if (! document.getElementById("mouseOverHighlights").checked)
+		return;
+
 	for(var x=0; x < nodes.length; x++) 
 	{
 		nodes[x].highlight = false;
