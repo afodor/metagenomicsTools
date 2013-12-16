@@ -53,11 +53,13 @@ line.link {
 			
 			
 					<br><input type="checkbox" id="mouseOverHighlights"
-			onchange=redrawScreen()> mouse over highlights branches</input>
-			
-			<br>
+			onchange=redrawScreen()> mouse over highlights</input>
+
+						
+			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			value="30" onchange=updateNums()></input> 
 	
-			
+			<br><br>
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
 			value="10" onchange=updateNums()></input> <input type="number"
 			id="numerNodesToShow" value="10" onchange=redrawScreen()></input> <br>
@@ -119,7 +121,7 @@ var w = 1200,
 var force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
-    .size([w, h - 60]).gravity(0.3);
+    .size([w, h - 60]).gravity(document.getElementById("gravitySlider").value/100)
     
 var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
     
@@ -247,7 +249,7 @@ function update()
  	 force
       .nodes(nodes)
       .links(links)
-      .start();
+      .start().gravity(document.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
