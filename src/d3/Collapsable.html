@@ -33,9 +33,13 @@ line.link {
 		<input type="checkbox" id="showNumberOfSequences"
 			onchange=redrawScreen() checked=true> Show number of
 		Sequences</input><br> <input type="checkbox" id="showOTULevel"
-			onchange=redrawScreen()> Show otu level</input><br> <input
-			type="checkbox" id="showGenus" onchange=redrawScreen()> show
-		genus</input><br> <input type="checkbox" id="showFamily"
+			onchange=redrawScreen()> Show otu level</input><br>
+			
+			<input type="checkbox" id="showNodeNumber" onchange=redrawScreen()> Show node number</input>
+			
+			<br> <input
+			type="checkbox" id="showGenus" onchange=redrawScreen()> 
+			show genus</input><br> <input type="checkbox" id="showFamily"
 			onchange=redrawScreen()> show family</input><br> <input
 			type="checkbox" id="showOrder" onchange=redrawScreen()> show
 		order</input><br> <input type="checkbox" id="showClass"
@@ -138,44 +142,49 @@ function getLabelText(d)
 		var returnString = ""
 		
 		
-		var aBox =document.getElementById("showOTULevel");
+		aBox1 =document.getElementById("showOTULevel");
 		
-		if (aBox.checked)
+		if (aBox1.checked)
 			returnString = returnString + d.otuLevel+ " ";
 			
-			
-		aBox =document.getElementById("showNumberOfSequences");
+		aBox2 =document.getElementById("showNumberOfSequences");
 		
-		if (aBox.checked)
+		if (aBox2.checked)
 			returnString = returnString + d.numSeqs + " ";
-				aBox =document.getElementById("showGenus");
+		
+		aBox3 =document.getElementById("showNodeNumber");
+		
+		if (aBox3.checked)
+			returnString = returnString + d.nodeNum + " ";
+		
+		aBox4 =document.getElementById("showGenus");
 				
-		if (aBox.checked)
+		if (aBox4.checked)
 			returnString = returnString + d.genus+ " ";
 		
-		aBox =document.getElementById("showFamily");
+		aBox5 =document.getElementById("showFamily");
 				
-		if (aBox.checked)
+		if (aBox5.checked)
 			returnString = returnString + d.family+ " ";
 			
-		aBox =document.getElementById("showOrder");
+		aBox6 =document.getElementById("showOrder");
 				
-		if (aBox.checked)
+		if (aBox6.checked)
 			returnString = returnString + d.order+ " ";
 			
-		aBox =document.getElementById("showClass");
+		aBox7 =document.getElementById("showClass");
 				
-		if (aBox.checked)
+		if (aBox7.checked)
 			returnString = returnString + d.class+ " ";
 		
-		aBox =document.getElementById("showPhylum");
+		aBox8 =document.getElementById("showPhylum");
 				
-		if (aBox.checked)
+		if (aBox8.checked)
 			returnString = returnString + d.phylum+ " ";
 		
-		aBox =document.getElementById("showSummaryRDP");
+		aBox9 =document.getElementById("showSummaryRDP");
 				
-		if (aBox.checked)
+		if (aBox9.checked)
 				returnString = returnString + d.rdpString+ " ";	
 		
 			
@@ -447,6 +456,12 @@ function flatten()
   {
   	if (!myNodes[i].id) myNodes[i].id = i+1;
   }
+  
+  
+  for( x=0; x < root.children.length; x++)
+  		console.log("In flatten Root has child " + root.children[x].nodeNum );
+  
+  
   return myNodes;
 }
 
@@ -461,6 +476,10 @@ function addNodeAndChildren( aNode, someNodes)
 			for( x=0; x < aNode.children.length; x++)
 				addNodeAndChildren(aNode.children[x],someNodes)
 	}
+	
+	 for( x=0; x < root.children.length; x++)
+  		console.log("In recurse Root has child " + root.children[x].nodeNum );
+  
 			
 }
 
