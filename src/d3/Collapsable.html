@@ -71,6 +71,7 @@ line.link {
 	<section>
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
+		"use strict";
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w = 1200,
     h = 800,
@@ -115,7 +116,7 @@ d3.json("aTree.json", function(json) {
   root.y = h / 2 - 80;
   
     
-  for( x=0; x < root.children.length; x++)
+  for( var x=0; x < root.children.length; x++)
   		console.log("Root has child " + root.children[x].nodeNum );
   
   
@@ -142,47 +143,47 @@ function getLabelText(d)
 		var returnString = ""
 		
 		
-		aBox1 =document.getElementById("showOTULevel");
+		var aBox1 =document.getElementById("showOTULevel");
 		
 		if (aBox1.checked)
 			returnString = returnString + d.otuLevel+ " ";
 			
-		aBox2 =document.getElementById("showNumberOfSequences");
+		var aBox2 =document.getElementById("showNumberOfSequences");
 		
 		if (aBox2.checked)
 			returnString = returnString + d.numSeqs + " ";
 		
-		aBox3 =document.getElementById("showNodeNumber");
+		var aBox3 =document.getElementById("showNodeNumber");
 		
 		if (aBox3.checked)
 			returnString = returnString + d.nodeNum + " ";
 		
-		aBox4 =document.getElementById("showGenus");
+		var aBox4 =document.getElementById("showGenus");
 				
 		if (aBox4.checked)
 			returnString = returnString + d.genus+ " ";
 		
-		aBox5 =document.getElementById("showFamily");
+		var aBox5 =document.getElementById("showFamily");
 				
 		if (aBox5.checked)
 			returnString = returnString + d.family+ " ";
 			
-		aBox6 =document.getElementById("showOrder");
+		var aBox6 =document.getElementById("showOrder");
 				
 		if (aBox6.checked)
 			returnString = returnString + d.order+ " ";
 			
-		aBox7 =document.getElementById("showClass");
+		var aBox7 =document.getElementById("showClass");
 				
 		if (aBox7.checked)
 			returnString = returnString + d.class+ " ";
 		
-		aBox8 =document.getElementById("showPhylum");
+		var aBox8 =document.getElementById("showPhylum");
 				
 		if (aBox8.checked)
 			returnString = returnString + d.phylum+ " ";
 		
-		aBox9 =document.getElementById("showSummaryRDP");
+		var aBox9 =document.getElementById("showSummaryRDP");
 				
 		if (aBox9.checked)
 				returnString = returnString + d.rdpString+ " ";	
@@ -217,7 +218,7 @@ function update()
 	{
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
-		for( z=0; z < nodes.length; z++)
+		for( var z=0; z < nodes.length; z++)
 			nodes[z].setVisible=false;
 		
 		var filteredNodes = nodes.filter(myFilterNodes);	
@@ -225,7 +226,7 @@ function update()
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
-	  node = vis.selectAll("circle.node")
+	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.id; } )
 	      .style("fill", color);
 	
@@ -240,6 +241,21 @@ function update()
 	      .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
 	      .call(force.drag);
+	      
+	      
+force.on("tick", function() { 
+	  node.attr("cx", function(d) { return d.x; })
+	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
+	      
+			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			link.attr("x1", function(d) { return d.source.x; })
+	      .attr("x1", function(d) { return d.source.x; })
+	      .attr("y1", function(d) { return d.source.y; })
+	      .attr("x2", function(d) { return d.target.x; })
+	      .attr("y2", function(d) { return d.target.y; });
+	   
+		});
+	  
 	      
 	      	// Update the links
   	link = vis.selectAll("line.link")
@@ -287,7 +303,7 @@ function update()
 	 	
 	 	 
 	vis.selectAll("text").remove()
-  text=vis.selectAll("text").data(filteredNodes, function(d) { return d.id; }).enter().append("svg:text").
+  var text=vis.selectAll("text").data(filteredNodes, function(d) { return d.id; }).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
@@ -314,7 +330,7 @@ function myMouseEnter(d)
 	
 		if( d2.children != null ) 
 		{
-			for(x=0; x < d2.children.length; x++) 
+			for(var x=0; x < d2.children.length; x++) 
 			{
 				highlightNodeAndChildren(d2.children[x]);
 			}		
@@ -327,11 +343,9 @@ function myMouseEnter(d)
 	update();
 }
 
-
-
 function myMouseLeave()
 {
-	for(x=0; x < nodes.length; x++) 
+	for(var x=0; x < nodes.length; x++) 
 	{
 		nodes[x].highlight = false;
 	}
@@ -351,21 +365,8 @@ function initialize() {
       .links(links)
       .start();
       
-  node = nodes;
+  var node = nodes;
 
-force.on("tick", function() { 
-	  node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) { return Math.sqrt(d.numSeqs) / 10; });
-	      
-			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-			link.attr("x1", function(d) { return d.source.x; })
-	      .attr("x1", function(d) { return d.source.x; })
-	      .attr("y1", function(d) { return d.source.y; })
-	      .attr("x2", function(d) { return d.target.x; })
-	      .attr("y2", function(d) { return d.target.y; });
-	   
-		});
-	  
 
 	
   initHasRun = true;
@@ -455,20 +456,30 @@ function flatten()
 	{
 		if( aNode != null) 
 		{
+			
 			myNodes.push(aNode);
 	
 			if( aNode.children != null)
-				for( x=0; x < aNode.children.length; x++)
+				for( var x=0; x < aNode.children.length; x++)
+				{
+					console.log("Calling for child " + aNode.children[x].nodeNum);
 					addNodeAndChildren(aNode.children[x])
+				}
+					
 		}
 			
 	}
   
   addNodeAndChildren(root);
   
-  for( i=0; i < myNodes.length; i++)
+  for( var i=0; i < myNodes.length; i++)
   {
   	if (!myNodes[i].id) myNodes[i].id = i+1;
+  }  
+  
+  for( i=0; i < myNodes.length; i++)
+  {
+  	console.log("Got " + myNodes[i].nodeNum);
   }  
   
   console.log("Got " + myNodes.length)
