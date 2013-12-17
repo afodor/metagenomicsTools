@@ -92,6 +92,7 @@ var w =  window.innerWidth-300,
   var firstFlatten = true;
   var topNodes = [];
   var ranges={};
+  var ordinalScales={};
     
  var dirty = true;
     
@@ -127,32 +128,7 @@ d3.json("aTree2.json", function(json) {
   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
-	
-	for( var propertyName in myNodes[0])
-  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
-  				&& propertyName != "children" && propertyName != "fixed" )
-  		{
-  			selectHTML += "<option value=\"" + propertyName
-  				+ "\">" + propertyName   +"</option>"
-  				
-  				var range=[]
-  				range[0] = myNodes[0][propertyName];
-  				range[1] = myNodes[0][propertyName];
-  							
-  				for( var x=0; x < myNodes.length; x++)
-  				{
-  					var aVal =myNodes[x][propertyName]; 
-  					if( aVal < range[0]) 
-  						range[0] = aVal;
-  						
-  					if( aVal > range[1]) 
-  						range[1] = aVal;
-  				}
-  				
-  				ranges[propertyName] = range; 
-  		}
-  	
-  	selectHTML +=  "</select>"	
+	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
 			 " id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
@@ -160,8 +136,48 @@ d3.json("aTree2.json", function(json) {
 			"id=\"logSize\" onchange=redrawScreen()>log</input>"
 			+"<input type=\"checkbox\"" + 
 			"id=\"invertSize\" onchange=redrawScreen()>invert</input><br>"
-			
 	
+	for( var propertyName in myNodes[0])
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
+  				&& propertyName != "children" && propertyName != "fixed" )
+  		{
+  			var isNumeric = true;
+  			var selectHTML = "<option value=\"" + propertyName
+  				+ "\">" + propertyName   +"</option>"
+  				
+  				var range=[]
+  				range[0] = myNodes[0][propertyName];
+  				range[1] = myNodes[0][propertyName];
+  							
+  				for( var x=0;  isNumeric && x < myNodes.length; x++)
+  				{
+  					var aVal =myNodes[x][propertyName]; 
+  					
+  					if( ! isNumber(aVal))
+  						isNumeric = false;
+  					
+  					if( aVal < range[0]) 
+  						range[0] = aVal;
+  						
+  					if( aVal > range[1]) 
+  						range[1] = aVal;
+  				}
+  				
+  				if( isNumeric) 
+  				{
+  					ranges[propertyName] = range; 
+  				}
+  				else
+  				{
+  					ordinalScales[propertyName] = 
+  					d3.scale.ordinal();
+  					
+  					ordinalScales[propertyName].range([0,document.getElementById("maxSize").value]);
+  				}
+  				
+  				document.getElementById("sizeByWhat").innerHTML += selectHTML
+	
+  		}
 	
   	mySidebar.innerHTML += "<h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
@@ -286,31 +302,42 @@ function getRadiusVal(d)
 	var propToSize = document.getElementById("sizeByWhat").value
 	var returnVal = document.getElementById("maxSize").value;
 	
-	if( document.getElementById("logSize").checked) 
+	// quantitative values
+	if( ranges[propToSize] != null)
 	{
-		// d3's log scale yields problems with p=0 in range so we 
-		// covert everything to log and feed it to the linear scale..
-		// as a nice side effect, you don't have to multiply p-values by negative 1
-		if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
+		if( document.getElementById("logSize").checked) 
 		{
-			maxScale = Math.log(ranges[propToSize][1]) / Math.LN10; 
+			// d3's log scale yields problems with p=0 in range so we 
+			// covert everything to log and feed it to the linear scale..
+			// as a nice side effect, you don't have to multiply p-values by negative 1
+			if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
+			{
+				maxScale = Math.log(ranges[propToSize][1]) / Math.LN10; 
+			
+				var aScale= d3.scale.linear().domain([0,maxScale]).range([0,
+	  					document.getElementById("maxSize").value]).clamp(true);
+	  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
+			}
+		}
+		else
+		{
+			var aScale= d3.scale.linear().domain(ranges[propToSize]).range([0,
+	  					document.getElementById("maxSize").value]).clamp(true);
+	  		returnVal = aScale(d[propToSize]);
+		}
 		
-			var aScale= d3.scale.linear().domain([0,maxScale]).range([0,
-  					document.getElementById("maxSize").value]).clamp(true);
-  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
+		if( document.getElementById("invertSize").checked ) 
+		{
+			returnVal = document.getElementById("maxSize").value - returnVal;
 		}
 	}
-	else
+	else //ordinal values - much easier
 	{
-		var aScale= d3.scale.linear().domain(ranges[propToSize]).range([0,
-  					document.getElementById("maxSize").value]).clamp(true);
-  		returnVal = aScale(d[propToSize]);
+		aScale = ordinalScales[propToSize];
+		returnVal =aScale(d[propToSize]);
 	}
 	
-	if( document.getElementById("invertSize").checked ) 
-	{
-		returnVal = document.getElementById("maxSize").value - returnVal;
-	}
+	
 	
 	return returnVal;
 	
