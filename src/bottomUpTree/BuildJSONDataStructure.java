@@ -34,7 +34,6 @@ import eTree.ETree;
 
 public class BuildJSONDataStructure
 {
-	private static int nodeNumber =0;
 	public static void main(String[] args) throws Exception
 	{
 		List<ENode> list= ReadCluster.readFromFile(
@@ -104,18 +103,10 @@ public class BuildJSONDataStructure
 		
 		writer.write("{\n");
 		
-		int level = 0;
-		
-		if( ! enode.getNodeName().equals(ETree.ROOT_NAME))
-			level = ETree.getIndexForLevel(enode.getLevel()) + 1;
-		
-		writer.write("\"level\": " +  level + ",\n");
+		writer.write("\"numSeqs\": " +  enode.getNumOfSequencesAtTips() + ",\n");		
 		writer.write("\"otuLevel\": " +  enode.getLevel()+ ",\n");
 		writer.write("\"rdpString\": \"" +  rdpString+ "\",\n");
-		writer.write("\"pvalueSubject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
-		nodeNumber++;
-		writer.write("\"nodeNum\": \"" +  nodeNumber+ "\",\n");
-		
+		writer.write("\"pvalue_Subject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
 		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -123,7 +114,7 @@ public class BuildJSONDataStructure
 			writer.write("\"" + NewRDPParserFileLine.TAXA_ARRAY[x]+ "\": \"" +  valString+ "\",\n");
 		}
 		
-		writer.write("\"numSeqs\": " +  enode.getNumOfSequencesAtTips() + "\n");
+		writer.write("\"nodeName\": \"" +  enode.getNodeName()+ "\"\n");
 		
 		List<ENode> toAdd = new ArrayList<ENode>();
 		
