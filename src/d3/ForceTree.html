@@ -130,15 +130,20 @@ d3.json("aTree.json", function(json) {
   initialize();
 });
   
-  function addRangeForPValue(myNodes)
+  function addDynamicMenuContent(myNodes)
   {
   	if( ! firstFlatten) 
   		return;
   	
+  	for( var propertyName in myNodes[0])
+  		{
+  			console.log(propertyName )
+  		}
   	
   	
   	for( var x =0; x < myNodes.length; x++)
   	{
+  		
   		// todo: this shouldn't be hard-coded
   		if( Math.abs( myNodes[x].otuLevel - 0.20 ) <0.01 )
   		{	
@@ -146,11 +151,10 @@ d3.json("aTree.json", function(json) {
   		}
   	}
   	
-  	
   	var mySidebar = document.getElementById("sidebar");
   	
-  	var rangeHTML = "<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
-  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()></input>";
+  	var rangeHTML = "Top level filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
   }
@@ -582,7 +586,7 @@ function flatten()
   if( firstFlatten) 
   {
   		setInitialPositions(myNodes);
-  		addRangeForPValue(myNodes);
+  		addDynamicMenuContent(myNodes);
   		firstFlatten = false;
   		
   }
