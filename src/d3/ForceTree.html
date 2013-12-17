@@ -93,6 +93,7 @@ var w =  window.innerWidth-300,
   var topNodes = [];
   var ranges={};
   var ordinalScales={};
+  var colorScales = {};
     
  var dirty = true;
     
@@ -172,7 +173,11 @@ d3.json("aTree2.json", function(json) {
   					ordinalScales[propertyName] = 
   					d3.scale.ordinal();
   					
+  					//todo: the range needs to be updated when maxSize changes
   					ordinalScales[propertyName].range([0,document.getElementById("maxSize").value]);
+  					
+  					colorScales[propertyName] = 
+  						d3.scale.category20();
   				}
   				
   				document.getElementById("sizeByWhat").innerHTML += selectHTML
@@ -564,6 +569,12 @@ function initialize() {
 // Color leaf nodes orange, and packages white or blue.
 function color(d) {
 	
+	var chosen = document.getElementById("colorByWhat").value;
+	
+	if( colorScales[chosen] != null) 
+	{
+		return colorScales[chosen]( d[chosen] );
+	}
 	
 	if( d._children != null)
 		return  "#3182bd";
