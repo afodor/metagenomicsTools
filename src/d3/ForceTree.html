@@ -215,10 +215,23 @@ d3.json("aTree2.json", function(json) {
 
 
 function getLabelText(d)
-	{	
-		var returnString ="";		
-		return returnString;	
+{	
+	if( d.marked == false && document.getElementById("labelOnlyTNodes").checked  )
+		return "";
+	
+	var returnString ="";
+	
+	for( var propertyName in nodes[0])
+	{
+		var aCheckBox = document.getElementById("label" + propertyName);
+		if( aCheckBox != null &&  aCheckBox.checked)
+		{
+			returnString += d[propertyName] + " ";
+		}
 	}
+		
+	return returnString;	
+}
 
 function myFilterNodes(d)
 {
