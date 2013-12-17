@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<style type="text/css">
+circle.node {
+	cursor: point;
+	stroke: #000;
+	stroke-width: .5px;
+}
+
+line.link {
+	fill: none;
+	stroke: #9ecae1;
+	stroke-width: 1.5px;
+}
+
+#sidebar {
+	float: right;
+	border: 1px solid red;
+	width: 200px;
+}
+</style>
+</head>
+<body>
+	<aside id="sidebar">
+
+		<br> <input type="checkbox" id="labelOnlyTNodes"
+			onchange=redrawScreen() checked=true> Label only T-Nodes</input><br>
+			
+					<input type="checkbox" id="animate"
+			onchange=redrawScreen() checked=true> animate</input>
+			
+			
+					<br><input type="checkbox" id="mouseOverHighlights"
+			onchange=redrawScreen()> mouse over highlights</input>
+
+						
+			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			value="30" onchange=updateNums()></input> 
+	
+			<br>   	<select id="sizeByWhat" onchange=updateNums()>
+    <option value="numSeqs">Size by # of sequences</option>
+		<option value="pValueBySubject">Size by log10(pValue) subject</option></select> <br>
+		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
+			value="100" onchange=updateNums()></input> <input type="number"
+			id="numerNodesToShow" value="100" onchange=redrawScreen()></input> <br>
+		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
+			max="25" value="15" onchange=redrawScreen()></input> <br>
+		
+		<select id="clickDoesWhat">
+    <option value="none">Click has no action</option>
+		<option value="hides">Click shows/hides branch</option>
+  	<option value="collapses">Click collapses/uncollapses</option>
+  	<option value="deletes">Click delete sub-nodes</option>
+</select>
+		
+		
+		<br>
+		<table border=1 id="tNodeTable">
+			<tr>
+				<td>Number of Visible Nodes</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Number of TNodes</td>
+				<td></td>
+			</tr>
+		</table>
+
+	</aside>
+
+	<section>
+		<script type="text/javascript" src="d3.v3.js"></script>
+		<script type="text/javascript">
+// modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
+var w =  window.innerWidth-300,
+    h = window.innerHeight-100,
+    nodes, 
+    links,
+    link,
+    root;
+    
+    // from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+    var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+    
+    
+  var reverse =false;
+  var initHasRun = false;
+  var firstFlatten = true;
+  var topNodes = [];
+ 
+ // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+	var stringToColour = function(str) {
+
+    // str to hash
+    for (var i = 0, hash = 0; i < str.length; hash = str.charCodeAt(i++) + ((hash << 5) - hash));
+
+    // int/hash to hex
+    for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
+
+    return colour;
+}
+    
+ var dirty = true;
+    
+ 
+var force = d3.layout.force()
+    .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
+    .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
+    .size([w, h - 60]).gravity(document.getElementById("gravitySlider").value/100)
+    
+var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
+    
+
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.json("aTree.json", function(json) {
+  root = json;
+  root.fixed = true;
+  root.x = w / 2;
+  root.y = h / 2 - 80;
+  
+  initialize();
+});
+  
+  function addRangeForPValue(myNodes)
+  {
+  	if( ! firstFlatten) 
+  		return;
+  	
+  	
+  	
+  	for( var x =0; x < myNodes.length; x++)
+  	{
+  		// todo: this shouldn't be hard-coded
+  		if( Math.abs( myNodes[x].otuLevel - 0.20 ) <0.01 )
+  		{	
+  			topNodes.push(myNodes[x]);
+  		}
+  	}
+  	
+  	
+  	var mySidebar = document.getElementById("sidebar");
+  	
+  	var rangeHTML = "<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()></input>";
+  	
+    mySidebar.innerHTML+= rangeHTML;
+  }
+  
+  function showOnlyMarked()
+  {
+  	var aVal = document.getElementById("pValueRange").value;
+  	
+  	if( aVal==0)
+  	{	
+  		for( var x=0; x < nodes.length; x++)
+  			nodes[x].doNotShow=false;
+  	}
+  	else
+  	{
+  		for( var x=0; x < nodes.length; x++)
+  			nodes[x].doNotShow=true;
+  			
+  		aVal = aVal -1;
+  		var myNode = topNodes[aVal];
+  		
+  		function markSelfAndDaughters(aNode)
+  		{
+  			aNode.doNotShow=false;
+  			
+  			if( aNode.children != null)
+  			{
+  				for( var y=0; y < aNode.children.length;y++)
+  				{
+  					markSelfAndDaughters(aNode.children[y]);
+  				}
+  			}
+  		}
+  		
+  		markSelfAndDaughters(myNode);
+  	}
+  	
+  	dirty=true;
+  	update();
+  }
+  
+  
+  function updateNums()
+  {
+  	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
+  	redrawScreen();
+  }
+  
+  function redrawScreen()
+  {
+  	dirty = true;
+  	update()
+  }
+
+
+function getLabelText(d)
+	{	
+		var returnString ="";		
+		return returnString;	
+	}
+
+function myFilterNodes(d)
+{
+	 if( ! d.doNotShow &&  d.numSeqs >= document.getElementById("numerNodesToShow").value)
+	 	return true;
+	 	
+	 return false;
+}
+
+function myFilterLinks(d)
+{
+     if( d.source.setVisible  && d.target.setVisible)
+      		return true;
+      	
+      return false;
+      		
+}
+
+function getRadiusVal(d)
+{
+	if(document.getElementById("sizeByWhat").value == "pValueBySubject") 
+	{
+		val = -Math.log(d.pvalueSubject)/Math.LN10;
+		if( val <1) return 1;
+		
+		if( isNaN(val) ||  val > 30) 
+			return 30;
+		
+		return val;
+	}
+	      					
+	return Math.sqrt(d.numSeqs) / 10; 
+}
+
+function update() 
+{
+	if( ! initHasRun )
+		return;
+ 
+	if( dirty ) 
+	{
+		vis.selectAll("text").remove()
+		vis.selectAll("circle.node").remove();
+		vis.selectAll("line.link").remove();
+		for( var z=0; z < nodes.length; z++)
+			nodes[z].setVisible=false;
+		
+		var filteredNodes = nodes.filter(myFilterNodes);	
+		
+		for( z=0; z < filteredNodes .length; z++)
+			filteredNodes[z].setVisible=true;
+		
+		links = d3.layout.tree().links(nodes);
+    
+  	// Restart the force layout.
+ 	 force
+      .nodes(nodes)
+      .links(links)
+      .start().gravity(document.getElementById("gravitySlider").value/100);
+  
+		
+	  var node = vis.selectAll("circle.node")
+	      .data(filteredNodes, function(d) {return d.id; } )
+	      .style("fill", color);
+	
+	  // Enter any new nodes.
+	 node.enter().append("svg:circle").on("click", myClick)
+	      .attr("class", "node")
+	      .attr("cx", function(d) { return d.x; })
+	      .attr("cy", function(d) { return d.y; })
+	      .attr("r", function(d) {  return getRadiusVal(d)})
+	      .style("fill", color)
+	     .on("mouseenter", myMouseEnter)
+	      .on("mouseleave", myMouseLeave).on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div.html(d.nodeNum + " "+  d.numSeqs + " "+ d.pvalueSubject+ " " + d.rdpString)  
+                .style("left", (d3.x) + "px")     
+                .style("top", (d3.y- 28) + "px");    
+            }).on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0)})                
+	      .call(force.drag);
+	      
+	      function updateNodesLinksText()
+	      {
+	      	node.attr("cx", function(d) { return d.x; })
+	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) {return getRadiusVal(d)} );
+	      
+			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			link.attr("x1", function(d) { return d.source.x; })
+	      .attr("x1", function(d) { return d.source.x; })
+	      .attr("y1", function(d) { return d.source.y; })
+	      .attr("x2", function(d) { return d.target.x; })
+	      .attr("y2", function(d) { return d.target.y; });
+	      }
+	    
+		force.on("tick", updateNodesLinksText);
+		force.on("end", updateNodesLinksText);
+	    
+	      
+	      	// Update the links
+  	link = vis.selectAll("line.link")
+      .data(links.filter(myFilterLinks), function(d) {  return d.target.id; }
+      		);
+	   
+	  // Enter any new links.
+	  link.enter().insert("svg:line", ".node")
+	      .attr("class", "link")
+	       
+	   	var numMarked =0;
+  		var numVisible=0;
+	 	for (var i = 0; i < nodes.length; i++)
+	 	{
+	 		nodes[i].marked= false;
+	 		if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
+	 		{
+	 			nodes[i].marked = true;
+		 		numVisible++;
+		 		
+		 		if( nodes[i].children != null) 
+		 		{
+		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+		 			{
+		 				if( ! nodes[i].children[j].doNotShow && 
+		 						 nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+		 				{
+		 					nodes[i].marked=false;
+		 				}
+		 			}
+		 		}
+		 		
+		 		if( nodes[i].marked == true) 
+		 			numMarked = numMarked + 1
+	 		}
+	 	}
+	 	
+	 	var table = document.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
+	 	
+	 	table.rows[0].cells[1].innerHTML = "" + numVisible;
+	 	
+	 	var row = table.rows[1];
+	 	var cell =row.cells[1];
+	 	cell.innerHTML = "" + numMarked;
+	 	
+	 	 
+  var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
+ 	attr("dx", function(d) { return 15; })
+                 .attr("dy", function(d) { return ".35em"; })
+		 .text( function (d) {  return getLabelText(d); })
+                 .attr("font-family", "sans-serif")
+                 .attr("font-size", document.getElementById("fontAdjust").value + "px")
+                 .attr("fill", function(d) {return  "#000000" } )
+                 // stringToColour(d.genus)} )
+	    
+
+ // cleanup
+  link.exit().remove();
+  node.exit().remove();
+  	
+  	
+  	
+	dirty = false;
+	}
+	
+	if (! document.getElementById("animate").checked)
+  		force.stop();
+}
+
+function myMouseEnter(d)
+{
+	if (! document.getElementById("mouseOverHighlights").checked)
+		return;
+	
+	function highlightNodeAndChildren(d2)
+	{
+		d2.highlight=true;
+	
+		if( d2.children != null ) 
+		{
+			for(var x=0; x < d2.children.length; x++) 
+			{
+				highlightNodeAndChildren(d2.children[x]);
+			}		
+		}
+	}
+	
+	highlightNodeAndChildren(d);
+	
+	dirty = true;
+	update();
+}
+
+function myMouseLeave()
+{
+	
+	if (! document.getElementById("mouseOverHighlights").checked)
+		return;
+
+	for(var x=0; x < nodes.length; x++) 
+	{
+		nodes[x].highlight = false;
+	}
+
+	dirty = true;
+	update();
+}
+
+function setInitialPositions( myNodes )
+{
+	var radius = Math.min(w,h)/2 - 300;
+	
+	for( var x=0; x < myNodes.length; x++) 
+	{
+		if( myNodes[x] != root ) 
+		{
+		
+			myNodes[x].x = radius * Math.cos( (myNodes.length-x) / 360.0) + root.x;
+			myNodes[x].y = radius * Math.sin( (myNodes.length-x) / 360.0) + root.y
+		}
+	}
+}
+
+
+function initialize() {
+
+  nodes = flatten(root),
+      
+  initHasRun = true;
+ 
+	update();
+}
+
+// Color leaf nodes orange, and packages white or blue.
+function color(d) {
+	
+	
+	if( d._children != null)
+		return  "#3182bd";
+	
+	if ( d.highlight == true) 
+		return "#fd8d3c";
+
+	if(  d.marked )
+		return "#000000";
+		
+		//return "#fd8d3c"; orange
+	// return "#c6dbef"; background blue
+	//return "#3182bd"; bright blue
+	return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+		
+}
+
+// Toggle children on click.
+var myClick= function (d) {
+
+	var aValue =document.getElementById("clickDoesWhat").value;
+	
+	if ( aValue == "deletes")
+	{
+		initHasRun = false;
+		d.children=null;
+		d._children=null;
+		initialize();
+	}
+	if (aValue=="collapses")
+	{
+		initHasRun = false;
+		
+		if( d._children == null)
+		{
+			d._children = d.children;
+			d.children =null;
+		}
+		else
+		{
+			d.children = d._children 
+			d._children = null;
+		}
+		
+		initialize();
+	}
+	else if ( aValue == "hides")
+	{
+		reverse = ! reverse;
+		
+		if( reverse == false)
+		{
+			for( var x =0; x < nodes.length; x++)
+				nodes[x].doNotShow=false;
+		}
+		else
+		{
+			for( var x =0; x < nodes.length; x++)
+				nodes[x].doNotShow=true;
+		
+			highlightAllChildren(d);
+			highlightAllParents(d);
+		}
+		
+	}
+	
+	dirty=true;
+	update();	
+}
+
+
+
+function highlightAllChildren(d)
+{
+	if( d== null)
+		return;
+
+	if( ! d.children || d.children == null)
+		return;	
+
+	d.doNotShow = false;
+	for( var x=0; x < d.children.length; x++) 
+	{
+		highlightAllChildren(d.children[x]);
+	}
+}
+
+function highlightAllParents(d)
+{
+	if ( d== null)
+		return;
+
+	d.doNotShow = false;
+	if( ! d.aParentNode ||  d.aParentNode != null)
+	{
+		highlightAllParents(d.aParentNode);
+	}
+}
+
+
+// Returns a list of all nodes under the root.
+function flatten() 
+{
+  var myNodes = [];
+  
+  function addNodeAndChildren( aNode) 
+	{
+		if( aNode != null) 
+		{
+			
+			myNodes.push(aNode);
+	
+			if( aNode.children != null)
+				for( var x=0; x < aNode.children.length; x++)
+				{
+					addNodeAndChildren(aNode.children[x])
+					aNode.children[x].aParentNode = aNode;
+				}
+					
+		}
+			
+	}
+  
+  addNodeAndChildren(root);
+  
+  for( var i=0; i < myNodes.length; i++)
+  {
+  	if (!myNodes[i].id) myNodes[i].id = i+1;
+  }  
+  
+  if( firstFlatten) 
+  {
+  		setInitialPositions(myNodes);
+  		addRangeForPValue(myNodes);
+  		firstFlatten = false;
+  		
+  }
+  
+  return myNodes;
+}
+
+
+
+    </script>
+	</section>
+</body>
+</html>
+
