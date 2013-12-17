@@ -135,10 +135,12 @@ d3.json("aTree2.json", function(json) {
   	if( ! firstFlatten) 
   		return;
   	
+  	var mySidebar = document.getElementById("sidebar");
+  	
   	for( var propertyName in myNodes[0])
-  		{
-  			console.log(propertyName )
-  		}
+  	{
+  		
+  	}
   	
   	
   	for( var x =0; x < myNodes.length; x++)
@@ -151,7 +153,7 @@ d3.json("aTree2.json", function(json) {
   		}
   	}
   	
-  	var mySidebar = document.getElementById("sidebar");
+  	
   	
   	var rangeHTML = "Top level filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
   	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
@@ -277,7 +279,7 @@ function update()
   
 		
 	  var node = vis.selectAll("circle.node")
-	      .data(filteredNodes, function(d) {return d.id; } )
+	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
 	      .style("fill", color);
 	
 	  // Enter any new nodes.
@@ -320,7 +322,7 @@ function update()
 	      
 	      	// Update the links
   	link = vis.selectAll("line.link")
-      .data(links.filter(myFilterLinks), function(d) {  return d.target.id; }
+      .data(links.filter(myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
@@ -580,7 +582,7 @@ function flatten()
   
   for( var i=0; i < myNodes.length; i++)
   {
-  	if (!myNodes[i].id) myNodes[i].id = i+1;
+  	if (!myNodes[i].forceTreeNodeID) myNodes[i].forceTreeNodeID = i+1;
   }  
   
   if( firstFlatten) 
