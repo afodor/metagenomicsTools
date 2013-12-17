@@ -177,7 +177,7 @@ d3.json("aTree2.json", function(json) {
   					ordinalScales[propertyName].range([0,document.getElementById("maxSize").value]);
   					
   					colorScales[propertyName] = 
-  						d3.scale.category20();
+  						d3.scale.category20b();
   				}
   				
   				document.getElementById("sizeByWhat").innerHTML += selectHTML
@@ -199,6 +199,10 @@ d3.json("aTree2.json", function(json) {
   		}
   	selectHTML +=  "</select>"
   	mySidebar.innerHTML += selectHTML
+  	
+  	mySidebar.innerHTML += "<br><input type=\"checkbox\" id=\"textIsBlack\"" + 
+				"onchange=redrawScreen()>text always black</input>";
+  	
 	
   	mySidebar.innerHTML += "<h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
@@ -502,6 +506,9 @@ function update()
 
 function getTextColor(d)
 {
+	if(  document.getElementById("textIsBlack").checked ) 
+		return "#000000";
+		
 	
 	var chosen = document.getElementById("colorByWhat").value;
 	
