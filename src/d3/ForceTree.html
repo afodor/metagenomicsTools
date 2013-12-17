@@ -345,7 +345,8 @@ function update()
 		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
-	      .style("fill", color);
+	      .style("fill", color)
+	      .style("opacity",document.getElementById("opacitySlider").value/100 );
 	
 	  // Enter any new nodes.
 	 node.enter().append("svg:circle").on("click", myClick)
@@ -353,7 +354,7 @@ function update()
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) {  return getRadiusVal(d)})
-	      .style("fill", color)
+	      .style("fill", color).style("opacity",document.getElementById("opacitySlider").value/100 )  
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave).on("mouseover", function(d) {      
             div.transition()        
@@ -365,7 +366,7 @@ function update()
             }).on("mouseout", function(d) {       
             div.transition()        
                 .duration(500)      
-                .style("opacity", 0)})                
+                .style("opacity",document.getElementById("opacitySlider").value/100)  })                
 	      .call(force.drag);
 	      
 	      function updateNodesLinksText()
