@@ -282,23 +282,24 @@ function isNumber(n) {
 function getRadiusVal(d)
 {
 	var propToSize = document.getElementById("sizeByWhat").value
+	var returnVal = document.getElementById("maxSize").value;
 	
 	if( document.getElementById("logSize").checked) 
 	{
-		
-  		var aScale= d3.scale.log().domain(ranges[propToSize]).range([0,
+		// log (p <=0) yields infinity, which we interpret as a big symbol
+		if(  isNumber(Math.log( d[propToSize] )) )
+		{
+			var aScale= d3.scale.log().domain(ranges[propToSize]).range([0,
   					document.getElementById("maxSize").value]).clamp(true);
+  			returnVal = aScale(d[propToSize]);
+		}
 	}
 	else
 	{
-		
-  		var aScale= d3.scale.linear().domain(ranges[propToSize]).range([0,
+		var aScale= d3.scale.linear().domain(ranges[propToSize]).range([0,
   					document.getElementById("maxSize").value]).clamp(true);
-  	
+  		returnVal = aScale(d[propToSize]);
 	}
-	
-				
-	var returnVal = aScale(d[propToSize]);
 	
 	if( document.getElementById("invertSize").checked ) 
 	{
