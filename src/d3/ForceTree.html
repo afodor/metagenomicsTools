@@ -115,6 +115,7 @@ d3.json("aTree2.json", function(json) {
   initialize();
 });
   
+  
   function addDynamicMenuContent(myNodes)
   {
   	if( ! firstFlatten) 
@@ -131,21 +132,27 @@ d3.json("aTree2.json", function(json) {
 	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
 	
 	for( var propertyName in myNodes[0])
-  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
+  				&& propertyName != "children" && propertyName != "fixed" )
   		{
   			selectHTML += "<option value=\"" + propertyName
   				+ "\">" + propertyName   +"</option>"
   				
-  				var dataArray = []
-  				for( var x in myNodes.length)
+  				var range=[]
+  				range[0] = myNodes[0][propertyName];
+  				range[1] = myNodes[0][propertyName];
+  							
+  				for( var x=0; x < myNodes.length; x++)
   				{
-  					var anObject =myNodes[x]; 
-  					dataArray.put(anObject[propertyName]);
+  					var aVal =myNodes[x][propertyName]; 
+  					if( aVal < range[0]) 
+  						range[0] = aVal;
+  						
+  					if( aVal > range[1]) 
+  						range[1] = aVal;
   				}
   				
-  				var range = [];
-  				range.push(Math.min(dataArray))
-  				range.push(Math.max(dataArray))
+  				console.log(propertyName + " "+ range );
   				linearScales[propertyName] = d3.scale.linear().domain(range).range(0,
   				document.getElementById("maxSize").value);
   		}
@@ -276,9 +283,7 @@ function getRadiusVal(d)
 	var propToSize = document.getElementById("sizeByWhat").value
 	
 	var aScale= linearScales[propToSize];	
-	
-	console.log("Returning " + aScale(d[propToSize] ));
-	return aScale(d[propToSize] );
+	return aScale( d[propToSize] );
 	
 }
 

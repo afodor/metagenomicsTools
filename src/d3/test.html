@@ -4,6 +4,14 @@ Hello world
 
     <script type="text/javascript">
 		
+		Array.max = function( array ){
+    return Math.max.apply( Math, array );};
+		
+	var a = [1,2,3,4,5,6];
+	var range = [];
+  	range.push(Math.min(a))
+  	range.push(Math.max.apply(Math, a));
+  	console.log(range);
 
 	</script> 
 </body>
