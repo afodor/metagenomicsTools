@@ -286,12 +286,16 @@ function getRadiusVal(d)
 	
 	if( document.getElementById("logSize").checked) 
 	{
-		// log (p <=0) yields infinity, which we interpret as a big symbol
-		if(  isNumber(Math.log( d[propToSize] )) )
+		// d3's log scale yields problems with p=0 in range so we 
+		// covert everything to log and feed it to the linear scale..
+		// as a nice side effect, you don't have to multiply p-values by negative 1
+		if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
 		{
-			var aScale= d3.scale.log().domain(ranges[propToSize]).range([0,
+			maxScale = Math.log(ranges[propToSize][1]) / Math.LN10; 
+		
+			var aScale= d3.scale.linear().domain([0,maxScale]).range([0,
   					document.getElementById("maxSize").value]).clamp(true);
-  			returnVal = aScale(d[propToSize]);
+  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
 		}
 	}
 	else
