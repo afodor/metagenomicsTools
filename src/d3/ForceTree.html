@@ -40,10 +40,6 @@ line.link {
 						
 			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			value="30" onchange=updateNums()></input> 
-	
-			<br>   	<select id="sizeByWhat" onchange=updateNums()>
-    <option value="numSeqs">Size by # of sequences</option>
-		<option value="pValueBySubject">Size by log10(pValue) subject</option></select> <br>
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
 			value="100" onchange=updateNums()></input> <input type="number"
 			id="numerNodesToShow" value="100" onchange=redrawScreen()></input> <br>
@@ -93,18 +89,6 @@ var w =  window.innerWidth-300,
   var initHasRun = false;
   var firstFlatten = true;
   var topNodes = [];
- 
- // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-	var stringToColour = function(str) {
-
-    // str to hash
-    for (var i = 0, hash = 0; i < str.length; hash = str.charCodeAt(i++) + ((hash << 5) - hash));
-
-    // int/hash to hex
-    for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
-
-    return colour;
-}
     
  var dirty = true;
     
@@ -137,7 +121,21 @@ d3.json("aTree2.json", function(json) {
   	
   	var mySidebar = document.getElementById("sidebar");
   	
-  	mySidebar.innerHTML += "<br><h3> Label: <h3>"
+  	mySidebar.innerHTML += "<h3> Size: <h3>"
+  	
+	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
+	
+	for( var propertyName in myNodes[0])
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
+  		{
+  			selectHTML += "<option value=\"" + propertyName 
+  				+ "\">" + propertyName   +"</option>"
+  		}
+  	
+  	selectHTML +=  "</select>"	
+	mySidebar.innerHTML += selectHTML
+	
+  	mySidebar.innerHTML += "<h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
 	  	{
@@ -248,6 +246,11 @@ function myFilterLinks(d)
       	
       return false;
       		
+}
+
+// from http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function getRadiusVal(d)
