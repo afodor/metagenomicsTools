@@ -19,7 +19,7 @@ line.link {
 
 #sidebar {
 	float: right;
-	border: 1px solid red;
+	border: 1px solid red;c
 	width: 200px;
 }
 </style>
@@ -39,9 +39,9 @@ line.link {
 
 						
 			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			value="30" onchange=updateNums()></input> 
+			value="30" onchange=updateNums()></input><br> 
 		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
-			value="100" onchange=updateNums()></input> <input type="number"
+			value="100" onchange=updateNums()></input> <br><input type="number"
 			id="numerNodesToShow" value="100" onchange=redrawScreen()></input> <br>
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
@@ -89,7 +89,7 @@ var w =  window.innerWidth-300,
   var initHasRun = false;
   var firstFlatten = true;
   var topNodes = [];
-  var linearScales=[];
+  var linearScales={};
     
  var dirty = true;
     
@@ -130,13 +130,11 @@ d3.json("aTree2.json", function(json) {
 			
 	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
 	
-	var propertyNum=0;
 	for( var propertyName in myNodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
   		{
-  			selectHTML += "<option value=\"" + propertyNum
+  			selectHTML += "<option value=\"" + propertyName
   				+ "\">" + propertyName   +"</option>"
-  				
   				
   				var dataArray = []
   				for( var x in myNodes.length)
@@ -145,9 +143,11 @@ d3.json("aTree2.json", function(json) {
   					dataArray.put(anObject[propertyName]);
   				}
   				
-  				linearScales.push( d3.scale.linear().domain(dataArray).range(0,
-  				document.getElementById("maxSize").value));
-  				propertyNum++;
+  				var range = [];
+  				range.push(Math.min(dataArray))
+  				range.push(Math.max(dataArray))
+  				linearScales[propertyName] = d3.scale.linear().domain(range).range(0,
+  				document.getElementById("maxSize").value);
   		}
   	
   	selectHTML +=  "</select>"	
@@ -273,22 +273,13 @@ function isNumber(n) {
 
 function getRadiusVal(d)
 {
-	/*
-
-	 		"id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
-	"<br><input type=\"checkbox\"" + 
-			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
-			
-	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
+	var propToSize = document.getElementById("sizeByWhat").value
 	
-	for( var propertyName in myNodes[0])
-  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
-  		{
-  			selectHTML += "<option value=\"" + propertyName 
-  				+ "\">" + propertyName   +"</option>"
-  		}
-  		*/
-  	
+	var aScale= linearScales[propToSize];	
+	
+	console.log("Returning " + aScale(d[propToSize] ));
+	return aScale(d[propToSize] );
+	
 }
 
 function update() 
@@ -346,7 +337,7 @@ function update()
 	      function updateNodesLinksText()
 	      {
 	      	node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; }).attr("r", function(d) {return getRadiusVal(d)} );
+	      .attr("cy", function(d) { return d.y; });
 	      
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			link.attr("x1", function(d) { return d.source.x; })
