@@ -152,9 +152,7 @@ d3.json("aTree2.json", function(json) {
   						range[1] = aVal;
   				}
   				
-  				console.log(propertyName + " "+ range );
-  				linearScales[propertyName] = d3.scale.linear().domain(range).range(0,
-  				document.getElementById("maxSize").value);
+  				linearScales[propertyName] = range; 
   		}
   	
   	selectHTML +=  "</select>"	
@@ -282,8 +280,11 @@ function getRadiusVal(d)
 {
 	var propToSize = document.getElementById("sizeByWhat").value
 	
-	var aScale= linearScales[propToSize];	
-	return aScale( d[propToSize] );
+	
+	
+	var aScale= d3.scale.linear().domain(linearScales[propToSize]).range([0,30]);
+  				//document.getElementById("maxSize").value);
+  	return aScale(d[propToSize]);
 	
 }
 
