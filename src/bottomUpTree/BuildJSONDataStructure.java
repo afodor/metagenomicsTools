@@ -65,7 +65,7 @@ public class BuildJSONDataStructure
 		
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
-			ConfigReader.getD3Dir() + File.separator + "aTree.json"	)));
+			ConfigReader.getD3Dir() + File.separator + "aTree2.json"	)));
 		
 		writeNodeAndChildren(writer, rootNode,10, rdpMap,pValueSubject);
 		 
