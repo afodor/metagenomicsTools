@@ -155,7 +155,9 @@ d3.json("aTree2.json", function(json) {
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
 			 " id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
 	"<br><input type=\"checkbox\"" + 
-			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
+			"id=\"logSize\" onchange=redrawScreen()>log</input>"
+			+"<input type=\"checkbox\"" + 
+			"id=\"invertSize\" onchange=redrawScreen()>invert</input><br>"
 			
 	
 	
@@ -286,7 +288,6 @@ function getRadiusVal(d)
 		
   		var aScale= d3.scale.log().domain(ranges[propToSize]).range([0,
   					document.getElementById("maxSize").value]).clamp(true);
-  	
 	}
 	else
 	{
@@ -295,8 +296,16 @@ function getRadiusVal(d)
   					document.getElementById("maxSize").value]).clamp(true);
   	
 	}
+	
 				
-	return aScale(d[propToSize]);
+	var returnVal = aScale(d[propToSize]);
+	
+	if( document.getElementById("invertSize").checked ) 
+	{
+		returnVal = document.getElementById("maxSize").value - returnVal;
+	}
+	
+	return returnVal;
 	
 }
 
