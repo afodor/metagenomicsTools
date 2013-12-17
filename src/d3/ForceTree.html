@@ -89,7 +89,7 @@ var w =  window.innerWidth-300,
   var initHasRun = false;
   var firstFlatten = true;
   var topNodes = [];
-  var linearScales={};
+  var ranges={};
     
  var dirty = true;
     
@@ -152,9 +152,7 @@ d3.json("aTree2.json", function(json) {
   						range[1] = aVal;
   				}
   				
-  				var aScale= d3.scale.linear().domain(range).range([0,
-  					document.getElementById("maxSize").value]).clamp(true);
-  				linearScales[propertyName] = aScale; 
+  				ranges[propertyName] = range; 
   		}
   	
   	selectHTML +=  "</select>"	
@@ -282,8 +280,22 @@ function getRadiusVal(d)
 {
 	var propToSize = document.getElementById("sizeByWhat").value
 	
-	var aScale=  linearScales[propToSize];
-  	return aScale(d[propToSize]);
+	if( document.getElementById("logSize").checked) 
+	{
+		
+  		var aScale= d3.scale.log().domain(ranges[propToSize]).range([0,
+  					document.getElementById("maxSize").value]).clamp(true);
+  	
+	}
+	else
+	{
+		
+  		var aScale= d3.scale.linear().domain(ranges[propToSize]).range([0,
+  					document.getElementById("maxSize").value]).clamp(true);
+  	
+	}
+				
+	return aScale(d[propToSize]);
 	
 }
 
