@@ -137,11 +137,15 @@ d3.json("aTree2.json", function(json) {
   	
   	var mySidebar = document.getElementById("sidebar");
   	
+  	mySidebar.innerHTML += "<br><h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
-  	{
-  		
-  	}
-  	
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
+	  	{
+	  		var newHTML = "<input type=\"checkbox\" id=\"label" + propertyName + "\"" + 
+				"onchange=redrawScreen()>" + propertyName + "</input><br>";
+				
+			 mySidebar.innerHTML+= newHTML;
+	  	}
   	
   	for( var x =0; x < myNodes.length; x++)
   	{
@@ -152,8 +156,6 @@ d3.json("aTree2.json", function(json) {
   			topNodes.push(myNodes[x]);
   		}
   	}
-  	
-  	
   	
   	var rangeHTML = "Top level filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
   	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
