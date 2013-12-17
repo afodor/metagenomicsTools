@@ -326,10 +326,7 @@ function getRadiusVal(d)
 	  		returnVal = aScale(d[propToSize]);
 		}
 		
-		if( document.getElementById("invertSize").checked ) 
-		{
-			returnVal = document.getElementById("maxSize").value - returnVal;
-		}
+		
 	}
 	else //ordinal values - much easier
 	{
@@ -337,7 +334,10 @@ function getRadiusVal(d)
 		returnVal =aScale(d[propToSize]);
 	}
 	
-	
+	if( document.getElementById("invertSize").checked ) 
+	{
+		returnVal = document.getElementById("maxSize").value - returnVal;
+	}
 	
 	return returnVal;
 	
