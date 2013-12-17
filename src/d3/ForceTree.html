@@ -179,6 +179,20 @@ d3.json("aTree2.json", function(json) {
 	
   		}
 	
+	mySidebar.innerHTML += "<h3> Color: <h3>";
+  	selectHTML =  "<select id=\"colorByWhat\" onchange=updateNums()>"
+	
+	for( var propertyName in myNodes[0])
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
+  				&& propertyName != "children" && propertyName != "fixed" )
+  		{
+  			selectHTML += "<option value=\"" + propertyName
+  				+ "\">" + propertyName   +"</option>"
+  						
+  		}
+  	selectHTML +=  "</select>"
+  	mySidebar.innerHTML += selectHTML
+	
   	mySidebar.innerHTML += "<h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
