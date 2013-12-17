@@ -110,6 +110,7 @@ var w =  window.innerWidth-300,
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
+  var topNodes = [];
  
  // from http://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
 	var stringToColour = function(str) {
@@ -152,16 +153,14 @@ d3.json("aTree.json", function(json) {
   	if( ! firstFlatten) 
   		return;
   	
-  	var topNodes = [];
+  	
   	
   	for( var x =0; x < myNodes.length; x++)
   	{
   		// todo: this shouldn't be hard-coded
   		if( Math.abs( myNodes[x].otuLevel - 0.20 ) <0.01 )
   		{	
-  			console.log("Adding " + myNodes[x].nodeNum);
   			topNodes.push(myNodes[x]);
-  			console.log("Now have " + topNodes.length);
   		}
   	}
   	
@@ -169,10 +168,48 @@ d3.json("aTree.json", function(json) {
   	var mySidebar = document.getElementById("sidebar");
   	
   	var rangeHTML = "<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
-  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=updateNums()></input>";
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
   }
+  
+  function showOnlyMarked()
+  {
+  	var aVal = document.getElementById("pValueRange").value;
+  	
+  	if( aVal==0)
+  	{	
+  		for( var x=0; x < nodes.length; x++)
+  			nodes[x].doNotShow=false;
+  	}
+  	else
+  	{
+  		for( var x=0; x < nodes.length; x++)
+  			nodes[x].doNotShow=true;
+  			
+  		aVal = aVal -1;
+  		var myNode = topNodes[aVal];
+  		
+  		function markSelfAndDaughters(aNode)
+  		{
+  			aNode.doNotShow=false;
+  			
+  			if( aNode.children != null)
+  			{
+  				for( var y=0; y < aNode.children.length;y++)
+  				{
+  					markSelfAndDaughters(aNode.children[y]);
+  				}
+  			}
+  		}
+  		
+  		markSelfAndDaughters(myNode);
+  	}
+  	
+  	dirty=true;
+  	update();
+  }
+  
   
   function updateNums()
   {
@@ -270,7 +307,6 @@ function getRadiusVal(d)
 		if( isNaN(val) ||  val > 30) 
 			return 30;
 		
-		console.log(val)
 		return val;
 	}
 	      					
@@ -550,6 +586,8 @@ var myClick= function (d) {
 	dirty=true;
 	update();	
 }
+
+
 
 function highlightAllChildren(d)
 {
