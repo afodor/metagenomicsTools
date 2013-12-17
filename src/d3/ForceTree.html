@@ -124,12 +124,7 @@ d3.json("aTree2.json", function(json) {
   	var mySidebar = document.getElementById("sidebar");
   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
-  	mySidebar.innerHTML += "Max size: <input type=\"number\"" + 
-			"id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
-	"<br><input type=\"checkbox\"" + 
-			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
-			
-	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
+  	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
 	
 	for( var propertyName in myNodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
@@ -157,6 +152,12 @@ d3.json("aTree2.json", function(json) {
   	
   	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
+	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
+			 " id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
+	"<br><input type=\"checkbox\"" + 
+			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
+			
+	
 	
   	mySidebar.innerHTML += "<h3> Label: <h3>"
   	for( var propertyName in myNodes[0])
