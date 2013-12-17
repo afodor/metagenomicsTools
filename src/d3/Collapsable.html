@@ -147,6 +147,33 @@ d3.json("aTree.json", function(json) {
   initialize();
 });
   
+  function addRangeForPValue(myNodes)
+  {
+  	if( ! firstFlatten) 
+  		return;
+  	
+  	var topNodes = [];
+  	
+  	for( var x =0; x < myNodes.length; x++)
+  	{
+  		// todo: this shouldn't be hard-coded
+  		if( Math.abs( myNodes[x].otuLevel - 0.20 ) <0.01 )
+  		{	
+  			console.log("Adding " + myNodes[x].nodeNum);
+  			topNodes.push(myNodes[x]);
+  			console.log("Now have " + topNodes.length);
+  		}
+  	}
+  	
+  	
+  	var mySidebar = document.getElementById("sidebar");
+  	
+  	var rangeHTML = "<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=updateNums()></input>";
+  	
+    mySidebar.innerHTML+= rangeHTML;
+  }
+  
   function updateNums()
   {
   	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
@@ -585,7 +612,9 @@ function flatten()
   if( firstFlatten) 
   {
   		setInitialPositions(myNodes);
+  		addRangeForPValue(myNodes);
   		firstFlatten = false;
+  		
   }
   
   return myNodes;
