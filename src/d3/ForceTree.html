@@ -89,6 +89,7 @@ var w =  window.innerWidth-300,
   var initHasRun = false;
   var firstFlatten = true;
   var topNodes = [];
+  var linearScales=[];
     
  var dirty = true;
     
@@ -122,14 +123,31 @@ d3.json("aTree2.json", function(json) {
   	var mySidebar = document.getElementById("sidebar");
   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
-  	
+  	mySidebar.innerHTML += "Max size: <input type=\"number\"" + 
+			"id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
+	"<br><input type=\"checkbox\"" + 
+			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
+			
 	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
 	
+	var propertyNum=0;
 	for( var propertyName in myNodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
   		{
-  			selectHTML += "<option value=\"" + propertyName 
+  			selectHTML += "<option value=\"" + propertyNum
   				+ "\">" + propertyName   +"</option>"
+  				
+  				
+  				var dataArray = []
+  				for( var x in myNodes.length)
+  				{
+  					var anObject =myNodes[x]; 
+  					dataArray.put(anObject[propertyName]);
+  				}
+  				
+  				linearScales.push( d3.scale.linear().domain(dataArray).range(0,
+  				document.getElementById("maxSize").value));
+  				propertyNum++;
   		}
   	
   	selectHTML +=  "</select>"	
@@ -255,18 +273,22 @@ function isNumber(n) {
 
 function getRadiusVal(d)
 {
-	if(document.getElementById("sizeByWhat").value == "pValueBySubject") 
-	{
-		val = -Math.log(d.pvalueSubject)/Math.LN10;
-		if( val <1) return 1;
-		
-		if( isNaN(val) ||  val > 30) 
-			return 30;
-		
-		return val;
-	}
-	      					
-	return Math.sqrt(d.numSeqs) / 10; 
+	/*
+
+	 		"id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" + 
+	"<br><input type=\"checkbox\"" + 
+			"id=\"logSize\" onchange=redrawScreen()>log</input><br>"
+			
+	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
+	
+	for( var propertyName in myNodes[0])
+  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
+  		{
+  			selectHTML += "<option value=\"" + propertyName 
+  				+ "\">" + propertyName   +"</option>"
+  		}
+  		*/
+  	
 }
 
 function update() 
