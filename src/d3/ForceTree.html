@@ -485,9 +485,7 @@ function update()
 		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", document.getElementById("fontAdjust").value + "px")
-                 .attr("fill", function(d) {return  "#000000" } )
-                 // stringToColour(d.genus)} )
-	    
+                 .attr("fill", function(d) {return  getTextColor(d) } )	    
 
  // cleanup
   link.exit().remove();
@@ -500,6 +498,18 @@ function update()
 	
 	if (! document.getElementById("animate").checked)
   		force.stop();
+}
+
+function getTextColor(d)
+{
+	
+	var chosen = document.getElementById("colorByWhat").value;
+	
+	if( colorScales[chosen] != null)
+		return color(d);
+		
+	return "#000000";
+		
 }
 
 function myMouseEnter(d)
