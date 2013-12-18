@@ -1,50 +1,191 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-ul
-{
-list-style-type:none;
-margin:50;
-padding:50;
-overflow:hidden;
-float: right;
+<style>/* demo page styles */ <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
+/* demo page styles */
+body {
+    background:#eee;
+    margin:0;
+    padding:0;
 }
-li
-{
-float:center;
-margin:50
-padding:50
+.example {
+    background:#fff url(../images/clouds-in-blue-sky.jpg);
+    width:770px;
+    height:570px;
+    border:0px #000 solid;
+    margin:0px auto;
+    padding:0px;
+    border-radius:0px;
+    -moz-border-radius:0px;
+    -webkit-border-radius:0	px;
+}
 
+/* main menu styles */
+#nav {
+    display:inline;
+    width:100%;
+    margin:0px auto;
+    padding:0;
+    background:#335599 url(../images/bg.png) repeat-x 0 -110px;
+
+    border-radius:0px; /*some css3*/
+    -moz-border-radius:0px;
+    -webkit-border-radius:0	px;
+    box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .5);
 }
-a:link,a:visited
-{
-display:block;
-width:120px;
-font-weight:bold;
-color:#000000;
-background-color:#FFFFFF;
-text-align:center;
-padding:5px;
-text-decoration:none;
-text-transform:uppercase;
+#nav li {
+    margin:10px;
+    float:left;
+    position:relative;
+    list-style:none;
 }
-a:hover,a:active
+#nav a {
+    font-weight:bold;
+    color:#e7e5e5;
+    text-decoration:none;
+    display:block;
+    padding:8px 20px;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    text-shadow:0 2px 2px rgba(0,0,0, .7);
+}
+
+/* selected menu element */
+#nav .current a, #nav li:hover > a {
+    background:#7788aa url(../images/bg.png) repeat-x 0 -20px;
+    color:#000;
+    border-top:1px solid #f8f8f8;
+
+    box-shadow:0 2px 2px rgba(0,0,0, .7); /*some css3*/
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .7);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .7);
+    text-shadow:0 2px 2px rgba(255,255,255, 0.7);
+}
+
+/* sublevels */
+#nav ul li:hover a, #nav li:hover li a {
+    background:none;
+    border:none;
+    color:#000;
+}
+#nav ul li a:hover {
+    background:#335599 url(../images/bg.png) repeat-x 0 -100px;
+    color:#fff;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    text-shadow:0 2px 2px rgba(0,0,0, 0.7);
+}
+
+#nav ul li:first-child > a {
+    -moz-border-radius-topleft:10px; /*some css3*/
+    -moz-border-radius-topright:10px;
+    -webkit-border-top-left-radius:10px;
+    -webkit-border-top-right-radius:10px;
+}
+#nav ul li:last-child > a {
+    -moz-border-radius-bottomleft:10px; /*some css3*/
+    -moz-border-radius-bottomright:10px;
+    -webkit-border-bottom-left-radius:10px;
+    -webkit-border-bottom-right-radius:10px;
+}
+
+/* drop down */
+#nav li:hover > ul {
+    opacity:1;
+    visibility:visible;
+}
+#nav ul {
+    opacity:0;
+    visibility:hidden;
+    padding:0;
+    width:175px;
+    position:absolute;
+    background:#aabbcc url(../images/bg.png) repeat-x 0 0;
+    border:1px solid #7788aa;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .5);
+
+    -moz-transition:opacity .25s linear, visibility .1s linear .1s;
+    -webkit-transition:opacity .25s linear, visibility .1s linear .1s;
+    -o-transition:opacity .25s linear, visibility .1s linear .1s;
+    transition:opacity .25s linear, visibility .1s linear .1s;
+}
+#nav ul li {
+    float:none;
+    margin:0;
+}
+#nav ul a {
+    font-weight:normal;
+    text-shadow:0 2px 2px rgba(255,255,255, 0.7);
+}
+#nav ul ul {
+    left:160px;
+    top:0px;
+}
 
 </style>
 </head>
-
 <body>
-<nav><ul>
-<li><a href="#home">Home</a></li>
-<li><a href="#news">News</a></li>
-<li><a href="#contact">Contact</a></li>
-<li><a href="#about">About</a></li>
-</ul></nav>
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
 
-<section>
+<!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
+
+<div class="example">
+    <ul id="nav">
+        <li class="current"><a href="http://www.script-tutorials.com/">Home</a></li>
+        <li><a href="http://www.script-tutorials.com/">Tutorials</a>
+            <ul>
+            	<li><input type="checkbox" id="labelOnlyTNodes"
+			onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>
+                <li><a href="http://www.script-tutorials.com/category/html-css/">HTML / CSS</a></li>
+                <li><a href="http://www.script-tutorials.com/category/jquery/">JS / jQuery</a>
+                    <ul>
+                        <li><a href="http://www.script-tutorials.com/category/jquery/">jQuery</a></li>
+                        <li><a href="http://www.script-tutorials.com/category/javascript/">JS</a></li>
+                    </ul>
+                </li>
+                <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
+                <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
+                <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
+                <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
+            </ul>
+        </li>
+        <li><a href="http://www.script-tutorials.com/category/resources/">Resources</a>
+            <ul>
+                <li><a href="http://www.script-tutorials.com/category/resources/">By category</a>
+                    <ul>
+                        <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
+                        <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
+                        <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
+                        <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
+                    </ul>
+                </li>
+                <li><a href="http://www.script-tutorials.com/category/resources/">By tag name</a>
+                    <ul>
+                        <li><a href="http://www.script-tutorials.com/tag/captcha/">captcha</a></li>
+                        <li><a href="http://www.script-tutorials.com/tag/gallery/">gallery</a></li>
+                        <li><a href="http://www.script-tutorials.com/tag/animation/">animation</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="http://www.script-tutorials.com/about/">About</a></li>
+        <li><a href="http://www.script-tutorials.com/creating-css3-dropdown-menu/">Go Back To The Tutorial</a></li>
+    </ul>
+</div>
+
 <script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">   </script>
- Hello world </section>
 </body>
 </html>
