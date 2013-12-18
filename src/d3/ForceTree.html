@@ -39,9 +39,9 @@ line.link {
 
 						
 			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			value="30" onchange=updateNums()></input>
+			value="30" onchange=redrawScreen()></input>
 			<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100"
-			value="90" onchange=updateNums()></input><br>
+			value="90" onchange=redrawScreen()></input><br>
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
 		
@@ -116,7 +116,7 @@ d3.json("aTree2.json", function(json) {
   	var mySidebar = document.getElementById("sidebar");
   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
-  	var selectHTML =  "<select id=\"sizeByWhat\" onchange=updateNums()>"
+  	var selectHTML =  "<select id=\"sizeByWhat\" onchange=redrawScreen()>"
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
@@ -173,7 +173,7 @@ d3.json("aTree2.json", function(json) {
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
-  	selectHTML =  "<select id=\"colorByWhat\" onchange=updateNums()>"
+  	selectHTML =  "<select id=\"colorByWhat\" onchange=redrawScreen()>"
 	selectHTML += "<option value=\"colorByMarked" 
   				+ "\">" + "marked"+"</option>"
   			
@@ -285,13 +285,7 @@ d3.json("aTree2.json", function(json) {
   	update();
   }
   
-  
-  function updateNums()
-  {
-  	document.getElementById("numerNodesToShow").value =  document.getElementById("nodesToShow").value 
-  	redrawScreen();
-  }
-  
+   
   function redrawScreen()
   {
   	dirty = true;
