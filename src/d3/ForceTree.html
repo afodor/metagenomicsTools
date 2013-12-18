@@ -161,20 +161,6 @@ body {
 <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
 <div class="example">
     <ul id="nav">
-        <li><a>Visualization</a>
-            <ul>
-            	<li> 					<input type="checkbox" id="animate"
-			onchange=redrawScreen() checked=true> animate</input> </li>
-			  
-				
-            	<li>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			value="30" onchange=redrawScreen()></input></li>
-			
-			<li>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100"
-			value="90" onchange=redrawScreen()></input></li>
-              
-            </ul>
-        
         <li><a>Mouse</a>
             <ul>
             
@@ -194,16 +180,15 @@ body {
     </ul>
 </div>
 	<aside id="sidebar">
-
+			 	<h3> Visualization: </h3>
+  	<input type="checkbox" id="animate"
+			onchange=redrawScreen() checked=true> animate</input>	
+       <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			+"value="30" onchange=redrawScreen()></input>
+		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
+			"value="90" onchange=redrawScreen()></input>
 			
-						
-			
-		
-		
-		<br>
-		
 	</aside>
-
 	<section>
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
@@ -262,6 +247,8 @@ d3.json("aTree2.json", function(json) {
   		return;
   	
   	var mySidebar = document.getElementById("sidebar");
+  	
+             
   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=redrawScreen()>"
