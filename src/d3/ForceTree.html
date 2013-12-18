@@ -543,8 +543,6 @@ function getTextColor(d)
 	if( colorScales[chosen] != null)
 		return color(d);
 		
-	return "#000000";
-		
 }
 
 function myMouseEnter(d)
@@ -619,6 +617,13 @@ function color(d) {
 	{
 		return colorScales[chosen]( d[chosen] );
 	}
+
+	if( ranges[chosen] != null)
+	{
+		var aScale= d3.scale.linear().domain(ranges[chosen]).range(['red','blue']);
+		return aScale(d[chosen]);	
+	}
+	
 	
 	if( d._children != null)
 		return  "#3182bd";
