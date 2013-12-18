@@ -121,7 +121,7 @@ d3.json("aTree2.json", function(json) {
 });
   
   
-  function addDynamicMenuContent(myNodes)
+  function addDynamicMenuContent()
   {
   	if( ! firstFlatten) 
   		return;
@@ -139,7 +139,7 @@ d3.json("aTree2.json", function(json) {
 			+"<input type=\"checkbox\"" + 
 			"id=\"invertSize\" onchange=redrawScreen()>invert</input><br>"
 	
-	for( var propertyName in myNodes[0])
+	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
   				&& propertyName != "children" && propertyName != "fixed" )
   		{
@@ -148,12 +148,12 @@ d3.json("aTree2.json", function(json) {
   				+ "\">" + propertyName   +"</option>"
   				
   				var range=[]
-  				range[0] = myNodes[0][propertyName];
-  				range[1] = myNodes[0][propertyName];
+  				range[0] = nodes[0][propertyName];
+  				range[1] = nodes[0][propertyName];
   							
-  				for( var x=0;  isNumeric && x < myNodes.length; x++)
+  				for( var x=0;  isNumeric && x < nodes.length; x++)
   				{
-  					var aVal =myNodes[x][propertyName]; 
+  					var aVal =nodes[x][propertyName]; 
   					
   					if( ! isNumber(aVal))
   						isNumeric = false;
@@ -190,7 +190,7 @@ d3.json("aTree2.json", function(json) {
 	selectHTML += "<option value=\"colorByMarked" 
   				+ "\">" + "marked"+"</option>"
   			
-	for( var propertyName in myNodes[0])
+	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
   				&& propertyName != "children" && propertyName != "fixed" )
   		{
@@ -206,7 +206,7 @@ d3.json("aTree2.json", function(json) {
   	
 	
   	mySidebar.innerHTML += "<h3> Label: <h3>"
-  	for( var propertyName in myNodes[0])
+  	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
 	  	{
 	  		var newHTML = "<input type=\"checkbox\" id=\"label" + propertyName + "\"" + 
@@ -215,20 +215,36 @@ d3.json("aTree2.json", function(json) {
 			 mySidebar.innerHTML+= newHTML;
 	  	}
   	
-  	for( var x =0; x < myNodes.length; x++)
-  	{
+  	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
+  		"max=\" ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
   		
-  		// todo: this shouldn't be hard-coded
-  		if( Math.abs( myNodes[x].otuLevel - 0.20 ) <0.01 )
-  		{	
-  			topNodes.push(myNodes[x]);
-  		}
-  	}
   	
-  	var rangeHTML = "Top level filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
+  	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
   	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
+  	setTopNodes();
+  	
+    
+  
+  }
+  
+  function setTopNodes()
+  {
+  	topNodes = [];
+  
+  	for( var x =0; x < nodes.length; x++)
+  	{
+  		if( nodes[x].nodeDepth == document.getElementById("depthFilter").value) 
+  		{	
+  			topNodes.push(nodes[x]);
+  		}
+  	}
+  	
+  	
+  	document.getElementById("pValueRange").max = topNodes.length;
+  	
+  	showOnlyMarked();
   }
   
   function showOnlyMarked()
@@ -576,17 +592,16 @@ function myMouseLeave()
 	update();
 }
 
-function setInitialPositions( myNodes )
+function setInitialPositions()
 {
 	var radius = Math.min(w,h)/2 - 300;
 	
-	for( var x=0; x < myNodes.length; x++) 
+	for( var x=0; x < nodes.length; x++) 
 	{
-		if( myNodes[x] != root ) 
+		if( nodes[x] != root ) 
 		{
-		
-			myNodes[x].x = radius * Math.cos( (myNodes.length-x) / 360.0) + root.x;
-			myNodes[x].y = radius * Math.sin( (myNodes.length-x) / 360.0) + root.y
+			nodes[x].x = radius * Math.cos( (nodes.length-x) / 360.0) + root.x;
+			nodes[x].y = radius * Math.sin( (nodes.length-x) / 360.0) + root.y
 		}
 	}
 }
@@ -594,11 +609,11 @@ function setInitialPositions( myNodes )
 
 function initialize() {
 
-  nodes = flatten(root),
+  flatten(root),
       
   initHasRun = true;
  
-	update();
+   update();
 }
 
 // Color leaf nodes orange, and packages white or blue.
@@ -741,17 +756,17 @@ function flatten()
   for( var i=0; i < myNodes.length; i++)
   {
   	if (!myNodes[i].forceTreeNodeID) myNodes[i].forceTreeNodeID = i+1;
-  }  
+  }
+  
+  nodes = myNodes;  
   
   if( firstFlatten) 
   {
-  		setInitialPositions(myNodes);
-  		addDynamicMenuContent(myNodes);
+  		setInitialPositions();
+  		addDynamicMenuContent();
   		firstFlatten = false;
   		
   }
-  
-  return myNodes;
 }
 
 
