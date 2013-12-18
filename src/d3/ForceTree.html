@@ -42,9 +42,6 @@ line.link {
 			value="30" onchange=updateNums()></input>
 			<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100"
 			value="90" onchange=updateNums()></input><br>
-		Node Adjust <input type="range" id="nodesToShow" min="10" max="20000"
-			value="100" onchange=updateNums()></input> <br><input type="number"
-			id="numerNodesToShow" value="100" onchange=redrawScreen()></input> <br>
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
 		
@@ -319,7 +316,7 @@ function getLabelText(d)
 
 function myFilterNodes(d)
 {
-	 if( ! d.doNotShow &&  d.numSeqs >= document.getElementById("numerNodesToShow").value)
+	 if( ! d.doNotShow )
 	 	return true;
 	 	
 	 return false;
@@ -495,8 +492,7 @@ function update()
 		 		{
 		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
 		 			{
-		 				if( ! nodes[i].children[j].doNotShow && 
-		 						 nodes[i].children[j].numSeqs >= document.getElementById("numerNodesToShow").value )
+		 				if( ! nodes[i].children[j].doNotShow )
 		 				{
 		 					nodes[i].marked=false;
 		 				}
