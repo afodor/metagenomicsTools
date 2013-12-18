@@ -389,11 +389,7 @@ function getToolTipText(d)
 
 	for( var propertyName in d)
 	{
-			if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
-  				&& propertyName != "children" && propertyName != "fixed" 
-  				&& propertyName != "weight" && propertyName != "px" &&
-  					propertyName != "py" && propertyName != "setVisible" 
-  					)
+			if( ranges[propertyName] != null	)
   				aVal += (propertyName + ":" +  d[propertyName] + " ");
 	}
   				
