@@ -66,6 +66,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="BuildJSONDataStructure">
+        <java classname="bottomUpTree.BuildJSONDataStructure" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="ChisquareTest">
         <java classname="utils.ChisquareTest" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -133,6 +138,13 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="DereplicateAFile">
+        <java classname="dereplicate.DereplicateAFile" failonerror="true" fork="yes">
+            <jvmarg line="-mx8000m"/>
+            <arg line="C:\MockCommunityIllumina\DEREP_SAMP_PREFIXstudy1685even1.FASTA c:\temp\deleteMe.CLUST"/>
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="DereplicateBySample">
         <java classname="dereplicate.DereplicateBySample" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -153,6 +165,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="ETreeFromBottom">
+        <java classname="bottomUpTree.ETreeFromBottom" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="GenerateDistances">
         <java classname="scripts.sequenceScripts.GenerateDistances" failonerror="true" fork="yes">
             <jvmarg line="-mx14000m"/>
@@ -164,8 +181,28 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="GetOneWayAnovas">
+        <java classname="bottomUpTree.pvalues.GetOneWayAnovas" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="KmerDatabase">
+        <java classname="kmerDatabase.KmerDatabase" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="KmerToBits">
+        <java classname="kmerDatabase.KmerToBits" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="MakeContextMapBits">
         <java classname="coPhylog.MakeContextMapBits" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="MakeSHFiles">
+        <java classname="bottomUpTree.MakeSHFiles" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -200,6 +237,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="NumNodesVsGreedyMax">
+        <java classname="bottomUpTree.figures.NumNodesVsGreedyMax" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="PairedTTests">
         <java classname="ianAnorexia.PairedTTests" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -217,6 +259,11 @@
     </target>
     <target name="PivotOTUs (1)">
         <java classname="parsers.PivotOTUs" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="PivotOut">
+        <java classname="bottomUpTree.PivotOut" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -261,8 +308,19 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="ReadCluster">
+        <java classname="bottomUpTree.ReadCluster" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="ReduceToTopTaxa">
         <java classname="scripts.pancreatitis.ReduceToTopTaxa" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="RefilterInSingleThread">
+        <java classname="bottomUpTree.RefilterInSingleThread" failonerror="true" fork="yes">
+            <jvmarg line="-mx8000m"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -280,6 +338,13 @@
     </target>
     <target name="RunManySingleThread">
         <java classname="eTree.RunManySingleThread" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
+    <target name="RunOne">
+        <java classname="bottomUpTree.RunOne" failonerror="true" fork="yes">
+            <jvmarg line="-mx12000m"/>
+            <arg line="C:\MockCommunityIllumina\DEREP_SAMP_PREFIXstudy1685even1.FASTA c:\temp\deleteMe.clust"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
@@ -402,11 +467,6 @@
     </target>
     <target name="WriteOnePercent">
         <java classname="erinManuscript.WriteOnePercent" failonerror="true" fork="yes">
-            <classpath refid="MetagenomicTools.classpath"/>
-        </java>
-    </target>
-    <target name="ReadCluster">
-        <java classname="bottomUpTree.ReadCluster" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
