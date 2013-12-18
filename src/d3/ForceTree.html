@@ -300,7 +300,19 @@ d3.json("aTree2.json", function(json) {
   	}
   	else
   	{
-  		aBox = document.getElementById("logSize");
+  		document.getElementById("logSize").enabled=true;
+  	}
+  	
+  	// can't log an ordinal color scale...
+  	if(  ordinalScales[ document.getElementById("colorByWhat").value] != null )  
+  	{
+  		aBox = document.getElementById("logColor");
+  		aBox.checked=false;
+  		aBox.enabled=false;
+  	}
+  	else
+  	{
+  		aBox = document.getElementById("logColor").enabled=true;
   	}
   	
   	dirty = true;
