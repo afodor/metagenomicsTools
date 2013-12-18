@@ -25,13 +25,14 @@ line.link {
 
 <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
 body {
+    background:#eee;
     margin:0;
     padding:0;
 }
 .example {
-	background:#fff 
-    width:770px;
-    height:50px;
+    background:#fff url(../images/clouds-in-blue-sky.jpg);
+    width:600px;
+    height:25px;
     border:0px #000 solid;
     margin:0px auto;
     padding:0px;
@@ -46,7 +47,8 @@ body {
     width:100%;
     margin:0px auto;
     padding:0;
-    background:#335599 repeat-x 0 -110px;
+    background:#335599 url(../images/bg.png) repeat-x 0 -110px;
+
     border-radius:0px; /*some css3*/
     -moz-border-radius:0px;
     -webkit-border-radius:0	px;
@@ -75,8 +77,8 @@ body {
 
 /* selected menu element */
 #nav .current a, #nav li:hover > a {
+    background:#7788aa url(../images/bg.png) repeat-x 0 -20px;
     color:#000;
-    background:#7788aa repeat-x 0 -20px;
     border-top:1px solid #f8f8f8;
 
     box-shadow:0 2px 2px rgba(0,0,0, .7); /*some css3*/
@@ -89,12 +91,12 @@ body {
 #nav ul li:hover a, #nav li:hover li a {
     background:none;
     border:none;
-    background:#7788aa;
     color:#000;
 }
 #nav ul li a:hover {
+    background:#335599 url(../images/bg.png) repeat-x 0 -100px;
     color:#fff;
-	background:#7788aa;
+
     border-radius:10px; /*some css3*/
     -moz-border-radius:10px;
     -webkit-border-radius:10px;
@@ -106,26 +108,26 @@ body {
     -moz-border-radius-topright:10px;
     -webkit-border-top-left-radius:10px;
     -webkit-border-top-right-radius:10px;
-    background:#7788aa;
 }
 #nav ul li:last-child > a {
     -moz-border-radius-bottomleft:10px; /*some css3*/
     -moz-border-radius-bottomright:10px;
     -webkit-border-bottom-left-radius:10px;
     -webkit-border-bottom-right-radius:10px;
-    background:#7788aa;
 }
 
 /* drop down */
 #nav li:hover > ul {
+    opacity:1;
     visibility:visible;
 }
 #nav ul {
+    opacity:0;
     visibility:hidden;
     padding:0;
     width:175px;
     position:absolute;
-    background:#7788aa
+    background:#aabbcc url(../images/bg.png) repeat-x 0 0;
     border:1px solid #7788aa;
 
     border-radius:10px; /*some css3*/
@@ -135,10 +137,10 @@ body {
     -moz-box-shadow:0 2px 2px rgba(0,0,0, .5);
     -webkit-box-shadow:0 2px 2px rgba(0,0,0, .5);
 
-    -moz-transition:opacity 1 linear, visibility .1s linear .1s;
-    -webkit-transition:opacity 1 linear, visibility .1s linear .1s;
-    -o-transition:opacity 1 linear, visibility .1s linear .1s;
-    transition:opacity 1 linear, visibility .1s linear .1s;
+    -moz-transition:opacity .25s linear, visibility .1s linear .1s;
+    -webkit-transition:opacity .25s linear, visibility .1s linear .1s;
+    -o-transition:opacity .25s linear, visibility .1s linear .1s;
+    transition:opacity .25s linear, visibility .1s linear .1s;
 }
 #nav ul li {
     float:none;
