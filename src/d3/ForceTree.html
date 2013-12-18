@@ -368,6 +368,24 @@ function getRadiusVal(d)
 	
 }
 
+function getToolTipText(d)
+{
+	var aVal = "";
+
+	console.log(d)
+	for( var propertyName in d)
+	{
+			if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
+  				&& propertyName != "children" && propertyName != "fixed" 
+  				&& propertyName != "weight" && propertyName != "px" &&
+  					propertyName != "py" && propertyName != "setVisible" 
+  					)
+  				aVal += (propertyName + ":" +  d[propertyName] + " ");
+	}
+  				
+  	return aVal
+}
+
 function update() 
 {
 	if( ! initHasRun )
@@ -412,10 +430,10 @@ function update()
             div.transition()        
                 .duration(200)      
                 .style("opacity", .9);      
-            div.html(d.nodeNum + " "+  d.numSeqs + " "+ d.pvalueSubject+ " " + d.rdpString)  
+            div.html(getToolTipText(d))
                 .style("left", (d3.x) + "px")     
-                .style("top", (d3.y- 28) + "px");    
-            }).on("mouseout", function(d) {       
+                .style("top", (d3.y- 28) + "px")    
+               }).on("mouseout", function(d) {       
             div.transition()        
                 .duration(500)      
                 .style("opacity",document.getElementById("opacitySlider").value/100)  })                
