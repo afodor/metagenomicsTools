@@ -219,7 +219,7 @@ d3.json("aTree2.json", function(json) {
   		"max=\" ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
   		
   	
-  	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"pValueRange\" min=\"0\" " + 
+  	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
   	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
@@ -242,14 +242,14 @@ d3.json("aTree2.json", function(json) {
   	}
   	
   	
-  	document.getElementById("pValueRange").max = topNodes.length;
+  	document.getElementById("depthFilterRange").max = topNodes.length;
   	
   	showOnlyMarked();
   }
   
   function showOnlyMarked()
   {
-  	var aVal = document.getElementById("pValueRange").value;
+  	var aVal = document.getElementById("depthFilterRange").value;
   	
   	if( aVal==0)
   	{	
