@@ -70,9 +70,9 @@ body {
     display:block;
     padding:8px 20px;
 
-    border-radius:10px; /*some css3*/
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:100px; /*some css3*/
+    -moz-border-radius:100px;
+    -webkit-border-radius:100px;
     text-shadow:0 2px 2px rgba(0,0,0, .7);
 }
 
@@ -244,6 +244,8 @@ var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
+    
+d3.behavior.zoom(vis);
 
 d3.json("aTree2.json", function(json) {
   root = json;
