@@ -159,41 +159,34 @@ body {
 <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
 <div class="example">
     <ul id="nav">
-        <li class="current"><a href="http://www.script-tutorials.com/">Home</a></li>
-        <li><a href="http://www.script-tutorials.com/">Tutorials</a>
+        <li><a>Visualization</a>
             <ul>
             	<li><input type="checkbox" id="labelOnlyTNodes"
 			onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>
-                <li><a href="http://www.script-tutorials.com/category/html-css/">HTML / CSS</a></li>
-                <li><a href="http://www.script-tutorials.com/category/jquery/">JS / jQuery</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/category/jquery/">jQuery</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/javascript/">JS</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
-                <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
-                <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
-                <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
+				<li> 					<input type="checkbox" id="animate"
+			onchange=redrawScreen() checked=true> animate</input> </li>
+			  
+				
+            	<li>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			value="30" onchange=redrawScreen()></input></li>
+			
+			<li>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100"
+			value="90" onchange=redrawScreen()></input></li>
+              
             </ul>
-        </li>
-        <li><a href="http://www.script-tutorials.com/category/resources/">Resources</a>
+        
+        <li><a>Mouse</a>
             <ul>
-                <li><a href="http://www.script-tutorials.com/category/resources/">By category</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://www.script-tutorials.com/category/resources/">By tag name</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/tag/captcha/">captcha</a></li>
-                        <li><a href="http://www.script-tutorials.com/tag/gallery/">gallery</a></li>
-                        <li><a href="http://www.script-tutorials.com/tag/animation/">animation</a></li>
-                    </ul>
-                </li>
+               <li><input type="checkbox" id="mouseOverHighlights"
+			onchange=redrawScreen()> mouse over highlights</input></li>
+			
+			<li><select id="clickDoesWhat">
+    	<option value="none">Click has no action</option>
+		<option value="hides">Click shows/hides branch</option>
+  		<option value="collapses">Click collapses/uncollapses</option>
+  		<option value="deletes">Click delete sub-nodes</option>
+		</select></li>
+		
             </ul>
         </li>
         <li><a href="http://www.script-tutorials.com/about/">About</a></li>
@@ -202,30 +195,12 @@ body {
 </div>
 	<aside id="sidebar">
 
-		<br> <input type="checkbox" id="labelOnlyTNodes"
-			onchange=redrawScreen() checked=true> Label only T-Nodes</input><br>
 			
-					<input type="checkbox" id="animate"
-			onchange=redrawScreen() checked=true> animate</input>
-			
-			
-					<br><input type="checkbox" id="mouseOverHighlights"
-			onchange=redrawScreen()> mouse over highlights</input>
-
 						
-			<br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			value="30" onchange=redrawScreen()></input>
-			<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100"
-			value="90" onchange=redrawScreen()></input><br>
+			
 		<br> Font Adjust <input type="range" id="fontAdjust" min="5"
 			max="25" value="15" onchange=redrawScreen()></input> <br>
 		
-		<select id="clickDoesWhat">
-    <option value="none">Click has no action</option>
-		<option value="hides">Click shows/hides branch</option>
-  	<option value="collapses">Click collapses/uncollapses</option>
-  	<option value="deletes">Click delete sub-nodes</option>
-</select>
 		
 		
 		<br>
