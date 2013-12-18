@@ -291,6 +291,18 @@ d3.json("aTree2.json", function(json) {
    
   function redrawScreen()
   {
+  	// can't log an ordinal color scale...
+  	if(  ordinalScales[ document.getElementById("sizeByWhat").value] != null )  
+  	{
+  		aBox = document.getElementById("logSize");
+  		aBox.checked=false;
+  		aBox.enabled=false;
+  	}
+  	else
+  	{
+  		aBox = document.getElementById("logSize");
+  	}
+  	
   	dirty = true;
   	update()
   }
