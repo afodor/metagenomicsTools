@@ -163,9 +163,7 @@ body {
     <ul id="nav">
         <li><a>Visualization</a>
             <ul>
-            	<li><input type="checkbox" id="labelOnlyTNodes"
-			onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>
-				<li> 					<input type="checkbox" id="animate"
+            	<li> 					<input type="checkbox" id="animate"
 			onchange=redrawScreen() checked=true> animate</input> </li>
 			  
 				
@@ -179,6 +177,7 @@ body {
         
         <li><a>Mouse</a>
             <ul>
+            
                <li><input type="checkbox" id="mouseOverHighlights"
 			onchange=redrawScreen()> mouse over highlights</input></li>
 			
@@ -346,9 +345,10 @@ d3.json("aTree2.json", function(json) {
   	
         
         
-  	var labelHTML = "<li><a>Labels</a><ul><li>";
-	labelHTML +="Font Adjust <input type=\"range\" id=\"fontAdjust\""
-		 labelHTML += "min=\"5\" max=\"25\" value=\"15\" onchange=redrawScreen()></input></li>"
+  	var labelHTML = "<li><a>Labels</a><ul>";
+  	labelHTML += "<li><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
+			"onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>"	
+				
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
 	  	{
@@ -358,6 +358,9 @@ d3.json("aTree2.json", function(json) {
 			 labelHTML += newHTML;
 	  	}
 	  	
+	  	
+	labelHTML +="<li>Font Adjust <input type=\"range\" id=\"fontAdjust\""
+		 labelHTML += "min=\"5\" max=\"25\" value=\"15\" onchange=redrawScreen()></input></li>"
 			 labelHTML += "</ul></li>"	  	
 	  	document.getElementById("nav").innerHTML+= labelHTML;
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
