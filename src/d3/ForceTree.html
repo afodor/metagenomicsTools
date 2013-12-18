@@ -54,17 +54,7 @@ line.link {
 		
 		
 		<br>
-		<table border=1 id="tNodeTable">
-			<tr>
-				<td>Number of Visible Nodes</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Number of TNodes</td>
-				<td></td>
-			</tr>
-		</table>
-
+		
 	</aside>
 
 	<section>
@@ -211,6 +201,7 @@ d3.json("aTree2.json", function(json) {
 				
 			 mySidebar.innerHTML+= newHTML;
 	  	}
+  	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
   	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
   		"max=\" ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
@@ -222,7 +213,20 @@ d3.json("aTree2.json", function(json) {
     mySidebar.innerHTML+= rangeHTML;
   	setTopNodes();
   	
-    
+  	var aTable =""
+  	
+  	aTable += "<table border=1 id=\"tNodeTable\">"
+	aTable +=		"<tr>"
+	aTable +=		"<td>Number of Visible Nodes</td>"
+	aTable +=			"<td></td>"
+	aTable +=		"</tr>"
+	aTable +=		"<tr>"
+	aTable +=		"<td>Number of TNodes</td>"
+	aTable +=		"<td></td>"
+	aTable +=		"</tr>"
+	aTable +=	"</table>"
+  	
+  	mySidebar.innerHTML+= aTable;
   
   }
   
