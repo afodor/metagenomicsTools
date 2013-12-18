@@ -94,6 +94,7 @@ var w =  window.innerWidth-300,
   var ranges={};
   var ordinalScales={};
   var colorScales = {};
+  
     
  var dirty = true;
     
@@ -713,12 +714,14 @@ function highlightAllParents(d)
 function flatten() 
 {
   var myNodes = [];
+  var level =0;
   
   function addNodeAndChildren( aNode) 
 	{
+		level++;
 		if( aNode != null) 
 		{
-			
+			aNode.nodeDepth = level;
 			myNodes.push(aNode);
 	
 			if( aNode.children != null)
@@ -729,6 +732,7 @@ function flatten()
 				}
 					
 		}
+		level--;
 			
 	}
   
