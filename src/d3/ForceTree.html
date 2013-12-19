@@ -204,13 +204,13 @@ body {
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 
 
-<li id="color1"> <input class="color" value="66ff00"> </li>	
+<li id="color1"> <input class="color" value="66ff00"> </li>
+	
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
 		
-		
-		
+document.getElementById("color1").style.visibility="hidden";
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w =  window.innerWidth-300,
     h = window.innerHeight-100,
@@ -733,7 +733,8 @@ function update()
 	if (! document.getElementById("animate").checked)
   		force.stop();
   		
-  	document.getElementById("ColorSubMenu").appendChild(color1);
+  	document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
+	document.getElementById("color1").style.visibility="visible";
   
 }
 
