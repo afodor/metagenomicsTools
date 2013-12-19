@@ -204,8 +204,8 @@ body {
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 
 
-<li id="color1"> Quantitiatve low<input class="color" value="ff0000"> </li>
-<li id="color2"> Quantitiatve high<input class="color" value="0000ff"> </li>	
+<li id="color1"> Quantitiatve low<input id="quantColorLow" class="color" value="ff0000" onchange=redrawScreen()> </li>
+<li id="color2"> Quantitiatve high<input id="quantColorHigh"  class="color" value="0000ff" onchange=redrawScreen()> </li>	
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
@@ -826,7 +826,6 @@ function initialize() {
    update();
 }
 
-// Color leaf nodes orange, and packages white or blue.
 function color(d) {
 	
 	var chosen = document.getElementById("colorByWhat").value;
@@ -838,6 +837,16 @@ function color(d) {
 
 	if( ranges[chosen] != null)
 	{
+		var lowColor = "#" + document.getElementById("quantColorLow").value;
+		var highColor ="#" + document.getElementById("quantColorHigh").value; 
+		
+		if( lowColor > highColor) 
+		{
+			var temp = lowColor
+			lowColor=  highColor;
+			highColor = temp;
+		}
+		
 		if( document.getElementById("logColor").checked) 
 		{
 			aVal =d[chosen]; 
@@ -847,12 +856,12 @@ function color(d) {
 			else
 				aVal = Math.log(aVal) / Math.LN10; 
 			
-			var aScale= d3.scale.linear().domain([0,maxScale]).range(['red','blue']).clamp(true);
+			var aScale= d3.scale.linear().domain([0,maxScale]).range([lowColor,highColor]).clamp(true);
 	  		return aScale(aVal);
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(ranges[chosen]).range(['red','blue']).clamp(true);
+			var aScale= d3.scale.linear().domain(ranges[chosen]).range([lowColor,highColor]).clamp(true);
 			return aScale(d[chosen]);	
 		}
 		
