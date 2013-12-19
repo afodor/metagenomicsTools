@@ -216,8 +216,7 @@ var w =  window.innerWidth-300,
   var ranges={};
   var ordinalScales={};
   var colorScales = {};
-  
-    
+  var labelCheckBoxes=[];  
  var dirty = true;
     
  
@@ -341,12 +340,14 @@ d3.json("testOperon.json", function(json) {
 			"onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>"	
 				
 	for( var propertyName in nodes[0])
-  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y")
+  		if( propertyName != "forceTreeNodeID" 
+  			&& propertyName != "x" && propertyName != "y")
 	  	{
 	  		var newHTML = "<li><input type=\"checkbox\" id=\"label" + propertyName + "\"" + 
 				"onchange=redrawScreen()>" + propertyName + "</input></li>";
 				
 			 labelHTML += newHTML;
+			 labelCheckBoxes.push("label" + propertyName );
 	  	}
 	  	
 	  	
@@ -577,6 +578,16 @@ function update()
  
 	if( dirty ) 
 	{
+		var anyLabels = false;
+		
+		for( var x=0; ! anyLabels && x < labelCheckBoxes.length; x++)
+		{
+			var aCheckBox = document.getElementById(labelCheckBoxes[x]);
+			
+			if( aCheckBox != null) 
+				anyLabels = aCheckBox.checked
+		}
+	
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
@@ -611,21 +622,10 @@ function update()
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) {  return getRadiusVal(d)})
-	      .style("fill", color).style("opacity",document.getElementById("opacitySlider").value/100 ) 
+	      .style("fill", color).
+	      style("opacity",document.getElementById("opacitySlider").value/100 ) 
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
-	      /*  tool tip is crashing the app
-	      .on("mouseover", function(d) {      
-            div.transition()        
-                .duration(5)      
-                .style("opacity", .9);      
-            div.html(getToolTipText(d))
-                .style("right", (d3.x) + "px")     
-                .style("top", (d3.y- 28) + "px")    
-               }).on("mouseout", function(d) {       
-            div.transition()        
-                .duration(5)      
-                .style("opacity",document.getElementById("opacitySlider").value/100)  }) */               
 	      .call(force.drag);
 	      
 	      function updateNodesLinksText()
@@ -633,6 +633,7 @@ function update()
 	      	node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; });
 	      
+	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
 			if( ! document.getElementById("hideLinks").checked )
@@ -693,7 +694,7 @@ function update()
 	 	var cell =row.cells[1];
 	 	cell.innerHTML = "" + numMarked;
 	 	
-	 	 
+	 	if( anyLabels  )
   var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
