@@ -630,6 +630,8 @@ function update()
 	{
 		var anyLabels = false;
 		
+		
+		
 		for( var x=0; ! anyLabels && x < labelCheckBoxes.length; x++)
 		{
 			var aCheckBox = document.getElementById(labelCheckBoxes[x]);
@@ -637,6 +639,34 @@ function update()
 			if( aCheckBox != null) 
 				anyLabels = aCheckBox.checked
 		}
+		
+		
+	   	var numMarked =0;
+  		var numVisible=0;
+	 	for (var i = 0; i < nodes.length; i++)
+	 	{
+	 		nodes[i].marked= false;
+	 		if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
+	 		{
+	 			nodes[i].marked = true;
+		 		numVisible++;
+		 		
+		 		if( nodes[i].children != null) 
+		 		{
+		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+		 			{
+		 				if( ! nodes[i].children[j].doNotShow )
+		 				{
+		 					nodes[i].marked=false;
+		 				}
+		 			}
+		 		}
+		 		
+		 		if( nodes[i].marked == true) 
+		 			numMarked = numMarked + 1
+	 		}
+	 	}
+	 		
 	
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
@@ -710,32 +740,6 @@ function update()
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
-	   	var numMarked =0;
-  		var numVisible=0;
-	 	for (var i = 0; i < nodes.length; i++)
-	 	{
-	 		nodes[i].marked= false;
-	 		if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
-	 		{
-	 			nodes[i].marked = true;
-		 		numVisible++;
-		 		
-		 		if( nodes[i].children != null) 
-		 		{
-		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
-		 			{
-		 				if( ! nodes[i].children[j].doNotShow )
-		 				{
-		 					nodes[i].marked=false;
-		 				}
-		 			}
-		 		}
-		 		
-		 		if( nodes[i].marked == true) 
-		 			numMarked = numMarked + 1
-	 		}
-	 	}
-	 	
 	 	var table = document.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
 	 	
 	 	table.rows[0].cells[1].innerHTML = "" + numVisible;
