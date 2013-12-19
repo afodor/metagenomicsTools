@@ -182,11 +182,15 @@ body {
 	<aside id="sidebar">
 			 	<h3> Visualization: </h3>
   	<input type="checkbox" id="animate"
-			onchange=redrawScreen() checked=true> animate</input>	
+			onchange=redrawScreen() checked=true> animate</input>
+	<br><input type="checkbox" id="hideLinks"
+			onchange=redrawScreen()> hideLinks</input>	
+    	
        <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			+"value="30" onchange=redrawScreen()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
 			"value="90" onchange=redrawScreen()></input>
+			
 			
 	</aside>
 	<section>
@@ -589,8 +593,11 @@ function update()
   	// Restart the force layout.
  	 force
       .nodes(nodes)
-      .links(links)
-      .start().gravity(document.getElementById("gravitySlider").value/100);
+      
+      if( ! document.getElementById("hideLinks").checked )
+      force.links(links)
+      
+      force.start().gravity(document.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
@@ -627,11 +634,14 @@ function update()
 	      .attr("cy", function(d) { return d.y; });
 	      
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			
+			if( ! document.getElementById("hideLinks").checked )
 			link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
 	      .attr("y1", function(d) { return d.source.y; })
 	      .attr("x2", function(d) { return d.target.x; })
 	      .attr("y2", function(d) { return d.target.y; });
+	      
 	      }
 	    
 		force.on("tick", updateNodesLinksText);
@@ -639,11 +649,13 @@ function update()
 	    
 	      
 	      	// Update the links
+	      	if( ! document.getElementById("hideLinks").checked )
   	link = vis.selectAll("line.link")
       .data(links.filter(myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
+	  if( ! document.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
@@ -691,7 +703,9 @@ function update()
                  .attr("fill", function(d) {return  getTextColor(d) } )	    
 
  // cleanup
+  if( ! document.getElementById("hideLinks").checked )
   link.exit().remove();
+  
   node.exit().remove();
   	
   	
