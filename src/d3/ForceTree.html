@@ -201,7 +201,7 @@ body {
 			+"value="30" onchange=redrawScreen()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
 			"value="90" onchange=redrawScreen()></input>
-			<input type="button" onclick=resort()>re-sort</input>
+			<br><button name= "button" onclick=resort()>re-sort</input>
 			
 	</aside>
 	<section>
@@ -216,6 +216,7 @@ body {
 
 function resort()
 {
+	setInitialPositions();
 }
 		
 document.getElementById("color1").style.visibility="hidden";
