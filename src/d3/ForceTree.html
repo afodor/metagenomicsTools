@@ -302,9 +302,9 @@ d3.json("testOperon.json", function(json) {
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
-			 " id=\"maxSize\" value=\"30\" onchange=redrawScreen()></input>" +
+			 " id=\"maxSize\" min=\"0\" max=\"100\" value=\"30\" onchange=redrawScreen()></input>" +
 			 "<br>Min size: <input type=\"number\"" + 
-			 " id=\"minSize\" value=\"1\" onchange=redrawScreen()></input>"   + 
+			 " id=\"minSize\" min=\"0\" max=\"100\"  value=\"1\" onchange=redrawScreen()></input>"   + 
 	"<br><input type=\"checkbox\"" + 
 			"id=\"logSize\" onchange=redrawScreen()>log</input>"
 			+"<input type=\"checkbox\"" + 
