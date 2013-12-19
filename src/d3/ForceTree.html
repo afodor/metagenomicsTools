@@ -177,9 +177,16 @@ body {
             </ul>
         </li>
         
+        <li ><a>Colors</a>
+        <ul id="ColorSubMenu">
+        </ul>
+        <li>
+        
     </ul>
 </div>
 	<aside id="sidebar">
+		<script type="text/javascript" src="jscolor/jscolor.js"></script>
+
 			 	<h3> Visualization: </h3>
   	<input type="checkbox" id="animate"
 			onchange=redrawScreen() checked=true> animate</input>
@@ -194,8 +201,16 @@ body {
 			
 	</aside>
 	<section>
+	<script type="text/javascript" src="jscolor/jscolor.js"></script>
+
+
+<li id="color1"> <input class="color" value="66ff00"> </li>	
+	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
+		
+		
+		
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w =  window.innerWidth-300,
     h = window.innerHeight-100,
@@ -208,7 +223,7 @@ var w =  window.innerWidth-300,
     var div = d3.select("body").append("div")   
     .attr("class", "tooltip")               
     
-    
+  var firstUpdate = true;
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
@@ -717,6 +732,9 @@ function update()
 	
 	if (! document.getElementById("animate").checked)
   		force.stop();
+  		
+  	document.getElementById("ColorSubMenu").appendChild(color1);
+  
 }
 
 function getTextColor(d)
@@ -786,7 +804,7 @@ function setInitialPositions()
 
 
 function initialize() {
-
+	
   flatten(root),
       
   initHasRun = true;
