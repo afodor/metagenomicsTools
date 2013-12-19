@@ -180,7 +180,7 @@ body {
         <li ><a>Colors</a>
         <ul id="ColorSubMenu">
         
-        <li><a>quantiative range</a><ul><li>From<input type="number" id="lowQuantRange" onchange=redrawScreen()></input></li>
+        <li><a>quantiative range...</a><ul><li>From<input type="number" id="lowQuantRange" onchange=redrawScreen()></input></li>
         			<li>To  <input type="number" id="highQuantRange" onchange=redrawScreen()></input></li></ul><li>
         
         </ul>
@@ -264,6 +264,30 @@ d3.json("testOperon.json", function(json) {
 });
   
   
+  function setQuantitativeDynamicRanges()
+  {
+  		var chosen = document.getElementById("colorByWhat");	
+  		
+  		var aRange = ranges[chosen.value];
+  		
+  		if( aRange == null)
+  		{
+  			document.getElementById("lowQuantRange").value = "categorical";
+  			document.getElementById("highQuantRange").value = "categorical";
+  			document.getElementById("lowQuantRange").enabled = false;
+  			document.getElementById("highQuantRange").enabled = false;
+  		}
+  		else
+  		{
+  			document.getElementById("lowQuantRange").value = aRange[0];
+  			document.getElementById("highQuantRange").value = aRange[1];
+  			
+  		}
+  
+  		if( ! firstUpdate ) 
+			redrawScreen();  	
+  }
+  
   function addDynamicMenuContent()
   {
   	if( ! firstFlatten) 
@@ -331,7 +355,7 @@ d3.json("testOperon.json", function(json) {
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
-  	selectHTML =  "<select id=\"colorByWhat\" onchange=redrawScreen()>"
+  	selectHTML =  "<select id=\"colorByWhat\" onchange=setQuantitativeDynamicRanges()>"
   	
   	selectHTML += "<option value=\"nodeDepth" + "\">" + "node depth"+"</option>"
 			
@@ -746,7 +770,8 @@ function update()
   	// once everything else has settled in...
 	if( firstUpdate ) 
 	{
-		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
+		setQuantitativeDynamicRanges();
+  		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
 		document.getElementById("color1").style.visibility="visible";
 		
 		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color2"));
@@ -833,62 +858,66 @@ function initialize() {
    update();
 }
 
-function color(d) {
+function getQuantiativeColor(d)
+{
+	var chosen = document.getElementById("colorByWhat").value;
+	
+	var lowColor = "#" + document.getElementById("quantColorLow").value;
+	var highColor ="#" + document.getElementById("quantColorHigh").value; 
+		
+	var aRange = []
+	aRange.push(document.getElementById("lowQuantRange").value);
+	aRange.push(document.getElementById("highQuantRange").value);
+		
+	if( lowColor > highColor) 
+	{
+		var temp = lowColor
+		lowColor=  highColor;
+		highColor = temp;
+	}
+		
+	if( document.getElementById("logColor").checked) 
+	{
+		aVal =d[chosen]; 
+		maxScale = Math.log(aRange[1]) / Math.LN10; 
+		
+		if( aVal ==0)
+				aVal = maxScale;
+		else
+			aVal = Math.log(aVal) / Math.LN10; 
+			
+		var aScale= d3.scale.linear().domain([0,maxScale]).range([lowColor,highColor]).clamp(true);
+	  	return aScale(aVal);
+	}
+	else
+	{
+		var aScale= d3.scale.linear().domain(aRange).range([lowColor,highColor]).clamp(true);
+		return aScale(d[chosen]);	
+	}
+		
+}
+
+function color(d) 
+{
 	
 	var chosen = document.getElementById("colorByWhat").value;
 	
-	if( colorScales[chosen] != null) 
-	{
-		return colorScales[chosen]( d[chosen] );
-	}
-
 	if( ranges[chosen] != null)
-	{
-		var lowColor = "#" + document.getElementById("quantColorLow").value;
-		var highColor ="#" + document.getElementById("quantColorHigh").value; 
-		
-		if( lowColor > highColor) 
-		{
-			var temp = lowColor
-			lowColor=  highColor;
-			highColor = temp;
-		}
-		
-		if( document.getElementById("logColor").checked) 
-		{
-			aVal =d[chosen]; 
-			maxScale = Math.log(ranges[chosen][1]) / Math.LN10; 
-			if( aVal ==0)
-				aVal = maxScale;
-			else
-				aVal = Math.log(aVal) / Math.LN10; 
-			
-			var aScale= d3.scale.linear().domain([0,maxScale]).range([lowColor,highColor]).clamp(true);
-	  		return aScale(aVal);
-		}
-		else
-		{
-			var aScale= d3.scale.linear().domain(ranges[chosen]).range([lowColor,highColor]).clamp(true);
-			return aScale(d[chosen]);	
-		}
-		
+		return getQuantiativeColor(d);
 	
+	if( colorScales[chosen] != null) 
+		return colorScales[chosen]( d[chosen] );
 		
-	}
-	
-	
 	if( d._children != null)
-		return  "#3182bd";
+		return  "#3182bd";  // bright blue
 	
 	if ( d.highlight == true) 
-		return "#fd8d3c";
+		return "#fd8d3c"; // orange
 
 	if(  d.marked )
-		return "#000000";
+		return "#000000";  // black
 		
-		//return "#fd8d3c"; orange
-	// return "#c6dbef"; background blue
-	//return "#3182bd"; bright blue
+		
 	return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
 		
 }
