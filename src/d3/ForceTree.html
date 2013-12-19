@@ -201,7 +201,7 @@ body {
 			+"value="30" onchange=redrawScreen()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
 			"value="90" onchange=redrawScreen()></input>
-			<br><button name= "button" onclick=resort()>re-sort</input>
+			<br><button name= "button" onclick=resort()>re-sort</button> on 
 			
 	</aside>
 	<section>
@@ -216,6 +216,15 @@ body {
 
 function resort()
 {
+  	var compareChoice =  document.getElementById("sortByWhat").value;
+  
+	nodes.sort( function(a,b) {
+ 					 if (a[compareChoice]< b[compareChoice])
+     						return -1;
+  					if (a[compareChoice]> b[compareChoice])
+    					return 1;
+  					return 0; } );
+	
 	setInitialPositions();
 }
 		
@@ -262,8 +271,6 @@ d3.behavior.zoom(vis);
 d3.json("testOperon.json", function(json) {
   root = json;
   root.fixed = true;
-  root.x = w / 2;
-  root.y = h / 2 - 80;
   
   initialize();
 });
@@ -300,8 +307,9 @@ d3.json("testOperon.json", function(json) {
   	
   	var mySidebar = document.getElementById("sidebar");
   	
-             
-  	
+   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=sort())></select>"
+	
+   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=redrawScreen()>"
 	selectHTML +=  "</select>"	
@@ -358,6 +366,7 @@ d3.json("testOperon.json", function(json) {
   				}
   				
   				document.getElementById("sizeByWhat").innerHTML += selectHTML
+  				document.getElementById("sortByWhat").innerHTML += selectHTML
 	
   		}
 	
@@ -626,15 +635,6 @@ function getToolTipText(d)
   	return aVal
 }
 
-function compare(a,b,chosen ) {
-  if (a[chosen]< b[chosen])
-     return -1;
-  if (a[chosen]> b[chosen])
-    return 1;
-  return 0;
-}
-
-
 var updateNum=0;
 function update() 
 {
@@ -858,6 +858,9 @@ function myMouseLeave()
 
 function setInitialPositions()
 {
+	root.x = w / 2;
+  	root.y = h / 2 - 80;
+	
 	var radius = Math.min(w,h)/2 - 300;
 	
 	for( var x=0; x < nodes.length; x++) 
@@ -866,6 +869,7 @@ function setInitialPositions()
 		{
 			nodes[x].x = radius * Math.cos( (nodes.length-x) / 360.0) + root.x;
 			nodes[x].y = radius * Math.sin( (nodes.length-x) / 360.0) + root.y
+			nodes[x].fixed=false;
 		}
 	}
 }
