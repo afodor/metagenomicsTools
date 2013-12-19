@@ -204,13 +204,14 @@ body {
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 
 
-<li id="color1"> <input class="color" value="66ff00"> </li>
-	
+<li id="color1"> Quantitiatve low<input class="color" value="ff0000"> </li>
+<li id="color2"> Quantitiatve high<input class="color" value="0000ff"> </li>	
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
 		
 document.getElementById("color1").style.visibility="hidden";
+document.getElementById("color2").style.visibility="hidden";
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
 var w =  window.innerWidth-300,
     h = window.innerHeight-100,
@@ -729,12 +730,24 @@ function update()
   	
 	dirty = false;
 	}
-	
+
 	if (! document.getElementById("animate").checked)
   		force.stop();
-  		
-  	document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
-	document.getElementById("color1").style.visibility="visible";
+  	
+  	// the color choosers don't work unless they are initialized first
+  	// hence they are initialized in the "section" and then moved to the appropriate menu
+  	// once everything else has settled in...
+	if( firstUpdate ) 
+	{
+		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
+		document.getElementById("color1").style.visibility="visible";
+		
+		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color2"));
+		document.getElementById("color2").style.visibility="visible";
+		
+		firstUpdate = false;
+	}	
+  	
   
 }
 
