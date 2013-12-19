@@ -545,7 +545,8 @@ function getRadiusVal(d)
 	}
 	else //ordinal values - much easier
 	{
-		aScale = ordinalScales[propToSize];
+		aScale = ordinalScales[propToSize].range([0,
+	  					document.getElementById("maxSize").value])
 		returnVal =aScale(d[propToSize]);
 	}
 	
