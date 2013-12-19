@@ -231,7 +231,7 @@ var vis = d3.select("body").append("svg:svg")
     
 d3.behavior.zoom(vis);
 
-d3.json("aTree2.json", function(json) {
+d3.json("testOperon.json", function(json) {
   root = json;
   root.fixed = true;
   root.x = w / 2;
