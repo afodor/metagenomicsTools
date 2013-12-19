@@ -621,6 +621,7 @@ function getToolTipText(d)
   	return aVal
 }
 
+var updateNum=0;
 function update() 
 {
 	if( ! initHasRun )
@@ -628,9 +629,9 @@ function update()
  
 	if( dirty ) 
 	{
+		console.log("Full update " + ++updateNum);
+		dirty = false;
 		var anyLabels = false;
-		
-		
 		
 		for( var x=0; ! anyLabels && x < labelCheckBoxes.length; x++)
 		{
@@ -666,7 +667,12 @@ function update()
 		 			numMarked = numMarked + 1
 	 		}
 	 	}
-	 		
+	 	
+	 	for (var i = 0; i < nodes.length; i++)
+	 	{
+	 		nodes[i].thisNodeColor = color(nodes[i]);
+	 		nodes[i].thisNodeRadius = getRadiusVal(nodes[i]);
+	 	}	
 	
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
@@ -693,7 +699,7 @@ function update()
 		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
-	      .style("fill", color)
+	      .style("fill", function(d) { return d.thisNodeColor} )
 	      .style("opacity",document.getElementById("opacitySlider").value/100 );
 	
 	  // Enter any new nodes.
@@ -701,8 +707,8 @@ function update()
 	      .attr("class", "node")
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
-	      .attr("r", function(d) {  return getRadiusVal(d)})
-	      .style("fill", color).
+	      .attr("r", function(d) {  return d.thisNodeRadius})
+	      .style("fill", function(d) { return d.thisNodeColor}).
 	      style("opacity",document.getElementById("opacitySlider").value/100 ) 
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
@@ -762,10 +768,6 @@ function update()
   link.exit().remove();
   
   node.exit().remove();
-  	
-  	
-  	
-	dirty = false;
 	}
 
 	if (! document.getElementById("animate").checked)
