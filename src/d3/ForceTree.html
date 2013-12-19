@@ -329,17 +329,20 @@ d3.json("testOperon.json", function(json) {
 	mySidebar.innerHTML += "<h3> Color: <h3>";
   	selectHTML =  "<select id=\"colorByWhat\" onchange=redrawScreen()>"
   	
-	selectHTML += "<option value=\"colorByMarked" 
-  				+ "\">" + "marked"+"</option>"
-  			
+  	selectHTML += "<option value=\"nodeDepth" + "\">" + "node depth"+"</option>"
+			
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
-  				&& propertyName != "children" && propertyName != "fixed" )
+  				&& propertyName != "children" && propertyName != "fixed" && propertyName != "nodeDepth" )
   		{
   			selectHTML += "<option value=\"" + propertyName
   				+ "\">" + propertyName   +"</option>"
   						
   		}
+  	
+  	selectHTML += "<option value=\"colorByMarked" 
+  				+ "\">" + "marked"+"</option>"
+  	
   	selectHTML +=  "</select>"
   	mySidebar.innerHTML += selectHTML
   	mySidebar.innerHTML += "<br><input type=\"checkbox\"" + 
