@@ -201,7 +201,7 @@ body {
 			+"value="30" onchange=redrawScreen()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
 			"value="90" onchange=redrawScreen()></input>
-			
+			<input type="button" onclick=resort()>re-sort</input>
 			
 	</aside>
 	<section>
@@ -213,6 +213,10 @@ body {
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
+
+function resort()
+{
+}
 		
 document.getElementById("color1").style.visibility="hidden";
 document.getElementById("color2").style.visibility="hidden";
@@ -620,6 +624,15 @@ function getToolTipText(d)
   				
   	return aVal
 }
+
+function compare(a,b,chosen ) {
+  if (a[chosen]< b[chosen])
+     return -1;
+  if (a[chosen]> b[chosen])
+    return 1;
+  return 0;
+}
+
 
 var updateNum=0;
 function update() 
