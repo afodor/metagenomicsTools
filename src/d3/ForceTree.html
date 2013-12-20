@@ -188,8 +188,10 @@ body {
         
         <li><a>Plot</a> <ul>
         	<li><button name= "button" onclick=reVis()>refresh graph</button></li>
-        	<li><select id="graphType"><option value="ForceTree" onchange=reVis()>Force Tree</option><option value="scatter">Scatter Plot</option></select></li></ul> </li>
-        
+        	<li><select id="graphType"><option value="ForceTree" onchange=reVis()>Force Tree</option><option value="scatter">Scatter Plot</option></select></li>
+        	<li>scatter x:<select id="scatterX"></select></li>
+        	<li>scatter y:<select id="scatterY"></select></li>
+        </ul> </li>
     </ul>
 </div>
 	<aside id="sidebar">
@@ -292,12 +294,11 @@ function reVis()
 	checkForStop()
 	vis.remove();
 	reforce();
-	setInitialPositions()
-	
-	checkForStop();
-	
 	dirty=true;
     update();
+	setInitialPositions();
+	update();
+	
 }
   
   
@@ -391,7 +392,8 @@ function reVis()
   				
   				document.getElementById("sizeByWhat").innerHTML += selectHTML
   				document.getElementById("sortByWhat").innerHTML += selectHTML
-	
+  				document.getElementById("scatterX").innerHTML += selectHTML
+  				document.getElementById("scatterY").innerHTML += selectHTML	
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
