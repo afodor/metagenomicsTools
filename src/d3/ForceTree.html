@@ -268,8 +268,7 @@ function reforce()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]).gravity(document.getElementById("gravitySlider").value/100)
     
-	drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
-    
+    drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
 
 	vis = d3.select("body").append("svg:svg")
     .attr("width", w)
@@ -289,9 +288,13 @@ d3.json("testOperon.json", function(json) {
 
 function reVis()
 {
+
+	checkForStop()
 	vis.remove();
 	reforce();
 	setInitialPositions()
+	
+	checkForStop();
 	
 	dirty=true;
     update();
@@ -723,6 +726,8 @@ function update()
 		}
 		
   	// Restart the force layout.
+ 	 
+ 	 if( document.getElementById("graphType").value == "ForceTree"  ) 
  	 force
       .nodes(nodes)
       
@@ -748,23 +753,37 @@ function update()
 	      style("opacity",document.getElementById("opacitySlider").value/100 ) 
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
-	      .call(force.drag);
+	      
+	      if( document.getElementById("graphType").value == "ForceTree"  )
+	      	node.call(force.drag);
 	      
 	      function updateNodesLinksText()
 	      {
+	      
+	      if( document.getElementById("graphType").value == "ForceTree"  )
+	      {
 	      	node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; });
-	      
+	      }
+	      else if( document.getElementById("graphType").value == "scatter"  )
+	      {
+	      	node.attr("cx", function(d) {   return 400 * Math.random(); })
+	      .attr("cy", function(d) {   return 400 * Math.random(); });
+	      }
+	      	
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
 		if( document.getElementById("graphType").value == "ForceTree"  && ! document.getElementById("hideLinks").checked )
-			link.attr("x1", function(d) { return d.source.x; })
+		{
+				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
 	      .attr("y1", function(d) { return d.source.y; })
 	      .attr("x2", function(d) { return d.target.x; })
 	      .attr("y2", function(d) { return d.target.y; });
-	      
+		}
+		
+		  	checkForStop();
 	      }
 	    
 		force.on("tick", updateNodesLinksText);
@@ -806,10 +825,8 @@ function update()
   
   node.exit().remove();
 	}
-
-	if ( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("animate").checked)
-  		force.stop();
   	
+  	checkForStop();
   	// the color choosers don't work unless they are initialized first
   	// hence they are initialized in the "section" and then moved to the appropriate menu
   	// once everything else has settled in...
@@ -826,6 +843,14 @@ function update()
 	}	
   	
   
+}
+
+function checkForStop()
+{
+	
+	if ( document.getElementById("graphType").value != "ForceTree" || ! document.getElementById("animate").checked)
+  		force.stop();
+	
 }
 
 function getTextColor(d)
