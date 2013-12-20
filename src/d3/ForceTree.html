@@ -187,6 +187,7 @@ body {
         <li>
         
         <li><a>Plot</a> <ul>
+        	<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
         	<li><button name= "button" onclick=reVis()>refresh graph</button></li>
         	<li><select id="graphType"><option value="ForceTree" onchange=reVis()>Force Tree</option><option value="scatter">Scatter Plot</option></select></li>
         	<li>scatter x:<select id="scatterX"></select></li>
@@ -219,6 +220,12 @@ body {
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript">
+
+function spawnNewWindow()
+{
+	newWindow = window.open("","Ratting","width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
+	newWindow.document.write("Hello world");
+}
 
 function resort()
 {
