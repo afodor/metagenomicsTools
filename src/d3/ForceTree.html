@@ -235,9 +235,7 @@ function resort()
 document.getElementById("color1").style.visibility="hidden";
 document.getElementById("color2").style.visibility="hidden";
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
-var w =  window.innerWidth-300,
-    h = window.innerHeight-100,
-    nodes, 
+var w,h,nodes, 
     links,
     link,
     root;
@@ -257,18 +255,30 @@ var w =  window.innerWidth-300,
   var labelCheckBoxes=[];  
  var dirty = true;
     
- 
-var force = d3.layout.force()
+var force, drag, vis;
+
+
+function reforce()
+{
+	w =  window.innerWidth-300,
+    h = window.innerHeight-100,
+    
+	force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]).gravity(document.getElementById("gravitySlider").value/100)
     
-var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
+	drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
     
 
-var vis = d3.select("body").append("svg:svg")
+	vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
+	 
+}
+
+reforce();
+ 
 
 d3.json("testOperon.json", function(json) {
   root = json;
@@ -280,14 +290,7 @@ d3.json("testOperon.json", function(json) {
 function reVis()
 {
 	vis.remove();
-	w =  window.innerWidth-300;
-    h = window.innerHeight-100;
-    
-    
-	vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-	
+	reforce();
 	setInitialPositions()
 	
 	dirty=true;
