@@ -6,17 +6,24 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 
 </head>
-<body>
+<body onload=callBackToParent()>
 <script charset="utf-8" src="d3.v3.min.js"></script>
 <script>
-	
+  		var childFoo =5;
+  	
+  		function callBackToParent()
+  		{
+  			opener.checkDaughter();
+  		}
+  		
   	</script>
+	
 
   	<section id="mySection">
-  		var childFoo =5;
-		Hello daughter!
+  		Hello daughter!
 		<input type="checkbox" id="animate"
-			onchange=redrawScreen() checked=true> animate</input>		
+			onchange=redrawScreen() checked=true> animate</input>	
+				
 	</section>
 </body>
 </html>
