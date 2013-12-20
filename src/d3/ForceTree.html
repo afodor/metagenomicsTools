@@ -698,16 +698,20 @@ function update()
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
-		links = d3.layout.tree().links(nodes);
-    
+		if( document.getElementById("graphType").value == "ForceTree") 
+		{
+				links = d3.layout.tree().links(nodes);
+		}
+		
   	// Restart the force layout.
  	 force
       .nodes(nodes)
       
-      if( ! document.getElementById("hideLinks").checked )
+      if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
       force.links(links)
       
-      force.start().gravity(document.getElementById("gravitySlider").value/100);
+      if( document.getElementById("graphType").value == "ForceTree" )
+      	force.start().gravity(document.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
@@ -735,7 +739,7 @@ function update()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-			if( ! document.getElementById("hideLinks").checked )
+			if( document.getElementById("graphType").value == "ForceTree"  && ! document.getElementById("hideLinks").checked )
 			link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
 	      .attr("y1", function(d) { return d.source.y; })
@@ -745,17 +749,18 @@ function update()
 	      }
 	    
 		force.on("tick", updateNodesLinksText);
+		
 		force.on("end", updateNodesLinksText);
 	    
 	      
 	      	// Update the links
-	      	if( ! document.getElementById("hideLinks").checked )
-  	link = vis.selectAll("line.link")
+	      	if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+  		link = vis.selectAll("line.link")
       .data(links.filter(myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( ! document.getElementById("hideLinks").checked )
+	  if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
@@ -777,13 +782,13 @@ function update()
                  .attr("fill", function(d) {return  getTextColor(d) } )	    
 
  // cleanup
-  if( ! document.getElementById("hideLinks").checked )
+  if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
 	}
 
-	if (! document.getElementById("animate").checked)
+	if ( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("animate").checked)
   		force.stop();
   	
   	// the color choosers don't work unless they are initialized first
