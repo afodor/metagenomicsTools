@@ -186,6 +186,8 @@ body {
         </ul>
         <li>
         
+        <li><a>Plot</a></li>
+        
     </ul>
 </div>
 	<aside id="sidebar">
@@ -309,7 +311,6 @@ d3.json("testOperon.json", function(json) {
   	
    	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=sort())></select>"
 	
-   	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=redrawScreen()>"
 	selectHTML +=  "</select>"	
@@ -394,10 +395,7 @@ d3.json("testOperon.json", function(json) {
 	
   	mySidebar.innerHTML += "<input type=\"checkbox\" id=\"textIsBlack\"" + 
 				"onchange=redrawScreen()>text always black</input>";
-  	
-  	
-        
-        
+  	    
   	var labelHTML = "<li><a>Labels</a><ul>";
   	labelHTML += "<li><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
 			"onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>"	
