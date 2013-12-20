@@ -1,17 +1,39 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
-<style>/* demo page styles */ <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
-/* demo page styles */
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<style type="text/css">
+circle.node {
+	cursor: point;
+	stroke: #000;
+	stroke-width: .5px;
+}
+
+line.link {
+	fill: none;
+	stroke: #9ecae1;
+	stroke-width: 1.5px;
+}
+
+#sidebar {
+	float: right;
+	border: 1px solid red;c
+	width: 200px;
+}
+
+<!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
 body {
     background:#eee;
     margin:0;
     padding:0;
 }
 .example {
-    background:#fff url(../images/clouds-in-blue-sky.jpg);
-    width:770px;
-    height:570px;
+    background:#fff;
+    float:left
+    width:600px;
+    height:25px;
     border:0px #000 solid;
     margin:0px auto;
     padding:0px;
@@ -26,7 +48,7 @@ body {
     width:100%;
     margin:0px auto;
     padding:0;
-    background:#335599 url(../images/bg.png) repeat-x 0 -110px;
+    background:#335599 repeat-x 0 -110px;
 
     border-radius:0px; /*some css3*/
     -moz-border-radius:0px;
@@ -48,15 +70,15 @@ body {
     display:block;
     padding:8px 20px;
 
-    border-radius:10px; /*some css3*/
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:100px; /*some css3*/
+    -moz-border-radius:100px;
+    -webkit-border-radius:100px;
     text-shadow:0 2px 2px rgba(0,0,0, .7);
 }
 
 /* selected menu element */
 #nav .current a, #nav li:hover > a {
-    background:#7788aa url(../images/bg.png) repeat-x 0 -20px;
+    background:#7788aa repeat-x 0 -20px;
     color:#000;
     border-top:1px solid #f8f8f8;
 
@@ -73,7 +95,7 @@ body {
     color:#000;
 }
 #nav ul li a:hover {
-    background:#335599 url(../images/bg.png) repeat-x 0 -100px;
+    background:#335599 repeat-x 0 -100px;
     color:#fff;
 
     border-radius:10px; /*some css3*/
@@ -106,7 +128,7 @@ body {
     padding:0;
     width:175px;
     position:absolute;
-    background:#aabbcc url(../images/bg.png) repeat-x 0 0;
+    background:#aabbcc repeat-x 0 0;
     border:1px solid #7788aa;
 
     border-radius:10px; /*some css3*/
@@ -133,69 +155,19 @@ body {
     left:160px;
     top:0px;
 }
-
 </style>
 </head>
 <body>
-<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
-
-<!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
-
-<div class="example">
-    <ul id="nav">
-        <li class="current"><a href="http://www.script-tutorials.com/">Home</a></li>
-        <li><a href="http://www.script-tutorials.com/">Tutorials</a>
-            <ul>
-            	<li><input type="checkbox" id="labelOnlyTNodes"
-			onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>
-                <li><a href="http://www.script-tutorials.com/category/html-css/">HTML / CSS</a></li>
-                <li><a href="http://www.script-tutorials.com/category/jquery/">JS / jQuery</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/category/jquery/">jQuery</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/javascript/">JS</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
-                <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
-                <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
-                <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
-            </ul>
-        </li>
-        <li><a href="http://www.script-tutorials.com/category/resources/">Resources</a>
-            <ul>
-                <li><a href="http://www.script-tutorials.com/category/resources/">By category</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/category/php/">PHP</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/mysql/">MySQL</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/xslt/">XSLT</a></li>
-                        <li><a href="http://www.script-tutorials.com/category/ajax/">Ajax</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://www.script-tutorials.com/category/resources/">By tag name</a>
-                    <ul>
-                        <li><a href="http://www.script-tutorials.com/tag/captcha/">captcha</a></li>
-                        <li><a href="http://www.script-tutorials.com/tag/gallery/">gallery</a></li>
-                        <li><a href="http://www.script-tutorials.com/tag/animation/">animation</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li><a href="http://www.script-tutorials.com/about/">About</a></li>
-        <li><a href="http://www.script-tutorials.com/creating-css3-dropdown-menu/">Go Back To The Tutorial</a></li>
-        <li><input class="color">try me</input></li>
-    </ul>
-</div>
-
-
-<script type="text/javascript" src="d3.v3.js"></script>
-		<script type="text/javascript">   </script>
-		
-		<section>
-		Hello world!
-		</section>
-		<aside>
-		<script type="text/javascript" src="jscolor/jscolor.js"></script>
-		<ul><li><a><input class="color">try me</ul></li></a>
-		</aside>
+<script charset="utf-8" src="d3.v3.min.js"></script>
+<script>
+var root;
+  
+   d3.json("testOperon.json", function(json) {
+  	root = json;
+  	root.fixed = true;});
+	console.log(root);
+		</script>
+	</section>
 </body>
 </html>
+
