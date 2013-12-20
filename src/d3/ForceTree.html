@@ -186,8 +186,9 @@ body {
         </ul>
         <li>
         
-        <li><a>Plot</a> <ul><li>
-        	<select id="graphType"><option value="ForceTree">Force Tree</option><option value="scatter">Scatter Plot</option></select></li></ul> </li>
+        <li><a>Plot</a> <ul>
+        	<li><button name= "button" onclick=reVis()>refresh graph</button></li>
+        	<li><select id="graphType"><option value="ForceTree" onchange=reVis()>Force Tree</option><option value="scatter">Scatter Plot</option></select></li></ul> </li>
         
     </ul>
 </div>
@@ -267,9 +268,7 @@ var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
-    .attr("height", h);
-    
-d3.behavior.zoom(vis);
+    .attr("height", h).attr("id", "mySVGID");
 
 d3.json("testOperon.json", function(json) {
   root = json;
@@ -277,6 +276,19 @@ d3.json("testOperon.json", function(json) {
   
   initialize();
 });
+
+function reVis()
+{
+	vis.remove();
+	w =  window.innerWidth-300,
+    h = window.innerHeight-100
+	vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h).attr("id", "mySVGID");
+	
+	dirty=true;
+    update();
+}
   
   
   function setQuantitativeDynamicRanges()
@@ -739,7 +751,7 @@ function update()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-			if( document.getElementById("graphType").value == "ForceTree"  && ! document.getElementById("hideLinks").checked )
+		if( document.getElementById("graphType").value == "ForceTree"  && ! document.getElementById("hideLinks").checked )
 			link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
 	      .attr("y1", function(d) { return d.source.y; })
