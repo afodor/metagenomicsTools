@@ -268,7 +268,7 @@ var drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
-    .attr("height", h).attr("id", "mySVGID");
+    .attr("height", h)
 
 d3.json("testOperon.json", function(json) {
   root = json;
@@ -280,11 +280,15 @@ d3.json("testOperon.json", function(json) {
 function reVis()
 {
 	vis.remove();
-	w =  window.innerWidth-300,
-    h = window.innerHeight-100
+	w =  window.innerWidth-300;
+    h = window.innerHeight-100;
+    
+    
 	vis = d3.select("body").append("svg:svg")
     .attr("width", w)
-    .attr("height", h).attr("id", "mySVGID");
+    .attr("height", h)
+	
+	setInitialPositions()
 	
 	dirty=true;
     update();
