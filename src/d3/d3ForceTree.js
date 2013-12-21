@@ -47,10 +47,7 @@ function StaticHolder()
 } 
 
 
-function getElement(aDocument,name )
-{
-	return aDocument.getElementById(name);
-}
+
 
 // modded from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
 function getQueryStrings(aWindow) {
@@ -108,7 +105,7 @@ if( queryStrings )
 this.resort = function()
 {
 	
-  	var compareChoice =  getElement(aDocument,"sortByWhat").value;
+  	var compareChoice =  aDocument.getElementById("sortByWhat").value;
   
 	nodes.sort( function(a,b) {
  					 if (a[compareChoice]< b[compareChoice])
@@ -162,7 +159,7 @@ this.reforce = function()
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.nodeDepth-16)/16 : 30; })
-    .size([w, h - 60]).gravity(getElement(aDocument,"gravitySlider").value/100)
+    .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
     
     drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
 
@@ -219,7 +216,7 @@ this.reVisOne = function()
   
   this.setQuantitativeDynamicRanges = function()
   {
-  		var chosen = getElement(aDocument,"colorByWhat");	
+  		var chosen = aDocument.getElementById("colorByWhat");	
   		
   		var aRange = statics.getRanges()[chosen.value];
   		
@@ -227,15 +224,15 @@ this.reVisOne = function()
   		{
 	  		if( aRange == null)
 	  		{
-	  			getElement(aDocument,"lowQuantRange").value = "categorical";
-	  			getElement(aDocument,"highQuantRange").value = "categorical";
-	  			getElement(aDocument,"lowQuantRange").enabled = false;
-	  			getElement(aDocument,"highQuantRange").enabled = false;
+	  			aDocument.getElementById("lowQuantRange").value = "categorical";
+	  			aDocument.getElementById("highQuantRange").value = "categorical";
+	  			aDocument.getElementById("lowQuantRange").enabled = false;
+	  			aDocument.getElementById("highQuantRange").enabled = false;
 	  		}
 	  		else
 	  		{
-	  			getElement(aDocument,"lowQuantRange").value = aRange[0];
-	  			getElement(aDocument,"highQuantRange").value = aRange[1];
+	  			aDocument.getElementById("lowQuantRange").value = aRange[0];
+	  			aDocument.getElementById("highQuantRange").value = aRange[1];
 	  			
 	  		}
   		}
@@ -248,7 +245,7 @@ this.reVisOne = function()
   	if( ! firstFlatten || ! isRunFromTopWindow) 
   		return;
   	
-  	var mySidebar = getElement(aDocument,"sidebar");
+  	var mySidebar = aDocument.getElementById("sidebar");
   	
    	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=myGo.sort())></select>"
 	
@@ -301,10 +298,10 @@ this.reVisOne = function()
   					statics.getColorScales()[propertyName] = d3.scale.category20b();
   				}
   				
-  				getElement(aDocument,"sizeByWhat").innerHTML += selectHTML
-  				getElement(aDocument,"sortByWhat").innerHTML += selectHTML
-  				getElement(aDocument,"scatterX").innerHTML += selectHTML
-  				getElement(aDocument,"scatterY").innerHTML += selectHTML	
+  				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
+  				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
+  				aDocument.getElementById("scatterX").innerHTML += selectHTML
+  				aDocument.getElementById("scatterY").innerHTML += selectHTML	
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
@@ -387,21 +384,21 @@ this.reVisOne = function()
   
   	for( var x =0; x < nodes.length; x++)
   	{
-  		if( nodes[x].nodeDepth == getElement(aDocument,"depthFilter").value) 
+  		if( nodes[x].nodeDepth == aDocument.getElementById("depthFilter").value) 
   		{	
   			topNodes.push(nodes[x]);
   		}
   	}
   	
   	if( isRunFromTopWindow ) 
-  		getElement(aDocument,"depthFilterRange").max = topNodes.length;
+  		aDocument.getElementById("depthFilterRange").max = topNodes.length;
   	
   	this.showOnlyMarked();
   }
   
   this.showOnlyMarked = function()
   {
-  	var aVal = getElement(aDocument,"depthFilterRange").value;
+  	var aVal = aDocument.getElementById("depthFilterRange").value;
   	
   	if( aVal==0)
   	{	
@@ -448,32 +445,32 @@ this.reVisOne = function()
    
   this.redrawAScreen = function()
   {
-  	getElement(aDocument,"logSize").enabled=true;
-  	aBox = getElement(aDocument,"logColor").enabled=true;
+  	aDocument.getElementById("logSize").enabled=true;
+  	aBox = aDocument.getElementById("logColor").enabled=true;
   
   	/* right now these are getting stuck in the off position
   	// can't log an ordinal color scale...
-  	if(  statics.getOrdinalScales()[ getElement(aDocument,"sizeByWhat").value] != null )  
+  	if(  statics.getOrdinalScales()[ aDocument.getElementById("sizeByWhat").value] != null )  
   	{
-  		aBox = getElement(aDocument,"logSize");
+  		aBox = aDocument.getElementById("logSize");
   		aBox.checked=false;
   		aBox.enabled=false;
   	}
   	else
   	{
-  		getElement(aDocument,"logSize").enabled=true;
+  		aDocument.getElementById("logSize").enabled=true;
   	}
   	
   	// can't log an ordinal color scale...
-  	if(  statics.getOrdinalScales()[ getElement(aDocument,"colorByWhat").value] != null )  
+  	if(  statics.getOrdinalScales()[ aDocument.getElementById("colorByWhat").value] != null )  
   	{
-  		aBox = getElement(aDocument,"logColor");
+  		aBox = aDocument.getElementById("logColor");
   		aBox.checked=false;
   		aBox.enabled=false;
   	}
   	else
   	{
-  		aBox = getElement(aDocument,"logColor").enabled=true;
+  		aBox = aDocument.getElementById("logColor").enabled=true;
   	}
   	*/
   	
@@ -484,14 +481,14 @@ this.reVisOne = function()
 
 this.getLabelText = function(d)
 {	
-	if( d.marked == false && getElement(aDocument,"labelOnlyTNodes").checked  )
+	if( d.marked == false && aDocument.getElementById("labelOnlyTNodes").checked  )
 		return "";
 	
 	var returnString ="";
 	
 	for( var propertyName in nodes[0])
 	{
-		var aCheckBox = getElement(aDocument,"label" + propertyName);
+		var aCheckBox = aDocument.getElementById("label" + propertyName);
 		if( aCheckBox != null &&  aCheckBox.checked)
 		{
 			returnString += d[propertyName] + " ";
@@ -527,13 +524,13 @@ this.isNumber = function (n) {
 
 this.getRadiusVal= function(d)
 {
-	var propToSize = getElement(aDocument,"sizeByWhat").value
-	var returnVal = getElement(aDocument,"maxSize").value;
+	var propToSize = aDocument.getElementById("sizeByWhat").value
+	var returnVal = aDocument.getElementById("maxSize").value;
 	
 	// quantitative values
 	if( statics.getRanges()[propToSize] != null)
 	{
-		if( getElement(aDocument,"logSize").checked) 
+		if( aDocument.getElementById("logSize").checked) 
 		{
 			// d3's log scale yields problems with p=0 in range so we 
 			// covert everything to log and feed it to the linear scale..
@@ -542,15 +539,15 @@ this.getRadiusVal= function(d)
 			{
 				maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
 			
-				var aScale= d3.scale.linear().domain([0,maxScale]).range([getElement(aDocument,"minSize").value,
-	  					getElement(aDocument,"maxSize").value]).clamp(true);
+				var aScale= d3.scale.linear().domain([0,maxScale]).range([aDocument.getElementById("minSize").value,
+	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
 			}
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(statics.getRanges()[propToSize]).range([getElement(aDocument,"minSize").value,
-	  					getElement(aDocument,"maxSize").value]).clamp(true);
+			var aScale= d3.scale.linear().domain(statics.getRanges()[propToSize]).range([aDocument.getElementById("minSize").value,
+	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  		returnVal = aScale(d[propToSize]);
 		}
 		
@@ -558,16 +555,16 @@ this.getRadiusVal= function(d)
 	}
 	else //ordinal values 
 	{
-		statics.getOrdinalScales()[propToSize].range([getElement(aDocument,"minSize").value
-  								,getElement(aDocument,"maxSize").value]); 
+		statics.getOrdinalScales()[propToSize].range([aDocument.getElementById("minSize").value
+  								,aDocument.getElementById("maxSize").value]); 
   					
 		returnVal = statics.getOrdinalScales()[propToSize](d[propToSize]);
 		
 	}
 	
-	if( getElement(aDocument,"invertSize").checked ) 
+	if( aDocument.getElementById("invertSize").checked ) 
 	{
-		returnVal = getElement(aDocument,"maxSize").value - returnVal;
+		returnVal = aDocument.getElementById("maxSize").value - returnVal;
 	}
 	
 	return returnVal;
@@ -587,13 +584,13 @@ this.update = function()
 		
 		for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
 		{
-			var aCheckBox = getElement(aDocument,statics.getLabelCheckBoxes()[x]);
+			var aCheckBox = aDocument.getElementById(statics.getLabelCheckBoxes()[x]);
 			
 			if( aCheckBox != null) 
 				anyLabels = aCheckBox.checked
 		}
 		
-		var noiseValue = getElement(aDocument,"noiseSlider").value;
+		var noiseValue = aDocument.getElementById("noiseSlider").value;
 		
 		var numMarked =0;
   		var numVisible=0;
@@ -680,17 +677,17 @@ this.update = function()
       .nodes(nodes)
       
       if( graphType == "ForceTree" 
-      			&& ! getElement(aDocument,"hideLinks").checked )
+      			&& ! aDocument.getElementById("hideLinks").checked )
       force.links(links)
       
       if( graphType == "ForceTree" )
-      	force.start().gravity(getElement(aDocument,"gravitySlider").value/100);
+      	force.start().gravity(aDocument.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
 	      .style("fill", function(d) { return d.thisNodeColor} )
-	      .style("opacity",getElement(aDocument,"opacitySlider").value/100 );
+	      .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
 	
 	  // Enter any new nodes.
 	 node.enter().append("svg:circle").on("click", this.myClick)
@@ -699,7 +696,7 @@ this.update = function()
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) {  return d.thisNodeRadius})
 	      .style("fill", function(d) { return d.thisNodeColor}).
-	      style("opacity",getElement(aDocument,"opacitySlider").value/100 ) 
+	      style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
 	     .on("mouseenter", this.myMouseEnter)
 	      .on("mouseleave", this.myMouseLeave)
 	      
@@ -715,7 +712,7 @@ this.update = function()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-		if( graphType == "ForceTree"  && ! getElement(aDocument,"hideLinks").checked )
+		if( graphType == "ForceTree"  && ! aDocument.getElementById("hideLinks").checked )
 		{
 				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
@@ -733,17 +730,17 @@ this.update = function()
 	    
 	      
 	      	// Update the links
-	      	if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+	      	if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   		link = vis.selectAll("line.link")
       .data(links.filter(this.myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+	  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
-	 	var table = getElement(aDocument,"tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
+	 	var table = aDocument.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
 	 	
 	 	table.rows[0].cells[1].innerHTML = "" + numVisible;
 	 	
@@ -759,11 +756,11 @@ this.update = function()
   			.attr("y", function(d) { return d.y; })
 		 .text( function (d) {  return thisContext.getLabelText(d); })
                  .attr("font-family", "sans-serif")
-                 .attr("font-size", getElement(aDocument,"fontAdjust").value + "px")
+                 .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
                  .attr("fill", function(d) {return  thisContext.getTextColor(d) } )	    
 
  // cleanup
-  if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
@@ -776,11 +773,11 @@ this.update = function()
 	if( firstUpdate && isRunFromTopWindow) 
 	{
 		this.setQuantitativeDynamicRanges();
-  		getElement(aDocument,"ColorSubMenu").appendChild(getElement(aDocument,"color1"));
-		getElement(aDocument,"color1").style.visibility="visible";
+  		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color1"));
+		aDocument.getElementById("color1").style.visibility="visible";
 		
-		getElement(aDocument,"ColorSubMenu").appendChild(getElement(aDocument,"color2"));
-		getElement(aDocument,"color2").style.visibility="visible";
+		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color2"));
+		aDocument.getElementById("color2").style.visibility="visible";
 		
 		
 	}	
@@ -791,17 +788,17 @@ this.update = function()
 this.checkForStop =function()
 {
 	
-	if ( graphType != "ForceTree" || ! getElement(aDocument,"animate").checked)
+	if ( graphType != "ForceTree" || ! aDocument.getElementById("animate").checked)
   		force.stop();
 	
 }
 
 this.getTextColor= function(d)
 {
-	if(  getElement(aDocument,"textIsBlack").checked ) 
+	if(  aDocument.getElementById("textIsBlack").checked ) 
 		return "#000000";
 		
-	var chosen = getElement(aDocument,"colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( statics.getColorScales()[chosen] != null || statics.getRanges()[chosen] != null)
 		return this.color(d);
@@ -810,7 +807,7 @@ this.getTextColor= function(d)
 
 this.myMouseEnter = function(d)
 {
-	if (! getElement(aDocument,"mouseOverHighlights").checked)
+	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
 	function highlightNodeAndChildren(d2)
@@ -835,7 +832,7 @@ this.myMouseEnter = function(d)
 this.myMouseLeave= function ()
 {
 	
-	if (! getElement(aDocument,"mouseOverHighlights").checked)
+	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 
 	for(var x=0; x < nodes.length; x++) 
@@ -854,9 +851,9 @@ this.setInitialPositions = function ()
 	
 	var radius = Math.min(w,h)/2;
 	
-	radius = radius - radius * getElement(aDocument,"gravitySlider").value/100;
+	radius = radius - radius * aDocument.getElementById("gravitySlider").value/100;
 	
-	console.log(getElement(aDocument,"gravitySlider").value + " " + radius);
+	console.log(aDocument.getElementById("gravitySlider").value + " " + radius);
 	
 	for( var x=0; x < nodes.length; x++) 
 	{
@@ -893,14 +890,14 @@ this.initialize = function () {
 
 this.getQuantiativeColor= function (d)
 {
-	var chosen = getElement(aDocument,"colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	var lowColor = "#" + getElement(aDocument,"quantColorLow").value;
-	var highColor ="#" + getElement(aDocument,"quantColorHigh").value; 
+	var lowColor = "#" + aDocument.getElementById("quantColorLow").value;
+	var highColor ="#" + aDocument.getElementById("quantColorHigh").value; 
 		
 	var aRange = []
-	aRange.push(getElement(aDocument,"lowQuantRange").value);
-	aRange.push(getElement(aDocument,"highQuantRange").value);
+	aRange.push(aDocument.getElementById("lowQuantRange").value);
+	aRange.push(aDocument.getElementById("highQuantRange").value);
 		
 	if( lowColor > highColor) 
 	{
@@ -909,7 +906,7 @@ this.getQuantiativeColor= function (d)
 		highColor = temp;
 	}
 		
-	if( getElement(aDocument,"logColor").checked) 
+	if( aDocument.getElementById("logColor").checked) 
 	{
 		aVal =d[chosen]; 
 		maxScale = Math.log(aRange[1]) / Math.LN10; 
@@ -932,7 +929,7 @@ this.getQuantiativeColor= function (d)
 
 this.color= function (d) 
 {
-	var chosen = getElement(aDocument,"colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( statics.getRanges()[chosen] != null)
 		return this.getQuantiativeColor(d);
@@ -957,7 +954,7 @@ this.color= function (d)
 // Toggle children on click.
 this.myClick= function (d) {
 
-	var aValue =getElement(aDocument,"clickDoesWhat").value;
+	var aValue =aDocument.getElementById("clickDoesWhat").value;
 	
 	if ( aValue == "deletes")
 	{
@@ -1086,8 +1083,8 @@ this.flatten= function ()
 if( isRunFromTopWindow ) 
 {
 
-	getElement(aDocument,"color1").style.visibility="hidden";
-	getElement(aDocument,"color2").style.visibility="hidden";
+	aDocument.getElementById("color1").style.visibility="hidden";
+	aDocument.getElementById("color2").style.visibility="hidden";
 }
 
 this.reforce();
