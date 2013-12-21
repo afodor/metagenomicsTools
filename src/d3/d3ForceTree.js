@@ -822,8 +822,8 @@ this.setInitialPositions = function ()
 	
 	for( var x=0; x < nodes.length; x++) 
 	{
-		var aRad = (1.0 -nodes[x].nodeDepth/maxLevel ) * radius;
-		nodes[x].x = root.x/2 + aRad * Math.cos( 360.0 * x/nodes.length) ;
+		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(maxLevel-1) * radius;
+		nodes[x].x = root.x - aRad * Math.cos( 360.0 * x/nodes.length) ;
 		nodes[x].y = aRad * Math.sin( 360.0 * x/nodes.length) + root.y;
 		
 		if( nodes[x].x <-10 ) 
@@ -1004,7 +1004,7 @@ this.highlightAllParents = function (d)
 this.flatten= function () 
 {
   var myNodes = [];
-  var level =0;
+  var level =0.0;
   
   function addNodeAndChildren( aNode) 
 	{
