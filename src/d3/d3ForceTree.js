@@ -86,11 +86,13 @@ function getQueryStrings(aWindow) {
 function GO(parentWindow,thisWindow,isRunFromTopWindow)
 {
 
-aDocument = parentWindow.document;
-statics = parentWindow.statics;
+var aDocument = parentWindow.document;
+var statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
-graphType = "scatter"
-queryStrings = getQueryStrings(thisWindow)
+var graphType = "scatter"
+var queryStrings = getQueryStrings(thisWindow)
+
+
 if( queryStrings ) 
 {
 	var aGraphType = queryStrings["GraphType"];
