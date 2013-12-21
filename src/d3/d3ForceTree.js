@@ -854,7 +854,7 @@ this.setInitialPositions = function ()
 	
 	var radius = Math.min(w,h)/2;
 	
-	radius = radius - radius * (100 - getElement(aDocument,"gravitySlider").value)/100;
+	radius = radius - radius * getElement(aDocument,"gravitySlider").value/100;
 	
 	console.log(getElement(aDocument,"gravitySlider").value + " " + radius);
 	
