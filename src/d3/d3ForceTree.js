@@ -27,11 +27,14 @@ var w,h,nodes,
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
-  GO.topNodes = [];
-  GO.ranges={};
-  GO.ordinalScales={};
-  GO.colorScales = {};
-  GO.labelCheckBoxes=[];  
+  
+  if( ! GO.ranges)  GO.ranges={};
+  if( ! GO.ordinalScales) GO.ordinalScales={};
+  if( ! GO.colorScales ) GO.colorScales = {};
+  if( ! GO.labelCheckBoxes) GO.labelCheckBoxes=[];  
+  
+  topNodes= [];
+  
   var dirty = true;
   
     
@@ -154,7 +157,7 @@ this.reVis = function()
   					d3.scale.ordinal();
   					
   					//todo: does the range needs to be updated when maxSize changes?
-  					GO.ordinalScales[propertyName].range([aDocument.getElementById("minSize")
+  					GO.ordinalScales[propertyName].range([aDocument.getElementById("minSize").value
   								,aDocument.getElementById("maxSize").value]);
   					
   					GO.colorScales[propertyName] = 
@@ -219,7 +222,7 @@ this.reVis = function()
   		
   	
   	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
-  	"max=\"" + GO.topNodes.length + "\" value=\"0\" onchange=myGo.showOnlyMarked()><br></input>";
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=myGo.showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
   	this.setTopNodes();
@@ -243,18 +246,18 @@ this.reVis = function()
   
   this.setTopNodes = function()
   {
-  	GO.topNodes = [];
+  	topNodes= [];
   
   	for( var x =0; x < nodes.length; x++)
   	{
   		if( nodes[x].nodeDepth == aDocument.getElementById("depthFilter").value) 
   		{	
-  			GO.topNodes.push(nodes[x]);
+  			topNodes.push(nodes[x]);
   		}
   	}
   	
   	if( isRunFromTopWindow ) 
-  		aDocument.getElementById("depthFilterRange").max = GO.topNodes.length;
+  		aDocument.getElementById("depthFilterRange").max = topNodes.length;
   	
   	this.showOnlyMarked();
   }
@@ -274,7 +277,7 @@ this.reVis = function()
   			nodes[x].doNotShow=true;
   			
   		aVal = aVal -1;
-  		var myNode = GO.topNodes[aVal];
+  		var myNode = topNodes[aVal];
   		
   		function markSelfAndDaughters(aNode)
   		{
@@ -404,9 +407,9 @@ this.getRadiusVal= function(d)
 	}
 	else //ordinal values - much easier
 	{
-		aScale = GO.ordinalScales[propToSize].range([aDocument.getElementById("minSize").value,
-	  					aDocument.getElementById("maxSize").value])
-		returnVal =aScale(d[propToSize]);
+		// todo: ordinal scales never seem to look at the domain in current implementation!
+		var ordinalScale = GO.ordinalScales[propToSize];
+		returnVal = 15 //ordinalScale(d[propToSize]);
 	}
 	
 	if( aDocument.getElementById("invertSize").checked ) 
@@ -492,7 +495,8 @@ this.update = function()
  	 force
       .nodes(nodes)
       
-      if( aDocument.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+      if( aDocument.getElementById("graphType").value == "ForceTree" 
+      			&& ! aDocument.getElementById("hideLinks").checked )
       force.links(links)
       
       if( aDocument.getElementById("graphType").value == "ForceTree" )
@@ -739,8 +743,8 @@ this.color= function (d)
 	if( GO.ranges[chosen] != null)
 		return this.getQuantiativeColor(d);
 	
-	if( colorScales[chosen] != null) 
-		return colorScales[chosen]( d[chosen] );
+	if( GO.colorScales[chosen] != null) 
+		return GO.colorScales[chosen]( d[chosen] );
 		
 	if( d._children != null)
 		return  "#3182bd";  // bright blue
