@@ -89,7 +89,7 @@ function GO(parentWindow,thisWindow,isRunFromTopWindow)
 aDocument = parentWindow.document;
 statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
-graphType = "ForceTree"
+graphType = "scatter"
 queryStrings = getQueryStrings(thisWindow)
 if( queryStrings ) 
 {
@@ -136,17 +136,7 @@ var force, drag, vis;
 
 this.reforce = function()
 {
-	if( isRunFromTopWindow ) 
-	{
-		w =  thisWindow.innerWidth-300,
-    	h = thisWindow.innerHeight-100;
-	}
-	else
-	{	
-		w =  thisWindow.innerWidth-25,
-    	h = thisWindow.innerHeight-25;
-	}
-
+	this.setWidthAndHeight();
 	
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
@@ -161,16 +151,32 @@ this.reforce = function()
 	 
 }
 
+this.setWidthAndHeight = function()
+{
+	if( isRunFromTopWindow ) 
+	{
+		w =  thisWindow.innerWidth-300,
+    	h = thisWindow.innerHeight-100;
+	}
+	else
+	{	
+		w =  thisWindow.innerWidth-25,
+    	h = thisWindow.innerHeight-25;
+	}
+	
+}
+
+
 this.reVis = function() 
 {
-
+	
 	this.checkForStop()
+	this.setWidthAndHeight();
+	this.setInitialPositions();
 	vis.remove();
 	this.reforce();
 	dirty=true;
     this.update();
-	this.setInitialPositions();
-	this.update();
 }
   
   
