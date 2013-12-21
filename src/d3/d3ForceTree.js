@@ -1,4 +1,5 @@
-function GO(aDocument){
+function GO(aDocument,isRunFromTopWindow)
+{
 
 function spawnNewWindow()
 {
@@ -38,10 +39,6 @@ var w,h,nodes,
   var labelCheckBoxes=[];  
   var dirty = true;
   
-  function setADocument(aDoc)
-  {
-  	aDocument = aDoc;
-  }
     
 var force, drag, vis;
 
@@ -84,27 +81,29 @@ function reVis()
   		
   		var aRange = ranges[chosen.value];
   		
-  		if( aRange == null)
+  		if( isRunFromTopWindow ) 
   		{
-  			aDocument.getElementById("lowQuantRange").value = "categorical";
-  			aDocument.getElementById("highQuantRange").value = "categorical";
-  			aDocument.getElementById("lowQuantRange").enabled = false;
-  			aDocument.getElementById("highQuantRange").enabled = false;
+	  		if( aRange == null)
+	  		{
+	  			aDocument.getElementById("lowQuantRange").value = "categorical";
+	  			aDocument.getElementById("highQuantRange").value = "categorical";
+	  			aDocument.getElementById("lowQuantRange").enabled = false;
+	  			aDocument.getElementById("highQuantRange").enabled = false;
+	  		}
+	  		else
+	  		{
+	  			aDocument.getElementById("lowQuantRange").value = aRange[0];
+	  			aDocument.getElementById("highQuantRange").value = aRange[1];
+	  			
+	  		}
   		}
-  		else
-  		{
-  			aDocument.getElementById("lowQuantRange").value = aRange[0];
-  			aDocument.getElementById("highQuantRange").value = aRange[1];
-  			
-  		}
-  
   		if( ! firstUpdate ) 
 			redrawScreen();  	
   }
 
   function addDynamicMenuContent()
   {
-  	if( ! firstFlatten) 
+  	if( ! firstFlatten || ! isRunFromTopWindow) 
   		return;
   	
   	var mySidebar = aDocument.getElementById("sidebar");
@@ -259,8 +258,8 @@ function reVis()
   		}
   	}
   	
-  	
-  	aDocument.getElementById("depthFilterRange").max = topNodes.length;
+  	if( isRunFromTopWindow ) 
+  		aDocument.getElementById("depthFilterRange").max = topNodes.length;
   	
   	showOnlyMarked();
   }
@@ -611,7 +610,7 @@ function update()
   	// the color choosers don't work unless they are initialized first
   	// hence they are initialized in the "section" and then moved to the appropriate menu
   	// once everything else has settled in...
-	if( firstUpdate ) 
+	if( firstUpdate && isRunFromTopWindow) 
 	{
 		setQuantitativeDynamicRanges();
   		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color1"));
@@ -620,10 +619,10 @@ function update()
 		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color2"));
 		aDocument.getElementById("color2").style.visibility="visible";
 		
-		firstUpdate = false;
+		
 	}	
   	
-  
+  	firstUpdate = false;
 }
 
 function checkForStop()
@@ -903,8 +902,12 @@ function flatten()
   }
 }
 
-aDocument.getElementById("color1").style.visibility="hidden";
-aDocument.getElementById("color2").style.visibility="hidden";
+if( isRunFromTopWindow ) 
+{
+
+	aDocument.getElementById("color1").style.visibility="hidden";
+	aDocument.getElementById("color2").style.visibility="hidden";
+}
 
 reforce();
 
