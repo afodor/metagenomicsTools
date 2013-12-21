@@ -92,6 +92,14 @@ var thisID = statics.addGoObject(this);
 var graphType = "scatter"
 var queryStrings = getQueryStrings(thisWindow)
 var maxLevel =-1;
+var addNoise= false;
+var firstNoise = true;
+
+this.addNoise = function()
+{
+	addNoise= true;
+	this.redrawScreen();
+}
 
 if( queryStrings ) 
 {
@@ -589,8 +597,9 @@ this.update = function()
 				anyLabels = aCheckBox.checked
 		}
 		
+		var noiseValue = getElement(aDocument,"noiseSlider").value;
 		
-	   	var numMarked =0;
+		var numMarked =0;
   		var numVisible=0;
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
@@ -614,7 +623,37 @@ this.update = function()
 		 		if( nodes[i].marked == true) 
 		 			numMarked = numMarked + 1
 	 		}
+	 		
+	 		if( addNoise )
+	 		{
+	 			if( firstNoise)
+	 			{
+	 				nodes[i].xBeforeNoise = nodes[i].x
+	 				nodes[i].yBeforeNoise = nodes[i].y
+	 			}
+	 			else
+	 			{
+	 				nodes[i].x = nodes[i].xBeforeNoise;
+	 				nodes[i].y = nodes[i].yBeforeNoise;
+	 			}
+	 		
+	 			var noiseX = 0.1 * nodes[i].x * Math.random() * (noiseValue/100);
+	 			var noiseY = 0.1 * nodes[i].y * Math.random() * (noiseValue/100);
+	 			
+	 			if( Math.random() < 0.5) 
+	 				noiseX = -noiseX;
+	 				
+	 			if( Math.random() < 0.5) 
+	 				noiseY = -noiseY;
+	 				
+	 			nodes[i].x += noiseX;
+	 			nodes[i].y += noiseY;
+	 			
+	 		}
 	 	}
+	 	
+	 	if( addNoise) 
+	 		firstNoise = false;
 	 	
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
@@ -815,8 +854,8 @@ this.myMouseLeave= function ()
 this.setInitialPositions = function ()
 {
 	
-	root.x = w / 2;
-  	root.y = h / 2;
+	root.x = (w-10) / 2  + 5;
+  	root.y = (h-10) / 2 + 5;
 	
 	var radius = Math.min(w,h)/2;
 	
@@ -837,7 +876,6 @@ this.setInitialPositions = function ()
 			
 		if( nodes[x].y >h +10) 
 			nodes[x].y =h +10;	
-		
 	}
 	
 	root.fixed=true;
