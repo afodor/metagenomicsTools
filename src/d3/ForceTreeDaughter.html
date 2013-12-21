@@ -16,22 +16,16 @@
 	{	
 		var myGo = new GO(opener.window,window,false);
 		
-			window.onresize=function(){ 
-				alert("got resize");  
-				if( myGo != null ) { alert("trying go"}; 
-												 myGo.reVis(); }};
-												 
-			
-			var myCount=0;
-		window.onresize=
-				function()
-						{ 
-							console.log("Got resize " + ++myCount);
-							if( myGo != null ) 
-							{ 
-								myGo.reVis(); 
-							}
-						};
+		var myCount =0;
+		
+		window.onresize=function()
+				{ 
+					console.log("Got resize " + ++myCount);
+					if( myGo != null ) 
+					{ 
+						myGo.reVis(); 
+					}
+				};
  
 	}
 	</script>

@@ -41,7 +41,7 @@
         <li><a>Plot</a> <ul>
         	<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
         	<li><button name= "button" onclick=myGo.reVis()>refresh graph</button></li>
-        	<li><select id="graphType"><option value="ForceTree" onchange=myGo.reVis()>Force Tree</option><option value="scatter">Scatter Plot</option></select></li>
+        	<li><select id="graphType"><option value="ForceTree">Force Tree</option><option value="scatter">Scatter Plot</option></select></li>
         	<li>scatter x:<select id="scatterX"></select></li>
         	<li>scatter y:<select id="scatterY"></select></li>
         </ul> </li>
@@ -77,7 +77,9 @@
 	
 	function spawnNewWindow()
 	{
-		newWindow = window.open("ForceTreeDaughter.html","Graph " + graph,
+		newWindow = window.open("ForceTreeDaughter.html?GraphType=" + 
+		document.getElementById("graphType").value        	
+				,document.getElementById("graphType").value  + graph,
 		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 		graph++;
 	}
