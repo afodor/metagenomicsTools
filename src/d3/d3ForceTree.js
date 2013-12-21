@@ -47,8 +47,7 @@ this.reforce = function()
 	w =  window.innerWidth-300,
     h = window.innerHeight-100;
     
-    
-	force = d3.layout.force()
+    force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
@@ -689,7 +688,7 @@ this.initialize = function () {
   this.flatten(root),
       
   initHasRun = true;
- 
+ 	dirty = true;
    this.update();
 }
 
