@@ -14,10 +14,13 @@
 						
 						function StaticHolder()
 						{
-							StaticHolder.ranges={};
-							StaticHolder.ordinalScales={};
-							StaticHolder.colorScales = {};
-							StaticHolder.labelCheckBoxes=[]; 
+							if( !StaticHolder.ranges)
+							{
+								 StaticHolder.ranges ={};
+								StaticHolder.ordinalScales={};
+								StaticHolder.colorScales = {};
+								StaticHolder.labelCheckBoxes=[]; 
+							}
 							
 							this.getRanges = function()
 							{
