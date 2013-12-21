@@ -1,3 +1,38 @@
+
+function StaticHolder()
+{
+	if( !StaticHolder.ranges)
+	{
+		StaticHolder.ranges ={};
+		StaticHolder.ordinalScales={};
+		StaticHolder.colorScales = {};
+		StaticHolder.labelCheckBoxes=[]; 
+	}
+	
+	this.getRanges = function()
+	{
+		return StaticHolder.ranges;
+	}
+	
+	this.getOrdinalScales = function()
+	{
+		return StaticHolder.ordinalScales;
+	}
+	
+	this.getColorScales = function()
+	{
+		return StaticHolder.colorScales;
+	}
+	
+	this.getLabelCheckBoxes= function()
+	{
+		return StaticHolder.labelCheckBoxes;
+	}
+} 
+
+statics = new StaticHolder();
+
+
 function GO(aDocument,isRunFromTopWindow)
 {
 
@@ -27,13 +62,7 @@ var w,h,nodes,
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
-  
-  // statics shared by all windows
-  if( ! GO.ranges)  GO.ranges={};
-  if( ! GO.ordinalScales) GO.ordinalScales={};
-  if( ! GO.colorScales ) GO.colorScales = {};
-  if( ! GO.labelCheckBoxes) GO.labelCheckBoxes=[];  
-  
+    
   topNodes= [];
   
   var dirty = true;
@@ -77,7 +106,7 @@ this.reVis = function()
   {
   		var chosen = aDocument.getElementById("colorByWhat");	
   		
-  		var aRange = GO.ranges[chosen.value];
+  		var aRange = statics.getRanges()[chosen.value];
   		
   		if( isRunFromTopWindow ) 
   		{
@@ -149,13 +178,12 @@ this.reVis = function()
   				
   				if( isNumeric) 
   				{
-  					GO.ranges[propertyName] = range; 
+  					statics.getRanges()[propertyName] = range; 
   				}
   				else
   				{
-  					alert("Adding " + propertyName )
-  					GO.ordinalScales[propertyName] = d3.scale.ordinal();
-  					GO.colorScales[propertyName] = d3.scale.category20b();
+  					statics.getOrdinalScales()[propertyName] = d3.scale.ordinal();
+  					statics.getColorScales()[propertyName] = d3.scale.category20b();
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
@@ -201,7 +229,7 @@ this.reVis = function()
 				"onchange=myGo.redrawScreen()>" + propertyName + "</input></li>";
 				
 			 labelHTML += newHTML;
-			 GO.labelCheckBoxes.push("label" + propertyName );
+			 statics.getLabelCheckBoxes().push("label" + propertyName );
 	  	}
 	  	
 	  	
@@ -212,7 +240,7 @@ this.reVis = function()
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
   	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
-  		"max=\" GO.ranges[\"nodeDepth\"] value=2 onchange=myGo.setTopNodes()></input><br>"; 
+  		"max=\" ranges[\"nodeDepth\"] value=2 onchange=myGo.setTopNodes()></input><br>"; 
   		
   	
   	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
@@ -297,7 +325,7 @@ this.reVis = function()
   this.redrawScreen = function()
   {
   	// can't log an ordinal color scale...
-  	if(  GO.ordinalScales[ aDocument.getElementById("sizeByWhat").value] != null )  
+  	if(  statics.getOrdinalScales()[ aDocument.getElementById("sizeByWhat").value] != null )  
   	{
   		aBox = aDocument.getElementById("logSize");
   		aBox.checked=false;
@@ -309,7 +337,7 @@ this.reVis = function()
   	}
   	
   	// can't log an ordinal color scale...
-  	if(  GO.ordinalScales[ aDocument.getElementById("colorByWhat").value] != null )  
+  	if(  statics.getOrdinalScales()[ aDocument.getElementById("colorByWhat").value] != null )  
   	{
   		aBox = aDocument.getElementById("logColor");
   		aBox.checked=false;
@@ -374,7 +402,7 @@ this.getRadiusVal= function(d)
 	var returnVal = aDocument.getElementById("maxSize").value;
 	
 	// quantitative values
-	if( GO.ranges[propToSize] != null)
+	if( statics.getRanges()[propToSize] != null)
 	{
 		if( aDocument.getElementById("logSize").checked) 
 		{
@@ -383,7 +411,7 @@ this.getRadiusVal= function(d)
 			// as a nice side effect, you don't have to multiply p-values by negative 1
 			if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
 			{
-				maxScale = Math.log(GO.ranges[propToSize][1]) / Math.LN10; 
+				maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
 			
 				var aScale= d3.scale.linear().domain([0,maxScale]).range([aDocument.getElementById("minSize").value,
 	  					aDocument.getElementById("maxSize").value]).clamp(true);
@@ -392,7 +420,7 @@ this.getRadiusVal= function(d)
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(GO.ranges[propToSize]).range([aDocument.getElementById("minSize").value,
+			var aScale= d3.scale.linear().domain(statics.getRanges()[propToSize]).range([aDocument.getElementById("minSize").value,
 	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  		returnVal = aScale(d[propToSize]);
 		}
@@ -401,10 +429,10 @@ this.getRadiusVal= function(d)
 	}
 	else //ordinal values 
 	{
-		GO.ordinalScales[propToSize].range([aDocument.getElementById("minSize").value
+		statics.getOrdinalScales()[propToSize].range([aDocument.getElementById("minSize").value
   								,aDocument.getElementById("maxSize").value]); 
   					
-		returnVal = GO.ordinalScales[propToSize](d[propToSize]);
+		returnVal = statics.getOrdinalScales()[propToSize](d[propToSize]);
 		
 	}
 	
@@ -428,9 +456,9 @@ this.update = function()
 		dirty = false;
 		var anyLabels = false;
 		
-		for( var x=0; ! anyLabels && x < GO.labelCheckBoxes.length; x++)
+		for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
 		{
-			var aCheckBox = aDocument.getElementById(GO.labelCheckBoxes[x]);
+			var aCheckBox = aDocument.getElementById(statics.getLabelCheckBoxes()[x]);
 			
 			if( aCheckBox != null) 
 				anyLabels = aCheckBox.checked
@@ -621,7 +649,7 @@ this.getTextColor= function(d)
 		
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	if( GO.colorScales[chosen] != null || GO.ranges[chosen] != null)
+	if( statics.getColorScales()[chosen] != null || statics.getRanges()[chosen] != null)
 		return this.color(d);
 		
 }
@@ -685,6 +713,8 @@ this.setInitialPositions = function ()
 
 
 this.initialize = function () {
+   
+  
   this.flatten(root),
       
   initHasRun = true;
@@ -735,11 +765,11 @@ this.color= function (d)
 {
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	if( GO.ranges[chosen] != null)
+	if( statics.getRanges()[chosen] != null)
 		return this.getQuantiativeColor(d);
 	
-	if( GO.colorScales[chosen] != null) 
-		return GO.colorScales[chosen]( d[chosen] );
+	if( statics.getColorScales()[chosen] != null) 
+		return statics.getColorScales()[chosen]( d[chosen] );
 		
 	if( d._children != null)
 		return  "#3182bd";  // bright blue
@@ -897,17 +927,4 @@ d3.json("testOperon.json", function(json)
   root.fixed = true;
   thisContext.initialize();
 });
-
-for( prop in GO.ordinalScales ) 
-	alert("Got " + prop );
-	
-if( ! GO.ordinalScales ) 
-	alert("Ordinal scales null");
-
-var myCount=0;
-
-for( prop in GO.ordinalScales ) 
-	myCount++ ;
-
-alert(" There are " + myCount );
 }
