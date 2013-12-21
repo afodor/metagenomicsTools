@@ -65,7 +65,7 @@ function getQueryStrings(aWindow) {
     var requestUrl = aWindow.location.search.toString();
 
     if (requestUrl != '') {
-    	alert("Got " + requestUrl);
+    	//alert("Got " + requestUrl);
         //window.location.search returns the part of the URL 
         //that follows the ? symbol, including the ? symbol
         requestUrl = requestUrl.substring(1);
@@ -592,22 +592,22 @@ this.update = function()
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
-		if( getElement(aDocument,"graphType").value == "ForceTree") 
+		if( graphType == "ForceTree") 
 		{
 				links = d3.layout.tree().links(nodes);
 		}
 		
   	// Restart the force layout.
  	 
- 	 if( getElement(aDocument,"graphType").value == "ForceTree"  ) 
+ 	 if( graphType == "ForceTree"  ) 
  	 force
       .nodes(nodes)
       
-      if( getElement(aDocument,"graphType").value == "ForceTree" 
+      if( graphType == "ForceTree" 
       			&& ! getElement(aDocument,"hideLinks").checked )
       force.links(links)
       
-      if( getElement(aDocument,"graphType").value == "ForceTree" )
+      if( graphType == "ForceTree" )
       	force.start().gravity(getElement(aDocument,"gravitySlider").value/100);
   
 		
@@ -627,18 +627,18 @@ this.update = function()
 	     .on("mouseenter", this.myMouseEnter)
 	      .on("mouseleave", this.myMouseLeave)
 	      
-	      if( getElement(aDocument,"graphType").value == "ForceTree"  )
+	      if( graphType == "ForceTree"  )
 	      	node.call(force.drag);
 	      
 	      function updateNodesLinksText()
 	      {
 	      
-	      if( getElement(aDocument,"graphType").value == "ForceTree"  )
+	      if( graphType == "ForceTree"  )
 	      {
 	      	node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; });
 	      }
-	      else if( getElement(aDocument,"graphType").value == "scatter"  )
+	      else if( graphType == "scatter"  )
 	      {
 	      	node.attr("cx", function(d) {   return 400 * Math.random(); })
 	      .attr("cy", function(d) {   return 400 * Math.random(); });
@@ -647,7 +647,7 @@ this.update = function()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-		if( getElement(aDocument,"graphType").value == "ForceTree"  && ! getElement(aDocument,"hideLinks").checked )
+		if( graphType == "ForceTree"  && ! getElement(aDocument,"hideLinks").checked )
 		{
 				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
@@ -665,13 +665,13 @@ this.update = function()
 	    
 	      
 	      	// Update the links
-	      	if( getElement(aDocument,"graphType").value == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+	      	if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
   		link = vis.selectAll("line.link")
       .data(links.filter(this.myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( getElement(aDocument,"graphType").value == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+	  if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
@@ -693,7 +693,7 @@ this.update = function()
                  .attr("fill", function(d) {return  thisContext.getTextColor(d) } )	    
 
  // cleanup
-  if( getElement(aDocument,"graphType").value == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
+  if( graphType == "ForceTree" && ! getElement(aDocument,"hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
@@ -721,7 +721,7 @@ this.update = function()
 this.checkForStop =function()
 {
 	
-	if ( getElement(aDocument,"graphType").value != "ForceTree" || ! getElement(aDocument,"animate").checked)
+	if ( graphType != "ForceTree" || ! getElement(aDocument,"animate").checked)
   		force.stop();
 	
 }
