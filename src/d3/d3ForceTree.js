@@ -30,11 +30,12 @@ function StaticHolder()
 	}
 } 
 
-statics = new StaticHolder();
 
-
-function GO(aDocument,isRunFromTopWindow)
+function GO(parentWindow,thisWindow,isRunFromTopWindow)
 {
+
+aDocument = parentWindow.document;
+statics = parentWindow.statics;
 
 this.resort = function()
 {
@@ -73,8 +74,8 @@ var force, drag, vis;
 
 this.reforce = function()
 {
-	w =  window.innerWidth-300,
-    h = window.innerHeight-100;
+	w =  thisWindow.innerWidth-300,
+    h = thisWindow.innerHeight-100;
     
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
