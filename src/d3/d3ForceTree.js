@@ -98,10 +98,8 @@ this.reforce = function()
 	}
 	else
 	{	
-		// for some reason, I can't get the daugther width and height by querying.
-		// so for now this is hard-coded
-		w =  500,
-    	h = 500;
+		w =  thisWindow.innerWidth-25,
+    	h = thisWindow.innerHeight-25;
 	}
 
 	
