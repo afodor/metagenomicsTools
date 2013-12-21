@@ -49,7 +49,7 @@ this.reforce = function()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
     .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
     
-    drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
+    drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
 
 	vis = d3.select("body").append("svg:svg")
     .attr("width", w)
@@ -103,20 +103,20 @@ this.reVis = function()
   	
   	var mySidebar = aDocument.getElementById("sidebar");
   	
-   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=sort())></select>"
+   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=myGo.sort())></select>"
 	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
-  	var selectHTML =  "<select id=\"sizeByWhat\" onchange=redrawScreen()>"
+  	var selectHTML =  "<select id=\"sizeByWhat\" onchange=myGo.redrawScreen()>"
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
-			 " id=\"maxSize\" min=\"0\" max=\"100\" value=\"30\" onchange=redrawScreen()></input>" +
+			 " id=\"maxSize\" min=\"0\" max=\"100\" value=\"30\" onchange=myGo.redrawScreen()></input>" +
 			 "<br>Min size: <input type=\"number\"" + 
-			 " id=\"minSize\" min=\"0\" max=\"100\"  value=\"1\" onchange=redrawScreen()></input>"   + 
+			 " id=\"minSize\" min=\"0\" max=\"100\"  value=\"1\" onchange=myGo.redrawScreen()></input>"   + 
 	"<br><input type=\"checkbox\"" + 
-			"id=\"logSize\" onchange=redrawScreen()>log</input>"
+			"id=\"logSize\" onchange=myGo.redrawScreen()>log</input>"
 			+"<input type=\"checkbox\"" + 
-			"id=\"invertSize\" onchange=redrawScreen()>invert</input><br>"
+			"id=\"invertSize\" onchange=myGo.redrawScreen()>invert</input><br>"
 	
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
@@ -168,7 +168,7 @@ this.reVis = function()
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
-  	selectHTML =  "<select id=\"colorByWhat\" onchange=setQuantitativeDynamicRanges()>"
+  	selectHTML =  "<select id=\"colorByWhat\" onchange=myGo.setQuantitativeDynamicRanges()>"
   	
   	selectHTML += "<option value=\"nodeDepth" + "\">" + "node depth"+"</option>"
 			
@@ -187,21 +187,21 @@ this.reVis = function()
   	selectHTML +=  "</select>"
   	mySidebar.innerHTML += selectHTML
   	mySidebar.innerHTML += "<br><input type=\"checkbox\"" + 
-			"id=\"logColor\" onchange=redrawScreen()>log</input>"
+			"id=\"logColor\" onchange=myGo.redrawScreen()>log</input>"
 	
   	mySidebar.innerHTML += "<input type=\"checkbox\" id=\"textIsBlack\"" + 
-				"onchange=redrawScreen()>text always black</input>";
+				"onchange=myGo.redrawScreen()>text always black</input>";
   	    
   	var labelHTML = "<li><a>Labels</a><ul>";
   	labelHTML += "<li><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
-			"onchange=redrawScreen() checked=true> Label only T-Nodes</input></li>"	
+			"onchange=myGo.redrawScreen() checked=true> Label only T-Nodes</input></li>"	
 				
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" 
   			&& propertyName != "x" && propertyName != "y")
 	  	{
 	  		var newHTML = "<li><input type=\"checkbox\" id=\"label" + propertyName + "\"" + 
-				"onchange=redrawScreen()>" + propertyName + "</input></li>";
+				"onchange=myGo.redrawScreen()>" + propertyName + "</input></li>";
 				
 			 labelHTML += newHTML;
 			 GO.labelCheckBoxes.push("label" + propertyName );
@@ -209,17 +209,17 @@ this.reVis = function()
 	  	
 	  	
 	labelHTML +="<li>Font Adjust <input type=\"range\" id=\"fontAdjust\""
-		 labelHTML += "min=\"5\" max=\"25\" value=\"15\" onchange=redrawScreen()></input></li>"
+		 labelHTML += "min=\"5\" max=\"25\" value=\"15\" onchange=myGo.redrawScreen()></input></li>"
 			 labelHTML += "</ul></li>"	  	
 	  	aDocument.getElementById("nav").innerHTML+= labelHTML;
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
   	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
-  		"max=\" GO.ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
+  		"max=\" GO.ranges[\"nodeDepth\"] value=2 onchange=myGo.setTopNodes()></input><br>"; 
   		
   	
   	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
-  	"max=\"" + GO.topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
+  	"max=\"" + GO.topNodes.length + "\" value=\"0\" onchange=myGo.showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
   	this.setTopNodes();
@@ -575,10 +575,10 @@ this.update = function()
   var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
  	attr("dx", function(d) { return 15; })
                  .attr("dy", function(d) { return ".35em"; })
-		 .text( function (d) {  return getLabelText(d); })
+		 .text( function (d) {  return thisContext.getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
-                 .attr("fill", function(d) {return  getTextColor(d) } )	    
+                 .attr("fill", function(d) {return  thisContext.getTextColor(d) } )	    
 
  // cleanup
   if( aDocument.getElementById("graphType").value == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
@@ -621,8 +621,8 @@ this.getTextColor= function(d)
 		
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	if( colorScales[chosen] != null || GO.ranges[chosen] != null)
-		return color(d);
+	if( GO.colorScales[chosen] != null || GO.ranges[chosen] != null)
+		return this.color(d);
 		
 }
 
@@ -647,7 +647,7 @@ this.myMouseEnter = function(d)
 	highlightNodeAndChildren(d);
 	
 	dirty = true;
-	update();
+	thisContext.update();
 }
 
 this.myMouseLeave= function ()
@@ -662,7 +662,7 @@ this.myMouseLeave= function ()
 	}
 
 	dirty = true;
-	update();
+	thisContext.update();
 }
 
 this.setInitialPositions = function ()
@@ -766,7 +766,7 @@ this.myClick= function (d) {
 		initHasRun = false;
 		d.children=null;
 		d._children=null;
-		initialize();
+		thisContext.initialize();
 	}
 	if (aValue=="collapses")
 	{
@@ -783,7 +783,7 @@ this.myClick= function (d) {
 			d._children = null;
 		}
 		
-		initialize();
+		thisContext.initialize();
 	}
 	else if ( aValue == "hides")
 	{
@@ -799,14 +799,14 @@ this.myClick= function (d) {
 			for( var x =0; x < nodes.length; x++)
 				nodes[x].doNotShow=true;
 		
-			highlightAllChildren(d);
-			highlightAllParents(d);
+			thisContext.highlightAllChildren(d);
+			thisContext.highlightAllParents(d);
 		}
 		
 	}
 	
 	dirty=true;
-	update();	
+	thisContext.update();	
 }
 
 
@@ -834,7 +834,7 @@ this.highlightAllParents = function (d)
 	d.doNotShow = false;
 	if( ! d.aParentNode ||  d.aParentNode != null)
 	{
-		highlightAllParents(d.aParentNode);
+		thisContext.highlightAllParents(d.aParentNode);
 	}
 }
 
