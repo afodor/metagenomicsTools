@@ -91,7 +91,7 @@ var statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
 var graphType = "scatter"
 var queryStrings = getQueryStrings(thisWindow)
-
+var maxLevel =-1;
 
 if( queryStrings ) 
 {
@@ -157,7 +157,7 @@ this.reforce = function()
 	
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
-    .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
+    .linkDistance(function(d) { return d.target._children ? 80 * (d.nodeDepth-16)/16 : 30; })
     .size([w, h - 60]).gravity(getElement(aDocument,"gravitySlider").value/100)
     
     drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
@@ -350,7 +350,7 @@ this.reVisOne = function()
 	  	aDocument.getElementById("nav").innerHTML+= labelHTML;
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
-  	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
+  	mySidebar.innerHTML += "node depth: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
   		"max=\" ranges[\"nodeDepth\"] value=2 onchange=myGo.setTopNodes()></input><br>"; 
   		
   	
@@ -820,6 +820,7 @@ this.myMouseLeave= function ()
 
 this.setInitialPositions = function ()
 {
+	
 	root.x = w / 2;
   	root.y = h / 2;
 	
@@ -827,20 +828,22 @@ this.setInitialPositions = function ()
 	
 	for( var x=0; x < nodes.length; x++) 
 	{
-		nodes[x].x = root.x/2 + radius * Math.cos( 360.0 * x/nodes.length) ;
-		nodes[x].y = radius * Math.sin( 360.0 * x/nodes.length) + root.y;
+		var aRad = (1.0 -nodes[x].nodeDepth/maxLevel ) * radius;
+		console.log(aRad);
+		nodes[x].x = root.x/2 + aRad * Math.cos( 360.0 * x/nodes.length) ;
+		nodes[x].y = aRad * Math.sin( 360.0 * x/nodes.length) + root.y;
 		
-		if( nodes[x].x <0 ) 
-			nodes[x].x =0;
+		if( nodes[x].x <-10 ) 
+			nodes[x].x =-10;
 			
-		if( nodes[x].x >w ) 
-			nodes[x].x =w;
+		if( nodes[x].x >w +10) 
+			nodes[x].x =w+10;
 		
-		if( nodes[x].y <0 ) 
-			nodes[x].y =0;
+		if( nodes[x].y <-10 ) 
+			nodes[x].y =-10;
 			
-		if( nodes[x].y >h ) 
-			nodes[x].y =h;	
+		if( nodes[x].y >h +10) 
+			nodes[x].y =h +10;	
 		
 	}
 	
@@ -1013,6 +1016,7 @@ this.flatten= function ()
   function addNodeAndChildren( aNode) 
 	{
 		level++;
+		maxLevel = Math.max(level,maxLevel);
 		if( aNode != null) 
 		{
 			aNode.nodeDepth = level;
@@ -1027,6 +1031,7 @@ this.flatten= function ()
 					
 		}
 		level--;
+		
 			
 	}
   
