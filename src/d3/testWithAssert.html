@@ -19,31 +19,31 @@
 							StaticHolder.colorScales = {};
 							StaticHolder.labelCheckBoxes=[]; 
 							
-							function getRanges()
+							this.getRanges = function()
 							{
 								return StaticHolder.ranges;
 							}
 							
-							function getOrdinalScales()
+							this.getOrdinalScales = function()
 							{
 								return StaticHolder.ordinalScales;
 							}
 							
-							function getColorScales()
+							this.getColorScales = function()
 							{
 								return StaticHolder.colorScales;
 							}
 							
-							function getLabelCheckBoxes()
+							this.getLabelCheckBoxes= function()
 							{
 								return StaticHolder.labelCheckBoxes;
 							}
 						} 
 						
 						h1 = new StaticHolder();
-						h1.getLabelCheckBoxes.push("Hello");
+						h1.getLabelCheckBoxes().push("Hello");
 						h2 = new StaticHolder();
-						h1.getLabelCheckBoxes.push("Hello");
+						h1.getLabelCheckBoxes().push("Hello");
 						h3 = new StaticHolder();
 						alert(h3.getLabelCheckBoxes() + " " + h3.getLabelCheckBoxes().length);
 				}
