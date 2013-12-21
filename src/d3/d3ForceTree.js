@@ -181,8 +181,24 @@ this.setWidthAndHeight = function()
 	
 }
 
+this.reVis = function(revisAll)
+{
+	if( revisAll )
+	{
+		registered = statics.getGoObjects();
+  		for (id in registered)
+		{	
+			registered[id].reVisOne();
+		}			
+	}
+	else
+	{	
+		this.reVisOne();
+	}
 
-this.reVis = function() 
+}
+
+this.reVisOne = function() 
 {
 	
 	this.checkForStop()
