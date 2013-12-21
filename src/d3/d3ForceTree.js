@@ -47,13 +47,9 @@ function StaticHolder()
 } 
 
 
-// from "Secrets of the JavaScript Ninja" - Resig and Bibeault
 function getElement(aDocument,name )
 {
-	if( ! getElement.cache) getElement.cache = {};
-	
-	return getElement.cache[name] = getElement.cache[name] ||
-		aDocument.getElementById(name);
+	return aDocument.getElementById(name);
 }
 
 // modded from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
@@ -853,11 +849,14 @@ this.myMouseLeave= function ()
 
 this.setInitialPositions = function ()
 {
-	
 	root.x = (w-10) / 2  + 5;
   	root.y = (h-10) / 2 + 5;
 	
 	var radius = Math.min(w,h)/2;
+	
+	radius = radius - radius * (100 - getElement(aDocument,"gravitySlider").value)/100;
+	
+	console.log(getElement(aDocument,"gravitySlider").value + " " + radius);
 	
 	for( var x=0; x < nodes.length; x++) 
 	{

@@ -57,7 +57,8 @@
 			onchange=myGo.redrawScreen()> hideLinks</input>	
     	
        <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			+"value="30" onchange=myGo.redrawScreen()></input>
+			" value="30" onchange= gravityAdjust()>
+						</input>
 			<br>Noise<input type="range" id="noiseSlider" min="0" max="100"
 			 value="0" onchange=myGo.addNoise()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
@@ -76,6 +77,12 @@
 		<script type="text/javascript" src="d3ForceTree.js"></script>
 		<script type="text/javascript">
 		var graph=1;
+	
+	function gravityAdjust()
+	{
+		myGo.setInitialPositions(); 
+		myGo.redrawScreen();
+	}
 	
 	function spawnNewWindow()
 	{
