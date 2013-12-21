@@ -1,12 +1,6 @@
 function GO(aDocument,isRunFromTopWindow)
 {
 
-function spawnNewWindow()
-{
-	newWindow = window.open("","Graph","width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
-	newWindow.aDocument.write("Hello world");
-}
-
 function resort()
 {
   	var compareChoice =  aDocument.getElementById("sortByWhat").value;
