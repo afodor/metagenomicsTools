@@ -28,6 +28,7 @@ var w,h,nodes,
   var initHasRun = false;
   var firstFlatten = true;
   
+  // statics shared by all windows
   if( ! GO.ranges)  GO.ranges={};
   if( ! GO.ordinalScales) GO.ordinalScales={};
   if( ! GO.colorScales ) GO.colorScales = {};
@@ -153,15 +154,9 @@ this.reVis = function()
   				}
   				else
   				{
-  					GO.ordinalScales[propertyName] = 
-  					d3.scale.ordinal();
-  					
-  					//todo: does the range needs to be updated when maxSize changes?
-  					GO.ordinalScales[propertyName].range([aDocument.getElementById("minSize").value
-  								,aDocument.getElementById("maxSize").value]);
-  					
-  					GO.colorScales[propertyName] = 
-  						d3.scale.category20b();
+  					alert("Adding " + propertyName )
+  					GO.ordinalScales[propertyName] = d3.scale.ordinal();
+  					GO.colorScales[propertyName] = d3.scale.category20b();
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
@@ -405,11 +400,13 @@ this.getRadiusVal= function(d)
 		
 		
 	}
-	else //ordinal values - much easier
+	else //ordinal values 
 	{
-		// todo: ordinal scales never seem to look at the domain in current implementation!
-		var ordinalScale = GO.ordinalScales[propToSize];
-		returnVal = 15 //ordinalScale(d[propToSize]);
+		GO.ordinalScales[propToSize].range([aDocument.getElementById("minSize").value
+  								,aDocument.getElementById("maxSize").value]); 
+  					
+		returnVal = GO.ordinalScales[propToSize](d[propToSize]);
+		
 	}
 	
 	if( aDocument.getElementById("invertSize").checked ) 
@@ -737,7 +734,6 @@ this.getQuantiativeColor= function (d)
 
 this.color= function (d) 
 {
-	
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( GO.ranges[chosen] != null)
@@ -903,7 +899,16 @@ d3.json("testOperon.json", function(json)
   thisContext.initialize();
 });
 
+for( prop in GO.ordinalScales ) 
+	alert("Got " + prop );
+	
+if( ! GO.ordinalScales ) 
+	alert("Ordinal scales null");
 
+var myCount=0;
 
+for( prop in GO.ordinalScales ) 
+	myCount++ ;
 
+alert(" There are " + myCount );
 }

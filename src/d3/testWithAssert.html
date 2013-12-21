@@ -1,5 +1,6 @@
 <html>
 	<head>
+	<script type="text/javascript" src="d3.v3.min.js"></script>
 		<script>
 			function assert(value,desc)
 			{
@@ -11,46 +12,17 @@
 			
 			window.onload = function()
 				{
-					myObj = {}
-					myObj["aString"] = "Apple";
-					myObj["anotherString"] = "grape";
+					var myScale = d3.scale.ordinal().range([0, 100]);
+					alert(myScale("Hello") + " " + myScale("Hello") + " " + myScale("Apple") + " " + 
+								myScale("Apple")  + " " + myScale("Apple") + " " + myScale("Hello") + " " 
+									+ myScale("Hello") );
+									myScale.range([0,30]);
+										alert(myScale("Hello") + " " + myScale("Hello") + " " + myScale("Apple") + " " + 
+								myScale("Apple")  + " " + myScale("Apple") + " " + myScale("Hello") + " " 
+									+ myScale("Hello") );
+				
+									
 					
-					alert( myObj["aString"] + " " + myObj["anotherString"] );
-						
-					function myFunc()
-					{
-						var count=0;
-						myFunc.staticCount =0;
-					
-						this.getCounts = function() {
-							return count;
-						};
-						
-						this.isNumber = function (n) {
-  								return !isNaN(parseFloat(n)) && isFinite(n);
-						}
-						
-						
-						this.increment = function(){
-						myFunc.staticCount++;
-						count++;
-						};
-						
-						this.incrementTwice = function()
-						{
-							this.increment();
-							this.increment();
-						}
-					}
-					
-					var obj1 = new myFunc();
-					var obj2 = new myFunc();
-					obj1.increment();
-					obj2.increment();
-					obj2.increment();
-					obj2.incrementTwice();
-					alert( obj1.isNumber(7) + " " + obj1.isNumber("Hello"));
-					alert(obj1.getCounts() + " " + obj2.getCounts() + " " + myFunc.staticCount);
 				}
 		</script>
 		<style>
