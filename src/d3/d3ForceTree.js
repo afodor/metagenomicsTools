@@ -1,3 +1,5 @@
+function GO(aDocument){
+
 function spawnNewWindow()
 {
 	newWindow = window.open("","Graph","width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
@@ -35,7 +37,6 @@ var w,h,nodes,
   var colorScales = {};
   var labelCheckBoxes=[];  
   var dirty = true;
-  var aDocument = document;
   
   function setADocument(aDoc)
   {
@@ -902,3 +903,19 @@ function flatten()
   }
 }
 
+aDocument.getElementById("color1").style.visibility="hidden";
+aDocument.getElementById("color2").style.visibility="hidden";
+
+reforce();
+
+d3.json("testOperon.json", function(json) 
+{
+  root = json;
+  root.fixed = true;
+  
+  initialize();
+});
+
+
+
+}
