@@ -11,8 +11,18 @@
 			
 			window.onload = function()
 				{
-					assert(true, "pass");
-					assert(false, "fail");
+					var f1 = function() 
+							{
+								var count =0;
+							
+								function increment()
+								{
+									count++; 
+								}
+							}
+					
+					var aFunc = new f1();
+					aFunc.increment();
 				}
 		</script>
 		<style>
