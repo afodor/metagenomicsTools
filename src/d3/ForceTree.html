@@ -17,7 +17,7 @@
             <ul>
             
                <li><input type="checkbox" id="mouseOverHighlights"
-			onchange=redrawScreen()> mouse over highlights</input></li>
+			onchange=myGo.redrawScreen()> mouse over highlights</input></li>
 			
 			<li><select id="clickDoesWhat">
     	<option value="none">Click has no action</option>
@@ -32,8 +32,8 @@
         <li ><a>Colors</a>
         <ul id="ColorSubMenu">
         
-        <li><a>quantiative range...</a><ul><li>From<input type="number" id="lowQuantRange" onchange=redrawScreen()></input></li>
-        			<li>To  <input type="number" id="highQuantRange" onchange=redrawScreen()></input></li></ul><li>
+        <li><a>quantiative range...</a><ul><li>From<input type="number" id="lowQuantRange" onchange=myGo.redrawScreen()></input></li>
+        			<li>To  <input type="number" id="highQuantRange" onchange=myGo.redrawScreen()></input></li></ul><li>
         
         </ul>
         <li>
@@ -52,14 +52,14 @@
 
 			 	<h3> Visualization: </h3>
   	<input type="checkbox" id="animate"
-			onchange=redrawScreen() checked=true> animate</input>
+			onchange=myGo.redrawScreen() checked=true> animate</input>
 	<br><input type="checkbox" id="hideLinks"
-			onchange=redrawScreen()> hideLinks</input>	
+			onchange=myGo.redrawScreen()> hideLinks</input>	
     	
        <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			+"value="30" onchange=redrawScreen()></input>
+			+"value="30" onchange=myGo.redrawScreen()></input>
 		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
-			"value="90" onchange=redrawScreen()></input>
+			"value="90" onchange=myGo.redrawScreen()></input>
 			<br><button name= "button" onclick=resort()>re-sort</button> on 
 			
 	</aside>
@@ -67,8 +67,8 @@
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 
 
-<li id="color1"> Quantitiatve low<input id="quantColorLow" class="color" value="ff0000" onchange=redrawScreen()> </li>
-<li id="color2"> Quantitiatve high<input id="quantColorHigh"  class="color" value="0000ff" onchange=redrawScreen()> </li>	
+<li id="color1"> Quantitiatve low<input id="quantColorLow" class="color" value="ff0000" onchange=myGo.redrawScreen()> </li>
+<li id="color2"> Quantitiatve high<input id="quantColorHigh"  class="color" value="0000ff" onchange=myGo.redrawScreen()> </li>	
 	
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript" src="d3ForceTree.js"></script>
@@ -80,7 +80,7 @@
 		"width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 	}
 	
-	GO(document,true);
+	var myGo = new GO(document,true);
  
     </script>
 	</section>

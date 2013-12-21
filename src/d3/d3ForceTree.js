@@ -1,7 +1,7 @@
 function GO(aDocument,isRunFromTopWindow)
 {
 
-function resort()
+this.resort = function()
 {
   	var compareChoice =  aDocument.getElementById("sortByWhat").value;
   
@@ -12,7 +12,7 @@ function resort()
     					return 1;
   					return 0; } );
 	
-	setInitialPositions();
+	this.setInitialPositions();
 }
 
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
@@ -20,27 +20,29 @@ var w,h,nodes,
     links,
     link,
     root;
+    thisContext = this;
                 
     
   var firstUpdate = true;
   var reverse =false;
   var initHasRun = false;
   var firstFlatten = true;
-  var topNodes = [];
-  var ranges={};
-  var ordinalScales={};
-  var colorScales = {};
-  var labelCheckBoxes=[];  
+  GO.topNodes = [];
+  GO.ranges={};
+  GO.ordinalScales={};
+  GO.colorScales = {};
+  GO.labelCheckBoxes=[];  
   var dirty = true;
   
     
 var force, drag, vis;
 
 
-function reforce()
+this.reforce = function()
 {
 	w =  window.innerWidth-300,
-    h = window.innerHeight-100,
+    h = window.innerHeight-100;
+    
     
 	force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
@@ -55,25 +57,24 @@ function reforce()
 	 
 }
 
-function reVis()
+this.reVis = function() 
 {
 
-	checkForStop()
+	this.checkForStop()
 	vis.remove();
-	reforce();
+	this.reforce();
 	dirty=true;
-    update();
-	setInitialPositions();
-	update();
-	
+    this.update();
+	this.setInitialPositions();
+	this.update();
 }
   
   
-  function setQuantitativeDynamicRanges()
+  this.setQuantitativeDynamicRanges = function()
   {
   		var chosen = aDocument.getElementById("colorByWhat");	
   		
-  		var aRange = ranges[chosen.value];
+  		var aRange = GO.ranges[chosen.value];
   		
   		if( isRunFromTopWindow ) 
   		{
@@ -92,10 +93,10 @@ function reVis()
 	  		}
   		}
   		if( ! firstUpdate ) 
-			redrawScreen();  	
+			this.redrawScreen();  	
   }
 
-  function addDynamicMenuContent()
+  this.addDynamicMenuContent =function()
   {
   	if( ! firstFlatten || ! isRunFromTopWindow) 
   		return;
@@ -133,7 +134,7 @@ function reVis()
   				{
   					var aVal =nodes[x][propertyName]; 
   					
-  					if( ! isNumber(aVal))
+  					if( ! this.isNumber(aVal))
   						isNumeric = false;
   					
   					if( aVal < range[0]) 
@@ -145,18 +146,18 @@ function reVis()
   				
   				if( isNumeric) 
   				{
-  					ranges[propertyName] = range; 
+  					GO.ranges[propertyName] = range; 
   				}
   				else
   				{
-  					ordinalScales[propertyName] = 
+  					GO.ordinalScales[propertyName] = 
   					d3.scale.ordinal();
   					
   					//todo: does the range needs to be updated when maxSize changes?
-  					ordinalScales[propertyName].range([aDocument.getElementById("minSize")
+  					GO.ordinalScales[propertyName].range([aDocument.getElementById("minSize")
   								,aDocument.getElementById("maxSize").value]);
   					
-  					colorScales[propertyName] = 
+  					GO.colorScales[propertyName] = 
   						d3.scale.category20b();
   				}
   				
@@ -203,7 +204,7 @@ function reVis()
 				"onchange=redrawScreen()>" + propertyName + "</input></li>";
 				
 			 labelHTML += newHTML;
-			 labelCheckBoxes.push("label" + propertyName );
+			 GO.labelCheckBoxes.push("label" + propertyName );
 	  	}
 	  	
 	  	
@@ -214,14 +215,14 @@ function reVis()
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
   	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
-  		"max=\" ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
+  		"max=\" GO.ranges[\"nodeDepth\"] value=2 onchange=setTopNodes()></input><br>"; 
   		
   	
   	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
-  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
+  	"max=\"" + GO.topNodes.length + "\" value=\"0\" onchange=showOnlyMarked()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
-  	setTopNodes();
+  	this.setTopNodes();
   	
   	var aTable =""
   	
@@ -240,25 +241,25 @@ function reVis()
   
   }
   
-  function setTopNodes()
+  this.setTopNodes = function()
   {
-  	topNodes = [];
+  	GO.topNodes = [];
   
   	for( var x =0; x < nodes.length; x++)
   	{
   		if( nodes[x].nodeDepth == aDocument.getElementById("depthFilter").value) 
   		{	
-  			topNodes.push(nodes[x]);
+  			GO.topNodes.push(nodes[x]);
   		}
   	}
   	
   	if( isRunFromTopWindow ) 
-  		aDocument.getElementById("depthFilterRange").max = topNodes.length;
+  		aDocument.getElementById("depthFilterRange").max = GO.topNodes.length;
   	
-  	showOnlyMarked();
+  	this.showOnlyMarked();
   }
   
-  function showOnlyMarked()
+  this.showOnlyMarked = function()
   {
   	var aVal = aDocument.getElementById("depthFilterRange").value;
   	
@@ -273,7 +274,7 @@ function reVis()
   			nodes[x].doNotShow=true;
   			
   		aVal = aVal -1;
-  		var myNode = topNodes[aVal];
+  		var myNode = GO.topNodes[aVal];
   		
   		function markSelfAndDaughters(aNode)
   		{
@@ -292,14 +293,14 @@ function reVis()
   	}
   	
   	dirty=true;
-  	update();
+  	this.update();
   }
   
    
-  function redrawScreen()
+  this.redrawScreen = function()
   {
   	// can't log an ordinal color scale...
-  	if(  ordinalScales[ aDocument.getElementById("sizeByWhat").value] != null )  
+  	if(  GO.ordinalScales[ aDocument.getElementById("sizeByWhat").value] != null )  
   	{
   		aBox = aDocument.getElementById("logSize");
   		aBox.checked=false;
@@ -311,7 +312,7 @@ function reVis()
   	}
   	
   	// can't log an ordinal color scale...
-  	if(  ordinalScales[ aDocument.getElementById("colorByWhat").value] != null )  
+  	if(  GO.ordinalScales[ aDocument.getElementById("colorByWhat").value] != null )  
   	{
   		aBox = aDocument.getElementById("logColor");
   		aBox.checked=false;
@@ -323,11 +324,11 @@ function reVis()
   	}
   	
   	dirty = true;
-  	update()
+  	this.update()
   }
 
 
-function getLabelText(d)
+this.getLabelText = function(d)
 {	
 	if( d.marked == false && aDocument.getElementById("labelOnlyTNodes").checked  )
 		return "";
@@ -346,7 +347,7 @@ function getLabelText(d)
 	return returnString;	
 }
 
-function myFilterNodes(d)
+this.myFilterNodes = function(d)
 {
 	 if( ! d.doNotShow )
 	 	return true;
@@ -354,7 +355,7 @@ function myFilterNodes(d)
 	 return false;
 }
 
-function myFilterLinks(d)
+this.myFilterLinks= function(d)
 {
      if( d.source.setVisible  && d.target.setVisible)
       		return true;
@@ -364,19 +365,19 @@ function myFilterLinks(d)
 }
 
 // from http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric
-function isNumber(n) {
+this.isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 
 
-function getRadiusVal(d)
+this.getRadiusVal= function(d)
 {
 	var propToSize = aDocument.getElementById("sizeByWhat").value
 	var returnVal = aDocument.getElementById("maxSize").value;
 	
 	// quantitative values
-	if( ranges[propToSize] != null)
+	if( GO.ranges[propToSize] != null)
 	{
 		if( aDocument.getElementById("logSize").checked) 
 		{
@@ -385,7 +386,7 @@ function getRadiusVal(d)
 			// as a nice side effect, you don't have to multiply p-values by negative 1
 			if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
 			{
-				maxScale = Math.log(ranges[propToSize][1]) / Math.LN10; 
+				maxScale = Math.log(GO.ranges[propToSize][1]) / Math.LN10; 
 			
 				var aScale= d3.scale.linear().domain([0,maxScale]).range([aDocument.getElementById("minSize").value,
 	  					aDocument.getElementById("maxSize").value]).clamp(true);
@@ -394,7 +395,7 @@ function getRadiusVal(d)
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(ranges[propToSize]).range([aDocument.getElementById("minSize").value,
+			var aScale= d3.scale.linear().domain(GO.ranges[propToSize]).range([aDocument.getElementById("minSize").value,
 	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  		returnVal = aScale(d[propToSize]);
 		}
@@ -403,7 +404,7 @@ function getRadiusVal(d)
 	}
 	else //ordinal values - much easier
 	{
-		aScale = ordinalScales[propToSize].range([aDocument.getElementById("minSize").value,
+		aScale = GO.ordinalScales[propToSize].range([aDocument.getElementById("minSize").value,
 	  					aDocument.getElementById("maxSize").value])
 		returnVal =aScale(d[propToSize]);
 	}
@@ -416,22 +417,8 @@ function getRadiusVal(d)
 	return returnVal;
 	
 }
-
-function getToolTipText(d)
-{
-	var aVal = "";
-
-	for( var propertyName in d)
-	{
-			if( ranges[propertyName] != null	)
-  				aVal += (propertyName + ":" +  d[propertyName] + " ");
-	}
-  				
-  	return aVal
-}
-
 var updateNum=0;
-function update() 
+this.update = function() 
 {
 	if( ! initHasRun )
 		return;
@@ -442,9 +429,9 @@ function update()
 		dirty = false;
 		var anyLabels = false;
 		
-		for( var x=0; ! anyLabels && x < labelCheckBoxes.length; x++)
+		for( var x=0; ! anyLabels && x < GO.labelCheckBoxes.length; x++)
 		{
-			var aCheckBox = aDocument.getElementById(labelCheckBoxes[x]);
+			var aCheckBox = aDocument.getElementById(GO.labelCheckBoxes[x]);
 			
 			if( aCheckBox != null) 
 				anyLabels = aCheckBox.checked
@@ -479,8 +466,8 @@ function update()
 	 	
 	 	for (var i = 0; i < nodes.length; i++)
 	 	{
-	 		nodes[i].thisNodeColor = color(nodes[i]);
-	 		nodes[i].thisNodeRadius = getRadiusVal(nodes[i]);
+	 		nodes[i].thisNodeColor = this.color(nodes[i]);
+	 		nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
 	 	}	
 	
 		vis.selectAll("text").remove()
@@ -489,7 +476,7 @@ function update()
 		for( var z=0; z < nodes.length; z++)
 			nodes[z].setVisible=false;
 		
-		var filteredNodes = nodes.filter(myFilterNodes);	
+		var filteredNodes = nodes.filter(this.myFilterNodes);	
 		
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
@@ -518,15 +505,15 @@ function update()
 	      .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
 	
 	  // Enter any new nodes.
-	 node.enter().append("svg:circle").on("click", myClick)
+	 node.enter().append("svg:circle").on("click", this.myClick)
 	      .attr("class", "node")
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) {  return d.thisNodeRadius})
 	      .style("fill", function(d) { return d.thisNodeColor}).
 	      style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
-	     .on("mouseenter", myMouseEnter)
-	      .on("mouseleave", myMouseLeave)
+	     .on("mouseenter", this.myMouseEnter)
+	      .on("mouseleave", this.myMouseLeave)
 	      
 	      if( aDocument.getElementById("graphType").value == "ForceTree"  )
 	      	node.call(force.drag);
@@ -557,7 +544,7 @@ function update()
 	      .attr("y2", function(d) { return d.target.y; });
 		}
 		
-		  	checkForStop();
+		  	thisContext.checkForStop();
 	      }
 	    
 		force.on("tick", updateNodesLinksText);
@@ -568,7 +555,7 @@ function update()
 	      	// Update the links
 	      	if( aDocument.getElementById("graphType").value == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   		link = vis.selectAll("line.link")
-      .data(links.filter(myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
+      .data(links.filter(this.myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
@@ -600,13 +587,13 @@ function update()
   node.exit().remove();
 	}
   	
-  	checkForStop();
+  	this.checkForStop();
   	// the color choosers don't work unless they are initialized first
   	// hence they are initialized in the "section" and then moved to the appropriate menu
   	// once everything else has settled in...
 	if( firstUpdate && isRunFromTopWindow) 
 	{
-		setQuantitativeDynamicRanges();
+		this.setQuantitativeDynamicRanges();
   		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color1"));
 		aDocument.getElementById("color1").style.visibility="visible";
 		
@@ -619,7 +606,7 @@ function update()
   	firstUpdate = false;
 }
 
-function checkForStop()
+this.checkForStop =function()
 {
 	
 	if ( aDocument.getElementById("graphType").value != "ForceTree" || ! aDocument.getElementById("animate").checked)
@@ -627,19 +614,19 @@ function checkForStop()
 	
 }
 
-function getTextColor(d)
+this.getTextColor= function(d)
 {
 	if(  aDocument.getElementById("textIsBlack").checked ) 
 		return "#000000";
 		
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	if( colorScales[chosen] != null || ranges[chosen] != null)
+	if( colorScales[chosen] != null || GO.ranges[chosen] != null)
 		return color(d);
 		
 }
 
-function myMouseEnter(d)
+this.myMouseEnter = function(d)
 {
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
@@ -663,7 +650,7 @@ function myMouseEnter(d)
 	update();
 }
 
-function myMouseLeave()
+this.myMouseLeave= function ()
 {
 	
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
@@ -678,7 +665,7 @@ function myMouseLeave()
 	update();
 }
 
-function setInitialPositions()
+this.setInitialPositions = function ()
 {
 	root.x = w / 2;
   	root.y = h / 2 - 80;
@@ -697,15 +684,15 @@ function setInitialPositions()
 }
 
 
-function initialize() {
-  flatten(root),
+this.initialize = function () {
+  this.flatten(root),
       
   initHasRun = true;
  
-   update();
+   this.update();
 }
 
-function getQuantiativeColor(d)
+this.getQuantiativeColor= function (d)
 {
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
@@ -744,13 +731,13 @@ function getQuantiativeColor(d)
 		
 }
 
-function color(d) 
+this.color= function (d) 
 {
 	
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	if( ranges[chosen] != null)
-		return getQuantiativeColor(d);
+	if( GO.ranges[chosen] != null)
+		return this.getQuantiativeColor(d);
 	
 	if( colorScales[chosen] != null) 
 		return colorScales[chosen]( d[chosen] );
@@ -770,7 +757,7 @@ function color(d)
 }
 
 // Toggle children on click.
-var myClick= function (d) {
+this.myClick= function (d) {
 
 	var aValue =aDocument.getElementById("clickDoesWhat").value;
 	
@@ -824,7 +811,7 @@ var myClick= function (d) {
 
 
 
-function highlightAllChildren(d)
+this.highlightAllChildren = function (d)
 {
 	if( d== null)
 		return;
@@ -835,11 +822,11 @@ function highlightAllChildren(d)
 	d.doNotShow = false;
 	for( var x=0; x < d.children.length; x++) 
 	{
-		highlightAllChildren(d.children[x]);
+		this.highlightAllChildren(d.children[x]);
 	}
 }
 
-function highlightAllParents(d)
+this.highlightAllParents = function (d)
 {
 	if ( d== null)
 		return;
@@ -853,7 +840,7 @@ function highlightAllParents(d)
 
 
 // Returns a list of all nodes under the root.
-function flatten() 
+this.flatten= function () 
 {
   var myNodes = [];
   var level =0;
@@ -889,8 +876,8 @@ function flatten()
   
   if( firstFlatten) 
   {
-  		setInitialPositions();
-  		addDynamicMenuContent();
+  		this.setInitialPositions();
+  		this.addDynamicMenuContent();
   		firstFlatten = false;
   		
   }
@@ -903,15 +890,15 @@ if( isRunFromTopWindow )
 	aDocument.getElementById("color2").style.visibility="hidden";
 }
 
-reforce();
+this.reforce();
 
 d3.json("testOperon.json", function(json) 
 {
   root = json;
   root.fixed = true;
-  
-  initialize();
+  thisContext.initialize();
 });
+
 
 
 
