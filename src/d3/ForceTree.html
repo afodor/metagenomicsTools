@@ -73,11 +73,13 @@
 		<script type="text/javascript" src="d3.v3.js"></script>
 		<script type="text/javascript" src="d3ForceTree.js"></script>
 		<script type="text/javascript">
+		var graph=1;
 	
 	function spawnNewWindow()
 	{
-		newWindow = window.open("ForceTreeDaughter.html","Graph",
+		newWindow = window.open("ForceTreeDaughter.html","Graph " + graph,
 		"width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
+		graph++;
 	}
 	
 	var statics = new StaticHolder();
