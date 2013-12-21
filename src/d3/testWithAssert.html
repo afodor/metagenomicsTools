@@ -11,6 +11,11 @@
 			
 			window.onload = function()
 				{
+					myObj = {}
+					myObj["aString"] = "Apple";
+					myObj["anotherString"] = "grape";
+					
+					alert( myObj["aString"] + " " + myObj["anotherString"] );
 						
 					function myFunc()
 					{
@@ -20,6 +25,11 @@
 						this.getCounts = function() {
 							return count;
 						};
+						
+						this.isNumber = function (n) {
+  								return !isNaN(parseFloat(n)) && isFinite(n);
+						}
+						
 						
 						this.increment = function(){
 						myFunc.staticCount++;
@@ -39,6 +49,7 @@
 					obj2.increment();
 					obj2.increment();
 					obj2.incrementTwice();
+					alert( obj1.isNumber(7) + " " + obj1.isNumber("Hello"));
 					alert(obj1.getCounts() + " " + obj2.getCounts() + " " + myFunc.staticCount);
 				}
 		</script>
