@@ -84,6 +84,17 @@
 	
 	var statics = new StaticHolder();
 	var myGo = new GO(window,window,true);
+	
+	var myCount=0;
+	window.onresize=
+				function()
+						{ 
+							console.log("Got resize " + ++myCount);
+							if( myGo != null ) 
+							{ 
+								myGo.reVis(); 
+							}
+						};
  
     </script>
 	</section>

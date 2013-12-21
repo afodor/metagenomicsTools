@@ -52,7 +52,7 @@ function getElement(aDocument,name )
 {
 	if( ! getElement.cache) getElement.cache = {};
 	
-	return getElement.cache[name] = getElement .cache[name] ||
+	return getElement.cache[name] = getElement.cache[name] ||
 		aDocument.getElementById(name);
 }
 
