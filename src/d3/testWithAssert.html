@@ -15,12 +15,14 @@
 					function myFunc()
 					{
 						var count=0;
+						myFunc.staticCount =0;
 					
 						this.getCounts = function() {
 							return count;
 						};
 						
 						this.increment = function(){
+						myFunc.staticCount++;
 						count++;
 						};
 					}
@@ -30,7 +32,7 @@
 					obj1.increment();
 					obj2.increment();
 					obj2.increment();
-					alert(obj1.getCounts() + " " + obj2.getCounts());
+					alert(obj1.getCounts() + " " + obj2.getCounts() + " " + myFunc.staticCount);
 				}
 		</script>
 		<style>
