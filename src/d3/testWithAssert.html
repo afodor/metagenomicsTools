@@ -11,18 +11,26 @@
 			
 			window.onload = function()
 				{
-					var f1 = function() 
-							{
-								var count =0;
-							
-								function increment()
-								{
-									count++; 
-								}
-							}
+					alert("start");
 					
-					var aFunc = new f1();
-					aFunc.increment();
+					function MyObj() 
+					{
+						this.count =0;
+						
+						var increment = function()
+						{
+							this.count++;
+						}
+					}
+					
+					var obj1 = new MyObj();
+					var obj2 = new MyObj();
+					
+					obj1.increment();
+					obj2.increment();
+					obj2.increment();
+					
+					alert("Got " + obj1.count + " " + obj2.count);
 				}
 		</script>
 		<style>
