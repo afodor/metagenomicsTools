@@ -674,16 +674,8 @@ this.update = function()
 	      function updateNodesLinksText()
 	      {
 	      
-	      if( graphType == "ForceTree"  )
-	      {
 	      	node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; });
-	      }
-	      else if( graphType == "scatter"  )
-	      {
-	      	node.attr("cx", function(d) {   return 400 * Math.random(); })
-	      .attr("cy", function(d) {   return 400 * Math.random(); });
-	      }
+	      		.attr("cy", function(d) { return d.y; });
 	      	
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -726,8 +718,10 @@ this.update = function()
 	 	
 	 	if( anyLabels  )
   var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
- 	attr("dx", function(d) { return 15; })
-                 .attr("dy", function(d) { return ".35em"; })
+ 					attr("dx", function(d) { return 15; })
+                 .attr("dy", function(d) { return ".35em"; })             
+                 .attr("x", function(d) { return d.x; })
+  			.attr("y", function(d) { return d.y; })
 		 .text( function (d) {  return thisContext.getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", getElement(aDocument,"fontAdjust").value + "px")
@@ -829,7 +823,6 @@ this.setInitialPositions = function ()
 	for( var x=0; x < nodes.length; x++) 
 	{
 		var aRad = (1.0 -nodes[x].nodeDepth/maxLevel ) * radius;
-		console.log(aRad);
 		nodes[x].x = root.x/2 + aRad * Math.cos( 360.0 * x/nodes.length) ;
 		nodes[x].y = aRad * Math.sin( 360.0 * x/nodes.length) + root.y;
 		
