@@ -91,9 +91,20 @@ var force, drag, vis;
 
 this.reforce = function()
 {
-	w =  thisWindow.innerWidth-300,
-    h = thisWindow.innerHeight-100;
-    
+	if( isRunFromTopWindow ) 
+	{
+		w =  thisWindow.innerWidth-300,
+    	h = thisWindow.innerHeight-100;
+	}
+	else
+	{	
+		// for some reason, I can't get the daugther width and height by querying.
+		// so for now this is hard-coded
+		w =  500,
+    	h = 500;
+	}
+
+	
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
