@@ -56,7 +56,7 @@ function getElement(aDocument,name )
 		aDocument.getElementById(name);
 }
 
-// from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
+// modded from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
 function getQueryStrings(aWindow) {
     //Holds key:value pairs
     var queryStringColl = null;
@@ -65,12 +65,11 @@ function getQueryStrings(aWindow) {
     var requestUrl = aWindow.location.search.toString();
 
     if (requestUrl != '') {
-    	//alert("Got " + requestUrl);
-        //window.location.search returns the part of the URL 
+    	//window.location.search returns the part of the URL 
         //that follows the ? symbol, including the ? symbol
         requestUrl = requestUrl.substring(1);
 
-        queryStringColl = new Array();
+        queryStringColl = {};
 
         //Get key:value pairs from querystring
         var kvPairs = requestUrl.split('&');
@@ -94,12 +93,10 @@ graphType = "ForceTree"
 queryStrings = getQueryStrings(thisWindow)
 if( queryStrings ) 
 {
-	var aGraphType = graphType = ["GraphType"];
+	var aGraphType = queryStrings["GraphType"];
 	if( aGraphType != null) 
 		graphType = aGraphType;
 }
-
-
 
 
 this.resort = function()
