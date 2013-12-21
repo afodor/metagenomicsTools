@@ -25,6 +25,12 @@
 						myFunc.staticCount++;
 						count++;
 						};
+						
+						this.incrementTwice = function()
+						{
+							this.increment();
+							this.increment();
+						}
 					}
 					
 					var obj1 = new myFunc();
@@ -32,6 +38,7 @@
 					obj1.increment();
 					obj2.increment();
 					obj2.increment();
+					obj2.incrementTwice();
 					alert(obj1.getCounts() + " " + obj2.getCounts() + " " + myFunc.staticCount);
 				}
 		</script>
