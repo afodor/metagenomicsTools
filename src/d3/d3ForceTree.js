@@ -1,12 +1,12 @@
 function spawnNewWindow()
 {
 	newWindow = window.open("","Graph","width=550,height=170,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
-	newWindow.document.write("Hello world");
+	newWindow.aDocument.write("Hello world");
 }
 
 function resort()
 {
-  	var compareChoice =  document.getElementById("sortByWhat").value;
+  	var compareChoice =  aDocument.getElementById("sortByWhat").value;
   
 	nodes.sort( function(a,b) {
  					 if (a[compareChoice]< b[compareChoice])
@@ -34,7 +34,13 @@ var w,h,nodes,
   var ordinalScales={};
   var colorScales = {};
   var labelCheckBoxes=[];  
- var dirty = true;
+  var dirty = true;
+  var aDocument = document;
+  
+  function setADocument(aDoc)
+  {
+  	aDocument = aDoc;
+  }
     
 var force, drag, vis;
 
@@ -47,7 +53,7 @@ function reforce()
 	force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.level-16)/16 : 30; })
-    .size([w, h - 60]).gravity(document.getElementById("gravitySlider").value/100)
+    .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
     
     drag = force.drag().on("dragstart", function(d) { d.fixed=true; update();});
 
@@ -73,21 +79,21 @@ function reVis()
   
   function setQuantitativeDynamicRanges()
   {
-  		var chosen = document.getElementById("colorByWhat");	
+  		var chosen = aDocument.getElementById("colorByWhat");	
   		
   		var aRange = ranges[chosen.value];
   		
   		if( aRange == null)
   		{
-  			document.getElementById("lowQuantRange").value = "categorical";
-  			document.getElementById("highQuantRange").value = "categorical";
-  			document.getElementById("lowQuantRange").enabled = false;
-  			document.getElementById("highQuantRange").enabled = false;
+  			aDocument.getElementById("lowQuantRange").value = "categorical";
+  			aDocument.getElementById("highQuantRange").value = "categorical";
+  			aDocument.getElementById("lowQuantRange").enabled = false;
+  			aDocument.getElementById("highQuantRange").enabled = false;
   		}
   		else
   		{
-  			document.getElementById("lowQuantRange").value = aRange[0];
-  			document.getElementById("highQuantRange").value = aRange[1];
+  			aDocument.getElementById("lowQuantRange").value = aRange[0];
+  			aDocument.getElementById("highQuantRange").value = aRange[1];
   			
   		}
   
@@ -100,7 +106,7 @@ function reVis()
   	if( ! firstFlatten) 
   		return;
   	
-  	var mySidebar = document.getElementById("sidebar");
+  	var mySidebar = aDocument.getElementById("sidebar");
   	
    	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=sort())></select>"
 	
@@ -152,17 +158,18 @@ function reVis()
   					ordinalScales[propertyName] = 
   					d3.scale.ordinal();
   					
-  					//todo: the range needs to be updated when maxSize changes
-  					ordinalScales[propertyName].range([0,document.getElementById("maxSize").value]);
+  					//todo: does the range needs to be updated when maxSize changes?
+  					ordinalScales[propertyName].range([aDocument.getElementById("minSize")
+  								,aDocument.getElementById("maxSize").value]);
   					
   					colorScales[propertyName] = 
   						d3.scale.category20b();
   				}
   				
-  				document.getElementById("sizeByWhat").innerHTML += selectHTML
-  				document.getElementById("sortByWhat").innerHTML += selectHTML
-  				document.getElementById("scatterX").innerHTML += selectHTML
-  				document.getElementById("scatterY").innerHTML += selectHTML	
+  				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
+  				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
+  				aDocument.getElementById("scatterX").innerHTML += selectHTML
+  				aDocument.getElementById("scatterY").innerHTML += selectHTML	
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
@@ -209,7 +216,7 @@ function reVis()
 	labelHTML +="<li>Font Adjust <input type=\"range\" id=\"fontAdjust\""
 		 labelHTML += "min=\"5\" max=\"25\" value=\"15\" onchange=redrawScreen()></input></li>"
 			 labelHTML += "</ul></li>"	  	
-	  	document.getElementById("nav").innerHTML+= labelHTML;
+	  	aDocument.getElementById("nav").innerHTML+= labelHTML;
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
   	mySidebar.innerHTML += "level: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
@@ -245,21 +252,21 @@ function reVis()
   
   	for( var x =0; x < nodes.length; x++)
   	{
-  		if( nodes[x].nodeDepth == document.getElementById("depthFilter").value) 
+  		if( nodes[x].nodeDepth == aDocument.getElementById("depthFilter").value) 
   		{	
   			topNodes.push(nodes[x]);
   		}
   	}
   	
   	
-  	document.getElementById("depthFilterRange").max = topNodes.length;
+  	aDocument.getElementById("depthFilterRange").max = topNodes.length;
   	
   	showOnlyMarked();
   }
   
   function showOnlyMarked()
   {
-  	var aVal = document.getElementById("depthFilterRange").value;
+  	var aVal = aDocument.getElementById("depthFilterRange").value;
   	
   	if( aVal==0)
   	{	
@@ -298,27 +305,27 @@ function reVis()
   function redrawScreen()
   {
   	// can't log an ordinal color scale...
-  	if(  ordinalScales[ document.getElementById("sizeByWhat").value] != null )  
+  	if(  ordinalScales[ aDocument.getElementById("sizeByWhat").value] != null )  
   	{
-  		aBox = document.getElementById("logSize");
+  		aBox = aDocument.getElementById("logSize");
   		aBox.checked=false;
   		aBox.enabled=false;
   	}
   	else
   	{
-  		document.getElementById("logSize").enabled=true;
+  		aDocument.getElementById("logSize").enabled=true;
   	}
   	
   	// can't log an ordinal color scale...
-  	if(  ordinalScales[ document.getElementById("colorByWhat").value] != null )  
+  	if(  ordinalScales[ aDocument.getElementById("colorByWhat").value] != null )  
   	{
-  		aBox = document.getElementById("logColor");
+  		aBox = aDocument.getElementById("logColor");
   		aBox.checked=false;
   		aBox.enabled=false;
   	}
   	else
   	{
-  		aBox = document.getElementById("logColor").enabled=true;
+  		aBox = aDocument.getElementById("logColor").enabled=true;
   	}
   	
   	dirty = true;
@@ -328,14 +335,14 @@ function reVis()
 
 function getLabelText(d)
 {	
-	if( d.marked == false && document.getElementById("labelOnlyTNodes").checked  )
+	if( d.marked == false && aDocument.getElementById("labelOnlyTNodes").checked  )
 		return "";
 	
 	var returnString ="";
 	
 	for( var propertyName in nodes[0])
 	{
-		var aCheckBox = document.getElementById("label" + propertyName);
+		var aCheckBox = aDocument.getElementById("label" + propertyName);
 		if( aCheckBox != null &&  aCheckBox.checked)
 		{
 			returnString += d[propertyName] + " ";
@@ -371,13 +378,13 @@ function isNumber(n) {
 
 function getRadiusVal(d)
 {
-	var propToSize = document.getElementById("sizeByWhat").value
-	var returnVal = document.getElementById("maxSize").value;
+	var propToSize = aDocument.getElementById("sizeByWhat").value
+	var returnVal = aDocument.getElementById("maxSize").value;
 	
 	// quantitative values
 	if( ranges[propToSize] != null)
 	{
-		if( document.getElementById("logSize").checked) 
+		if( aDocument.getElementById("logSize").checked) 
 		{
 			// d3's log scale yields problems with p=0 in range so we 
 			// covert everything to log and feed it to the linear scale..
@@ -386,15 +393,15 @@ function getRadiusVal(d)
 			{
 				maxScale = Math.log(ranges[propToSize][1]) / Math.LN10; 
 			
-				var aScale= d3.scale.linear().domain([0,maxScale]).range([document.getElementById("minSize").value,
-	  					document.getElementById("maxSize").value]).clamp(true);
+				var aScale= d3.scale.linear().domain([0,maxScale]).range([aDocument.getElementById("minSize").value,
+	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
 			}
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(ranges[propToSize]).range([document.getElementById("minSize").value,
-	  					document.getElementById("maxSize").value]).clamp(true);
+			var aScale= d3.scale.linear().domain(ranges[propToSize]).range([aDocument.getElementById("minSize").value,
+	  					aDocument.getElementById("maxSize").value]).clamp(true);
 	  		returnVal = aScale(d[propToSize]);
 		}
 		
@@ -402,14 +409,14 @@ function getRadiusVal(d)
 	}
 	else //ordinal values - much easier
 	{
-		aScale = ordinalScales[propToSize].range([document.getElementById("minSize").value,
-	  					document.getElementById("maxSize").value])
+		aScale = ordinalScales[propToSize].range([aDocument.getElementById("minSize").value,
+	  					aDocument.getElementById("maxSize").value])
 		returnVal =aScale(d[propToSize]);
 	}
 	
-	if( document.getElementById("invertSize").checked ) 
+	if( aDocument.getElementById("invertSize").checked ) 
 	{
-		returnVal = document.getElementById("maxSize").value - returnVal;
+		returnVal = aDocument.getElementById("maxSize").value - returnVal;
 	}
 	
 	return returnVal;
@@ -443,7 +450,7 @@ function update()
 		
 		for( var x=0; ! anyLabels && x < labelCheckBoxes.length; x++)
 		{
-			var aCheckBox = document.getElementById(labelCheckBoxes[x]);
+			var aCheckBox = aDocument.getElementById(labelCheckBoxes[x]);
 			
 			if( aCheckBox != null) 
 				anyLabels = aCheckBox.checked
@@ -493,28 +500,28 @@ function update()
 		for( z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
-		if( document.getElementById("graphType").value == "ForceTree") 
+		if( aDocument.getElementById("graphType").value == "ForceTree") 
 		{
 				links = d3.layout.tree().links(nodes);
 		}
 		
   	// Restart the force layout.
  	 
- 	 if( document.getElementById("graphType").value == "ForceTree"  ) 
+ 	 if( aDocument.getElementById("graphType").value == "ForceTree"  ) 
  	 force
       .nodes(nodes)
       
-      if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+      if( aDocument.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
       force.links(links)
       
-      if( document.getElementById("graphType").value == "ForceTree" )
-      	force.start().gravity(document.getElementById("gravitySlider").value/100);
+      if( aDocument.getElementById("graphType").value == "ForceTree" )
+      	force.start().gravity(aDocument.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
 	      .style("fill", function(d) { return d.thisNodeColor} )
-	      .style("opacity",document.getElementById("opacitySlider").value/100 );
+	      .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
 	
 	  // Enter any new nodes.
 	 node.enter().append("svg:circle").on("click", myClick)
@@ -523,22 +530,22 @@ function update()
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) {  return d.thisNodeRadius})
 	      .style("fill", function(d) { return d.thisNodeColor}).
-	      style("opacity",document.getElementById("opacitySlider").value/100 ) 
+	      style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
 	     .on("mouseenter", myMouseEnter)
 	      .on("mouseleave", myMouseLeave)
 	      
-	      if( document.getElementById("graphType").value == "ForceTree"  )
+	      if( aDocument.getElementById("graphType").value == "ForceTree"  )
 	      	node.call(force.drag);
 	      
 	      function updateNodesLinksText()
 	      {
 	      
-	      if( document.getElementById("graphType").value == "ForceTree"  )
+	      if( aDocument.getElementById("graphType").value == "ForceTree"  )
 	      {
 	      	node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; });
 	      }
-	      else if( document.getElementById("graphType").value == "scatter"  )
+	      else if( aDocument.getElementById("graphType").value == "scatter"  )
 	      {
 	      	node.attr("cx", function(d) {   return 400 * Math.random(); })
 	      .attr("cy", function(d) {   return 400 * Math.random(); });
@@ -547,7 +554,7 @@ function update()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-		if( document.getElementById("graphType").value == "ForceTree"  && ! document.getElementById("hideLinks").checked )
+		if( aDocument.getElementById("graphType").value == "ForceTree"  && ! aDocument.getElementById("hideLinks").checked )
 		{
 				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
@@ -565,17 +572,17 @@ function update()
 	    
 	      
 	      	// Update the links
-	      	if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+	      	if( aDocument.getElementById("graphType").value == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   		link = vis.selectAll("line.link")
       .data(links.filter(myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+	  if( aDocument.getElementById("graphType").value == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
-	 	var table = document.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
+	 	var table = aDocument.getElementById("tNodeTable"); //.rows[0].cells[1].item[0] = "" + numMarked ;
 	 	
 	 	table.rows[0].cells[1].innerHTML = "" + numVisible;
 	 	
@@ -589,11 +596,11 @@ function update()
                  .attr("dy", function(d) { return ".35em"; })
 		 .text( function (d) {  return getLabelText(d); })
                  .attr("font-family", "sans-serif")
-                 .attr("font-size", document.getElementById("fontAdjust").value + "px")
+                 .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
                  .attr("fill", function(d) {return  getTextColor(d) } )	    
 
  // cleanup
-  if( document.getElementById("graphType").value == "ForceTree" && ! document.getElementById("hideLinks").checked )
+  if( aDocument.getElementById("graphType").value == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
@@ -606,11 +613,11 @@ function update()
 	if( firstUpdate ) 
 	{
 		setQuantitativeDynamicRanges();
-  		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color1"));
-		document.getElementById("color1").style.visibility="visible";
+  		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color1"));
+		aDocument.getElementById("color1").style.visibility="visible";
 		
-		document.getElementById("ColorSubMenu").appendChild(document.getElementById("color2"));
-		document.getElementById("color2").style.visibility="visible";
+		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color2"));
+		aDocument.getElementById("color2").style.visibility="visible";
 		
 		firstUpdate = false;
 	}	
@@ -621,17 +628,17 @@ function update()
 function checkForStop()
 {
 	
-	if ( document.getElementById("graphType").value != "ForceTree" || ! document.getElementById("animate").checked)
+	if ( aDocument.getElementById("graphType").value != "ForceTree" || ! aDocument.getElementById("animate").checked)
   		force.stop();
 	
 }
 
 function getTextColor(d)
 {
-	if(  document.getElementById("textIsBlack").checked ) 
+	if(  aDocument.getElementById("textIsBlack").checked ) 
 		return "#000000";
 		
-	var chosen = document.getElementById("colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( colorScales[chosen] != null || ranges[chosen] != null)
 		return color(d);
@@ -640,7 +647,7 @@ function getTextColor(d)
 
 function myMouseEnter(d)
 {
-	if (! document.getElementById("mouseOverHighlights").checked)
+	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
 	function highlightNodeAndChildren(d2)
@@ -665,7 +672,7 @@ function myMouseEnter(d)
 function myMouseLeave()
 {
 	
-	if (! document.getElementById("mouseOverHighlights").checked)
+	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 
 	for(var x=0; x < nodes.length; x++) 
@@ -706,14 +713,14 @@ function initialize() {
 
 function getQuantiativeColor(d)
 {
-	var chosen = document.getElementById("colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
-	var lowColor = "#" + document.getElementById("quantColorLow").value;
-	var highColor ="#" + document.getElementById("quantColorHigh").value; 
+	var lowColor = "#" + aDocument.getElementById("quantColorLow").value;
+	var highColor ="#" + aDocument.getElementById("quantColorHigh").value; 
 		
 	var aRange = []
-	aRange.push(document.getElementById("lowQuantRange").value);
-	aRange.push(document.getElementById("highQuantRange").value);
+	aRange.push(aDocument.getElementById("lowQuantRange").value);
+	aRange.push(aDocument.getElementById("highQuantRange").value);
 		
 	if( lowColor > highColor) 
 	{
@@ -722,7 +729,7 @@ function getQuantiativeColor(d)
 		highColor = temp;
 	}
 		
-	if( document.getElementById("logColor").checked) 
+	if( aDocument.getElementById("logColor").checked) 
 	{
 		aVal =d[chosen]; 
 		maxScale = Math.log(aRange[1]) / Math.LN10; 
@@ -746,7 +753,7 @@ function getQuantiativeColor(d)
 function color(d) 
 {
 	
-	var chosen = document.getElementById("colorByWhat").value;
+	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( ranges[chosen] != null)
 		return getQuantiativeColor(d);
@@ -771,7 +778,7 @@ function color(d)
 // Toggle children on click.
 var myClick= function (d) {
 
-	var aValue =document.getElementById("clickDoesWhat").value;
+	var aValue =aDocument.getElementById("clickDoesWhat").value;
 	
 	if ( aValue == "deletes")
 	{
