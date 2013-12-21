@@ -7,6 +7,8 @@ function StaticHolder()
 		StaticHolder.ordinalScales={};
 		StaticHolder.colorScales = {};
 		StaticHolder.labelCheckBoxes=[]; 
+		StaticHolder.counter =0;
+		StaticHolder.goObjects = {};
 	}
 	
 	this.getRanges = function()
@@ -28,6 +30,20 @@ function StaticHolder()
 	{
 		return StaticHolder.labelCheckBoxes;
 	}
+	
+	this.addGoObject = function(goObject)
+	{
+		StaticHolder.counter++;
+		
+		StaticHolder.goObjects[StaticHolder.counter] = goObject;
+		
+		return StaticHolder.counter;
+	}
+	
+	this.getGoObjects = function()
+	{
+		return StaticHolder.goObjects;
+	}
 } 
 
 
@@ -36,6 +52,7 @@ function GO(parentWindow,thisWindow,isRunFromTopWindow)
 
 aDocument = parentWindow.document;
 statics = parentWindow.statics;
+var thisID = statics.addGoObject(this);
 
 this.resort = function()
 {
@@ -322,8 +339,17 @@ this.reVis = function()
   	this.update();
   }
   
+  // calls redrawAScreen on all registered listeners
+  this.redrawScreen= function()
+  {
+  	registered = statics.getGoObjects();
+  	for (id in registered)
+	{	
+		registered[id].redrawAScreen();
+	}
+  }
    
-  this.redrawScreen = function()
+  this.redrawAScreen = function()
   {
   	// can't log an ordinal color scale...
   	if(  statics.getOrdinalScales()[ aDocument.getElementById("sizeByWhat").value] != null )  
