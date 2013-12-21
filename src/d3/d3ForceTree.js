@@ -101,6 +101,7 @@ if( queryStrings )
 
 this.resort = function()
 {
+	
   	var compareChoice =  getElement(aDocument,"sortByWhat").value;
   
 	nodes.sort( function(a,b) {
@@ -111,6 +112,8 @@ this.resort = function()
   					return 0; } );
 	
 	this.setInitialPositions();
+	this.redrawScreen();
+	
 }
 
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
@@ -136,6 +139,18 @@ var force, drag, vis;
 
 this.reforce = function()
 {
+	if( force != null ) 
+	{
+		force.stop();
+	}
+	
+	if( vis != null)
+	{
+		vis.selectAll("text").remove()
+		vis.selectAll("circle.node").remove();
+		vis.selectAll("line.link").remove();
+	}
+	
 	this.setWidthAndHeight();
 	
     force = d3.layout.force()
@@ -411,6 +426,10 @@ this.reVis = function()
    
   this.redrawAScreen = function()
   {
+  	getElement(aDocument,"logSize").enabled=true;
+  	aBox = getElement(aDocument,"logColor").enabled=true;
+  
+  	/* right now these are getting stuck in the off position
   	// can't log an ordinal color scale...
   	if(  statics.getOrdinalScales()[ getElement(aDocument,"sizeByWhat").value] != null )  
   	{
@@ -434,6 +453,7 @@ this.reVis = function()
   	{
   		aBox = getElement(aDocument,"logColor").enabled=true;
   	}
+  	*/
   	
   	dirty = true;
   	this.update()
@@ -783,19 +803,30 @@ this.myMouseLeave= function ()
 this.setInitialPositions = function ()
 {
 	root.x = w / 2;
-  	root.y = h / 2 - 80;
+  	root.y = h / 2;
 	
-	var radius = Math.min(w,h)/2 - 300;
+	var radius = Math.min(w,h)/2;
 	
 	for( var x=0; x < nodes.length; x++) 
 	{
-		if( nodes[x] != root ) 
-		{
-			nodes[x].x = radius * Math.cos( (nodes.length-x) / 360.0) + root.x;
-			nodes[x].y = radius * Math.sin( (nodes.length-x) / 360.0) + root.y
-			nodes[x].fixed=false;
-		}
+		nodes[x].x = root.x/2 + radius * Math.cos( 360.0 * x/nodes.length) ;
+		nodes[x].y = radius * Math.sin( 360.0 * x/nodes.length) + root.y;
+		
+		if( nodes[x].x <0 ) 
+			nodes[x].x =0;
+			
+		if( nodes[x].x >w ) 
+			nodes[x].x =w;
+		
+		if( nodes[x].y <0 ) 
+			nodes[x].y =0;
+			
+		if( nodes[x].y >h ) 
+			nodes[x].y =h;	
+		
 	}
+	
+	root.fixed=true;
 }
 
 
