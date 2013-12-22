@@ -265,6 +265,14 @@ this.reVisOne = function()
   		var scatterX = thisDocument.getElementById("scatterX")
   		var scatterY = thisDocument.getElementById("scatterY")
   		
+  		var xString = "<option value=\"circleX\">circleX</option>";
+  		var yString = "<option value=\"circleY\">circleY</option>";
+  		
+  		scatterX.innerHTML += xString;
+  		scatterY.innerHTML += yString;
+  		scatterX.innerHTML += yString;
+  		scatterY.innerHTML += xString;
+  		
   		//todo: these will be in a different order than other menus
   		for (prop1 in statics.getRanges())
   			allNames.push(prop1);
