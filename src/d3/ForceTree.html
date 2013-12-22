@@ -55,14 +55,14 @@
 			   <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			" value="30" onchange= myGo.gravityAdjust()>
 						</input>
-			<br>scatter x:<select id="scatterX"></select>
-        	<br>scatter y:<select id="scatterY"></select></li>
+			<br>scatter x:<select id="scatterX" onchange=myGo.redrawScreen()></select>
+        	<br>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select>
 						
 	
 		<script type="text/javascript" src="jscolor/jscolor.js"></script>
 			 	<h3> All graphs: </h3>
 			 	Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
-			"value="90" onchafnge=myGo.redrawScreen()></input>
+			"value="90" onchange=myGo.redrawScreen()></input>
 			<br>Noise<input type="range" id="noiseSlider" min="0" max="100"
 			 value="0" onchange=myGo.addNoise()></input>
 			<br><button name= "button" onclick=myGo.resort()>re-sort</button> on 

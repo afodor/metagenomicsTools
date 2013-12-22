@@ -326,19 +326,33 @@ this.reVisOne = function()
   				var range=[]
   				range[0] = nodes[0][propertyName];
   				range[1] = nodes[0][propertyName];
-  							
+  				
+  				if( this.isNumber(range[0]) && this.isNumber(range[1]) ) 
+  				{
+  					range[0] = 1.0 * range[0];
+  					range[1] = 1.0 * range[1];
+  				}
+  				
+  				
   				for( var x=0;  isNumeric && x < nodes.length; x++)
   				{
   					var aVal =nodes[x][propertyName]; 
   					
   					if( ! this.isNumber(aVal))
+  					{
   						isNumeric = false;
-  					
-  					if( aVal < range[0]) 
-  						range[0] = aVal;
+  					}
+  					else
+  					{	
+  						aVal = 1.0 * aVal;
+  						if( aVal < range[0]) 
+  							range[0] = aVal;
   						
-  					if( aVal > range[1]) 
-  						range[1] = aVal;
+  						if( aVal > range[1]) 
+  							range[1] = aVal;
+  					}
+  					
+  					
   				}
   				
   				if( isNumeric) 
@@ -582,7 +596,34 @@ this.isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-
+this.getAVal = function (chosen, d, xAxis)
+		{
+			//var scatterX = thisDocument.getElementById("scatterX")
+			
+			if( chosen == "circleX" )
+				return d.x;
+				
+			if( chosen == "circleY" ) 
+				return d.y;
+				
+			// quantitative scale 
+			if( statics.getRanges()[chosen] != null)
+			{	
+				var aRange = statics.getRanges()[chosen];
+				var aScale = d3.scale.linear().domain(aRange).
+					range([0, xAxis ? w : h]).clamp(true);
+				return aScale(d[chosen]);
+	  		}
+	  		else
+	  		{
+	  			statics.getOrdinalScales()[chosen].
+	  				range([0, xAxis ? w : h]); 
+  					
+				return statics.getOrdinalScales()[chosen](d[chosen]);
+	  		}
+	  		
+	  		alert("Could not find " + chosen);
+		}
 
 this.getRadiusVal= function(d)
 {
@@ -640,7 +681,6 @@ this.update = function()
  
 	if( dirty ) 
 	{
-		console.log("Full update " + ++updateNum);
 		dirty = false;
 		var anyLabels = false;
 		
@@ -751,11 +791,16 @@ this.update = function()
 	      .style("fill", function(d) { return d.thisNodeColor} )
 	      .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
 	
+	
 	  // Enter any new nodes.
 	 node.enter().append("svg:circle").on("click", this.myClick)
 	      .attr("class", "node")
-	      .attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; })
+	      .attr("cx", 
+					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)}
+				)
+	      .attr("cy", 
+					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
+				)
 	      .attr("r", function(d) {  return d.thisNodeRadius})
 	      .style("fill", function(d) { return d.thisNodeColor}).
 	      style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
@@ -768,9 +813,13 @@ this.update = function()
 	      function updateNodesLinksText()
 	      {
 	      
-	      	node.attr("cx", function(d) { return d.x; })
-	      		.attr("cy", function(d) { return d.y; });
-	      	
+	      	 node.attr("cx", 
+					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)}
+				)
+	      	.attr("cy", 
+					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
+				)
+	    
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
@@ -994,6 +1043,7 @@ this.getQuantiativeColor= function (d)
 	}
 		
 }
+
 
 this.color= function (d) 
 {
