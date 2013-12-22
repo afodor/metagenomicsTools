@@ -124,6 +124,21 @@ if( queryStrings )
 		graphType = aGraphType;
 }
 
+// unregister any other ForceTrees.
+// Only 1 ForceTree graph 
+if( graphType == "ForceTree" )
+{
+	for( prop in statics.getGoObjects())
+	{
+		if( prop != thisID && statics.getGoObjects()[prop] &&
+					  statics.getGoObjects()[prop].graphType == "ForceTree")
+		{
+			prop.unregister();
+		}
+	}
+}
+			
+
 this.resort = function()
 {
 	var compareChoice =  aDocument.getElementById("sortByWhat").value;
@@ -342,7 +357,7 @@ this.reVisOne = function()
   	
   	var mySidebar = aDocument.getElementById("sidebar");
   	
-   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\"></select>"
+   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onChange=myGo.resort()></select>"
 	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=myGo.redrawScreen()>"
