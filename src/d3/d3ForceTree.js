@@ -860,15 +860,31 @@ this.update = function()
 	 	cell.innerHTML = "" + numMarked;
 	 	
 	 	if( anyLabels  )
-  var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text").
- 					attr("dx", function(d) { return 15; })
-                 .attr("dy", function(d) { return ".35em"; })             
-                 .attr("x", function(d) { return d.x; })
-  			.attr("y", function(d) { return d.y; })
-		 .text( function (d) {  return thisContext.getLabelText(d); })
+  
+
+	if ( anyLabels  ) 
+	{
+		var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text")
+  				.text( function (d) {  return thisContext.getLabelText(d); })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
-                 .attr("fill", function(d) {return  thisContext.getTextColor(d) } )	    
+                 .attr("fill", function(d) {return  thisContext.getTextColor(d) } )
+         			 
+                    if( graphType != "ForceTree")
+	                {
+	                	 text.attr("x",
+	                	 function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)})
+  						.attr("y", 
+  						function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)});
+                    }
+                    else
+                    {
+                    	text.attr("dx", function(d) { return 15; })
+                 		.attr("dy", function(d) { return ".35em"; })
+                    }
+	
+	}
+  	 	    
 
  // cleanup
   if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
