@@ -12,23 +12,36 @@
   <script src="/d3.v3.js"></script>
   <script src="/d3ForceTree.js"></script>
   <script>
-    test( "a first test", function() {
+    test( "a first test", function() 
+    {
 		urlString = "/ForceTree.html?GraphType=scatter&FileToOpen=testOperon.json";
 		
-		daughter = window.open(urlString); 
+		var daughter = null;
 		
-		vals = getQueryStrings(daughter);
+		ok( ! daughter);
 		
-		equal(vals["GraphType"], "scatter" );
-		equal(vals["FileToOpen"], "testOperon.json");
-		daughter.close();
+		daughter = window.open(urlString,"Test1",
+		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 		
-    });
-    
-      test( "a second test", function() {
-      var value = "hello3";
-      equal( value, "hello3", "We expect value to be hello" );
-    });
+		ok(daughter);
+		
+ 		// a hack to give time to load - todo make a proper callback 	
+ 		asyncTest( "test loaded frame", function() 
+ 			{
+ 				expect(3);
+ 			
+  				setTimeout(function() 
+  				{  	
+  					vals = getQueryStrings(daughter);
+					ok(vals);
+					equal(vals["GraphType"], "scatter" );
+					equal(vals["FileToOpen"], "testOperon.json");
+					daughter.close();
+					start();}
+				, 1000);
+  			});  //end asyncTest
+  		
+	}); // end test method
   </script>
 </body>
 </html>

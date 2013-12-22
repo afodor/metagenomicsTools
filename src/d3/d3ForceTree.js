@@ -50,29 +50,30 @@ function StaticHolder()
 
 
 // modded from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
-function getQueryStrings(aWindow) {
+function getQueryStrings(aWindow) 
+{
     //Holds key:value pairs
     var queryStringColl = null;
             
     //Get querystring from url
     var requestUrl = aWindow.location.search.toString();
 
-    if (requestUrl != '') {
-    	//window.location.search returns the part of the URL 
-        //that follows the ? symbol, including the ? symbol
-        requestUrl = requestUrl.substring(1);
+    if (requestUrl != '') 
+    {
+    	requestUrl = requestUrl.substring(1);
 
         queryStringColl = {};
 
         //Get key:value pairs from querystring
         var kvPairs = requestUrl.split('&');
 
-        for (var i = 0; i < kvPairs.length; i++) {
+        for (var i = 0; i < kvPairs.length; i++) 
+        {
             var kvPair = kvPairs[i].split('=');
             queryStringColl[kvPair[0]] = kvPair[1];
         }
     }
-
+   
     return queryStringColl;
 }
 
