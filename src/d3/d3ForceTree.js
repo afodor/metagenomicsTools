@@ -632,6 +632,24 @@ this.getAVal = function (chosen, d, xAxis)
 	  		
 	  		alert("Could not find " + chosen);
 		}
+		
+this.addAxis = function(chosen, xAxis)
+{
+	if( chosen == "circleX" || chosen == "circleY")
+		return;
+		
+	if( statics.getRanges()[chosen] != null)
+	{	
+		var aRange = statics.getRanges()[chosen];
+		var aScale = d3.scale.linear().domain(aRange).
+					range([0, xAxis ? w : h]).clamp(true);
+		var xAxis = d3.svg.axis()
+                  .scale(aScale)
+                  .orient("bottom");
+        vis.append("svg:svg").call(xAxis);
+        
+	  }
+}
 
 this.getRadiusVal= function(d)
 {
@@ -893,6 +911,8 @@ this.update = function()
 	
 	}
   	 	    
+  	 	    
+ 		this.addAxis( 	thisDocument.getElementById("scatterX").value, true);
 
  // cleanup
   if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
