@@ -9,10 +9,20 @@
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script src="/test/resources/qunit-1.12.0.js"></script>
+  <script src="/d3.v3.js"></script>
+  <script src="/d3ForceTree.js"></script>
   <script>
     test( "a first test", function() {
-      var value = "hello2";
-      equal( value, "hello2", "We expect value to be hello" );
+		urlString = "/ForceTree.html?GraphType=scatter&FileToOpen=testOperon.json";
+		
+		daughter = window.open(urlString); 
+		
+		vals = getQueryStrings(daughter);
+		
+		equal(vals["GraphType"], "scatter" );
+		equal(vals["FileToOpen"], "testOperon.json");
+		daughter.close();
+		
     });
     
       test( "a second test", function() {
