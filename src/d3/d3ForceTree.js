@@ -9,6 +9,17 @@ function StaticHolder()
 		StaticHolder.labelCheckBoxes=[]; 
 		StaticHolder.counter =0;
 		StaticHolder.goObjects = {};
+		StaticHolder.nodes;
+	}
+	
+	this.getNodes = function()
+	{
+		return StaticHolder.nodes;
+	}
+	
+	this.setNodes = function(someNodes)
+	{
+		StaticHolder.nodes = someNodes;
 	}
 	
 	this.getRanges = function()
@@ -45,8 +56,6 @@ function StaticHolder()
 		return StaticHolder.goObjects;
 	}
 } 
-
-
 
 
 // modded from http://dotnetprof.blogspot.com/2012/11/get-querystring-values-using-javascript.html
@@ -105,17 +114,7 @@ if( queryStrings )
 
 this.resort = function()
 {
-	registered = statics.getGoObjects();
-  	for (id in registered)
-	{	
-		registered[id].resortOne();
-	}
-}
-
-this.resortOne = function()
-{
-	
-  	var compareChoice =  aDocument.getElementById("sortByWhat").value;
+	var compareChoice =  aDocument.getElementById("sortByWhat").value;
   
   	// quantiative
   	if( statics.getRanges()[compareChoice] != null ) 
@@ -143,11 +142,10 @@ this.resortOne = function()
   	
 	this.setInitialPositions();
 	this.redrawScreen();
-	
 }
 
 // modded from http://mbostock.github.com/d3/talk/20111116/force-collapsible.html
-var w,h,nodes, 
+var w,h, 
     links,
     link,
     root;
@@ -157,7 +155,6 @@ var w,h,nodes,
   var firstUpdate = true;
   var reverse =false;
   var initHasRun = false;
-  var firstFlatten = true;
     
   topNodes= [];
   
@@ -304,7 +301,7 @@ this.reVisOne = function()
 
   this.addDynamicMenuContent =function()
   {
-  	if( ! firstFlatten || ! isRunFromTopWindow) 
+  	if( ! isRunFromTopWindow) 
   		return;
   	
   	var mySidebar = aDocument.getElementById("sidebar");
@@ -1214,6 +1211,14 @@ this.highlightAllParents = function (d)
 // Returns a list of all nodes under the root.
 this.flatten= function () 
 {
+	if( ! isRunFromTopWindow  )
+	{
+		nodes = statics.getNodes();
+		this.setInitialPositions();
+  		this.addDynamicMenuContent();
+  		return;
+	}
+
   var myNodes = [];
   var level =0.0;
   
@@ -1248,14 +1253,11 @@ this.flatten= function ()
   	myNodes[i].listPosition =i;
   }
   
-  nodes = myNodes;  
+  nodes = myNodes;
+  statics.setNodes(nodes);
   
-  if( firstFlatten) 
-  {
-  		this.setInitialPositions();
-  		this.addDynamicMenuContent();
-  		firstFlatten = false;
-  }
+  this.setInitialPositions();
+  this.addDynamicMenuContent();
   
 }
 
