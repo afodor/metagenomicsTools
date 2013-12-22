@@ -102,8 +102,16 @@ if( queryStrings )
 		graphType = aGraphType;
 }
 
-
 this.resort = function()
+{
+	registered = statics.getGoObjects();
+  	for (id in registered)
+	{	
+		registered[id].resortOne();
+	}
+}
+
+this.resortOne = function()
 {
 	
   	var compareChoice =  aDocument.getElementById("sortByWhat").value;
