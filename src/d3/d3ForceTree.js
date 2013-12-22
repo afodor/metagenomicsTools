@@ -640,6 +640,11 @@ this.isNumber = function (n) {
 
 this.getAVal = function (chosen, d, xAxis)
 		{
+		
+			if( graphType == "ForceTree" )
+			{
+					return xAxis? d.x : d.y;	
+			}
 			
 			if( chosen == "circleX" )
 				return d.xMap[thisID];
@@ -894,17 +899,33 @@ this.update = function()
 				)
 	    
 	      if ( anyLabels )
-			text.attr("transform", function(d) { return "translate(" + 
+	      {	
+	      	if( graphType == "ForceTree" ) 
+	      	{
+	      		
+	      	text.attr("transform", function(d) { return "translate(" + 
+						d.x
+							+ "," + d.y+ ")"; });
+			
+	      	}
+	      	else
+	      	{
+	      		
+	      	text.attr("transform", function(d) { return "translate(" + 
 						d.xMap[thisID]
 							+ "," + d.yMap[thisID]+ ")"; });
+	      	}
+	      	
+	      
+	      }
 			
 		if( graphType == "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
 		{
-				link.attr("x1", function(d) { return d.source.myNodes[i].xMap ; })
-	      .attr("x1", function(d) { return d.source.myNodes[i].xMap[thisID]; })
-	      .attr("y1", function(d) { return d.source.myNodes[i].yMap[thisID]; })
-	      .attr("x2", function(d) { return d.target.myNodes[i].xMap[thisID]; })
-	      .attr("y2", function(d) { return d.target.myNodes[i].yMap[thisID]; });
+				link.attr("x1", function(d) { return d.source.x; })
+	      .attr("x1", function(d) { return d.source.x; })
+	      .attr("y1", function(d) { return d.source.y; })
+	      .attr("x2", function(d) { return d.target.x; })
+	      .attr("y2", function(d) { return d.target.y; });
 		}
 		
 		  	thisContext.checkForStop();
