@@ -46,12 +46,52 @@
   						console.log(prop + " "  
   						+ daughter.statics.getNodes()[0].xMap[daughter.myGo.getThisId()]);
   					
-  					daughter.close();
-					start();}
+  					start();}
 				, 1000);
   			});  //end asyncTest
   			
-  			ok(true);
+  			var grandDaughter;
+		
+ 			asyncTest( "spawnGranddaughter", function() 
+ 			{
+ 				setTimeout(function() 
+ 				{   
+  					ok( ! grandDaughter);
+  					ok( daughter);
+  					ok(daughter.spawnNewWindow);
+  					grandDaughter= daughter.spawnNewWindow();
+  					start();
+  				}
+				, 3000);
+  			});  //end asyncTest
+  			
+  			asyncTest( "testGranddaughterX_Y_map", function() 
+ 			{
+ 				setTimeout(function() 
+ 				{   
+ 					ok(daughter);
+  					ok(daughter.statics);
+  					ok(daughter.statics.getNodes());
+  					ok(daughter.statics.getNodes()[0]);
+  					ok(daughter.statics.getNodes()[0].xMap);
+  					ok(daughter.statics.getNodes()[0].yMap);
+  					ok(daughter.myGo.getThisId());
+  					
+  					ok(daughter.statics.getNodes()[0].xMap[daughter.myGo.getThisId()]);
+  					ok(daughter.statics.getNodes()[0].yMap[daughter.myGo.getThisId()]);
+  					
+  					ok(grandDaughter);
+  					ok(daughter.statics.getNodes()[0]);
+  					ok(daughter.statics.getNodes()[0].xMap);
+  					ok(daughter.statics.getNodes()[0].yMap);
+  					ok(grandDaughter.myGo.getThisId());
+  					ok(daughter.statics.getNodes()[0].xMap[grandDaughter.myGo.getThisId()]);
+  					ok(daughter.statics.getNodes()[0].yMap[grandDaughter.myGo.getThisId()]);
+  					grandDaughter.close();
+ 					daughter.close();
+  					start();}
+				, 5000);
+  			});  //end asyncTest
   		
 	}); // end test method
   </script>

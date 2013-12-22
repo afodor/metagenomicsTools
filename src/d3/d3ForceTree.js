@@ -10,12 +10,24 @@ function StaticHolder()
 		StaticHolder.counter =0;
 		StaticHolder.goObjects = {};
 		StaticHolder.nodes;
+		StaticHolder.root;
 	}
 	
 	this.getNodes = function()
 	{
 		return StaticHolder.nodes;
 	}
+	
+	this.getRoot = function()
+	{
+		return StaticHolder.root;
+	}
+	
+	this.setRoot = function(aRoot)
+	{
+		StaticHolder.root = aRoot;
+	}
+	
 	
 	this.setNodes = function(someNodes)
 	{
@@ -148,7 +160,6 @@ this.resort = function()
 var w,h, 
     links,
     link,
-    root;
     thisContext = this;
     
   	var firstUpdate = true;
@@ -816,7 +827,8 @@ this.update = function()
 	 		nodes[i].thisNodeColor = this.color(nodes[i]);
 	 		nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
 	 	}	
-	
+		
+			
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
@@ -1040,8 +1052,10 @@ this.myMouseLeave= function ()
 
 this.setInitialPositions = function ()
 {
+	var root = statics.getRoot();
+	
 	root.xMap[thisID] =  (w-10) / 2  + 5;
-  	root.yMap[thisID] = (h-10) / 2 + 5;
+  	statics.getRoot().yMap[thisID] = (h-10) / 2 + 5;
 	
 	if( ! isRunFromTopWindow ) 
 	{
@@ -1080,7 +1094,7 @@ this.setInitialPositions = function ()
 
 this.initialize = function () {
    
-  this.flatten(root);
+  this.flatten();
   this.addIndividualMenuDynamicMenuContent();
       
   initHasRun = true;
@@ -1271,7 +1285,7 @@ this.flatten= function ()
 			
 	}
   
-  addNodeAndChildren(root);
+  addNodeAndChildren(statics.getRoot());
   
   for( var i=0; i < myNodes.length; i++)
   {
@@ -1292,20 +1306,24 @@ this.flatten= function ()
   
 }
 
-if( isRunFromTopWindow ) 
-{
-
-	aDocument.getElementById("color1").style.visibility="hidden";
-	aDocument.getElementById("color2").style.visibility="hidden";
-}
-
 this.reforce();
 
-//todo: nice error message if file can't be found
-d3.json(getQueryStrings(thisWindow)["FileToOpen"], function(json) 
+if( isRunFromTopWindow ) 
 {
-  root = json;
-  root.fixed = true;
-  thisContext.initialize();
-});
+	aDocument.getElementById("color1").style.visibility="hidden";
+	aDocument.getElementById("color2").style.visibility="hidden";
+	//todo: nice error message if file can't be found
+	d3.json(getQueryStrings(thisWindow)["FileToOpen"], function(json) 
+	{
+  		statics.setRoot(json);
+  		statics.getRoot().fixed = true;
+  	thisContext.initialize();  // wait until the data is loaded to initialize
+	});
+}
+else
+{
+	thisContext.initialize();  // data is already loaded - ok to initialize.
+}
+
+
 }

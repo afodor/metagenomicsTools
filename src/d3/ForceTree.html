@@ -85,9 +85,8 @@
 	spawnNewWindow = function()
 	{
 		newWindow = window.open("ForceTreeDaughter.html?GraphType=" + 
-		document.getElementById("graphType").value + "&" + "FileToOpen=" + 
-			getQueryStrings(window)["FileToOpen"]
-				,document.getElementById("graphType").value  + graph,
+		document.getElementById("graphType").value 
+						,document.getElementById("graphType").value  + graph,
 		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 		graph++;
 		return newWindow;

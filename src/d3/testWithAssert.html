@@ -1,62 +1,46 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<script>
-			function assert(value,desc)
-			{
-				var li = document.createElement("li");
-				li.className = value ? "pass" : "fail";
-				li.appendChild(document.createTextNode(desc));
-				document.getElementById("results").appendChild(li);
-			}
-			
-			window.onload = function()
-				{
-						
-						function StaticHolder()
-						{
-							if( !StaticHolder.ranges)
-							{
-								 StaticHolder.ranges ={};
-								StaticHolder.ordinalScales={};
-								StaticHolder.colorScales = {};
-								StaticHolder.labelCheckBoxes=[]; 
-							}
-							
-							this.getRanges = function()
-							{
-								return StaticHolder.ranges;
-							}
-							
-							this.getOrdinalScales = function()
-							{
-								return StaticHolder.ordinalScales;
-							}
-							
-							this.getColorScales = function()
-							{
-								return StaticHolder.colorScales;
-							}
-							
-							this.getLabelCheckBoxes= function()
-							{
-								return StaticHolder.labelCheckBoxes;
-							}
-						} 
-						
-						h1 = new StaticHolder();
-						h1.getLabelCheckBoxes().push("Hello");
-						h2 = new StaticHolder();
-						h1.getLabelCheckBoxes().push("Hello");
-						h3 = new StaticHolder();
-						alert(h3.getLabelCheckBoxes() + " " + h3.getLabelCheckBoxes().length);
-				}
-		</script>
-		<style>
-			#results li.pass { color:green; } 
-			#results li.fail { color:red; } 
-		</style>
-	</head>
-	<body>
-		<ul id="results"></ul>
-	</body>
-	</html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit basic example</title>
+  <link rel="stylesheet" href="/test/resources/qunit-1.12.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="/test/resources/qunit-1.12.0.js"></script>
+  <script src="/d3.v3.js"></script>
+  <script src="/d3ForceTree.js"></script>
+  <script>
+  	
+  	
+	test( "Basic assertions to put QUnit through the motions", function() 
+    {
+		
+		
+		myVar = {};
+		myVar["Akey"]="Aval";
+		ok(myVar)
+		ok(myVar["Akey"])
+		equal(myVar["Akey"],"Aval")
+		
+		myVar["Akey"] = null;
+		
+		ok(myVar);
+		ok( !myVar["Akey"]);
+		
+		aNewVar = {};
+		aNewVar[1] = 43;
+		aNewVar[2] = 60;
+		ok(aNewVar);
+		ok(aNewVar[1]);
+		ok(aNewVar[2]);
+		ok(!aNewVar[3]);
+		equal(aNewVar[1],43);
+		equal(aNewVar[2],60);
+  			
+  		
+	}); // end test method
+  </script>
+</body>
+</html>
