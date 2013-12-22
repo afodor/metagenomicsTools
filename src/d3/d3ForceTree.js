@@ -1268,7 +1268,8 @@ if( isRunFromTopWindow )
 
 this.reforce();
 
-d3.json("testOperon.json", function(json) 
+//todo: nice error message if file can't be found
+d3.json(getQueryStrings(thisWindow)["FileToOpen"], function(json) 
 {
   root = json;
   root.fixed = true;

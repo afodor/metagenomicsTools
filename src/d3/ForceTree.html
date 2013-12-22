@@ -82,17 +82,11 @@
 		<script type="text/javascript">
 		var graph=1;
 	
-	// to be used for testing to allow external test harnesses to test the 
-	// state of this window
-	function callback(function f)
-	{
-		f();
-	}
-	
 	function spawnNewWindow()
 	{
 		newWindow = window.open("ForceTreeDaughter.html?GraphType=" + 
-		document.getElementById("graphType").value        	
+		document.getElementById("graphType").value + "&" + "FileToOpen=" + 
+			getQueryStrings(window)["FileToOpen"]
 				,document.getElementById("graphType").value  + graph,
 		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 		graph++;
@@ -111,10 +105,6 @@
 								myGo.reVis(false); 
 							}
 						};
- 
- 	// for testing
- 	window.onload =
- 		
  
     </script>
 	</section>
