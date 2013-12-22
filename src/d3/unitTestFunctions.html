@@ -46,6 +46,82 @@
   		
 	}); // end test method
 	
+	test( "test grand-daughter spawning", function() 
+    {
+		urlString = "/ForceTree.html?GraphType=scatter&FileToOpen=testOperon.json";
+		
+		var daughter = null;
+		
+		ok( ! daughter);
+		
+		daughter = window.open(urlString,"Test3",
+		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
+		
+		var newWindow;
+		
+ 		asyncTest( "testUnregisterLoadedFrame", function() 
+ 			{
+ 				expect(3);
+ 				var newWindowId;
+ 			
+  				setTimeout(function() 
+  				{   
+  					ok( ! newWindow);
+  					ok( daughter);
+  					ok(daughter.spawnNewWindow);
+  					newWindow = daughter.spawnNewWindow();
+  					start();}
+				, 1000);
+  			});  //end asyncTest
+  		
+  		
+  		asyncTest( "testUnregisterLoadedFrame", function() 
+ 			{
+ 				expect(10);
+ 			
+  				setTimeout(function() 
+  				{   	
+  					ok( newWindow);
+  					ok(daughter.statics)
+  					ok(daughter.myGo)
+  					ok(daughter.statics.getGoObjects());
+  					ok(daughter.myGo.getThisId());
+  					ok(daughter.statics.getGoObjects()[daughter.myGo.getThisId()]);
+  					ok(newWindow.myGo)
+  					ok(newWindow.myGo.getThisId());
+  					ok(daughter.statics.getGoObjects()[newWindow.myGo.getThisId()]);
+  					ok( newWindow.myGo.getThisId() != daughter.myGo.getThisId());
+  					newWindowId = newWindow.myGo.getThisId()
+  					newWindow.close();
+  					start();}
+				, 3000);
+  			});  //end asyncTest
+  			
+  			
+  			
+  		asyncTest( "testUnregisterLoadedFrame", function() 
+ 			{
+ 				expect(7);
+ 			
+  				setTimeout(function() 
+  				{   	
+  					ok(newWindowId);
+  					ok( ! daughter.statics.getGoObjects()[newWindowId]);
+  					ok(daughter.statics)
+  					ok(daughter.myGo)
+  					ok(daughter.statics.getGoObjects());
+  					ok(daughter.myGo.getThisId());
+  					ok(daughter.statics.getGoObjects()[daughter.myGo.getThisId()]);
+  					daughter.close();
+  					start();}
+				, 5000);
+  			});  //end asyncTest
+  			
+  			
+  		
+  		
+	}); // end test method
+	
 	test( "a second test", function() 
     {
 		urlString = "/ForceTree.html?GraphType=scatter&FileToOpen=testOperon.json";

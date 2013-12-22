@@ -82,7 +82,7 @@
 		<script type="text/javascript">
 		var graph=1;
 	
-	function spawnNewWindow()
+	spawnNewWindow = function()
 	{
 		newWindow = window.open("ForceTreeDaughter.html?GraphType=" + 
 		document.getElementById("graphType").value + "&" + "FileToOpen=" + 
@@ -90,7 +90,9 @@
 				,document.getElementById("graphType").value  + graph,
 		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
 		graph++;
-	}
+		return newWindow;
+	};
+	
 	
 	var statics = new StaticHolder();
 	var myGo = new GO(window,window,true);
