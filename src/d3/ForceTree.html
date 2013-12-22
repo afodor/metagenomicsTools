@@ -99,12 +99,17 @@
 	window.onresize=
 				function()
 						{ 
-							console.log("Got resize " + ++myCount);
 							if( myGo != null ) 
 							{ 
 								myGo.reVis(false); 
 							}
 						};
+	window.onunload = 
+			function()
+			{
+				if( myGo)
+					myGo.unregister();
+			}
  
     </script>
 	</section>

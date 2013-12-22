@@ -42,6 +42,13 @@
 				};
  
 	}
+	
+	window.onclose = 
+			function()
+			{
+				if( myGo)
+					myGo.unregister();
+			}
 	</script>
 	
 </body>

@@ -208,6 +208,32 @@ this.setWidthAndHeight = function()
 	
 }
 
+this.getThisId = function()
+{
+	return thisID;
+}
+
+// to be called on window call
+this.unregister = function()
+{
+	console.log("Got unregister " + thisID );
+	statics.getGoObjects()[thisID] = null;
+	
+	if( force ) 
+	{
+		force.stop();
+	}
+	
+	if( vis ) 
+	{
+		vis.selectAll("text").remove()
+		vis.selectAll("circle.node").remove();
+		vis.selectAll("line.link").remove();
+	}
+	
+	
+}
+
 this.reVis = function(revisAll)
 {
 	if( revisAll )

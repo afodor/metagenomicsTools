@@ -85,8 +85,24 @@
   					start();}
 				, 1000);
   			});  //end asyncTest
+  		
+  		asyncTest( "testclosedFrame", function() 
+ 			{
+ 				expect(5);
+ 			
+  				setTimeout(function() 
+  				{   	
+  					ok(daughter.statics)
+  					ok(daughter.myGo)
+  					ok(daughter.statics.getGoObjects());
+  					ok(daughter.myGo.getThisId());
+  					ok(!daughter.statics.getGoObjects()[daughter.myGo.getThisId()]);
+  					start();}
+				, 5000);
+  			});  //end asyncTest
   			
-  			ok(true);
+  			
+  			
   		
 	}); // end test method
   </script>
