@@ -814,13 +814,13 @@ this.update = function()
 	 		{
 	 			if( firstNoise)
 	 			{
-	 				myNodes[i].xMapNoise  = nodes[i].xMap[thisID];
-	 				myNodes[i].yMapNoise  = nodes[i].yMap[thisID];
+	 				nodes[i].xMapNoise  = nodes[i].xMap[thisID];
+	 				nodes[i].yMapNoise  = nodes[i].yMap[thisID];
 	 			}
 	 			else
 	 			{
-	 				nodes[i].xMap[thisID]=myNodes[i].xMapNoise ;
-	 				nodes[i].yMap[thisID]= myNodes[i].yMapNoise;
+	 				nodes[i].xMap[thisID]=nodes[i].xMapNoise ;
+	 				nodes[i].yMap[thisID]= nodes[i].yMapNoise;
 	 				
 	 			}
 	 		
