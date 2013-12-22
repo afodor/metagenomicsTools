@@ -872,11 +872,13 @@ this.setInitialPositions = function ()
 	
 	console.log(aDocument.getElementById("gravitySlider").value + " " + radius);
 	
+	var piTwice= 2* Math.PI ;
+	
 	for( var x=0; x < nodes.length; x++) 
 	{
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(maxLevel-1) * radius;
-		nodes[x].x = root.x - aRad * Math.cos( 2* Math.PI * x/nodes.length) ;
-		nodes[x].y = aRad * Math.sin( 2* Math.PI * x/nodes.length) + root.y;
+		nodes[x].x = root.x - aRad * Math.cos( piTwice * x/nodes.length) ;
+		nodes[x].y = aRad * Math.sin( piTwice * x/nodes.length) + root.y;
 		
 		if( nodes[x].x <-10 ) 
 			nodes[x].x =-10;
