@@ -11,6 +11,7 @@
 </head>
 <body>
 <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
+	
 <div class="example">
     <ul id="nav">
         <li><a>Mouse</a>
@@ -48,24 +49,26 @@
     </ul>
 </div>
 	<aside id="sidebar">
-		<script type="text/javascript" src="jscolor/jscolor.js"></script>
-
-			 	<h3> Visualization: </h3>
-  	<input type="checkbox" id="animate"
+		<h3>This graph: </h3>
+		<input type="checkbox" id="animate"
 			onchange=myGo.redrawScreen() checked=true> animate</input>
 	<br><input type="checkbox" id="hideLinks"
 			onchange=myGo.redrawScreen()> hideLinks</input>	
-    	
-       <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			" value="30" onchange= gravityAdjust()>
+			   <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			" value="30" onchange= myGo.gravityAdjust()>
 						</input>
+	
+		<script type="text/javascript" src="jscolor/jscolor.js"></script>
+			 	<h3> All graphs: </h3>
+			 	Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
+			"value="90" onchafnge=myGo.redrawScreen()></input>
 			<br>Noise<input type="range" id="noiseSlider" min="0" max="100"
 			 value="0" onchange=myGo.addNoise()></input>
-		<br>Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
-			"value="90" onchafnge=myGo.redrawScreen()></input>
 			<br><button name= "button" onclick=myGo.resort()>re-sort</button> on 
 			
 	</aside>
+	
+	
 	<section>
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 
@@ -78,11 +81,6 @@
 		<script type="text/javascript">
 		var graph=1;
 	
-	function gravityAdjust()
-	{
-		myGo.setInitialPositions(); 
-		myGo.redrawScreen();
-	}
 	
 	function spawnNewWindow()
 	{

@@ -80,6 +80,7 @@ function GO(parentWindow,thisWindow,isRunFromTopWindow)
 {
 
 var aDocument = parentWindow.document;
+var thisDocument = thisWindow.document;
 var statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
 var graphType = "scatter"
@@ -176,7 +177,7 @@ this.reforce = function()
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.nodeDepth-16)/16 : 30; })
-    .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
+    .size([w, h - 60]).gravity(thisDocument.getElementById("gravitySlider").value/100)
     
     drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
 
@@ -532,6 +533,16 @@ this.myFilterLinks= function(d)
       		
 }
 
+this.gravityAdjust = function()
+{
+		if  (graphType !=  "ForceTree")		
+		{
+			myGo.setInitialPositions();
+		}	
+		
+		myGo.redrawScreen();
+}
+
 // from http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric
 this.isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
@@ -694,11 +705,11 @@ this.update = function()
       .nodes(nodes)
       
       if( graphType == "ForceTree" 
-      			&& ! aDocument.getElementById("hideLinks").checked )
+      			&& ! thisDocument.getElementById("hideLinks").checked )
       force.links(links)
       
       if( graphType == "ForceTree" )
-      	force.start().gravity(aDocument.getElementById("gravitySlider").value/100);
+      	force.start().gravity(thisDocument.getElementById("gravitySlider").value/100);
   
 		
 	  var node = vis.selectAll("circle.node")
@@ -729,7 +740,7 @@ this.update = function()
 	      if ( anyLabels )
 			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 			
-		if( graphType == "ForceTree"  && ! aDocument.getElementById("hideLinks").checked )
+		if( graphType == "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
 		{
 				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
@@ -747,13 +758,13 @@ this.update = function()
 	    
 	      
 	      	// Update the links
-	      	if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
+	      	if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
   		link = vis.selectAll("line.link")
       .data(links.filter(this.myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
+	  if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
@@ -777,7 +788,7 @@ this.update = function()
                  .attr("fill", function(d) {return  thisContext.getTextColor(d) } )	    
 
  // cleanup
-  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
+  if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
@@ -805,7 +816,7 @@ this.update = function()
 this.checkForStop =function()
 {
 	
-	if ( graphType != "ForceTree" || ! aDocument.getElementById("animate").checked)
+	if ( graphType != "ForceTree" || ! thisDocument.getElementById("animate").checked)
   		force.stop();
 	
 }
@@ -868,10 +879,8 @@ this.setInitialPositions = function ()
 	
 	var radius = Math.min(w,h)/2;
 	
-	radius = radius - radius * aDocument.getElementById("gravitySlider").value/100;
-	
-	console.log(aDocument.getElementById("gravitySlider").value + " " + radius);
-	
+	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
+		
 	var piTwice= 2* Math.PI ;
 	
 	for( var x=0; x < nodes.length; x++) 
