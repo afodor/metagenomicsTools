@@ -107,13 +107,30 @@ this.resort = function()
 	
   	var compareChoice =  aDocument.getElementById("sortByWhat").value;
   
-	nodes.sort( function(a,b) {
+  	// quantiative
+  	if( statics.getRanges()[compareChoice] != null ) 
+  	{
+		nodes.sort( function(a,b) {
+ 					 if (1.0 * a[compareChoice]< 1.0 * b[compareChoice])
+     						return -1;
+  					if (1.0 * a[compareChoice]> 1.0 * b[compareChoice])
+    					return 1;
+  					return 0; } );
+  	}
+  	else
+  	{
+  			nodes.sort( function(a,b) {
  					 if (a[compareChoice]< b[compareChoice])
      						return -1;
   					if (a[compareChoice]> b[compareChoice])
     					return 1;
   					return 0; } );
-	
+  
+  	}
+  
+  	for( var x=0; x < nodes.length; x++) 
+  		console.log( nodes[x][compareChoice] );
+  	
 	this.setInitialPositions();
 	this.redrawScreen();
 	
@@ -247,7 +264,7 @@ this.reVisOne = function()
   	
   	var mySidebar = aDocument.getElementById("sidebar");
   	
-   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onchange=myGo.sort())></select>"
+   	mySidebar.innerHTML +=  "<select id=\"sortByWhat\"></select>"
 	
   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=myGo.redrawScreen()>"
