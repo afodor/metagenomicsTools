@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit basic example</title>
+  <link rel="stylesheet" href="/test/resources/qunit-1.12.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="/test/resources/qunit-1.12.0.js"></script>
+  <script src="/d3.v3.js"></script>
+  <script src="/d3ForceTree.js"></script>
+  <script>
+  	
+  	test( "testMerged data", function() 
+    {
+		urlString = "/ForceTree.html?GraphType=scatter&FileToOpen=testOperon.json";
+		
+		var daughter = null;
+		
+		ok( ! daughter);
+		
+		daughter = window.open(urlString,"Test1",
+		"width=500,height=500,0,status=0,titlebar=no,menubar=no,location=no,toolbar=no,status=no");
+		
+		ok(daughter);
+		
+ 		// a hack to give time to load - todo make a proper callback 	
+ 		asyncTest( "test loaded frame", function() 
+ 			{
+  				setTimeout(function() 
+  				{  	
+  					ok(daughter);
+  					ok(daughter.statics);
+  					ok(daughter.statics.getNodes());
+  					ok(daughter.statics.getNodes()[0]);
+  					ok(daughter.statics.getNodes()[0].xMap);
+  					ok(daughter.statics.getNodes()[0].yMap);
+  					ok(daughter.myGo.getThisId());
+  					
+  					ok(daughter.statics.getNodes()[0].xMap[daughter.myGo.getThisId()]);
+  					ok(daughter.statics.getNodes()[0].yMap[daughter.myGo.getThisId()]);
+  					
+  					for(prop in daughter.statics.getNodes()[0].xMap)
+  						console.log(prop + " "  
+  						+ daughter.statics.getNodes()[0].xMap[daughter.myGo.getThisId()]);
+  					
+  					daughter.close();
+					start();}
+				, 1000);
+  			});  //end asyncTest
+  			
+  			ok(true);
+  		
+	}); // end test method
+  </script>
+</body>
+</html>

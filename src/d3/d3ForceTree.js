@@ -150,15 +150,14 @@ var w,h,
     link,
     root;
     thisContext = this;
-                
     
-  var firstUpdate = true;
-  var reverse =false;
-  var initHasRun = false;
+  	var firstUpdate = true;
+  	var reverse =false;
+  	var initHasRun = false;
     
-  topNodes= [];
+  	topNodes= [];
   
-  var dirty = true;
+  	var dirty = true;
   
     
 var force, drag, vis;
@@ -630,13 +629,12 @@ this.isNumber = function (n) {
 
 this.getAVal = function (chosen, d, xAxis)
 		{
-			//var scatterX = thisDocument.getElementById("scatterX")
 			
 			if( chosen == "circleX" )
-				return d.x;
+				return d.xMap[thisID];
 				
 			if( chosen == "circleY" ) 
-				return d.y;
+				return d.yMap[thisID];
 				
 			// quantitative scale 
 			if( statics.getRanges()[chosen] != null)
@@ -785,17 +783,18 @@ this.update = function()
 	 		{
 	 			if( firstNoise)
 	 			{
-	 				nodes[i].xBeforeNoise = nodes[i].x
-	 				nodes[i].yBeforeNoise = nodes[i].y
+	 				myNodes[i].xMapNoise  = nodes[i].xMap[thisID];
+	 				myNodes[i].yMapNoise  = nodes[i].yMap[thisID];
 	 			}
 	 			else
 	 			{
-	 				nodes[i].x = nodes[i].xBeforeNoise;
-	 				nodes[i].y = nodes[i].yBeforeNoise;
+	 				nodes[i].xMap[thisID]=myNodes[i].xMapNoise ;
+	 				nodes[i].yMap[thisID]= myNodes[i].yMapNoise;
+	 				
 	 			}
 	 		
-	 			var noiseX = 0.1 * nodes[i].x * Math.random() * (noiseValue/100);
-	 			var noiseY = 0.1 * nodes[i].y * Math.random() * (noiseValue/100);
+	 			var noiseX = 0.1 * nodes[i].xMap[thisID]* Math.random() * (noiseValue/100);
+	 			var noiseY = 0.1 * nodes[i].yMap[thisID]* Math.random() * (noiseValue/100);
 	 			
 	 			if( Math.random() < 0.5) 
 	 				noiseX = -noiseX;
@@ -803,8 +802,8 @@ this.update = function()
 	 			if( Math.random() < 0.5) 
 	 				noiseY = -noiseY;
 	 				
-	 			nodes[i].x += noiseX;
-	 			nodes[i].y += noiseY;
+	 			nodes[i].xMap[thisID] += noiseX;
+	 			nodes[i].yMap[thisID] += noiseY;
 	 			
 	 		}
 	 	}
@@ -883,15 +882,17 @@ this.update = function()
 				)
 	    
 	      if ( anyLabels )
-			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			text.attr("transform", function(d) { return "translate(" + 
+						d.xMap[thisID]
+							+ "," + d.yMap[thisID]+ ")"; });
 			
 		if( graphType == "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
 		{
-				link.attr("x1", function(d) { return d.source.x; })
-	      .attr("x1", function(d) { return d.source.x; })
-	      .attr("y1", function(d) { return d.source.y; })
-	      .attr("x2", function(d) { return d.target.x; })
-	      .attr("y2", function(d) { return d.target.y; });
+				link.attr("x1", function(d) { return d.source.myNodes[i].xMap ; })
+	      .attr("x1", function(d) { return d.source.myNodes[i].xMap[thisID]; })
+	      .attr("y1", function(d) { return d.source.myNodes[i].yMap[thisID]; })
+	      .attr("x2", function(d) { return d.target.myNodes[i].xMap[thisID]; })
+	      .attr("y2", function(d) { return d.target.myNodes[i].yMap[thisID]; });
 		}
 		
 		  	thisContext.checkForStop();
@@ -1039,13 +1040,13 @@ this.myMouseLeave= function ()
 
 this.setInitialPositions = function ()
 {
-	root.x = (w-10) / 2  + 5;
-  	root.y = (h-10) / 2 + 5;
+	root.xMap[thisID] =  (w-10) / 2  + 5;
+  	root.yMap[thisID] = (h-10) / 2 + 5;
 	
 	if( ! isRunFromTopWindow ) 
 	{
-		root.y -= 150;
-		root.x -= 50;
+		root.yMap[thisID] -= 150;
+		root.xMap[thisID] -= 50;
 	}
 	
 	var radius = Math.min(w,h)/2;
@@ -1057,20 +1058,20 @@ this.setInitialPositions = function ()
 	for( var x=0; x < nodes.length; x++) 
 	{
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(maxLevel-1) * radius;
-		nodes[x].x = root.x - aRad * Math.cos( piTwice * x/nodes.length) ;
-		nodes[x].y = aRad * Math.sin( piTwice * x/nodes.length) + root.y;
+		nodes[x].xMap[thisID]  = root.xMap[thisID]- aRad * Math.cos( piTwice * x/nodes.length) ;
+		nodes[x].yMap[thisID]  = aRad * Math.sin( piTwice * x/nodes.length) + root.xMap[thisID];
 		
-		if( nodes[x].x <-10 ) 
-			nodes[x].x =-10;
+		if( nodes[x].xMap[thisID]  <-10 ) 
+			nodes[x].xMap[thisID]  =-10;
 			
-		if( nodes[x].x >w +10) 
-			nodes[x].x =w+10;
+		if( nodes[x].xMap[thisID]  >w +10) 
+			nodes[x].xMap[thisID]  =w+10;
 		
-		if( nodes[x].y <-10 ) 
-			nodes[x].y =-10;
+		if( nodes[x].yMap[thisID]  <-10 ) 
+			nodes[x].yMap[thisID]  =-10;
 			
-		if( nodes[x].y >h +10) 
-			nodes[x].y =h +10;	
+		if( nodes[x].yMap[thisID]  >h +10) 
+			nodes[x].yMap[thisID]  =h +10;	
 	}
 	
 	root.fixed=true;
@@ -1277,6 +1278,10 @@ this.flatten= function ()
   	if (!myNodes[i].forceTreeNodeID) myNodes[i].forceTreeNodeID = i+1;
   	
   	myNodes[i].listPosition =i;
+  	myNodes[i].xMap = {};
+  	myNodes[i].yMap = {};
+  	myNodes[i].xMapNoise = {};
+  	myNodes[i].yMapNoise = {};
   }
   
   nodes = myNodes;
