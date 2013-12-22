@@ -633,21 +633,33 @@ this.getAVal = function (chosen, d, xAxis)
 	  		alert("Could not find " + chosen);
 		}
 		
-this.addAxis = function(chosen, xAxis)
+this.addAxis = function(chosen, isXAxis)
 {
 	if( chosen == "circleX" || chosen == "circleY")
 		return;
 		
 	if( statics.getRanges()[chosen] != null)
 	{	
-		var aRange = statics.getRanges()[chosen];
+		if( isXAxis)
+		{
+				var aRange = statics.getRanges()[chosen];
 		var aScale = d3.scale.linear().domain(aRange).
-					range([0, xAxis ? w : h]).clamp(true);
+					range([0, w]).clamp(true);
 		var xAxis = d3.svg.axis()
                   .scale(aScale)
-                  .orient("bottom");
-        vis.append("svg:svg").call(xAxis);
-        
+                  .orient( "bottom");
+        vis.append("svg:svg").call(xAxis); 
+		}
+		else
+		{
+		var aRange = statics.getRanges()[chosen];
+		var aScale = d3.scale.linear().domain(aRange).
+					range([0, h]).clamp(true);
+		var yAxis = d3.svg.axis()
+                  .scale(aScale)
+                  .orient( "right");
+        vis.append("svg:svg").call(yAxis); 
+		}
 	  }
 }
 
@@ -913,6 +925,8 @@ this.update = function()
   	 	    
   	 	    
  		this.addAxis( 	thisDocument.getElementById("scatterX").value, true);
+ 		this.addAxis( 	thisDocument.getElementById("scatterY").value, false);
+ 		
 
  // cleanup
   if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
