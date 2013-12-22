@@ -60,6 +60,17 @@
 		
 		ok(daughter);
 		
+		myVar = {};
+		myVar["Akey"]="Aval";
+		ok(myVar)
+		ok(myVar["Akey"])
+		equal(myVar["Akey"],"Aval")
+		
+		myVar["Akey"] = null;
+		
+		ok(myVar);
+		ok( !myVar["Akey"]);
+		
  		// a hack to give time to load - todo make a proper callback 	
  		asyncTest( "test loaded frame", function() 
  			{
