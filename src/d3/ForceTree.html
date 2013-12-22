@@ -43,8 +43,6 @@
         	<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
         	<li><button name= "button" onclick=myGo.reVis()>refresh graph</button></li>
         	<li><select id="graphType"><option value="scatter">Scatter Plot</option><option value="ForceTree">Force Tree</option></select></li>
-        	<li>scatter x:<select id="scatterX"></select></li>
-        	<li>scatter y:<select id="scatterY"></select></li>
         </ul> </li>
     </ul>
 </div>
@@ -57,6 +55,9 @@
 			   <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			" value="30" onchange= myGo.gravityAdjust()>
 						</input>
+			<br>scatter x:<select id="scatterX"></select>
+        	<br>scatter y:<select id="scatterY"></select></li>
+						
 	
 		<script type="text/javascript" src="jscolor/jscolor.js"></script>
 			 	<h3> All graphs: </h3>

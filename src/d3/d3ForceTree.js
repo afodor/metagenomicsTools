@@ -196,8 +196,8 @@ this.setWidthAndHeight = function()
 	}
 	else
 	{	
-		w =  thisWindow.innerWidth-25,
-    	h = thisWindow.innerHeight-25;
+		w =  thisWindow.innerWidth-40;
+    	h = thisWindow.innerHeight;
 	}
 	
 }
@@ -256,6 +256,33 @@ this.reVisOne = function()
   		}
   		if( ! firstUpdate ) 
 			this.redrawScreen();  	
+  }
+  
+  this.addIndividualMenuDynamicMenuContent = function()
+  {
+  		var allNames = [];
+  		
+  		var scatterX = thisDocument.getElementById("scatterX")
+  		var scatterY = thisDocument.getElementById("scatterY")
+  		
+  		//todo: these will be in a different order than other menus
+  		for (prop1 in statics.getRanges())
+  			allNames.push(prop1);
+  		
+  		for (prop2 in statics.getOrdinalScales())	
+  			allNames.push(prop2);
+  			
+  		for( var x=0; x< allNames.length; x++)
+  		{
+  			var propertyName = allNames[x];
+  			
+  			var selectHTML = "<option value=\"" + propertyName
+  				+ "\">" + propertyName   +"</option>"
+  			
+  			scatterX.innerHTML += selectHTML;
+  			scatterY.innerHTML += selectHTML;
+  		}
+  
   }
 
   this.addDynamicMenuContent =function()
@@ -318,8 +345,7 @@ this.reVisOne = function()
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
   				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
-  				aDocument.getElementById("scatterX").innerHTML += selectHTML
-  				aDocument.getElementById("scatterY").innerHTML += selectHTML	
+  
   		}
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
@@ -877,6 +903,12 @@ this.setInitialPositions = function ()
 	root.x = (w-10) / 2  + 5;
   	root.y = (h-10) / 2 + 5;
 	
+	if( ! isRunFromTopWindow ) 
+	{
+		root.y -= 150;
+		root.x -= 50;
+	}
+	
 	var radius = Math.min(w,h)/2;
 	
 	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
@@ -908,8 +940,8 @@ this.setInitialPositions = function ()
 
 this.initialize = function () {
    
-  
-  this.flatten(root),
+  this.flatten(root);
+  this.addIndividualMenuDynamicMenuContent();
       
   initHasRun = true;
  	dirty = true;
@@ -1106,8 +1138,8 @@ this.flatten= function ()
   		this.setInitialPositions();
   		this.addDynamicMenuContent();
   		firstFlatten = false;
-  		
   }
+  
 }
 
 if( isRunFromTopWindow ) 
