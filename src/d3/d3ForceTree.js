@@ -432,6 +432,8 @@ this.reVisOne = function()
   						&& propertyName != "yMapNoise")
   					dataMenuHTML+=
   						"<li><a>" + propertyName   +" </a><ul>"  
+  						
+  						
   				
   					dataMenuHTML+=	"</ul></li>";
   				}
