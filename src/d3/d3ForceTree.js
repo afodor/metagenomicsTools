@@ -431,8 +431,9 @@ this.reVisOne = function()
   						&& propertyName != "xMapNoise"
   						&& propertyName != "yMapNoise")
   					dataMenuHTML+=
-  						"<li><input type=\"checkbox\" id=\"show\"" + propertyName
-  							+ "\">" + propertyName   +" </input></li>";
+  						"<li><a>" + propertyName   +" </a><ul>"  
+  				
+  					dataMenuHTML+=	"</ul></li>";
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
