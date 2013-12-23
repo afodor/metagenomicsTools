@@ -426,18 +426,21 @@ this.reVisOne = function()
   					statics.getOrdinalScales()[propertyName] = d3.scale.ordinal();
   					statics.getColorScales()[propertyName] = d3.scale.category20b();
   					
-  					if(propertyName != "xMap" 
-  						&& propertyName != "yMap" 
-  						&& propertyName != "xMapNoise"
-  						&& propertyName != "yMapNoise")
-  					dataMenuHTML+=
-  						"<li><a>" + propertyName   +" </a><ul>"  
-  				
-  					dataMenuHTML+=	"</ul></li>";
+  			
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
   				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
+  				
+  				if(propertyName != "xMap" 
+						&& propertyName != "yMap" 
+						&& propertyName != "xMapNoise"
+						&& propertyName != "yMapNoise")
+					dataMenuHTML+=
+						"<li><a>" + propertyName   +" </a></li>"  
+						
+				
+			
   
   		}
 	
