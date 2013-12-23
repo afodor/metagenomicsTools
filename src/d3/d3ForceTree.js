@@ -372,9 +372,14 @@ this.reVisOne = function()
 			+"<input type=\"checkbox\"" + 
 			"id=\"invertSize\" onchange=myGo.redrawScreen()>invert</input><br>"
 	
+	var dataMenuHTML =   "<li id=\"dataMenu\"><a>Data</a><ul>";
 	for( var propertyName in nodes[0])
-  		if( propertyName != "forceTreeNodeID" && propertyName != "x" && propertyName != "y"
-  				&& propertyName != "children" && propertyName != "fixed" )
+  		if( 	propertyName != "forceTreeNodeID" 
+  				&& propertyName != "x" 
+  				&& propertyName != "y"
+  				&& propertyName != "children" 
+  				&& propertyName != "fixed" 
+  				)
   		{
   			var isNumeric = true;
   			var selectHTML = "<option value=\"" + propertyName
@@ -420,12 +425,25 @@ this.reVisOne = function()
   				{
   					statics.getOrdinalScales()[propertyName] = d3.scale.ordinal();
   					statics.getColorScales()[propertyName] = d3.scale.category20b();
+  					
+  					if(propertyName != "xMap" 
+  						&& propertyName != "yMap" 
+  						&& propertyName != "xMapNoise"
+  						&& propertyName != "yMapNoise")
+  					dataMenuHTML+=
+  						"<li><input type=\"checkbox\" id=\"show\"" + propertyName
+  							+ "\">" + propertyName   +" </input></li>";
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
   				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
   
   		}
+	
+	dataMenuHTML+= "</ul></li>";
+	
+	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
+		
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
   	selectHTML =  "<select id=\"colorByWhat\" onchange=myGo.setQuantitativeDynamicRanges()>"
