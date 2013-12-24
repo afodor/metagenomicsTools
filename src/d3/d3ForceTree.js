@@ -110,6 +110,7 @@ var queryStrings = getQueryStrings(thisWindow)
 var maxLevel =-1;
 var addNoise= false;
 var firstNoise = true;
+var dataNames = [];
 
 this.addNoise = function()
 {
@@ -413,8 +414,6 @@ this.reVisOne = function()
   						if( aVal > range[1]) 
   							range[1] = aVal;
   					}
-  					
-  					
   				}
   				
   				if( isNumeric) 
@@ -425,8 +424,6 @@ this.reVisOne = function()
   				{
   					statics.getOrdinalScales()[propertyName] = d3.scale.ordinal();
   					statics.getColorScales()[propertyName] = d3.scale.category20b();
-  					
-  			
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
@@ -437,17 +434,16 @@ this.reVisOne = function()
 						&& propertyName != "xMapNoise"
 						&& propertyName != "yMapNoise")
 					dataMenuHTML+=
-						"<li><a>" + propertyName   +" </a></li>"  
+						"<li id=\"dataRange" + propertyName + "\"><a>" + propertyName   +" </a></li>"  
 						
-				
-			
-  
+					dataNames.push( "dataRange" + propertyName );
   		}
 	
 	dataMenuHTML+= "</ul></li>";
 	
 	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
 		
+	
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
   	selectHTML =  "<select id=\"colorByWhat\" onchange=myGo.setQuantitativeDynamicRanges()>"
@@ -870,7 +866,6 @@ this.update = function()
 	 		nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
 	 	}	
 		
-			
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
@@ -884,7 +879,7 @@ this.update = function()
 		
 		if( graphType == "ForceTree") 
 		{
-				links = d3.layout.tree().links(nodes);
+			links = d3.layout.tree().links(nodes);
 		}
 		
   	// Restart the force layout.
