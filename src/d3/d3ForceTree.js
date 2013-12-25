@@ -361,8 +361,8 @@ this.reVisOne = function()
   	var mySidebar = aDocument.getElementById("sidebar");
   	
    	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onChange=myGo.resort()></select>"
-	
-  	mySidebar.innerHTML += "<h3> Size: <h3>"
+
+   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=myGo.redrawScreen()>"
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
@@ -1024,10 +1024,16 @@ this.update = function()
 	 	cell.innerHTML = "" + numMarked;
 	
 
+	for( var x=0; x < nodes.length; x++)
+	 {	
+		nodes[x].nodeLabelText = this.getLabelText(nodes[x]);
+	 }
+
+
 	if ( anyLabels  ) 
 	{
 		var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text")
-  				.text( function (d) {  return thisContext.getLabelText(d); })
+  				.text( function (d) {  return d.nodeLabelText; })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
                  .attr("fill", function(d) {return  thisContext.getTextColor(d) } )
