@@ -660,11 +660,12 @@ this.getLabelText = function(d)
 					thisDocument.getElementById("scatterX").value == "circleY" ) || 
 					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" ))
 		{
-			if( circleDraws[ d["nodeDepth"]] ==  returnString)
+			if( circleDraws[d.nodeDepth] ==  returnString)			
 				return "";
 		}
 	
-	circleDraws[ d["nodeDepth"]] ==  returnString;
+	circleDraws[d.nodeDepth] =  "" +  returnString;
+	
 	
 	return returnString;	
 }
@@ -825,7 +826,7 @@ this.update = function()
 		
 		for( var x=0; x<= maxLevel; x++ )
 		{
-			circleDraws[maxLevel] = "";
+			circleDraws[x] = "";
 		}
 		
 		
