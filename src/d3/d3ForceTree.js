@@ -185,6 +185,8 @@ var w,h,
   	topNodes= [];
   
   	var dirty = true;
+  	
+  	var circleDraws = {};
   
     
 var force, drag, vis;
@@ -224,11 +226,11 @@ this.setWidthAndHeight = function()
 	if( isRunFromTopWindow ) 
 	{
 		w =  thisWindow.innerWidth-300,
-    	h = thisWindow.innerHeight-100;
+    	h = thisWindow.innerHeight-25;
 	}
 	else
 	{	
-		w =  thisWindow.innerWidth-40;
+		w =  thisWindow.innerWidth-25;
     	h = thisWindow.innerHeight;
 	}
 	
@@ -443,12 +445,12 @@ this.reVisOne = function()
 	
 	for( var x=0; x < dataNames.push; x++)
 	{
-		var innerString = "<ul>";
+		var innerString = "";
 		
 		for( var y=0; y < 5; y++)
 			innerString += "<li>Number " + x + "</li>";
 		
-		innerString += "</ul>";
+		innerString += "";
 		aDocument.getElementById(dataNames).innerHTML += innerString;
 		
 		
@@ -459,9 +461,6 @@ this.reVisOne = function()
 	
 	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
 		
-	
-	
-	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
   	selectHTML =  "<select id=\"colorByWhat\" onchange=myGo.setQuantitativeDynamicRanges()>"
   	
@@ -488,8 +487,10 @@ this.reVisOne = function()
 				"onchange=myGo.redrawScreen()>text always black</input>";
   	    
   	var labelHTML = "<li><a>Labels</a><ul>";
-  	labelHTML += "<li><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
-			"onchange=myGo.redrawScreen() checked=true> Label only T-Nodes</input></li>"	
+  	labelHTML += "<li><input type=\"checkbox\" id=\"cicleLabelScheme\"" + 
+			"onchange=myGo.redrawScreen() checked=true>" +
+			"Smart circular labels</input><br><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
+			"onchange=myGo.redrawScreen()> Label only T-Nodes</input></li>"	
 				
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" 
@@ -652,7 +653,19 @@ this.getLabelText = function(d)
 			returnString += d[propertyName] + " ";
 		}
 	}
-		
+	
+
+	if( aDocument.getElementById("cicleLabelScheme").checked  &&
+			(thisDocument.getElementById("scatterX").value == "circleX" || 
+					thisDocument.getElementById("scatterX").value == "circleY" ) || 
+					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" ))
+		{
+			if( circleDraws[ d["nodeDepth"]] ==  returnString)
+				return "";
+		}
+	
+	circleDraws[ d["nodeDepth"]] ==  returnString;
+	
 	return returnString;	
 }
 
@@ -809,6 +822,12 @@ this.update = function()
 	{
 		dirty = false;
 		var anyLabels = false;
+		
+		for( var x=0; x<= maxLevel; x++ )
+		{
+			circleDraws[maxLevel] = "";
+		}
+		
 		
 		for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
 		{
