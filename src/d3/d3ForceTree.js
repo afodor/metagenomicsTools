@@ -637,6 +637,7 @@ this.reVisOne = function()
   	this.update()
   }
 
+  
 
 this.getLabelText = function(d)
 {	
