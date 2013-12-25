@@ -441,8 +441,25 @@ this.reVisOne = function()
 	
 	dataMenuHTML+= "</ul></li>";
 	
+	for( var x=0; x < dataNames.push; x++)
+	{
+		var innerString = "<ul>";
+		
+		for( var y=0; y < 5; y++)
+			innerString += "<li>Number " + x + "</li>";
+		
+		innerString += "</ul>";
+		aDocument.getElementById(dataNames).innerHTML += innerString;
+		
+		
+	}
+	
+	
+	
+	
 	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
 		
+	
 	
 	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
@@ -1037,8 +1054,6 @@ this.update = function()
 		
 		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color2"));
 		aDocument.getElementById("color2").style.visibility="visible";
-		
-		
 	}	
   	
   	firstUpdate = false;
