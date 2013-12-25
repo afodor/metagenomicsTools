@@ -1022,9 +1022,7 @@ this.update = function()
 	 	var row = table.rows[1];
 	 	var cell =row.cells[1];
 	 	cell.innerHTML = "" + numMarked;
-	 	
-	 	if( anyLabels  )
-  
+	
 
 	if ( anyLabels  ) 
 	{
