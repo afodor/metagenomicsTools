@@ -219,7 +219,7 @@ this.reforce = function()
     .attr("width", w)
     .attr("height", h)
   .append("g")
-    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", thisContext.zoom))
+    .call(d3.behavior.zoom().scaleExtent([0.01, 100]).on("zoom", thisContext.zoom))
   .append("g");
 	 
 }
