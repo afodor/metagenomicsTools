@@ -110,6 +110,7 @@ var queryStrings = getQueryStrings(thisWindow)
 var maxLevel =-1;
 var addNoise= false;
 var firstNoise = true;
+var dataNames = [];
 
 this.addNoise = function()
 {
@@ -184,6 +185,8 @@ var w,h,
   	topNodes= [];
   
   	var dirty = true;
+  	
+  	var circleDraws = {};
   
     
 var force, drag, vis;
@@ -223,11 +226,11 @@ this.setWidthAndHeight = function()
 	if( isRunFromTopWindow ) 
 	{
 		w =  thisWindow.innerWidth-300,
-    	h = thisWindow.innerHeight-100;
+    	h = thisWindow.innerHeight-25;
 	}
 	else
 	{	
-		w =  thisWindow.innerWidth-40;
+		w =  thisWindow.innerWidth-25;
     	h = thisWindow.innerHeight;
 	}
 	
@@ -358,8 +361,8 @@ this.reVisOne = function()
   	var mySidebar = aDocument.getElementById("sidebar");
   	
    	mySidebar.innerHTML +=  "<select id=\"sortByWhat\" onChange=myGo.resort()></select>"
-	
-  	mySidebar.innerHTML += "<h3> Size: <h3>"
+
+   	mySidebar.innerHTML += "<h3> Size: <h3>"
   	var selectHTML =  "<select id=\"sizeByWhat\" onchange=myGo.redrawScreen()>"
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
@@ -413,8 +416,6 @@ this.reVisOne = function()
   						if( aVal > range[1]) 
   							range[1] = aVal;
   					}
-  					
-  					
   				}
   				
   				if( isNumeric) 
@@ -425,29 +426,41 @@ this.reVisOne = function()
   				{
   					statics.getOrdinalScales()[propertyName] = d3.scale.ordinal();
   					statics.getColorScales()[propertyName] = d3.scale.category20b();
-  					
-  					if(propertyName != "xMap" 
-  						&& propertyName != "yMap" 
-  						&& propertyName != "xMapNoise"
-  						&& propertyName != "yMapNoise")
-  					dataMenuHTML+=
-  						"<li><a>" + propertyName   +" </a><ul>"  
-  						
-  						
-  				
-  					dataMenuHTML+=	"</ul></li>";
   				}
   				
   				aDocument.getElementById("sizeByWhat").innerHTML += selectHTML
   				aDocument.getElementById("sortByWhat").innerHTML += selectHTML
-  
+  				
+  				if(propertyName != "xMap" 
+						&& propertyName != "yMap" 
+						&& propertyName != "xMapNoise"
+						&& propertyName != "yMapNoise")
+					dataMenuHTML+=
+						"<li id=\"dataRange" + propertyName + "\"><a>" + propertyName   +" </a></li>"  
+						
+					dataNames.push( "dataRange" + propertyName );
   		}
 	
 	dataMenuHTML+= "</ul></li>";
 	
+	for( var x=0; x < dataNames.push; x++)
+	{
+		var innerString = "";
+		
+		for( var y=0; y < 5; y++)
+			innerString += "<li>Number " + x + "</li>";
+		
+		innerString += "";
+		aDocument.getElementById(dataNames).innerHTML += innerString;
+		
+		
+	}
+	
+	
+	
+	
 	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
 		
-	
 	mySidebar.innerHTML += "<h3> Color: <h3>";
   	selectHTML =  "<select id=\"colorByWhat\" onchange=myGo.setQuantitativeDynamicRanges()>"
   	
@@ -474,8 +487,10 @@ this.reVisOne = function()
 				"onchange=myGo.redrawScreen()>text always black</input>";
   	    
   	var labelHTML = "<li><a>Labels</a><ul>";
-  	labelHTML += "<li><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
-			"onchange=myGo.redrawScreen() checked=true> Label only T-Nodes</input></li>"	
+  	labelHTML += "<li><input type=\"checkbox\" id=\"cicleLabelScheme\"" + 
+			"onchange=myGo.redrawScreen() checked=true>" +
+			"Smart circular labels</input><br><input type=\"checkbox\" id=\"labelOnlyTNodes\"" + 
+			"onchange=myGo.redrawScreen()> Label only T-Nodes</input></li>"	
 				
 	for( var propertyName in nodes[0])
   		if( propertyName != "forceTreeNodeID" 
@@ -622,6 +637,7 @@ this.reVisOne = function()
   	this.update()
   }
 
+  
 
 this.getLabelText = function(d)
 {	
@@ -638,7 +654,20 @@ this.getLabelText = function(d)
 			returnString += d[propertyName] + " ";
 		}
 	}
-		
+	
+
+	if( aDocument.getElementById("cicleLabelScheme").checked  &&
+			(thisDocument.getElementById("scatterX").value == "circleX" || 
+					thisDocument.getElementById("scatterX").value == "circleY" ) || 
+					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" ))
+		{
+			if( circleDraws[d.nodeDepth] ==  returnString)			
+				return "";
+		}
+	
+	circleDraws[d.nodeDepth] =  "" +  returnString;
+	
+	
 	return returnString;	
 }
 
@@ -796,6 +825,12 @@ this.update = function()
 		dirty = false;
 		var anyLabels = false;
 		
+		for( var x=0; x<= maxLevel; x++ )
+		{
+			circleDraws[x] = "";
+		}
+		
+		
 		for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
 		{
 			var aCheckBox = aDocument.getElementById(statics.getLabelCheckBoxes()[x]);
@@ -869,7 +904,6 @@ this.update = function()
 	 		nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
 	 	}	
 		
-			
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
@@ -883,7 +917,7 @@ this.update = function()
 		
 		if( graphType == "ForceTree") 
 		{
-				links = d3.layout.tree().links(nodes);
+			links = d3.layout.tree().links(nodes);
 		}
 		
   	// Restart the force layout.
@@ -990,14 +1024,18 @@ this.update = function()
 	 	var row = table.rows[1];
 	 	var cell =row.cells[1];
 	 	cell.innerHTML = "" + numMarked;
-	 	
-	 	if( anyLabels  )
-  
+	
+
+	for( var x=0; x < nodes.length; x++)
+	 {	
+		nodes[x].nodeLabelText = this.getLabelText(nodes[x]);
+	 }
+
 
 	if ( anyLabels  ) 
 	{
 		var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text")
-  				.text( function (d) {  return thisContext.getLabelText(d); })
+  				.text( function (d) {  return d.nodeLabelText; })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
                  .attr("fill", function(d) {return  thisContext.getTextColor(d) } )
@@ -1041,8 +1079,6 @@ this.update = function()
 		
 		aDocument.getElementById("ColorSubMenu").appendChild(aDocument.getElementById("color2"));
 		aDocument.getElementById("color2").style.visibility="visible";
-		
-		
 	}	
   	
   	firstUpdate = false;

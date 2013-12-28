@@ -16,28 +16,16 @@
   	
 	test( "Basic assertions to put QUnit through the motions", function() 
     {
-		
-		
-		myVar = {};
-		myVar["Akey"]="Aval";
-		ok(myVar)
-		ok(myVar["Akey"])
-		equal(myVar["Akey"],"Aval")
-		
-		myVar["Akey"] = null;
-		
-		ok(myVar);
-		ok( !myVar["Akey"]);
-		
+		aString = "Hello"
 		aNewVar = {};
-		aNewVar[1] = 43;
-		aNewVar[2] = 60;
+		aNewVar[1] = aString;
+		aNewVar[2] = "There";
 		ok(aNewVar);
 		ok(aNewVar[1]);
 		ok(aNewVar[2]);
 		ok(!aNewVar[3]);
-		equal(aNewVar[1],43);
-		equal(aNewVar[2],60);
+		equal(aNewVar[1],"Hello");
+		equal(aNewVar[2],"There");
   			
   		
 	}); // end test method
