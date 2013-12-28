@@ -111,7 +111,6 @@ var maxLevel =-1;
 var addNoise= false;
 var firstNoise = true;
 var dataNames = [];
-var svg; // for zoom
 
 this.addNoise = function()
 {
@@ -216,11 +215,7 @@ this.reforce = function()
     
     drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
 
-	vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-    
-    svg = d3.select("body").append("svg:svg")
+    vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("g")
@@ -230,7 +225,7 @@ this.reforce = function()
 }
 
 this.zoom = function() {
-  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
 this.setWidthAndHeight = function()
