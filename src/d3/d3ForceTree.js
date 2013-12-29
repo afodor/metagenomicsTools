@@ -595,6 +595,7 @@ this.reVisOne = function()
   		markSelfAndDaughters(myNode);
   	}
   	
+  	statics.getRoot().doNotShow=false;
   	dirty=true;
   	this.update();
   }
