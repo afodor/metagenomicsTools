@@ -204,6 +204,7 @@ this.reforce = function()
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
+		vis.selectAll("line").remove();
 	}
 	
 	this.setWidthAndHeight();
@@ -226,7 +227,7 @@ this.reforce = function()
 
 this.zoom = function() {
   vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-  this.redrawScreen();
+  thisContext.redrawScreen();
 }
 
 this.setWidthAndHeight = function()
@@ -265,6 +266,7 @@ this.unregister = function()
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
+		vis.selectAll("line").remove();
 	}
 	
 	
@@ -463,9 +465,6 @@ this.reVisOne = function()
 		
 		
 	}
-	
-	
-	
 	
 	aDocument.getElementById("nav").innerHTML+= dataMenuHTML;
 		
@@ -915,6 +914,7 @@ this.update = function()
 		vis.selectAll("text").remove()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
+		vis.selectAll("line").remove();
 		for( var z=0; z < nodes.length; z++)
 			nodes[z].setVisible=false;
 		
@@ -1008,7 +1008,38 @@ this.update = function()
 		
 		  	thisContext.checkForStop();
 	      }
-	    
+	      
+	      if( graphType != "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
+		  {
+		    	  function addNodeAndChildren(aNode)
+		    	  {
+		    		  if( aNode.children && aNode.children.length > 0 )
+		    		  {
+		    			  for( var i=0; i < aNode.children.length; i++)
+		    			  {
+		    				  childNode = aNode.children[i];
+		    				  
+		    				  vis.append("line").attr("x1", aNode.xMap[thisID]).
+		    				  					attr("y1", aNode.xMap[thisID]).
+		    				  					attr("x2", childNode.xMap[thisID]).
+		    				  					attr("y2", childNode.yMap[thisID]).
+		    				  					attr("stroke-width", 1).
+		    				  					attr("stroke", "black");
+		    				  
+		    				  addNodeAndChildren( childNode );
+		    				//  console.log( aNode.xMap[thisID] + " " +  aNode.xMap[thisID] + " " + 
+		    					//	  childNode.xMap[thisID] + " " + childNode.yMap[thisID]); 
+		    			  }
+		    		  }
+		    	  }
+		    		  
+		    		  
+		          addNodeAndChildren(statics.getRoot());
+		    		  
+			}
+			
+	    thisContext.checkForStop();
+		
 		force.on("tick", updateNodesLinksText);
 		
 		force.on("end", updateNodesLinksText);
