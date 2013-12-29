@@ -605,7 +605,7 @@ this.reVisOne = function()
   	
   	statics.getRoot().doNotShow=false;
   	dirty=true;
-  	this.update();
+  	this.redrawScreen();
   }
   
   // calls redrawAScreen on all registered listeners
