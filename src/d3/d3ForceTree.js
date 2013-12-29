@@ -217,11 +217,16 @@ this.reforce = function()
     
     drag = force.drag().on("dragstart", function(d) { 
     						
-    						if( graphType ==  "ForceTree")
+    						// consume the drag event at the node level
+    						// otherwise the whole tree gets dragged
+    						if( graphType ==  "ForceTree"  && thisDocument.getElementById("dragNodes").checked )
+    						{
     							d3.event.sourceEvent.stopPropagation();
+        						d.fixed=true; 
+        						thisContext.update();
+    						}
     						
-    						d.fixed=true; 
-    						thisContext.update();}
+    							}
     						);
 
     vis = d3.select("body").append("svg:svg")
