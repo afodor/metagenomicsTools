@@ -662,15 +662,18 @@ this.getLabelText = function(d)
 		}
 	}
 	
-
 	if( aDocument.getElementById("cicleLabelScheme").checked  &&
-			(thisDocument.getElementById("scatterX").value == "circleX" || 
+			((thisDocument.getElementById("scatterX").value == "circleX" || 
 					thisDocument.getElementById("scatterX").value == "circleY" ) || 
-					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" ))
-		{
-			if( circleDraws[d.nodeDepth] ==  returnString)			
-				return "";
-		}
+					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" )))
+	{
+
+			if( circleDraws[d.nodeDepth] ==  returnString)	
+			{
+				return "";	
+			}
+			
+	}
 	
 	circleDraws[d.nodeDepth] =  "" +  returnString;
 	
