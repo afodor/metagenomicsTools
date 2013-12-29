@@ -205,6 +205,7 @@ this.reforce = function()
 		vis.selectAll("circle.node").remove();
 		vis.selectAll("line.link").remove();
 		vis.selectAll("line").remove();
+		d3.select("body").select("svg").remove();
 	}
 	
 	this.setWidthAndHeight();
@@ -234,7 +235,7 @@ this.setWidthAndHeight = function()
 {
 	if( isRunFromTopWindow ) 
 	{
-		w =  thisWindow.innerWidth-300,
+		w =  thisWindow.innerWidth-25,
     	h = thisWindow.innerHeight-25;
 	}
 	else
@@ -1195,14 +1196,8 @@ this.setInitialPositions = function ()
 {
 	var root = statics.getRoot();
 	
-	root.xMap[thisID] =  (w-10) / 2  + 5;
-  	statics.getRoot().yMap[thisID] = (h-10) / 2 + 5;
-	
-	if( ! isRunFromTopWindow ) 
-	{
-		root.yMap[thisID] -= 150;
-		root.xMap[thisID] -= 50;
-	}
+	root.xMap[thisID] =  w / 2.0  + 20;
+	root.yMap[thisID] = h /2.0;
 	
 	var radius = Math.min(w,h)/2;
 	
@@ -1214,19 +1209,7 @@ this.setInitialPositions = function ()
 	{
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(maxLevel-1) * radius;
 		nodes[x].xMap[thisID]  = root.xMap[thisID]- aRad * Math.cos( piTwice * x/nodes.length) ;
-		nodes[x].yMap[thisID]  = aRad * Math.sin( piTwice * x/nodes.length) + root.xMap[thisID];
-		
-		if( nodes[x].xMap[thisID]  <-10 ) 
-			nodes[x].xMap[thisID]  =-10;
-			
-		if( nodes[x].xMap[thisID]  >w +10) 
-			nodes[x].xMap[thisID]  =w+10;
-		
-		if( nodes[x].yMap[thisID]  <-10 ) 
-			nodes[x].yMap[thisID]  =-10;
-			
-		if( nodes[x].yMap[thisID]  >h +10) 
-			nodes[x].yMap[thisID]  =h +10;	
+		nodes[x].yMap[thisID]  = aRad * Math.sin( piTwice * x/nodes.length) + root.yMap[thisID];
 	}
 	
 	root.fixed=true;
