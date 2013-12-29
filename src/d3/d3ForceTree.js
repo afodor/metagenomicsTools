@@ -215,7 +215,14 @@ this.reforce = function()
     .linkDistance(function(d) { return d.target._children ? 80 * (d.nodeDepth-16)/16 : 30; })
     .size([w, h - 60]).gravity(thisDocument.getElementById("gravitySlider").value/100)
     
-    drag = force.drag().on("dragstart", function(d) { d.fixed=true; thisContext.update();});
+    drag = force.drag().on("dragstart", function(d) { 
+    						
+    						if( graphType ==  "ForceTree")
+    							d3.event.sourceEvent.stopPropagation();
+    						
+    						d.fixed=true; 
+    						thisContext.update();}
+    						);
 
     vis = d3.select("body").append("svg:svg")
     .attr("width", w)
@@ -988,7 +995,7 @@ this.update = function()
 					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
 				)
 	    
-	      if ( anyLabels )
+		  if ( anyLabels )
 	      {	
 	      	if( graphType == "ForceTree" ) 
 	      	{
@@ -1000,17 +1007,17 @@ this.update = function()
 	      	}
 	      	else
 	      	{
+	      		/* radial labels: todo: this should be an option
 	      		console.log("set rotate " + Math.PI *
 	      				d.listPosition / statics.getNodes().length);
 	      		text.attr("transform", function(d) { return "rotate(" + Math.PI *
 	      				d.listPosition / statics.getNodes().length
 	      					+ ")"});
+	      					*/
 	      		
-	      		/*non-radial labels; todo: Let this still be an option
 	      	text.attr("transform", function(d) { return "translate(" + 
 						d.xMap[thisID]
 							+ "," + d.yMap[thisID]+ ")"; });
-							*/
 	      	}	      
 	      }
 			
@@ -1108,6 +1115,8 @@ this.update = function()
 	                	 function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)})
   						.attr("y", 
   						function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)})
+  						
+  						/* todo: radial labels should be an option
   						.attr("transform", 
   	         				 	function(d) 
   	         				 	{ 
@@ -1121,6 +1130,7 @@ this.update = function()
   												+ "," + thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false) + ")"
   	         			         }
   	         		         );
+  	         		         */
                     }
                     else
                     {
