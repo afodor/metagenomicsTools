@@ -252,15 +252,15 @@ this.zoom = function() {
 
 this.setWidthAndHeight = function()
 {
-	if( isRunFromTopWindow ) 
+	//if( isRunFromTopWindow ) 
 	{
 		w =  thisWindow.innerWidth-25,
     	h = thisWindow.innerHeight-25;
 	}
-	else
+	//else
 	{	
-		w =  thisWindow.innerWidth-25;
-    	h = thisWindow.innerHeight;
+		//w =  thisWindow.innerWidth-25;
+    	//h = thisWindow.innerHeight;
 	}
 	
 }
