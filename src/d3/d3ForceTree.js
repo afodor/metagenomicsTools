@@ -1016,22 +1016,23 @@ this.update = function()
 		    	  function addNodeAndChildren(aNode)
 		    	  {
 		    		  depth++;
-		    		  if( aNode.children && aNode.children.length > 0 )
+		    		  if( !aNode.doNotShow && aNode.children && aNode.children.length > 0 )
 		    		  {
 		    			  for( var i=0; i < aNode.children.length; i++)
 		    			  {
 		    				  var childNode = aNode.children[i];
 		    				  
-		    				  vis.append("line").attr("x1", aNode.xMap[thisID]).
-		    				  					attr("y1", aNode.yMap[thisID]).
-		    				  					attr("x2", childNode.xMap[thisID]).
-		    				  					attr("y2", childNode.yMap[thisID]).
-		    				  					attr("stroke-width", 0.5).
-		    				  					attr("stroke", "black");
-		    				  
-		    				  addNodeAndChildren( childNode );
-		    				//  console.log( aNode.xMap[thisID] + " " +  aNode.xMap[thisID] + " " + 
-		    					//	  childNode.xMap[thisID] + " " + childNode.yMap[thisID]); 
+		    				  if( ! childNode.doNotShow)
+		    				  {
+			    				  vis.append("line").attr("x1", aNode.xMap[thisID]).
+			    				  					attr("y1", aNode.yMap[thisID]).
+			    				  					attr("x2", childNode.xMap[thisID]).
+			    				  					attr("y2", childNode.yMap[thisID]).
+			    				  					attr("stroke-width", 0.5).
+			    				  					attr("stroke", "black");
+			    				  
+			    				  addNodeAndChildren( childNode );
+		    				  }
 		    			  }
 		    		  }
 		    		  depth--;
