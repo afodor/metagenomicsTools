@@ -1011,19 +1011,22 @@ this.update = function()
 	      
 	      if( graphType != "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
 		  {
+	    	  	var depth =0;
+	    	  
 		    	  function addNodeAndChildren(aNode)
 		    	  {
+		    		  depth++;
 		    		  if( aNode.children && aNode.children.length > 0 )
 		    		  {
 		    			  for( var i=0; i < aNode.children.length; i++)
 		    			  {
-		    				  childNode = aNode.children[i];
+		    				  var childNode = aNode.children[i];
 		    				  
 		    				  vis.append("line").attr("x1", aNode.xMap[thisID]).
-		    				  					attr("y1", aNode.xMap[thisID]).
+		    				  					attr("y1", aNode.yMap[thisID]).
 		    				  					attr("x2", childNode.xMap[thisID]).
 		    				  					attr("y2", childNode.yMap[thisID]).
-		    				  					attr("stroke-width", 1).
+		    				  					attr("stroke-width", 0.5).
 		    				  					attr("stroke", "black");
 		    				  
 		    				  addNodeAndChildren( childNode );
@@ -1031,6 +1034,7 @@ this.update = function()
 		    					//	  childNode.xMap[thisID] + " " + childNode.yMap[thisID]); 
 		    			  }
 		    		  }
+		    		  depth--;
 		    	  }
 		    		  
 		    		  
