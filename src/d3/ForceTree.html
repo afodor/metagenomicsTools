@@ -40,24 +40,26 @@
         <li>
         
         <li><a>Plot</a> <ul>
-        	<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
+        	<li><input type="checkbox" id="animate"
+			onchange=myGo.redrawScreen() checked=true> animate</input></li>
+			<li><input type="checkbox" id="hideLinks"
+			onchange=myGo.redrawScreen()> hideLinks</input></li>
+			<li>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			" value="30" onchange= myGo.gravityAdjust()>
+					</li>
+			<li>scatter x:<select id="scatterX" onchange=myGo.redrawScreen()></select></li>
+			<li>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select></li>
+			<li><br></li>
+			<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
         	<li><select id="graphType" onchange=spawnNewWindow()><option value="scatter">Scatter Plot</option><option value="ForceTree">Force Tree</option></select></li>
+        	
+		
         </ul> </li>
         
     </ul>
 </div>
 	<aside id="sidebar">
-		<h3>This graph: </h3>
-		<input type="checkbox" id="animate"
-			onchange=myGo.redrawScreen() checked=true> animate</input>
-	<br><input type="checkbox" id="hideLinks"
-			onchange=myGo.redrawScreen()> hideLinks</input>	
-			   <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
-			" value="30" onchange= myGo.gravityAdjust()>
-						</input>
-			<br>scatter x:<select id="scatterX" onchange=myGo.redrawScreen()></select>
-        	<br>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select>
-						
+			
 	
 		<script type="text/javascript" src="jscolor/jscolor.js"></script>
 			 	<h3> All graphs: </h3>
