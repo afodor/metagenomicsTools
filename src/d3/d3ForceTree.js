@@ -226,6 +226,13 @@ this.reforce = function()
 	 
 }
 
+// from http://blog.luzid.com/2013/extending-the-d3-zoomable-sunburst-with-labels/
+this.computeTextRotation = function(d) {
+	  var angle = x(d.x + d.dx / 2) - Math.PI / 2;
+	  return angle / Math.PI * 180;
+	}
+
+
 this.zoom = function() {
   vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   thisContext.redrawScreen();
@@ -993,13 +1000,18 @@ this.update = function()
 	      	}
 	      	else
 	      	{
+	      		console.log("set rotate " + Math.PI *
+	      				d.listPosition / statics.getNodes().length);
+	      		text.attr("transform", function(d) { return "rotate(" + Math.PI *
+	      				d.listPosition / statics.getNodes().length
+	      					+ ")"});
 	      		
+	      		/*non-radial labels; todo: Let this still be an option
 	      	text.attr("transform", function(d) { return "translate(" + 
 						d.xMap[thisID]
 							+ "," + d.yMap[thisID]+ ")"; });
-	      	}
-	      	
-	      
+							*/
+	      	}	      
 	      }
 			
 		if( graphType == "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
@@ -1083,18 +1095,32 @@ this.update = function()
 
 	if ( anyLabels  ) 
 	{
-		var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text")
+
+    	var text=vis.selectAll("text").data(filteredNodes).enter().append("svg:text")
   				.text( function (d) {  return d.nodeLabelText; })
                  .attr("font-family", "sans-serif")
                  .attr("font-size", aDocument.getElementById("fontAdjust").value + "px")
-                 .attr("fill", function(d) {return  thisContext.getTextColor(d) } )
+                 .attr("fill", function(d) {return  thisContext.getTextColor(d) });
          			 
                     if( graphType != "ForceTree")
 	                {
 	                	 text.attr("x",
 	                	 function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)})
   						.attr("y", 
-  						function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)});
+  						function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)})
+  						.attr("transform", 
+  	         				 	function(d) 
+  	         				 	{ 
+  									var anAngle = 360.0 *  
+       			 					d.listPosition / (Math.PI *statics.getNodes().length);
+  									
+  									console.log( anAngle);
+  									
+  	         			 			return "rotate(" + anAngle + "," 
+  	         			 					+ thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)
+  												+ "," + thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false) + ")"
+  	         			         }
+  	         		         );
                     }
                     else
                     {
