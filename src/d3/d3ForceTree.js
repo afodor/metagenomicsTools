@@ -1270,6 +1270,16 @@ this.myMouseEnter = function(d)
 	statics.setHighlightedNode(d);
 	d.highlight = true;
 	
+	infoPane = aDocument.getElementById("rightInfoArea")
+	
+	infoPane.innerHTML = "";
+	
+	for( prop in d)
+	{
+		infoPane.innerHTML += ( prop + " " + d[prop] + " <br>" )
+	}
+	
+	
 	dirty = true;
 	thisContext.redrawScreen();
 }
