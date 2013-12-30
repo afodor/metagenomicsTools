@@ -1346,6 +1346,9 @@ this.getQuantiativeColor= function (d)
 
 this.color= function (d) 
 {
+	if ( d.highlight == true) 
+		return "#fd8d3c"; // orange
+
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( statics.getRanges()[chosen] != null)
@@ -1357,10 +1360,7 @@ this.color= function (d)
 	if( d._children != null)
 		return  "#3182bd";  // bright blue
 	
-	if ( d.highlight == true) 
-		return "#fd8d3c"; // orange
-
-	if(  d.marked )
+		if(  d.marked )
 		return "#000000";  // black
 		
 		
