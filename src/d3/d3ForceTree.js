@@ -1272,13 +1272,19 @@ this.myMouseEnter = function(d)
 	
 	infoPane = aDocument.getElementById("rightInfoArea")
 	
-	infoPane.innerHTML = "";
+	var someHTML = "<table>";
 	
 	for( prop in d)
 	{
-		infoPane.innerHTML += ( prop + " " + d[prop] + " <br>" )
+		var aVal = "" + d[prop];
+		
+		//todo: This will truncate long strings..
+		someHTML += ( "<tr><td>" +  prop + "</td><td> " + aVal.substring(0,50) + "</td></tr>" )
 	}
 	
+	someHTML += "</table>"
+		
+	infoPane.innerHTML = someHTML;
 	
 	dirty = true;
 	thisContext.redrawScreen();
