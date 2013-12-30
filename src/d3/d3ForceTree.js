@@ -856,7 +856,9 @@ this.toggleVisibilityOfSidebars =function()
 {
 	var registered = statics.getGoObjects();
   	for (id in registered)
-	{	
+	{
+		registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
+			
 		if( aDocument.getElementById("showLeftControl").checked )
 		{ 
 			registered[id].getThisDocument().getElementById("sidebar").style.visibility="visible";
@@ -868,6 +870,7 @@ this.toggleVisibilityOfSidebars =function()
 		}					
 	}
 	
+	
 	if( aDocument.getElementById("showRightDataPanel").checked ) 
 	{
 		aDocument.getElementById("rightInfoArea").style.visibility="visible";
@@ -878,7 +881,8 @@ this.toggleVisibilityOfSidebars =function()
 		aDocument.getElementById("rightInfoArea").style.visibility="hidden";
 	}
 		
-
+	aDocument.getElementById("rightInfoArea").style.backgroundColor="#ffffff";
+		
 }
 
 this.update = function() 
