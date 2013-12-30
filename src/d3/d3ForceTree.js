@@ -1038,7 +1038,11 @@ this.update = function()
 		  	thisContext.checkForStop();
 	      }
 	      
-	      if( graphType != "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
+	      if( graphType != "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked
+	    		  && ((thisDocument.getElementById("scatterX").value == "circleX" || 
+	  					thisDocument.getElementById("scatterX").value == "circleY" ) && 
+						(thisDocument.getElementById("scatterY").value == "circleX" 
+							|| thisDocument.getElementById("scatterY").value == "circleY" )))
 		  {
 	    	  	var depth =0;
 	    	  
