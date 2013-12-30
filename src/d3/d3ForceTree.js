@@ -192,10 +192,39 @@ this.resort = function()
 	}
 	else
 	{
+		var newNodes = [];
 		
+		addNodeAndSortDaughters = function(aNode)
+		{
+			newNodes.push(aNode);
+			
+			if( ! aNode.children || aNode.children.length ==0 )
+				return;
+			
+			var childrenNodes = [];
+			for( var x=0; x < aNode.children.length; x++)
+				childrenNodes.push(aNode.children[x]);
+			
+			// quantiative
+		  	if( statics.getRanges()[compareChoice] != null ) 
+		  	{
+				childrenNodes.sort( quantitativeSort );
+		  	}
+		  	else
+		  	{
+		  		childrenNodes.sort( nonQuantitativeSort );
+		  	}
+			
+		  	for( var x=0; x < childrenNodes.length; x++)
+		  		addNodeAndSortDaughters( childrenNodes[x]);
+		}
+		
+		addNodeAndSortDaughters(statics.getRoot());
+		nodes = newNodes;
+		statics.setNodes(newNodes);
 	}
 	
-		for( var x=0; x < nodes.length; x++) 
+	for( var x=0; x < nodes.length; x++) 
 		nodes[x].listPosition =x;  		
   	
 	this.setInitialPositions();
