@@ -9,13 +9,24 @@ function StaticHolder()
 		StaticHolder.labelCheckBoxes=[]; 
 		StaticHolder.counter =0;
 		StaticHolder.goObjects = {};
-		StaticHolder.nodes;
-		StaticHolder.root;
+		StaticHolder.nodes=null;
+		StaticHolder.root=null;
+		StaticHolder.highlightedNode=null;
 	}
 	
 	this.getNodes = function()
 	{
 		return StaticHolder.nodes;
+	}
+	
+	this.getHighlightedNode = function()
+	{
+		return StaticHolder.highlightedNode;
+	}
+	
+	this.setHighlightedNode = function(aNode)
+	{
+		StaticHolder.highlightedNode = aNode;
 	}
 	
 	this.getRoot = function()
@@ -858,16 +869,24 @@ this.toggleVisibilityOfSidebars =function()
   	for (id in registered)
 	{
 		registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
-			
-		if( aDocument.getElementById("showLeftControl").checked )
-		{ 
-			registered[id].getThisDocument().getElementById("sidebar").style.visibility="visible";
+		
+		var aDoc =registered[id].getThisDocument(); 
+		
+		if( aDoc ) 
+		{
+			if( aDocument.getElementById("showLeftControl").checked )
+			{ 
+				aDoc.getElementById("sidebar").style.visibility="visible";
+			}
+			else
+			{
+				aDoc.getElementById("sidebar").style.visibility="hidden";
+			}
 		}
-			
 		else
 		{
-			registered[id].getThisDocument().getElementById("sidebar").style.visibility="hidden";
-		}					
+			console.log("Could not get doc for " + id);
+		}
 	}
 	
 	
@@ -1233,23 +1252,22 @@ this.getTextColor= function(d)
 		
 }
 
-var highlightedNode;
 
 this.myMouseEnter = function(d)
 {
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
-	if( highlightedNode )
+	if( statics.getHighlightedNode())
 	{
-		highlightedNode.highlight = false;			
+		statics.getHighlightedNode().highlight = false;			
 	}
 		
-	highlightedNode =d;
+	statics.setHighlightedNode(d);
 	d.highlight = true;
 	
 	dirty = true;
-	this.redrawScreen()
+	thisContext.redrawScreen();
 }
 
 this.myMouseLeave= function ()
@@ -1257,14 +1275,14 @@ this.myMouseLeave= function ()
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
-	if( highlightedNode )
+	if( statics.getHighlightedNode())
 	{
-		highlightedNode.highlight = false;		
-		highlightedNode=null;
+		statics.getHighlightedNode().highlight = false;			
 	}
+	
 		
 	dirty = true;
-	this.redrawScreen()
+	thisContext.redrawScreen();
 }
 
 this.setInitialPositions = function ()
