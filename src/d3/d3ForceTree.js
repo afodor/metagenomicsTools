@@ -1233,43 +1233,38 @@ this.getTextColor= function(d)
 		
 }
 
+var highlightedNode;
+
 this.myMouseEnter = function(d)
 {
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
-	function highlightNodeAndChildren(d2)
+	if( highlightedNode )
 	{
-		d2.highlight=true;
-	
-		if( d2.children != null ) 
-		{
-			for(var x=0; x < d2.children.length; x++) 
-			{
-				highlightNodeAndChildren(d2.children[x]);
-			}		
-		}
+		highlightedNode.highlight = false;			
 	}
-	
-	highlightNodeAndChildren(d);
+		
+	highlightedNode =d;
+	d.highlight = true;
 	
 	dirty = true;
-	thisContext.update();
+	this.redrawScreen()
 }
 
 this.myMouseLeave= function ()
 {
-	
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
-
-	for(var x=0; x < nodes.length; x++) 
+	
+	if( highlightedNode )
 	{
-		nodes[x].highlight = false;
+		highlightedNode.highlight = false;		
+		highlightedNode=null;
 	}
-
+		
 	dirty = true;
-	thisContext.update();
+	this.redrawScreen()
 }
 
 this.setInitialPositions = function ()
