@@ -1276,10 +1276,24 @@ this.myMouseEnter = function(d)
 	
 	for( prop in d)
 	{
-		var aVal = "" + d[prop];
-		
-		//todo: This will truncate long strings..
-		someHTML += ( "<tr><td>" +  prop + "</td><td> " + aVal.substring(0,50) + "</td></tr>" )
+		if( prop != "forceTreeNodeID" 
+				&& prop != "x" 
+				&& prop != "y"
+				&& prop != "children" 
+				&& prop != "fixed" 
+					&& prop != "xMap" 
+					&& prop != "yMap" 
+					&& prop != "xMapNoise"
+					&& prop != "yMapNoise" && prop != "highlight" && prop != "nodeLabelText" &&
+						prop != "setVisible" && prop != "thisNodeRadius" && prop != "thisNodeColor" &&
+						prop != "marked" && prop != "doNotShow" && prop != "listPosition" && prop != "px" &&
+						prop != "py" && prop != "weight" && aProp != "aParentNode" )
+		{
+			var aVal = "" + d[prop];
+			
+			//todo: This will truncate long strings..
+			someHTML += ( "<tr><td>" +  prop + "</td><td> " + aVal.substring(0,25) + "</td></tr>" )
+		}
 	}
 	
 	someHTML += "</table>"
