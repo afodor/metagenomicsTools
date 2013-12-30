@@ -118,6 +118,11 @@ this.addNoise = function()
 	this.redrawScreen();
 }
 
+this.getThisDocument = function()
+{
+	return thisDocument;
+}
+
 if( queryStrings ) 
 {
 	var aGraphType = queryStrings["GraphType"];
@@ -846,11 +851,41 @@ this.getRadiusVal= function(d)
 	
 }
 var updateNum=0;
+
+this.toggleVisibilityOfSidebars =function()
+{
+	var registered = statics.getGoObjects();
+  	for (id in registered)
+	{	
+		if( aDocument.getElementById("showLeftControl").checked )
+		{ 
+			registered[id].getThisDocument().getElementById("sidebar").style.visibility="visible";
+		}
+			
+		else
+		{
+			registered[id].getThisDocument().getElementById("sidebar").style.visibility="hidden";
+		}					
+	}
+	
+	if( aDocument.getElementById("showRightDataPanel").checked ) 
+	{
+		aDocument.getElementById("rightInfoArea").style.visibility="visible";
+		
+	}
+	else
+	{
+		aDocument.getElementById("rightInfoArea").style.visibility="hidden";
+	}
+		
+
+}
+
 this.update = function() 
 {
 	if( ! initHasRun )
 		return;
- 
+ 	
 	if( dirty ) 
 	{
 		dirty = false;
@@ -1265,6 +1300,8 @@ this.initialize = function () {
   initHasRun = true;
  	dirty = true;
    this.update();
+   
+   this.toggleVisibilityOfSidebars();
 }
 
 this.getQuantiativeColor= function (d)
