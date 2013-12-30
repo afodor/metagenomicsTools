@@ -1287,7 +1287,7 @@ this.myMouseEnter = function(d)
 					&& prop != "yMapNoise" && prop != "highlight" && prop != "nodeLabelText" &&
 						prop != "setVisible" && prop != "thisNodeRadius" && prop != "thisNodeColor" &&
 						prop != "marked" && prop != "doNotShow" && prop != "listPosition" && prop != "px" &&
-						prop != "py" && prop != "weight" && aProp != "aParentNode" )
+						prop != "py" && prop != "weight" && prop != "aParentNode" )
 		{
 			var aVal = "" + d[prop];
 			
