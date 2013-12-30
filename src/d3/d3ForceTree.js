@@ -601,7 +601,7 @@ this.reVisOne = function()
   		
   	
   	var rangeHTML = "Depth Filter:<input type=\"range\" id=\"depthFilterRange\" min=\"0\" " + 
-  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=myGo.showOnlyMarked()><br></input>";
+  	"max=\"" + topNodes.length + "\" value=\"0\" onchange=myGo.setTopNodes()><br></input>";
   	
     mySidebar.innerHTML+= rangeHTML;
   	this.setTopNodes();
