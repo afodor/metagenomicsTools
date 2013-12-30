@@ -154,34 +154,48 @@ if( graphType == "ForceTree" )
 		}
 	}
 }
-			
+
 
 this.resort = function()
 {
 	var compareChoice =  aDocument.getElementById("sortByWhat").value;
+	
+	quantitativeSort = function(a,b) 
+		{
+		 if (1.0 * a[compareChoice]< 1.0 * b[compareChoice])
+				return -1;
+		if (1.0 * a[compareChoice]> 1.0 * b[compareChoice])
+			return 1;
+		return 0; 
+		} 
+
+	nonQuantitativeSort = function(a,b) 
+	{
+		if (a[compareChoice]< b[compareChoice])
+				return -1;
+		if (a[compareChoice]> b[compareChoice])
+		return 1;
+		return 0;
+	}
   
-  	// quantiative
-  	if( statics.getRanges()[compareChoice] != null ) 
-  	{
-		nodes.sort( function(a,b) {
- 					 if (1.0 * a[compareChoice]< 1.0 * b[compareChoice])
-     						return -1;
-  					if (1.0 * a[compareChoice]> 1.0 * b[compareChoice])
-    					return 1;
-  					return 0; } );
-  	}
-  	else
-  	{
-  			nodes.sort( function(a,b) {
- 					 if (a[compareChoice]< b[compareChoice])
-     						return -1;
-  					if (a[compareChoice]> b[compareChoice])
-    					return 1;
-  					return 0; } );
-  
-  	}
-  
-  	for( var x=0; x < nodes.length; x++) 
+	if( ! aDocument.getElementById("treeAwareSort").checked)
+	{
+		// quantiative
+	  	if( statics.getRanges()[compareChoice] != null ) 
+	  	{
+			nodes.sort( quantitativeSort );
+	  	}
+	  	else
+	  	{
+	  			nodes.sort( nonQuantitativeSort );
+	  	}
+	}
+	else
+	{
+		
+	}
+	
+		for( var x=0; x < nodes.length; x++) 
 		nodes[x].listPosition =x;  		
   	
 	this.setInitialPositions();
