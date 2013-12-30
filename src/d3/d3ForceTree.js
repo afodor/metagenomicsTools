@@ -9,13 +9,24 @@ function StaticHolder()
 		StaticHolder.labelCheckBoxes=[]; 
 		StaticHolder.counter =0;
 		StaticHolder.goObjects = {};
-		StaticHolder.nodes;
-		StaticHolder.root;
+		StaticHolder.nodes=null;
+		StaticHolder.root=null;
+		StaticHolder.highlightedNode=null;
 	}
 	
 	this.getNodes = function()
 	{
 		return StaticHolder.nodes;
+	}
+	
+	this.getHighlightedNode = function()
+	{
+		return StaticHolder.highlightedNode;
+	}
+	
+	this.setHighlightedNode = function(aNode)
+	{
+		StaticHolder.highlightedNode = aNode;
 	}
 	
 	this.getRoot = function()
@@ -116,6 +127,11 @@ this.addNoise = function()
 {
 	addNoise= true;
 	this.redrawScreen();
+}
+
+this.getThisDocument = function()
+{
+	return thisDocument;
 }
 
 if( queryStrings ) 
@@ -252,15 +268,15 @@ this.zoom = function() {
 
 this.setWidthAndHeight = function()
 {
-	if( isRunFromTopWindow ) 
+	//if( isRunFromTopWindow ) 
 	{
 		w =  thisWindow.innerWidth-25,
     	h = thisWindow.innerHeight-25;
 	}
-	else
+	//else
 	{	
-		w =  thisWindow.innerWidth-25;
-    	h = thisWindow.innerHeight;
+		//w =  thisWindow.innerWidth-25;
+    	//h = thisWindow.innerHeight;
 	}
 	
 }
@@ -846,11 +862,53 @@ this.getRadiusVal= function(d)
 	
 }
 var updateNum=0;
+
+this.toggleVisibilityOfSidebars =function()
+{
+	var registered = statics.getGoObjects();
+  	for (id in registered)
+	{
+		registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
+		
+		var aDoc =registered[id].getThisDocument(); 
+		
+		if( aDoc ) 
+		{
+			if( aDocument.getElementById("showLeftControl").checked )
+			{ 
+				aDoc.getElementById("sidebar").style.visibility="visible";
+			}
+			else
+			{
+				aDoc.getElementById("sidebar").style.visibility="hidden";
+			}
+		}
+		else
+		{
+			console.log("Could not get doc for " + id);
+		}
+	}
+	
+	
+	if( aDocument.getElementById("showRightDataPanel").checked ) 
+	{
+		aDocument.getElementById("rightInfoArea").style.visibility="visible";
+		
+	}
+	else
+	{
+		aDocument.getElementById("rightInfoArea").style.visibility="hidden";
+	}
+		
+	aDocument.getElementById("rightInfoArea").style.backgroundColor="#ffffff";
+		
+}
+
 this.update = function() 
 {
 	if( ! initHasRun )
 		return;
- 
+ 	
 	if( dirty ) 
 	{
 		dirty = false;
@@ -1198,43 +1256,37 @@ this.getTextColor= function(d)
 		
 }
 
+
 this.myMouseEnter = function(d)
 {
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
 	
-	function highlightNodeAndChildren(d2)
+	if( statics.getHighlightedNode())
 	{
-		d2.highlight=true;
-	
-		if( d2.children != null ) 
-		{
-			for(var x=0; x < d2.children.length; x++) 
-			{
-				highlightNodeAndChildren(d2.children[x]);
-			}		
-		}
+		statics.getHighlightedNode().highlight = false;			
 	}
-	
-	highlightNodeAndChildren(d);
+		
+	statics.setHighlightedNode(d);
+	d.highlight = true;
 	
 	dirty = true;
-	thisContext.update();
+	thisContext.redrawScreen();
 }
 
 this.myMouseLeave= function ()
 {
-	
 	if (! aDocument.getElementById("mouseOverHighlights").checked)
 		return;
-
-	for(var x=0; x < nodes.length; x++) 
+	
+	if( statics.getHighlightedNode())
 	{
-		nodes[x].highlight = false;
+		statics.getHighlightedNode().highlight = false;			
 	}
-
+	
+		
 	dirty = true;
-	thisContext.update();
+	thisContext.redrawScreen();
 }
 
 this.setInitialPositions = function ()
@@ -1269,6 +1321,8 @@ this.initialize = function () {
   initHasRun = true;
  	dirty = true;
    this.update();
+   
+   this.toggleVisibilityOfSidebars();
 }
 
 this.getQuantiativeColor= function (d)
@@ -1313,6 +1367,9 @@ this.getQuantiativeColor= function (d)
 
 this.color= function (d) 
 {
+	if ( d.highlight == true) 
+		return "#fd8d3c"; // orange
+
 	var chosen = aDocument.getElementById("colorByWhat").value;
 	
 	if( statics.getRanges()[chosen] != null)
@@ -1324,10 +1381,7 @@ this.color= function (d)
 	if( d._children != null)
 		return  "#3182bd";  // bright blue
 	
-	if ( d.highlight == true) 
-		return "#fd8d3c"; // orange
-
-	if(  d.marked )
+		if(  d.marked )
 		return "#000000";  // black
 		
 		

@@ -18,6 +18,14 @@ position:absolute;
 	width: 200px
 }
 
+#rightInfoArea 
+{
+	position:absolute;
+    top:50px;
+    right: 200px;
+    border: 1px solid red;c
+	width: 200px
+}
 
 <!--modded from  http://www.script-tutorials.com/creating-css3-dropdown-menu/  -->
 body {

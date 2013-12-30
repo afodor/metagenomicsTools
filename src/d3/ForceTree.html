@@ -44,6 +44,12 @@
 			onchange=myGo.redrawScreen()> animate</input></li>
 			<li><input type="checkbox" id="hideLinks"
 			onchange=myGo.redrawScreen()> hideLinks</input></li>
+			<li><input type="checkbox" id="showLeftControl"
+			onchange=myGo.toggleVisibilityOfSidebars()> show left control</input></li>
+			<li><input type="checkbox" id="showRightDataPanel"
+			onchange=myGo.toggleVisibilityOfSidebars()> show right data panel</input></li>
+			
+			
 			<li>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
 			" value="30" onchange= myGo.gravityAdjust()>
 					</li>
@@ -69,6 +75,12 @@
 			 value="0" onchange=myGo.addNoise()></input>
 			<br><button name= "button" onclick=myGo.resort()>re-sort</button> on 
 			
+	</aside>
+	
+	<aside id="rightInfoArea">
+		<br>blah blah blah
+		<br>blah blah blah
+		<br>blah blah blah
 	</aside>
 	
 	
