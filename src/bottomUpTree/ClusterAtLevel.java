@@ -57,8 +57,11 @@ public class ClusterAtLevel
 	static int getNumberOfDereplicatedSequences(FastaSequence fs) throws Exception
 	{
 		StringTokenizer header = new StringTokenizer(fs.getFirstTokenOfHeader(), "_");
-		header.nextToken();
-		header.nextToken();
+		
+		while( header.countTokens() > 1  )
+		{
+			header.nextToken();
+		}
 		
 		int returnVal = Integer.parseInt(header.nextToken());
 		
