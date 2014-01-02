@@ -102,6 +102,7 @@ public class DereplicateAFile
 	public static void main(String[] args) throws Exception
 	{
 		File directory= new File(ConfigReader.getNinaWithDuplicatesDir() );
+		System.out.println("Trying directory " + directory.getAbsolutePath());
 		
 		String[] names = directory.list();
 		
