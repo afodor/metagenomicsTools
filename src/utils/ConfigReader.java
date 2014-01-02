@@ -58,10 +58,16 @@ public class ConfigReader
 	public static final String D3_DIR = "D3_DIR";
 	
 	public static final String R_DIRECTORY = "R_DIRECTORY";
+	public static final String NINA_WITH_DUPLICATES_DIR = "NINA_WITH_DUPLICATES_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
+	}
+	
+	public static String getNinaWithDuplicatesDir() throws Exception
+	{
+		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
 	}
 
 	public static String getMachineLearningDir() throws Exception

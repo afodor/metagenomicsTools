@@ -23,6 +23,44 @@ import dereplicate.DereplicateBySample;
 
 public class MakeSHFiles
 {
+	/*
+	 * For the ISME colorectal adenomas dataset
+	 */
+	public static void main(String[] args) throws Exception
+	{
+		File dir = new File(ConfigReader.getNinaWithDuplicatesDir());
+		
+		List<String> fileNames = new ArrayList<String>();
+		for( String s : dir.list())
+			fileNames.add(s);
+		
+		BufferedWriter mainBatFile = new BufferedWriter(new FileWriter(new File( 
+				ConfigReader.getNinaWithDuplicatesDir() + File.separator + "runAll.sh")));
+		
+		for(String s : fileNames)
+			if( s.startsWith(DereplicateBySample.DEREP_PREFIX))
+			{
+				File shFile = 
+						new File( 
+							ConfigReader.getNinaWithDuplicatesDir() + File.separator + 
+								"run" + s.replace(DereplicateBySample.DEREP_PREFIX, "") + ".sh");
+				
+				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
+				
+				aSHWriter.write("java -classpath /users/afodor/metagenomicsTools/bin/ -mx20000m bottomUpTree.RunOne " + 
+				dir.getAbsolutePath() + File.separator + s + " " + dir.getAbsolutePath() + File.separator +  s +"_CLUST.clust");
+				
+				mainBatFile.write("qsub -N \"RunClust" + s.replace(DereplicateBySample.DEREP_PREFIX, "")
+								+ "\"  -q \"viper\" " + shFile.getAbsolutePath() + "\n");
+				
+				aSHWriter.flush();  aSHWriter.close();
+			}
+		
+		mainBatFile.flush();  mainBatFile.close();
+	}
+	
+	/*
+	 * For the Illumina mock dataset
 	public static void main(String[] args) throws Exception
 	{
 		File dir = new File(ConfigReader.getMockSeqDir());
@@ -55,6 +93,7 @@ public class MakeSHFiles
 		
 		mainBatFile.flush();  mainBatFile.close();
 	}
+	*/
 	
 	/*
 	 * For the 74 sample dataset.
