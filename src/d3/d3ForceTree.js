@@ -12,7 +12,19 @@ function StaticHolder()
 		StaticHolder.nodes=null;
 		StaticHolder.root=null;
 		StaticHolder.highlightedNode=null;
+		StaticHolder.maxLevel = -1;
 	}
+	
+	this.setMaxLevel = function(aLevel)
+	{
+		StaticHolder.maxLevel = aLevel;
+	}
+	
+	this.getMaxLevel = function()
+	{
+		return StaticHolder.maxLevel;
+	}
+	
 	
 	this.getNodes = function()
 	{
@@ -118,7 +130,6 @@ var statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
 var graphType = "scatter"
 var queryStrings = getQueryStrings(thisWindow)
-var maxLevel =-1;
 var addNoise= false;
 var firstNoise = true;
 var dataNames = [];
@@ -957,7 +968,7 @@ this.update = function()
 		dirty = false;
 		var anyLabels = false;
 		
-		for( var x=0; x<= maxLevel; x++ )
+		for( var x=0; x<= statics.getMaxLevel(); x++ )
 		{
 			circleDraws[x] = "";
 		}
@@ -1377,12 +1388,19 @@ this.setInitialPositions = function ()
 	
 	for( var x=0; x < nodes.length; x++) 
 	{
-		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(maxLevel-1) * radius;
+		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
 		nodes[x].xMap[thisID]  = root.xMap[thisID]- aRad * Math.cos( piTwice * x/nodes.length) ;
 		nodes[x].yMap[thisID]  = aRad * Math.sin( piTwice * x/nodes.length) + root.yMap[thisID];
 	}
 	
 	root.fixed=true;
+}
+
+this.arrangeForcePlot = function()
+{
+	numVisibleArray = [];
+	
+	
 }
 
 
@@ -1562,7 +1580,7 @@ this.flatten= function ()
   function addNodeAndChildren( aNode) 
 	{
 		level++;
-		maxLevel = Math.max(level,maxLevel);
+		statics.setMaxLevel (Math.max(level,statics.getMaxLevel()));
 		if( aNode != null) 
 		{
 			aNode.nodeDepth = level;
@@ -1577,8 +1595,6 @@ this.flatten= function ()
 					
 		}
 		level--;
-		
-			
 	}
   
   addNodeAndChildren(statics.getRoot());
