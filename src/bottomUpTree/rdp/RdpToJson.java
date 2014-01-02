@@ -14,12 +14,16 @@
 package bottomUpTree.rdp;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
 
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
@@ -101,6 +105,12 @@ public class RdpToJson
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 			addALevel(caseControlMap, x, root, allRDPLines);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getD3Dir() + File.separator + "ismeJRDP_CaseControl.txt")));
+		
+		writeNodeAndChildren(writer, root);
+		
+		writer.flush();  writer.close();
 		
 		
 	}
@@ -221,6 +231,33 @@ public class RdpToJson
 		
 		return returnMap;
 	}
+	
+	private static void writeNodeAndChildren( BufferedWriter writer,Holder h) throws Exception
+	{
+		
+		writer.write("{\n");
+		
+		writer.write("\"numSeqs\": " +  (h.caseCounts + h.controlCounts)+ ",\n");		
+		writer.write("\"rpdLevel\": " +  h.taxonomicLevel + ",\n");
+		writer.write("\"rdptaxa\": \"" +  h.taxonomicName + "\",\n");
+		writer.write("\"fractionCase\": \"" +  (h.caseCounts / (h.caseCounts + h.controlCounts) )+ "\"\n");
+		
+		if ( h.children.size() > 0) 
+		{
+			writer.write(",\"children\": [\n");
+				
+			for( Iterator<Holder> i = h.children.values().iterator(); i.hasNext(); )
+			{
+				writeNodeAndChildren(writer,i.next());
+				if( i.hasNext())
+					writer.write(",");
+			}
+					writer.write("]\n");
+		}
+		
+		
+		writer.write("}\n");
+}
 	
 	private static class Holder
 	{
