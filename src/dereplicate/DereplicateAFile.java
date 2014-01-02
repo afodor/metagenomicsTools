@@ -111,7 +111,7 @@ public class DereplicateAFile
 			if( s.endsWith("fas.gz"))
 			{
 				File inFile = new File(directory.getAbsolutePath() + File.separator + s);
-				String sampleName = s.substring(0, s.indexOf("ready")).replaceAll("_","");
+				String sampleName = s.substring(0, s.indexOf(".fas.gz")).replaceAll("Tope_","");
 				File outFile = new File(ConfigReader.getNinaWithDuplicatesDir() 
 						+ File.separator + DereplicateBySample.DEREP_PREFIX + sampleName + ".FASTA");
 				dereplicateFile(inFile.getAbsolutePath(), outFile.getAbsolutePath(), sampleName);
