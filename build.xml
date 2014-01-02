@@ -313,6 +313,11 @@
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
+    <target name="ReCluster">
+        <java classname="scratch.ReCluster" failonerror="true" fork="yes">
+            <classpath refid="MetagenomicTools.classpath"/>
+        </java>
+    </target>
     <target name="ReduceToTopTaxa">
         <java classname="scripts.pancreatitis.ReduceToTopTaxa" failonerror="true" fork="yes">
             <classpath refid="MetagenomicTools.classpath"/>
@@ -344,7 +349,7 @@
     <target name="RunOne">
         <java classname="bottomUpTree.RunOne" failonerror="true" fork="yes">
             <jvmarg line="-mx12000m"/>
-            <arg line="C:\MockCommunityIllumina\DEREP_SAMP_PREFIXstudy1685even1.FASTA c:\temp\deleteMe.clust"/>
+            <arg line="D:\NinaWithDuplicates\OriginalFiles\ToReCluster\DEREP_SAMP_PREFIXD5-601-120_2_1_63.FASTA c:\temp\deleteMe.clust"/>
             <classpath refid="MetagenomicTools.classpath"/>
         </java>
     </target>
