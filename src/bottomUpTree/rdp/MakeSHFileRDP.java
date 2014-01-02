@@ -40,7 +40,7 @@ public class MakeSHFileRDP
 			if( s.endsWith("fas"))
 			{
 				File shFile = 
-						new File( dir.getAbsolutePath()+ File.separator + "runAll"  + ".sh");
+						new File( dir.getAbsolutePath()+ File.separator + "run" + s  + ".sh");
 				
 				BufferedWriter aSHWriter = new BufferedWriter(new FileWriter(shFile));
 				
