@@ -146,7 +146,7 @@ public class RdpToJson
 				"rdp" + File.separator + NewRDPParserFileLine.TAXA_ARRAY[rdpDepth]
 									+"_taxaAsColumns.txt");
 		List<List<Double>> logNormData = wrapper.getDataPointsNormalizedThenLogged();
-		List<List<Double>> unloggedData= wrapper.getDataPointsNormalizedThenLogged();
+		List<List<Double>> unloggedData= wrapper.getDataPointsUnnormalized();
 		String parentLevel = NewRDPParserFileLine.TAXA_ARRAY[rdpDepth-1];
 		
 		if( rdpDepth -1 == 0 )
