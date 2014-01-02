@@ -62,7 +62,7 @@ public class RdpToJson
 		return map;
 	}
 	
-	private static String getKeyFromFilename(String s)
+	static String getKeyFromFilename(String s)
 	{
 		s = s.replace("Tope_","");
 		s = s.replace(".fas_rdpOut.txt.gz", "");
@@ -86,6 +86,10 @@ public class RdpToJson
 		File rdpDir = new File(ConfigReader.getNinaWithDuplicatesDir() + File.separator + "rdp" );
 		
 		String[] names = rdpDir.list();
+	
+		Holder root = new Holder();
+		
+		root.taxonomicLevel = "root";
 		
 		for( String s : names)
 		{
@@ -96,5 +100,22 @@ public class RdpToJson
 			if( caseControl == null)
 				throw new Exception("Could not find " + key);
 		}
+		
+		
+	}
+	
+	private static void addAFile( File file, Holder root, int caseControl )
+	{
+		
+	}
+	
+	private static class Holder
+	{
+		String taxonomicLevel;
+		int countsCase=0;
+		int countsControl=0;
+		double pValueFromTTest=1;
+		double pValueFromWilcoxon=1;
+		HashMap<String, Holder> children = new HashMap<String, Holder>();
 	}
 }
