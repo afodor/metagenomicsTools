@@ -158,7 +158,7 @@ if( graphType == "ForceTree" )
 {
 	for( prop in statics.getGoObjects())
 	{
-		if( prop != thisID && statics.getGoObjects()[prop] &&
+		if( prop.thisID != thisID && statics.getGoObjects()[prop] &&
 					  statics.getGoObjects()[prop].graphType == "ForceTree")
 		{
 			prop.unregister();
@@ -920,7 +920,7 @@ var updateNum=0;
 this.toggleVisibilityOfSidebars =function()
 {
 	var registered = statics.getGoObjects();
-  	for (id in registered)
+  	for (id in registered) if (registered[id])
 	{
 		registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
 		
@@ -1438,7 +1438,7 @@ this.arrangeForcePlot = function()
 
 
 this.initialize = function () {
-   
+   12
   this.flatten();
   this.addIndividualMenuDynamicMenuContent();
       

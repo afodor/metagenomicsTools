@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -239,13 +240,15 @@ public class RdpToJson
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,Holder h) throws Exception
 	{
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(3);
 		
 		writer.write("{\n");
 		
-		writer.write("\"numSeqs\": " +  (h.caseCounts + h.controlCounts)+ ",\n");		
+		writer.write("\"numSeqs\": " +  ((int)(h.caseCounts + h.controlCounts))+ ",\n");		
 		writer.write("\"rpdLevel\": \"" +  h.taxonomicLevel + "\",\n");
 		writer.write("\"rdptaxa\": \"" +  h.taxonomicName + "\",\n");
-		writer.write("\"fractionCase\": \"" +  (h.caseCounts / (h.caseCounts + h.controlCounts) )+ "\"\n");
+		writer.write("\"fractionCase\": \"" + nf.format((h.caseCounts / (h.caseCounts + h.controlCounts) )+ "\"\n"));
 		
 		if ( h.children.size() > 0) 
 		{
