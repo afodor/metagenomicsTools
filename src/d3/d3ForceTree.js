@@ -1409,12 +1409,11 @@ this.arrangeForcePlot = function()
 	
 	for( var x=0; x < nodes.length; x++ )
 	{
-		if( nodes[x].doNotShow=false)
+		if( nodes[x].doNotShow==false)
 			numVisibleArray[nodes[x].nodeDepth]++;
 	}
 	
-	aDocument.getElementById("animate").checked = false;
-	 
+	
 	var root = statics.getRoot();
 	
 	root.x =  w / 2.0  + 20;
