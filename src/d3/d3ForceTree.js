@@ -1123,8 +1123,12 @@ this.update = function()
 	      			
 					function (d){
 	      					if(d.fixMeNextTime)
+	      					{
 	      						d.fixed=true;
-
+	      						d.fixMeNextTime=false;
+	      					}
+	      					
+	      						
 	      		return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
 				)
 	    
@@ -1314,6 +1318,20 @@ this.checkForStop =function()
 	
 }
 
+this.releaseAllFixed = function()
+{
+	for ( var x=0; x < nodes.length; x++)
+	{
+		nodes[x].fixed = false;
+		nodes[x].fixMeNextTime=false;
+	}
+	
+		
+	
+	this.redrawScreen();
+}
+
+
 this.getTextColor= function(d)
 {
 	if(  aDocument.getElementById("textIsBlack").checked ) 
@@ -1357,7 +1375,7 @@ this.myMouseEnter = function(d)
 					&& prop != "yMapNoise" && prop != "highlight" && prop != "nodeLabelText" &&
 						prop != "setVisible" && prop != "thisNodeRadius" && prop != "thisNodeColor" &&
 						prop != "marked" && prop != "doNotShow" && prop != "listPosition" && prop != "px" &&
-						prop != "py" && prop != "weight" && prop != "aParentNode" )
+						prop != "py" && prop != "weight" && prop != "aParentNode" && prop != "fixMeNextTime" )
 		{
 			var aVal = "" + d[prop];
 			
