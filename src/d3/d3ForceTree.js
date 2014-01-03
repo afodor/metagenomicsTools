@@ -1116,12 +1116,16 @@ this.update = function()
 	      
 	      function updateNodesLinksText()
 	      {
-	      
 	      	 node.attr("cx", 
 					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)}
 				)
 	      	.attr("cy", 
-					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
+	      			
+					function (d){
+	      					if(d.fixMeNextTime)
+	      						d.fixed=true;
+
+	      		return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
 				)
 	    
 		  if ( anyLabels )
@@ -1423,6 +1427,8 @@ this.arrangeForcePlot = function()
 	{
 		if( nodes[x].doNotShow==false)
 			numVisibleArray[nodes[x].nodeDepth] = numVisibleArray[nodes[x].nodeDepth]+ 1;
+		
+		nodes[x].fixMeNextTime=false;
 	}
 	
 	
@@ -1439,14 +1445,17 @@ this.arrangeForcePlot = function()
 	
 	for( var x=0; x < nodes.length; x++) if( nodes[x].doNotShow==false ) 
 	{
+		nodes[x].fixed=false;
 		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
-		console.log( numAssignedArray[nodes[x].nodeDepth] + " " +  numVisibleArray[nodes[x].nodeDepth]); 
+		console.log( aPosition + " " + 
+				numAssignedArray[nodes[x].nodeDepth] + " " +  numVisibleArray[nodes[x].nodeDepth]); 
+		
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
 		nodes[x].x = root.x- 
 			aRad * Math.cos( piTwice * aPosition) ;
-		nodes[x].y  = aRad * Math.sin( piTwice *  aPosition + root.y);
+		nodes[x].y  = aRad * Math.sin( piTwice *  aPosition) + root.y;
 		numAssignedArray[nodes[x].nodeDepth] = numAssignedArray[nodes[x].nodeDepth]+ 1;
-		//nodes[x].fixed = true;
+		nodes[x].fixMeNextTime= true;
 	}
 }
 
@@ -1659,6 +1668,9 @@ this.flatten= function ()
   
   nodes = myNodes;
   statics.setNodes(nodes);
+  
+  for( var x=0; x < nodes.length; x++)
+	  nodes[x].fixMeNextTime =false;
   
   this.setInitialPositions();
   this.addDynamicMenuContent();
