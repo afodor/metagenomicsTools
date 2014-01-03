@@ -367,7 +367,7 @@ this.reVis = function(revisAll)
 	if( revisAll )
 	{
 		registered = statics.getGoObjects();
-  		for (id in registered)
+  		for (id in registered) if( registered[id] )
 		{	
 			registered[id].reVisOne();
 		}			
@@ -694,7 +694,7 @@ this.reVisOne = function()
   this.redrawScreen= function()
   {
   	registered = statics.getGoObjects();
-  	for (id in registered)
+  	for (id in registered) if (registered[id])
 	{	
 		registered[id].redrawAScreen();
 	}
@@ -1410,7 +1410,7 @@ this.arrangeForcePlot = function()
 	for( var x=0; x < nodes.length; x++ )
 	{
 		if( nodes[x].doNotShow==false)
-			numVisibleArray[nodes[x].nodeDepth]++;
+			numVisibleArray[nodes[x].nodeDepth] = numVisibleArray[nodes[x].nodeDepth]+ 1;
 	}
 	
 	
@@ -1425,14 +1425,16 @@ this.arrangeForcePlot = function()
 		
 	var piTwice= 2* Math.PI ;
 	
-	for( var x=0; x < nodes.length; x++) 
+	for( var x=0; x < nodes.length; x++) if( nodes[x].doNotShow==false ) 
 	{
 		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
+		console.log( numAssignedArray[nodes[x].nodeDepth] + " " +  numVisibleArray[nodes[x].nodeDepth]); 
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
 		nodes[x].x = root.x- 
 			aRad * Math.cos( piTwice * aPosition) ;
 		nodes[x].y  = aRad * Math.sin( piTwice *  aPosition + root.y);
-		numAssignedArray[nodes[x].nodeDepth]++;
+		numAssignedArray[nodes[x].nodeDepth] = numAssignedArray[nodes[x].nodeDepth]+ 1;
+		//nodes[x].fixed = true;
 	}
 }
 

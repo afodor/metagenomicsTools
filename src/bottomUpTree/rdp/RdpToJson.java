@@ -31,6 +31,7 @@ import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 
 import utils.ConfigReader;
+import utils.TTest;
 import utils.TabReader;
 
 public class RdpToJson
@@ -238,6 +239,20 @@ public class RdpToJson
 		return returnMap;
 	}
 	
+	private static double getTTestVal(Holder h) 
+	{
+		try
+		{
+			return TTest.ttestFromNumber(h.caseSamplesLogNormalized, h.controlSamplesLogNormalized).getPValue();
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		
+		return 1;
+	}
+	
 	private static void writeNodeAndChildren( BufferedWriter writer,Holder h) throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
@@ -248,7 +263,15 @@ public class RdpToJson
 		writer.write("\"numSeqs\": " +  ((int)(h.caseCounts + h.controlCounts))+ ",\n");		
 		writer.write("\"rpdLevel\": \"" +  h.taxonomicLevel + "\",\n");
 		writer.write("\"rdptaxa\": \"" +  h.taxonomicName + "\",\n");
-		writer.write("\"fractionCase\": \"" + nf.format((h.caseCounts / (h.caseCounts + h.controlCounts) )+ "\"\n"));
+		
+		double tTestVal = getTTestVal(h);
+		writer.write("\"tTestP\": \"" +  nf.format(tTestVal)+ "\",\n");
+		writer.write("\"t-log10TTesetP\": \"" +  nf.format( Math.log10( tTestVal))+ "\",\n");
+		
+		
+		double ratio = h.caseCounts / (h.caseCounts + h.controlCounts) ;
+		writer.write("\"fractionCase\": \"" + nf.format(ratio)+ "\"\n");
+		
 		
 		if ( h.children.size() > 0) 
 		{
@@ -273,10 +296,8 @@ public class RdpToJson
 		String taxonomicLevel;
 		double caseCounts=0;
 		double controlCounts=0;
-		List<Double> caseSamplesLogNormalized =new ArrayList<Double>();
-		List<Double> controlSamplesLogNormalized =new ArrayList<Double>();
-		double pValueFromTTest=1;
-		double pValueFromWilcoxon=1;
+		List<Number> caseSamplesLogNormalized =new ArrayList<Number>();
+		List<Number> controlSamplesLogNormalized =new ArrayList<Number>();
 		HashMap<String, Holder> children = new HashMap<String, Holder>();
 	}
 }
