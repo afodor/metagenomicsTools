@@ -60,6 +60,8 @@ public class ConfigReader
 	public static final String R_DIRECTORY = "R_DIRECTORY";
 	public static final String NINA_WITH_DUPLICATES_DIR = "NINA_WITH_DUPLICATES_DIR";
 	
+	public static final String SANDRA_RIVER_JUNE_2012_Dir = "SANDRA_RIVER_JUNE_2012_Dir";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -83,6 +85,11 @@ public class ConfigReader
 	public static String getD3Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(D3_DIR);
+	}
+	
+	public static String getSandraRiverJune2012Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(SANDRA_RIVER_JUNE_2012_Dir);
 	}
 	
 	public static String getETreeTestDir() throws Exception
