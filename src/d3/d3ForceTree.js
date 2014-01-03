@@ -1399,8 +1399,42 @@ this.setInitialPositions = function ()
 this.arrangeForcePlot = function()
 {
 	numVisibleArray = [];
+	numAssignedArray = [];
 	
+	for( var x=0; x <= statics.getMaxLevel(); x++)
+	{
+		numVisibleArray.push(0);
+		numAssignedArray.push(0);
+	}
 	
+	for( var x=0; x < nodes.length; x++ )
+	{
+		if( nodes[x].doNotShow=false)
+			numVisibleArray[nodes[x].nodeDepth]++;
+	}
+	
+	aDocument.getElementById("animate").checked = false;
+	 
+	var root = statics.getRoot();
+	
+	root.x =  w / 2.0  + 20;
+	root.y = h /2.0;
+	
+	var radius = Math.min(w,h)/2;
+	
+	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
+		
+	var piTwice= 2* Math.PI ;
+	
+	for( var x=0; x < nodes.length; x++) 
+	{
+		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
+		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
+		nodes[x].x = root.x- 
+			aRad * Math.cos( piTwice * aPosition) ;
+		nodes[x].y  = aRad * Math.sin( piTwice *  aPosition + root.y);
+		numAssignedArray[nodes[x].nodeDepth]++;
+	}
 }
 
 
