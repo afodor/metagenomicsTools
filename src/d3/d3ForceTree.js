@@ -662,10 +662,10 @@ this.reVisOne = function()
   	if( isRunFromTopWindow ) 
   		aDocument.getElementById("depthFilterRange").max = topNodes.length;
   	
-  	this.showOnlyMarked();
+  	this.showOnlyMarked(true);
   }
   
-  this.showOnlyMarked = function()
+  this.showOnlyMarked = function(withRedraw)
   {
   	var aVal = aDocument.getElementById("depthFilterRange").value;
   	
@@ -699,8 +699,15 @@ this.reVisOne = function()
   	}
   	
   	statics.getRoot().doNotShow=false;
-  	dirty=true;
-  	this.redrawScreen();
+  	
+  	
+  	if( withRedraw)
+  	{
+  		dirty=true;
+  	  	this.redrawScreen();
+  	}
+  	
+  	
   }
   
   // calls redrawAScreen on all registered listeners
@@ -1465,8 +1472,6 @@ this.arrangeForcePlot = function()
 	{
 		nodes[x].fixed=false;
 		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
-		console.log( aPosition + " " + 
-				numAssignedArray[nodes[x].nodeDepth] + " " +  numVisibleArray[nodes[x].nodeDepth]); 
 		
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
 		nodes[x].x = root.x- 
@@ -1591,6 +1596,8 @@ this.myClick= function (d) {
 		{
 			for( var x =0; x < nodes.length; x++)
 				nodes[x].doNotShow=false;
+			
+			this.showOnlyMarked(false);
 		}
 		else
 		{
