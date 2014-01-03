@@ -287,9 +287,9 @@ this.reforce = function()
     
     drag = force.drag().on("dragstart", function(d) { 
     						
-    						// consume the drag event at the node level
-    						// otherwise the whole tree gets dragged
-    						if( graphType ==  "ForceTree"  && thisDocument.getElementById("dragNodes").checked )
+    						// disable drag and zoom for graph events for force tree view
+    						// since it is not working very well (very jumpy)
+    						if( graphType ==  "ForceTree" )//  && thisDocument.getElementById("dragNodes").checked )
     						{
     							d3.event.sourceEvent.stopPropagation();
         						d.fixed=true; 
@@ -299,12 +299,25 @@ this.reforce = function()
     							}
     						);
 
-    vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-  .append("g")
-    .call(d3.behavior.zoom().scaleExtent([0.01, 100]).on("zoom", thisContext.zoom))
-  .append("g");
+    if( graphType != "ForceTree")
+    {
+    	vis = d3.select("body").append("svg:svg")
+        .attr("width", w)
+        .attr("height", h)
+      .append("g")
+        .call(d3.behavior.zoom().scaleExtent([0.01, 100]).on("zoom", thisContext.zoom))
+      .append("g");
+    }
+    else
+    {
+    	vis = d3.select("body").append("svg:svg")
+        .attr("width", w)
+        .attr("height", h)
+    }
+    
+    
+    
+    
 	 
 }
 
@@ -1077,7 +1090,6 @@ this.update = function()
       if( graphType == "ForceTree" )
       	force.start().gravity(thisDocument.getElementById("gravitySlider").value/100);
   
-		
 	  var node = vis.selectAll("circle.node")
 	      .data(filteredNodes, function(d) {return d.forceTreeNodeID; } )
 	      .style("fill", function(d) { return d.thisNodeColor} )
