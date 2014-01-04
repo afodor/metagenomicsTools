@@ -159,3 +159,15 @@ body {
     left:160px;
     top:0px;
 }
+
+    #canvas {
+        width:100px;
+        height:100px;
+        border: 10px solid transparent;
+        visibility:visible
+    }
+    .rectangle {
+        border: 1px solid #FF0000;
+        position: absolute;
+        visibility:visible
+    }
