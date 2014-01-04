@@ -134,6 +134,32 @@ var addNoise= false;
 var firstNoise = true;
 var dataNames = [];
 
+var mouse = {
+        x: 0,
+        y: 0,
+        startX: 0,
+        startY: 0
+    };
+    
+var element = null;
+
+
+//modded from http://stackoverflow.com/questions/17408010/javascript-drawing-a-rectangle-using-click-mouse-move-and-click
+
+this.setMousePosition = function setMousePosition() 
+{
+		var ev = vis || window.event; //Moz || IE
+		if (ev.pageX) 
+		{ //Moz
+			mouse.x = ev.pageX + window.pageXOffset;
+			mouse.y = ev.pageY + window.pageYOffset;
+		} else if (ev.clientX) 
+		{ //IE
+			mouse.x = ev.clientX + document.body.scrollLeft;
+			mouse.y = ev.clientY + document.body.scrollTop;
+		}
+};
+
 this.addNoise = function()
 {
 	addNoise= true;
@@ -316,7 +342,37 @@ this.reforce = function()
     }
     
     
-    
+    // add a rectangle box...
+	vis.onmousedown = function e() 
+	{
+		setMousePosition();
+		mouse.startX = mouse.x;
+        mouse.startY = mouse.y;
+        element = document.createElement('div');
+        element.className = 'rectangle'
+        element.style.left = mouse.x + 'px';
+        element.style.top = mouse.y + 'px';
+        canvas.appendChild(element)
+    	canvas.style.cursor="crosshair";
+	}
+	
+	vis.onmouseup = function e() 
+	{
+	  canvas.style.cursor="default";
+      element = null;
+	}
+	
+	vis.onmousemove = function (e) 
+	{
+        setMousePosition();
+        if (element !== null) 
+        {
+            element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
+            element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
+            element.style.left = (mouse.x - mouse.startX < 0) ? mouse.x + 'px' : mouse.startX + 'px';
+            element.style.top = (mouse.y - mouse.startY < 0) ? mouse.y + 'px' : mouse.startY + 'px';
+        }
+    }
     
 	 
 }
