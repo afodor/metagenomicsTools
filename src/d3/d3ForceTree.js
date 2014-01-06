@@ -1514,6 +1514,14 @@ this.arrangeForcePlot = function(arrangeChildren)
 		numAssignedArray[nodesToRun[x].nodeDepth] = numAssignedArray[nodesToRun[x].nodeDepth]+ 1;
 		nodesToRun[x].fixMeNextTime= true;
 	}
+	
+	if(  arrangeChildren &&  lastSelected)
+	{
+		lastSelected.fixed=true;
+		lastSelected.userMoved = true;
+		
+	}
+	
 }
 
 
