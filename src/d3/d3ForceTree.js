@@ -1496,8 +1496,14 @@ this.arrangeForcePlot = function(arrangeChildren)
 	
 	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
 
+	var localMinLevel = 0;
+	
 	if(  arrangeChildren &&  lastSelected)
+	{
 		radius = radius / thisDocument.getElementById("localGravity").value;
+		localMinLevel = lastSelected.nodeDepth;
+	}
+	
 		
 	var piTwice= 2* Math.PI ;
 	
@@ -1507,7 +1513,7 @@ this.arrangeForcePlot = function(arrangeChildren)
 		nodesToRun[x].userMoved = false;
 		var aPosition = numAssignedArray[nodesToRun[x].nodeDepth]/numVisibleArray[nodesToRun[x].nodeDepth];
 		
-		var aRad = (parseFloat(nodesToRun[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
+		var aRad = (parseFloat(nodesToRun[x].nodeDepth)- localMinLevel)/(statics.getMaxLevel() - localMinLevel) * radius;
 		nodesToRun[x].x = root.x- 
 			aRad * Math.cos( piTwice * aPosition) ;
 		nodesToRun[x].y  = aRad * Math.sin( piTwice *  aPosition) + root.y;
