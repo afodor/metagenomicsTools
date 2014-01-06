@@ -133,7 +133,7 @@ var queryStrings = getQueryStrings(thisWindow)
 var addNoise= false;
 var firstNoise = true;
 var dataNames = [];
-var userMoved = false;
+var lastSelected = null;
 
 this.addNoise = function()
 {
@@ -1453,38 +1453,50 @@ this.arrangeForcePlot = function()
 		numAssignedArray.push(0);
 	}
 	
-	for( var x=0; x < nodes.length; x++ )
+	var nodesToRun = nodes;
+	
+	if( lastSelected )
+		nodesToRun = lastSelected.children;
+	
+	for( var x=0; x < nodesToRun.length; x++ )
 	{
-		if( nodes[x].doNotShow==false)
-			numVisibleArray[nodes[x].nodeDepth] = numVisibleArray[nodes[x].nodeDepth]+ 1;
+		if( nodesToRun[x].doNotShow==false)
+			numVisibleArray[nodesToRun[x].nodeDepth] = numVisibleArray[nodesToRun[x].nodeDepth]+ 1;
 		
-		nodes[x].fixMeNextTime=false;
+		nodesToRun[x].fixMeNextTime=false;
 	}
 	
+	var root = lastSelected;
 	
-	var root = statics.getRoot();
-	
-	root.x =  w / 2.0  + 20;
-	root.y = h /2.0;
+	if( ! root)
+	{
+		root = statics.getRoot();
+		root.x =  w / 2.0  + 20;
+		root.y = h /2.0;
+		
+	}
 	
 	var radius = Math.min(w,h)/2;
 	
 	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
+	
+	if( lastSelected)
+		radius = radius / lastSelected.nodeDepth;
 		
 	var piTwice= 2* Math.PI ;
 	
-	for( var x=0; x < nodes.length; x++) if( nodes[x].doNotShow==false ) 
+	for( var x=0; x < nodesToRun.length; x++) if( nodesToRun[x].doNotShow==false ) 
 	{
-		nodes[x].fixed=false;
-		nodes[x].userMoved = false;
-		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
+		nodesToRun[x].fixed=false;
+		nodesToRun[x].userMoved = false;
+		var aPosition = numAssignedArray[nodesToRun[x].nodeDepth]/numVisibleArray[nodesToRun[x].nodeDepth];
 		
-		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
-		nodes[x].x = root.x- 
+		var aRad = (parseFloat(nodesToRun[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
+		nodesToRun[x].x = root.x- 
 			aRad * Math.cos( piTwice * aPosition) ;
-		nodes[x].y  = aRad * Math.sin( piTwice *  aPosition) + root.y;
-		numAssignedArray[nodes[x].nodeDepth] = numAssignedArray[nodes[x].nodeDepth]+ 1;
-		nodes[x].fixMeNextTime= true;
+		nodesToRun[x].y  = aRad * Math.sin( piTwice *  aPosition) + root.y;
+		numAssignedArray[nodesToRun[x].nodeDepth] = numAssignedArray[nodesToRun[x].nodeDepth]+ 1;
+		nodesToRun[x].fixMeNextTime= true;
 	}
 }
 
