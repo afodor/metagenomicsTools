@@ -1369,6 +1369,7 @@ this.myMouseEnter = function(d)
 		
 	statics.setHighlightedNode(d);
 	d.highlight = true;
+	lastSelected = d;
 	
 	infoPane = aDocument.getElementById("rightInfoArea")
 	
@@ -1456,7 +1457,22 @@ this.arrangeForcePlot = function()
 	var nodesToRun = nodes;
 	
 	if( lastSelected )
-		nodesToRun = lastSelected.children;
+	{
+		nodesToRun = [];
+		
+		function addNodeAndChildren(aNode)
+		{
+			nodesToRun.push(aNode);
+			
+			if( aNode.children)
+				for( var x=0; x < aNode.children.length; x++)
+					addNodeAndChildren(aNode.children[x]);
+		}
+		
+		addNodeAndChildren(lastSelected);
+
+	}
+	
 	
 	for( var x=0; x < nodesToRun.length; x++ )
 	{
