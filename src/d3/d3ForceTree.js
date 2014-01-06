@@ -1443,7 +1443,7 @@ this.setInitialPositions = function ()
 	root.fixed=true;
 }
 
-this.arrangeForcePlot = function()
+this.arrangeForcePlot = function(arrangeChildren)
 {
 	numVisibleArray = [];
 	numAssignedArray = [];
@@ -1456,7 +1456,7 @@ this.arrangeForcePlot = function()
 	
 	var nodesToRun = nodes;
 	
-	if( lastSelected )
+	if( arrangeChildren && lastSelected )
 	{
 		nodesToRun = [];
 		
@@ -1484,7 +1484,7 @@ this.arrangeForcePlot = function()
 	
 	var root = lastSelected;
 	
-	if( ! root)
+	if( ! root || ! arrangeChildren)
 	{
 		root = statics.getRoot();
 		root.x =  w / 2.0  + 20;
@@ -1496,7 +1496,7 @@ this.arrangeForcePlot = function()
 	
 	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
 	
-	if( lastSelected)
+	if(  arrangeChildren &&  lastSelected)
 		radius = radius / lastSelected.nodeDepth;
 		
 	var piTwice= 2* Math.PI ;
@@ -1518,7 +1518,7 @@ this.arrangeForcePlot = function()
 
 
 this.initialize = function () {
-   12
+	
   this.flatten();
   this.addIndividualMenuDynamicMenuContent();
       

@@ -20,7 +20,8 @@
 						</input>
 					<br>scatter x:<select id="scatterX" onchange=myGo.redrawScreen()></select>
         	<br>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select>
-			<br><input type=button onclick=myGo.arrangeForcePlot() value="arrange (force plot only) "></input>
+			<br><input type=button onclick=myGo.arrangeForcePlot(false) value="arrange (entire tree) "></input>
+			<br><input type=button onclick=myGo.arrangeForcePlot(true) value="arrange (around last selected)"></input>
 			<br><input type=button onclick=myGo.releaseAllFixed() value="reanimate "></input>
 					</aside>
 	<script type="text/javascript" src="d3.v3.js"></script>
