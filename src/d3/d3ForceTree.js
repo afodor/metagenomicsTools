@@ -133,6 +133,7 @@ var queryStrings = getQueryStrings(thisWindow)
 var addNoise= false;
 var firstNoise = true;
 var dataNames = [];
+var userMoved = false;
 
 this.addNoise = function()
 {
@@ -293,6 +294,7 @@ this.reforce = function()
     						{
     							d3.event.sourceEvent.stopPropagation();
         						d.fixed=true; 
+        						d.userMoved = true;
         						thisContext.update();
     						}
     						
@@ -1329,8 +1331,11 @@ this.releaseAllFixed = function()
 {
 	for ( var x=0; x < nodes.length; x++)
 	{
-		nodes[x].fixed = false;
-		nodes[x].fixMeNextTime=false;
+		if( ! nodes[x].userMoved)
+		{
+			nodes[x].fixed = false;
+			nodes[x].fixMeNextTime=false;
+		}
 	}
 	
 		
@@ -1471,6 +1476,7 @@ this.arrangeForcePlot = function()
 	for( var x=0; x < nodes.length; x++) if( nodes[x].doNotShow==false ) 
 	{
 		nodes[x].fixed=false;
+		nodes[x].userMoved = false;
 		var aPosition = numAssignedArray[nodes[x].nodeDepth]/numVisibleArray[nodes[x].nodeDepth];
 		
 		var aRad = (parseFloat(nodes[x].nodeDepth)-1)/(statics.getMaxLevel()) * radius;
