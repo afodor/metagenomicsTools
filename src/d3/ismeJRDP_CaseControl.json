@@ -1,0 +1,6734 @@
+{
+"numSeqs": 578096,
+"rpdLevel": "root",
+"rdptaxa": "root",
+"tTestP": "1",
+"t-log10TTesetP": "0",
+"fractionCase": "0.509"
+,"children": [
+{
+"numSeqs": 1504,
+"rpdLevel": "phylum",
+"rdptaxa": "Fusobacteria",
+"tTestP": "0.171",
+"t-log10TTesetP": "-0.766",
+"fractionCase": "0.787"
+,"children": [
+{
+"numSeqs": 1504,
+"rpdLevel": "class",
+"rdptaxa": "Fusobacteria",
+"tTestP": "0.166",
+"t-log10TTesetP": "-0.779",
+"fractionCase": "0.787"
+,"children": [
+{
+"numSeqs": 1504,
+"rpdLevel": "order",
+"rdptaxa": "Fusobacteriales",
+"tTestP": "0.166",
+"t-log10TTesetP": "-0.781",
+"fractionCase": "0.787"
+,"children": [
+{
+"numSeqs": 19,
+"rpdLevel": "family",
+"rdptaxa": "Leptotrichiaceae",
+"tTestP": "0.231",
+"t-log10TTesetP": "-0.637",
+"fractionCase": "0.842"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Leptotrichia",
+"tTestP": "0.315",
+"t-log10TTesetP": "-0.502",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Sneathia",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 1476,
+"rpdLevel": "family",
+"rdptaxa": "Fusobacteriaceae",
+"tTestP": "0.153",
+"t-log10TTesetP": "-0.814",
+"fractionCase": "0.787"
+,"children": [
+{
+"numSeqs": 325,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XIX",
+"tTestP": "0.602",
+"t-log10TTesetP": "-0.22",
+"fractionCase": "0.548"
+}
+,{
+"numSeqs": 1146,
+"rpdLevel": "genus",
+"rdptaxa": "Fusobacterium",
+"tTestP": "0.206",
+"t-log10TTesetP": "-0.686",
+"fractionCase": "0.858"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 24,
+"rpdLevel": "phylum",
+"rdptaxa": "Chloroflexi",
+"tTestP": "0.329",
+"t-log10TTesetP": "-0.482",
+"fractionCase": "0.542"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "class",
+"rdptaxa": "Ktedonobacteria",
+"tTestP": "0.131",
+"t-log10TTesetP": "-0.882",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "order",
+"rdptaxa": "Ktedonobacterales",
+"tTestP": "0.133",
+"t-log10TTesetP": "-0.876",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Thermosporotrichaceae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Thermosporothrix",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 20,
+"rpdLevel": "class",
+"rdptaxa": "Thermomicrobia",
+"tTestP": "0.309",
+"t-log10TTesetP": "-0.51",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 17,
+"rpdLevel": "order",
+"rdptaxa": "Sphaerobacterales",
+"tTestP": "0.366",
+"t-log10TTesetP": "-0.437",
+"fractionCase": "0.471"
+,"children": [
+{
+"numSeqs": 17,
+"rpdLevel": "family",
+"rdptaxa": "Sphaerobacteraceae",
+"tTestP": "0.361",
+"t-log10TTesetP": "-0.443",
+"fractionCase": "0.471"
+,"children": [
+{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Sphaerobacter",
+"tTestP": "0.345",
+"t-log10TTesetP": "-0.463",
+"fractionCase": "0.471"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 523,
+"rpdLevel": "phylum",
+"rdptaxa": "Acidobacteria",
+"tTestP": "0.121",
+"t-log10TTesetP": "-0.918",
+"fractionCase": "0.576"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp10",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 113,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp4",
+"tTestP": "0.812",
+"t-log10TTesetP": "-0.091",
+"fractionCase": "0.389"
+}
+,{
+"numSeqs": 63,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp3",
+"tTestP": "0.965",
+"t-log10TTesetP": "-0.016",
+"fractionCase": "0.492"
+}
+,{
+"numSeqs": 80,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp2",
+"tTestP": "0.019",
+"t-log10TTesetP": "-1.714",
+"fractionCase": "0.762"
+}
+,{
+"numSeqs": 243,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp1",
+"tTestP": "0.108",
+"t-log10TTesetP": "-0.966",
+"fractionCase": "0.658"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp7",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp6",
+"tTestP": "0.426",
+"t-log10TTesetP": "-0.37",
+"fractionCase": "0.75"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp5",
+"tTestP": "0.771",
+"t-log10TTesetP": "-0.113",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "class",
+"rdptaxa": "Holophagae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "order",
+"rdptaxa": "Holophagales",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "family",
+"rdptaxa": "Holophagaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Geothrix",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 57,
+"rpdLevel": "phylum",
+"rdptaxa": "Tenericutes",
+"tTestP": "0.115",
+"t-log10TTesetP": "-0.94",
+"fractionCase": "0.719"
+,"children": [
+{
+"numSeqs": 57,
+"rpdLevel": "class",
+"rdptaxa": "Mollicutes",
+"tTestP": "0.114",
+"t-log10TTesetP": "-0.944",
+"fractionCase": "0.719"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "order",
+"rdptaxa": "Mycoplasmatales",
+"tTestP": "0.136",
+"t-log10TTesetP": "-0.867",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "family",
+"rdptaxa": "Mycoplasmataceae",
+"tTestP": "0.138",
+"t-log10TTesetP": "-0.861",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Ureaplasma",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Mycoplasma",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 40,
+"rpdLevel": "order",
+"rdptaxa": "Anaeroplasmatales",
+"tTestP": "0.091",
+"t-log10TTesetP": "-1.043",
+"fractionCase": "0.775"
+,"children": [
+{
+"numSeqs": 40,
+"rpdLevel": "family",
+"rdptaxa": "Anaeroplasmataceae",
+"tTestP": "0.092",
+"t-log10TTesetP": "-1.035",
+"fractionCase": "0.775"
+,"children": [
+{
+"numSeqs": 39,
+"rpdLevel": "genus",
+"rdptaxa": "Anaeroplasma",
+"tTestP": "0.123",
+"t-log10TTesetP": "-0.91",
+"fractionCase": "0.769"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Asteroleplasma",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "order",
+"rdptaxa": "Haloplasmatales",
+"tTestP": "0.582",
+"t-log10TTesetP": "-0.235",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "family",
+"rdptaxa": "Haloplasmataceae",
+"tTestP": "0.572",
+"t-log10TTesetP": "-0.243",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Haloplasma",
+"tTestP": "0.563",
+"t-log10TTesetP": "-0.25",
+"fractionCase": "0.7"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "phylum",
+"rdptaxa": "Thermotogae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "class",
+"rdptaxa": "Thermotogae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "order",
+"rdptaxa": "Thermotogales",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "family",
+"rdptaxa": "Thermotogales_incertae_sedis",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Oceanotoga",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "phylum",
+"rdptaxa": "Nitrospira",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Nitrospira",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "order",
+"rdptaxa": "Nitrospirales",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Nitrospiraceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Nitrospira",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 20,
+"rpdLevel": "phylum",
+"rdptaxa": "Gemmatimonadetes",
+"tTestP": "0.664",
+"t-log10TTesetP": "-0.178",
+"fractionCase": "0.15"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "class",
+"rdptaxa": "Gemmatimonadetes",
+"tTestP": "0.663",
+"t-log10TTesetP": "-0.178",
+"fractionCase": "0.15"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "order",
+"rdptaxa": "Gemmatimonadales",
+"tTestP": "0.655",
+"t-log10TTesetP": "-0.184",
+"fractionCase": "0.15"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "family",
+"rdptaxa": "Gemmatimonadaceae",
+"tTestP": "0.658",
+"t-log10TTesetP": "-0.182",
+"fractionCase": "0.15"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "genus",
+"rdptaxa": "Gemmatimonas",
+"tTestP": "0.666",
+"t-log10TTesetP": "-0.176",
+"fractionCase": "0.15"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 15,
+"rpdLevel": "phylum",
+"rdptaxa": "Chlorobi",
+"tTestP": "0.283",
+"t-log10TTesetP": "-0.548",
+"fractionCase": "0.2"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "class",
+"rdptaxa": "Ignavibacteria",
+"tTestP": "0.283",
+"t-log10TTesetP": "-0.548",
+"fractionCase": "0.2"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "order",
+"rdptaxa": "Ignavibacteriales",
+"tTestP": "0.284",
+"t-log10TTesetP": "-0.547",
+"fractionCase": "0.2"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "family",
+"rdptaxa": "Ignavibacteriaceae",
+"tTestP": "0.284",
+"t-log10TTesetP": "-0.547",
+"fractionCase": "0.2"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Ignavibacterium",
+"tTestP": "0.297",
+"t-log10TTesetP": "-0.527",
+"fractionCase": "0.2"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 340933,
+"rpdLevel": "phylum",
+"rdptaxa": "Firmicutes",
+"tTestP": "0.047",
+"t-log10TTesetP": "-1.332",
+"fractionCase": "0.492"
+,"children": [
+{
+"numSeqs": 288925,
+"rpdLevel": "class",
+"rdptaxa": "Clostridia",
+"tTestP": "0.086",
+"t-log10TTesetP": "-1.064",
+"fractionCase": "0.493"
+,"children": [
+{
+"numSeqs": 288842,
+"rpdLevel": "order",
+"rdptaxa": "Clostridiales",
+"tTestP": "0.1",
+"t-log10TTesetP": "-0.999",
+"fractionCase": "0.493"
+,"children": [
+{
+"numSeqs": 230,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XI",
+"tTestP": "0.939",
+"t-log10TTesetP": "-0.027",
+"fractionCase": "0.509"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Parvimonas",
+"tTestP": "0.477",
+"t-log10TTesetP": "-0.321",
+"fractionCase": "0.4"
+}
+,{
+"numSeqs": 75,
+"rpdLevel": "genus",
+"rdptaxa": "Finegoldia",
+"tTestP": "0.535",
+"t-log10TTesetP": "-0.272",
+"fractionCase": "0.44"
+}
+,{
+"numSeqs": 58,
+"rpdLevel": "genus",
+"rdptaxa": "Peptoniphilus",
+"tTestP": "0.411",
+"t-log10TTesetP": "-0.387",
+"fractionCase": "0.621"
+}
+,{
+"numSeqs": 86,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerococcus",
+"tTestP": "0.665",
+"t-log10TTesetP": "-0.177",
+"fractionCase": "0.523"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Heliobacteriaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Heliobacillus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 56,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XII",
+"tTestP": "0.129",
+"t-log10TTesetP": "-0.889",
+"fractionCase": "0.643"
+,"children": [
+{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Guggenheimella",
+"tTestP": "0.113",
+"t-log10TTesetP": "-0.947",
+"fractionCase": "0.786"
+}
+,{
+"numSeqs": 39,
+"rpdLevel": "genus",
+"rdptaxa": "Fusibacter",
+"tTestP": "0.591",
+"t-log10TTesetP": "-0.228",
+"fractionCase": "0.59"
+}
+]
+}
+,{
+"numSeqs": 66056,
+"rpdLevel": "family",
+"rdptaxa": "Ruminococcaceae",
+"tTestP": "0.198",
+"t-log10TTesetP": "-0.703",
+"fractionCase": "0.522"
+,"children": [
+{
+"numSeqs": 31343,
+"rpdLevel": "genus",
+"rdptaxa": "Faecalibacterium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "0.559"
+}
+,{
+"numSeqs": 106,
+"rpdLevel": "genus",
+"rdptaxa": "Acetanaerobacterium",
+"tTestP": "0.016",
+"t-log10TTesetP": "-1.795",
+"fractionCase": "0.67"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Acetivibrio",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1477,
+"rpdLevel": "genus",
+"rdptaxa": "Butyricicoccus",
+"tTestP": "0.636",
+"t-log10TTesetP": "-0.197",
+"fractionCase": "0.515"
+}
+,{
+"numSeqs": 59,
+"rpdLevel": "genus",
+"rdptaxa": "Ethanoligenens",
+"tTestP": "0.238",
+"t-log10TTesetP": "-0.623",
+"fractionCase": "0.322"
+}
+,{
+"numSeqs": 394,
+"rpdLevel": "genus",
+"rdptaxa": "Hydrogenoanaerobacterium",
+"tTestP": "0.203",
+"t-log10TTesetP": "-0.693",
+"fractionCase": "0.414"
+}
+,{
+"numSeqs": 4950,
+"rpdLevel": "genus",
+"rdptaxa": "Ruminococcus",
+"tTestP": "0.993",
+"t-log10TTesetP": "-0.003",
+"fractionCase": "0.489"
+}
+,{
+"numSeqs": 5601,
+"rpdLevel": "genus",
+"rdptaxa": "Oscillibacter",
+"tTestP": "0.324",
+"t-log10TTesetP": "-0.489",
+"fractionCase": "0.489"
+}
+,{
+"numSeqs": 1587,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium IV",
+"tTestP": "0.452",
+"t-log10TTesetP": "-0.344",
+"fractionCase": "0.355"
+}
+,{
+"numSeqs": 1184,
+"rpdLevel": "genus",
+"rdptaxa": "Flavonifractor",
+"tTestP": "0.588",
+"t-log10TTesetP": "-0.231",
+"fractionCase": "0.476"
+}
+,{
+"numSeqs": 180,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerofilum",
+"tTestP": "0.738",
+"t-log10TTesetP": "-0.132",
+"fractionCase": "0.322"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Papillibacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 4813,
+"rpdLevel": "genus",
+"rdptaxa": "Subdoligranulum",
+"tTestP": "0.75",
+"t-log10TTesetP": "-0.125",
+"fractionCase": "0.433"
+}
+,{
+"numSeqs": 228,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerotruncus",
+"tTestP": "0.673",
+"t-log10TTesetP": "-0.172",
+"fractionCase": "0.382"
+}
+,{
+"numSeqs": 867,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudoflavonifractor",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.861",
+"fractionCase": "0.617"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Saccharofermentans",
+"tTestP": "0.102",
+"t-log10TTesetP": "-0.993",
+"fractionCase": "0.857"
+}
+,{
+"numSeqs": 25,
+"rpdLevel": "genus",
+"rdptaxa": "Sporobacter",
+"tTestP": "0.637",
+"t-log10TTesetP": "-0.196",
+"fractionCase": "0.4"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis III",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Thermoanaerobacterium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 63,
+"rpdLevel": "family",
+"rdptaxa": "Incertae Sedis XI",
+"tTestP": "0.564",
+"t-log10TTesetP": "-0.249",
+"fractionCase": "0.444"
+,"children": [
+{
+"numSeqs": 26,
+"rpdLevel": "genus",
+"rdptaxa": "Murdochiella",
+"tTestP": "0.124",
+"t-log10TTesetP": "-0.906",
+"fractionCase": "0.154"
+}
+,{
+"numSeqs": 37,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerosphaera",
+"tTestP": "0.393",
+"t-log10TTesetP": "-0.406",
+"fractionCase": "0.649"
+}
+]
+}
+,{
+"numSeqs": 46,
+"rpdLevel": "family",
+"rdptaxa": "Peptococcaceae 1",
+"tTestP": "0.289",
+"t-log10TTesetP": "-0.539",
+"fractionCase": "0.522"
+,"children": [
+{
+"numSeqs": 34,
+"rpdLevel": "genus",
+"rdptaxa": "Peptococcus",
+"tTestP": "0.971",
+"t-log10TTesetP": "-0.013",
+"fractionCase": "0.382"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Dehalobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 954,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XIII",
+"tTestP": "0.543",
+"t-log10TTesetP": "-0.265",
+"fractionCase": "0.418"
+,"children": [
+{
+"numSeqs": 166,
+"rpdLevel": "genus",
+"rdptaxa": "Mogibacterium",
+"tTestP": "0.086",
+"t-log10TTesetP": "-1.067",
+"fractionCase": "0.108"
+}
+,{
+"numSeqs": 733,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerovorax",
+"tTestP": "0.982",
+"t-log10TTesetP": "-0.008",
+"fractionCase": "0.494"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Peptococcaceae 2",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Cryptanaerobacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiaceae 4",
+"tTestP": "0.76",
+"t-log10TTesetP": "-0.119",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Thermotalea",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 74,
+"rpdLevel": "family",
+"rdptaxa": "Eubacteriaceae",
+"tTestP": "0.023",
+"t-log10TTesetP": "-1.631",
+"fractionCase": "0.176"
+,"children": [
+{
+"numSeqs": 31,
+"rpdLevel": "genus",
+"rdptaxa": "Eubacterium",
+"tTestP": "0.063",
+"t-log10TTesetP": "-1.198",
+"fractionCase": "0.097"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Garciella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Acetobacterium",
+"tTestP": "0.146",
+"t-log10TTesetP": "-0.835",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 31,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerofustis",
+"tTestP": "0.592",
+"t-log10TTesetP": "-0.228",
+"fractionCase": "0.29"
+}
+]
+}
+,{
+"numSeqs": 2972,
+"rpdLevel": "family",
+"rdptaxa": "Peptostreptococcaceae",
+"tTestP": "0.615",
+"t-log10TTesetP": "-0.211",
+"fractionCase": "0.487"
+,"children": [
+{
+"numSeqs": 153,
+"rpdLevel": "genus",
+"rdptaxa": "Peptostreptococcus",
+"tTestP": "0.774",
+"t-log10TTesetP": "-0.111",
+"fractionCase": "0.614"
+}
+,{
+"numSeqs": 22,
+"rpdLevel": "genus",
+"rdptaxa": "Sporacetigenium",
+"tTestP": "0.184",
+"t-log10TTesetP": "-0.736",
+"fractionCase": "0.227"
+}
+,{
+"numSeqs": 2657,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XI",
+"tTestP": "0.678",
+"t-log10TTesetP": "-0.169",
+"fractionCase": "0.471"
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Peptostreptococcaceae_incertae_sedis",
+"tTestP": "0.95",
+"t-log10TTesetP": "-0.022",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XVII",
+"tTestP": "0.203",
+"t-log10TTesetP": "-0.693",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Thermaerobacter",
+"tTestP": "0.204",
+"t-log10TTesetP": "-0.69",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 1757,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiaceae 1",
+"tTestP": "0.783",
+"t-log10TTesetP": "-0.106",
+"fractionCase": "0.372"
+,"children": [
+{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerobacter",
+"tTestP": "0.461",
+"t-log10TTesetP": "-0.337",
+"fractionCase": "0.25"
+}
+,{
+"numSeqs": 1441,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium sensu stricto",
+"tTestP": "0.688",
+"t-log10TTesetP": "-0.162",
+"fractionCase": "0.363"
+}
+,{
+"numSeqs": 44,
+"rpdLevel": "genus",
+"rdptaxa": "Proteiniclasticum",
+"tTestP": "0.855",
+"t-log10TTesetP": "-0.068",
+"fractionCase": "0.432"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerosporobacter",
+"tTestP": "0.177",
+"t-log10TTesetP": "-0.752",
+"fractionCase": "0.857"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Sarcina",
+"tTestP": "0.105",
+"t-log10TTesetP": "-0.977",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 206360,
+"rpdLevel": "family",
+"rdptaxa": "Lachnospiraceae",
+"tTestP": "0.028",
+"t-log10TTesetP": "-1.559",
+"fractionCase": "0.477"
+,"children": [
+{
+"numSeqs": 10169,
+"rpdLevel": "genus",
+"rdptaxa": "Coprococcus",
+"tTestP": "0.936",
+"t-log10TTesetP": "-0.029",
+"fractionCase": "0.504"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudobutyrivibrio",
+"tTestP": "0.338",
+"t-log10TTesetP": "-0.471",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Oribacterium",
+"tTestP": "0.448",
+"t-log10TTesetP": "-0.348",
+"fractionCase": "0.833"
+}
+,{
+"numSeqs": 670,
+"rpdLevel": "genus",
+"rdptaxa": "Robinsoniella",
+"tTestP": "0.426",
+"t-log10TTesetP": "-0.371",
+"fractionCase": "0.49"
+}
+,{
+"numSeqs": 102,
+"rpdLevel": "genus",
+"rdptaxa": "Cellulosilyticum",
+"tTestP": "0.119",
+"t-log10TTesetP": "-0.925",
+"fractionCase": "0.686"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Sporobacterium",
+"tTestP": "0.135",
+"t-log10TTesetP": "-0.871",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 293,
+"rpdLevel": "genus",
+"rdptaxa": "Lactonifactor",
+"tTestP": "0.4",
+"t-log10TTesetP": "-0.398",
+"fractionCase": "0.471"
+}
+,{
+"numSeqs": 5803,
+"rpdLevel": "genus",
+"rdptaxa": "Syntrophococcus",
+"tTestP": "0.484",
+"t-log10TTesetP": "-0.315",
+"fractionCase": "0.583"
+}
+,{
+"numSeqs": 99,
+"rpdLevel": "genus",
+"rdptaxa": "Butyrivibrio",
+"tTestP": "0.305",
+"t-log10TTesetP": "-0.515",
+"fractionCase": "0.525"
+}
+,{
+"numSeqs": 19648,
+"rpdLevel": "genus",
+"rdptaxa": "Dorea",
+"tTestP": "0.115",
+"t-log10TTesetP": "-0.94",
+"fractionCase": "0.467"
+}
+,{
+"numSeqs": 91,
+"rpdLevel": "genus",
+"rdptaxa": "Marvinbryantia",
+"tTestP": "0.043",
+"t-log10TTesetP": "-1.37",
+"fractionCase": "0.637"
+}
+,{
+"numSeqs": 5308,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XlVa",
+"tTestP": "0.709",
+"t-log10TTesetP": "-0.15",
+"fractionCase": "0.383"
+}
+,{
+"numSeqs": 3509,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XlVb",
+"tTestP": "0.53",
+"t-log10TTesetP": "-0.276",
+"fractionCase": "0.371"
+}
+,{
+"numSeqs": 25840,
+"rpdLevel": "genus",
+"rdptaxa": "Blautia",
+"tTestP": "0.546",
+"t-log10TTesetP": "-0.263",
+"fractionCase": "0.503"
+}
+,{
+"numSeqs": 318,
+"rpdLevel": "genus",
+"rdptaxa": "Lachnobacterium",
+"tTestP": "0.142",
+"t-log10TTesetP": "-0.847",
+"fractionCase": "0.632"
+}
+,{
+"numSeqs": 619,
+"rpdLevel": "genus",
+"rdptaxa": "Howardella",
+"tTestP": "0.728",
+"t-log10TTesetP": "-0.138",
+"fractionCase": "0.22"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Hespellia",
+"tTestP": "0.886",
+"t-log10TTesetP": "-0.053",
+"fractionCase": "0.286"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Parasporobacterium",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Acetitomaculum",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 12121,
+"rpdLevel": "genus",
+"rdptaxa": "Roseburia",
+"tTestP": "0.258",
+"t-log10TTesetP": "-0.589",
+"fractionCase": "0.546"
+}
+,{
+"numSeqs": 4969,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerostipes",
+"tTestP": "0.05",
+"t-log10TTesetP": "-1.303",
+"fractionCase": "0.256"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Moryella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 62527,
+"rpdLevel": "genus",
+"rdptaxa": "Lachnospiracea_incertae_sedis",
+"tTestP": "0.105",
+"t-log10TTesetP": "-0.977",
+"fractionCase": "0.458"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 17510,
+"rpdLevel": "class",
+"rdptaxa": "Bacilli",
+"tTestP": "0.376",
+"t-log10TTesetP": "-0.424",
+"fractionCase": "0.509"
+,"children": [
+{
+"numSeqs": 12367,
+"rpdLevel": "order",
+"rdptaxa": "Lactobacillales",
+"tTestP": "0.366",
+"t-log10TTesetP": "-0.437",
+"fractionCase": "0.503"
+,"children": [
+{
+"numSeqs": 7127,
+"rpdLevel": "family",
+"rdptaxa": "Streptococcaceae",
+"tTestP": "0.609",
+"t-log10TTesetP": "-0.215",
+"fractionCase": "0.364"
+,"children": [
+{
+"numSeqs": 5227,
+"rpdLevel": "genus",
+"rdptaxa": "Streptococcus",
+"tTestP": "0.006",
+"t-log10TTesetP": "-2.203",
+"fractionCase": "0.239"
+}
+,{
+"numSeqs": 1888,
+"rpdLevel": "genus",
+"rdptaxa": "Lactococcus",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.244",
+"fractionCase": "0.71"
+}
+]
+}
+,{
+"numSeqs": 513,
+"rpdLevel": "family",
+"rdptaxa": "Enterococcaceae",
+"tTestP": "0.202",
+"t-log10TTesetP": "-0.694",
+"fractionCase": "0.029"
+,"children": [
+{
+"numSeqs": 509,
+"rpdLevel": "genus",
+"rdptaxa": "Enterococcus",
+"tTestP": "0.172",
+"t-log10TTesetP": "-0.764",
+"fractionCase": "0.026"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Bavariicoccus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Pilibacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 51,
+"rpdLevel": "family",
+"rdptaxa": "Aerococcaceae",
+"tTestP": "0.372",
+"t-log10TTesetP": "-0.43",
+"fractionCase": "0.275"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Facklamia",
+"tTestP": "0.366",
+"t-log10TTesetP": "-0.437",
+"fractionCase": "0.7"
+}
+,{
+"numSeqs": 18,
+"rpdLevel": "genus",
+"rdptaxa": "Aerococcus",
+"tTestP": "0.187",
+"t-log10TTesetP": "-0.728",
+"fractionCase": "0.111"
+}
+,{
+"numSeqs": 20,
+"rpdLevel": "genus",
+"rdptaxa": "Abiotrophia",
+"tTestP": "0.562",
+"t-log10TTesetP": "-0.25",
+"fractionCase": "0.2"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Globicatella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 367,
+"rpdLevel": "family",
+"rdptaxa": "Leuconostocaceae",
+"tTestP": "0",
+"t-log10TTesetP": "-3.892",
+"fractionCase": "0.749"
+,"children": [
+{
+"numSeqs": 88,
+"rpdLevel": "genus",
+"rdptaxa": "Leuconostoc",
+"tTestP": "0.005",
+"t-log10TTesetP": "-2.289",
+"fractionCase": "0.795"
+}
+,{
+"numSeqs": 279,
+"rpdLevel": "genus",
+"rdptaxa": "Weissella",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.298",
+"fractionCase": "0.735"
+}
+]
+}
+,{
+"numSeqs": 190,
+"rpdLevel": "family",
+"rdptaxa": "Carnobacteriaceae",
+"tTestP": "0.585",
+"t-log10TTesetP": "-0.233",
+"fractionCase": "0.511"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Atopostipes",
+"tTestP": "0.525",
+"t-log10TTesetP": "-0.28",
+"fractionCase": "0.455"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Dolosigranulum",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 35,
+"rpdLevel": "genus",
+"rdptaxa": "Lacticigenium",
+"tTestP": "0.085",
+"t-log10TTesetP": "-1.073",
+"fractionCase": "0.686"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Carnobacterium",
+"tTestP": "0.854",
+"t-log10TTesetP": "-0.068",
+"fractionCase": "0.429"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Allofustis",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 74,
+"rpdLevel": "genus",
+"rdptaxa": "Granulicatella",
+"tTestP": "0.945",
+"t-log10TTesetP": "-0.024",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 3965,
+"rpdLevel": "family",
+"rdptaxa": "Lactobacillaceae",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.098",
+"fractionCase": "0.787"
+,"children": [
+{
+"numSeqs": 3933,
+"rpdLevel": "genus",
+"rdptaxa": "Lactobacillus",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.095",
+"fractionCase": "0.786"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 5079,
+"rpdLevel": "order",
+"rdptaxa": "Bacillales",
+"tTestP": "0.107",
+"t-log10TTesetP": "-0.97",
+"fractionCase": "0.523"
+,"children": [
+{
+"numSeqs": 3523,
+"rpdLevel": "family",
+"rdptaxa": "Bacillaceae 1",
+"tTestP": "0.016",
+"t-log10TTesetP": "-1.791",
+"fractionCase": "0.551"
+,"children": [
+{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerobacillus",
+"tTestP": "0.808",
+"t-log10TTesetP": "-0.093",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Falsibacillus",
+"tTestP": "0.948",
+"t-log10TTesetP": "-0.023",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Anoxybacillus",
+"tTestP": "0.358",
+"t-log10TTesetP": "-0.446",
+"fractionCase": "0.615"
+}
+,{
+"numSeqs": 114,
+"rpdLevel": "genus",
+"rdptaxa": "Geobacillus",
+"tTestP": "0.317",
+"t-log10TTesetP": "-0.499",
+"fractionCase": "0.193"
+}
+,{
+"numSeqs": 3318,
+"rpdLevel": "genus",
+"rdptaxa": "Bacillus",
+"tTestP": "0.006",
+"t-log10TTesetP": "-2.195",
+"fractionCase": "0.562"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Aeribacillus",
+"tTestP": "0.73",
+"t-log10TTesetP": "-0.137",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 56,
+"rpdLevel": "family",
+"rdptaxa": "Bacillaceae 2",
+"tTestP": "0.132",
+"t-log10TTesetP": "-0.878",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 19,
+"rpdLevel": "genus",
+"rdptaxa": "Salirhabdus",
+"tTestP": "0.215",
+"t-log10TTesetP": "-0.667",
+"fractionCase": "0.579"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Ornithinibacillus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Terribacillus",
+"tTestP": "0.613",
+"t-log10TTesetP": "-0.213",
+"fractionCase": "0.25"
+}
+]
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Paenibacillaceae 2",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Aneurinibacillus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 431,
+"rpdLevel": "family",
+"rdptaxa": "Staphylococcaceae",
+"tTestP": "0.065",
+"t-log10TTesetP": "-1.186",
+"fractionCase": "0.606"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Salinicoccus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 413,
+"rpdLevel": "genus",
+"rdptaxa": "Staphylococcus",
+"tTestP": "0.084",
+"t-log10TTesetP": "-1.074",
+"fractionCase": "0.6"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Jeotgalicoccus",
+"tTestP": "0.269",
+"t-log10TTesetP": "-0.57",
+"fractionCase": "0.706"
+}
+]
+}
+,{
+"numSeqs": 55,
+"rpdLevel": "family",
+"rdptaxa": "Paenibacillaceae 1",
+"tTestP": "0.755",
+"t-log10TTesetP": "-0.122",
+"fractionCase": "0.691"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Cohnella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Brevibacillus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 46,
+"rpdLevel": "genus",
+"rdptaxa": "Paenibacillus",
+"tTestP": "0.577",
+"t-log10TTesetP": "-0.238",
+"fractionCase": "0.696"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Thermobacillus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 240,
+"rpdLevel": "family",
+"rdptaxa": "Bacillales_Incertae Sedis XII",
+"tTestP": "0.037",
+"t-log10TTesetP": "-1.436",
+"fractionCase": "0.592"
+,"children": [
+{
+"numSeqs": 240,
+"rpdLevel": "genus",
+"rdptaxa": "Exiguobacterium",
+"tTestP": "0.032",
+"t-log10TTesetP": "-1.498",
+"fractionCase": "0.592"
+}
+]
+}
+,{
+"numSeqs": 11,
+"rpdLevel": "family",
+"rdptaxa": "Alicyclobacillaceae",
+"tTestP": "0.122",
+"t-log10TTesetP": "-0.913",
+"fractionCase": "0.909"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Alicyclobacillus",
+"tTestP": "0.125",
+"t-log10TTesetP": "-0.903",
+"fractionCase": "0.909"
+}
+]
+}
+,{
+"numSeqs": 153,
+"rpdLevel": "family",
+"rdptaxa": "Bacillales_Incertae Sedis XI",
+"tTestP": "0.834",
+"t-log10TTesetP": "-0.079",
+"fractionCase": "0.471"
+,"children": [
+{
+"numSeqs": 153,
+"rpdLevel": "genus",
+"rdptaxa": "Gemella",
+"tTestP": "0.82",
+"t-log10TTesetP": "-0.086",
+"fractionCase": "0.471"
+}
+]
+}
+,{
+"numSeqs": 9,
+"rpdLevel": "family",
+"rdptaxa": "Listeriaceae",
+"tTestP": "0.59",
+"t-log10TTesetP": "-0.229",
+"fractionCase": "0.333"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Brochothrix",
+"tTestP": "0.82",
+"t-log10TTesetP": "-0.086",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Listeria",
+"tTestP": "0.404",
+"t-log10TTesetP": "-0.394",
+"fractionCase": "0.167"
+}
+]
+}
+,{
+"numSeqs": 12,
+"rpdLevel": "family",
+"rdptaxa": "Bacillales_Incertae Sedis X",
+"tTestP": "0.092",
+"t-log10TTesetP": "-1.037",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Thermicanus",
+"tTestP": "0.092",
+"t-log10TTesetP": "-1.035",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 64,
+"rpdLevel": "family",
+"rdptaxa": "Planococcaceae",
+"tTestP": "0.134",
+"t-log10TTesetP": "-0.872",
+"fractionCase": "0.594"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Kurthia",
+"tTestP": "0.069",
+"t-log10TTesetP": "-1.161",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Paenisporosarcina",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Rummeliibacillus",
+"tTestP": "0.128",
+"t-log10TTesetP": "-0.892",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Planococcaceae_incertae_sedis",
+"tTestP": "0.727",
+"t-log10TTesetP": "-0.138",
+"fractionCase": "0.529"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Planomicrobium",
+"tTestP": "0.565",
+"t-log10TTesetP": "-0.248",
+"fractionCase": "0.529"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Planococcus",
+"tTestP": "0.902",
+"t-log10TTesetP": "-0.045",
+"fractionCase": "0.333"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 5731,
+"rpdLevel": "class",
+"rdptaxa": "Negativicutes",
+"tTestP": "0.409",
+"t-log10TTesetP": "-0.389",
+"fractionCase": "0.48"
+,"children": [
+{
+"numSeqs": 5731,
+"rpdLevel": "order",
+"rdptaxa": "Selenomonadales",
+"tTestP": "0.439",
+"t-log10TTesetP": "-0.357",
+"fractionCase": "0.48"
+,"children": [
+{
+"numSeqs": 2593,
+"rpdLevel": "family",
+"rdptaxa": "Veillonellaceae",
+"tTestP": "0.882",
+"t-log10TTesetP": "-0.054",
+"fractionCase": "0.519"
+,"children": [
+{
+"numSeqs": 1039,
+"rpdLevel": "genus",
+"rdptaxa": "Megamonas",
+"tTestP": "0.981",
+"t-log10TTesetP": "-0.008",
+"fractionCase": "0.638"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Mitsuokella",
+"tTestP": "0.817",
+"t-log10TTesetP": "-0.088",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 581,
+"rpdLevel": "genus",
+"rdptaxa": "Veillonella",
+"tTestP": "0.14",
+"t-log10TTesetP": "-0.855",
+"fractionCase": "0.251"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Zymophilus",
+"tTestP": "0.28",
+"t-log10TTesetP": "-0.553",
+"fractionCase": "0.875"
+}
+,{
+"numSeqs": 49,
+"rpdLevel": "genus",
+"rdptaxa": "Allisonella",
+"tTestP": "0.914",
+"t-log10TTesetP": "-0.039",
+"fractionCase": "0.531"
+}
+,{
+"numSeqs": 417,
+"rpdLevel": "genus",
+"rdptaxa": "Dialister",
+"tTestP": "0.702",
+"t-log10TTesetP": "-0.154",
+"fractionCase": "0.624"
+}
+,{
+"numSeqs": 117,
+"rpdLevel": "genus",
+"rdptaxa": "Megasphaera",
+"tTestP": "0.488",
+"t-log10TTesetP": "-0.312",
+"fractionCase": "0.231"
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Selenomonas",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 301,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerovibrio",
+"tTestP": "0.229",
+"t-log10TTesetP": "-0.64",
+"fractionCase": "0.591"
+}
+]
+}
+,{
+"numSeqs": 3120,
+"rpdLevel": "family",
+"rdptaxa": "Acidaminococcaceae",
+"tTestP": "0.756",
+"t-log10TTesetP": "-0.121",
+"fractionCase": "0.447"
+,"children": [
+{
+"numSeqs": 416,
+"rpdLevel": "genus",
+"rdptaxa": "Succinispira",
+"tTestP": "0.117",
+"t-log10TTesetP": "-0.93",
+"fractionCase": "0.678"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Succiniclasticum",
+"tTestP": "0.486",
+"t-log10TTesetP": "-0.314",
+"fractionCase": "0.8"
+}
+,{
+"numSeqs": 432,
+"rpdLevel": "genus",
+"rdptaxa": "Acidaminococcus",
+"tTestP": "0.994",
+"t-log10TTesetP": "-0.003",
+"fractionCase": "0.241"
+}
+,{
+"numSeqs": 2057,
+"rpdLevel": "genus",
+"rdptaxa": "Phascolarctobacterium",
+"tTestP": "0.304",
+"t-log10TTesetP": "-0.517",
+"fractionCase": "0.434"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 26514,
+"rpdLevel": "class",
+"rdptaxa": "Erysipelotrichia",
+"tTestP": "0.222",
+"t-log10TTesetP": "-0.654",
+"fractionCase": "0.453"
+,"children": [
+{
+"numSeqs": 26514,
+"rpdLevel": "order",
+"rdptaxa": "Erysipelotrichales",
+"tTestP": "0.241",
+"t-log10TTesetP": "-0.617",
+"fractionCase": "0.453"
+,"children": [
+{
+"numSeqs": 26514,
+"rpdLevel": "family",
+"rdptaxa": "Erysipelotrichaceae",
+"tTestP": "0.265",
+"t-log10TTesetP": "-0.577",
+"fractionCase": "0.453"
+,"children": [
+{
+"numSeqs": 1020,
+"rpdLevel": "genus",
+"rdptaxa": "Turicibacter",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.998",
+"fractionCase": "0.654"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Erysipelothrix",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Sharpea",
+"tTestP": "0.652",
+"t-log10TTesetP": "-0.186",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 1230,
+"rpdLevel": "genus",
+"rdptaxa": "Coprobacillus",
+"tTestP": "0.397",
+"t-log10TTesetP": "-0.401",
+"fractionCase": "0.279"
+}
+,{
+"numSeqs": 7538,
+"rpdLevel": "genus",
+"rdptaxa": "Erysipelotrichaceae_incertae_sedis",
+"tTestP": "0.395",
+"t-log10TTesetP": "-0.403",
+"fractionCase": "0.443"
+}
+,{
+"numSeqs": 184,
+"rpdLevel": "genus",
+"rdptaxa": "Holdemania",
+"tTestP": "0.946",
+"t-log10TTesetP": "-0.024",
+"fractionCase": "0.467"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Solobacterium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 912,
+"rpdLevel": "genus",
+"rdptaxa": "Allobaculum",
+"tTestP": "0.028",
+"t-log10TTesetP": "-1.549",
+"fractionCase": "0.802"
+}
+,{
+"numSeqs": 158,
+"rpdLevel": "genus",
+"rdptaxa": "Catenibacterium",
+"tTestP": "0.443",
+"t-log10TTesetP": "-0.354",
+"fractionCase": "0.209"
+}
+,{
+"numSeqs": 8293,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XVIII",
+"tTestP": "0.686",
+"t-log10TTesetP": "-0.164",
+"fractionCase": "0.406"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 466,
+"rpdLevel": "phylum",
+"rdptaxa": "Spirochaetes",
+"tTestP": "0.943",
+"t-log10TTesetP": "-0.026",
+"fractionCase": "0.062"
+,"children": [
+{
+"numSeqs": 466,
+"rpdLevel": "class",
+"rdptaxa": "Spirochaetes",
+"tTestP": "0.946",
+"t-log10TTesetP": "-0.024",
+"fractionCase": "0.062"
+,"children": [
+{
+"numSeqs": 466,
+"rpdLevel": "order",
+"rdptaxa": "Spirochaetales",
+"tTestP": "0.958",
+"t-log10TTesetP": "-0.019",
+"fractionCase": "0.062"
+,"children": [
+{
+"numSeqs": 47,
+"rpdLevel": "family",
+"rdptaxa": "Spirochaetaceae",
+"tTestP": "0.264",
+"t-log10TTesetP": "-0.579",
+"fractionCase": "0.553"
+,"children": [
+{
+"numSeqs": 47,
+"rpdLevel": "genus",
+"rdptaxa": "Treponema",
+"tTestP": "0.248",
+"t-log10TTesetP": "-0.606",
+"fractionCase": "0.553"
+}
+]
+}
+,{
+"numSeqs": 419,
+"rpdLevel": "family",
+"rdptaxa": "Brachyspiraceae",
+"tTestP": "0.464",
+"t-log10TTesetP": "-0.333",
+"fractionCase": "0.007"
+,"children": [
+{
+"numSeqs": 419,
+"rpdLevel": "genus",
+"rdptaxa": "Brachyspira",
+"tTestP": "0.466",
+"t-log10TTesetP": "-0.332",
+"fractionCase": "0.007"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 20,
+"rpdLevel": "phylum",
+"rdptaxa": "Deferribacteres",
+"tTestP": "0.338",
+"t-log10TTesetP": "-0.471",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "class",
+"rdptaxa": "Deferribacteres",
+"tTestP": "0.33",
+"t-log10TTesetP": "-0.482",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "order",
+"rdptaxa": "Deferribacterales",
+"tTestP": "0.327",
+"t-log10TTesetP": "-0.485",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "family",
+"rdptaxa": "Deferribacteraceae",
+"tTestP": "0.327",
+"t-log10TTesetP": "-0.485",
+"fractionCase": "0.7"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "genus",
+"rdptaxa": "Mucispirillum",
+"tTestP": "0.32",
+"t-log10TTesetP": "-0.495",
+"fractionCase": "0.7"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 67926,
+"rpdLevel": "phylum",
+"rdptaxa": "Proteobacteria",
+"tTestP": "0.162",
+"t-log10TTesetP": "-0.791",
+"fractionCase": "0.556"
+,"children": [
+{
+"numSeqs": 523,
+"rpdLevel": "class",
+"rdptaxa": "Epsilonproteobacteria",
+"tTestP": "0",
+"t-log10TTesetP": "-4.06",
+"fractionCase": "0.906"
+,"children": [
+{
+"numSeqs": 523,
+"rpdLevel": "order",
+"rdptaxa": "Campylobacterales",
+"tTestP": "0",
+"t-log10TTesetP": "-4.042",
+"fractionCase": "0.906"
+,"children": [
+{
+"numSeqs": 506,
+"rpdLevel": "family",
+"rdptaxa": "Helicobacteraceae",
+"tTestP": "0",
+"t-log10TTesetP": "-4.354",
+"fractionCase": "0.919"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Wolinella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 501,
+"rpdLevel": "genus",
+"rdptaxa": "Helicobacter",
+"tTestP": "0",
+"t-log10TTesetP": "-4.478",
+"fractionCase": "0.918"
+}
+]
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "family",
+"rdptaxa": "Campylobacteraceae",
+"tTestP": "0.151",
+"t-log10TTesetP": "-0.822",
+"fractionCase": "0.562"
+,"children": [
+{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Campylobacter",
+"tTestP": "0.509",
+"t-log10TTesetP": "-0.293",
+"fractionCase": "0.462"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Arcobacter",
+"tTestP": "0.064",
+"t-log10TTesetP": "-1.194",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1065,
+"rpdLevel": "class",
+"rdptaxa": "Deltaproteobacteria",
+"tTestP": "0.137",
+"t-log10TTesetP": "-0.862",
+"fractionCase": "0.533"
+,"children": [
+{
+"numSeqs": 682,
+"rpdLevel": "order",
+"rdptaxa": "Desulfovibrionales",
+"tTestP": "0.382",
+"t-log10TTesetP": "-0.418",
+"fractionCase": "0.545"
+,"children": [
+{
+"numSeqs": 30,
+"rpdLevel": "family",
+"rdptaxa": "Desulfohalobiaceae",
+"tTestP": "0.779",
+"t-log10TTesetP": "-0.109",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 636,
+"rpdLevel": "family",
+"rdptaxa": "Desulfovibrionaceae",
+"tTestP": "0.518",
+"t-log10TTesetP": "-0.285",
+"fractionCase": "0.539"
+,"children": [
+{
+"numSeqs": 320,
+"rpdLevel": "genus",
+"rdptaxa": "Desulfovibrio",
+"tTestP": "0.855",
+"t-log10TTesetP": "-0.068",
+"fractionCase": "0.388"
+}
+,{
+"numSeqs": 81,
+"rpdLevel": "genus",
+"rdptaxa": "Bilophila",
+"tTestP": "0.088",
+"t-log10TTesetP": "-1.053",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 41,
+"rpdLevel": "genus",
+"rdptaxa": "Desulfocurvus",
+"tTestP": "0.4",
+"t-log10TTesetP": "-0.398",
+"fractionCase": "0.098"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "order",
+"rdptaxa": "Bdellovibrionales",
+"tTestP": "0.127",
+"t-log10TTesetP": "-0.895",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Bdellovibrionaceae",
+"tTestP": "0.127",
+"t-log10TTesetP": "-0.895",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Bdellovibrio",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Vampirovibrio",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "order",
+"rdptaxa": "Desulfobacterales",
+"tTestP": "0.14",
+"t-log10TTesetP": "-0.854",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Desulfobacteraceae",
+"tTestP": "0.14",
+"t-log10TTesetP": "-0.853",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Desulfatiferula",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 131,
+"rpdLevel": "order",
+"rdptaxa": "Myxococcales",
+"tTestP": "0.477",
+"t-log10TTesetP": "-0.321",
+"fractionCase": "0.137"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Cystobacteraceae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 119,
+"rpdLevel": "family",
+"rdptaxa": "Polyangiaceae",
+"tTestP": "0.991",
+"t-log10TTesetP": "-0.004",
+"fractionCase": "0.076"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Byssovorax",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 54,
+"rpdLevel": "genus",
+"rdptaxa": "Sorangium",
+"tTestP": "0.418",
+"t-log10TTesetP": "-0.378",
+"fractionCase": "0.019"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 18639,
+"rpdLevel": "class",
+"rdptaxa": "Betaproteobacteria",
+"tTestP": "0.006",
+"t-log10TTesetP": "-2.237",
+"fractionCase": "0.645"
+,"children": [
+{
+"numSeqs": 17032,
+"rpdLevel": "order",
+"rdptaxa": "Burkholderiales",
+"tTestP": "0.006",
+"t-log10TTesetP": "-2.238",
+"fractionCase": "0.645"
+,"children": [
+{
+"numSeqs": 1804,
+"rpdLevel": "family",
+"rdptaxa": "Burkholderiales_incertae_sedis",
+"tTestP": "0",
+"t-log10TTesetP": "-3.764",
+"fractionCase": "0.807"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Leptothrix",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Rubrivivax",
+"tTestP": "0.457",
+"t-log10TTesetP": "-0.341",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 48,
+"rpdLevel": "genus",
+"rdptaxa": "Tepidimonas",
+"tTestP": "0.516",
+"t-log10TTesetP": "-0.288",
+"fractionCase": "0.375"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Inhella",
+"tTestP": "0.128",
+"t-log10TTesetP": "-0.894",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1671,
+"rpdLevel": "genus",
+"rdptaxa": "Aquabacterium",
+"tTestP": "0",
+"t-log10TTesetP": "-4.3",
+"fractionCase": "0.822"
+}
+]
+}
+,{
+"numSeqs": 5314,
+"rpdLevel": "family",
+"rdptaxa": "Sutterellaceae",
+"tTestP": "0.191",
+"t-log10TTesetP": "-0.718",
+"fractionCase": "0.539"
+,"children": [
+{
+"numSeqs": 1297,
+"rpdLevel": "genus",
+"rdptaxa": "Parasutterella",
+"tTestP": "0.652",
+"t-log10TTesetP": "-0.186",
+"fractionCase": "0.371"
+}
+,{
+"numSeqs": 4008,
+"rpdLevel": "genus",
+"rdptaxa": "Sutterella",
+"tTestP": "0.018",
+"t-log10TTesetP": "-1.745",
+"fractionCase": "0.594"
+}
+]
+}
+,{
+"numSeqs": 11,
+"rpdLevel": "family",
+"rdptaxa": "Alcaligenaceae",
+"tTestP": "0.576",
+"t-log10TTesetP": "-0.24",
+"fractionCase": "0.364"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Achromobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Kerstersia",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Bordetella",
+"tTestP": "0.76",
+"t-log10TTesetP": "-0.119",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Derxia",
+"tTestP": "0.906",
+"t-log10TTesetP": "-0.043",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Pelistega",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 965,
+"rpdLevel": "family",
+"rdptaxa": "Burkholderiaceae",
+"tTestP": "0.312",
+"t-log10TTesetP": "-0.506",
+"fractionCase": "0.543"
+,"children": [
+{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Cupriavidus",
+"tTestP": "0.225",
+"t-log10TTesetP": "-0.647",
+"fractionCase": "0.765"
+}
+,{
+"numSeqs": 103,
+"rpdLevel": "genus",
+"rdptaxa": "Ralstonia",
+"tTestP": "0.905",
+"t-log10TTesetP": "-0.043",
+"fractionCase": "0.495"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Polynucleobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 836,
+"rpdLevel": "genus",
+"rdptaxa": "Burkholderia",
+"tTestP": "0.313",
+"t-log10TTesetP": "-0.505",
+"fractionCase": "0.543"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Chitinimonas",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 115,
+"rpdLevel": "family",
+"rdptaxa": "Oxalobacteraceae",
+"tTestP": "0.817",
+"t-log10TTesetP": "-0.088",
+"fractionCase": "0.47"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Duganella",
+"tTestP": "0.208",
+"t-log10TTesetP": "-0.683",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Oxalicibacterium",
+"tTestP": "0.511",
+"t-log10TTesetP": "-0.291",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 59,
+"rpdLevel": "genus",
+"rdptaxa": "Massilia",
+"tTestP": "0.299",
+"t-log10TTesetP": "-0.524",
+"fractionCase": "0.559"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Janthinobacterium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Naxibacter",
+"tTestP": "0.519",
+"t-log10TTesetP": "-0.284",
+"fractionCase": "0.625"
+}
+,{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Oxalobacter",
+"tTestP": "0.146",
+"t-log10TTesetP": "-0.836",
+"fractionCase": "0.111"
+}
+,{
+"numSeqs": 25,
+"rpdLevel": "genus",
+"rdptaxa": "Herbaspirillum",
+"tTestP": "0.844",
+"t-log10TTesetP": "-0.074",
+"fractionCase": "0.44"
+}
+]
+}
+,{
+"numSeqs": 8501,
+"rpdLevel": "family",
+"rdptaxa": "Comamonadaceae",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.833",
+"fractionCase": "0.711"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Ottowia",
+"tTestP": "0.084",
+"t-log10TTesetP": "-1.078",
+"fractionCase": "0.7"
+}
+,{
+"numSeqs": 1024,
+"rpdLevel": "genus",
+"rdptaxa": "Diaphorobacter",
+"tTestP": "0",
+"t-log10TTesetP": "-3.535",
+"fractionCase": "0.795"
+}
+,{
+"numSeqs": 4509,
+"rpdLevel": "genus",
+"rdptaxa": "Acidovorax",
+"tTestP": "0",
+"t-log10TTesetP": "-3.536",
+"fractionCase": "0.76"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Ramlibacter",
+"tTestP": "0.232",
+"t-log10TTesetP": "-0.634",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Simplicispira",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 402,
+"rpdLevel": "genus",
+"rdptaxa": "Comamonas",
+"tTestP": "0.076",
+"t-log10TTesetP": "-1.118",
+"fractionCase": "0.711"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Tepidicella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 262,
+"rpdLevel": "genus",
+"rdptaxa": "Caenimonas",
+"tTestP": "0.303",
+"t-log10TTesetP": "-0.518",
+"fractionCase": "0.008"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Xenophilus",
+"tTestP": "0.909",
+"t-log10TTesetP": "-0.042",
+"fractionCase": "0.571"
+}
+,{
+"numSeqs": 245,
+"rpdLevel": "genus",
+"rdptaxa": "Hydrogenophaga",
+"tTestP": "0.02",
+"t-log10TTesetP": "-1.694",
+"fractionCase": "0.808"
+}
+,{
+"numSeqs": 1635,
+"rpdLevel": "genus",
+"rdptaxa": "Delftia",
+"tTestP": "0.003",
+"t-log10TTesetP": "-2.588",
+"fractionCase": "0.648"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Limnohabitans",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 120,
+"rpdLevel": "genus",
+"rdptaxa": "Variovorax",
+"tTestP": "0.058",
+"t-log10TTesetP": "-1.239",
+"fractionCase": "0.683"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Schlegelella",
+"tTestP": "0.342",
+"t-log10TTesetP": "-0.466",
+"fractionCase": "0.25"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Curvibacter",
+"tTestP": "0.979",
+"t-log10TTesetP": "-0.009",
+"fractionCase": "0.571"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Alicycliphilus",
+"tTestP": "0.068",
+"t-log10TTesetP": "-1.166",
+"fractionCase": "0.833"
+}
+,{
+"numSeqs": 156,
+"rpdLevel": "genus",
+"rdptaxa": "Pelomonas",
+"tTestP": "0.383",
+"t-log10TTesetP": "-0.417",
+"fractionCase": "0.571"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 27,
+"rpdLevel": "order",
+"rdptaxa": "Hydrogenophilales",
+"tTestP": "0.214",
+"t-log10TTesetP": "-0.669",
+"fractionCase": "0.704"
+,"children": [
+{
+"numSeqs": 27,
+"rpdLevel": "family",
+"rdptaxa": "Hydrogenophilaceae",
+"tTestP": "0.214",
+"t-log10TTesetP": "-0.67",
+"fractionCase": "0.704"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "genus",
+"rdptaxa": "Hydrogenophilus",
+"tTestP": "0.626",
+"t-log10TTesetP": "-0.203",
+"fractionCase": "0.65"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Petrobacter",
+"tTestP": "0.126",
+"t-log10TTesetP": "-0.898",
+"fractionCase": "0.857"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "order",
+"rdptaxa": "Methylophilales",
+"tTestP": "0.492",
+"t-log10TTesetP": "-0.308",
+"fractionCase": "0.562"
+,"children": [
+{
+"numSeqs": 16,
+"rpdLevel": "family",
+"rdptaxa": "Methylophilaceae",
+"tTestP": "0.488",
+"t-log10TTesetP": "-0.312",
+"fractionCase": "0.562"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Methylobacillus",
+"tTestP": "0.607",
+"t-log10TTesetP": "-0.217",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Methylovorus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Methylophilus",
+"tTestP": "0.876",
+"t-log10TTesetP": "-0.058",
+"fractionCase": "0.375"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 395,
+"rpdLevel": "order",
+"rdptaxa": "Neisseriales",
+"tTestP": "0.667",
+"t-log10TTesetP": "-0.176",
+"fractionCase": "0.38"
+,"children": [
+{
+"numSeqs": 395,
+"rpdLevel": "family",
+"rdptaxa": "Neisseriaceae",
+"tTestP": "0.676",
+"t-log10TTesetP": "-0.17",
+"fractionCase": "0.38"
+,"children": [
+{
+"numSeqs": 278,
+"rpdLevel": "genus",
+"rdptaxa": "Uruburuella",
+"tTestP": "0.654",
+"t-log10TTesetP": "-0.185",
+"fractionCase": "0.356"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Conchiformibius",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Chitiniphilus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 25,
+"rpdLevel": "genus",
+"rdptaxa": "Neisseria",
+"tTestP": "0.268",
+"t-log10TTesetP": "-0.573",
+"fractionCase": "0.28"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Eikenella",
+"tTestP": "0.383",
+"t-log10TTesetP": "-0.417",
+"fractionCase": "0.143"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Kingella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Microvirgula",
+"tTestP": "0.587",
+"t-log10TTesetP": "-0.231",
+"fractionCase": "0.467"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1151,
+"rpdLevel": "order",
+"rdptaxa": "Rhodocyclales",
+"tTestP": "0",
+"t-log10TTesetP": "-3.429",
+"fractionCase": "0.741"
+,"children": [
+{
+"numSeqs": 1151,
+"rpdLevel": "family",
+"rdptaxa": "Rhodocyclaceae",
+"tTestP": "0",
+"t-log10TTesetP": "-3.493",
+"fractionCase": "0.741"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Methyloversatilis",
+"tTestP": "0.127",
+"t-log10TTesetP": "-0.895",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 79,
+"rpdLevel": "genus",
+"rdptaxa": "Dechloromonas",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.017",
+"fractionCase": "0.759"
+}
+,{
+"numSeqs": 217,
+"rpdLevel": "genus",
+"rdptaxa": "Zoogloea",
+"tTestP": "0",
+"t-log10TTesetP": "-3.325",
+"fractionCase": "0.751"
+}
+,{
+"numSeqs": 741,
+"rpdLevel": "genus",
+"rdptaxa": "Azonexus",
+"tTestP": "0.003",
+"t-log10TTesetP": "-2.491",
+"fractionCase": "0.727"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Azospira",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 90,
+"rpdLevel": "genus",
+"rdptaxa": "Shinella",
+"tTestP": "0.131",
+"t-log10TTesetP": "-0.882",
+"fractionCase": "0.778"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Propionivibrio",
+"tTestP": "0.464",
+"t-log10TTesetP": "-0.334",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Azovibrio",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 21005,
+"rpdLevel": "class",
+"rdptaxa": "Alphaproteobacteria",
+"tTestP": "0.149",
+"t-log10TTesetP": "-0.827",
+"fractionCase": "0.57"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "order",
+"rdptaxa": "Alphaproteobacteria_incertae_sedis",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2532,
+"rpdLevel": "order",
+"rdptaxa": "Rhizobiales",
+"tTestP": "0.008",
+"t-log10TTesetP": "-2.086",
+"fractionCase": "0.656"
+,"children": [
+{
+"numSeqs": 753,
+"rpdLevel": "family",
+"rdptaxa": "Bradyrhizobiaceae",
+"tTestP": "0.229",
+"t-log10TTesetP": "-0.64",
+"fractionCase": "0.765"
+,"children": [
+{
+"numSeqs": 101,
+"rpdLevel": "genus",
+"rdptaxa": "Bradyrhizobium",
+"tTestP": "0.268",
+"t-log10TTesetP": "-0.573",
+"fractionCase": "0.327"
+}
+,{
+"numSeqs": 273,
+"rpdLevel": "genus",
+"rdptaxa": "Afipia",
+"tTestP": "0.08",
+"t-log10TTesetP": "-1.096",
+"fractionCase": "0.853"
+}
+,{
+"numSeqs": 18,
+"rpdLevel": "genus",
+"rdptaxa": "Bosea",
+"tTestP": "0.081",
+"t-log10TTesetP": "-1.094",
+"fractionCase": "0.833"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Nitrobacter",
+"tTestP": "0.601",
+"t-log10TTesetP": "-0.221",
+"fractionCase": "0.714"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Agromonas",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Oligotropha",
+"tTestP": "0.11",
+"t-log10TTesetP": "-0.958",
+"fractionCase": "0.917"
+}
+]
+}
+,{
+"numSeqs": 21,
+"rpdLevel": "family",
+"rdptaxa": "Brucellaceae",
+"tTestP": "0.358",
+"t-log10TTesetP": "-0.446",
+"fractionCase": "0.238"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Daeguia",
+"tTestP": "0.124",
+"t-log10TTesetP": "-0.907",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudochrobactrum",
+"tTestP": "0.985",
+"t-log10TTesetP": "-0.007",
+"fractionCase": "0.6"
+}
+,{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Ochrobactrum",
+"tTestP": "0.831",
+"t-log10TTesetP": "-0.08",
+"fractionCase": "0.167"
+}
+]
+}
+,{
+"numSeqs": 66,
+"rpdLevel": "family",
+"rdptaxa": "Rhizobiaceae",
+"tTestP": "0.115",
+"t-log10TTesetP": "-0.939",
+"fractionCase": "0.652"
+,"children": [
+{
+"numSeqs": 51,
+"rpdLevel": "genus",
+"rdptaxa": "Rhizobium",
+"tTestP": "0.032",
+"t-log10TTesetP": "-1.494",
+"fractionCase": "0.725"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Sinorhizobium",
+"tTestP": "0.134",
+"t-log10TTesetP": "-0.873",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Ensifer",
+"tTestP": "0.964",
+"t-log10TTesetP": "-0.016",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "family",
+"rdptaxa": "Rhizobiales_incertae_sedis",
+"tTestP": "0.479",
+"t-log10TTesetP": "-0.319",
+"fractionCase": "0.333"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Vasilyevaea",
+"tTestP": "0.485",
+"t-log10TTesetP": "-0.314",
+"fractionCase": "0.333"
+}
+]
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "family",
+"rdptaxa": "Xanthobacteraceae",
+"tTestP": "0.65",
+"t-log10TTesetP": "-0.187",
+"fractionCase": "0.6"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Ancylobacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Starkeya",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "family",
+"rdptaxa": "Methylocystaceae",
+"tTestP": "0.619",
+"t-log10TTesetP": "-0.209",
+"fractionCase": "0.667"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Methylocystis",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Pleomorphomonas",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 736,
+"rpdLevel": "family",
+"rdptaxa": "Beijerinckiaceae",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.355",
+"fractionCase": "0.63"
+,"children": [
+{
+"numSeqs": 725,
+"rpdLevel": "genus",
+"rdptaxa": "Beijerinckia",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.446",
+"fractionCase": "0.632"
+}
+]
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "family",
+"rdptaxa": "Aurantimonadaceae",
+"tTestP": "0.796",
+"t-log10TTesetP": "-0.099",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Aurantimonas",
+"tTestP": "0.782",
+"t-log10TTesetP": "-0.107",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 352,
+"rpdLevel": "family",
+"rdptaxa": "Hyphomicrobiaceae",
+"tTestP": "0.15",
+"t-log10TTesetP": "-0.825",
+"fractionCase": "0.56"
+,"children": [
+{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Devosia",
+"tTestP": "0.771",
+"t-log10TTesetP": "-0.113",
+"fractionCase": "0.444"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Blastochloris",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Pedomicrobium",
+"tTestP": "0.973",
+"t-log10TTesetP": "-0.012",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 26,
+"rpdLevel": "genus",
+"rdptaxa": "Rhodoplanes",
+"tTestP": "0.881",
+"t-log10TTesetP": "-0.055",
+"fractionCase": "0.423"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Hyphomicrobium",
+"tTestP": "0.24",
+"t-log10TTesetP": "-0.62",
+"fractionCase": "0.9"
+}
+,{
+"numSeqs": 294,
+"rpdLevel": "genus",
+"rdptaxa": "Gemmiger",
+"tTestP": "0.137",
+"t-log10TTesetP": "-0.862",
+"fractionCase": "0.561"
+}
+]
+}
+,{
+"numSeqs": 419,
+"rpdLevel": "family",
+"rdptaxa": "Methylobacteriaceae",
+"tTestP": "0.245",
+"t-log10TTesetP": "-0.612",
+"fractionCase": "0.601"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Microvirga",
+"tTestP": "0.122",
+"t-log10TTesetP": "-0.913",
+"fractionCase": "0.1"
+}
+,{
+"numSeqs": 408,
+"rpdLevel": "genus",
+"rdptaxa": "Methylobacterium",
+"tTestP": "0.146",
+"t-log10TTesetP": "-0.835",
+"fractionCase": "0.613"
+}
+]
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "family",
+"rdptaxa": "Phyllobacteriaceae",
+"tTestP": "0.203",
+"t-log10TTesetP": "-0.692",
+"fractionCase": "0.667"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudaminobacter",
+"tTestP": "0.127",
+"t-log10TTesetP": "-0.895",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Aminobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Hoeflea",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 180,
+"rpdLevel": "order",
+"rdptaxa": "Caulobacterales",
+"tTestP": "0.597",
+"t-log10TTesetP": "-0.224",
+"fractionCase": "0.517"
+,"children": [
+{
+"numSeqs": 180,
+"rpdLevel": "family",
+"rdptaxa": "Caulobacteraceae",
+"tTestP": "0.579",
+"t-log10TTesetP": "-0.237",
+"fractionCase": "0.517"
+,"children": [
+{
+"numSeqs": 18,
+"rpdLevel": "genus",
+"rdptaxa": "Caulobacter",
+"tTestP": "0.615",
+"t-log10TTesetP": "-0.211",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 58,
+"rpdLevel": "genus",
+"rdptaxa": "Asticcacaulis",
+"tTestP": "0.027",
+"t-log10TTesetP": "-1.568",
+"fractionCase": "0.69"
+}
+,{
+"numSeqs": 57,
+"rpdLevel": "genus",
+"rdptaxa": "Brevundimonas",
+"tTestP": "0.499",
+"t-log10TTesetP": "-0.302",
+"fractionCase": "0.509"
+}
+,{
+"numSeqs": 42,
+"rpdLevel": "genus",
+"rdptaxa": "Phenylobacterium",
+"tTestP": "0.782",
+"t-log10TTesetP": "-0.107",
+"fractionCase": "0.357"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 26,
+"rpdLevel": "order",
+"rdptaxa": "Rickettsiales",
+"tTestP": "0.981",
+"t-log10TTesetP": "-0.008",
+"fractionCase": "0.385"
+,"children": [
+{
+"numSeqs": 26,
+"rpdLevel": "family",
+"rdptaxa": "Rickettsiaceae",
+"tTestP": "0.968",
+"t-log10TTesetP": "-0.014",
+"fractionCase": "0.385"
+,"children": [
+{
+"numSeqs": 26,
+"rpdLevel": "genus",
+"rdptaxa": "Rickettsia",
+"tTestP": "0.97",
+"t-log10TTesetP": "-0.013",
+"fractionCase": "0.385"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 17097,
+"rpdLevel": "order",
+"rdptaxa": "Sphingomonadales",
+"tTestP": "0.23",
+"t-log10TTesetP": "-0.638",
+"fractionCase": "0.567"
+,"children": [
+{
+"numSeqs": 17088,
+"rpdLevel": "family",
+"rdptaxa": "Sphingomonadaceae",
+"tTestP": "0.218",
+"t-log10TTesetP": "-0.663",
+"fractionCase": "0.567"
+,"children": [
+{
+"numSeqs": 107,
+"rpdLevel": "genus",
+"rdptaxa": "Blastomonas",
+"tTestP": "0.26",
+"t-log10TTesetP": "-0.585",
+"fractionCase": "0.495"
+}
+,{
+"numSeqs": 15771,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingomonas",
+"tTestP": "0.264",
+"t-log10TTesetP": "-0.578",
+"fractionCase": "0.561"
+}
+,{
+"numSeqs": 33,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingopyxis",
+"tTestP": "0.474",
+"t-log10TTesetP": "-0.324",
+"fractionCase": "0.758"
+}
+,{
+"numSeqs": 225,
+"rpdLevel": "genus",
+"rdptaxa": "Novosphingobium",
+"tTestP": "0.017",
+"t-log10TTesetP": "-1.776",
+"fractionCase": "0.747"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingosinicella",
+"tTestP": "0.195",
+"t-log10TTesetP": "-0.709",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 653,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingobium",
+"tTestP": "0.001",
+"t-log10TTesetP": "-3.3",
+"fractionCase": "0.678"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 155,
+"rpdLevel": "order",
+"rdptaxa": "Rhodospirillales",
+"tTestP": "0.977",
+"t-log10TTesetP": "-0.01",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 40,
+"rpdLevel": "family",
+"rdptaxa": "Rhodospirillaceae",
+"tTestP": "0.685",
+"t-log10TTesetP": "-0.165",
+"fractionCase": "0.525"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Azospirillum",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Novispirillum",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Dongia",
+"tTestP": "0.188",
+"t-log10TTesetP": "-0.726",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Skermanella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 101,
+"rpdLevel": "family",
+"rdptaxa": "Acetobacteraceae",
+"tTestP": "0.496",
+"t-log10TTesetP": "-0.305",
+"fractionCase": "0.168"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Acidisphaera",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Neokomagataea",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Acidomonas",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Roseomonas",
+"tTestP": "0.464",
+"t-log10TTesetP": "-0.334",
+"fractionCase": "0.714"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Granulibacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Craurococcus",
+"tTestP": "0.258",
+"t-log10TTesetP": "-0.588",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Gluconobacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "order",
+"rdptaxa": "Kiloniellales",
+"tTestP": "0.656",
+"t-log10TTesetP": "-0.183",
+"fractionCase": "0.615"
+,"children": [
+{
+"numSeqs": 13,
+"rpdLevel": "family",
+"rdptaxa": "Kiloniellaceae",
+"tTestP": "0.658",
+"t-log10TTesetP": "-0.181",
+"fractionCase": "0.615"
+,"children": [
+{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Kiloniella",
+"tTestP": "0.664",
+"t-log10TTesetP": "-0.178",
+"fractionCase": "0.615"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 181,
+"rpdLevel": "order",
+"rdptaxa": "Rhodobacterales",
+"tTestP": "0.237",
+"t-log10TTesetP": "-0.625",
+"fractionCase": "0.514"
+,"children": [
+{
+"numSeqs": 181,
+"rpdLevel": "family",
+"rdptaxa": "Rhodobacteraceae",
+"tTestP": "0.225",
+"t-log10TTesetP": "-0.647",
+"fractionCase": "0.514"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Rhodobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Amaricoccus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Loktanella",
+"tTestP": "0.687",
+"t-log10TTesetP": "-0.163",
+"fractionCase": "0.6"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Agaricicola",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 65,
+"rpdLevel": "genus",
+"rdptaxa": "Rubellimicrobium",
+"tTestP": "0.322",
+"t-log10TTesetP": "-0.492",
+"fractionCase": "0.2"
+}
+,{
+"numSeqs": 82,
+"rpdLevel": "genus",
+"rdptaxa": "Paracoccus",
+"tTestP": "0.055",
+"t-log10TTesetP": "-1.258",
+"fractionCase": "0.695"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 25920,
+"rpdLevel": "class",
+"rdptaxa": "Gammaproteobacteria",
+"tTestP": "0.937",
+"t-log10TTesetP": "-0.028",
+"fractionCase": "0.478"
+,"children": [
+{
+"numSeqs": 787,
+"rpdLevel": "order",
+"rdptaxa": "Vibrionales",
+"tTestP": "0.211",
+"t-log10TTesetP": "-0.676",
+"fractionCase": "0.328"
+,"children": [
+{
+"numSeqs": 787,
+"rpdLevel": "family",
+"rdptaxa": "Vibrionaceae",
+"tTestP": "0.213",
+"t-log10TTesetP": "-0.672",
+"fractionCase": "0.328"
+,"children": [
+{
+"numSeqs": 563,
+"rpdLevel": "genus",
+"rdptaxa": "Vibrio",
+"tTestP": "0.272",
+"t-log10TTesetP": "-0.566",
+"fractionCase": "0.3"
+}
+,{
+"numSeqs": 78,
+"rpdLevel": "genus",
+"rdptaxa": "Listonella",
+"tTestP": "0.053",
+"t-log10TTesetP": "-1.277",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 130,
+"rpdLevel": "genus",
+"rdptaxa": "Allomonas",
+"tTestP": "0.928",
+"t-log10TTesetP": "-0.032",
+"fractionCase": "0.446"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 10507,
+"rpdLevel": "order",
+"rdptaxa": "Enterobacteriales",
+"tTestP": "0.925",
+"t-log10TTesetP": "-0.034",
+"fractionCase": "0.38"
+,"children": [
+{
+"numSeqs": 10507,
+"rpdLevel": "family",
+"rdptaxa": "Enterobacteriaceae",
+"tTestP": "0.948",
+"t-log10TTesetP": "-0.023",
+"fractionCase": "0.38"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Hafnia",
+"tTestP": "0.006",
+"t-log10TTesetP": "-2.253",
+"fractionCase": "0.933"
+}
+,{
+"numSeqs": 419,
+"rpdLevel": "genus",
+"rdptaxa": "Enterobacter",
+"tTestP": "0.104",
+"t-log10TTesetP": "-0.983",
+"fractionCase": "0.587"
+}
+,{
+"numSeqs": 3758,
+"rpdLevel": "genus",
+"rdptaxa": "Escherichia/Shigella",
+"tTestP": "0.527",
+"t-log10TTesetP": "-0.278",
+"fractionCase": "0.326"
+}
+,{
+"numSeqs": 1521,
+"rpdLevel": "genus",
+"rdptaxa": "Pantoea",
+"tTestP": "0.008",
+"t-log10TTesetP": "-2.102",
+"fractionCase": "0.601"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Tatumella",
+"tTestP": "0.769",
+"t-log10TTesetP": "-0.114",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Pectobacterium",
+"tTestP": "0.331",
+"t-log10TTesetP": "-0.48",
+"fractionCase": "0.727"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Sodalis",
+"tTestP": "0.656",
+"t-log10TTesetP": "-0.183",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Brenneria",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 293,
+"rpdLevel": "genus",
+"rdptaxa": "Erwinia",
+"tTestP": "0.059",
+"t-log10TTesetP": "-1.226",
+"fractionCase": "0.604"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Cronobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Buttiauxella",
+"tTestP": "0.079",
+"t-log10TTesetP": "-1.102",
+"fractionCase": "0.143"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Plesiomonas",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 115,
+"rpdLevel": "genus",
+"rdptaxa": "Yokenella",
+"tTestP": "0.572",
+"t-log10TTesetP": "-0.242",
+"fractionCase": "0.339"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Proteus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Morganella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Pragia",
+"tTestP": "0.19",
+"t-log10TTesetP": "-0.721",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Yersinia",
+"tTestP": "0.196",
+"t-log10TTesetP": "-0.708",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Obesumbacterium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Kluyvera",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 344,
+"rpdLevel": "genus",
+"rdptaxa": "Serratia",
+"tTestP": "0.239",
+"t-log10TTesetP": "-0.622",
+"fractionCase": "0.488"
+}
+,{
+"numSeqs": 382,
+"rpdLevel": "genus",
+"rdptaxa": "Klebsiella",
+"tTestP": "0.538",
+"t-log10TTesetP": "-0.269",
+"fractionCase": "0.068"
+}
+,{
+"numSeqs": 322,
+"rpdLevel": "genus",
+"rdptaxa": "Raoultella",
+"tTestP": "0.138",
+"t-log10TTesetP": "-0.859",
+"fractionCase": "0.031"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Cedecea",
+"tTestP": "0.087",
+"t-log10TTesetP": "-1.062",
+"fractionCase": "0.875"
+}
+,{
+"numSeqs": 511,
+"rpdLevel": "genus",
+"rdptaxa": "Citrobacter",
+"tTestP": "0.5",
+"t-log10TTesetP": "-0.301",
+"fractionCase": "0.354"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Leclercia",
+"tTestP": "0.128",
+"t-log10TTesetP": "-0.893",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 58,
+"rpdLevel": "genus",
+"rdptaxa": "Salmonella",
+"tTestP": "0.504",
+"t-log10TTesetP": "-0.298",
+"fractionCase": "0.586"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "order",
+"rdptaxa": "Gammaproteobacteria_incertae_sedis",
+"tTestP": "0.204",
+"t-log10TTesetP": "-0.691",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 6142,
+"rpdLevel": "order",
+"rdptaxa": "Pseudomonadales",
+"tTestP": "0.008",
+"t-log10TTesetP": "-2.114",
+"fractionCase": "0.69"
+,"children": [
+{
+"numSeqs": 2043,
+"rpdLevel": "family",
+"rdptaxa": "Moraxellaceae",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.624",
+"fractionCase": "0.754"
+,"children": [
+{
+"numSeqs": 1916,
+"rpdLevel": "genus",
+"rdptaxa": "Acinetobacter",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.353",
+"fractionCase": "0.768"
+}
+,{
+"numSeqs": 90,
+"rpdLevel": "genus",
+"rdptaxa": "Enhydrobacter",
+"tTestP": "0.6",
+"t-log10TTesetP": "-0.222",
+"fractionCase": "0.467"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Moraxella",
+"tTestP": "0.081",
+"t-log10TTesetP": "-1.092",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Psychrobacter",
+"tTestP": "0.578",
+"t-log10TTesetP": "-0.238",
+"fractionCase": "0.786"
+}
+,{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Alkanindiges",
+"tTestP": "0.637",
+"t-log10TTesetP": "-0.196",
+"fractionCase": "0.455"
+}
+]
+}
+,{
+"numSeqs": 4092,
+"rpdLevel": "family",
+"rdptaxa": "Pseudomonadaceae",
+"tTestP": "0.01",
+"t-log10TTesetP": "-2.015",
+"fractionCase": "0.658"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Cellvibrio",
+"tTestP": "0.747",
+"t-log10TTesetP": "-0.127",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 43,
+"rpdLevel": "genus",
+"rdptaxa": "Serpens",
+"tTestP": "0.05",
+"t-log10TTesetP": "-1.305",
+"fractionCase": "0.674"
+}
+,{
+"numSeqs": 3848,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudomonas",
+"tTestP": "0.009",
+"t-log10TTesetP": "-2.064",
+"fractionCase": "0.659"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Rhizobacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1565,
+"rpdLevel": "order",
+"rdptaxa": "Xanthomonadales",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.88",
+"fractionCase": "0.678"
+,"children": [
+{
+"numSeqs": 12,
+"rpdLevel": "family",
+"rdptaxa": "Sinobacteraceae",
+"tTestP": "0.161",
+"t-log10TTesetP": "-0.794",
+"fractionCase": "0.75"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Steroidobacter",
+"tTestP": "0.078",
+"t-log10TTesetP": "-1.109",
+"fractionCase": "0.818"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Nevskia",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 1553,
+"rpdLevel": "family",
+"rdptaxa": "Xanthomonadaceae",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.918",
+"fractionCase": "0.677"
+,"children": [
+{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Lysobacter",
+"tTestP": "0.869",
+"t-log10TTesetP": "-0.061",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Luteimonas",
+"tTestP": "0.718",
+"t-log10TTesetP": "-0.144",
+"fractionCase": "0.333"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudofulvimonas",
+"tTestP": "0.347",
+"t-log10TTesetP": "-0.46",
+"fractionCase": "0.615"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Aspromonas",
+"tTestP": "0.654",
+"t-log10TTesetP": "-0.184",
+"fractionCase": "0.75"
+}
+,{
+"numSeqs": 41,
+"rpdLevel": "genus",
+"rdptaxa": "Xanthomonas",
+"tTestP": "0.014",
+"t-log10TTesetP": "-1.859",
+"fractionCase": "0.878"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Thermomonas",
+"tTestP": "0.233",
+"t-log10TTesetP": "-0.633",
+"fractionCase": "0.769"
+}
+,{
+"numSeqs": 1346,
+"rpdLevel": "genus",
+"rdptaxa": "Stenotrophomonas",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.801",
+"fractionCase": "0.677"
+}
+,{
+"numSeqs": 53,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudoxanthomonas",
+"tTestP": "0.037",
+"t-log10TTesetP": "-1.436",
+"fractionCase": "0.679"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Luteibacter",
+"tTestP": "0.629",
+"t-log10TTesetP": "-0.201",
+"fractionCase": "0.75"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Rudaea",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 354,
+"rpdLevel": "order",
+"rdptaxa": "Chromatiales",
+"tTestP": "0.168",
+"t-log10TTesetP": "-0.775",
+"fractionCase": "0.359"
+,"children": [
+{
+"numSeqs": 354,
+"rpdLevel": "family",
+"rdptaxa": "Chromatiaceae",
+"tTestP": "0.163",
+"t-log10TTesetP": "-0.788",
+"fractionCase": "0.359"
+,"children": [
+{
+"numSeqs": 354,
+"rpdLevel": "genus",
+"rdptaxa": "Rheinheimera",
+"tTestP": "0.16",
+"t-log10TTesetP": "-0.795",
+"fractionCase": "0.359"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1259,
+"rpdLevel": "order",
+"rdptaxa": "Oceanospirillales",
+"tTestP": "0.309",
+"t-log10TTesetP": "-0.509",
+"fractionCase": "0.307"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "family",
+"rdptaxa": "Alcanivoracaceae",
+"tTestP": "0.647",
+"t-log10TTesetP": "-0.189",
+"fractionCase": "0.75"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Alcanivorax",
+"tTestP": "0.626",
+"t-log10TTesetP": "-0.204",
+"fractionCase": "0.75"
+}
+]
+}
+,{
+"numSeqs": 1235,
+"rpdLevel": "family",
+"rdptaxa": "Oceanospirillaceae",
+"tTestP": "0.239",
+"t-log10TTesetP": "-0.621",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 1227,
+"rpdLevel": "genus",
+"rdptaxa": "Marinomonas",
+"tTestP": "0.224",
+"t-log10TTesetP": "-0.65",
+"fractionCase": "0.302"
+}
+]
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "family",
+"rdptaxa": "Halomonadaceae",
+"tTestP": "0.842",
+"t-log10TTesetP": "-0.075",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Halomonas",
+"tTestP": "0.482",
+"t-log10TTesetP": "-0.317",
+"fractionCase": "0.571"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "order",
+"rdptaxa": "Legionellales",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Legionellaceae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Legionella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 2884,
+"rpdLevel": "order",
+"rdptaxa": "Aeromonadales",
+"tTestP": "0.094",
+"t-log10TTesetP": "-1.029",
+"fractionCase": "0.499"
+,"children": [
+{
+"numSeqs": 827,
+"rpdLevel": "family",
+"rdptaxa": "Aeromonadaceae",
+"tTestP": "0.896",
+"t-log10TTesetP": "-0.048",
+"fractionCase": "0.358"
+,"children": [
+{
+"numSeqs": 796,
+"rpdLevel": "genus",
+"rdptaxa": "Aeromonas",
+"tTestP": "0.87",
+"t-log10TTesetP": "-0.061",
+"fractionCase": "0.354"
+}
+,{
+"numSeqs": 21,
+"rpdLevel": "genus",
+"rdptaxa": "Tolumonas",
+"tTestP": "0.279",
+"t-log10TTesetP": "-0.555",
+"fractionCase": "0.429"
+}
+]
+}
+,{
+"numSeqs": 2057,
+"rpdLevel": "family",
+"rdptaxa": "Succinivibrionaceae",
+"tTestP": "0.013",
+"t-log10TTesetP": "-1.881",
+"fractionCase": "0.556"
+,"children": [
+{
+"numSeqs": 1996,
+"rpdLevel": "genus",
+"rdptaxa": "Succinivibrio",
+"tTestP": "0.012",
+"t-log10TTesetP": "-1.921",
+"fractionCase": "0.556"
+}
+,{
+"numSeqs": 45,
+"rpdLevel": "genus",
+"rdptaxa": "Ruminobacter",
+"tTestP": "0.555",
+"t-log10TTesetP": "-0.256",
+"fractionCase": "0.444"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerobiospirillum",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Succinimonas",
+"tTestP": "0.143",
+"t-log10TTesetP": "-0.846",
+"fractionCase": "1"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1451,
+"rpdLevel": "order",
+"rdptaxa": "Alteromonadales",
+"tTestP": "0.601",
+"t-log10TTesetP": "-0.221",
+"fractionCase": "0.355"
+,"children": [
+{
+"numSeqs": 13,
+"rpdLevel": "family",
+"rdptaxa": "Alteromonadaceae",
+"tTestP": "0.039",
+"t-log10TTesetP": "-1.413",
+"fractionCase": "0.077"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Alishewanella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Agarivorans",
+"tTestP": "0.043",
+"t-log10TTesetP": "-1.37",
+"fractionCase": "0.091"
+}
+]
+}
+,{
+"numSeqs": 37,
+"rpdLevel": "family",
+"rdptaxa": "Shewanellaceae",
+"tTestP": "0.295",
+"t-log10TTesetP": "-0.531",
+"fractionCase": "0.324"
+,"children": [
+{
+"numSeqs": 37,
+"rpdLevel": "genus",
+"rdptaxa": "Shewanella",
+"tTestP": "0.297",
+"t-log10TTesetP": "-0.527",
+"fractionCase": "0.324"
+}
+]
+}
+,{
+"numSeqs": 1363,
+"rpdLevel": "family",
+"rdptaxa": "Pseudoalteromonadaceae",
+"tTestP": "0.571",
+"t-log10TTesetP": "-0.243",
+"fractionCase": "0.36"
+,"children": [
+{
+"numSeqs": 1362,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudoalteromonas",
+"tTestP": "0.554",
+"t-log10TTesetP": "-0.257",
+"fractionCase": "0.36"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 671,
+"rpdLevel": "order",
+"rdptaxa": "Pasteurellales",
+"tTestP": "0.01",
+"t-log10TTesetP": "-1.979",
+"fractionCase": "0.379"
+,"children": [
+{
+"numSeqs": 671,
+"rpdLevel": "family",
+"rdptaxa": "Pasteurellaceae",
+"tTestP": "0.011",
+"t-log10TTesetP": "-1.973",
+"fractionCase": "0.379"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Aggregatibacter",
+"tTestP": "0.073",
+"t-log10TTesetP": "-1.139",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Actinobacillus",
+"tTestP": "0.288",
+"t-log10TTesetP": "-0.541",
+"fractionCase": "0.25"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Pasteurella",
+"tTestP": "0.455",
+"t-log10TTesetP": "-0.342",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 585,
+"rpdLevel": "genus",
+"rdptaxa": "Haemophilus",
+"tTestP": "0.019",
+"t-log10TTesetP": "-1.728",
+"fractionCase": "0.39"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Phocoenobacter",
+"tTestP": "0.04",
+"t-log10TTesetP": "-1.395",
+"fractionCase": "0.154"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 276,
+"rpdLevel": "phylum",
+"rdptaxa": "TM7",
+"tTestP": "0",
+"t-log10TTesetP": "-4.595",
+"fractionCase": "0.783"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "phylum",
+"rdptaxa": "Armatimonadetes",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "phylum",
+"rdptaxa": "Crenarchaeota",
+"tTestP": "0.13",
+"t-log10TTesetP": "-0.885",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "class",
+"rdptaxa": "Thermoprotei",
+"tTestP": "0.13",
+"t-log10TTesetP": "-0.885",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 106,
+"rpdLevel": "phylum",
+"rdptaxa": "Verrucomicrobia",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.384",
+"fractionCase": "0.811"
+,"children": [
+{
+"numSeqs": 106,
+"rpdLevel": "class",
+"rdptaxa": "Verrucomicrobiae",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.401",
+"fractionCase": "0.811"
+,"children": [
+{
+"numSeqs": 106,
+"rpdLevel": "order",
+"rdptaxa": "Verrucomicrobiales",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.412",
+"fractionCase": "0.811"
+,"children": [
+{
+"numSeqs": 106,
+"rpdLevel": "family",
+"rdptaxa": "Verrucomicrobiaceae",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.453",
+"fractionCase": "0.811"
+,"children": [
+{
+"numSeqs": 106,
+"rpdLevel": "genus",
+"rdptaxa": "Akkermansia",
+"tTestP": "0.003",
+"t-log10TTesetP": "-2.472",
+"fractionCase": "0.811"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 121,
+"rpdLevel": "phylum",
+"rdptaxa": "Deinococcus-Thermus",
+"tTestP": "0.955",
+"t-log10TTesetP": "-0.02",
+"fractionCase": "0.207"
+,"children": [
+{
+"numSeqs": 121,
+"rpdLevel": "class",
+"rdptaxa": "Deinococci",
+"tTestP": "0.947",
+"t-log10TTesetP": "-0.024",
+"fractionCase": "0.207"
+,"children": [
+{
+"numSeqs": 112,
+"rpdLevel": "order",
+"rdptaxa": "Deinococcales",
+"tTestP": "0.786",
+"t-log10TTesetP": "-0.104",
+"fractionCase": "0.179"
+,"children": [
+{
+"numSeqs": 40,
+"rpdLevel": "family",
+"rdptaxa": "Deinococcaceae",
+"tTestP": "0.216",
+"t-log10TTesetP": "-0.666",
+"fractionCase": "0.125"
+,"children": [
+{
+"numSeqs": 40,
+"rpdLevel": "genus",
+"rdptaxa": "Deinococcus",
+"tTestP": "0.216",
+"t-log10TTesetP": "-0.666",
+"fractionCase": "0.125"
+}
+]
+}
+,{
+"numSeqs": 72,
+"rpdLevel": "family",
+"rdptaxa": "Trueperaceae",
+"tTestP": "0.634",
+"t-log10TTesetP": "-0.198",
+"fractionCase": "0.208"
+,"children": [
+{
+"numSeqs": 72,
+"rpdLevel": "genus",
+"rdptaxa": "Truepera",
+"tTestP": "0.63",
+"t-log10TTesetP": "-0.2",
+"fractionCase": "0.208"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "order",
+"rdptaxa": "Thermales",
+"tTestP": "0.156",
+"t-log10TTesetP": "-0.807",
+"fractionCase": "0.625"
+,"children": [
+{
+"numSeqs": 8,
+"rpdLevel": "family",
+"rdptaxa": "Thermaceae",
+"tTestP": "0.156",
+"t-log10TTesetP": "-0.808",
+"fractionCase": "0.625"
+,"children": [
+{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Thermus",
+"tTestP": "0.352",
+"t-log10TTesetP": "-0.453",
+"fractionCase": "0.571"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 9841,
+"rpdLevel": "phylum",
+"rdptaxa": "Cyanobacteria/Chloroplast",
+"tTestP": "0.004",
+"t-log10TTesetP": "-2.406",
+"fractionCase": "0.572"
+,"children": [
+{
+"numSeqs": 1077,
+"rpdLevel": "class",
+"rdptaxa": "Cyanobacteria",
+"tTestP": "0.627",
+"t-log10TTesetP": "-0.202",
+"fractionCase": "0.041"
+}
+,{
+"numSeqs": 8731,
+"rpdLevel": "class",
+"rdptaxa": "Chloroplast",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.621",
+"fractionCase": "0.639"
+}
+]
+}
+,{
+"numSeqs": 142231,
+"rpdLevel": "phylum",
+"rdptaxa": "Bacteroidetes",
+"tTestP": "0.464",
+"t-log10TTesetP": "-0.333",
+"fractionCase": "0.52"
+,"children": [
+{
+"numSeqs": 135740,
+"rpdLevel": "class",
+"rdptaxa": "Bacteroidia",
+"tTestP": "0.847",
+"t-log10TTesetP": "-0.072",
+"fractionCase": "0.512"
+,"children": [
+{
+"numSeqs": 135740,
+"rpdLevel": "order",
+"rdptaxa": "Bacteroidales",
+"tTestP": "0.776",
+"t-log10TTesetP": "-0.11",
+"fractionCase": "0.512"
+,"children": [
+{
+"numSeqs": 12111,
+"rpdLevel": "family",
+"rdptaxa": "Prevotellaceae",
+"tTestP": "0.022",
+"t-log10TTesetP": "-1.658",
+"fractionCase": "0.622"
+,"children": [
+{
+"numSeqs": 6619,
+"rpdLevel": "genus",
+"rdptaxa": "Prevotella",
+"tTestP": "0.084",
+"t-log10TTesetP": "-1.075",
+"fractionCase": "0.53"
+}
+,{
+"numSeqs": 252,
+"rpdLevel": "genus",
+"rdptaxa": "Xylanibacter",
+"tTestP": "0.035",
+"t-log10TTesetP": "-1.451",
+"fractionCase": "0.694"
+}
+,{
+"numSeqs": 1961,
+"rpdLevel": "genus",
+"rdptaxa": "Paraprevotella",
+"tTestP": "0.003",
+"t-log10TTesetP": "-2.588",
+"fractionCase": "0.69"
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Hallella",
+"tTestP": "0.202",
+"t-log10TTesetP": "-0.695",
+"fractionCase": "0.688"
+}
+]
+}
+,{
+"numSeqs": 102302,
+"rpdLevel": "family",
+"rdptaxa": "Bacteroidaceae",
+"tTestP": "0.218",
+"t-log10TTesetP": "-0.661",
+"fractionCase": "0.493"
+,"children": [
+{
+"numSeqs": 102295,
+"rpdLevel": "genus",
+"rdptaxa": "Bacteroides",
+"tTestP": "0.205",
+"t-log10TTesetP": "-0.688",
+"fractionCase": "0.493"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerorhabdus",
+"tTestP": "0.99",
+"t-log10TTesetP": "-0.004",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 29,
+"rpdLevel": "family",
+"rdptaxa": "Bacteroidales_incertae_sedis",
+"tTestP": "0.675",
+"t-log10TTesetP": "-0.171",
+"fractionCase": "0.69"
+,"children": [
+{
+"numSeqs": 29,
+"rpdLevel": "genus",
+"rdptaxa": "Phocaeicola",
+"tTestP": "0.691",
+"t-log10TTesetP": "-0.161",
+"fractionCase": "0.69"
+}
+]
+}
+,{
+"numSeqs": 3899,
+"rpdLevel": "family",
+"rdptaxa": "Rikenellaceae",
+"tTestP": "0.06",
+"t-log10TTesetP": "-1.219",
+"fractionCase": "0.512"
+,"children": [
+{
+"numSeqs": 274,
+"rpdLevel": "genus",
+"rdptaxa": "Rikenella",
+"tTestP": "0.027",
+"t-log10TTesetP": "-1.561",
+"fractionCase": "0.391"
+}
+,{
+"numSeqs": 3624,
+"rpdLevel": "genus",
+"rdptaxa": "Alistipes",
+"tTestP": "0.079",
+"t-log10TTesetP": "-1.102",
+"fractionCase": "0.522"
+}
+]
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "family",
+"rdptaxa": "Marinilabiaceae",
+"tTestP": "0.065",
+"t-log10TTesetP": "-1.185",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerophaga",
+"tTestP": "0.079",
+"t-log10TTesetP": "-1.105",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 12223,
+"rpdLevel": "family",
+"rdptaxa": "Porphyromonadaceae",
+"tTestP": "0.238",
+"t-log10TTesetP": "-0.624",
+"fractionCase": "0.499"
+,"children": [
+{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Paludibacter",
+"tTestP": "0.26",
+"t-log10TTesetP": "-0.586",
+"fractionCase": "0.833"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Proteiniphilum",
+"tTestP": "0.792",
+"t-log10TTesetP": "-0.101",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Tannerella",
+"tTestP": "0.021",
+"t-log10TTesetP": "-1.674",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 114,
+"rpdLevel": "genus",
+"rdptaxa": "Butyricimonas",
+"tTestP": "0.669",
+"t-log10TTesetP": "-0.175",
+"fractionCase": "0.509"
+}
+,{
+"numSeqs": 653,
+"rpdLevel": "genus",
+"rdptaxa": "Barnesiella",
+"tTestP": "0.798",
+"t-log10TTesetP": "-0.098",
+"fractionCase": "0.397"
+}
+,{
+"numSeqs": 31,
+"rpdLevel": "genus",
+"rdptaxa": "Dysgonomonas",
+"tTestP": "0.439",
+"t-log10TTesetP": "-0.358",
+"fractionCase": "0.645"
+}
+,{
+"numSeqs": 8354,
+"rpdLevel": "genus",
+"rdptaxa": "Parabacteroides",
+"tTestP": "0.427",
+"t-log10TTesetP": "-0.37",
+"fractionCase": "0.477"
+}
+,{
+"numSeqs": 64,
+"rpdLevel": "genus",
+"rdptaxa": "Porphyromonas",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.544",
+"fractionCase": "0.078"
+}
+,{
+"numSeqs": 788,
+"rpdLevel": "genus",
+"rdptaxa": "Odoribacter",
+"tTestP": "0.418",
+"t-log10TTesetP": "-0.379",
+"fractionCase": "0.478"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "class",
+"rdptaxa": "Bacteroidetes_incertae_sedis",
+"tTestP": "0.145",
+"t-log10TTesetP": "-0.839",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 773,
+"rpdLevel": "class",
+"rdptaxa": "Sphingobacteria",
+"tTestP": "0.012",
+"t-log10TTesetP": "-1.922",
+"fractionCase": "0.559"
+,"children": [
+{
+"numSeqs": 773,
+"rpdLevel": "order",
+"rdptaxa": "Sphingobacteriales",
+"tTestP": "0.012",
+"t-log10TTesetP": "-1.919",
+"fractionCase": "0.559"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Cyclobacteriaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Aquiflexum",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 190,
+"rpdLevel": "family",
+"rdptaxa": "Cytophagaceae",
+"tTestP": "0.328",
+"t-log10TTesetP": "-0.484",
+"fractionCase": "0.363"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Leadbetterella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 103,
+"rpdLevel": "genus",
+"rdptaxa": "Hymenobacter",
+"tTestP": "0.646",
+"t-log10TTesetP": "-0.19",
+"fractionCase": "0.194"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Meniscus",
+"tTestP": "0.932",
+"t-log10TTesetP": "-0.031",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Pontibacter",
+"tTestP": "0.308",
+"t-log10TTesetP": "-0.511",
+"fractionCase": "0.889"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Flectobacillus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Fibrisoma",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Dyadobacter",
+"tTestP": "0.162",
+"t-log10TTesetP": "-0.79",
+"fractionCase": "0.615"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Adhaeribacter",
+"tTestP": "0.895",
+"t-log10TTesetP": "-0.048",
+"fractionCase": "0.412"
+}
+,{
+"numSeqs": 25,
+"rpdLevel": "genus",
+"rdptaxa": "Spirosoma",
+"tTestP": "0.155",
+"t-log10TTesetP": "-0.809",
+"fractionCase": "0.56"
+}
+]
+}
+,{
+"numSeqs": 71,
+"rpdLevel": "family",
+"rdptaxa": "Flammeovirgaceae",
+"tTestP": "0.652",
+"t-log10TTesetP": "-0.186",
+"fractionCase": "0.056"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Limibacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 65,
+"rpdLevel": "genus",
+"rdptaxa": "Cesiribacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 105,
+"rpdLevel": "family",
+"rdptaxa": "Sphingobacteriaceae",
+"tTestP": "0.036",
+"t-log10TTesetP": "-1.447",
+"fractionCase": "0.667"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudosphingobacterium",
+"tTestP": "0.033",
+"t-log10TTesetP": "-1.476",
+"fractionCase": "0.8"
+}
+,{
+"numSeqs": 55,
+"rpdLevel": "genus",
+"rdptaxa": "Pedobacter",
+"tTestP": "0.765",
+"t-log10TTesetP": "-0.116",
+"fractionCase": "0.491"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Mucilaginibacter",
+"tTestP": "0.127",
+"t-log10TTesetP": "-0.895",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Nubsella",
+"tTestP": "0.129",
+"t-log10TTesetP": "-0.889",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingobacterium",
+"tTestP": "0.213",
+"t-log10TTesetP": "-0.671",
+"fractionCase": "0.867"
+}
+]
+}
+,{
+"numSeqs": 177,
+"rpdLevel": "family",
+"rdptaxa": "Chitinophagaceae",
+"tTestP": "0.752",
+"t-log10TTesetP": "-0.124",
+"fractionCase": "0.605"
+,"children": [
+{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Sediminibacterium",
+"tTestP": "0.647",
+"t-log10TTesetP": "-0.189",
+"fractionCase": "0.556"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Niastella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 23,
+"rpdLevel": "genus",
+"rdptaxa": "Filimonas",
+"tTestP": "0.546",
+"t-log10TTesetP": "-0.263",
+"fractionCase": "0.348"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Flavisolibacter",
+"tTestP": "0.478",
+"t-log10TTesetP": "-0.321",
+"fractionCase": "0.25"
+}
+,{
+"numSeqs": 87,
+"rpdLevel": "genus",
+"rdptaxa": "Niabella",
+"tTestP": "0.435",
+"t-log10TTesetP": "-0.362",
+"fractionCase": "0.667"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Ferruginibacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 3485,
+"rpdLevel": "class",
+"rdptaxa": "Flavobacteria",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.699",
+"fractionCase": "0.724"
+,"children": [
+{
+"numSeqs": 3485,
+"rpdLevel": "order",
+"rdptaxa": "Flavobacteriales",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.695",
+"fractionCase": "0.724"
+,"children": [
+{
+"numSeqs": 6,
+"rpdLevel": "family",
+"rdptaxa": "Cryomorphaceae",
+"tTestP": "0.014",
+"t-log10TTesetP": "-1.844",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Fluviicola",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Wandonia",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 3433,
+"rpdLevel": "family",
+"rdptaxa": "Flavobacteriaceae",
+"tTestP": "0.002",
+"t-log10TTesetP": "-2.771",
+"fractionCase": "0.724"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Myroides",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 431,
+"rpdLevel": "genus",
+"rdptaxa": "Chryseobacterium",
+"tTestP": "0.072",
+"t-log10TTesetP": "-1.142",
+"fractionCase": "0.733"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Epilithonimonas",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 67,
+"rpdLevel": "genus",
+"rdptaxa": "Flavobacterium",
+"tTestP": "0.124",
+"t-log10TTesetP": "-0.905",
+"fractionCase": "0.642"
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "genus",
+"rdptaxa": "Riemerella",
+"tTestP": "0.785",
+"t-log10TTesetP": "-0.105",
+"fractionCase": "0.562"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Zunongwangia",
+"tTestP": "0.134",
+"t-log10TTesetP": "-0.872",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Empedobacter",
+"tTestP": "0.103",
+"t-log10TTesetP": "-0.987",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Salinimicrobium",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 17,
+"rpdLevel": "genus",
+"rdptaxa": "Elizabethkingia",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2815,
+"rpdLevel": "genus",
+"rdptaxa": "Cloacibacterium",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.947",
+"fractionCase": "0.721"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Wautersiella",
+"tTestP": "0.065",
+"t-log10TTesetP": "-1.188",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Capnocytophaga",
+"tTestP": "0.137",
+"t-log10TTesetP": "-0.863",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Gillisia",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 13990,
+"rpdLevel": "phylum",
+"rdptaxa": "Actinobacteria",
+"tTestP": "0.388",
+"t-log10TTesetP": "-0.412",
+"fractionCase": "0.53"
+,"children": [
+{
+"numSeqs": 13990,
+"rpdLevel": "class",
+"rdptaxa": "Actinobacteria",
+"tTestP": "0.365",
+"t-log10TTesetP": "-0.438",
+"fractionCase": "0.53"
+,"children": [
+{
+"numSeqs": 7376,
+"rpdLevel": "order",
+"rdptaxa": "Coriobacteriales",
+"tTestP": "0.847",
+"t-log10TTesetP": "-0.072",
+"fractionCase": "0.522"
+,"children": [
+{
+"numSeqs": 7376,
+"rpdLevel": "family",
+"rdptaxa": "Coriobacteriaceae",
+"tTestP": "0.878",
+"t-log10TTesetP": "-0.056",
+"fractionCase": "0.522"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Denitrobacterium",
+"tTestP": "0.133",
+"t-log10TTesetP": "-0.875",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Adlercreutzia",
+"tTestP": "0.668",
+"t-log10TTesetP": "-0.176",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 831,
+"rpdLevel": "genus",
+"rdptaxa": "Eggerthella",
+"tTestP": "0.528",
+"t-log10TTesetP": "-0.278",
+"fractionCase": "0.556"
+}
+,{
+"numSeqs": 244,
+"rpdLevel": "genus",
+"rdptaxa": "Slackia",
+"tTestP": "0.644",
+"t-log10TTesetP": "-0.191",
+"fractionCase": "0.504"
+}
+,{
+"numSeqs": 22,
+"rpdLevel": "genus",
+"rdptaxa": "Atopobium",
+"tTestP": "0.483",
+"t-log10TTesetP": "-0.316",
+"fractionCase": "0.591"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Gordonibacter",
+"tTestP": "0.972",
+"t-log10TTesetP": "-0.012",
+"fractionCase": "0.571"
+}
+,{
+"numSeqs": 27,
+"rpdLevel": "genus",
+"rdptaxa": "Enterorhabdus",
+"tTestP": "0.046",
+"t-log10TTesetP": "-1.341",
+"fractionCase": "0.852"
+}
+,{
+"numSeqs": 99,
+"rpdLevel": "genus",
+"rdptaxa": "Asaccharobacter",
+"tTestP": "0.101",
+"t-log10TTesetP": "-0.997",
+"fractionCase": "0.323"
+}
+,{
+"numSeqs": 71,
+"rpdLevel": "genus",
+"rdptaxa": "Olsenella",
+"tTestP": "0.366",
+"t-log10TTesetP": "-0.436",
+"fractionCase": "0.549"
+}
+,{
+"numSeqs": 5674,
+"rpdLevel": "genus",
+"rdptaxa": "Collinsella",
+"tTestP": "0.626",
+"t-log10TTesetP": "-0.204",
+"fractionCase": "0.509"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1904,
+"rpdLevel": "order",
+"rdptaxa": "Rubrobacterales",
+"tTestP": "0.031",
+"t-log10TTesetP": "-1.511",
+"fractionCase": "0.546"
+,"children": [
+{
+"numSeqs": 1904,
+"rpdLevel": "family",
+"rdptaxa": "Rubrobacteraceae",
+"tTestP": "0.029",
+"t-log10TTesetP": "-1.532",
+"fractionCase": "0.546"
+,"children": [
+{
+"numSeqs": 1904,
+"rpdLevel": "genus",
+"rdptaxa": "Rubrobacter",
+"tTestP": "0.027",
+"t-log10TTesetP": "-1.566",
+"fractionCase": "0.546"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 4597,
+"rpdLevel": "order",
+"rdptaxa": "Actinomycetales",
+"tTestP": "0.222",
+"t-log10TTesetP": "-0.654",
+"fractionCase": "0.542"
+,"children": [
+{
+"numSeqs": 53,
+"rpdLevel": "family",
+"rdptaxa": "Intrasporangiaceae",
+"tTestP": "0.247",
+"t-log10TTesetP": "-0.608",
+"fractionCase": "0.642"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Tetrasphaera",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 50,
+"rpdLevel": "genus",
+"rdptaxa": "Janibacter",
+"tTestP": "0.236",
+"t-log10TTesetP": "-0.628",
+"fractionCase": "0.64"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Ornithinimicrobium",
+"tTestP": "0.928",
+"t-log10TTesetP": "-0.033",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 39,
+"rpdLevel": "family",
+"rdptaxa": "Kineosporiaceae",
+"tTestP": "0.959",
+"t-log10TTesetP": "-0.018",
+"fractionCase": "0.179"
+,"children": [
+{
+"numSeqs": 34,
+"rpdLevel": "genus",
+"rdptaxa": "Quadrisphaera",
+"tTestP": "0.461",
+"t-log10TTesetP": "-0.336",
+"fractionCase": "0.059"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Kineosporia",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 492,
+"rpdLevel": "family",
+"rdptaxa": "Micrococcaceae",
+"tTestP": "0.146",
+"t-log10TTesetP": "-0.835",
+"fractionCase": "0.553"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Acaricomes",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 57,
+"rpdLevel": "genus",
+"rdptaxa": "Kocuria",
+"tTestP": "0.904",
+"t-log10TTesetP": "-0.044",
+"fractionCase": "0.509"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Nesterenkonia",
+"tTestP": "0.205",
+"t-log10TTesetP": "-0.688",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Renibacterium",
+"tTestP": "0.516",
+"t-log10TTesetP": "-0.288",
+"fractionCase": "0.375"
+}
+,{
+"numSeqs": 46,
+"rpdLevel": "genus",
+"rdptaxa": "Micrococcus",
+"tTestP": "0.885",
+"t-log10TTesetP": "-0.053",
+"fractionCase": "0.478"
+}
+,{
+"numSeqs": 308,
+"rpdLevel": "genus",
+"rdptaxa": "Arthrobacter",
+"tTestP": "0.013",
+"t-log10TTesetP": "-1.881",
+"fractionCase": "0.62"
+}
+,{
+"numSeqs": 46,
+"rpdLevel": "genus",
+"rdptaxa": "Rothia",
+"tTestP": "0.135",
+"t-log10TTesetP": "-0.871",
+"fractionCase": "0.239"
+}
+]
+}
+,{
+"numSeqs": 51,
+"rpdLevel": "family",
+"rdptaxa": "Micromonosporaceae",
+"tTestP": "0.001",
+"t-log10TTesetP": "-2.856",
+"fractionCase": "0.824"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Hamadaea",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "family",
+"rdptaxa": "Promicromonosporaceae",
+"tTestP": "0.787",
+"t-log10TTesetP": "-0.104",
+"fractionCase": "0.6"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Xylanimonas",
+"tTestP": "0.703",
+"t-log10TTesetP": "-0.153",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 55,
+"rpdLevel": "family",
+"rdptaxa": "Nocardioidaceae",
+"tTestP": "0.638",
+"t-log10TTesetP": "-0.195",
+"fractionCase": "0.491"
+,"children": [
+{
+"numSeqs": 37,
+"rpdLevel": "genus",
+"rdptaxa": "Nocardioides",
+"tTestP": "0.836",
+"t-log10TTesetP": "-0.078",
+"fractionCase": "0.595"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Aeromicrobium",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 13,
+"rpdLevel": "genus",
+"rdptaxa": "Marmoricola",
+"tTestP": "0.525",
+"t-log10TTesetP": "-0.279",
+"fractionCase": "0.308"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Pimelobacter",
+"tTestP": "0.77",
+"t-log10TTesetP": "-0.114",
+"fractionCase": "0.5"
+}
+]
+}
+,{
+"numSeqs": 248,
+"rpdLevel": "family",
+"rdptaxa": "Actinomycetaceae",
+"tTestP": "0.591",
+"t-log10TTesetP": "-0.228",
+"fractionCase": "0.383"
+,"children": [
+{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Varibaculum",
+"tTestP": "0.852",
+"t-log10TTesetP": "-0.069",
+"fractionCase": "0.625"
+}
+,{
+"numSeqs": 230,
+"rpdLevel": "genus",
+"rdptaxa": "Actinomyces",
+"tTestP": "0.443",
+"t-log10TTesetP": "-0.354",
+"fractionCase": "0.357"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Mobiluncus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Dietziaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Dietzia",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "family",
+"rdptaxa": "Ruaniaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 394,
+"rpdLevel": "family",
+"rdptaxa": "Corynebacteriaceae",
+"tTestP": "0.94",
+"t-log10TTesetP": "-0.027",
+"fractionCase": "0.536"
+,"children": [
+{
+"numSeqs": 387,
+"rpdLevel": "genus",
+"rdptaxa": "Corynebacterium",
+"tTestP": "0.94",
+"t-log10TTesetP": "-0.027",
+"fractionCase": "0.532"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Turicella",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Demequinaceae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Demequina",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 22,
+"rpdLevel": "family",
+"rdptaxa": "Nocardiaceae",
+"tTestP": "0.406",
+"t-log10TTesetP": "-0.392",
+"fractionCase": "0.364"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Rhodococcus",
+"tTestP": "0.213",
+"t-log10TTesetP": "-0.671",
+"fractionCase": "0.133"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Nocardia",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "family",
+"rdptaxa": "Dermabacteraceae",
+"tTestP": "0.132",
+"t-log10TTesetP": "-0.879",
+"fractionCase": "0.8"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Brachybacterium",
+"tTestP": "0.132",
+"t-log10TTesetP": "-0.88",
+"fractionCase": "0.8"
+}
+]
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "family",
+"rdptaxa": "Cellulomonadaceae",
+"tTestP": "0.656",
+"t-log10TTesetP": "-0.183",
+"fractionCase": "0.25"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Cellulomonas",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Cryptosporangiaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Cryptosporangium",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 1660,
+"rpdLevel": "family",
+"rdptaxa": "Microbacteriaceae",
+"tTestP": "0.035",
+"t-log10TTesetP": "-1.455",
+"fractionCase": "0.658"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudoclavibacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Agrococcus",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Leucobacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 150,
+"rpdLevel": "genus",
+"rdptaxa": "Curtobacterium",
+"tTestP": "0.348",
+"t-log10TTesetP": "-0.458",
+"fractionCase": "0.553"
+}
+,{
+"numSeqs": 745,
+"rpdLevel": "genus",
+"rdptaxa": "Clavibacter",
+"tTestP": "0.018",
+"t-log10TTesetP": "-1.745",
+"fractionCase": "0.658"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Zimmermannella",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Rathayibacter",
+"tTestP": "0.522",
+"t-log10TTesetP": "-0.282",
+"fractionCase": "0.2"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Plantibacter",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Leifsonia",
+"tTestP": "0.466",
+"t-log10TTesetP": "-0.331",
+"fractionCase": "0.8"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Agreia",
+"tTestP": "0.239",
+"t-log10TTesetP": "-0.621",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 714,
+"rpdLevel": "genus",
+"rdptaxa": "Microbacterium",
+"tTestP": "0.008",
+"t-log10TTesetP": "-2.093",
+"fractionCase": "0.69"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Frondihabitans",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 58,
+"rpdLevel": "family",
+"rdptaxa": "Pseudonocardiaceae",
+"tTestP": "0.43",
+"t-log10TTesetP": "-0.367",
+"fractionCase": "0.672"
+,"children": [
+{
+"numSeqs": 30,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudonocardia",
+"tTestP": "0.176",
+"t-log10TTesetP": "-0.756",
+"fractionCase": "0.767"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Actinomycetospora",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Actinophytocola",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Saccharopolyspora",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Thermocrispum",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 12,
+"rpdLevel": "family",
+"rdptaxa": "Brevibacteriaceae",
+"tTestP": "0.718",
+"t-log10TTesetP": "-0.144",
+"fractionCase": "0.583"
+,"children": [
+{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Brevibacterium",
+"tTestP": "0.673",
+"t-log10TTesetP": "-0.172",
+"fractionCase": "0.583"
+}
+]
+}
+,{
+"numSeqs": 60,
+"rpdLevel": "family",
+"rdptaxa": "Mycobacteriaceae",
+"tTestP": "0.862",
+"t-log10TTesetP": "-0.065",
+"fractionCase": "0.45"
+,"children": [
+{
+"numSeqs": 60,
+"rpdLevel": "genus",
+"rdptaxa": "Mycobacterium",
+"tTestP": "0.839",
+"t-log10TTesetP": "-0.076",
+"fractionCase": "0.45"
+}
+]
+}
+,{
+"numSeqs": 1201,
+"rpdLevel": "family",
+"rdptaxa": "Propionibacteriaceae",
+"tTestP": "0.342",
+"t-log10TTesetP": "-0.466",
+"fractionCase": "0.401"
+,"children": [
+{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Propionicimonas",
+"tTestP": "0.869",
+"t-log10TTesetP": "-0.061",
+"fractionCase": "0.556"
+}
+,{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Friedmanniella",
+"tTestP": "0.881",
+"t-log10TTesetP": "-0.055",
+"fractionCase": "0.357"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Tessaracoccus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "genus",
+"rdptaxa": "Microlunatus",
+"tTestP": "0.53",
+"t-log10TTesetP": "-0.275",
+"fractionCase": "0.833"
+}
+,{
+"numSeqs": 1164,
+"rpdLevel": "genus",
+"rdptaxa": "Propionibacterium",
+"tTestP": "0.33",
+"t-log10TTesetP": "-0.481",
+"fractionCase": "0.399"
+}
+]
+}
+,{
+"numSeqs": 36,
+"rpdLevel": "family",
+"rdptaxa": "Geodermatophilaceae",
+"tTestP": "0.839",
+"t-log10TTesetP": "-0.076",
+"fractionCase": "0.333"
+,"children": [
+{
+"numSeqs": 31,
+"rpdLevel": "genus",
+"rdptaxa": "Blastococcus",
+"tTestP": "0.869",
+"t-log10TTesetP": "-0.061",
+"fractionCase": "0.355"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Modestobacter",
+"tTestP": "0.765",
+"t-log10TTesetP": "-0.116",
+"fractionCase": "0.5"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Geodermatophilus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 6,
+"rpdLevel": "family",
+"rdptaxa": "Dermacoccaceae",
+"tTestP": "0.122",
+"t-log10TTesetP": "-0.915",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Dermacoccus",
+"tTestP": "0.192",
+"t-log10TTesetP": "-0.716",
+"fractionCase": "0"
+}
+,{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Kytococcus",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 16,
+"rpdLevel": "family",
+"rdptaxa": "Streptomycetaceae",
+"tTestP": "0.65",
+"t-log10TTesetP": "-0.187",
+"fractionCase": "0.25"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Streptomyces",
+"tTestP": "0.666",
+"t-log10TTesetP": "-0.176",
+"fractionCase": "0.267"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 19,
+"rpdLevel": "order",
+"rdptaxa": "Solirubrobacterales",
+"tTestP": "0.474",
+"t-log10TTesetP": "-0.325",
+"fractionCase": "0.263"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Conexibacteraceae",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Conexibacter",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 9,
+"rpdLevel": "family",
+"rdptaxa": "Patulibacteraceae",
+"tTestP": "0.141",
+"t-log10TTesetP": "-0.851",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"rdptaxa": "Patulibacter",
+"tTestP": "0.141",
+"t-log10TTesetP": "-0.851",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "family",
+"rdptaxa": "Solirubrobacteraceae",
+"tTestP": "0.874",
+"t-log10TTesetP": "-0.059",
+"fractionCase": "0.5"
+,"children": [
+{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Solirubrobacter",
+"tTestP": "0.938",
+"t-log10TTesetP": "-0.028",
+"fractionCase": "0.5"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 28,
+"rpdLevel": "order",
+"rdptaxa": "Acidimicrobiales",
+"tTestP": "0.469",
+"t-log10TTesetP": "-0.329",
+"fractionCase": "0.643"
+,"children": [
+{
+"numSeqs": 8,
+"rpdLevel": "family",
+"rdptaxa": "Acidimicrobiaceae",
+"tTestP": "0.186",
+"t-log10TTesetP": "-0.731",
+"fractionCase": "0.875"
+,"children": [
+{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Ilumatobacter",
+"tTestP": "0.132",
+"t-log10TTesetP": "-0.879",
+"fractionCase": "1"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Ferrithrix",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Iamiaceae",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Iamia",
+"tTestP": "0.355",
+"t-log10TTesetP": "-0.45",
+"fractionCase": "0"
+}
+]
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "family",
+"rdptaxa": "Acidimicrobineae_incertae_sedis",
+"tTestP": "0.363",
+"t-log10TTesetP": "-0.44",
+"fractionCase": "0.25"
+,"children": [
+{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Aciditerrimonas",
+"tTestP": "0.371",
+"t-log10TTesetP": "-0.431",
+"fractionCase": "0.25"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 60,
+"rpdLevel": "order",
+"rdptaxa": "Bifidobacteriales",
+"tTestP": "0.036",
+"t-log10TTesetP": "-1.445",
+"fractionCase": "0.167"
+,"children": [
+{
+"numSeqs": 60,
+"rpdLevel": "family",
+"rdptaxa": "Bifidobacteriaceae",
+"tTestP": "0.041",
+"t-log10TTesetP": "-1.383",
+"fractionCase": "0.167"
+,"children": [
+{
+"numSeqs": 60,
+"rpdLevel": "genus",
+"rdptaxa": "Bifidobacterium",
+"tTestP": "0.045",
+"t-log10TTesetP": "-1.344",
+"fractionCase": "0.167"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 33,
+"rpdLevel": "phylum",
+"rdptaxa": "Synergistetes",
+"tTestP": "0.489",
+"t-log10TTesetP": "-0.31",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 33,
+"rpdLevel": "class",
+"rdptaxa": "Synergistia",
+"tTestP": "0.496",
+"t-log10TTesetP": "-0.305",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 33,
+"rpdLevel": "order",
+"rdptaxa": "Synergistales",
+"tTestP": "0.503",
+"t-log10TTesetP": "-0.298",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 33,
+"rpdLevel": "family",
+"rdptaxa": "Synergistaceae",
+"tTestP": "0.53",
+"t-log10TTesetP": "-0.276",
+"fractionCase": "0.303"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"rdptaxa": "Aminiphilus",
+"tTestP": "0.358",
+"t-log10TTesetP": "-0.446",
+"fractionCase": "0.75"
+}
+,{
+"numSeqs": 29,
+"rpdLevel": "genus",
+"rdptaxa": "Cloacibacillus",
+"tTestP": "0.345",
+"t-log10TTesetP": "-0.462",
+"fractionCase": "0.241"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "phylum",
+"rdptaxa": "SR1",
+"tTestP": "0.286",
+"t-log10TTesetP": "-0.543",
+"fractionCase": "1"
+}
+]
+}

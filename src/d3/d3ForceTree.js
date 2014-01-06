@@ -1495,9 +1495,9 @@ this.arrangeForcePlot = function(arrangeChildren)
 	var radius = Math.min(w,h)/2;
 	
 	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
-	
+
 	if(  arrangeChildren &&  lastSelected)
-		radius = radius / lastSelected.nodeDepth;
+		radius = radius / thisDocument.getElementById("localGravity").value;
 		
 	var piTwice= 2* Math.PI ;
 	
