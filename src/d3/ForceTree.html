@@ -40,9 +40,7 @@
         <li>
         
         <li><a>Plot</a> <ul>
-        	<li><input type="checkbox" id="animate"
-			onchange=myGo.redrawScreen()> animate</input></li>
-			<li><input type="checkbox" id="hideLinks"
+        	<li><input type="checkbox" id="hideLinks"
 			onchange=myGo.redrawScreen()> hideLinks</input></li>
 			<li><input type="checkbox" id="showLeftControl"
 			checked=true onchange=myGo.toggleVisibilityOfSidebars()> show left control</input></li>
@@ -57,7 +55,7 @@
 			<li>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select></li>
 			<li><br></li>
 			<li><button name= "button" onclick=spawnNewWindow()>spawn graph</button></li>
-        	<li><select id="graphType" onchange=spawnNewWindow()><option value="ForceTree">Force Tree</option><option value="scatter">Scatter Plot</option></select></li>
+        	<li><select id="graphType" onchange=spawnNewWindow()><option value="scatter">Scatter Plot</option></select></li>
         	
 		
         </ul> </li>
@@ -65,10 +63,18 @@
     </ul>
 </div>
 	<aside id="sidebar">
-			
-	
+		
 		<script type="text/javascript" src="jscolor/jscolor.js"></script>
-			 	<h3> All graphs: </h3>
+		<br><input type="checkbox" id="hideLinks"
+			onchange=myGo.redrawScreen()> hideLinks</input>	
+			   <br>Gravity Adjust <input type="range" id="gravitySlider" min="0" max="100"
+			" value="30" onchange= myGo.gravityAdjust()>
+						</input>
+			<br><input type=button onclick=myGo.arrangeForcePlot(false) value="arrange (entire tree) "></input>
+			<br><input type=button onclick=myGo.arrangeForcePlot(true) value="arrange (around last selected)"></input>
+			<br>Local gravity: <input type=number id="localGravity" value=5.0></input>
+			<br><input type=button onclick=myGo.releaseAllFixed() value="reanimate "></input><br>
+	
 			 	Opacity Adjust <input type="range" id="opacitySlider" min="0" max="100" +
 			"value="90" onchange=myGo.redrawScreen()></input>
 			<br>Noise<input type="range" id="noiseSlider" min="0" max="100"

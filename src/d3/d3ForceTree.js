@@ -128,7 +128,7 @@ var aDocument = parentWindow.document;
 var thisDocument = thisWindow.document;
 var statics = parentWindow.statics;
 var thisID = statics.addGoObject(this);
-var graphType = "scatter"
+var graphType = "ForceTree"
 var queryStrings = getQueryStrings(thisWindow)
 var addNoise= false;
 var firstNoise = true;
@@ -1333,7 +1333,7 @@ this.update = function()
 this.checkForStop =function()
 {
 	
-	if ( graphType != "ForceTree" || ! thisDocument.getElementById("animate").checked)
+	if ( graphType != "ForceTree" )
   		force.stop();
 	
 }
