@@ -1089,7 +1089,7 @@ this.update = function()
 		
 		var filteredNodes = nodes.filter(this.myFilterNodes);	
 		
-		for( z=0; z < filteredNodes .length; z++)
+		for( var z=0; z < filteredNodes .length; z++)
 			filteredNodes[z].setVisible=true;
 		
 		if( graphType == "ForceTree") 
