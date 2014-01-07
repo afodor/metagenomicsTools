@@ -1553,7 +1553,8 @@ this.initialize = function () {
    
    this.toggleVisibilityOfSidebars();
    
-   this.arrangeForcePlot(false)
+   if( graphType == "ForceTree" )
+	   this.arrangeForcePlot(false)
 }
 
 this.getQuantiativeColor= function (d)
