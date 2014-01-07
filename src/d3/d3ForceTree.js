@@ -1552,6 +1552,8 @@ this.initialize = function () {
    this.update();
    
    this.toggleVisibilityOfSidebars();
+   
+   this.arrangeForcePlot(false)
 }
 
 this.getQuantiativeColor= function (d)
