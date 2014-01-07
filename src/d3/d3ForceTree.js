@@ -284,7 +284,7 @@ this.reforce = function()
     force = d3.layout.force()
     .charge(function(d) { return d._children ? -d.numSeqs / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 * (d.nodeDepth-16)/16 : 30; })
-    .size([w, h - 60]).gravity(thisDocument.getElementById("gravitySlider").value/100)
+    .size([w, h - 60]).gravity(aDocument.getElementById("gravitySlider").value/100)
     
     drag = force.drag().on("dragstart", function(d) { 
     						
@@ -1104,7 +1104,7 @@ this.update = function()
       .nodes(nodes)
       
       if( graphType == "ForceTree" 
-      			&& ! thisDocument.getElementById("hideLinks").checked )
+      			&& ! aDocument.getElementById("hideLinks").checked )
       force.links(links)
       
       if( graphType == "ForceTree" )
@@ -1178,7 +1178,7 @@ this.update = function()
 	      	}	      
 	      }
 			
-		if( graphType == "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked )
+		if( graphType == "ForceTree"  && ! aDocument.getElementById("hideLinks").checked )
 		{
 				link.attr("x1", function(d) { return d.source.x; })
 	      .attr("x1", function(d) { return d.source.x; })
@@ -1190,7 +1190,7 @@ this.update = function()
 		  	thisContext.checkForStop();
 	      }
 	      
-	      if( graphType != "ForceTree"  && ! thisDocument.getElementById("hideLinks").checked
+	      if( graphType != "ForceTree"  && ! aDocument.getElementById("hideLinks").checked
 	    		  && ((thisDocument.getElementById("scatterX").value == "circleX" || 
 	  					thisDocument.getElementById("scatterX").value == "circleY" ) && 
 						(thisDocument.getElementById("scatterY").value == "circleX" 
@@ -1236,13 +1236,13 @@ this.update = function()
 	    
 	      
 	      	// Update the links
-	      	if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
+	      	if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   		link = vis.selectAll("line.link")
       .data(links.filter(this.myFilterLinks), function(d) {  return d.target.forceTreeNodeID; }
       		);
 	   
 	  // Enter any new links.
-	  if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
+	  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
 	  link.enter().insert("svg:line", ".node")
 	      .attr("class", "link")
 	       
@@ -1307,7 +1307,7 @@ this.update = function()
  		
 
  // cleanup
-  if( graphType == "ForceTree" && ! thisDocument.getElementById("hideLinks").checked )
+  if( graphType == "ForceTree" && ! aDocument.getElementById("hideLinks").checked )
   link.exit().remove();
   
   node.exit().remove();
@@ -1440,7 +1440,7 @@ this.setInitialPositions = function ()
 	
 	var radius = Math.min(w,h)/2;
 	
-	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
+	radius = radius - radius * aDocument.getElementById("gravitySlider").value/100;
 		
 	var piTwice= 2* Math.PI ;
 	
@@ -1505,13 +1505,13 @@ this.arrangeForcePlot = function(arrangeChildren)
 	
 	var radius = Math.min(w,h)/2;
 	
-	radius = radius - radius * thisDocument.getElementById("gravitySlider").value/100;
+	radius = radius - radius * aDocument.getElementById("gravitySlider").value/100;
 
 	var localMinLevel = 0;
 	
 	if(  arrangeChildren &&  lastSelected)
 	{
-		radius = radius / thisDocument.getElementById("localGravity").value;
+		radius = radius / aDocument.getElementById("localGravity").value;
 		localMinLevel = lastSelected.nodeDepth;
 	}
 	
