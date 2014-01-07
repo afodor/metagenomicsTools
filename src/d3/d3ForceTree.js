@@ -893,6 +893,9 @@ this.getRadiusVal= function(d)
 {
 	var propToSize = aDocument.getElementById("sizeByWhat").value
 	var returnVal = aDocument.getElementById("maxSize").value;
+	var minValue = aDocument.getElementById("minSize").value * 1.0 ;
+	var maxValue= aDocument.getElementById("maxSize").value * 1.0 ;
+	
 	
 	// quantitative values
 	if( statics.getRanges()[propToSize] != null)
@@ -906,24 +909,26 @@ this.getRadiusVal= function(d)
 			{
 				maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
 			
-				var aScale= d3.scale.linear().domain([0,maxScale]).range([aDocument.getElementById("minSize").value,
-	  					aDocument.getElementById("maxSize").value]).clamp(true);
+				var aScale= d3.scale.linear().domain([0,maxScale]).range(minValue,maxValue).clamp(true);
 	  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
 			}
 		}
 		else
 		{
-			var aScale= d3.scale.linear().domain(statics.getRanges()[propToSize]).range([aDocument.getElementById("minSize").value,
-	  					aDocument.getElementById("maxSize").value]).clamp(true);
-	  		returnVal = aScale(d[propToSize]);
+			var aRange = maxValue- minValue;
+			var aValue = 1.0 * d[propToSize] ;
+			
+			var partial = ( aValue- statics.getRanges()[propToSize][0] )
+							/ (statics.getRanges()[propToSize][1] - statics.getRanges()[propToSize][0]);
+			
+			partial = partial *  aRange;
+			returnVal = minValue +  partial;	
 		}
-		
-		
+			
 	}
 	else //ordinal values 
 	{
-		statics.getOrdinalScales()[propToSize].range([aDocument.getElementById("minSize").value
-  								,aDocument.getElementById("maxSize").value]); 
+		statics.getOrdinalScales()[propToSize].range(minValue,maxValue); 
   					
 		returnVal = statics.getOrdinalScales()[propToSize](d[propToSize]);
 		
@@ -931,8 +936,14 @@ this.getRadiusVal= function(d)
 	
 	if( aDocument.getElementById("invertSize").checked ) 
 	{
-		returnVal = aDocument.getElementById("maxSize").value - returnVal;
+		returnVal = maxValue- returnVal;
 	}
+	
+	if( returnVal < minValue)
+		returnVal = minValue;
+		
+	if( returnVal > maxValue)
+		returnVal = maxValue;
 	
 	return returnVal;
 	
