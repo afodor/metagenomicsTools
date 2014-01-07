@@ -895,6 +895,7 @@ this.getRadiusVal= function(d)
 	var returnVal = aDocument.getElementById("maxSize").value;
 	var minValue = aDocument.getElementById("minSize").value * 1.0 ;
 	var maxValue= aDocument.getElementById("maxSize").value * 1.0 ;
+	var aRange = maxValue- minValue;
 	
 	
 	// quantitative values
@@ -902,20 +903,18 @@ this.getRadiusVal= function(d)
 	{
 		if( aDocument.getElementById("logSize").checked) 
 		{
-			// d3's log scale yields problems with p=0 in range so we 
-			// covert everything to log and feed it to the linear scale..
-			// as a nice side effect, you don't have to multiply p-values by negative 1
 			if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
 			{
 				maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
-			
-				var aScale= d3.scale.linear().domain([0,maxScale]).range(minValue,maxValue).clamp(true);
-	  			returnVal = aScale(Math.log(d[propToSize]) / Math.LN10 );
+				var aValue = Math.log( d[propToSize]  ) / Math.LN10;
+				
+				var partial = aValue / maxScale;
+				partial = partial * aRange;
+				returnVal = minValue + partial;
 			}
 		}
 		else
 		{
-			var aRange = maxValue- minValue;
 			var aValue = 1.0 * d[propToSize] ;
 			
 			var partial = ( aValue- statics.getRanges()[propToSize][0] )
