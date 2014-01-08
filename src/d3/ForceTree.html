@@ -155,7 +155,23 @@
     if (charCode) 
     {
         if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
+        {
         	myGo.arrangeForcePlot(true);
+        } else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
+        {
+        	if( document.getElementById("showLeftControl").checked )
+        	{
+        		document.getElementById("showLeftControl").checked =false;
+        	}
+        	else
+        	{
+        		document.getElementById("showLeftControl").checked =true;
+        	}
+        	
+        	myGo.toggleVisibilityOfSidebars();
+        }
+        
+        
         	
     }
 	};
