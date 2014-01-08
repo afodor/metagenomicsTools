@@ -157,7 +157,8 @@
         if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
         {
         	myGo.arrangeForcePlot(true);
-        } else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
+        } 
+        else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
         {
         	if( document.getElementById("showLeftControl").checked )
         	{
@@ -166,6 +167,22 @@
         	else
         	{
         		document.getElementById("showLeftControl").checked =true;
+        	}
+        	
+        	
+        	myGo.toggleVisibilityOfSidebars();
+        }
+        else if( String.fromCharCode(charCode) == "R" || String.fromCharCode(charCode) == 'r')
+        {
+        	
+        	
+        	if( document.getElementById("showRightDataPanel").checked )
+        	{
+        		document.getElementById("showRightDataPanel").checked =false;
+        	}
+        	else
+        	{
+        		document.getElementById("showRightDataPanel").checked =true;
         	}
         	
         	myGo.toggleVisibilityOfSidebars();
