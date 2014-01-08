@@ -148,6 +148,18 @@
 	
 	var myCount=0;
 	
+	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
+	window.onkeypress = function(e) {
+	e = e || window.event;
+    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+    if (charCode) 
+    {
+        if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
+        	myGo.arrangeForcePlot(true);
+        	
+    }
+	};
+	
 	window.onresize=
 				function()
 						{ 
