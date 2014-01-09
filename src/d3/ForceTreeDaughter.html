@@ -20,53 +20,8 @@
 	var myGo;
 
 	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
-	window.onkeypress = function(e) {
-	e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    if (charCode) 
-    {
-        if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
-        {
-        	myGo.arrangeForcePlot(true);
-        } 
-        else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
-        {
-        	if( myGo.getParentDocument().getElementById("showLeftControl").checked )
-        	{
-        		myGo.getParentDocument().getElementById("showLeftControl").checked =false;
-        	}
-        	else
-        	{
-        		myGo.getParentDocument().getElementById("showLeftControl").checked =true;
-        	}
-        	
-        	
-        	myGo.toggleVisibilityOfSidebars();
-        }
-        else if( String.fromCharCode(charCode) == "R" || String.fromCharCode(charCode) == 'r')
-        {
-        	
-        	
-        	if( myGo.getParentDocument().getElementById("showRightDataPanel").checked )
-        	{
-        		myGo.getParentDocument().getElementById("showRightDataPanel").checked =false;
-        	}
-        	else
-        	{
-        		myGo.getParentDocument().getElementById("showRightDataPanel").checked =true;
-        	}
-        	
-        	myGo.toggleVisibilityOfSidebars();
-        }
-        else if ( String.fromCharCode(charCode) == "V" || String.fromCharCode(charCode) == 'v')
-        {
-        	myGo.hideAndShow();
-        	myGo.redrawScreen();
-        }
-        	
-    }
-	};
-
+	window.onkeypress = function(e) { myGo.handleKeyboardEvent(e)}; 
+	
 	window.onload = 
 	function ()
 	{	

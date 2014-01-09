@@ -143,52 +143,7 @@
 	
 	var myCount=0;
 	
-	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
-	window.onkeypress = function(e) {
-	e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    if (charCode) 
-    {
-        if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
-        {
-        	myGo.arrangeForcePlot(true);
-        } 
-        else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
-        {
-        	if( document.getElementById("showLeftControl").checked )
-        	{
-        		document.getElementById("showLeftControl").checked =false;
-        	}
-        	else
-        	{
-        		document.getElementById("showLeftControl").checked =true;
-        	}
-        	
-        	
-        	myGo.toggleVisibilityOfSidebars();
-        }
-        else if( String.fromCharCode(charCode) == "R" || String.fromCharCode(charCode) == 'r')
-        {
-        	
-        	
-        	if( document.getElementById("showRightDataPanel").checked )
-        	{
-        		document.getElementById("showRightDataPanel").checked =false;
-        	}
-        	else
-        	{
-        		document.getElementById("showRightDataPanel").checked =true;
-        	}
-        	
-        	myGo.toggleVisibilityOfSidebars();
-        }
-        else if ( String.fromCharCode(charCode) == "V" || String.fromCharCode(charCode) == 'v')
-        {
-        	myGo.hideAndShow();
-        	myGo.redrawScreen();
-        }	
-    }
-	};
+	window.onkeypress = function(e){ myGo.handleKeyboardEvent(e)}; 
 	
 	window.onresize=
 				function()

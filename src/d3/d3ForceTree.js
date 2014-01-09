@@ -1020,6 +1020,55 @@ this.toggleVisibilityOfSidebars =function()
 		
 }
 
+this.handleKeyboardEvent = function(e)
+{
+	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
+	e = e || thisWindow.event;
+    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+    if (charCode) 
+    {
+        if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
+        {
+        	thisContext.arrangeForcePlot(true);
+        } 
+        else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
+        {
+        	if( thisContext.getParentDocument().getElementById("showLeftControl").checked )
+        	{
+        		thisContext.getParentDocument().getElementById("showLeftControl").checked =false;
+        	}
+        	else
+        	{
+        		thisContext.getParentDocument().getElementById("showLeftControl").checked =true;
+        	}
+        	
+        	
+        	thisContext.toggleVisibilityOfSidebars();
+        }
+        else if( String.fromCharCode(charCode) == "R" || String.fromCharCode(charCode) == 'r')
+        {
+        	
+        	
+        	if( thisContext.getParentDocument().getElementById("showRightDataPanel").checked )
+        	{
+        		thisContext.getParentDocument().getElementById("showRightDataPanel").checked =false;
+        	}
+        	else
+        	{
+        		thisContext.getParentDocument().getElementById("showRightDataPanel").checked =true;
+        	}
+        	
+        	thisContext.toggleVisibilityOfSidebars();
+        }
+        else if ( String.fromCharCode(charCode) == "V" || String.fromCharCode(charCode) == 'v')
+        {
+        	thisContext.hideAndShow();
+        	thisContext.redrawScreen();
+        }
+    }
+}
+
+
 this.update = function() 
 {
 	if( ! initHasRun )
