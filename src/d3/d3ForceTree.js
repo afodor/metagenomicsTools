@@ -13,11 +13,22 @@ function StaticHolder()
 		StaticHolder.root=null;
 		StaticHolder.highlightedNode=null;
 		StaticHolder.maxLevel = -1;
+		StaticHolder.highlightReverse=false;
 	}
 	
 	this.setMaxLevel = function(aLevel)
 	{
 		StaticHolder.maxLevel = aLevel;
+	}
+	
+	this.getHighlightReverse = function()
+	{
+		return StaticHolder.highlightReverse;
+	}
+	
+	this.setHighlightReverse =function(b)
+	{
+		StaticHolder.highlightReverse=b;
 	}
 	
 	this.getMaxLevel = function()
@@ -256,7 +267,6 @@ var w,h,
     thisContext = this;
     
   	var firstUpdate = true;
-  	var reverse =false;
   	var initHasRun = false;
     
   	topNodes= [];
@@ -268,6 +278,10 @@ var w,h,
     
 var force, drag, vis;
 
+this.makeDirty = function()
+{
+	this.dirty=true;
+}
 
 this.reforce = function()
 {
@@ -1690,9 +1704,9 @@ this.hideAndShow = function(d)
 	if( ! d)
 		return;
 	
-	reverse = ! reverse;
+	statics.setHighlightReverse( ! statics.getHighlightReverse() );
 	
-	if( reverse == false)
+	if( statics.getHighlightReverse() == false)
 	{
 		for( var x =0; x < nodes.length; x++)
 			nodes[x].doNotShow=false;
