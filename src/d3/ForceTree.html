@@ -39,9 +39,9 @@
 					<li><a>quantiative range...</a>
 					<ul>
 							<li>From<input type="number" id="lowQuantRange"
-								onchange=myGo.redrawScreen()></input></li>
+								onchange=myGo.redrawScreen() onkeypress="return myGo.isNumber(event)"></input></li>
 							<li>To <input type="number" id="highQuantRange"
-								onchange=myGo.redrawScreen()></input></li>
+								onchange=myGo.redrawScreen() onkeypress="return myGo.isNumber(event)"></input></li>
 						</ul>
 					<li>
 				</ul>
@@ -80,7 +80,7 @@
 			value="arrange (entire tree) "></input> <br>
 		<input type=button onclick=myGo.arrangeForcePlot(true)
 			value="arrange (around last selected)"></input> <br>Local
-		gravity: <input type=number id="localGravity" value=5.0></input> <br>
+		gravity: <input type=number id="localGravity" value=2.0 onkeypress="return myGo.isNumber(event)"></input> <br>
 		<input type=button onclick=myGo.releaseAllFixed() value="reanimate "></input><br>
 
 		Opacity Adjust <input type="range" id="opacitySlider" min="0"
@@ -159,6 +159,7 @@
 				if( myGo)
 					myGo.unregister();
 			}
+ 
  
     </script>
 		<script>
