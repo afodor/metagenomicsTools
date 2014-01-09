@@ -1030,7 +1030,11 @@ this.handleKeyboardEvent = function(e)
         if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
         {
         	thisContext.arrangeForcePlot(true);
-        } 
+        }
+        else if( String.fromCharCode(charCode) == "T" || String.fromCharCode(charCode) == 't')
+        {
+        	thisContext.arrangeForcePlot(false);
+        }
         else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
         {
         	if( thisContext.getParentDocument().getElementById("showLeftControl").checked )
