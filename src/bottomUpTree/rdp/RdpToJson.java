@@ -120,6 +120,7 @@ public class RdpToJson
 		
 		writer.flush();  writer.close();
 		
+		writeFlatFile(root);
 		
 	}
 	
@@ -253,6 +254,34 @@ public class RdpToJson
 		return 1;
 	}
 	
+	private static void writeFlatFile( Holder root ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getNinaWithDuplicatesDir() + 
+				File.separator + "rdp" + File.separator + "flatFile.txt")));
+		List<Holder> list= new ArrayList<Holder>();
+		flatten(root, list);
+		
+		writer.write("numSeqs\trdpLevel\trdpTaxa\ttTestP\t-10log10TTestP\tfractionCase\n");
+		
+		for(Holder h : list)
+		{
+			writer.write(((int)(h.caseCounts + h.controlCounts)) + "\t");
+			writer.write(h.taxonomicLevel + "\t");
+			writer.write(h.taxonomicName + "\t");
+			double tTestVal = getTTestVal(h);
+			
+			writer.write(tTestVal + "\t");
+			writer.write(-Math.log10(tTestVal) + "\t");
+			
+			double ratio = h.caseCounts / (h.caseCounts + h.controlCounts) ;
+			writer.write(ratio + "\n");
+			
+		}
+		
+		writer.flush();  writer.close();
+		
+	}
+	
 	private static void writeNodeAndChildren( BufferedWriter writer,Holder h) throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
@@ -266,7 +295,7 @@ public class RdpToJson
 		
 		double tTestVal = getTTestVal(h);
 		writer.write("\"tTestP\": \"" +  nf.format(tTestVal)+ "\",\n");
-		writer.write("\"t-log10TTesetP\": \"" +  nf.format( Math.log10( tTestVal))+ "\",\n");
+		writer.write("\"t-log10TTesetP\": \"" +  nf.format( -Math.log10( tTestVal))+ "\",\n");
 		
 		
 		double ratio = h.caseCounts / (h.caseCounts + h.controlCounts) ;

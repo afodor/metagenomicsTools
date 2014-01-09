@@ -146,6 +146,12 @@ this.getThisDocument = function()
 	return thisDocument;
 }
 
+this.getParentDocument = function()
+{
+	return aDocument;
+}
+
+
 if( queryStrings ) 
 {
 	var aGraphType = queryStrings["GraphType"];
@@ -775,7 +781,7 @@ this.getLabelText = function(d)
 		}
 	}
 	
-	if( aDocument.getElementById("cicleLabelScheme").checked  &&
+	if(  aDocument.getElementById("cicleLabelScheme").checked  && graphType=="ForceTree" || 
 			((thisDocument.getElementById("scatterX").value == "circleX" || 
 					thisDocument.getElementById("scatterX").value == "circleY" ) || 
 					(thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY" )))
@@ -826,38 +832,48 @@ this.isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-this.getAVal = function (chosen, d, xAxis)
-		{
+this.getAVal = function (d, xAxis)
+{
+
+	if( graphType == "ForceTree" )
+	{
+			return xAxis? d.x : d.y;	
+	}
+	
+	chosen = null;
+	
+	if( xAxis)
+	{
+		chosen = thisDocument.getElementById("scatterX").value;
+	}
+	else
+	{
+		chosen = thisDocument.getElementById("scatterY").value;
+	}
+	
+	if( chosen == "circleX" )
+		return d.xMap[thisID];
 		
-			if( graphType == "ForceTree" )
-			{
-					return xAxis? d.x : d.y;	
-			}
+	if( chosen == "circleY" ) 
+		return d.yMap[thisID];
+		
+	// quantitative scale 
+	if( statics.getRanges()[chosen] != null)
+	{	
+		var aRange = statics.getRanges()[chosen];
+		var aScale = d3.scale.linear().domain(aRange).
+			range([0, xAxis ? w : h]).clamp(true);
+		return aScale(d[chosen]);
+	}
+	else
+	{
+		statics.getOrdinalScales()[chosen].
+			range([0, xAxis ? w : h]); 
 			
-			if( chosen == "circleX" )
-				return d.xMap[thisID];
-				
-			if( chosen == "circleY" ) 
-				return d.yMap[thisID];
-				
-			// quantitative scale 
-			if( statics.getRanges()[chosen] != null)
-			{	
-				var aRange = statics.getRanges()[chosen];
-				var aScale = d3.scale.linear().domain(aRange).
-					range([0, xAxis ? w : h]).clamp(true);
-				return aScale(d[chosen]);
-	  		}
-	  		else
-	  		{
-	  			statics.getOrdinalScales()[chosen].
-	  				range([0, xAxis ? w : h]); 
-  					
-				return statics.getOrdinalScales()[chosen](d[chosen]);
-	  		}
-	  		
-	  		alert("Could not find " + chosen);
-		}
+		return statics.getOrdinalScales()[chosen](d[chosen]);
+	}
+	
+}
 		
 this.addAxis = function(chosen, isXAxis)
 {
@@ -1119,10 +1135,10 @@ this.update = function()
 	 node.enter().append("svg:circle").on("click", this.myClick)
 	      .attr("class", "node")
 	      .attr("cx", 
-					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)}
+					function (d){return thisContext.getAVal( d,true)}
 				)
 	      .attr("cy", 
-					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
+					function (d){return thisContext.getAVal( d,false)}
 				)
 	      .attr("r", function(d) {  return d.thisNodeRadius})
 	      .style("fill", function(d) { return d.thisNodeColor}).
@@ -1136,7 +1152,7 @@ this.update = function()
 	      function updateNodesLinksText()
 	      {
 	      	 node.attr("cx", 
-					function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)}
+					function (d){return thisContext.getAVal( d,true)}
 				)
 	      	.attr("cy", 
 	      			
@@ -1148,7 +1164,7 @@ this.update = function()
 	      					}
 	      					
 	      						
-	      		return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)}
+	      		return thisContext.getAVal( d,false)}
 				)
 	    
 		  if ( anyLabels )
@@ -1272,9 +1288,9 @@ this.update = function()
                     if( graphType != "ForceTree")
 	                {
 	                	 text.attr("x",
-	                	 function (d){return thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)})
+	                	 function (d){return thisContext.getAVal( d,true)})
   						.attr("y", 
-  						function (d){return thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false)})
+  						function (d){return thisContext.getAVal( d,false)})
   						
   						/* todo: radial labels should be an option
   						.attr("transform", 
@@ -1286,8 +1302,8 @@ this.update = function()
   									console.log( anAngle);
   									
   	         			 			return "rotate(" + anAngle + "," 
-  	         			 					+ thisContext.getAVal( thisDocument.getElementById("scatterX").value,d,true)
-  												+ "," + thisContext.getAVal( thisDocument.getElementById("scatterY").value,d,false) + ")"
+  	         			 					+ thisContext.getAVal( d,true)
+  												+ "," + thisContext.getAVal( d,false) + ")"
   	         			         }
   	         		         );
   	         		         */
@@ -1300,9 +1316,12 @@ this.update = function()
 	
 	}
   	 	    
-  	 	    
- 		this.addAxis( 	thisDocument.getElementById("scatterX").value, true);
- 		this.addAxis( 	thisDocument.getElementById("scatterY").value, false);
+  	 	if( graphType != "ForceTree")
+  	 	{
+  	 		this.addAxis( 	thisDocument.getElementById("scatterX").value, true);
+  	 		this.addAxis( 	thisDocument.getElementById("scatterY").value, false);
+  	 	}
+  	 	
  		
 
  // cleanup
@@ -1544,7 +1563,12 @@ this.arrangeForcePlot = function(arrangeChildren)
 this.initialize = function () {
 	
   this.flatten();
-  this.addIndividualMenuDynamicMenuContent();
+  
+  if( graphType != "ForceTree" )
+  {
+	  this.addIndividualMenuDynamicMenuContent();
+	   
+  }
       
   initHasRun = true;
  	dirty = true;
