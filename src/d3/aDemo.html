@@ -1,7 +1,13 @@
 <html>
 	<body>
+		<h3>Draggable force tree for genomics data.</h3>
 		<br><a href=ForceTree.html?FileToOpen=testOperon.json>force tree with  rna-seq data</a>
 		<br><a href=ForceTree.html?FileToOpen=aTree2.json>force tree with gastro 16S data</a>
 		<br><a href=ForceTree.html?FileToOpen=ismeJRDP_CaseControl.json>force tree with ISME-J 16S data</a>
+		
+		<p>Genomics and bioinformatics data often are generated at many hierarchical levels.  For example, an <a href=>”http:// http://rdp.cme.msu.edu/ “</a>  classification of a 16 experiment yields calls to phylum, class, order, family and then genus with each level nested within the one above it.  So a phylum can have many classes, which in turn can have many orders and so forth.  For an rna-seq experiment on a bacteria, reads can be mapped to genes, which in turn can be grouped into operons, with one to many genes per operon.  In performing inference, it is not trivial to interpret these multiple levels.  Typically, levels are chosen ahead of time and infernence is constrained to that level.  For example, it is common to perform RDP analyses at the genus or phyla level.  But such a-priori filtering of the data may miss important patterns; for example, for some taxa a difference at the genus level might be important, while for other taxa in the same experiment, a meaningful signal won’t be observed unless a less derived phylogenetic level is considered.  
+
+		<p>In order to visualize such cases, this web page contains a demonstration project for visualization of phylogenetic trees.  In the <a href=ForceTree.html?FileToOpen=ismeJRDP_CaseControl.json> example</a> we consider RDP classifications of a <a href=>previously published experiment</a>.  This was a 454-based 16S rRNA experiment in which punch biopsies 
+		
 	</body>
 </html>
