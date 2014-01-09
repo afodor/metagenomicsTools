@@ -1675,30 +1675,33 @@ this.myClick= function (d) {
 	}
 	else if ( aValue == "hides")
 	{
-		reverse = ! reverse;
-		
-		if( reverse == false)
-		{
-			for( var x =0; x < nodes.length; x++)
-				nodes[x].doNotShow=false;
-			
-			this.showOnlyMarked(false);
-		}
-		else
-		{
-			for( var x =0; x < nodes.length; x++)
-				nodes[x].doNotShow=true;
-		
-			thisContext.highlightAllChildren(d);
-			thisContext.highlightAllParents(d);
-		}
-		
+		thisContext.hideAndShow(d);
 	}
 	
 	dirty=true;
 	thisContext.update();	
 }
 
+this.hideAndShow = function(d)
+{
+	reverse = ! reverse;
+	
+	if( reverse == false)
+	{
+		for( var x =0; x < nodes.length; x++)
+			nodes[x].doNotShow=false;
+		
+		this.showOnlyMarked(false);
+	}
+	else
+	{
+		for( var x =0; x < nodes.length; x++)
+			nodes[x].doNotShow=true;
+	
+		thisContext.highlightAllChildren(d);
+		thisContext.highlightAllParents(d);
+	}
+}
 
 
 this.highlightAllChildren = function (d)
