@@ -1684,6 +1684,12 @@ this.myClick= function (d) {
 
 this.hideAndShow = function(d)
 {
+	if( ! d)
+		d=statics.getHighlightedNode();
+	
+	if( ! d)
+		return;
+	
 	reverse = ! reverse;
 	
 	if( reverse == false)
