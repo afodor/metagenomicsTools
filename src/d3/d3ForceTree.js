@@ -502,9 +502,9 @@ this.reVisOne = function()
 	selectHTML +=  "</select>"	
 	mySidebar.innerHTML += selectHTML
 	mySidebar.innerHTML += "<br>Max size: <input type=\"number\"" + 
-			 " id=\"maxSize\" min=\"0\" max=\"100\" value=\"30\" onchange=myGo.redrawScreen()></input>" +
+			 " id=\"maxSize\" min=\"0\" max=\"100\" value=\"30\" onkeypress=\"return myGo.isNumber(event)\" onchange=myGo.redrawScreen()></input>" +
 			 "<br>Min size: <input type=\"number\"" + 
-			 " id=\"minSize\" min=\"0\" max=\"100\"  value=\"1\" onchange=myGo.redrawScreen()></input>"   + 
+			 " id=\"minSize\" min=\"0\" max=\"100\"  value=\"1\" onkeypress=\"return myGo.isNumber(event)\" onchange=myGo.redrawScreen()></input>"   + 
 	"<br><input type=\"checkbox\"" + 
 			"id=\"logSize\" onchange=myGo.redrawScreen()>log</input>"
 			+"<input type=\"checkbox\"" + 
@@ -642,7 +642,8 @@ this.reVisOne = function()
 	  	aDocument.getElementById("nav").innerHTML+= labelHTML;
   	mySidebar.innerHTML += "<h3> Filter: <h3>"
   	
-  	mySidebar.innerHTML += "node depth: <input type=\"number\" id=\"depthFilter\" min=\"2\" " + 
+  	mySidebar.innerHTML += "node depth: <input type=\"number\" id=\"depthFilter\" onkeypress=\"return myGo.isNumber(event)\" " +
+  	" min=\"2\" " + 
   		"max=\" ranges[\"nodeDepth\"] value=2 onchange=myGo.setTopNodes()></input><br>"; 
   		
   	
@@ -1078,6 +1079,10 @@ this.handleKeyboardEvent = function(e)
 	this.isNumber = function(evt) {
 evt = (evt) ? evt : window.event;
 var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+if( charCode == 46)  //decimal places are allowed
+	return true;
+
 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
     return false;
 }
