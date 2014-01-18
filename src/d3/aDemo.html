@@ -6,7 +6,7 @@
 		<br><a href=ForceTree.html?FileToOpen=ismeJRDP_CaseControl.json>force tree with ISME-J 16S data</a>
 		
 		<p>Genomics and bioinformatics data often are generated at many hierarchical levels.  
-		For example, an <a href=>”http:// http://rdp.cme.msu.edu/ “</a>  classification of a 16 experiment yields 
+		For example, an <a href=>”http:// http://rdp.cme.msu.edu/ “</a>  classification of a 16S rRNA experiment yields 
 		calls to phylum, class, order, family and then genus with each level nested within the one above it.  
 		So a phylum can have many classes, which in turn can have many orders and so forth.  
 		For an rna-seq experiment on a bacteria, reads can be mapped to genes, which in turn can be grouped into 
@@ -23,7 +23,15 @@
 		previously published experiment</a>.  
 		This was a 454-based 16S rRNA experiment in which punch biopsies were collected from <a href=http://www.nature.com/ismej/journal/v6/n10/fig_tab/ismej201243t1.html#figure-title>33 subjects with 
 		adenomas and 38 (control) subjects without adenomas.</a>.  In the analysis presented on this web page,
-		578,096 sequences 
+		578,096 sequences were run through the stand-alone version of the RDP classifier (version 2.6).
+		Classifications to each phylogenetic level (phylum, class, order, family, genus) were taken if
+		the bootstrap value was >= 50. For each taxa at each level in the tree, a t-test was performed
+		testing the null hypothesis that the log-normalized distribution of that taxa was the same in 
+		case vs. control.
+		
+		The visualization <a href=ForceTree.html?FileToOpen=ismeJRDP_CaseControl.json>shown here</a> (for Chrome 
+		browsers only) shows the phylogenetic tree that results from this analysis.  By default, the size of
+		each circle is the number of sequences assigned to each node.  
 		
 	</body>
 </html>
