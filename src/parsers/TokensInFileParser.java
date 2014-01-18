@@ -6,11 +6,13 @@ import java.util.StringTokenizer;
 
 public class TokensInFileParser
 {
-	private BufferedReader reader;
+	private final BufferedReader reader;
 	private StringTokenizer sToken;
+	private final String delims;
 	
-	public TokensInFileParser(String filePath) throws Exception
+	public TokensInFileParser(String filePath, String delims) throws Exception
 	{
+		this.delims = delims;
 		this.reader = new BufferedReader(new FileReader(filePath));
 		
 		String nextLine = reader.readLine();
@@ -18,7 +20,7 @@ public class TokensInFileParser
 		while( nextLine.startsWith("#"))
 			nextLine = reader.readLine();
 		
-		this.sToken = new StringTokenizer(nextLine);
+		this.sToken = new StringTokenizer(nextLine,delims);
 	}
 	
 	public String nextToken() throws Exception
@@ -29,6 +31,7 @@ public class TokensInFileParser
 		while(true)
 		{
 			String nextLine = reader.readLine();
+			//System.out.println(nextLine);
 			
 			while( nextLine != null && nextLine.startsWith("#"))
 				nextLine = reader.readLine();
@@ -39,7 +42,7 @@ public class TokensInFileParser
 				return null;
 			}
 				
-			sToken = new StringTokenizer(nextLine);
+			sToken = new StringTokenizer(nextLine,delims);
 			
 			if( sToken.hasMoreTokens())
 				return sToken.nextToken();

@@ -24,7 +24,7 @@ public class JsonObject
 	public static JsonObject parseJsonFileWithChildren(String filePath)
 		throws Exception
 	{
-		TokensInFileParser tifp = new TokensInFileParser(filePath);
+		TokensInFileParser tifp = new TokensInFileParser(filePath," \n\t:,");
 		
 		if( ! tifp.nextToken().equals("{"))
 			throw new Exception("First token should be {");
@@ -42,14 +42,12 @@ public class JsonObject
 		while(keepParsing)
 		{
 			String key = tifp.nextToken().replaceAll("\"", "");
-			
-			if( ! tifp.nextToken().equals(":"))
-				throw new Exception("Expecting : to separate keys and values");
+			//System.out.println("Got key " + key);
 			
 			if( key.equals("children"))
 			{
 				if( ! tifp.nextToken().equals("["))
-					throw new Exception("Expecting stat of list");
+					throw new Exception("Expecting start of list");
 				
 				boolean addingChildren = true;
 				
@@ -66,21 +64,17 @@ public class JsonObject
 					
 					if( sepToken.equals("]"))
 						addingChildren = false;
-					else if ( ! sepToken.equals(","))
-						throw new Exception("Parsing error expecting comma " + sepToken);
 				}
 			}
 			
 			String value = tifp.nextToken().replaceAll("\"", "");
+			//System.out.println("Got value " + value );
 			json.nameValuePairMap.put(key, value);
 			
 			String sepToken = tifp.nextToken();
 			
 			if( sepToken.equals("}"))
-				keepParsing = false;
-			else if ( ! sepToken.equals(","))
-				throw new Exception("Parsing error expecting comma " + sepToken);
-	
+				keepParsing = false;	
 		}
 		
 		return json;
@@ -91,5 +85,8 @@ public class JsonObject
 		JsonObject root= 
 				parseJsonFileWithChildren(
 						"C:\\Users\\Anthony\\workspace\\fodorwebsite\\war\\testOperon.json");
+		
+		for(String s : root.nameValuePairMap.keySet())
+			System.out.println(s + " " + root.nameValuePairMap.get(s));
 	}
 }
