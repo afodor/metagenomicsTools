@@ -13,12 +13,12 @@ public class JsonObject
 	
 	public HashMap<String,String> getNameValuePairMap()
 	{
-		return null;
+		return nameValuePairMap;
 	}
 	
 	public List<JsonObject> getChildren()
 	{
-		return null;
+		return children;
 	}
 	
 	public static JsonObject parseJsonFileWithChildren(String filePath)
