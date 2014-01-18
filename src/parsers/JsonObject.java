@@ -42,9 +42,12 @@ public class JsonObject
 		while(keepParsing)
 		{
 			String key = tifp.nextToken().replaceAll("\"", "");
-			//System.out.println("Got key " + key);
 			
-			if( key.equals("children"))
+			if( key.equals("}"))
+			{
+				keepParsing = false;
+			}
+			else if( key.equals("children"))
 			{
 				if( ! tifp.nextToken().equals("["))
 					throw new Exception("Expecting start of list");
@@ -55,26 +58,27 @@ public class JsonObject
 				
 				while( addingChildren)
 				{
-					if( ! tifp.nextToken().equals("{"))
-						throw new Exception("First token should be {");
-			
-					json.children.add(getObjectAfterBrace(tifp));
+					String nextToken = tifp.nextToken();
 					
-					String sepToken= tifp.nextToken();
-					
-					if( sepToken.equals("]"))
+					if( nextToken.equals("]"))
+					{
 						addingChildren = false;
+					}
+					else
+					{
+						if( ! nextToken.equals("{"))
+							throw new Exception("First token should be { " );
+				
+						json.children.add(getObjectAfterBrace(tifp));
+					}
+				
 				}
 			}
-			
-			String value = tifp.nextToken().replaceAll("\"", "");
-			//System.out.println("Got value " + value );
-			json.nameValuePairMap.put(key, value);
-			
-			String sepToken = tifp.nextToken();
-			
-			if( sepToken.equals("}"))
-				keepParsing = false;	
+			else
+			{
+				String value = tifp.nextToken().replaceAll("\"", "");
+				json.nameValuePairMap.put(key, value);
+			}
 		}
 		
 		return json;
