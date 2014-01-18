@@ -26,7 +26,7 @@ public class TokensInFileParser
 	public String nextToken() throws Exception
 	{
 		if( sToken.hasMoreTokens())
-			return sToken.nextToken();
+			return sToken.nextToken().trim();
 		
 		while(true)
 		{
@@ -45,7 +45,7 @@ public class TokensInFileParser
 			sToken = new StringTokenizer(nextLine,delims);
 			
 			if( sToken.hasMoreTokens())
-				return sToken.nextToken();
+				return sToken.nextToken().trim();
 		}
 	}
 }

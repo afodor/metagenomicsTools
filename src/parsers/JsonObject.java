@@ -24,7 +24,7 @@ public class JsonObject
 	public static JsonObject parseJsonFileWithChildren(String filePath)
 		throws Exception
 	{
-		TokensInFileParser tifp = new TokensInFileParser(filePath," \n\t:,");
+		TokensInFileParser tifp = new TokensInFileParser(filePath,":,");
 		
 		if( ! tifp.nextToken().equals("{"))
 			throw new Exception("First token should be {");
@@ -49,9 +49,6 @@ public class JsonObject
 			}
 			else if( key.equals("children"))
 			{
-				if( ! tifp.nextToken().equals("["))
-					throw new Exception("Expecting start of list");
-				
 				boolean addingChildren = true;
 				
 				json.children = new ArrayList<JsonObject>();
@@ -60,6 +57,9 @@ public class JsonObject
 				{
 					String nextToken = tifp.nextToken();
 					
+					if( nextToken.equals("["))
+						nextToken = tifp.nextToken();
+					
 					if( nextToken.equals("]"))
 					{
 						addingChildren = false;
@@ -67,7 +67,7 @@ public class JsonObject
 					else
 					{
 						if( ! nextToken.equals("{"))
-							throw new Exception("First token should be { " );
+							throw new Exception("First token should be { " + nextToken );
 				
 						json.children.add(getObjectAfterBrace(tifp));
 					}
@@ -84,13 +84,33 @@ public class JsonObject
 		return json;
 	}
 	
+	public static void dumpChildrenToConsole(JsonObject aJson, int indentatioNum)
+	{
+		System.out.println();
+		String indentationString = "";
+			
+		for(int x=0; x < indentatioNum; x++)
+			indentationString += "\t" +"";
+		
+		indentatioNum++;
+		
+		for(String s : aJson.nameValuePairMap.keySet())
+			System.out.println(indentationString + " " + 
+							s + " " + aJson.nameValuePairMap.get(s));
+		
+		if( aJson.children != null ) 
+			for( JsonObject child : aJson.children)
+				dumpChildrenToConsole(child, indentatioNum);
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		JsonObject root= 
 				parseJsonFileWithChildren(
 						"C:\\Users\\Anthony\\workspace\\fodorwebsite\\war\\testOperon.json");
 		
-		for(String s : root.nameValuePairMap.keySet())
-			System.out.println(s + " " + root.nameValuePairMap.get(s));
+		dumpChildrenToConsole(root, 0);
+		
+		
 	}
 }
