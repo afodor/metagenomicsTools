@@ -1,5 +1,6 @@
 package bottomUpTree.figures;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import parsers.JsonObject;
+import utils.ConfigReader;
 
 public class TranformRnaSeqJSON
 {
@@ -18,7 +20,8 @@ public class TranformRnaSeqJSON
 						"C:\\Documents and Settings\\Anthony\\git\\metagenomicsTools\\src\\bottomUpTree\\figures\\testOperon.json");
 		
 		transformNodeAndChildren(root);
-		addContigLayer(root);
+		//addContigLayer(root);
+		JsonObject.writeToFile(root, ConfigReader.getD3Dir() + File.separator + "rnaSeqDemo.json");
 	}
 	
 	private static void addContigLayer(JsonObject root) throws Exception

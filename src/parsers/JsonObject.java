@@ -1,7 +1,11 @@
 package parsers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class JsonObject 
@@ -89,6 +93,46 @@ public class JsonObject
 		return json;
 	}
 	
+	public static void writeToFile(JsonObject root, String filePath) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)));
+		writeObjectAndChildrenToFile(root, writer);
+		writer.flush();  writer.close();
+	}
+	
+	private static void writeObjectAndChildrenToFile( JsonObject json, 
+				BufferedWriter writer) throws Exception
+	{
+		writer.write("{\n");
+		
+		for( Iterator<String> i = json.nameValuePairMap.keySet().iterator(); i.hasNext(); )
+		{
+			String key = i.next();
+			writer.write("\"" + key + "\" : \"" + json.nameValuePairMap.get(key) + "\"");
+			
+			if( i.hasNext())
+				writer.write(",\n");
+		}
+		
+		if( json.children != null)
+		{
+			writer.write(",\n\"children\":[\n");
+
+			for( Iterator<JsonObject> i = json.children.iterator(); i.hasNext(); )
+			{
+				JsonObject child = i.next();
+				writeObjectAndChildrenToFile(child, writer);
+				
+				if( i.hasNext())
+					writer.write(",\n");
+			}
+			
+			writer.write("]\n");
+		}
+		
+		writer.write("}\n");
+	}
+ 	
 	public static void dumpChildrenToConsole(JsonObject aJson, int indentatioNum)
 	{
 		System.out.println();
