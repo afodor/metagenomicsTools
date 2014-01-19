@@ -11,6 +11,11 @@ public class JsonObject
 	
 	private List<JsonObject> children = null;
 	
+	public void makeNewEmptyChildrenList()
+	{
+		this.children = new ArrayList<JsonObject>();
+	}
+	
 	public HashMap<String,String> getNameValuePairMap()
 	{
 		return nameValuePairMap;
