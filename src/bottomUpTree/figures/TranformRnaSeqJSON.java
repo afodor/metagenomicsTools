@@ -20,7 +20,7 @@ public class TranformRnaSeqJSON
 						"C:\\Documents and Settings\\Anthony\\git\\metagenomicsTools\\src\\bottomUpTree\\figures\\testOperon.json");
 		
 		transformNodeAndChildren(root);
-		//addContigLayer(root);
+		addContigLayer(root);
 		JsonObject.writeToFile(root, ConfigReader.getD3Dir() + File.separator + "rnaSeqDemo.json");
 	}
 	
@@ -28,6 +28,7 @@ public class TranformRnaSeqJSON
 	{
 		List<JsonObject> list = new ArrayList<JsonObject>();
 		addNodeAndChildren(root, list);
+		System.out.println("Got " + list.size() + " flat nodes");
 		
 		HashMap<Integer, List<JsonObject>> outerMap = new HashMap<Integer, List<JsonObject>>();
 		
@@ -41,18 +42,18 @@ public class TranformRnaSeqJSON
 				{
 					throw new Exception("Logic error");
 				}
-				else
+			}
+			else if (json.getNameValuePairMap().get("level").equals("operon"))
+			{
+				List<JsonObject> aList = outerMap.get(genomicLevel);
+				
+				if( aList == null)
 				{
-					List<JsonObject> aList = outerMap.get(genomicLevel);
-					
-					if( aList == null)
-					{
-						aList = new ArrayList<JsonObject>();
-						outerMap.put(genomicLevel, aList);
-					}
-					
-					aList.add(json);
+					aList = new ArrayList<JsonObject>();
+					outerMap.put(genomicLevel, aList);
 				}
+				
+				aList.add(json);
 			}
 		}
 		
@@ -60,6 +61,9 @@ public class TranformRnaSeqJSON
 		Collections.sort(outerKeys);
 		
 		root.getChildren().clear();
+		
+		if( root.getChildren().size() != 0)
+			throw new Exception("Could not clear list");
 		
 		for( Integer i : outerKeys )
 		{
