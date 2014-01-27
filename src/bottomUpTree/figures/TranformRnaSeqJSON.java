@@ -17,7 +17,7 @@ public class TranformRnaSeqJSON
 	{
 		JsonObject root= 
 			 JsonObject.parseJsonFileWithChildren(
-						"C:\\Documents and Settings\\Anthony\\git\\metagenomicsTools\\src\\bottomUpTree\\figures\\testOperon.json");
+						"C:\\Documents and Settings\\Anthony\\git\\metagenomicsTools\\src\\bottomUpTree\\figures\\testOperon_fc_gLoc_pksIDs.json");
 		
 		transformNodeAndChildren(root);
 		addContigLayer(root);
@@ -110,16 +110,16 @@ public class TranformRnaSeqJSON
 		throws Exception
 	{
 		//System.out.println(json.getNameValuePairMap());
-		double aPValue = Double.parseDouble(json.getNameValuePairMap().get("pValue.il02.ilaom02"));
-		json.getNameValuePairMap().remove("pValue.il02.ilaom02");
+		double aPValue = Double.parseDouble(json.getNameValuePairMap().get("pValue_il02_ilaom02"));
+		json.getNameValuePairMap().remove("pValue_il02_ilaom02");
 		json.getNameValuePairMap().put("log_pValue.il02.ilaom02","" + -Math.log10(aPValue));
 		
-		aPValue = Double.parseDouble(json.getNameValuePairMap().get("pValue.il12.ilaom12"));
-		json.getNameValuePairMap().remove("pValue.il12.ilaom12");
+		aPValue = Double.parseDouble(json.getNameValuePairMap().get("pValue_il12_ilaom12"));
+		json.getNameValuePairMap().remove("pValue_il12_ilaom12");
 		json.getNameValuePairMap().put("log_pValue.il12.ilaom12","" + -Math.log10(aPValue));
 		
-		String location = json.getNameValuePairMap().get("genomic.location");
-		StringTokenizer sToken = new StringTokenizer(location, ".");
+		String location = json.getNameValuePairMap().get("genomic_location");
+		StringTokenizer sToken = new StringTokenizer(location, "_");
 		
 		if( sToken.countTokens() != 2)
 			throw new Exception("Parsing error");
