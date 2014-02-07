@@ -30,3 +30,7 @@ for( i in 1:numIterations )
 }
 
 hist(posteiorDist,breaks=200)
+
+#compare with theoretical distribution
+xVals <- seq(0.0,1.0,0.005)
+lines( xVals, dbeta(xVals, 10+14, 10+24) * numIterations/200,col="red")
