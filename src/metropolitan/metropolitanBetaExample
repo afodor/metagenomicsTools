@@ -2,7 +2,7 @@
 rm(list=ls())
 piOld <- 0.5
 
-numIterations <- 500000
+numIterations <- 10000
 posteiorDist <- vector(length=numIterations )
 
 for( i in 1:numIterations )
