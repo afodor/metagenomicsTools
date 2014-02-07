@@ -11,7 +11,7 @@ for( i in 1:numIterations )
 	# our new data with 14 heads and 10 tails
 	pOld <- dbeta( piOld, 10,10 ) * dbinom( 14, 24, piOld )
 	
-	piNew <- piOld + rnorm(1, 0, sd =0.0001);
+	piNew <- piOld + rnorm(1, 0, sd =0.01);
 	
 	if( piNew > 1) 
 		piNew = 1;
@@ -24,13 +24,11 @@ for( i in 1:numIterations )
 	ratio <- pNew / pOld
 	
 	if( ratio > 1 || ratio >= runif(1) ) 
-		pOld = pNew;
+		piOld = piNew;
 		
-	posteiorDist[i] = pOld;	
+	posteiorDist[i] = piOld;	
 }
 
-hist(posteiorDist,breaks=200)
-
-#compare with theoretical distribution
-xVals <- seq(0.0,1.0,0.005)
-lines( xVals, dbeta(xVals, 10+14, 10+24) * numIterations/200,col="red")
+myHist <- hist(posteiorDist,breaks=200,plot=FALSE)
+plot( myHist$mids, myHist$counts/numIterations) 
+lines( myHist$mids, dbeta(myHist$mids, 10+14, 10+10)/200,col="red")
