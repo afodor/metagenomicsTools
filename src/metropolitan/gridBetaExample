@@ -18,4 +18,4 @@ for( x in xVals )
 }
 
 plot( posteriorDist / sum ) 
-lines( dbeta(xVals, 10+14, 10+10)/numBreaks,col="red") 
+lines( dbeta(xVals, 10+14, 10+10)/numBreaks,col="red")  
