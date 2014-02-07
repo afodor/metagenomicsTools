@@ -1,0 +1,32 @@
+
+rm(list=ls())
+piOld <- 0.5
+
+numIterations <- 500000
+posteiorDist <- vector(length=numIterations )
+
+for( i in 1:numIterations )
+{
+	# our prior with 9 heads and 9 flips 
+	# our new data with 14 heads and 10 tails
+	pOld <- dbeta( piOld, 10,10 ) * dbinom( 14, 24, piOld )
+	
+	piNew <- piOld + rnorm(1, 0, sd =0.0001);
+	
+	if( piNew > 1) 
+		piNew = 1;
+	
+	if( piNew < 0 ) 
+		piNew =0;
+		
+	pNew <- dbeta( piNew, 10,10 ) * dbinom( 14, 24, piNew )
+	
+	ratio <- pNew / pOld
+	
+	if( ratio > 1 || ratio >= runif(1) ) 
+		pOld = pNew;
+		
+	posteiorDist[i] = pOld;	
+}
+
+hist(posteiorDist,breaks=200)
