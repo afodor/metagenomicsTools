@@ -28,8 +28,49 @@ public class TTestsCaseVsControl
 			taxaMap.put(s, h);
 		}
 		
+		populateMap(taxaNames, taxaMap, reader);
 		
 		reader.close();
+	}
+	
+	private static void populateMap( List<String> taxaNames, HashMap<String, Holder> map, BufferedReader reader )
+		throws Exception
+	{
+		for( String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			sToken.nextToken();
+			String sample = sToken.nextToken().replaceAll("\"", "");
+			System.out.println(sample);
+			
+			String caseControlString = sToken.nextToken().trim().replaceAll("\"", "");
+			
+			for( int x=0; x < taxaNames.size(); x++)
+			{
+				System.out.println("\t"+ taxaNames.get(x));
+				HashMap<String, Double> innerMap = null;
+				String taxa = taxaNames.get(x);
+				Holder h = map.get(taxa);
+				
+				if( caseControlString.equals("case"))
+				{
+					innerMap = h.caseMap;
+				}
+				else if( caseControlString.equals("control"))
+				{
+					innerMap = h.controlMap;
+				}
+				else throw new Exception("NO " + caseControlString );
+				
+				if( innerMap.containsKey(sample))
+					throw new Exception("duplicate sample  " + sample);
+				
+				innerMap.put(sample, Double.parseDouble(sToken.nextToken()));
+			}
+			
+			if( sToken.hasMoreTokens())
+				throw new Exception("No");
+		}
 	}
 	
 	private static class Holder
@@ -43,12 +84,12 @@ public class TTestsCaseVsControl
 	{
 		List<String> list = new ArrayList<String>();
 		
-		StringTokenizer sToken = new StringTokenizer(headerLine);
+		StringTokenizer sToken = new StringTokenizer(headerLine, "\t");
 		
 		sToken.nextToken(); sToken.nextToken();
 		
 		while( sToken.hasMoreTokens())
-			list.add(sToken.nextToken());
+			list.add(sToken.nextToken().replaceAll("\"", ""));
 			
 		return list;
 	}
