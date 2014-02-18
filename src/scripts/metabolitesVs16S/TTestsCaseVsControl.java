@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ public class TTestsCaseVsControl
 		}
 		
 		populateMap(taxaNames, taxaMap, reader);
+		addPValues(taxaMap, taxaNames);
 		writeResults(taxaMap, taxaNames,level);
 		
 		reader.close();
@@ -89,11 +91,46 @@ public class TTestsCaseVsControl
 		}
 	}
 	
-	private static class Holder
+	private static class Holder implements Comparable<Holder>
 	{
 		String taxaName;
+		double pValue;
 		HashMap<String, Double> caseMap = new HashMap<String,Double>();
 		HashMap<String, Double> controlMap = new HashMap<String,Double>();
+		
+		@Override
+		public int compareTo(Holder arg0)
+		{
+			return Double.compare(this.pValue, arg0.pValue);
+		}
+	}
+	
+	private static void addPValues( HashMap<String, Holder> map , List<String> taxaName)
+	{
+		for( String s : taxaName ) 
+		{
+			Holder h = map.get(s);
+			List<Double> caseList = new ArrayList<Double>();
+			List<Double> controlList = new ArrayList<Double>();
+			
+			for( String s2 : h.caseMap.keySet() )
+				caseList.add(h.caseMap.get(s2));
+			
+			for( String s2 : h.controlMap.keySet())
+				controlList.add(h.controlMap.get(s2));
+			
+			double pValue =1 ;
+			
+			try
+			{
+				pValue = TTest.ttestFromNumber(caseList, controlList).getPValue();
+			}
+			catch(Exception ex)
+			{
+				
+			}
+			h.pValue = pValue;
+		}
 	}
 	
 	private static void writeResults( HashMap<String, Holder> map , List<String> taxaName, String level ) throws Exception
@@ -101,11 +138,14 @@ public class TTestsCaseVsControl
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMetabolitesCaseControl() +
 				File.separator +  level + "TTest.txt")));
 		
-		writer.write(level + "\tcaseAverage\tcontrolAverage\tcaseControlRatio\tpValue\n");
+		List<Holder> resultsList = new ArrayList<Holder>(map.values());
+		Collections.sort(resultsList);
 		
-		for( String s : taxaName ) 
+		writer.write(level + "\tcaseAverage\tcontrolAverage\tcaseControlRatio\tpValue\tbhCorrectedPValue\n");
+		
+		int index =1;
+		for( Holder h : resultsList) 
 		{
-			Holder h = map.get(s);
 			writer.write(h.taxaName + "\t");
 			List<Double> caseList = new ArrayList<Double>();
 			List<Double> controlList = new ArrayList<Double>();
@@ -122,19 +162,11 @@ public class TTestsCaseVsControl
 			double controlAvg = new Avevar(controlList).getAve();
 			writer.write(controlAvg+ "\t");
 			writer.write( caseAvg / controlAvg + "\t");
-			
-			double pValue =1 ;
-			
-			try
-			{
-				pValue = TTest.ttestFromNumber(caseList, controlList).getPValue();
-			}
-			catch(Exception ex)
-			{
 				
-			}
+			writer.write(h.pValue + "\t");
+			writer.write(h.pValue * resultsList.size() / index + "\n");
+			index++;
 			
-			writer.write(pValue + "\n");
 		} 
 		
 		writer.flush();  writer.close();
