@@ -62,6 +62,8 @@ public class ConfigReader
 	
 	public static final String SANDRA_RIVER_JUNE_2012_Dir = "SANDRA_RIVER_JUNE_2012_Dir";
 	
+	public static final String METABOLITES_CASE_CONTROL = "METABOLITES_CASE_CONTROL";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -70,6 +72,11 @@ public class ConfigReader
 	public static String getNinaWithDuplicatesDir() throws Exception
 	{
 		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
+	}
+	
+	public static String getMetabolitesCaseControl() throws Exception
+	{
+		return getConfigReader().getAProperty(METABOLITES_CASE_CONTROL);
 	}
 
 	public static String getMachineLearningDir() throws Exception
