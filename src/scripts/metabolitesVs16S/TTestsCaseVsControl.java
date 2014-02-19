@@ -161,7 +161,15 @@ public class TTestsCaseVsControl
 			
 			double controlAvg = new Avevar(controlList).getAve();
 			writer.write(controlAvg+ "\t");
-			writer.write( caseAvg / controlAvg + "\t");
+			
+			double ratio = caseAvg / controlAvg ;
+			
+			if( ratio < 1)
+				ratio = -1/ratio;
+			
+			writer.write( ratio + "\t");
+			
+			
 				
 			writer.write(h.pValue + "\t");
 			writer.write(h.pValue * resultsList.size() / index + "\n");

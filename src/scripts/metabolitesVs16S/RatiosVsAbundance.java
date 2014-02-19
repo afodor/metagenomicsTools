@@ -57,7 +57,7 @@ public class RatiosVsAbundance
 		
 		TTestsCaseVsControl.populateMap(taxaNames, taxaMap, reader);
 		normalizeMap(taxaMap);
-		//writeResults(taxaMap, taxaNames,level);
+		writeResults(taxaMap, taxaNames,level);
 		
 		reader.close();
 	}
@@ -123,19 +123,19 @@ public class RatiosVsAbundance
 	private static void writeResults( HashMap<String, Holder> map , List<String> taxaName, String level ) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMetabolitesCaseControl() +
-				File.separator +  level + "TTest.txt")));
+				File.separator +  level + "ratioVsAbundnace.txt")));
 		
 		List<Holder> resultsList = new ArrayList<Holder>(map.values());
 		Collections.sort(resultsList);
 		
-		writer.write(level + "\tcaseAverage\tcontrolAverage\tcaseControlRatio\tpValue\tbhCorrectedPValue\n");
+		writer.write(level + "\tcaseAverage\tcontrolAverage\tcaseControlRatio\trelativeAbundance\n");
 		
-		int index =1;
 		for( Holder h : resultsList) 
 		{
 			writer.write(h.taxaName + "\t");
 			List<Double> caseList = new ArrayList<Double>();
 			List<Double> controlList = new ArrayList<Double>();
+			List<Double> allList = new ArrayList<Double>();
 			
 			for( String s2 : h.caseMap.keySet() )
 				caseList.add(h.caseMap.get(s2));
@@ -143,16 +143,33 @@ public class RatiosVsAbundance
 			for( String s2 : h.controlMap.keySet())
 				controlList.add(h.controlMap.get(s2));
 			
+			allList.addAll(caseList);
+			allList.addAll(controlList);
+			
 			double caseAvg = new Avevar(caseList).getAve() ;
 			writer.write( caseAvg+ "\t");
 			
 			double controlAvg = new Avevar(controlList).getAve();
 			writer.write(controlAvg+ "\t");
-			writer.write( caseAvg / controlAvg + "\t");
+			
+			double ratio =caseAvg / controlAvg ;
+			
+			if( ratio ==0 )
+			{
+				ratio =-200;
+			}
+			if( Double.isInfinite(ratio) || Double.isNaN(ratio))
+			{
+				if( controlAvg == 0 )
+					ratio = 200;
+				else throw new Exception("No");
+			}
+			else if( ratio < 1)
+				ratio = -1/ratio;
+			
+			writer.write( ratio + "\t");
 				
-			writer.write(h.pValue + "\t");
-			writer.write(h.pValue * resultsList.size() / index + "\n");
-			index++;
+			writer.write(new Avevar(allList).getAve() + "\n");
 			
 		} 
 		
