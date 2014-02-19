@@ -20,7 +20,7 @@ public class TTestsCaseVsControl
 {
 	public static void main(String[] args) throws Exception
 	{
-		String[] vals = { "fam" , "gen", "ord", "phy" , "cls" };
+		String[] vals = { "fam" , "gen", "ord", "phy" , "cls", "counts" };
 		
 		for(String s : vals)
 			runALevel(s);
@@ -123,7 +123,7 @@ public class TTestsCaseVsControl
 			
 			try
 			{
-				pValue = TTest.ttestFromNumber(caseList, controlList).getPValue();
+				pValue = TTest.ttestFromNumberUnequalVariance(caseList, controlList).getPValue();
 			}
 			catch(Exception ex)
 			{
