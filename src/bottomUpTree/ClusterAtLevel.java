@@ -108,6 +108,7 @@ public class ClusterAtLevel
 	 * 
 	 * As a side effect, all seqs are removed from seqsToCluster
 	 */
+	@SuppressWarnings("unused")
 	public static void clusterAtLevel( List<ENode> alreadyClustered,
 					List<ENode> seqstoCluster, 
 								float levelToCluster, float stopSearchThreshold, 

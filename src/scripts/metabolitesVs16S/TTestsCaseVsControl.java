@@ -51,7 +51,7 @@ public class TTestsCaseVsControl
 	
 	
 	
-	private static void populateMap( List<String> taxaNames, HashMap<String, Holder> map, BufferedReader reader )
+	static void populateMap( List<String> taxaNames, HashMap<String, Holder> map, BufferedReader reader )
 		throws Exception
 	{
 		for( String s= reader.readLine(); s != null; s= reader.readLine())
@@ -91,7 +91,7 @@ public class TTestsCaseVsControl
 		}
 	}
 	
-	private static class Holder implements Comparable<Holder>
+	static class Holder implements Comparable<Holder>
 	{
 		String taxaName;
 		double pValue;
@@ -172,7 +172,7 @@ public class TTestsCaseVsControl
 		writer.flush();  writer.close();
 	}
 	
-	private static List<String> getTaxaNames(String headerLine) throws Exception
+	static List<String> getTaxaNames(String headerLine) throws Exception
 	{
 		List<String> list = new ArrayList<String>();
 		
