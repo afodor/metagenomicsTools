@@ -65,7 +65,7 @@ public class DiversityCaseVsControl
 		double caseAvg = new Avevar(caseVals).getAve();
 		double controlAvg = new Avevar(controlVals).getAve();
 		
-		System.out.println(caseAvg + " " + controlAvg + " " + caseAvg / controlAvg + " " +
+		System.out.println(level + " " +  caseAvg + " " + controlAvg + " " + caseAvg / controlAvg + " " +
 					TTest.ttestFromNumberUnequalVariance(caseVals, controlVals).getPValue());
 		
 		reader.close();
