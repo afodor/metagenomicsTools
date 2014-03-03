@@ -18,17 +18,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import utils.Avevar;
 import utils.ConfigReader;
 import utils.TTest;
+import utils.TabReader;
 
 public class DiversityCaseVsControl
 {
 	public static void main(String[] args) throws Exception
 	{
-		String[] vals = { "fam" , "gen", "ord", "phy" , "cls", "counts" };
+		String[] vals = { "fam" , "gen", "ord", "phy" , "cls", "counts", "metabolites" };
 		
 		for(String s : vals)
 			writeALevel(s);
@@ -38,16 +38,27 @@ public class DiversityCaseVsControl
 	{
 		List<Double> caseVals =new ArrayList<Double>();
 		List<Double> controlVals = new ArrayList<Double>();
+	
+		File inFile = new File( 
+				ConfigReader.getMetabolitesCaseControl() + File.separator + 
+				"topeFeb2014_raw_" + level +  ".txt");
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File( 
-			ConfigReader.getMetabolitesCaseControl() + File.separator + 
-			"topeFeb2014_raw_" + level +  ".txt")));
+		if( level.equals("metabolites"))
+			inFile = new File(ConfigReader.getMetabolitesCaseControl() + File.separator + 
+					"sampleList.txt");
+		
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		reader.readLine();
-		for( String s= reader.readLine(); s != null; s = reader.readLine())
+		for( String s= reader.readLine(); s != null && s.trim().length() > 0; s = reader.readLine())
 		{
-			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			TabReader sToken = new TabReader(s);
 			sToken.nextToken(); sToken.nextToken();
+			
+			if( level.equals("metabolites"))
+			{
+				sToken.nextToken(); 
+			}
 			
 			List<Double> aList = null;
 			
@@ -58,7 +69,7 @@ public class DiversityCaseVsControl
 			else if( aString.equals("control"))
 				aList = controlVals;
 			else 
-				throw new Exception("no");
+				throw new Exception("no " + aString);
 			aList.add(getEntropy(sToken));
 		}
 		
@@ -71,24 +82,29 @@ public class DiversityCaseVsControl
 		reader.close();
 	}
 	
-	private static double getEntropy(StringTokenizer sToken)
+	private static double getEntropy(TabReader sToken)
 		throws Exception
 	{
 		List<Double> counts = new ArrayList<Double>();
 		double sum =0;
 		
-		while(sToken.hasMoreTokens())
+		while(sToken.hasMore())
 		{
-			Double d = Double.parseDouble(sToken.nextToken());
+			String aVal = sToken.nextToken().trim().replaceAll("\"", "");
 			
-			if( d < 0 )
+			if( aVal.length() > 0 )
 			{
-				throw new Exception("No");
-			}
-			else
-			{
-				counts.add(d);
-				sum += d;
+				Double d = Double.parseDouble(aVal);
+				
+				if( d < 0 )
+				{
+					throw new Exception("No");
+				}
+				else
+				{
+					counts.add(d);
+					sum += d;
+				}
 			}
 		}
 		
