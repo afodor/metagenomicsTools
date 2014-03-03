@@ -46,7 +46,7 @@ public class DiversityCaseVsControl
 		reader.readLine();
 		for( String s= reader.readLine(); s != null; s = reader.readLine())
 		{
-			StringTokenizer sToken = new StringTokenizer(s);
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			sToken.nextToken(); sToken.nextToken();
 			
 			List<Double> aList = null;

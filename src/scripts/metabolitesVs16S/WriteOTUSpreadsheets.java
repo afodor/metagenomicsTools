@@ -32,15 +32,18 @@ public class WriteOTUSpreadsheets
 			writeALevel(s);
 	}
 	
-	private static void writeALine(BufferedWriter writer, String s) throws Exception
+	private static void writeALine(BufferedWriter writer, String s, boolean firstTime) throws Exception
 	{
-		StringTokenizer sToken = new StringTokenizer(s);
-		sToken.nextToken(); 
-		writer.write(sToken.nextToken());
+		StringTokenizer sToken = new StringTokenizer(s, "\t");
+		
+		if( ! firstTime)
+			sToken.nextToken(); 
+		
+		writer.write(sToken.nextToken().replaceAll("\"", ""));
 		sToken.nextToken();
 		
 		while( sToken.hasMoreTokens())
-			writer.write("\t" + sToken.nextToken());
+			writer.write("\t" + sToken.nextToken().replaceAll("\"", ""));
 		
 		writer.write("\n");
 		
@@ -54,9 +57,15 @@ public class WriteOTUSpreadsheets
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getMetabolitesCaseControl()+
 				File.separator + "topeFeb2014_raw_" + level + ".txt" )));
 		
-		for(String s = reader.readLine(); s != null; s= reader.readLine())
-			writeALine(writer, s);
+		boolean firstTime = true;
 		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			writeALine(writer, s, firstTime);
+			firstTime = false;
+			
+		}
+			
 		reader.close();
 		writer.flush();  writer.close();
 	}
