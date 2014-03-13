@@ -34,14 +34,15 @@ public class PCA_CaseControlMetabolites
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getMetabolitesCaseControl() + File.separator + 
-					"topeFeb2014_raw_fam.txt")));
+					"sampleList.txt")));
 		
 		reader.readLine();
 		
-		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0
+				; s = reader.readLine())
 		{
 			StringTokenizer sToken = new StringTokenizer(s);
-			sToken.nextToken();
+			sToken.nextToken(); sToken.nextToken();
 			
 			String key = sToken.nextToken().replaceAll("\"","");
 			
@@ -55,35 +56,21 @@ public class PCA_CaseControlMetabolites
 		
 		return map;
 	}
-	
-	/*
-	 * Run WriteOTUSpreadsheets first...
-	 */
+		
 	public static void main(String[] args) throws Exception
 	{
-		String[] vals = { "fam" , "gen", "ord", "phy" , "cls", "counts" };
-		
-		for(String s : vals)
-			pcaPivotALevel(s);
-	}
-			
-		
-	public static void pcaPivotALevel(String level) throws Exception
-	{
-		System.out.println(level);
 		HashMap<String, String> caseControlMap= getCaseControlMap();
 			
 		List<String> shannon = new ArrayList<String>();
 		List<String> evenness = new ArrayList<String>();
-		List<String> numSequences = new ArrayList<String>();
 		List<String> sampleIds = new ArrayList<String>();
 		List<String> caseControl = new ArrayList<String>();
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMetabolitesCaseControl() + File.separator + 
-				level + "_asColumns.txt");
+				"cleanSampleListMetabolitesAsColumns.txt");
 			
 		System.out.println(wrapper.getSampleNames().size() + " " + wrapper.getOtuNames().size());
 			
-		double[][] d=  wrapper.getNormalizedThenLoggedAsArray();
+		double[][] d=  wrapper.getNormalizedAsArray();
 			
 		for(String s : wrapper.getSampleNames())
 		{
@@ -100,22 +87,21 @@ public class PCA_CaseControlMetabolites
 			
 			caseControl.add(aString);
 			
-			numSequences.add("" + wrapper.getCountsForSample(s));
 		}
 			
 			List<String> catHeaders = new ArrayList<String>();
 			catHeaders.add("caseControl");
-			catHeaders.add("NumSequences"); catHeaders.add("diversity");
+			catHeaders.add("diversity");
 			catHeaders.add("evenness"); 
 			
 			List<List<String>> categories = new ArrayList<List<String>>();
 			
 			categories.add(caseControl);
-			categories.add(numSequences); categories.add(shannon);
+			categories.add(shannon);
 			categories.add(evenness); 
 	
 		File outFile = new File(ConfigReader.getMetabolitesCaseControl() + File.separator
-					+ "PCA_PIVOT_" + level+  ".txt");
+					+ "PCA_PIVOT_metabolites.txt");
 			
 			PCA.writePCAFile(sampleIds, catHeaders, categories,d, outFile);
 	}
