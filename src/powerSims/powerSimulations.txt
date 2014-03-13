@@ -53,7 +53,7 @@ sortedPValues <- sort(pValues)
 bhUnder <- 0;
 index <- 1;
 
-while( index <= numHypotheses &&  sortedPValues[index] < (numHypotheses * sortedPValues[index] / index) ) 
+while( index <= numHypotheses &&  (numHypotheses * sortedPValues[index] / index) < 0.10 ) 
 {
 	bhUnder = bhUnder + 1;
 	index = index + 1;
