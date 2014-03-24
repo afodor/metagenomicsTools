@@ -23,6 +23,41 @@ import utils.ConfigReader;
 * GNU General Public License for more details at http://www.gnu.org * * */
 public class MedianOfCageForOTU
 {
+	private static HashMap<String, String> getCagePhenotypeMap() throws Exception
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File( 
+				ConfigReader.getSaccharineRatDir() + File.separator+ "mergedUnweightedUnifrac.txt"	)));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			
+			for( int x=0; x< 7; x++)
+				sToken.nextToken();
+			
+			String phenotype = sToken.nextToken();
+			String cage = sToken.nextToken();
+			
+			String oldPhenotype = map.get(cage);
+			
+			if( oldPhenotype == null)
+			{
+				map.put(cage, phenotype);
+			}
+			else if( ! oldPhenotype.equals(phenotype))
+				throw new Exception("No");
+				
+			
+		}
+		
+		reader.close();
+		return map;
+	}
+	
 	private static HashMap<String, Set<String>> getCageKey() throws Exception
 	{
 		HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
@@ -56,12 +91,16 @@ public class MedianOfCageForOTU
 			innerSet.add(id);
 		}
 		
+		reader.close();
 		return map;
 	}
+	
 	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Set<String>> cageMap = getCageKey();
 		System.out.println(cageMap);
+		HashMap<String, String> cagePhenotypeMap = getCagePhenotypeMap();
+		System.out.println(cagePhenotypeMap);
 	}
 }
