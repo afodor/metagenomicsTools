@@ -142,6 +142,7 @@ public class OTUViaTTest
 			{
 				
 			}
+			list.add(h);
 		}
 		
 		writer.write("taxa\tlowAverage\thiAverage\tpValue\tfdrPValue\n");
