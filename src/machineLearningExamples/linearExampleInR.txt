@@ -1,0 +1,40 @@
+# my attempt at R code for Figure 2.1 in 4th edition of 
+# elements of statistical learning
+
+rm(list=ls())
+
+numDataPoints <- 100
+
+classBlue <- rnorm(10);
+classOrange <- rnorm(10,mean=1);
+
+blueDataX <- vector();
+orangeDataX <- vector();
+blueDataY <- vector();
+orangeDataY<- vector();
+
+for( i in 1:numDataPoints)
+{
+	blueDataX[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
+	orangeDataX[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	blueDataY[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
+	orangeDataY[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+}
+
+colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
+values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
+
+
+mergedDataX <- c(  blueDataX, orangeDataX );
+mergedDataY <-  c(  blueDataY, orangeDataY);
+
+plot(mergedDataX, mergedDataY, col=colors)
+
+aLm <- lm( values ~ mergedDataX + mergedDataY )
+summary(aLm)
+coef(aLm)
+
+decisionX <- seq( min(mergedDataX), max(mergedDataX), 0.001)
+decisionY <- ( 0.5 - coef(aLm)[1] - coef(aLm)[2] * decisionX ) / coef(aLm)[3]
+lines(decisionX, decisionY)
+
