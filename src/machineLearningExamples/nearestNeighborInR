@@ -1,0 +1,65 @@
+# my attempt at R code for Figure 2.1 in 4th edition of 
+# elements of statistical learning
+
+rm(list=ls())
+K=15
+
+numDataPoints <- 100
+
+classBlue <- rnorm(10);
+classOrange <- rnorm(10,mean=1);
+
+blueDataX <- vector();
+orangeDataX <- vector();
+blueDataY <- vector();
+orangeDataY<- vector();
+
+for( i in 1:numDataPoints)
+{
+	blueDataX[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
+	orangeDataX[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	blueDataY[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
+	orangeDataY[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+}
+
+colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
+values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
+mergedDataX <- c(  blueDataX, orangeDataX );
+mergedDataY <-  c(  blueDataY, orangeDataY);
+
+plot(mergedDataX, mergedDataY, col=colors)
+
+xSeqs <- seq( min(mergedDataX), max(mergedDataX), (max(mergedDataX) - min(mergedDataX)) / 10  )
+ySeqs <- seq( min(mergedDataY), max(mergedDataY), (max(mergedDataY) - min(mergedDataY)) / 10  )
+
+gridIndex <-0
+for ( x in xSeqs ) 
+{
+	for( y in ySeqs ) 
+	{
+		gridIndex = gridIndex + 1;
+		resultsFrame <- as.data.frame( matrix( rep(0,4 * numDataPoints), ncol=2)) 	
+		colnames(resultsFrame)[1] = "distance";
+		colnames(resultsFrame)[2] = "score";
+		
+		for( z in 1:(numDataPoints*2) )
+		{
+			xDist <- x - mergedDataX[z];
+			xDist <- xDist * xDist;
+			yDist <- y - mergedDataY[z];
+			yDist <- yDist * yDist;
+			resultsFrame$distance[z] = sqrt( xDist + yDist );
+			resultsFrame$score[z] = values[z];
+		}
+		
+		
+		resultsFrame <- resultsFrame[order(resultsFrame$distance),]
+		score <- mean( resultsFrame$score[1:K] )
+	
+		if( abs(score-0.5) < 0.2)
+			points(x,y)
+	
+		print(score)
+	}
+	
+}
