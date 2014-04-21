@@ -32,12 +32,13 @@ plot(mergedDataX, mergedDataY, col=colors)
 xSeqs <- seq( min(mergedDataX), max(mergedDataX), (max(mergedDataX) - min(mergedDataX)) / 10  )
 ySeqs <- seq( min(mergedDataY), max(mergedDataY), (max(mergedDataY) - min(mergedDataY)) / 10  )
 
+xLines <-vector()
+yLines <-vector()
 gridIndex <-0
 for ( x in xSeqs ) 
 {
 	for( y in ySeqs ) 
 	{
-		gridIndex = gridIndex + 1;
 		resultsFrame <- as.data.frame( matrix( rep(0,4 * numDataPoints), ncol=2)) 	
 		colnames(resultsFrame)[1] = "distance";
 		colnames(resultsFrame)[2] = "score";
@@ -57,9 +58,15 @@ for ( x in xSeqs )
 		score <- mean( resultsFrame$score[1:K] )
 	
 		if( abs(score-0.5) < 0.2)
-			points(x,y)
+		{
+			gridIndex = gridIndex + 1;
+			xLines[gridIndex] = x
+			yLines[gridIndex] = y
+		}
 	
 		print(score)
 	}
 	
 }
+
+lines(xLines, yLines)
