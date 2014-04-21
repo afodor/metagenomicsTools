@@ -24,7 +24,6 @@ for( i in 1:numDataPoints)
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
 
-
 mergedDataX <- c(  blueDataX, orangeDataX );
 mergedDataY <-  c(  blueDataY, orangeDataY);
 
