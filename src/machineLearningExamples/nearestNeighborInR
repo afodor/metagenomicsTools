@@ -2,7 +2,7 @@
 # elements of statistical learning
 
 rm(list=ls())
-K=16
+K=4
 
 numDataPoints <- 300
 
