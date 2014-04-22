@@ -1,0 +1,30 @@
+rm(list=ls())
+
+x <- seq(0,4,0.1)
+xSquared <- x ^ 2
+cor(x , xSquared)
+
+myMatrix <- matrix( t( c(x,xSquared)), ncol=2)
+
+meanSubtractedMatrix <- matrix( nrow = length(x), ncol=2 )
+
+for ( i in 1:2 ) 
+{
+	meanSubtractedMatrix[,i] = myMatrix[,i] - mean(myMatrix[,i])
+}
+
+plot( myMatrix[,1], myMatrix[,2] )
+plot( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2] ) 
+
+myPCA <- princomp(myMatrix)
+summary(myPCA)
+
+plot( myPCA$scores[,1], myPCA$scores[,2])
+
+compressedMatrixOneComponenet <- myPCA$scores[,1] %*% t( myPCA$loadings[,1])
+
+plot( compressedMatrixOneComponenet[,1], compressedMatrixOneComponenet[,2]  )
+
+compressedMatrixTwoComponenet <- myPCA$scores[,1:2] %*% t( myPCA$loadings[,1:2])
+
+plot( compressedMatrixTwoComponenet[,1], compressedMatrixTwoComponenet[,2]  )
