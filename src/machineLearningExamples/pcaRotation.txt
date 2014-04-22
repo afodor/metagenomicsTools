@@ -1,10 +1,11 @@
 rm(list=ls())
 
-x <- seq(0,4,0.1)
+x <- seq(0,10,0.1)
 xSquared <- x ^ 2
-cor(x , xSquared)
-
 myMatrix <- matrix( t( c(x,xSquared)), ncol=2)
+plot( myMatrix[,1], myMatrix[,2] )
+
+
 
 meanSubtractedMatrix <- matrix( nrow = length(x), ncol=2 )
 
@@ -13,8 +14,26 @@ for ( i in 1:2 )
 	meanSubtractedMatrix[,i] = myMatrix[,i] - mean(myMatrix[,i])
 }
 
-plot( myMatrix[,1], myMatrix[,2] )
 plot( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2] ) 
+
+rotatedMatrix <- meanSubtractedMatrix %*% eigen(cov(meanSubtractedMatrix))$vectors
+plot(rotatedMatrix[,1], rotatedMatrix[,2])
+
+rotatedBackFromOneComponent <- rotatedMatrix[,1] %*%  t(eigen(cov(meanSubtractedMatrix))$vectors[,1])
+plot( rotatedBackFromOneComponent[,1], rotatedBackFromOneComponent[,2], col="RED")
+lines( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2])
+
+rotatedBackBothComponents <- rotatedMatrix[,1:2] %*%  t(eigen(cov(meanSubtractedMatrix))$vectors[,1:2])
+plot( rotatedBackBothComponents [,1], rotatedBackBothComponents [,2], col="RED")
+lines( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2])
+
+
+
+aLm <- lm(meanSubtractedMatrix[,2] ~meanSubtractedMatrix[,1])
+summary(aLm)
+coef(aLm)
+lines(meanSubtractedMatrix[,1], coef(aLm)[1] + coef(aLm)[2] * meanSubtractedMatrix[,1] ) 
+
 
 myPCA <- princomp(myMatrix)
 summary(myPCA)
@@ -22,9 +41,9 @@ summary(myPCA)
 plot( myPCA$scores[,1], myPCA$scores[,2])
 
 compressedMatrixOneComponenet <- myPCA$scores[,1] %*% t( myPCA$loadings[,1])
-
-plot( compressedMatrixOneComponenet[,1], compressedMatrixOneComponenet[,2]  )
+plot( compressedMatrixOneComponenet[,1], compressedMatrixOneComponenet[,2], col="RED"  )
+lines( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2])
 
 compressedMatrixTwoComponenet <- myPCA$scores[,1:2] %*% t( myPCA$loadings[,1:2])
-
-plot( compressedMatrixTwoComponenet[,1], compressedMatrixTwoComponenet[,2]  )
+plot( compressedMatrixTwoComponenet[,1], compressedMatrixTwoComponenet[,2] , col= "RED" )
+lines( meanSubtractedMatrix[,1], meanSubtractedMatrix[,2])
