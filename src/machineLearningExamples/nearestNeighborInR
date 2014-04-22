@@ -2,8 +2,8 @@
 # elements of statistical learning
 
 rm(list=ls())
-K=4
-numDataPoints <- 300
+K=16
+numDataPoints <- 100
 
 classBlue <- rnorm(10,mean=1);
 classOrange <- rnorm(10);
