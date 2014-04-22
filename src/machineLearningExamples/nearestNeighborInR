@@ -3,41 +3,50 @@
 
 rm(list=ls())
 K=4
-
 numDataPoints <- 300
 
-classBlue <- rnorm(10);
-classOrange <- rnorm(10,mean=1);
+classBlue <- rnorm(10,mean=1);
+classOrange <- rnorm(10);
 
-blueDataX <- vector();
-orangeDataX <- vector();
-blueDataY <- vector();
+blueDataX1 <- vector();
+orangeDataX2 <- vector();
+blueDataX2 <- vector();
 orangeDataY<- vector();
 
 for( i in 1:numDataPoints)
 {
-	blueDataX[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
-	orangeDataX[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
-	blueDataY[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
+	blueDataX1[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
+	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	blueDataX2[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
 	orangeDataY[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
 }
 
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
-mergedDataX <- c(  blueDataX, orangeDataX );
-mergedDataY <-  c(  blueDataY, orangeDataY);
 
-plot(mergedDataX, mergedDataY, col=colors)
+mergedDataX1 <- c(  blueDataX1, orangeDataX2 );
+mergedDataX2 <-  c(  blueDataX2, orangeDataY);
 
-xSeqs <- seq( min(mergedDataX), max(mergedDataX), (max(mergedDataX) - min(mergedDataX)) / 30)
-ySeqs <- seq( min(mergedDataY), max(mergedDataY), (max(mergedDataY) - min(mergedDataY)) / 30)
+plot(mergedDataX1, mergedDataX2, col=colors)
+
+x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 30)
+x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 30)
+
+aLm <- lm( values ~ mergedDataX1 + mergedDataX2 )
+summary(aLm)
+coef(aLm)
+
+decisionX <- seq( min(mergedDataX1), max(mergedDataX1), 0.001)
+decisionY <- ( 0.5 - coef(aLm)[1] - coef(aLm)[2] * decisionX ) / coef(aLm)[3]
+lines(decisionX, decisionY, col="BLUE")
+
  
 xLines <-vector()
 yLines <-vector()
 gridIndex <-0
-for ( x in xSeqs ) 
+for ( x in x1Seqs ) 
 {
-	for( y in ySeqs ) 
+	for( y in x2Seqs ) 
 	{
 		resultsFrame <- as.data.frame( matrix( rep(0,4 * numDataPoints), ncol=2)) 	
 		colnames(resultsFrame)[1] = "distance";
@@ -45,9 +54,9 @@ for ( x in xSeqs )
 		
 		for( z in 1:(numDataPoints*2) )
 		{
-			xDist <- x - mergedDataX[z];
+			xDist <- x - mergedDataX1[z];
 			xDist <- xDist * xDist;
-			yDist <- y - mergedDataY[z];
+			yDist <- y - mergedDataX2[z];
 			yDist <- yDist * yDist;
 			resultsFrame$distance[z] = sqrt( xDist + yDist );
 			resultsFrame$score[z] = values[z];
@@ -70,11 +79,3 @@ for ( x in xSeqs )
 }
 
 lines(xLines, yLines, col="RED")
-
-aLm <- lm( values ~ mergedDataX + mergedDataY )
-summary(aLm)
-coef(aLm)
-
-decisionX <- seq( min(mergedDataX), max(mergedDataX), 0.001)
-decisionY <- ( 0.5 - coef(aLm)[1] - coef(aLm)[2] * decisionX ) / coef(aLm)[3]
-lines(decisionX, decisionY, col="BLUE")
