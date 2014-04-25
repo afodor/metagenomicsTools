@@ -18,6 +18,7 @@ public class OtuWrapperToSVMLight
 		writer.write("case\tscore\n");
 		
 		OtuWrapper wrapper = new OtuWrapper( "D:\\MachineLearningJournalClub\\testData.txt");
+		
 		for( int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
 			File model = writeAnInteration(wrapper, x);
