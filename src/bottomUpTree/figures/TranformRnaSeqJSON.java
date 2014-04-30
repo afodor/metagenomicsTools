@@ -16,7 +16,7 @@ public class TranformRnaSeqJSON
 	public static void main(String[] args) throws Exception
 	{
 		JsonObject root= 
-			 JsonObject.parseJsonFileWithChildren("C:\\temp\\operon_fc_gLoc_pksIDs_2_12_20_eqSampleSizes_04172014.json");
+			 JsonObject.parseJsonFileWithChildren("C:\\temp\\NC101_operon_fc_gLoc_pksIDs_12_20_eqSampleSizes.json");
 		
 		transformNodeAndChildren(root);
 		addContigLayer(root);

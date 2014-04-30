@@ -10,9 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import sun.util.locale.StringTokenIterator;
-import utils.ConfigReader;
-
 public class ROC_Curve
 {
 	private static class Holder implements Comparable<Holder>
