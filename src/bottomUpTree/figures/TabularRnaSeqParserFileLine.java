@@ -1,5 +1,9 @@
 package bottomUpTree.figures;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class TabularRnaSeqParserFileLine
@@ -126,9 +130,25 @@ public class TabularRnaSeqParserFileLine
 		return g_fc_il20_ilaom20;
 	}
 
+	public static List<TabularRnaSeqParserFileLine> parseFile(String filepath) throws Exception
+	{
+		List<TabularRnaSeqParserFileLine> list = new ArrayList<TabularRnaSeqParserFileLine>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(filepath));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			list.add(new TabularRnaSeqParserFileLine(s));
+		}
+		
+		reader.close();
+		
+		return list;
+	}
 
-
-	private TabularRnaSeqParserFileLine(String s)
+	private TabularRnaSeqParserFileLine(String s) throws Exception
 	{
 		StringTokenizer sToken = new StringTokenizer(s, "\t");
 		this.contig = sToken.nextToken();
@@ -146,6 +166,9 @@ public class TabularRnaSeqParserFileLine
 		this.g_fc_il02_ilaom02 = Double.parseDouble(sToken.nextToken());
 		this.g_fc_il12_ilaom12 = Double.parseDouble(sToken.nextToken());
 		this.g_fc_il20_ilaom20 = Double.parseDouble(sToken.nextToken());
+		
+		if( sToken.hasMoreTokens())
+			throw new Exception("No " + sToken.hasMoreTokens());
 	}
 
 }
