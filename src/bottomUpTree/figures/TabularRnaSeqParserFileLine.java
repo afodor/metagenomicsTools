@@ -3,29 +3,107 @@ package bottomUpTree.figures;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class TabularRnaSeqParserFileLine
 {
 
-	private final String contig;
-	private final String operonName;
-	private final String operonLocation;
-	private final double o_pValue_il02_ilaom02;
-	private final double o_pValue_il12_ilaom12;
-	private final double o_pValue_il20_ilaom20;
-	private final String geneName;
-	private final String geneProduct;
-	private final int geneLocation;	
-	private final double g_pValue_il02_ilaom02;
-	private final double g_pValue_il12_ilaom12;
-	private final double g_pValue_il20_ilaom20;
-	private final double g_fc_il02_ilaom02;
-	private final double g_fc_il12_ilaom12;
-	private final double g_fc_il20_ilaom20;
+	private String contig;
+	private String operonName;
+	private String operonLocation;
+	private double o_pValue_il02_ilaom02;
+	private double o_pValue_il12_ilaom12;
+	private double o_pValue_il20_ilaom20;
+	private String geneName;
+	private String geneProduct;
+	private int geneLocation;	
+	private double g_pValue_il02_ilaom02;
+	private double g_pValue_il12_ilaom12;
+	private double g_pValue_il20_ilaom20;
+	private double g_fc_il02_ilaom02;
+	private double g_fc_il12_ilaom12;
+	private double g_fc_il20_ilaom20;
 	
+	private List<TabularRnaSeqParserFileLine> children = null;
 	
+	private boolean isOperon = false;
+	
+	public static TabularRnaSeqParserFileLine getAsTree(String filepath)
+		throws Exception
+	{
+		List<TabularRnaSeqParserFileLine> list = new ArrayList<TabularRnaSeqParserFileLine>();
+		
+		TabularRnaSeqParserFileLine root = new TabularRnaSeqParserFileLine();
+		
+		HashMap<String, TabularRnaSeqParserFileLine> operonMap = 
+				new HashMap<String, TabularRnaSeqParserFileLine>();
+		
+		for( TabularRnaSeqParserFileLine t : list)
+		{
+			TabularRnaSeqParserFileLine daughter = operonMap.get(t.getOperonName());
+			
+			if( daughter == null)
+			{
+				t.isOperon = true;
+				t.children = new ArrayList<TabularRnaSeqParserFileLine>();
+				root.children.add(t);
+				operonMap.put(t.getOperonName(), t);
+			}
+			else
+			{
+				equalOperonDataOrThrow(t, daughter);
+			}
+		}
+		
+		for( TabularRnaSeqParserFileLine t : list)
+		{
+			TabularRnaSeqParserFileLine parentOperon = operonMap.get(t.operonName);
+			
+			
+		}
+		
+		return root;
+	}
+	
+	private static void equalOperonDataOrThrow(TabularRnaSeqParserFileLine t1, TabularRnaSeqParserFileLine t2) 
+		throws Exception
+	{
+		if( t1.o_pValue_il02_ilaom02!= t2.o_pValue_il02_ilaom02)
+			throw new Exception("No");
+		
+		if( t1.o_pValue_il12_ilaom12 != t2.o_pValue_il12_ilaom12)
+			throw new Exception("No");
+		
+		if( t1.o_pValue_il20_ilaom20 != t2.o_pValue_il20_ilaom20)
+			throw new Exception("No");
+		
+		if( ! t1.operonName.equals(t2.operonName))
+			throw new Exception("Logic error");
+		
+	}
+	
+	// gets the root node
+	private TabularRnaSeqParserFileLine()
+	{
+		this.contig = "root";
+		this.operonName = "root";
+		this.operonLocation = "root";
+		this.o_pValue_il02_ilaom02 = 0;
+		this.o_pValue_il12_ilaom12 = 0;
+		this.o_pValue_il20_ilaom20 =0;
+		this.g_pValue_il02_ilaom02 =0;
+		this.g_pValue_il12_ilaom12 =0;
+		this.g_pValue_il20_ilaom20 =0;
+		this.g_fc_il02_ilaom02 =0;
+		this.g_fc_il12_ilaom12 =0;
+		this.g_fc_il20_ilaom20=0;
+		this.geneLocation = 0;
+		this.geneName = "root";
+		this.geneProduct = "root";
+		this.children = new ArrayList<TabularRnaSeqParserFileLine>();
+	}
 	
 	public String getContig()
 	{
