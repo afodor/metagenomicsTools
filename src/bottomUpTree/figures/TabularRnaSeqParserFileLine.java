@@ -34,6 +34,12 @@ public class TabularRnaSeqParserFileLine
 	}
 	
 	private boolean isOperon = false;
+	private boolean isContig = false;
+	
+	public boolean getIsContig()
+	{
+		return isContig;
+	}
 	
 	public boolean getIsOperon() 
 	{
@@ -52,8 +58,39 @@ public class TabularRnaSeqParserFileLine
 		newT.o_pValue_il02_ilaom02 = parent.o_pValue_il02_ilaom02;
 		newT.isOperon = true;
 		newT.children = new ArrayList<TabularRnaSeqParserFileLine>();
+		newT.geneName = "operon";
 		
 		return newT;
+	}
+	
+	private static void addContigLayer(TabularRnaSeqParserFileLine root) throws Exception
+	{
+		HashMap<String , TabularRnaSeqParserFileLine> contigMap = 
+				new HashMap<String, TabularRnaSeqParserFileLine>();
+		
+		List<TabularRnaSeqParserFileLine> operons = root.children;
+		
+		root.children = new ArrayList<TabularRnaSeqParserFileLine>();
+	
+		for(TabularRnaSeqParserFileLine t : operons ) 
+		{
+			TabularRnaSeqParserFileLine contig = contigMap.get(t.getContig());
+			
+			if( contig == null)
+			{
+				contig = new TabularRnaSeqParserFileLine();
+				contig.contig = t.contig;
+				contig.geneName = "contig";
+				contig.operonName = "contig";
+				contig.isContig = true;
+				contigMap.put(t.getContig(), contig);
+				root.children.add(contig);
+				contig.children = new ArrayList<TabularRnaSeqParserFileLine>();
+			}
+			
+			contig.children.add(t);
+			addAverageFoldChange(t);
+		}
 	}
 	
 	public static TabularRnaSeqParserFileLine getAsTree(String filepath)
@@ -61,7 +98,7 @@ public class TabularRnaSeqParserFileLine
 	{
 		List<TabularRnaSeqParserFileLine> list =parseFile(filepath);
 		
-		TabularRnaSeqParserFileLine root = new TabularRnaSeqParserFileLine();
+		TabularRnaSeqParserFileLine root = getAsRoot();
 		
 		HashMap<String, TabularRnaSeqParserFileLine> operonMap = 
 				new HashMap<String, TabularRnaSeqParserFileLine>();
@@ -73,7 +110,7 @@ public class TabularRnaSeqParserFileLine
 			if( daughter == null)
 			{
 				daughter = cloneAsOperon(t);
-				root.children.add(t);
+				root.children.add(daughter	);
 				operonMap.put(t.getOperonName(), daughter);
 			}
 			else
@@ -87,6 +124,8 @@ public class TabularRnaSeqParserFileLine
 			TabularRnaSeqParserFileLine parentOperon = operonMap.get(t.operonName);
 			parentOperon.children.add(t);
 		}
+		
+		addContigLayer(root);
 		
 		return root;
 	}
@@ -111,25 +150,64 @@ public class TabularRnaSeqParserFileLine
 		
 	}
 	
-	// gets the root node
 	private TabularRnaSeqParserFileLine()
 	{
-		this.contig = "root";
-		this.operonName = "root";
-		this.operonLocation = "root";
-		this.o_pValue_il02_ilaom02 = 0;
-		this.o_pValue_il12_ilaom12 = 0;
-		this.o_pValue_il20_ilaom20 =0;
-		this.g_pValue_il02_ilaom02 =0;
-		this.g_pValue_il12_ilaom12 =0;
-		this.g_pValue_il20_ilaom20 =0;
-		this.g_fc_il02_ilaom02 =0;
-		this.g_fc_il12_ilaom12 =0;
-		this.g_fc_il20_ilaom20=0;
-		this.geneLocation = 0;
-		this.geneName = "root";
-		this.geneProduct = "root";
-		this.children = new ArrayList<TabularRnaSeqParserFileLine>();
+		
+	}
+	
+	private static void addAverageFoldChange(TabularRnaSeqParserFileLine operon)
+		throws Exception
+	{
+		if( ! operon.isOperon)
+			throw new Exception("No");
+		
+		double sum =0;
+		
+		for( TabularRnaSeqParserFileLine child : operon.children )
+			sum += child.g_fc_il02_ilaom02;
+		
+		operon.g_fc_il02_ilaom02 = sum / operon.children.size();
+		
+		sum =0;
+		
+		for( TabularRnaSeqParserFileLine child : operon.children )
+			sum += child.g_fc_il12_ilaom12;
+		
+		operon.g_fc_il12_ilaom12 = sum / operon.children.size();
+		
+		sum =0;
+		
+		for( TabularRnaSeqParserFileLine child : operon.children )
+			sum += child.g_fc_il20_ilaom20;
+		
+		operon.g_fc_il20_ilaom20 = sum / operon.children.size();
+		
+	}
+	
+	
+	// gets the root node
+	private static TabularRnaSeqParserFileLine getAsRoot()
+	{
+		TabularRnaSeqParserFileLine t = new TabularRnaSeqParserFileLine();
+		
+		t.contig = "root";
+		t.operonName = "root";
+		t.operonLocation = "root";
+		t.o_pValue_il02_ilaom02 = 0;
+		t.o_pValue_il12_ilaom12 = 0;
+		t.o_pValue_il20_ilaom20 =0;
+		t.g_pValue_il02_ilaom02 =0;
+		t.g_pValue_il12_ilaom12 =0;
+		t.g_pValue_il20_ilaom20 =0;
+		t.g_fc_il02_ilaom02 =0;
+		t.g_fc_il12_ilaom12 =0;
+		t.g_fc_il20_ilaom20=0;
+		t.geneLocation = 0;
+		t.geneName = "root";
+		t.geneProduct = "root";
+		t.children = new ArrayList<TabularRnaSeqParserFileLine>();
+		
+		return t;
 	}
 	
 	public String getContig()
