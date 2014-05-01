@@ -3,6 +3,7 @@ package bottomUpTree.figures;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Iterator;
 
 import utils.ConfigReader;
 
@@ -66,10 +67,11 @@ public class RnaSeqTabularToJSON
 		{
 			writer.write( "\"children\" : [\n");
 			
-			for( TabularRnaSeqParserFileLine child : node.getChildren() )
-				writeNodeAndChildren(writer, child);
-			
-			writer.write("]\n");
+			for( Iterator<TabularRnaSeqParserFileLine> i = node.getChildren().iterator(); i.hasNext(); )
+			{
+				writeNodeAndChildren(writer, i.next());
+				writer.write( i.hasNext() ? ",\n" : "]\n");
+			}	
 		}
 		
 		writer.write("}\n");
