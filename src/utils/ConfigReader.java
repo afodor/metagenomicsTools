@@ -64,6 +64,7 @@ public class ConfigReader
 	
 	public static final String METABOLITES_CASE_CONTROL = "METABOLITES_CASE_CONTROL";
 	public static final String SVM_DIR = "SVM_DIR";
+	public static final String JANELLE_RNA_SEQ_DIR = "JANELLE_RNA_SEQ_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -130,6 +131,10 @@ public class ConfigReader
 		return getConfigReader().getAProperty(IAN_ANOREXIA_DIR);
 	}
 	
+	public static String getJanelleRNASeqDir() throws Exception
+	{
+		return getConfigReader().getAProperty(JANELLE_RNA_SEQ_DIR);
+	}
 	
 	private boolean isSetToTrue(String namedProperty)
 	{

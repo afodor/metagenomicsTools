@@ -28,12 +28,38 @@ public class TabularRnaSeqParserFileLine
 	
 	private List<TabularRnaSeqParserFileLine> children = null;
 	
+	public List<TabularRnaSeqParserFileLine> getChildren()
+	{
+		return children;
+	}
+	
 	private boolean isOperon = false;
+	
+	public boolean getIsOperon() 
+	{
+		return isOperon;
+	}
+	
+	private static TabularRnaSeqParserFileLine cloneAsOperon( TabularRnaSeqParserFileLine parent )
+	{
+		TabularRnaSeqParserFileLine newT = new TabularRnaSeqParserFileLine();
+		
+		newT.contig = parent.contig;
+		newT.operonName = parent.operonName;
+		newT.operonLocation = parent.operonLocation;
+		newT.o_pValue_il20_ilaom20 = parent.o_pValue_il20_ilaom20;
+		newT.o_pValue_il12_ilaom12 = parent.o_pValue_il12_ilaom12;
+		newT.o_pValue_il02_ilaom02 = parent.o_pValue_il02_ilaom02;
+		newT.isOperon = true;
+		newT.children = new ArrayList<TabularRnaSeqParserFileLine>();
+		
+		return newT;
+	}
 	
 	public static TabularRnaSeqParserFileLine getAsTree(String filepath)
 		throws Exception
 	{
-		List<TabularRnaSeqParserFileLine> list = new ArrayList<TabularRnaSeqParserFileLine>();
+		List<TabularRnaSeqParserFileLine> list =parseFile(filepath);
 		
 		TabularRnaSeqParserFileLine root = new TabularRnaSeqParserFileLine();
 		
@@ -46,10 +72,9 @@ public class TabularRnaSeqParserFileLine
 			
 			if( daughter == null)
 			{
-				t.isOperon = true;
-				t.children = new ArrayList<TabularRnaSeqParserFileLine>();
+				daughter = cloneAsOperon(t);
 				root.children.add(t);
-				operonMap.put(t.getOperonName(), t);
+				operonMap.put(t.getOperonName(), daughter);
 			}
 			else
 			{
@@ -60,8 +85,7 @@ public class TabularRnaSeqParserFileLine
 		for( TabularRnaSeqParserFileLine t : list)
 		{
 			TabularRnaSeqParserFileLine parentOperon = operonMap.get(t.operonName);
-			
-			
+			parentOperon.children.add(t);
 		}
 		
 		return root;
@@ -81,6 +105,9 @@ public class TabularRnaSeqParserFileLine
 		
 		if( ! t1.operonName.equals(t2.operonName))
 			throw new Exception("Logic error");
+		
+		if( ! t1.contig.equals(t2.contig) )
+			throw new Exception("NO");
 		
 	}
 	
