@@ -13,10 +13,10 @@ public class RnaSeqTabularToJSON
 	{
 		TabularRnaSeqParserFileLine root =
 				TabularRnaSeqParserFileLine.getAsTree(ConfigReader.getJanelleRNASeqDir() + 
-						File.separator + "NC_101_4JSON.txt");
+						File.separator + "NC_101_4JSON.txt", true);
 		
-	//	for( TabularRnaSeqParserFileLine t : root.getChildren() )
-		//	System.out.println(t.getGeneName());
+		for( TabularRnaSeqParserFileLine t : root.getChildren() )
+			System.out.println(t.getGeneName());
 		
 		//System.out.println("Got root with " + root.getChildren().size());
 		
@@ -32,6 +32,15 @@ public class RnaSeqTabularToJSON
 		writeNodeAndChildren(writer, root);
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static String clean(String s)
+	{
+		if( s== null)
+			return "null";
+		
+		return s.replaceAll("/", "").replaceAll("\\\\", "");
+				
 	}
 	
 	private static void writeNodeAndChildren( BufferedWriter writer,  
@@ -54,7 +63,9 @@ public class RnaSeqTabularToJSON
 			writer.write("gene\",\n");
 		
 		writer.write( "\"contig\" : \"" + node.getContig()+ "\",\n" );
-		writer.write( "\"gene product\" : \"" + node.getGeneProduct()+ "\",\n" );
+		writer.write( "\"operonName\" : \"" + node.getOperonName()+ "\",\n" );
+		writer.write( "\"gene product\" : \"" + clean( node.getGeneProduct() ) 
+					+ "\",\n" );
 		writer.write( "\"fc2weeks\" : \"" + node.getG_fc_il02_ilaom02()+ "\",\n" );
 		writer.write( "\"fc12weeks\" : \"" + node.getG_fc_il12_ilaom12()+ "\",\n" );
 		writer.write( "\"fc20weeks\" : \"" + node.getG_fc_il20_ilaom20()+ "\",\n" );
