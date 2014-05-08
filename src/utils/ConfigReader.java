@@ -65,6 +65,7 @@ public class ConfigReader
 	public static final String METABOLITES_CASE_CONTROL = "METABOLITES_CASE_CONTROL";
 	public static final String SVM_DIR = "SVM_DIR";
 	public static final String JANELLE_RNA_SEQ_DIR = "JANELLE_RNA_SEQ_DIR";
+	public static final String KLEB_DIR="KLEB_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -84,6 +85,11 @@ public class ConfigReader
 	public static String getMetabolitesCaseControl() throws Exception
 	{
 		return getConfigReader().getAProperty(METABOLITES_CASE_CONTROL);
+	}
+	
+	public static String getKlebDir() throws Exception
+	{
+		return getConfigReader().getAProperty(KLEB_DIR);
 	}
 
 	public static String getMachineLearningDir() throws Exception
