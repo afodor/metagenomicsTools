@@ -34,6 +34,8 @@ public class LookForSharedSNPs
 		ColumnHolder[] counts = getColumnCounts(new ArrayList<FastaSequence>(sequenceMap.values()));
 		System.out.println("Got counts");
 		HashMap<String, Integer> distanceMap = getDistanceMap(sequenceMap);
+		for(String s : distanceMap.keySet())
+			System.out.println(s);
 		System.out.println("Got distance");
 		writeSnpVsAlleleFrequency(snpMap, distanceMap, counts);
 	}
@@ -109,26 +111,25 @@ public class LookForSharedSNPs
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() +
 				File.separator + "snpVsAlleleFrequency.txt")));
 		
-		writer.write("genome1\tgenome2\tcharIn1\tcharIn2\toverallDistance\tnumSharedWith1\tnumSharedWith2\tsnpEventNumber\n");
+		writer.write("genome1\tgenome2\tposition\tcharIn1\tcharIn2\toverallDistance\tnumSharedWith1\tnumSharedWith2\tsnpEventNumber\n");
 		
-		int numDone =0;
 		for( SNPEvent se : snpEventMap.values() )
 		{
 			for( Pairing pair : se.pairingList )
 			{
-				writer.write(pair.firstGenomeID + "\t");
-				writer.write(pair.secondGenokeID + "\t");
+				String first = pair.firstGenomeID.replace("_V1", "");
+				String second = pair.firstGenomeID.replace("_V1", "");
+				writer.write(first + "\t");
+				writer.write(second+ "\t");
+				writer.write(se.position + "\t");
 				writer.write(pair.firstGenomeChar + "\t");
 				writer.write(pair.secondGenomeChar + "\t");
-				writer.write(distanceMap.get(pair.firstGenomeID + "_" + pair.secondGenokeID) + "\t");
+				writer.write(distanceMap.get(first + "_" + second) + "\t");
 				writer.write(columnCounts[se.position].getNum(pair.firstGenomeChar) + "\t");
 				writer.write(columnCounts[se.position].getNum(pair.secondGenomeChar) + "\t");
 				writer.write( se.pairingList.size() + "\n" );
 				
 			}
-			
-			if(++numDone % 1000 == 0 )
-				System.out.println("Wrote " + numDone);
 		}
 		
 		writer.flush();  writer.close();
