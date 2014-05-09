@@ -47,7 +47,7 @@ public class LookForSharedSNPs
 			writer.write(se.firstChar + "\t");
 			writer.write(se.secondChar + "\t");
 			writer.write(se.pairingList.size() + "\t");
-			writer.write(se.position + "\n");
+			writer.write(se.pairingList + "\n");
 		}
 		
 		writer.flush();  writer.close();
