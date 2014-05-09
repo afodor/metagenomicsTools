@@ -26,13 +26,15 @@ public class LookForSharedSNPs
 			for(int y=x+1; y < aList.size(); y++)
 				{
 					System.out.println(x + " " + y);
-					addToSNPList(snpMap, sequenceMap.get(aList.get(x)), sequenceMap.get(aList.get(y)));
+					addToSNPMap(snpMap, sequenceMap.get(aList.get(x)), sequenceMap.get(aList.get(y)));
 				}
 		
 		writePivotedByEvents(snpMap);
 		
 		ColumnHolder[] counts = getColumnCounts(new ArrayList<FastaSequence>(sequenceMap.values()));
+		System.out.println("Got counts");
 		HashMap<String, Integer> distanceMap = getDistanceMap(sequenceMap);
+		System.out.println("Got distance");
 		writeSnpVsAlleleFrequency(snpMap, distanceMap, counts);
 	}
 	
@@ -85,6 +87,7 @@ public class LookForSharedSNPs
 		int numG=0;
 		int numT=0;
 		
+		
 		private int getNum(char c) throws Exception
 		{
 			if( c=='A')
@@ -108,6 +111,7 @@ public class LookForSharedSNPs
 		
 		writer.write("genome1\tgenome2\tcharIn1\tcharIn2\toverallDistance\tnumSharedWith1\tnumSharedWith2\tsnpEventNumber\n");
 		
+		int numDone =0;
 		for( SNPEvent se : snpEventMap.values() )
 		{
 			for( Pairing pair : se.pairingList )
@@ -122,6 +126,9 @@ public class LookForSharedSNPs
 				writer.write( se.pairingList.size() + "\n" );
 				
 			}
+			
+			if(++numDone % 1000 == 0 )
+				System.out.println("Wrote " + numDone);
 		}
 		
 		writer.flush();  writer.close();
@@ -132,6 +139,9 @@ public class LookForSharedSNPs
 	private static ColumnHolder[] getColumnCounts( List<FastaSequence> seqList) throws Exception
 	{
 		ColumnHolder[] holders = new ColumnHolder[seqList.get(0).getSequence().length()];
+		
+		for( int x=0; x < holders.length; x++)
+			holders[x] = new ColumnHolder();
 		
 		for(FastaSequence fs : seqList)
 		{
@@ -169,6 +179,8 @@ public class LookForSharedSNPs
 		Collections.sort(fastaSequenceNames);
 		
 		for( int x=0; x < fastaSequenceNames.size() -1; x++ )
+		{
+			System.out.println("Distance " + x);
 			for(int y=0; y < fastaSequenceNames.size() -1; y++)
 			{
 				int numDifferent = QuickSnpDistance.getNumDifferent(sequenceMap.get(fastaSequenceNames.get(x)), 
@@ -177,11 +189,13 @@ public class LookForSharedSNPs
 				String key = fastaSequenceNames.get(x) + "_" + fastaSequenceNames.get(y);
 				map.put(key, numDifferent);
 			}
+		}
+			
 		
 		return map;
 	}
 	
-	private static void addToSNPList( HashMap<String, SNPEvent> map, FastaSequence fs1, FastaSequence fs2 ) throws Exception
+	private static void addToSNPMap( HashMap<String, SNPEvent> map, FastaSequence fs1, FastaSequence fs2 ) throws Exception
 	{
 
 		String seq1 = fs1.getSequence();
