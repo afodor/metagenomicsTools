@@ -86,7 +86,7 @@ public class QuickSnpDistance
 		
 	}
 		
-	private static int getNumDifferent( FastaSequence fs1, FastaSequence fs2 ) throws Exception
+	static int getNumDifferent( FastaSequence fs1, FastaSequence fs2 ) throws Exception
 	{
 		int numDifferent =0;
 		

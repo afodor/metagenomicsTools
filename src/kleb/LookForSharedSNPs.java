@@ -29,11 +29,14 @@ public class LookForSharedSNPs
 					addToSNPList(snpMap, sequenceMap.get(aList.get(x)), sequenceMap.get(aList.get(y)));
 				}
 		
-		writeResults(snpMap);
+		writePivotedByEvents(snpMap);
 		
+		ColumnHolder[] counts = getColumnCounts(new ArrayList<FastaSequence>(sequenceMap.values()));
+		HashMap<String, Integer> distanceMap = getDistanceMap(sequenceMap);
+		writeSnpVsAlleleFrequency(snpMap, distanceMap, counts);
 	}
 	
-	private static void writeResults(HashMap<String, SNPEvent> snpMap  )
+	private static void writePivotedByEvents(HashMap<String, SNPEvent> snpMap  )
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( ConfigReader.getKlebDir()+ 
@@ -75,6 +78,109 @@ public class LookForSharedSNPs
 		
 	}
 	
+	private static class ColumnHolder
+	{
+		int numA=0;
+		int numC=0;
+		int numG=0;
+		int numT=0;
+		
+		private int getNum(char c) throws Exception
+		{
+			if( c=='A')
+				return numA;
+			else if ( c == 'C')
+				return numC;
+			else if (c == 'G')
+				return numG;
+			else if ( c=='T')
+				return numT;
+			else throw new Exception("Parsing error " + c);
+		}
+	}
+	
+	private static void writeSnpVsAlleleFrequency( HashMap<String, SNPEvent> snpEventMap, 
+			HashMap<String, Integer> distanceMap, ColumnHolder[] columnCounts)
+				throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() +
+				File.separator + "snpVsAlleleFrequency.txt")));
+		
+		writer.write("genome1\tgenome2\tcharIn1\tcharIn2\toverallDistance\tnumSharedWith1\tnumSharedWith2\tsnpEventNumber\n");
+		
+		for( SNPEvent se : snpEventMap.values() )
+		{
+			for( Pairing pair : se.pairingList )
+			{
+				writer.write(pair.firstGenomeID + "\t");
+				writer.write(pair.secondGenokeID + "\t");
+				writer.write(pair.firstGenomeChar + "\t");
+				writer.write(pair.secondGenomeChar + "\t");
+				writer.write(distanceMap.get(pair.firstGenomeID + "_" + pair.secondGenokeID) + "\t");
+				writer.write(columnCounts[se.position].getNum(pair.firstGenomeChar) + "\t");
+				writer.write(columnCounts[se.position].getNum(pair.secondGenomeChar) + "\t");
+				writer.write( se.pairingList.size() + "\n" );
+				
+			}
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	
+	
+	private static ColumnHolder[] getColumnCounts( List<FastaSequence> seqList) throws Exception
+	{
+		ColumnHolder[] holders = new ColumnHolder[seqList.get(0).getSequence().length()];
+		
+		for(FastaSequence fs : seqList)
+		{
+			String seq = fs.getSequence();
+			
+			if( seq.length() != holders.length)
+				throw new Exception("Parsing error");
+			
+			for(int x=0; x < seq.length(); x++)
+			{
+				char c = seq.charAt(x);
+				
+				if( c == 'A')
+					holders[x].numA++;
+				else if ( c== 'C')
+					holders[x].numC++;
+				else if ( c == 'G')
+					holders[x].numG++;
+				else if  (c=='T')
+					holders[x].numT++;
+				else throw new Exception("Parsing error");
+			}
+		}
+		
+		return holders;
+		
+	}
+	
+	private static HashMap<String, Integer> getDistanceMap(HashMap<String, FastaSequence> sequenceMap )
+		throws Exception
+	{
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		List<String> fastaSequenceNames =new ArrayList<String>(sequenceMap.keySet());
+		Collections.sort(fastaSequenceNames);
+		
+		for( int x=0; x < fastaSequenceNames.size() -1; x++ )
+			for(int y=0; y < fastaSequenceNames.size() -1; y++)
+			{
+				int numDifferent = QuickSnpDistance.getNumDifferent(sequenceMap.get(fastaSequenceNames.get(x)), 
+						sequenceMap.get(fastaSequenceNames.get(y)));
+				
+				String key = fastaSequenceNames.get(x) + "_" + fastaSequenceNames.get(y);
+				map.put(key, numDifferent);
+			}
+		
+		return map;
+	}
+	
 	private static void addToSNPList( HashMap<String, SNPEvent> map, FastaSequence fs1, FastaSequence fs2 ) throws Exception
 	{
 
@@ -98,7 +204,8 @@ public class LookForSharedSNPs
 					oldEvent = newEvent;
 				}
 				
-				oldEvent.pairingList.add(new Pairing(fs1.getFirstTokenOfHeader(), fs2.getFirstTokenOfHeader()));
+				oldEvent.pairingList.add(new Pairing(
+						fs1.getFirstTokenOfHeader(), fs2.getFirstTokenOfHeader(),seq1.charAt(x), seq2.charAt(x)));
 			}
 				
 	}
@@ -144,8 +251,10 @@ public class LookForSharedSNPs
 	{
 		final String firstGenomeID;
 		final String secondGenokeID;
+		final char firstGenomeChar;
+		final char secondGenomeChar;
 		
-		Pairing(String id1, String id2) throws Exception
+		Pairing(String id1, String id2, char firstChar, char secondChar) throws Exception
 		{
 			if( id1.equals(id2))
 				throw new Exception("Logic error");
@@ -154,11 +263,15 @@ public class LookForSharedSNPs
 			{
 				this.firstGenomeID = id1;
 				this.secondGenokeID = id2;
+				this.firstGenomeChar = firstChar;
+				this.secondGenomeChar = secondChar;
 			}
 			else
 			{
 				this.firstGenomeID = id2;
 				this.secondGenokeID= id1;
+				this.firstGenomeChar = secondChar;
+				this.secondGenomeChar = firstChar;
 			}
 		}
 		
