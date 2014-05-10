@@ -109,7 +109,7 @@ public class LookForSharedSNPs
 				throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() +
-				File.separator + "snpVsAlleleFrequency.txt")));
+				File.separator + "snpVsAlleleFrequencyLessThan2500.txt")));
 		
 		writer.write("genome1\tgenome2\tposition\tcharIn1\tcharIn2\toverallDistance\tnumSharedWith1\tnumSharedWith2\tsnpEventNumber\n");
 		
@@ -118,17 +118,21 @@ public class LookForSharedSNPs
 			for( Pairing pair : se.pairingList )
 			{
 				String first = pair.firstGenomeID.replace("_V1", "");
-				String second = pair.firstGenomeID.replace("_V1", "");
-				writer.write(first + "\t");
-				writer.write(second+ "\t");
-				writer.write(se.position + "\t");
-				writer.write(pair.firstGenomeChar + "\t");
-				writer.write(pair.secondGenomeChar + "\t");
-				writer.write(distanceMap.get(first + "_" + second) + "\t");
-				writer.write(columnCounts[se.position].getNum(pair.firstGenomeChar) + "\t");
-				writer.write(columnCounts[se.position].getNum(pair.secondGenomeChar) + "\t");
-				writer.write( se.pairingList.size() + "\n" );
+				String second = pair.secondGenokeID.replace("_V1", "");
+				double distance = distanceMap.get(first + "_" + second);
 				
+				if( distance <= 2500)
+				{
+					writer.write(first + "\t");
+					writer.write(second+ "\t");
+					writer.write(se.position + "\t");
+					writer.write(pair.firstGenomeChar + "\t");
+					writer.write(pair.secondGenomeChar + "\t");
+					writer.write(distance+ "\t");
+					writer.write(columnCounts[se.position].getNum(pair.firstGenomeChar) + "\t");
+					writer.write(columnCounts[se.position].getNum(pair.secondGenomeChar) + "\t");
+					writer.write( se.pairingList.size() + "\n" );	
+				}
 			}
 		}
 		
@@ -182,7 +186,7 @@ public class LookForSharedSNPs
 		for( int x=0; x < fastaSequenceNames.size() -1; x++ )
 		{
 			System.out.println("Distance " + x);
-			for(int y=0; y < fastaSequenceNames.size() -1; y++)
+			for(int y=x+1; y < fastaSequenceNames.size(); y++)
 			{
 				int numDifferent = QuickSnpDistance.getNumDifferent(sequenceMap.get(fastaSequenceNames.get(x)), 
 						sequenceMap.get(fastaSequenceNames.get(y)));
