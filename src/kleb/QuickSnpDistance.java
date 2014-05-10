@@ -35,7 +35,8 @@ public class QuickSnpDistance
 					System.out.println(x + " " + y);
 					writer.write(aList.get(x) + "\t");
 					writer.write(aList.get(y) + "\t");
-					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y))) + "\n");
+					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y))) 
+								+ "\n");
 					writer.flush();
 				}
 		
