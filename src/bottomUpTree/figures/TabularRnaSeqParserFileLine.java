@@ -93,7 +93,7 @@ public class TabularRnaSeqParserFileLine
 		}
 	}
 	
-	public static TabularRnaSeqParserFileLine getAsTree(String filepath)
+	public static TabularRnaSeqParserFileLine getAsTree(String filepath, boolean includeContigLayer)
 		throws Exception
 	{
 		List<TabularRnaSeqParserFileLine> list =parseFile(filepath);
@@ -125,7 +125,8 @@ public class TabularRnaSeqParserFileLine
 			parentOperon.children.add(t);
 		}
 		
-		addContigLayer(root);
+		if( includeContigLayer)
+			addContigLayer(root);
 		
 		return root;
 	}
