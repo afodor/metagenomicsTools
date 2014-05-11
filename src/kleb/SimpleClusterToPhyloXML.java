@@ -303,5 +303,4 @@ public class SimpleClusterToPhyloXML
 		Collections.sort(list);
 		return list;
 	}
-	
 }
