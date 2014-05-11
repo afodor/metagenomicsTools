@@ -8,7 +8,9 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -16,18 +18,48 @@ import utils.ConfigReader;
 
 public class MergeDataAndDistance
 {
+	private static HashSet<Integer> getOutbreakGroup()
+	{
+		int[] a1 =
+		{3, 12, 23, 25, 26, 27, 28, 30, 32, 34, 36, 37, 38, 39, 41, 42, 53, 62, 64, 71, 72, 73, 75};
+		
+		int[] a2 = 
+			{2, 5, 6, 7, 13, 14, 16, 17, 18, 19, 29, 33, 35, 45, 50, 54, 57, 58, 59, 60, 61, 63, 65, 70, 74};
+		
+		HashSet<Integer> set = new HashSet<Integer>();
+		
+		for( Integer i : a1)
+			set.add(i);
+		
+		for( Integer i : a2)
+			set.add(i);
+		
+		return set;
+	}
+	
+	private static GregorianCalendar getGregorianCalendar(String s)
+	{
+		StringTokenizer sToken = new StringTokenizer(s, "/");
+		int month = Integer.parseInt(sToken.nextToken()) -1;
+		int day = Integer.parseInt(sToken.nextToken());
+		int year = Integer.parseInt(sToken.nextToken());
+		return new GregorianCalendar(year, month,day);
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
+		long aDay = 1000 * 60 *60 * 24;
+		
 		List<StrainMetadataFileLine> metaList = 
 				new ArrayList<StrainMetadataFileLine>(StrainMetadataFileLine.parseMetadata().values());
 		
 		HashMap<String, Double> distanceMap = getDistances();
+		HashSet<Integer> outbreakGroup = getOutbreakGroup();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getKlebDir() + File.separator + "distanceVsTime.txt")));
 		
-		writer.write("xGenome\tyGenome\ttimeDifference\tgenomicDistance\n");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+		writer.write("xGenome\tyGenome\ttimeDifference\tgenomicDistance\tinOutbreakGroup\n");
 		
 		for(int x=0; x < metaList.size() -1; x++)
 		{
@@ -35,7 +67,7 @@ public class MergeDataAndDistance
 			
 			if( xMeta.getDateString().trim().length() > 0)
 			{
-				Date xDate = sdf.parse(xMeta.getDateString());
+				GregorianCalendar xCal = getGregorianCalendar(xMeta.getDateString());
 						
 				for( int y=x+1; y < metaList.size(); y++)
 				{
@@ -43,7 +75,7 @@ public class MergeDataAndDistance
 					
 					if( yMeta.getDateString().trim().length() > 0 )
 					{
-						Date yDate = sdf.parse(yMeta.getDateString());
+						GregorianCalendar yCal = getGregorianCalendar(yMeta.getDateString());
 						String key = makeTwoChars(xMeta.getStrainID())
 								+ "_" + makeTwoChars(yMeta.getStrainID());
 						
@@ -51,8 +83,12 @@ public class MergeDataAndDistance
 						{
 							writer.write(xMeta.getStrainID() + "\t");
 							writer.write(yMeta.getStrainID() + "\t");
-							writer.write(Math.abs(xDate.getTime() - yDate.getTime()) + "\t");
-							writer.write(distanceMap.get(key) + "\n");
+							writer.write(Math.abs(xCal.getTime().getTime() - yCal.getTime().getTime())/aDay + "\t");
+							writer.write(distanceMap.get(key) + "\t");
+							
+							boolean inOutbreakGroup = outbreakGroup.contains(xMeta.getStrainID()) &&
+										outbreakGroup.contains(yMeta.getStrainID());
+							writer.write( inOutbreakGroup + "\n" );
 						}
 						else
 							System.out.println("Could not find " + key);
