@@ -68,7 +68,7 @@ public class MergeDataAndDistance
 		writer.flush(); writer.close();
 	}
 	
-	private static String makeTwoChars(int val) throws Exception
+	static String makeTwoChars(int val) throws Exception
 	{
 		if( val < 1)
 			throw new Exception("Unexpected identifier");
@@ -79,7 +79,7 @@ public class MergeDataAndDistance
 		return "" + val;
 	}
 	
-	private static HashMap<String, Double> getDistances() throws Exception
+	static HashMap<String, Double> getDistances() throws Exception
 	{
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		

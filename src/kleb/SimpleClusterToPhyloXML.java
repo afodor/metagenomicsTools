@@ -37,8 +37,35 @@ public class SimpleClusterToPhyloXML
 		for( DistanceHolder dh : mergedList)
 			System.out.println(dh);
 		
+		confirmDistances(mergedList);
 		writePhyloXml(mergedList, metaMap);
 		
+	}
+	
+	private static void confirmDistances( List<DistanceHolder> mergedList ) throws Exception
+	{
+		HashMap<String, Double> distances = MergeDataAndDistance.getDistances();
+		
+		for( DistanceHolder dh : mergedList)
+		{
+			double sum=0;
+			int n=0;
+			
+			for( Integer leftName : dh.leftStrains)
+				for(Integer rightName: dh.rightStrains)
+				{
+					n++;
+					String key = MergeDataAndDistance.makeTwoChars(leftName) + "_" +
+									MergeDataAndDistance.makeTwoChars(rightName);
+					sum += distances.get(key);
+				}
+			
+			double avg = sum / n;
+			System.out.println(avg + " "  + dh.distance);
+			
+			if( Math.abs(avg - dh.distance) > 0.0001)
+				throw new Exception("No");
+		}
 	}
 	
 	private static void mergeOne( List<DistanceHolder> distanceList, List<DistanceHolder> mergedNodes)
