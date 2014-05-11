@@ -56,6 +56,20 @@ public class MetadataFileLine
 				this.hospital;
 	}
 	
+	public String getColorStringByLocation() throws Exception
+	{
+		if( this.hospital.equals("metro"))
+			return "<color><red>255</red><green>0</green><blue>0</blue></color>";
+		
+		if( this.hospital.equals("reg"))
+			return "<color><red>0</red><green>255</green><blue>0</blue></color>";
+		
+		if( this.hospital.equals("op"))
+			return "<color><red>0</red><green>0</green><blue>255</blue></color>";
+		
+		throw new Exception("Unknown " + this.hospital );
+	}
+	
 	public static HashMap<Integer,MetadataFileLine> parseMetadata() throws Exception
 	{
 		HashMap<Integer,MetadataFileLine>  map = new HashMap<Integer, MetadataFileLine>();
