@@ -56,6 +56,7 @@ public class StrainMetadataFileLine
 				this.hospital;
 	}
 	
+	
 	public String getColorStringByLocation() throws Exception
 	{
 		if( this.hospital.equals("metro"))
