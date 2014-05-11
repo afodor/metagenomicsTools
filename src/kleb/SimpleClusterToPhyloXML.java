@@ -189,7 +189,11 @@ public class SimpleClusterToPhyloXML
 		if( nameList.size() != 1)
 			throw new Exception("Logic error");
 		
-		writer.write("<clade><name>" + nameList+ "</name><branch_length>0</branch_length></clade>");
+		StrainMetadataFileLine meta = metaMap.get(nameList.get(0));
+		
+		writer.write("<clade><name>" + nameList+ "</name><branch_length>0</branch_length>\n");
+		writer.write(meta.getColorStringByLocation() + "\n");
+		writer.write("</clade>\n");
 
 	}
 	
