@@ -158,12 +158,6 @@ public class SimpleClusterToPhyloXML
 		writer.write("<clade>\n");
 		
 		double distance = Math.log10(node.distance+1);
-		/*
-		double distance = node.distance * 10 + 1;
-		
-		if( distance > 300)
-			distance = Math.log10(300) + Math.log10(distance - 300);
-			*/
 		
 		writer.write("<branch_length>" + distance+ "</branch_length>\n");
 		writer.write(" <taxonomy><scientific_name>" + nf.format( node.distance) + "</scientific_name></taxonomy>\n" );
@@ -174,15 +168,24 @@ public class SimpleClusterToPhyloXML
 		if( leftNode != null)
 			writeNodeAndChildren(writer, mergedList, leftNode );
 		else
-			writer.write("<clade><name>" + node.leftStrains + "</name><branch_length>0</branch_length></clade>");
-
+			writeTip(writer, node.leftStrains);
+			
 		if( rightNode != null)
 			writeNodeAndChildren(writer, mergedList, rightNode);
 		else
-			writer.write("<clade><name>" + node.rightStrains+ "</name><branch_length>0</branch_length></clade>");
-
+			writeTip(writer, node.rightStrains);
 		
 		writer.write("</clade>\n");
+	}
+	
+	private static void writeTip(BufferedWriter writer, List<Integer> nameList)
+		throws Exception
+	{
+		if( nameList.size() != 1)
+			throw new Exception("Logic error");
+		
+		writer.write("<clade><name>" + nameList+ "</name><branch_length>0</branch_length></clade>");
+
 	}
 	
 	//todo: This is embarassingly naive and inefficeint..
