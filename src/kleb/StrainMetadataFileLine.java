@@ -10,14 +10,14 @@ import utils.TabReader;
 
 public class StrainMetadataFileLine
 {
-	private final int treeNumber;
+	private final int strainID;
 	private final String tissue;
 	private final String dateString;
 	private final String hospital;
 	
-	public int getTreeNumber()
+	public int getStrainID()
 	{
-		return treeNumber;
+		return strainID;
 	}
 
 	public String getTissue()
@@ -39,7 +39,7 @@ public class StrainMetadataFileLine
 	{
 		TabReader tReader = new TabReader(s);
 		tReader.nextToken();
-		this.treeNumber = Integer.parseInt(tReader.nextToken());
+		this.strainID = Integer.parseInt(tReader.nextToken());
 		
 		for( int x=0; x < 7; x++)
 			tReader.nextToken();
@@ -52,7 +52,7 @@ public class StrainMetadataFileLine
 	@Override
 	public String toString()
 	{
-		return this.treeNumber + " " + this.dateString + " " + this.tissue+ " " + 
+		return this.strainID + " " + this.dateString + " " + this.tissue+ " " + 
 				this.hospital;
 	}
 	
@@ -84,10 +84,10 @@ public class StrainMetadataFileLine
 		{
 			StrainMetadataFileLine mfl = new StrainMetadataFileLine(s);
 				
-				if( map.containsKey(mfl.treeNumber))
-					throw new Exception("Parsing error " + mfl.treeNumber);
+				if( map.containsKey(mfl.strainID))
+					throw new Exception("Parsing error " + mfl.strainID);
 				
-				map.put(mfl.treeNumber, mfl);
+				map.put(mfl.strainID, mfl);
 
 		}
 		return map;
