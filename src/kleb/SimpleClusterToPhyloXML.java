@@ -29,8 +29,8 @@ public class SimpleClusterToPhyloXML
 		while( initialDistances.size() > 0)
 			mergeOne(initialDistances, mergedList);
 		
-		for( DistanceHolder dh : initialDistances)
-			System.out.println(dh);
+		//for( DistanceHolder dh : initialDistances)
+			//System.out.println(dh);
 		
 		System.out.println("MERGES   MERGES");
 		
@@ -61,7 +61,7 @@ public class SimpleClusterToPhyloXML
 				}
 			
 			double avg = sum / n;
-			System.out.println(avg + " "  + dh.distance);
+			//System.out.println(avg + " "  + dh.distance);
 			
 			if( Math.abs(avg - dh.distance) > 0.0001)
 				throw new Exception("No");

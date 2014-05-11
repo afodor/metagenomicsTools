@@ -92,7 +92,7 @@ public class MergeDataAndDistance
 		{
 			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			String key = sToken.nextToken() + "_" + sToken.nextToken();
-			System.out.println(key);
+			//System.out.println(key);
 			
 			if( map.containsKey(key))
 				throw new Exception("Parsing error");
