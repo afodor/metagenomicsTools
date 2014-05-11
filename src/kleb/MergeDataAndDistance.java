@@ -59,7 +59,8 @@ public class MergeDataAndDistance
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getKlebDir() + File.separator + "distanceVsTime.txt")));
 		
-		writer.write("xGenome\tyGenome\ttimeDifference\tgenomicDistance\tinOutbreakGroup\n");
+		writer.write("xGenome\tyGenome\txDateString\tyDateString\txLocation\tyLocation\tsameLocation\t" 
+				+ "timeDifference\tgenomicDistance\tinOutbreakGroup\n");
 		
 		for(int x=0; x < metaList.size() -1; x++)
 		{
@@ -83,6 +84,11 @@ public class MergeDataAndDistance
 						{
 							writer.write(xMeta.getStrainID() + "\t");
 							writer.write(yMeta.getStrainID() + "\t");
+							writer.write(xMeta.getDateString() + "\t");
+							writer.write(yMeta.getDateString() + "\t");
+							writer.write(xMeta.getHospital() + "\t");
+							writer.write(yMeta.getHospital() + "\t");
+							writer.write(xMeta.getHospital().equals(yMeta.getHospital()) + "\t");
 							writer.write(Math.abs(xCal.getTime().getTime() - yCal.getTime().getTime())/aDay + "\t");
 							writer.write(distanceMap.get(key) + "\t");
 							
