@@ -22,6 +22,7 @@ public class SimpleClusterToPhyloXML
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<Integer, StrainMetadataFileLine> metaMap = StrainMetadataFileLine.parseMetadata();
 		List<DistanceHolder> initialDistances = getInitialDistances();
 		List<DistanceHolder> mergedList= new ArrayList<DistanceHolder>();
 		
@@ -36,7 +37,7 @@ public class SimpleClusterToPhyloXML
 		for( DistanceHolder dh : mergedList)
 			System.out.println(dh);
 		
-		writePhyloXml(mergedList);
+		writePhyloXml(mergedList, metaMap);
 		
 	}
 	
@@ -125,7 +126,7 @@ public class SimpleClusterToPhyloXML
 		DistanceHolder rightMatching;
 	}
 	
-	private static void writePhyloXml(List<DistanceHolder> mergedList )
+	private static void writePhyloXml(List<DistanceHolder> mergedList, HashMap<Integer, StrainMetadataFileLine> metaMap )
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
@@ -137,7 +138,7 @@ public class SimpleClusterToPhyloXML
 		
 		writer.write("<phylogeny rooted=\"false\">\n");
 		
-		writeNodeAndChildren( writer, mergedList, mergedList.remove(mergedList.size()-1));
+		writeNodeAndChildren( writer, mergedList, mergedList.remove(mergedList.size()-1), metaMap);
 		
 		writer.write("</phylogeny>\n");
 		writer.write("</phyloxml>\n");
@@ -149,7 +150,10 @@ public class SimpleClusterToPhyloXML
 		
 	}
 	
-	private static void writeNodeAndChildren( BufferedWriter writer, List<DistanceHolder> mergedList, DistanceHolder node )
+	private static void writeNodeAndChildren( BufferedWriter writer, 
+			List<DistanceHolder> mergedList, 
+			DistanceHolder node, 
+			HashMap<Integer, StrainMetadataFileLine> metaMap)
 		throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
@@ -166,19 +170,20 @@ public class SimpleClusterToPhyloXML
 		DistanceHolder rightNode = findAndRemoveChildNode(mergedList, node.rightStrains);
 		
 		if( leftNode != null)
-			writeNodeAndChildren(writer, mergedList, leftNode );
+			writeNodeAndChildren(writer, mergedList, leftNode,metaMap );
 		else
-			writeTip(writer, node.leftStrains);
+			writeTip(writer, node.leftStrains, metaMap);
 			
 		if( rightNode != null)
-			writeNodeAndChildren(writer, mergedList, rightNode);
+			writeNodeAndChildren(writer, mergedList, rightNode,metaMap);
 		else
-			writeTip(writer, node.rightStrains);
+			writeTip(writer, node.rightStrains,metaMap);
 		
 		writer.write("</clade>\n");
 	}
 	
-	private static void writeTip(BufferedWriter writer, List<Integer> nameList)
+	private static void writeTip(BufferedWriter writer, List<Integer> nameList, 
+			HashMap<Integer, StrainMetadataFileLine> metaMap)
 		throws Exception
 	{
 		if( nameList.size() != 1)

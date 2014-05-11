@@ -8,7 +8,7 @@ import java.util.HashMap;
 import utils.ConfigReader;
 import utils.TabReader;
 
-public class MetadataFileLine
+public class StrainMetadataFileLine
 {
 	private final int treeNumber;
 	private final String tissue;
@@ -35,7 +35,7 @@ public class MetadataFileLine
 		return hospital;
 	}
 
-	private MetadataFileLine(String s) throws Exception
+	private StrainMetadataFileLine(String s) throws Exception
 	{
 		TabReader tReader = new TabReader(s);
 		tReader.nextToken();
@@ -70,9 +70,9 @@ public class MetadataFileLine
 		throw new Exception("Unknown " + this.hospital );
 	}
 	
-	public static HashMap<Integer,MetadataFileLine> parseMetadata() throws Exception
+	public static HashMap<Integer,StrainMetadataFileLine> parseMetadata() throws Exception
 	{
-		HashMap<Integer,MetadataFileLine>  map = new HashMap<Integer, MetadataFileLine>();
+		HashMap<Integer,StrainMetadataFileLine>  map = new HashMap<Integer, StrainMetadataFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getKlebDir() + File.separator + 
@@ -82,7 +82,7 @@ public class MetadataFileLine
 		
 		for(String s = reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
 		{
-			MetadataFileLine mfl = new MetadataFileLine(s);
+			StrainMetadataFileLine mfl = new StrainMetadataFileLine(s);
 				
 				if( map.containsKey(mfl.treeNumber))
 					throw new Exception("Parsing error " + mfl.treeNumber);
@@ -95,7 +95,7 @@ public class MetadataFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<Integer, MetadataFileLine> map = parseMetadata();
+		HashMap<Integer, StrainMetadataFileLine> map = parseMetadata();
 		
 		for( Integer key :map.keySet())
 			System.out.println(map.get(key));
