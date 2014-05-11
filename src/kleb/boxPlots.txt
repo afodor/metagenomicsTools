@@ -1,0 +1,34 @@
+setwd("D:\\BroadTrees")
+myT <- read.table("distanceVsTime.txt", header=TRUE, sep="\t")
+
+boxplot( log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==0)] ,
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==1)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==2)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==3)] ,
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==4)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==5)] ,
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==6)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==7)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==8)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==9)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==10)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==11)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==12)],
+log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance>12)]     )
+
+
+
+boxplot( ( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==0)] ,
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==1)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==2)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==3)] ,
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==4)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==5)] ,
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==6)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==7)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==8)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==9)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==10)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==11)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==12)],
+( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance>12)]     )
