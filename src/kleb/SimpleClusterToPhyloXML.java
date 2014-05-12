@@ -41,7 +41,11 @@ public class SimpleClusterToPhyloXML
 			System.out.println(dh);
 		
 		confirmDistances(mergedList);
+		
+		List<DistanceHolder> listCopy = new ArrayList<DistanceHolder>(mergedList);
+		
 		writePhyloXml(mergedList, metaMap);
+		writeJSON(listCopy, metaMap);
 		
 	}
 	
@@ -187,6 +191,55 @@ public class SimpleClusterToPhyloXML
 		DistanceHolder rightMatching;
 	}
 	
+	private static void writeJSON(List<DistanceHolder> mergedList, HashMap<Integer, StrainMetadataFileLine> metaMap )
+			throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
+				File.separator + "kleb76.json")));
+		
+		writeJSonNodeAndChildren( writer, mergedList, mergedList.get(mergedList.size()-1), metaMap);
+		
+		writer.flush();  writer.close();
+		
+	}	
+	
+	private static void writeJSonNodeAndChildren( BufferedWriter writer, 
+			List<DistanceHolder> mergedList, 
+			DistanceHolder node, 
+			HashMap<Integer, StrainMetadataFileLine> metaMap)
+		throws Exception
+	{
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(1);
+		
+		writer.write("{");
+		
+		writer.write("\"snp_distance\":\"" + node.distance+ "\"\n");
+		writer.write("\"days_distance\":\"" + nf.format(getAveragePairwiseDateDistance(node, metaMap)) + "\"\n");
+		writer.write("\"strainID\":\"" + "mixed" +  "\"\n");
+		writer.write("\"location\":\"" + "mixed" + "\"\n");		
+		
+		DistanceHolder leftNode = findAndRemoveChildNode(mergedList, node.leftStrains);
+		DistanceHolder rightNode = findAndRemoveChildNode(mergedList, node.rightStrains);
+		
+		writer.write("\"children\": [\n");
+		
+		if( leftNode != null)
+			writeJSonNodeAndChildren(writer, mergedList, leftNode,metaMap );
+		else
+			writeJsonTip(writer, node.leftStrains, metaMap);
+			
+		writer.write(" , ");
+		
+		if( rightNode != null)
+			writeJSonNodeAndChildren(writer, mergedList, rightNode,metaMap);
+		else
+			writeJsonTip(writer, node.rightStrains,metaMap);
+		
+		writer.write("]\n");
+		writer.write("}");
+	}
+	
 	private static void writePhyloXml(List<DistanceHolder> mergedList, HashMap<Integer, StrainMetadataFileLine> metaMap )
 		throws Exception
 	{
@@ -261,6 +314,25 @@ public class SimpleClusterToPhyloXML
 		writer.write("<clade><name>" + nameList+ "</name><branch_length>0</branch_length>\n");
 		writer.write(meta.getColorStringByLocation() + "\n");
 		writer.write("</clade>\n");
+
+	}
+	
+
+	private static void writeJsonTip(BufferedWriter writer, List<Integer> nameList, 
+			HashMap<Integer, StrainMetadataFileLine> metaMap)
+		throws Exception
+	{
+		if( nameList.size() != 1)
+			throw new Exception("Logic error");
+		
+		StrainMetadataFileLine meta = metaMap.get(nameList.get(0));
+		
+		writer.write("{");
+		writer.write("\"snp_distance\":\"" + "0"+ "\"\n");
+		writer.write("\"days_distance\":\"" + "0"+ "\"\n");
+		writer.write("\"strainID\":\"" + nameList.get(0)+ "\"\n");
+		writer.write("\"location\":\"" + meta.getColorStringByLocation() + "\"\n");		
+		writer.write("}");
 
 	}
 	
