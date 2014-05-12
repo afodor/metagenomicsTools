@@ -16,7 +16,7 @@ import utils.ConfigReader;
 
 public class MergeDataAndDistance
 {
-	private static HashSet<Integer> getOutbreakGroup()
+	static HashSet<Integer> getOutbreakGroup()
 	{
 		int[] a1 =
 		{3, 12, 23, 25, 26, 27, 28, 30, 32, 34, 36, 37, 38, 39, 41, 42, 53, 62, 64, 71, 72, 73, 75};
@@ -35,7 +35,7 @@ public class MergeDataAndDistance
 		return set;
 	}
 	
-	private static GregorianCalendar getGregorianCalendar(String s)
+	static GregorianCalendar getGregorianCalendar(String s)
 	{
 		StringTokenizer sToken = new StringTokenizer(s, "/");
 		int month = Integer.parseInt(sToken.nextToken()) -1;
