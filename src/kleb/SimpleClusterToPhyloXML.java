@@ -214,10 +214,10 @@ public class SimpleClusterToPhyloXML
 		
 		writer.write("{");
 		
-		writer.write("\"snp_distance\":\"" + node.distance+ "\"\n");
-		writer.write("\"days_distance\":\"" + nf.format(getAveragePairwiseDateDistance(node, metaMap)) + "\"\n");
-		writer.write("\"strainID\":\"" + "mixed" +  "\"\n");
-		writer.write("\"location\":\"" + "mixed" + "\"\n");		
+		writer.write("\"snp_distance\":\"" + node.distance+ "\",\n");
+		writer.write("\"days_distance\":\"" + nf.format(getAveragePairwiseDateDistance(node, metaMap)) + "\",\n");
+		writer.write("\"strainID\":\"" + "mixed" +  "\",\n");
+		writer.write("\"location\":\"" + "mixed" + "\",\n");		
 		
 		DistanceHolder leftNode = findAndRemoveChildNode(mergedList, node.leftStrains);
 		DistanceHolder rightNode = findAndRemoveChildNode(mergedList, node.rightStrains);
@@ -328,9 +328,9 @@ public class SimpleClusterToPhyloXML
 		StrainMetadataFileLine meta = metaMap.get(nameList.get(0));
 		
 		writer.write("{");
-		writer.write("\"snp_distance\":\"" + "0"+ "\"\n");
-		writer.write("\"days_distance\":\"" + "0"+ "\"\n");
-		writer.write("\"strainID\":\"" + nameList.get(0)+ "\"\n");
+		writer.write("\"snp_distance\":\"" + "0"+ "\",\n");
+		writer.write("\"days_distance\":\"" + "0"+ "\",\n");
+		writer.write("\"strainID\":\"" + nameList.get(0)+ "\",\n");
 		writer.write("\"location\":\"" + meta.getColorStringByLocation() + "\"\n");		
 		writer.write("}");
 
