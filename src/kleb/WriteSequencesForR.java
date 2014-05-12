@@ -24,6 +24,9 @@ public class WriteSequencesForR
 		
 		HashMap<Integer,StrainMetadataFileLine> metaMap = StrainMetadataFileLine.parseMetadata();
 		HashSet<Integer> includedSet = MergeDataAndDistance.getOutbreakGroup();
+		includedSet.remove(19); includedSet.remove(17); includedSet.remove(13); includedSet.remove(14);
+		includedSet.remove(3); includedSet.remove(23); includedSet.remove(18);
+		//outbreaker can't deal with long times
 		List<Integer> samples = new ArrayList<Integer>();
 		List<GregorianCalendar> dates = new ArrayList<GregorianCalendar>();
 		
@@ -50,6 +53,7 @@ public class WriteSequencesForR
 		}
 		
 		writer.flush();  writer.close();
+		System.out.println(samples);
 		writeDateVector(dates);
 	}
 	
@@ -62,17 +66,17 @@ public class WriteSequencesForR
 		
 		long aDay = 1000 * 60 * 60 * 24;
 		
-		System.out.println("[");
+		System.out.println("c(");
 		
 		for( Iterator<GregorianCalendar> i = dates.iterator(); i.hasNext();)
 		{
-			System.out.print( ((i.next().getTimeInMillis() - minTime) / aDay) + "");
+			System.out.print( ((i.next().getTimeInMillis() - minTime) / (aDay*10)) + "");
 			
 			if( i.hasNext())
 				System.out.print(",");
 		}
 
-		System.out.print("]\n");
+		System.out.print(")\n");
 	}
 	
 }

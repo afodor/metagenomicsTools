@@ -1,6 +1,12 @@
 
 rm(list=ls())
-setwd("G:\\BroadTrees")
+setwd("D:\\BroadTrees")
 library("outbreaker")
 library("adegenet")
-mySeqs = fasta2DNAbin("sequencesForR.fasta")
+mySeqs <- fasta2DNAbin("sequencesForR.fasta")
+dates <- c(
+28,30,10,32,33,28,30,31,9,33,29,8,29,25,28,33,29,25,30,29,0,29,29,28,26,32,28,26,26,9,32,27,24,25,25,29,28,5,30,24,30)
+
+w <- c(0.00, 0.50, 1.00, 0.75) # from An introduction to outbreaker 1.1-2
+
+anOutbreak <- outbreaker(dna=mySeqs,dates,w.dens=w)
