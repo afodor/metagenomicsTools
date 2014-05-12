@@ -1,0 +1,6 @@
+
+rm(list=ls())
+setwd("G:\\BroadTrees")
+library("outbreaker")
+library("adegenet")
+mySeqs = fasta2DNAbin("sequencesForR.fasta")
