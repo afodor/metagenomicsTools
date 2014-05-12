@@ -24,8 +24,6 @@ public class WriteSequencesForR
 		
 		HashMap<Integer,StrainMetadataFileLine> metaMap = StrainMetadataFileLine.parseMetadata();
 		HashSet<Integer> includedSet = MergeDataAndDistance.getOutbreakGroup();
-		includedSet.remove(19); includedSet.remove(17); includedSet.remove(13); includedSet.remove(14);
-		includedSet.remove(3); includedSet.remove(23); includedSet.remove(18);
 		//outbreaker can't deal with long times
 		List<Integer> samples = new ArrayList<Integer>();
 		List<GregorianCalendar> dates = new ArrayList<GregorianCalendar>();
