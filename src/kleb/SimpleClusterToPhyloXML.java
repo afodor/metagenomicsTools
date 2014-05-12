@@ -275,7 +275,7 @@ public class SimpleClusterToPhyloXML
 		
 		writer.write("<clade>\n");
 		
-		double distance =0;
+		double distance =1;
 		
 		if( node.distance > 0)
 		{
