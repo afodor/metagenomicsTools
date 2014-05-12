@@ -331,7 +331,7 @@ public class SimpleClusterToPhyloXML
 		writer.write("\"snp_distance\":\"" + "0"+ "\",\n");
 		writer.write("\"days_distance\":\"" + "0"+ "\",\n");
 		writer.write("\"strainID\":\"" + nameList.get(0)+ "\",\n");
-		writer.write("\"location\":\"" + meta.getColorStringByLocation() + "\"\n");		
+		writer.write("\"location\":\"" + meta.getHospital()+ "\"\n");		
 		writer.write("}");
 
 	}
