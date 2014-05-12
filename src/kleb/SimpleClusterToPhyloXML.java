@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,8 @@ import utils.ConfigReader;
 
 public class SimpleClusterToPhyloXML
 {
+	public static final long A_DAY = 1000 * 60 * 60 * 24;
+	
 	/*
 	 * Run QuickSnpDistance first
 	 */
@@ -40,6 +43,37 @@ public class SimpleClusterToPhyloXML
 		confirmDistances(mergedList);
 		writePhyloXml(mergedList, metaMap);
 		
+	}
+	
+	private static double getAveragePairwiseDateDistance( DistanceHolder dh , 
+			HashMap<Integer, StrainMetadataFileLine> metaMap)
+	{
+		double sum =0;
+		int n=0;
+		
+		for( Integer i : dh.leftStrains)
+		{
+			StrainMetadataFileLine leftMeta = metaMap.get(i);
+			
+			if( leftMeta.getDateString().trim().length() > 0 )
+			{
+				GregorianCalendar leftGC = MergeDataAndDistance.getGregorianCalendar(leftMeta.getDateString());
+				
+				for(Integer i2 : dh.rightStrains)
+				{
+					StrainMetadataFileLine rightMeta = metaMap.get(i2);
+					
+					if( rightMeta.getDateString().trim().length() > 0 )
+					{
+						GregorianCalendar rightGC = MergeDataAndDistance.getGregorianCalendar(rightMeta.getDateString());
+						n++;
+						sum+= Math.abs(leftGC.getTimeInMillis() - rightGC.getTimeInMillis()) / A_DAY;
+					}	
+				}
+			}
+		}
+		
+		return sum / n;
 	}
 	
 	private static void confirmDistances( List<DistanceHolder> mergedList ) throws Exception
@@ -191,7 +225,8 @@ public class SimpleClusterToPhyloXML
 		double distance = Math.log10(node.distance+1);
 		
 		writer.write("<branch_length>" + distance+ "</branch_length>\n");
-		writer.write(" <taxonomy><scientific_name>" + nf.format( node.distance) + "</scientific_name></taxonomy>\n" );
+		writer.write(" <taxonomy><scientific_name>" + nf.format( node.distance) + "_" + 
+					nf.format(getAveragePairwiseDateDistance(node, metaMap)) + 	"</scientific_name></taxonomy>\n" );
 		
 		DistanceHolder leftNode = findAndRemoveChildNode(mergedList, node.leftStrains);
 		DistanceHolder rightNode = findAndRemoveChildNode(mergedList, node.rightStrains);
