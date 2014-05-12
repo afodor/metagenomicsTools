@@ -222,7 +222,12 @@ public class SimpleClusterToPhyloXML
 		
 		writer.write("<clade>\n");
 		
-		double distance = Math.log10(node.distance+1);
+		double distance =0;
+		
+		if( node.distance > 0)
+		{
+			distance = Math.log10(node.distance+1) + 3;			
+		}
 		
 		writer.write("<branch_length>" + distance+ "</branch_length>\n");
 		writer.write(" <taxonomy><scientific_name>" + nf.format( node.distance) + "_" + 
