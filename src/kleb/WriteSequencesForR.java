@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -19,7 +20,7 @@ public class WriteSequencesForR
 	public static void main(String[] args) throws Exception
 	{
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(ConfigReader.getKlebDir() + 
-				File.separator + "Klebs.mfa");
+				File.separator + "alignmentOnlyDifferingPositions.txt");
 		
 		HashMap<Integer,StrainMetadataFileLine> metaMap = StrainMetadataFileLine.parseMetadata();
 		HashSet<Integer> includedSet = MergeDataAndDistance.getOutbreakGroup();
@@ -49,6 +50,29 @@ public class WriteSequencesForR
 		}
 		
 		writer.flush();  writer.close();
+		writeDateVector(dates);
+	}
+	
+	private static void writeDateVector(List<GregorianCalendar> dates) throws Exception
+	{
+		long minTime = Long.MAX_VALUE;
+		
+		for( GregorianCalendar gc : dates)
+			minTime = Math.min(minTime, gc.getTimeInMillis());
+		
+		long aDay = 1000 * 60 * 60 * 24;
+		
+		System.out.println("[");
+		
+		for( Iterator<GregorianCalendar> i = dates.iterator(); i.hasNext();)
+		{
+			System.out.print( ((i.next().getTimeInMillis() - minTime) / aDay) + "");
+			
+			if( i.hasNext())
+				System.out.print(",");
+		}
+
+		System.out.print("]\n");
 	}
 	
 }
