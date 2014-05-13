@@ -55,7 +55,7 @@ public class MergeDataAndDistance
 		HashSet<Integer> outbreakGroup = getOutbreakGroup();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
-				ConfigReader.getKlebDir() + File.separator + "distanceVsTime.txt")));
+				ConfigReader.getKlebDir() + File.separator + "distanceVsTimeSubset.txt")));
 		
 		writer.write("xGenome\tyGenome\txDateString\tyDateString\txLocation\tyLocation\tsameLocation\t" 
 				+ "timeDifference\tgenomicDistance\tinOutbreakGroup\n");
@@ -124,7 +124,7 @@ public class MergeDataAndDistance
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir()+
-				File.separator + "distances.txt")));
+				File.separator + "distancesOnlySubset.txt")));
 		
 		reader.readLine();
 		

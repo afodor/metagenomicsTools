@@ -22,15 +22,15 @@ public class QuickSnpDistance
 		HashMap<String, FastaSequence> map = getAsMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getKlebDir() + File.separator + "distancesUpperTriangleNoDiag.txt")));
+				ConfigReader.getKlebDir() + File.separator + "distancesOnlySubset.txt")));
 		
 		writer.write("xGenome\tyGenome\tdistance\n");
 		
 		List<String> aList = new ArrayList<String>(map.keySet());
 		Collections.sort(aList);
 		
-		for( int x=0; x < aList.size()-1 ; x++)
-			for(int y=x+1; y < aList.size(); y++)
+		for( int x=0; x < aList.size() ; x++)
+			for(int y=0; y < aList.size(); y++)
 				{
 					System.out.println(x + " " + y);
 					writer.write(aList.get(x) + "\t");
@@ -42,7 +42,7 @@ public class QuickSnpDistance
 		
 		writer.flush();  writer.close();
 		
-		writeDiffPositionsFiles( new ArrayList<FastaSequence>( map.values()));
+		//writeDiffPositionsFiles( new ArrayList<FastaSequence>( map.values()));
 	}
 	
 	private static void writeDiffPositionsFiles( List<FastaSequence> list ) throws Exception
@@ -71,7 +71,7 @@ public class QuickSnpDistance
 		
 		List<FastaSequence> list = 
 				FastaSequence.readFastaFile(ConfigReader.getKlebDir() +File.separator + 
-						"all76.mfa");
+						"Klebs.mfa");
 		
 		for(FastaSequence fs : list)
 		{
