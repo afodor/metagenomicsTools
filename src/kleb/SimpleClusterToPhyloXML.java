@@ -20,6 +20,32 @@ public class SimpleClusterToPhyloXML
 {
 	public static final long A_DAY = 1000 * 60 * 60 * 24;
 	
+	private static HashMap<Integer, String> getFacilityMap() throws Exception
+	{
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getKlebDir() + 
+				File.separator + "BroadSampleFacilities.txt"));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null && s.trim().length()>0; s = reader.readLine())
+		{
+			System.out.println(s);
+			String[] splits = s.split("\t");
+			
+			if( map.containsKey(Integer.parseInt(splits[0])))
+				throw new Exception("No");
+			
+			if( splits.length == 1)
+				map.put(Integer.parseInt(splits[0]), "NA");
+			else
+				map.put(Integer.parseInt(splits[0]), splits[1]);
+		}
+		
+		return map;
+	}
+	
 	/*
 	 * Run QuickSnpDistance first
 	 */
@@ -243,6 +269,7 @@ public class SimpleClusterToPhyloXML
 	private static void writePhyloXml(List<DistanceHolder> mergedList, HashMap<Integer, StrainMetadataFileLine> metaMap )
 		throws Exception
 	{
+		HashMap<Integer, String> facilitiesMap = getFacilityMap();
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
 				File.separator + "kleb76.xml")));
 		
@@ -252,7 +279,7 @@ public class SimpleClusterToPhyloXML
 		
 		writer.write("<phylogeny rooted=\"false\">\n");
 		
-		writeNodeAndChildren( writer, mergedList, mergedList.remove(mergedList.size()-1), metaMap);
+		writeNodeAndChildren( writer, mergedList, mergedList.remove(mergedList.size()-1), metaMap, facilitiesMap);
 		
 		writer.write("</phylogeny>\n");
 		writer.write("</phyloxml>\n");
@@ -267,7 +294,8 @@ public class SimpleClusterToPhyloXML
 	private static void writeNodeAndChildren( BufferedWriter writer, 
 			List<DistanceHolder> mergedList, 
 			DistanceHolder node, 
-			HashMap<Integer, StrainMetadataFileLine> metaMap)
+			HashMap<Integer, StrainMetadataFileLine> metaMap,
+			HashMap<Integer, String> facilitiesMap)
 		throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
@@ -290,20 +318,21 @@ public class SimpleClusterToPhyloXML
 		DistanceHolder rightNode = findAndRemoveChildNode(mergedList, node.rightStrains);
 		
 		if( leftNode != null)
-			writeNodeAndChildren(writer, mergedList, leftNode,metaMap );
+			writeNodeAndChildren(writer, mergedList, leftNode,metaMap, facilitiesMap );
 		else
-			writeTip(writer, node.leftStrains, metaMap);
+			writeTip(writer, node.leftStrains, metaMap, facilitiesMap);
 			
 		if( rightNode != null)
-			writeNodeAndChildren(writer, mergedList, rightNode,metaMap);
+			writeNodeAndChildren(writer, mergedList, rightNode,metaMap, facilitiesMap);
 		else
-			writeTip(writer, node.rightStrains,metaMap);
+			writeTip(writer, node.rightStrains,metaMap, facilitiesMap);
 		
 		writer.write("</clade>\n");
 	}
 	
 	private static void writeTip(BufferedWriter writer, List<Integer> nameList, 
-			HashMap<Integer, StrainMetadataFileLine> metaMap)
+			HashMap<Integer, StrainMetadataFileLine> metaMap,
+			HashMap<Integer, String> facilitesMap)
 		throws Exception
 	{
 		if( nameList.size() != 1)
@@ -311,7 +340,8 @@ public class SimpleClusterToPhyloXML
 		
 		StrainMetadataFileLine meta = metaMap.get(nameList.get(0));
 		
-		writer.write("<clade><name>" + nameList+ "</name><branch_length>0</branch_length>\n");
+		writer.write("<clade><name>" + nameList+ "_" + facilitesMap.get(nameList.get(0)) +
+				"</name><branch_length>0</branch_length>\n");
 		writer.write(meta.getColorStringByLocation() + "\n");
 		writer.write("</clade>\n");
 

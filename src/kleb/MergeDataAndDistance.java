@@ -124,7 +124,7 @@ public class MergeDataAndDistance
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir()+
-				File.separator + "distancesOnlySubset.txt")));
+				File.separator + "distances.txt")));
 		
 		reader.readLine();
 		
