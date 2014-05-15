@@ -37,6 +37,7 @@ public class MergeDataAndDistance
 	
 	static GregorianCalendar getGregorianCalendar(String s)
 	{
+		System.out.println(s);
 		StringTokenizer sToken = new StringTokenizer(s, "/");
 		int month = Integer.parseInt(sToken.nextToken()) -1;
 		int day = Integer.parseInt(sToken.nextToken());
@@ -64,7 +65,7 @@ public class MergeDataAndDistance
 		{
 			StrainMetadataFileLine xMeta = metaList.get(x);
 			
-			if( xMeta.getDateString().trim().length() > 0)
+			if( ! xMeta.getDateString().equals("NA"))
 			{
 				GregorianCalendar xCal = getGregorianCalendar(xMeta.getDateString());
 						
@@ -72,7 +73,7 @@ public class MergeDataAndDistance
 				{
 					StrainMetadataFileLine yMeta = metaList.get(y);
 					
-					if( yMeta.getDateString().trim().length() > 0 )
+					if( ! yMeta.getDateString().equals("NA"))
 					{
 						GregorianCalendar yCal = getGregorianCalendar(yMeta.getDateString());
 						String key = makeTwoChars(xMeta.getStrainID())

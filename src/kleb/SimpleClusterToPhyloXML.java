@@ -85,7 +85,7 @@ public class SimpleClusterToPhyloXML
 		{
 			StrainMetadataFileLine leftMeta = metaMap.get(i);
 			
-			if( leftMeta.getDateString().trim().length() > 0 )
+			if( ! leftMeta.getDateString().equals("NA") )
 			{
 				GregorianCalendar leftGC = MergeDataAndDistance.getGregorianCalendar(leftMeta.getDateString());
 				
@@ -93,7 +93,7 @@ public class SimpleClusterToPhyloXML
 				{
 					StrainMetadataFileLine rightMeta = metaMap.get(i2);
 					
-					if( rightMeta.getDateString().trim().length() > 0 )
+					if( ! rightMeta.getDateString().equals("NA") )
 					{
 						GregorianCalendar rightGC = MergeDataAndDistance.getGregorianCalendar(rightMeta.getDateString());
 						n++;
@@ -340,7 +340,8 @@ public class SimpleClusterToPhyloXML
 		
 		StrainMetadataFileLine meta = metaMap.get(nameList.get(0));
 		
-		writer.write("<clade><name>" + nameList+ "_" + facilitesMap.get(nameList.get(0)) +
+		writer.write("<clade><name>" + nameList+ "_" + facilitesMap.get(nameList.get(0)) + " " + 
+				meta.getDateString()+
 				"</name><branch_length>0</branch_length>\n");
 		writer.write(meta.getColorStringByLocation() + "\n");
 		writer.write("</clade>\n");

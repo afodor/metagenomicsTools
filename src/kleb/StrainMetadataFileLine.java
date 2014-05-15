@@ -68,6 +68,9 @@ public class StrainMetadataFileLine
 		if( this.hospital.equals("op"))
 			return "<color><red>0</red><green>0</green><blue>255</blue></color>";
 		
+		if( this.hospital.equals("na"))
+			return "";
+		
 		throw new Exception("Unknown " + this.hospital );
 	}
 	
