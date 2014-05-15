@@ -45,25 +45,6 @@ public class QuickSnpDistance
 		//writeDiffPositionsFiles( new ArrayList<FastaSequence>( map.values()));
 	}
 	
-	private static void writeDiffPositionsFiles( List<FastaSequence> list ) throws Exception
-	{
-		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
-				File.separator + "alignmentOnlyDifferingPositions.txt")));
-		
-		for(FastaSequence fs : list)
-		{
-			writer.write(fs.getHeader() + "\n");
-			
-			String seq = fs.getSequence();
-			for( int x=0; x < seq.length(); x++)
-				if( diffPositions.contains(x))
-					writer.write("" + seq.charAt(x));
-			
-			writer.write("\n");
-		}
-		
-		writer.flush();  writer.close();
-	}
 	
 	private static HashMap<String, FastaSequence> getAsMap() throws Exception
 	{
