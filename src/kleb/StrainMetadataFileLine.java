@@ -11,18 +11,12 @@ import utils.TabReader;
 public class StrainMetadataFileLine
 {
 	private final int strainID;
-	private final String tissue;
 	private final String dateString;
 	private final String hospital;
 	
 	public int getStrainID()
 	{
 		return strainID;
-	}
-
-	public String getTissue()
-	{
-		return tissue;
 	}
 
 	public String getDateString()
@@ -38,40 +32,43 @@ public class StrainMetadataFileLine
 	private StrainMetadataFileLine(String s) throws Exception
 	{
 		TabReader tReader = new TabReader(s);
-		tReader.nextToken();
-		this.strainID = Integer.parseInt(tReader.nextToken());
 		
-		for( int x=0; x < 7; x++)
+		for( int x=0; x < 4; x++)
 			tReader.nextToken();
 		
-		this.tissue = tReader.nextToken().toLowerCase();
 		this.dateString = tReader.nextToken();
-		this.hospital = tReader.nextToken().toLowerCase();
+		
+		tReader.nextToken();
+		this.strainID = Integer.parseInt(tReader.nextToken());
+		this.hospital = tReader.nextToken();
 	}
 	
 	@Override
 	public String toString()
 	{
-		return this.strainID + " " + this.dateString + " " + this.tissue+ " " + 
+		return this.strainID + " " + this.dateString + " " +
 				this.hospital;
 	}
 	
 	
 	public String getColorStringByLocation() throws Exception
 	{
-		if( this.hospital.equals("metro"))
+		if( this.hospital.equals("CMC Main"))
 			return "<color><red>255</red><green>0</green><blue>0</blue></color>";
 		
-		if( this.hospital.equals("reg"))
+		if( this.hospital.equals("Rehab"))
 			return "<color><red>0</red><green>255</green><blue>0</blue></color>";
 		
-		if( this.hospital.equals("op"))
+		if( this.hospital.equals("Mercy"))
 			return "<color><red>0</red><green>0</green><blue>255</blue></color>";
 		
-		if( this.hospital.equals("na"))
-			return "";
+		if( this.hospital.equals("Outpatient"))
+			return "<color><red>128</red><green>128</green><blue>128</blue></color>";
 		
-		throw new Exception("Unknown " + this.hospital );
+		if( this.hospital.equals("University"))
+			return "<color><red>255</red><green>255</green><blue>0</blue></color>";
+			
+		return "";
 	}
 	
 	public static HashMap<Integer,StrainMetadataFileLine> parseMetadata() throws Exception
@@ -80,7 +77,7 @@ public class StrainMetadataFileLine
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getKlebDir() + File.separator + 
-				"cre_for_broad_final_OrdByKlebTree_5-7-14.txt")));
+				"Corrected_SpreadsheetSamplesSentToBroadWithFacilities_5-16-14_AF.txt")));
 		
 		reader.readLine(); reader.readLine();
 		

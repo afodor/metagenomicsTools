@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -23,7 +22,6 @@ public class WriteSequencesForR
 				File.separator + "alignmentOnlyDifferingPositions.txt");
 		
 		HashMap<Integer,StrainMetadataFileLine> metaMap = StrainMetadataFileLine.parseMetadata();
-		HashSet<Integer> includedSet = MergeDataAndDistance.getOutbreakGroup();
 		//outbreaker can't deal with long times
 		List<Integer> samples = new ArrayList<Integer>();
 		List<GregorianCalendar> dates = new ArrayList<GregorianCalendar>();
@@ -38,7 +36,7 @@ public class WriteSequencesForR
 			
 			Integer sampleID = Integer.parseInt(aKey);
 			
-			if(includedSet.contains(sampleID))
+			//if(includedSet.contains(sampleID))
 			{
 				System.out.println(sampleID);
 				samples.add(sampleID);

@@ -1,5 +1,6 @@
+rm(list=ls())
 setwd("G:\\BroadTrees")
-myT <- read.table("distanceVsTimeSubset.txt", header=TRUE, sep="\t")
+myT <- read.table("distanceVsTimeCorrected.txt", header=TRUE, sep="\t")
 
 boxplot( log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==0)] ,
 log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==1)],
@@ -32,3 +33,15 @@ boxplot( ( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDi
 ( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==11)],
 ( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==12)],
 ( myT$timeDifference)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance>12)]     )
+
+
+
+boxplot(log10( myT$timeDifference[which( myT$genomicDistance==0)]+1), 
+log10( myT$timeDifference[which( myT$genomicDistance>0 & myT$genomicDistance<=5)]+1),
+log10( myT$timeDifference[which( myT$genomicDistance>5 & myT$genomicDistance<=10)]+1),
+log10( myT$timeDifference[which( myT$genomicDistance>10 & myT$genomicDistance<=20)]+1),
+log10( myT$timeDifference[which( myT$genomicDistance>20 & myT$genomicDistance<=40)]+1),
+log10( myT$timeDifference[which( myT$genomicDistance>40 & myT$genomicDistance<=80)]+1),
+log10( myT$timeDifference[which( myT$genomicDistance>80 & myT$genomicDistance<=160)]+1)
+)
+
