@@ -36,7 +36,7 @@ public class OtuWrapperToSVMLight
 			
 	}
 	
-	private static void deleteOrThrow(File f) throws Exception
+	static void deleteOrThrow(File f) throws Exception
 	{
 		f.delete();
 		
@@ -44,7 +44,7 @@ public class OtuWrapperToSVMLight
 			throw new Exception("No " + f.getAbsolutePath());
 	}
 	
-	private static double getClassificationScore(OtuWrapper wrapper, File modelFile, int iteration ) throws Exception
+	static double getClassificationScore(OtuWrapper wrapper, File modelFile, int iteration ) throws Exception
 	{
 		File classificationData = new File("D:\\MachineLearningJournalClub\\trainingDataSVM_classification" + iteration+ ".txt");
 		deleteOrThrow(classificationData);
@@ -56,15 +56,11 @@ public class OtuWrapperToSVMLight
 		
 		deleteOrThrow(svmResults);
 		
-		if( wrapper.getSampleNames().get(iteration).indexOf("case") != -1 ) 
-				writer.write("1 ");
-		else
-				writer.write("-1 ");
+		writer.write("0 ");
 				
 		for( int y=0; y < wrapper.getOtuNames().size(); y++)
 		{
-				if( wrapper.getFractionZeroForTaxa(y) < 0.75)
-					writer.write( y +  ":"+ wrapper.getDataPointsNormalizedThenLogged().get(iteration).get(y) + " " );
+			writer.write( y +  ":"+ wrapper.getDataPointsNormalizedThenLogged().get(iteration).get(y) + " " );
 		}
 				
 		writer.write("\n");
