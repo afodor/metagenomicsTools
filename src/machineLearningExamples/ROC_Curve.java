@@ -26,7 +26,7 @@ public class ROC_Curve
 	
 	private static void writeResults(List<Holder> list) throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("D:\\MachineLearningJournalClub\\rocOut.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("D:\\raad_SupervisedClassification\\nina\\rorRare.txt")));
 		writer.write("numCase\tnumControl\n");
 		
 		int numCase =0;
@@ -48,7 +48,7 @@ public class ROC_Curve
 	
 	private static List<Holder> getList() throws Exception
 	{
-		BufferedReader reader = new BufferedReader(new FileReader(new File("D:\\MachineLearningJournalClub\\roc.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(new File("D:\\raad_SupervisedClassification\\nina\\rocForCR_rare_2701.txt")));
 		
 		List<Holder> list = new ArrayList<ROC_Curve.Holder>();
 		
