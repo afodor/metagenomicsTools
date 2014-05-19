@@ -39,6 +39,7 @@ public class SVM_LightWithExternalCaseControl
 			else throw new Exception("No " + caseControlVal);
 			
 			writer.write(score + "\n");
+			writer.flush();
 		}
 		
 		writer.flush();  writer.close();

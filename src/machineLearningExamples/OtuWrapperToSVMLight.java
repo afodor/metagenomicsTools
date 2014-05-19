@@ -60,7 +60,8 @@ public class OtuWrapperToSVMLight
 				
 		for( int y=0; y < wrapper.getOtuNames().size(); y++)
 		{
-			writer.write( y +  ":"+ wrapper.getDataPointsNormalizedThenLogged().get(iteration).get(y) + " " );
+				if( wrapper.getFractionZeroForTaxa(y) < 0.75)
+					writer.write( y +  ":"+ wrapper.getDataPointsNormalizedThenLogged().get(iteration).get(y) + " " );
 		}
 				
 		writer.write("\n");
