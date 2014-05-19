@@ -23,20 +23,16 @@ public class SVM_LightWithExternalCaseControl
 		
 		OtuWrapper wrapper = new OtuWrapper( "D:\\raad_SupervisedClassification\\nina\\inputData\\nina_otus\\nina_CR_rare_2701.txt");
 		
-		
-		
 		for( int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
 
 			String caseControlVal = map.get(wrapper.getSampleNames().get(x));
-			File model = writeAnInteration(wrapper, x, caseControlVal.equals("case") );
+		
+			
+			File model = writeAnInteration(wrapper, x, map);
 			double score = OtuWrapperToSVMLight.getClassificationScore(wrapper, model, x);
 			
-			if( caseControlVal.equals("control") )
-				writer.write("control\t");
-			else if( caseControlVal.equals("case") )
-				writer.write("case\t");
-			else throw new Exception("No " + caseControlVal);
+			writer.write(caseControlVal + "\t");
 			
 			writer.write(score + "\n");
 			writer.flush();
@@ -46,7 +42,8 @@ public class SVM_LightWithExternalCaseControl
 	
 	}
 	
-	private static File writeAnInteration(OtuWrapper wrapper, int iteration,boolean isCase) throws Exception
+	private static File writeAnInteration(OtuWrapper wrapper, int iteration,HashMap<String, String> caseContolMap) 
+				throws Exception
 	{
 		File trainingData = new File("D:\\MachineLearningJournalClub\\trainingDataSVM_" + iteration + ".txt");
 		OtuWrapperToSVMLight.deleteOrThrow(trainingData);
@@ -61,10 +58,11 @@ public class SVM_LightWithExternalCaseControl
 		for( int x=0; x < wrapper.getSampleNames().size(); x++)
 			if( x != iteration)
 			{
-				if( isCase) 
+				if( caseContolMap.get(wrapper.getSampleNames().get(x)).equals("case")) 
 					writer.write("1 ");
-				else
+				else if( caseContolMap.get(wrapper.getSampleNames().get(x)).equals("control")) 
 					writer.write("-1 ");
+				else throw new Exception("No " + caseContolMap.get(wrapper.getSampleNames().get(x)));
 				
 				for( int y=0; y < wrapper.getOtuNames().size(); y++)
 				{

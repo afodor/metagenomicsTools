@@ -18,11 +18,12 @@ public class ProcessWrapper
 		
 		BufferedReader br = new BufferedReader (new InputStreamReader(p.getInputStream ()));
 		
+		@SuppressWarnings("unused")
 		String s;
 		
 		while ((s = br.readLine ())!= null)
 		{
-    		System.out.println (s);
+    		//System.out.println (s);
 		}
 				
 		p.waitFor();
