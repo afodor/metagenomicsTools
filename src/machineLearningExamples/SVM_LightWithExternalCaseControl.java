@@ -39,12 +39,12 @@ public class SVM_LightWithExternalCaseControl
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, String> fileLines = 
-				getFileLines("D:\\raad_SupervisedClassification\\nina\\inputData\\nina_otus\\nina_CR_deSEQ2_VarianceStabilized.txt" );
+				getFileLines("D:\\raad_SupervisedClassification\\nina\\inputData\\nina_otus\\nina_DN_rare_2765.txt" );
 		
 		HashMap<String, String> map = getCaseControlMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				"D:\\raad_SupervisedClassification\\nina\\rocForCR_VS.txt")));
+				"D:\\raad_SupervisedClassification\\nina\\rocForDN_rare_2765.txt")));
 		writer.write("case\tscore\n");
 		
 		for( String s : map.keySet())
