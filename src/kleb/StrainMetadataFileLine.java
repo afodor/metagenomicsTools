@@ -33,14 +33,17 @@ public class StrainMetadataFileLine
 	{
 		TabReader tReader = new TabReader(s);
 		
-		for( int x=0; x < 4; x++)
+		for( int x=0; x < 9; x++)
 			tReader.nextToken();
 		
 		this.dateString = tReader.nextToken();
 		
-		tReader.nextToken();
+		tReader.nextToken();tReader.nextToken();tReader.nextToken();
 		this.strainID = Integer.parseInt(tReader.nextToken());
 		this.hospital = tReader.nextToken();
+		
+		if( tReader.hasMore())
+			throw new Exception("Unexpected token " + tReader.nextToken());
 	}
 	
 	@Override
@@ -77,7 +80,7 @@ public class StrainMetadataFileLine
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getKlebDir() + File.separator + 
-				"Corrected_SpreadsheetSamplesSentToBroadWithFacilities_5-16-14_AF.txt")));
+				"Final_BroadSamples_Locations_AF.txt")));
 		
 		reader.readLine(); reader.readLine();
 		

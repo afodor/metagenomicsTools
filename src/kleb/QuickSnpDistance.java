@@ -22,14 +22,14 @@ public class QuickSnpDistance
 		HashMap<String, FastaSequence> map = getAsMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getKlebDir() + File.separator + "distancesOnlyKlebUpperTriangleNoDiag.txt")));
+				ConfigReader.getKlebDir() + File.separator + "distancesAllUpperTriangleNoDiag.txt")));
 		
 		writer.write("xGenome\tyGenome\tdistance\n");
 		
 		List<String> aList = new ArrayList<String>(map.keySet());
 		Collections.sort(aList);
 		
-		for( int x=0; x < aList.size()-1 ; x++)
+		for( int x=0; x < aList.size() -1; x++)
 			for(int y=x+1; y < aList.size(); y++)
 				{
 					System.out.println(x + " " + y);
@@ -52,7 +52,7 @@ public class QuickSnpDistance
 		
 		List<FastaSequence> list = 
 				FastaSequence.readFastaFile(ConfigReader.getKlebDir() +File.separator + 
-						"Klebs.mfa");
+						"all76.mfa");
 		
 		for(FastaSequence fs : list)
 		{

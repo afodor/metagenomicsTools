@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("G:\\BroadTrees")
+setwd("D:\\BroadTrees")
 myT <- read.table("distanceVsTimeCorrected.txt", header=TRUE, sep="\t")
 
 boxplot( log10( myT$timeDifference+1)[which(myT$inOutbreakGroup=="true" & myT$genomicDistance==0)] ,

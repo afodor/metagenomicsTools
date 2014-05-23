@@ -31,8 +31,11 @@ public class SimpleClusterToPhyloXML
 		List<DistanceHolder> mergedList= new ArrayList<DistanceHolder>();
 		
 		while( initialDistances.size() > 0)
+		{
+			System.out.println(initialDistances);
 			mergeOne(initialDistances, mergedList);
-		
+		}
+			
 		//for( DistanceHolder dh : initialDistances)
 			//System.out.println(dh);
 		
@@ -196,7 +199,7 @@ public class SimpleClusterToPhyloXML
 			throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
-				File.separator + "kleb76SubAlignment.json")));
+				File.separator + "all76Tree.json")));
 		
 		writeJSonNodeAndChildren( writer, mergedList, mergedList.get(mergedList.size()-1), metaMap);
 		
@@ -245,7 +248,7 @@ public class SimpleClusterToPhyloXML
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
-				File.separator + "klebSubAlignment.xml")));
+				File.separator + "all76Tree.xml")));
 		
 		writer.write("<phyloxml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + ""
 				+ "xsi:schemaLocation=\"http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd\" " + 
@@ -428,7 +431,7 @@ public class SimpleClusterToPhyloXML
 		List<DistanceHolder> list = new ArrayList<DistanceHolder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getKlebDir() + File.separator +  "distancesOnlyKlebUpperTriangleNoDiag.txt")));
+			ConfigReader.getKlebDir() + File.separator +  "distancesAllUpperTriangleNoDiag.txt")));
 		
 		reader.readLine();
 		

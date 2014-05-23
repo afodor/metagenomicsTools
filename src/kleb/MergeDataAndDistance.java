@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,9 @@ public class MergeDataAndDistance
 		for( Integer i : a2)
 			set.add(i);
 		
+		List<Integer> aList = new ArrayList<Integer>(set);
+		Collections.sort(aList);
+		System.out.println(aList);
 		return set;
 	}
 	
