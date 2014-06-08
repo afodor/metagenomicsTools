@@ -1,0 +1,13 @@
+setwd("G:\\BigDataScalingFactors")
+
+rm(list=ls())
+myT <- read.table(file="ttuLyte_70_mergedReads_PL_raw_counts.txt", header=TRUE, 
+	row.names=1, sep="\t")
+
+# PCoA on raw data..
+
+otusAsCols <- t(myT)
+
+library("vegan")
+
+myPCA <- prcomp(log(otusAsCols+1))

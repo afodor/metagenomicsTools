@@ -66,6 +66,7 @@ public class ConfigReader
 	public static final String SVM_DIR = "SVM_DIR";
 	public static final String JANELLE_RNA_SEQ_DIR = "JANELLE_RNA_SEQ_DIR";
 	public static final String KLEB_DIR="KLEB_DIR";
+	public static final String BIG_DATA_SCALING_FACTORS = "BIG_DATA_SCALING_FACTORS";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -105,6 +106,11 @@ public class ConfigReader
 	public static String getD3Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(D3_DIR);
+	}
+	
+	public static String getBigDataScalingFactorsDir() throws Exception
+	{
+		return getConfigReader().getAProperty(BIG_DATA_SCALING_FACTORS);
 	}
 	
 	public static String getSandraRiverJune2012Dir() throws Exception
