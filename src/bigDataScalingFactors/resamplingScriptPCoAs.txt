@@ -35,13 +35,15 @@ return(t(a2))
 
 "quick_rle" <- function(myIn)
 {
+myTrans <- t(myIn)
+myTrans <- myTrans + 1
 a2<-t(myIn)
 a2 <- a2 + 1
 a2<- log10(a2)
 
 for(i in 1:nrow(a2))
 {
-        medianSam <-median(a2[i,1:ncol(a2)]@.Data)
+        medianSam <-log10( median( myTrans[i,1:ncol(a2)]@.Data))
         a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] - medianSam
 }
 return(t(a2))
