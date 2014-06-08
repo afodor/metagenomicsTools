@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("D:\\BigDataScaleFactor")
+setwd("G:\\BigDataScalingFactors")
 library("phyloseq")
 library("DESeq2")
 library("ggplot2")
@@ -27,6 +27,22 @@ for(i in 1:nrow(a2))
 {
         totSam<-sum(a2[i,1:ncol(a2)])
         a2[i,1:ncol(a2)]<-a2[i,1:ncol(a2)]/totSam
+}
+return(t(a2))
+}
+
+##################################################################################
+
+"quick_rle" <- function(myIn)
+{
+a2<-t(myIn)
+a2 <- a2 + 1
+a2<- log10(a2)
+
+for(i in 1:nrow(a2))
+{
+        medianSam <-median(a2[i,1:ncol(a2)]@.Data)
+        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] - medianSam
 }
 return(t(a2))
 }
@@ -59,7 +75,11 @@ otu_table(ttuLyte_LN)<-otu_table(logNormalize(otu_table(ttuLyte)), taxa_are_rows
 samSums<-log10(sample_sums(ttuLyte))
 
 ttuLyte_RelativeAbundnace<-ttuLyte
-otu_table(ttuLyte_LN)<-otu_table(normalize(otu_table(ttuLyte)), taxa_are_rows=T)
+otu_table(ttuLyte_RelativeAbundnace)<-otu_table(normalize(otu_table(ttuLyte)), taxa_are_rows=T)
+
+ttuLyte_RLE <- ttuLyte
+otu_table(ttuLyte_RLE )<-otu_table(quick_rle(otu_table(ttuLyte_RLE)), taxa_are_rows=T)
+
 
 ########################
 #diagdds = phyloseq_to_deseq2(ttuLyte, ~1)
@@ -85,16 +105,21 @@ Kendall(  bc_LogNorm[[1]]$Axis.1 , bc_LogNorm[[1]]$samSums )
 ###############################################
 
 numAxis<-2 #this returns the first two axes for plotting, change to how many axes you need
+bc_RLE<-getPCoA(ttuLyte_RLE, method = "bray", numAxis)
+bc_RLE[[1]]<-cbind(bc_RLE[[1]], samSums)
+plot(bc_RLE[[1]]$Axis.1 , bc_RLE[[1]]$samSums ) 
+Kendall(bc_RLE[[1]]$samSums , bc_RLE[[1]]$Axis.1 ) 
+
+#####################################################
+
+
+numAxis<-2 #this returns the first two axes for plotting, change to how many axes you need
 bc_RA<-getPCoA(ttuLyte_RelativeAbundnace, method = "bray", numAxis)
 #plot PCoA colored by saccharin and point size is log10 sample size
 bc_RA[[1]]<-cbind(bc_RA[[1]], samSums)
 str(bc_RA)
 plot(bc_RA[[1]]$samSums , bc_RA[[1]]$Axis.1 ) 
 Kendall(bc_RA[[1]]$samSums , bc_RA[[1]]$Axis.1 ) 
-
-#####################################################
-
-
 
 
 #######################  Bray-Cutris PCoA not log normalized ###############
