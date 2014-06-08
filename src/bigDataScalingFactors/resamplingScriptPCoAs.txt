@@ -68,6 +68,16 @@ map <- import_qiime_sample_data("mapping.txt")
 ttuLyte<-merge_phyloseq(myBiom, map)
 
 
+############################
+# raw counts
+#####
+numAxis<-2 
+ttuLyteRaw <- ttuLyte
+samSums<-log10(sample_sums(ttuLyte))
+bc_Raw<-getPCoA(ttuLyteRaw, method = "bray", numAxis)
+plot( samSums, bc_Raw[[1]]$Axis.1)
+Kendall(  samSums, bc_Raw[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_Raw[[1]]$Axis.1))
 
 ########################
 ttuLyte_LN<-ttuLyte
@@ -82,25 +92,22 @@ otu_table(ttuLyte_RLE )<-otu_table(quick_rle(otu_table(ttuLyte_RLE)), taxa_are_r
 
 
 ########################
-#diagdds = phyloseq_to_deseq2(ttuLyte, ~1)
-#diagdds = estimateSizeFactors(diagdds)
-#diagdds = estimateDispersions(diagdds, fitType='local')
-#diagvst = getVarianceStabilizedData(diagdds)
-#diagvst<-diagvst + abs( min(diagvst))
-#ttuLyte_VSD<-ttuLyte
-#otu_table(ttuLyte_VSD)<-otu_table(diagvst, taxa_are_rows=T)
+diagdds = phyloseq_to_deseq2(ttuLyte, ~1)
+diagdds = estimateSizeFactors(diagdds)
+diagdds = estimateDispersions(diagdds, fitType='local')
+diagvst = getVarianceStabilizedData(diagdds)
+diagvst<-diagvst + abs( min(diagvst))
+ttuLyte_VSD<-ttuLyte
+otu_table(ttuLyte_VSD)<-otu_table(diagvst, taxa_are_rows=T)
 
 ######################## Bray-Curtis  PCoA using log Norm
 numAxis<-2 #this returns the first two axes for plotting, change to how many axes you need
 bc_LogNorm<-getPCoA(ttuLyte_LN, method = "bray", numAxis)
-#plot PCoA colored by saccharin and point size is log10 sample size
 bc_LogNorm[[1]]<-cbind(bc_LogNorm[[1]], samSums)
 bc_LogNorm_plot<- ggplot(bc_LogNorm[[1]], aes(Axis.1, Axis.2)) + geom_point(aes(colour=saccharin, size = samSums)) + theme(axis.title.x = element_blank()) + ylab(bc_LogNorm[[2]][2])  + xlab(bc_LogNorm[[2]][1]) + theme_bw()
-str(bc_LogNorm)
-plot( bc_LogNorm[[1]]$Axis.1, bc_LogNorm[[1]]$samSums ) 
-plot(  bc_LogNorm[[1]]$samSums , bc_LogNorm[[1]]$Axis.1)
-plot( sample_sums(ttuLyte), bc_LogNorm[[1]]$Axis.1)
-Kendall(  bc_LogNorm[[1]]$Axis.1 , bc_LogNorm[[1]]$samSums ) 
+plot( samSums, bc_LogNorm[[1]]$Axis.1)
+Kendall(  samSums, bc_LogNorm[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_LogNorm[[1]]$Axis.1))
 
 ###############################################
 
@@ -109,6 +116,7 @@ bc_RLE<-getPCoA(ttuLyte_RLE, method = "bray", numAxis)
 bc_RLE[[1]]<-cbind(bc_RLE[[1]], samSums)
 plot(bc_RLE[[1]]$Axis.1 , bc_RLE[[1]]$samSums ) 
 Kendall(bc_RLE[[1]]$samSums , bc_RLE[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_RLE[[1]]$Axis.1))
 
 #####################################################
 
@@ -117,9 +125,9 @@ numAxis<-2 #this returns the first two axes for plotting, change to how many axe
 bc_RA<-getPCoA(ttuLyte_RelativeAbundnace, method = "bray", numAxis)
 #plot PCoA colored by saccharin and point size is log10 sample size
 bc_RA[[1]]<-cbind(bc_RA[[1]], samSums)
-str(bc_RA)
-plot(bc_RA[[1]]$samSums , bc_RA[[1]]$Axis.1 ) 
-Kendall(bc_RA[[1]]$samSums , bc_RA[[1]]$Axis.1 ) 
+plot( samSums, bc_RA[[1]]$Axis.1)
+Kendall(  samSums, bc_RA[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_RA[[1]]$Axis.1))
 
 
 #######################  Bray-Cutris PCoA not log normalized ###############
@@ -133,6 +141,11 @@ bc_VSD<-getPCoA(ttuLyte_VSD, method = "bray", numAxis)
 #plot PCoA colored by saccharin and point size is log10 sample size
 bc_VSD[[1]]<-cbind(bc_VSD[[1]], samSums)
 bc_VSD_plot<- ggplot(bc_VSD[[1]], aes(Axis.1, Axis.2)) + geom_point(aes(colour=saccharin, , size = samSums)) + theme(axis.title.x = element_blank()) + ylab(bc_VSD[[2]][2])  + xlab(bc_VSD[[2]][1]) + theme_bw()
+
+plot(bc_VSD[[1]]$samSums , bc_VSD[[1]]$Axis.1 ) 
+Kendall(bc_VSD[[1]]$samSums , bc_VSD[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_VSD[[1]]$Axis.1))
+
 
 ########################
 if(!unique(as.character(bc_LogNorm[[1]]$X.SampleID) == names(samSums))){stop("samples not in the same order")}
