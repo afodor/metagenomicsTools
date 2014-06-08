@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("G:\\BigDataScalingFactors")
+setwd("D:\\BigDataScalingFactors")
 library("phyloseq")
 library("DESeq2")
 library("ggplot2")
@@ -95,7 +95,14 @@ otu_table(ttuLyte_RLE )<-otu_table(quick_rle(otu_table(ttuLyte_RLE)), taxa_are_r
 
 ########################
 diagdds = phyloseq_to_deseq2(ttuLyte, ~1)
+
+# with geomeans
+#geoMeans <- exp(rowMeans(log(counts(diagdds))))
+#diagdds = estimateSizeFactors(diagdds,geoMeans=geoMeans)
+
+#without geomeans
 diagdds = estimateSizeFactors(diagdds)
+
 diagdds = estimateDispersions(diagdds, fitType='local')
 diagvst = getVarianceStabilizedData(diagdds)
 diagvst<-diagvst + abs( min(diagvst))
