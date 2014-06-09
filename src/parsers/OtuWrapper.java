@@ -657,6 +657,67 @@ public class OtuWrapper
 		writer.flush();  writer.close();
 	}
 
+	public static void transpose(String inFile, String outFile) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		
+		String[] firstLineSplits = reader.readLine().split("\t");
+		
+		List<String> sampleNames = new ArrayList<String>();
+
+		List<List<Double>> data = new ArrayList<List<Double>>();
+		
+		for( int x=1; x < firstLineSplits.length; x++)
+		{
+			sampleNames.add(firstLineSplits[x]);
+			data.add(new ArrayList<Double>());
+		}
+			
+		List<String> otuNames = new ArrayList<String>();
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] otuSplits = s.split("\t");
+			
+			if( otuSplits.length != firstLineSplits.length)
+				throw new Exception("NO");
+			
+			otuNames.add(otuSplits[0]);
+			
+			for( int x=1; x < otuSplits.length; x++)
+				data.get(x-1).add(Double.parseDouble(otuSplits[x]));
+		}
+		
+		reader.close();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("otu");
+		
+		for(String s : otuNames)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(int x=0; x < sampleNames.size(); x++)
+		{
+			writer.write(sampleNames.get(x) );
+			
+			List<Double> innerList = data.get(x);
+			
+			if( innerList.size() != otuNames.size())
+				throw new Exception("No");
+			
+			for( Double d : innerList )
+				writer.write("\t" + d);
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+		
+		
+	}
+	
 	/*
 	 * Not thread safe even from separate VMs
 	 */
@@ -1811,5 +1872,13 @@ public class OtuWrapper
 
 			x++;
 		}
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
+				"ttuLyte_70_mergedReads_PL_raw_counts.txt", 
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
+				"ttuLyte_70_mergedReads_PL_raw_counts_taxaAsColumns.txt");
 	}
 }
