@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("D:\\BigDataScalingFactors")
+setwd("G:\\BigDataScalingFactors")
 library("phyloseq")
 library("DESeq2")
 library("ggplot2")
@@ -49,6 +49,26 @@ for(i in 1:nrow(a2))
 return(t(a2))
 }
 
+#################################################################
+
+"quick_rle_withGeoMean" <- function(myIn)
+{
+
+a2<-t(myIn)
+a2 <- a2 + 1
+a2<- log10(a2)
+
+for(i in 1:nrow(a2))
+{
+        geoMean<-  sum( a2[i,1:ncol(a2)]@.Data) / length(a2[i,1:ncol(a2)]@.Data)
+        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] - geoMean 
+}
+
+a2 <- t(a2)
+a2 <- a2 + abs( min(a2))
+return(a2)
+}
+
 ################################################################################################################################################
 "getPCoA" <- function(phyloObject,method, numAxis)
 {
@@ -92,6 +112,11 @@ otu_table(ttuLyte_RelativeAbundnace)<-otu_table(normalize(otu_table(ttuLyte)), t
 ttuLyte_RLE <- ttuLyte
 otu_table(ttuLyte_RLE )<-otu_table(quick_rle(otu_table(ttuLyte_RLE)), taxa_are_rows=T)
 
+ttuLyteGeoMean_RLE <- ttuLyte;
+otu_table(ttuLyteGeoMean_RLE )<-otu_table(quick_rle_withGeoMean(otu_table(ttuLyteGeoMean_RLE )),taxa_are_rows=T)
+
+
+
 
 ########################
 diagdds = phyloseq_to_deseq2(ttuLyte, ~1)
@@ -126,6 +151,16 @@ bc_RLE[[1]]<-cbind(bc_RLE[[1]], samSums)
 plot(bc_RLE[[1]]$Axis.1 , bc_RLE[[1]]$samSums ) 
 Kendall(bc_RLE[[1]]$samSums , bc_RLE[[1]]$Axis.1 ) 
 summary( lm(  samSums ~ bc_RLE[[1]]$Axis.1))
+
+####################################################
+
+numAxis<-2 #this returns the first two axes for plotting, change to how many axes you need
+bc_RLE_geoMean<-getPCoA(ttuLyteGeoMean_RLE, method = "bray", numAxis)
+bc_RLE_geoMean[[1]]<-cbind(bc_RLE_geoMean[[1]], samSums)
+plot(bc_RLE_geoMean[[1]]$Axis.1 , bc_RLE_geoMean[[1]]$samSums ) 
+Kendall(bc_RLE_geoMean[[1]]$samSums , bc_RLE_geoMean[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_RLE_geoMean[[1]]$Axis.1))
+
 
 #####################################################
 
