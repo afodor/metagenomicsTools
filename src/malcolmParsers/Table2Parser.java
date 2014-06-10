@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -116,6 +115,17 @@ public class Table2Parser
 		return set;
 	}
 	
+	public static HashSet<String> getAllGenotypes( Collection<Table2Parser> c ) 
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for( Table2Parser t2p : c)
+			set.addAll(t2p.genotypicProfiles);
+			
+		
+		return set;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Table2Parser> map = parseTable("c:\\temp\\Table_S2.txt");
@@ -126,6 +136,20 @@ public class Table2Parser
 		}
 		
 		System.out.println("Phenotypes: " + getAllPhenotypes(map.values()));
+		System.out.println("genotypes: " + getAllGenotypes(map.values()));
+		
+		// write json colors
+		
+		for( String  s :  getAllGenotypes(map.values()))
+		{
+
+			for(String s2 : map.keySet() )
+			{
+				if( map.get(s2).genotypicProfiles.contains(s))
+					System.out.println("found " + s + " in " + s2);
+			}
+		}
+		
 	}
 	
 }
