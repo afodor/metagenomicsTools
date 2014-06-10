@@ -14,10 +14,11 @@ public class CaclulateSparsity
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
 				"ttuLyte_70_mergedReads_PL_raw_counts_taxaAsColumns.txt");
 		
+		System.out.println("Num otus " + wrapper.getOtuNames().size());
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator
 				+ "sparseVsSequenceDepth.txt")));
 		
-		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tgeometricMean\n");
+		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tlog10Sum\tgeometricMean\n");
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
@@ -35,7 +36,13 @@ public class CaclulateSparsity
 					num++;
 			}
 			
+			double sum =0;
+			
+			for( int x2=0; x2< wrapper.getOtuNames().size(); x2++)
+				sum+= Math.log10(wrapper.getDataPointsUnnormalized().get(x).get(x2) + 1.0);
+			
 			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			writer.write(sum + "\t");
 			writer.write( wrapper.getGeometricMeanForSample(x) + "\n");
 		}
 		
