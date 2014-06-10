@@ -3,6 +3,8 @@ package malcolmParsers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -103,6 +105,17 @@ public class Table2Parser
 		return map;
 	}
 	
+	public static HashSet<String> getAllPhenotypes( Collection<Table2Parser> c ) 
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for( Table2Parser t2p : c)
+			set.addAll(t2p.phenotypicProfiles);
+			
+		
+		return set;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Table2Parser> map = parseTable("c:\\temp\\Table_S2.txt");
@@ -111,6 +124,8 @@ public class Table2Parser
 		{
 			System.out.println(map.get(s));
 		}
+		
+		System.out.println("Phenotypes: " + getAllPhenotypes(map.values()));
 	}
 	
 }
