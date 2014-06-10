@@ -18,6 +18,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.math.BigDecimal;
+import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -717,6 +719,32 @@ public class OtuWrapper
 		
 		
 	}
+	
+	// adds a pseduocount of 1.  may overflow/underflow
+	public double getGeometricMeanForSample(int sampleIndex)
+	{
+		double sum =1;
+		
+		for( int x=0; x< getOtuNames().size(); x++)
+			sum*= (getDataPointsUnnormalized().get(sampleIndex).get(x) + 1.0);
+		
+		return Math.pow(sum, 1 / getOtuNames().size());
+	}
+	
+	/*
+	public BigDecimal getGeometricMeanWithArbitraryPrecisions(int sampleIndex)
+	{
+		BigDecimal sum = new BigDecimal(1);
+		
+		for( int x=0; x< getOtuNames().size(); x++)
+			sum = sum.multiply( new BigDecimal(getDataPointsUnnormalized().get(sampleIndex).get(x) + 1.0));
+		
+		System.out.println(sum.toString());
+		
+		return sum.
+		
+	}
+	*/
 	
 	/*
 	 * Not thread safe even from separate VMs

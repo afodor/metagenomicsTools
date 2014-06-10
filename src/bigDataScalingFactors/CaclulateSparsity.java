@@ -17,7 +17,7 @@ public class CaclulateSparsity
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator
 				+ "sparseVsSequenceDepth.txt")));
 		
-		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\n");
+		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tgeometricMean\n");
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
@@ -35,7 +35,8 @@ public class CaclulateSparsity
 					num++;
 			}
 			
-			writer.write( num / wrapper.getOtuNames().size()  + "\n");
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			writer.write( wrapper.getGeometricMeanForSample(x) + "\n");
 		}
 		
 		writer.flush();  writer.close();
