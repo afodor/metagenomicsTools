@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("G:\\BigDataScalingFactors")
+setwd("D:\\BigDataScalingFactors")
 library("phyloseq")
 library("DESeq2")
 library("ggplot2")
@@ -54,25 +54,25 @@ return(t(a2))
 "quick_rle_withGeoMean" <- function(myIn)
 {
 
-a2<-t(myIn)
-a2 <- a2
-
-for(i in 1:nrow(a2))
-{
-        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] /  sum( a2[i,1:ncol(a2)]@.Data)
-}
-
-a2<- log10(a2+0.5)
-
-for(i in 1:nrow(a2))
-{
-        geoMean<-  sum( a2[i,1:ncol(a2)]@.Data) / length(a2[i,1:ncol(a2)]@.Data)
-        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] - geoMean 
-}
-
-a2 <- t(a2)
-a2 <- a2 + abs( min(a2))
-return(a2)
+	a2<-t(myIn)
+	a2 <- a2 + 0.5
+	
+	for(i in 1:nrow(a2))
+	{
+	        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] /  sum( a2[i,1:ncol(a2)]@.Data)
+	}
+	
+	a2 <- log(a2)
+	
+	for(i in 1:nrow(a2))
+	{
+	        geoMean<-  sum( a2[i,1:ncol(a2)]@.Data) / length(a2[i,1:ncol(a2)]@.Data)
+	        a2[i,1:ncol(a2)] <- a2[i,1:ncol(a2)] - geoMean 
+	}
+	
+	a2 <- t(a2)
+	a2 <- a2 + abs( min(a2))
+	return(a2)
 }
 
 ################################################################################################################################################
