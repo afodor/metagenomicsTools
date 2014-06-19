@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashSet;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class CheckForDuplicates
@@ -12,8 +13,9 @@ public class CheckForDuplicates
 	public static void main(String[] args) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"ttuLyte_70_mergedReads_PL_raw_counts.txt")));
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+						+ File.separator + 
+					"riskRawTaxaAsColumn.txt")));
 		
 		reader.readLine();
 		
@@ -30,6 +32,21 @@ public class CheckForDuplicates
 			
 			set.add(splits[0]);
 		}
+		
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+						+ File.separator + 
+					"riskRawTaxaAsColumn.txt");
+		
+		set = new HashSet<String>();
+		
+		for(String s : wrapper.getOtuNames())
+		{
+			if( set.contains(s))
+				throw new Exception("NO");
+			
+			set.add(s);
+		}
+		
 		
 		System.out.println("FINISHED");
 	}

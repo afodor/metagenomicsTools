@@ -657,7 +657,7 @@ public class OtuWrapper
 		writer.flush();  writer.close();
 	}
 
-	public static void transpose(String inFile, String outFile) throws Exception
+	public static void transpose(String inFile, String outFile, boolean makeSamplesUnique) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -672,6 +672,10 @@ public class OtuWrapper
 			sampleNames.add(firstLineSplits[x]);
 			data.add(new ArrayList<Double>());
 		}
+		
+		if( makeSamplesUnique)
+			for( int x=0; x < sampleNames.size(); x++)
+				sampleNames.set(x, sampleNames.get(x) + "_" + x);
 			
 		List<String> otuNames = new ArrayList<String>();
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
@@ -1909,7 +1913,7 @@ public class OtuWrapper
 				"riskRaw.txt", 
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
 						+ File.separator + 
-					"riskRawTaxaAsColumn.txt"
+					"riskRawTaxaAsColumn.txt", true
 				);
 	}
 }
