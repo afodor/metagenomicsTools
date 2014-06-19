@@ -18,7 +18,7 @@ public class PCA_Pivot
 		
 		System.out.println(wrapper.getSampleNames().size() + " " + wrapper.getOtuNames().size());
 			
-		double[][] d=  wrapper.getNormalizedThenLoggedAsArray();
+		double[][] d=  wrapper.getAsGeoNormalizedLoggedArray();
 			
 		List<String> numSequences = new ArrayList<String>();
 		List<String> sampleIDs = new ArrayList<String>();
@@ -38,7 +38,7 @@ public class PCA_Pivot
 		
 		File outFile = new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
 				+ File.separator + 
-			"PCA_Lognormalized.txt");
+			"PCA_LognormalizedGeoMean.txt");
 			
 		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile);
 	}

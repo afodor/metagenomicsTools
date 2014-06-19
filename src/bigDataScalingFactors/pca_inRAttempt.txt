@@ -10,7 +10,8 @@ for( i in 1:nrow(myT))
 	seqNums[i] = sum(myT[i,])
 }
 
-myPCA <- prcomp(myT)
+#myPCA <- prcomp(myT)
+myPCA <- prcomp(myT,scale=TRUE)
 plot(seqNums, myPCA$x[,1])
 summary(lm(seqNums~ myPCA$x[,1]))
 
@@ -23,3 +24,4 @@ for( i in 1:nrow(myT))
 myPCANorm <- prcomp(myT)
 plot(seqNums, myPCANorm$x[,1])
 summary(lm(seqNums~ myPCANorm$x[,1]))
+Kendall(seqNums,myPCANorm$x[,1])

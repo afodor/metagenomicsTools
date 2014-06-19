@@ -729,9 +729,6 @@ public class OtuWrapper
 		for( int x=0; x< getOtuNames().size(); x++)
 			sum+= Math.log10(getDataPointsUnnormalized().get(sampleIndex).get(x) + 1.0);
 		
-		if( sum > 3245)
-			System.out.println( sum  + " " +  sum /getOtuNames().size() + " " + 
-					Math.pow(10, sum /getOtuNames().size()));
 		return Math.pow(10, sum /getOtuNames().size());
 	}
 	
@@ -1332,6 +1329,23 @@ public class OtuWrapper
 			for (int y = 0; y < dataPointsUnnormalized.get(0).size(); y++)
 				d[x][y] =  dataPointsUnnormalized.get(x).get(y);
 
+		return d;
+	}
+	
+	public double[][] getAsGeoNormalizedLoggedArray()
+	{
+		double[][] d = new double[dataPointsUnnormalized.size()][dataPointsUnnormalized
+				.get(0).size()];
+
+		for (int x = 0; x < dataPointsUnnormalized.size(); x++)
+		{
+			double logGeoMean = Math.log10( this.getGeometricMeanForSample(x));
+			
+			for (int y = 0; y < dataPointsUnnormalized.get(0).size(); y++)
+				d[x][y] = Math.log10( dataPointsUnnormalized.get(x).get(y) +1 ) - logGeoMean ;
+
+		}
+			
 		return d;
 	}
 
