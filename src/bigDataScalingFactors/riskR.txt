@@ -1,5 +1,5 @@
 rm(list=ls())
-#setwd("G:\\BigDataScalingFactors")
+setwd("D:\\BigDataScalingFactors\\risk")
 library("phyloseq")
 library("DESeq2")
 library("ggplot2")
@@ -53,3 +53,9 @@ plot(samSums, bc_VSD[[1]]$Axis.1, pch=19)
 
 Kendall(  samSums, bc_VSD[[1]]$Axis.1 ) 
 summary( lm(  samSums ~ bc_VSD[[1]]$Axis.1))
+
+=##############################
+
+riskData_100_raw <- riskData_100
+otu_table(riskData_100_raw)<-otu_table(riskData_100_raw, taxa_are_rows=T)
+write.table(otu_table(riskData_100_raw), file="riskRaw.txt", sep="\t") 

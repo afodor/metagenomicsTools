@@ -1904,9 +1904,12 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
-		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"ttuLyte_70_mergedReads_PL_raw_counts.txt", 
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"ttuLyte_70_mergedReads_PL_raw_counts_taxaAsColumns.txt");
+		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+					+ File.separator + 
+				"riskRaw.txt", 
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+						+ File.separator + 
+					"riskRawTaxaAsColumn.txt"
+				);
 	}
 }
