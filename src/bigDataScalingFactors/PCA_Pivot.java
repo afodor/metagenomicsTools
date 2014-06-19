@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import parsers.OtuWrapper;
+import pca.CorrelationMatrixDistanceMeasure;
 import pca.PCA;
 import utils.ConfigReader;
 
@@ -38,8 +39,8 @@ public class PCA_Pivot
 		
 		File outFile = new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
 				+ File.separator + 
-			"PCA_NotNormalized.txt");
+			"PCA_NotNormalizedPearson.txt");
 			
-		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile);
+		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile, new CorrelationMatrixDistanceMeasure());
 	}
 }

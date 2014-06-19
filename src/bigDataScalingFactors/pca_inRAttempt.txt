@@ -1,0 +1,5 @@
+rm(list=ls())
+setwd("D:\\BigDataScalingFactors\\risk")
+
+myT <- read.table("riskRawTaxaAsColumn.txt", sep="\t", header=TRUE,row.names=1)
+myPCA <- prcomp(myT)
