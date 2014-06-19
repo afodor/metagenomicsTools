@@ -60,7 +60,8 @@ public class MergeDataAndDistance
 		HashSet<Integer> outbreakGroup = getOutbreakGroup();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
-				ConfigReader.getKlebDir() + File.separator + "distanceVsTimeCorrected.txt")));
+				ConfigReader.getKlebDir() + File.separator + "setOf48" + File.separator + 
+				"distanceVsTimeCorrectedOnly48.txt")));
 		
 		writer.write("xGenome\tyGenome\txDateString\tyDateString\txLocation\tyLocation\tsameLocation\t" 
 				+ "timeDifference\tgenomicDistance\tinOutbreakGroup\n");
@@ -128,15 +129,17 @@ public class MergeDataAndDistance
 	{
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir()+
-				File.separator + "distances.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir() 
+				+ File.separator +"setOf48" + File.separator + 
+				"distancesAllUpperTriangleNoDiagOnly48.txt")));
 		
 		reader.readLine();
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			StringTokenizer sToken = new StringTokenizer(s, "\t");
-			String key = sToken.nextToken() + "_" + sToken.nextToken();
+			String key = sToken.nextToken().replaceAll("Kleb_pneu_CHS_", "") 
+					+ "_" + sToken.nextToken().replaceAll("Kleb_pneu_CHS_", "");
 			//System.out.println(key);
 			
 			if( map.containsKey(key))

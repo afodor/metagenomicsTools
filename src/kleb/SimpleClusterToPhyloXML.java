@@ -44,12 +44,13 @@ public class SimpleClusterToPhyloXML
 		for( DistanceHolder dh : mergedList)
 			System.out.println(dh);
 		
-		confirmDistances(mergedList);
+		//todo: recheck test code
+		//confirmDistances(mergedList);
 		
 		List<DistanceHolder> listCopy = new ArrayList<DistanceHolder>(mergedList);
 		
 		writePhyloXml(mergedList, metaMap);
-		writeJSON(listCopy, metaMap);
+		//writeJSON(listCopy, metaMap);
 		
 	}
 	
@@ -99,6 +100,9 @@ public class SimpleClusterToPhyloXML
 					n++;
 					String key = MergeDataAndDistance.makeTwoChars(leftName) + "_" +
 									MergeDataAndDistance.makeTwoChars(rightName);
+					
+					System.out.println(key);
+					
 					sum += distances.get(key);
 				}
 			
@@ -199,7 +203,7 @@ public class SimpleClusterToPhyloXML
 			throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
-				File.separator + "all76Tree.json")));
+				File.separator + "setOf48" + File.separator +  "setOf48Tree.json")));
 		
 		writeJSonNodeAndChildren( writer, mergedList, mergedList.get(mergedList.size()-1), metaMap);
 		
@@ -248,7 +252,7 @@ public class SimpleClusterToPhyloXML
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKlebDir() + 
-				File.separator + "all76Tree.xml")));
+				File.separator + "setOf48" + File.separator + "setOf48Tree.xml")));
 		
 		writer.write("<phyloxml xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + ""
 				+ "xsi:schemaLocation=\"http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd\" " + 
@@ -431,7 +435,8 @@ public class SimpleClusterToPhyloXML
 		List<DistanceHolder> list = new ArrayList<DistanceHolder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getKlebDir() + File.separator +  "distancesAllUpperTriangleNoDiag.txt")));
+			ConfigReader.getKlebDir() + File.separator + "setOf48" + File.separator + 
+				"distancesAllUpperTriangleNoDiagOnly48.txt")));
 		
 		reader.readLine();
 		
@@ -440,8 +445,8 @@ public class SimpleClusterToPhyloXML
 			String[] splits = s.split("\t");
 			DistanceHolder h = new DistanceHolder();
 			list.add(h);
-			h.leftStrains.add(Integer.parseInt(splits[0]));
-			h.rightStrains.add(Integer.parseInt(splits[1]));
+			h.leftStrains.add(Integer.parseInt(splits[0].replaceAll("Kleb_pneu_CHS_", "")));
+			h.rightStrains.add(Integer.parseInt(splits[1].replaceAll("Kleb_pneu_CHS_", "")));
 			h.distance = Double.parseDouble(splits[2]);
 		}
 		
