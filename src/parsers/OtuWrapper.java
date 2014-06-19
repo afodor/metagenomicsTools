@@ -234,6 +234,17 @@ public class OtuWrapper
 		return sum / n;
 	}
 	
+	public double getCountsForSampleExcludingTheseTaxa(int sampleIndex, HashSet<String> taxa)
+	{
+		double sum =0;
+		
+		for( int x=0; x < this.getOtuNames().size(); x++)
+			if( ! taxa.contains( this.getOtuNames().get(x) ))
+				sum += this.dataPointsUnnormalized.get(sampleIndex).get(x);
+		
+		return sum;
+	}
+	
 	public double getMinimumExcludingZeros(int col)
 	{
 		double d = Double.MAX_VALUE;
