@@ -28,7 +28,7 @@ public class PCA_Pivot
 				+ File.separator + 
 			"riskRawTaxaAsColumn.txt");
 		
-		for( int x=0; x< 10; x++)
+		for( int x=10; x>=0; x--)
 			writePCOA(writer, x, wrapper);
 		
 		writer.flush();  writer.close();
