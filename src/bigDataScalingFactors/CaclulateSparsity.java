@@ -11,12 +11,15 @@ public class CaclulateSparsity
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"ttuLyte_70_mergedReads_PL_raw_counts_taxaAsColumns.txt");
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+				+ File.separator + 
+			"riskRawTaxaAsColumn.txt");
 		
 		System.out.println("Num otus " + wrapper.getOtuNames().size());
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator
-				+ "sparseVsSequenceDepth.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+						+ File.separator + 
+					"riskRawTaxaAsColumnSparsityVsSequenceDepth.txt")));
 		
 		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tlog10Sum\tgeometricMean\n");
 		
