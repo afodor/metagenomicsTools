@@ -20,16 +20,16 @@ public class PCA_Pivot
 	public static void main(String[] args) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "risk" + File.separator + "pcoaLog.txt")));
+				File.separator + "risk" + File.separator + "pcoaLogPercentile.txt")));
 		
-		writer.write("sparsityNum\ttaxaRemoved\ttaxaLeft\tsamplesRemoved\tsamplesLeft\tpValue\trSquared\n");
+		writer.write("sparsityNum\ttaxaRemoved\ttaxaLeft\tsamplesRemoved\tsamplesLeft\trSquared\tpValue\n");
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
 				+ File.separator + 
 			"riskRawTaxaAsColumn.txt");
 		
-		for( int x=50; x>=0; x = x -5)
-			writePCOA(writer, x, wrapper);
+		//for( int x=50; x>=0; x = x -5)
+			writePCOA(writer, 25, wrapper);
 		
 		writer.flush();  writer.close();
 	
@@ -44,7 +44,8 @@ public class PCA_Pivot
 		
 		for( int x=0; x< wrapper.getOtuNames().size(); x++)
 		{
-			if( wrapper.getCountsForTaxa(x) <= removeSparse + 0.001 )
+			System.out.println("Fraction " + x + " " + wrapper.getFractionZeroForTaxa(x));
+			if( wrapper.getFractionZeroForTaxa(x) >= 0.75)
 				excludedTaxa.add(wrapper.getOtuNames().get(x));
 		}
 		
@@ -63,6 +64,7 @@ public class PCA_Pivot
 		
 		System.out.println("EXCLUDING " + excludedTaxa);
 		System.out.println("EXCLUDING " + excludedSamples);
+		System.out.println("New wrapper " + wrapper.getOtuNames().size() + " " + wrapper.getSampleNames().size());
 			
 		double[][] d=  wrapper.getAsGeoNormalizedLoggedArray();
 			
