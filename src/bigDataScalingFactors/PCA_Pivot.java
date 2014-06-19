@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import parsers.OtuWrapper;
-import pca.CorrelationMatrixDistanceMeasure;
 import pca.PCA;
 import utils.ConfigReader;
 
@@ -19,7 +18,7 @@ public class PCA_Pivot
 		
 		System.out.println(wrapper.getSampleNames().size() + " " + wrapper.getOtuNames().size());
 			
-		double[][] d=  wrapper.getAsArray();
+		double[][] d=  wrapper.getNormalizedThenLoggedAsArray();
 			
 		List<String> numSequences = new ArrayList<String>();
 		List<String> sampleIDs = new ArrayList<String>();
@@ -39,8 +38,8 @@ public class PCA_Pivot
 		
 		File outFile = new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
 				+ File.separator + 
-			"PCA_NotNormalizedPearson.txt");
+			"PCA_Lognormalized.txt");
 			
-		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile, new CorrelationMatrixDistanceMeasure());
+		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile);
 	}
 }

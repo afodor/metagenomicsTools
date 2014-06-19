@@ -1,5 +1,25 @@
 rm(list=ls())
 setwd("D:\\BigDataScalingFactors\\risk")
-
 myT <- read.table("riskRawTaxaAsColumn.txt", sep="\t", header=TRUE,row.names=1)
+
+
+seqNums <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	seqNums[i] = sum(myT[i,])
+}
+
 myPCA <- prcomp(myT)
+plot(seqNums, myPCA$x[,1])
+summary(lm(seqNums~ myPCA$x[,1]))
+
+
+for( i in 1:nrow(myT)) 
+{
+	myT[i,1:ncol(myT)] = myT[i,1:ncol(myT)] / seqNums[i]
+}
+
+myPCANorm <- prcomp(myT)
+plot(seqNums, myPCANorm$x[,1])
+summary(lm(seqNums~ myPCANorm$x[,1]))
