@@ -32,3 +32,12 @@ myT <- read.table("PCA_NotNormalizedCoVariance.txt", sep="\t", header=TRUE)
 plot(log10(myT$NumSequences), myT$Comp0 )
 summary(lm(log10(as.numeric(myT$NumSequences)) ~ as.numeric(myT$Comp0 )))
 
+myT <- read.table("PCA_normalized.txt", sep="\t", header=TRUE)
+plot(log10(myT$NumSequences), myT$Comp0 )
+summary(lm(log10(as.numeric(myT$NumSequences)) ~ as.numeric(myT$Comp0 )))
+
+
+myT <- read.table("PCA_Lognormalized.txt", sep="\t", header=TRUE)
+plot(log10(myT$NumSequences), myT$Comp0 )
+summary(lm(log10(as.numeric(myT$NumSequences)) ~ as.numeric(myT$Comp0 )))
+
