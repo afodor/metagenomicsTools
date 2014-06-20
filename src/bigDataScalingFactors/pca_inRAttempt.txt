@@ -25,3 +25,10 @@ myPCANorm <- prcomp(myT)
 plot(seqNums, myPCANorm$x[,1])
 summary(lm(seqNums~ myPCANorm$x[,1]))
 Kendall(seqNums,myPCANorm$x[,1])
+
+#############################################
+
+myT <- read.table("PCA_NotNormalizedCoVariance.txt", sep="\t", header=TRUE)
+plot(log10(myT$NumSequences), myT$Comp0 )
+summary(lm(log10(as.numeric(myT$NumSequences)) ~ as.numeric(myT$Comp0 )))
+
