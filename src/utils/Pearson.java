@@ -219,4 +219,12 @@ public class Pearson
             }
             return sxy/(Math.sqrt(sxx*syy)+TINY);
     } 
+    
+    public static void main(String[] args) throws Exception
+	{
+		double[] a = {2, 3, 4, 5, 6, 7, 8, 2, 3, 3, 2};
+		double[] b = {2, 3, 4, 1, 4, 5, 6, 7, 8, 9, 1};
+		
+		System.out.println(getPearsonR(a, b));
+	}
 }

@@ -235,7 +235,7 @@ public class PCA
 			for(String s : categoryHeaders)
 				writer.write("\t"+ s);
 		
-		for( int x=0; x < a.length; x++)
+		for( int x=0; x < a.length && x < 10; x++)
 			writer.write("\tComp" + x);
 		
 		writer.write("\n");
@@ -248,7 +248,7 @@ public class PCA
 				for( List<String> cats : categories )
 					writer.write("\t" + cats.get(y));
 			
-			for( int x=0; x < eigenValues.size(); x++)
+			for( int x=0; x < eigenValues.size() && x < 10; x++)
 			{
 				writer.write("\t" + a[eigenValues.get(x).rank][y]);
 			}
