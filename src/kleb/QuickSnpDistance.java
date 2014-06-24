@@ -23,9 +23,11 @@ public class QuickSnpDistance
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getKlebDir() + File.separator +"setOf48" + File.separator + 
-				"distancesAllUpperTriangleNoDiagOnly48.txt")));
+				"distancesAllUpperTriangleNoDiagOnly48_Thresh6.txt")));
 		
 		writer.write("xGenome\tyGenome\tdistance\n");
+		
+		HashMap<Integer, Integer> threshMap = NumberVsEntropy.getPositionVsNumChangesMap();
 		
 		List<String> aList = new ArrayList<String>(map.keySet());
 		Collections.sort(aList);
@@ -36,7 +38,7 @@ public class QuickSnpDistance
 					System.out.println(x + " " + y);
 					writer.write(aList.get(x) + "\t");
 					writer.write(aList.get(y) + "\t");
-					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y))) 
+					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y)), threshMap, 6) 
 								+ "\n");
 					writer.flush();
 				}
@@ -70,7 +72,14 @@ public class QuickSnpDistance
 		
 	}
 		
-	static int getNumDifferent( FastaSequence fs1, FastaSequence fs2 ) throws Exception
+	/*
+	 * If positionToNumDiffMap is null it is ignored.
+	 * 
+	 * Otherwise, only columns that are indicated in the key of the map with a value <= threshold are included in 
+	 * the SNP distance
+	 */
+	static int getNumDifferent( FastaSequence fs1, FastaSequence fs2, 
+				HashMap<Integer, Integer> positionToNumDiffMap, int threshold ) throws Exception
 	{
 		int numDifferent =0;
 		
@@ -81,13 +90,24 @@ public class QuickSnpDistance
 			throw new Exception("No");
 		
 		for( int x=0; x < seq1.length(); x++)
-			if( seq1.charAt(x) != seq2.charAt(x))
+		{
+			if( positionToNumDiffMap == null || 
+					(positionToNumDiffMap.get(x) != null && positionToNumDiffMap.get(x) <= threshold ) )
 			{
-				numDifferent++;
-				diffPositions.add(x);
+				if( seq1.charAt(x) != seq2.charAt(x))
+				{
+					numDifferent++;
+					diffPositions.add(x);
+				}
 			}
+		}
 				
 		return numDifferent;
+	}
+	
+	static int getNumDifferent( FastaSequence fs1, FastaSequence fs2) throws Exception
+	{
+		return getNumDifferent(fs1, fs2, null, -1);
 	}
 	
 }

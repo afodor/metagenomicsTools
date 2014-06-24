@@ -1,10 +1,13 @@
 package kleb;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import parsers.FastaSequence;
@@ -17,6 +20,37 @@ public class NumberVsEntropy
 	private static int C_POS=1;
 	private static int G_POS=2;
 	private static int T_POS=3;
+	
+	/*
+	 * Run the main method in this.
+	 * 
+	 *  The key is the position number in the alignment.
+	 *  The value is the number of total SNP chagnes in the entire column.
+	 *  (This map is sparse so perfectly conserved columns are not present).
+	 */
+	public static HashMap<Integer, Integer> getPositionVsNumChangesMap(  ) throws Exception
+	{
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir() + File.separator+
+				"setOf48" + File.separator + "entropyVsNumOut.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			Integer key = Integer.parseInt(splits[0]);
+			
+			if( map.containsKey(key))
+				throw new Exception("Duplicate");
+			
+			map.put(key, Integer.parseInt( splits[6]));
+		}
+		
+		reader.close();
+		return map;
+	}
 	
 	public static void main(String[] args) throws Exception
 	{

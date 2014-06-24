@@ -61,7 +61,7 @@ public class MergeDataAndDistance
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getKlebDir() + File.separator + "setOf48" + File.separator + 
-				"distanceVsTimeCorrectedOnly48.txt")));
+				"distanceVsTimeCorrectedOnly48_Thresh6.txt")));
 		
 		writer.write("xGenome\tyGenome\txDateString\tyDateString\txLocation\tyLocation\tsameLocation\t" 
 				+ "timeDifference\tgenomicDistance\tinOutbreakGroup\n");
@@ -131,7 +131,7 @@ public class MergeDataAndDistance
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKlebDir() 
 				+ File.separator +"setOf48" + File.separator + 
-				"distancesAllUpperTriangleNoDiagOnly48.txt")));
+				"distancesAllUpperTriangleNoDiagOnly48_Thresh6.txt")));
 		
 		reader.readLine();
 		
