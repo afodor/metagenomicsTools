@@ -1933,12 +1933,12 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
-		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 					+ File.separator + 
-				"riskRaw.txt", 
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+				"raw_100.txt", 
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 						+ File.separator + 
-					"riskRawTaxaAsColumn.txt", true
+					"raw_100_taxaAsColumns.txt", true
 				);
 	}
 }
