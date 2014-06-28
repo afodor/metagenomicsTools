@@ -1717,6 +1717,7 @@ public class OtuWrapper
 			RankHolder rh = new RankHolder();
 			rh.originalIndex = x;
 			rh.originalData = this.getDataPointsUnnormalized().get(sampleIndex).get(x);
+			rankedList.add(rh);
 		}
 		
 		Collections.sort(rankedList);
@@ -2010,15 +2011,21 @@ public class OtuWrapper
 				);
 		*/
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("c:\\temp\\temp.txt")));
+		
+		writer.write("counts\trank\n");
+		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 				+ File.separator + 
-			"raw_100.txt");
+			"raw_100_taxaAsColumns.txt");
 		
 		Integer[] ranks= wrapper.getRankForSample(0);
 		
 		for(int x=0; x < wrapper.getOtuNames().size(); x++)
 		{
-			System.out.println(wrapper.getDataPointsUnnormalized().get(0).get(x) + " " + ranks[x]);
+			writer.write(wrapper.getDataPointsUnnormalized().get(0).get(x) + "\t" + ranks[x] + "\n");
 		}
+		
+		writer.flush();  writer.close();
 	}
 }
