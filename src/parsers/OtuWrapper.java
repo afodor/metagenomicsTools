@@ -1783,6 +1783,22 @@ public class OtuWrapper
 			backIndex--;
 		}
 		
+		HashMap<Integer, Integer> rankMap = new HashMap<Integer, Integer>();
+		
+		int val=0;
+		for( int x=rankedList.size()-1; x>=0; x--)
+		{
+			int intVal = (int) (rankedList.get(x).rank + 0.001);
+			if( !rankMap.containsKey(intVal))
+			{
+				val++;
+				rankMap.put(intVal, val);
+			}
+		}
+		
+		for( RankHolder rh : rankedList)
+			rh.rank = rankMap.get((int) (rh.rank + 0.001));
+		
 		Integer[] returnVals = new Integer[ this.getDataPointsUnnormalized().get(sampleIndex).size()];
 		
 		for( RankHolder rh : rankedList)
