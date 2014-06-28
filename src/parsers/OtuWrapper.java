@@ -549,11 +549,18 @@ public class OtuWrapper
 		return s;
 	}
 	
-	private static class RankHolder
+	private static class RankHolder implements Comparable<RankHolder>
 	{
 		int originalIndex;
 		double rank;
 		double originalData;
+		boolean tieMark = false;
+		
+		@Override
+		public int compareTo(RankHolder o)
+		{
+			return Double.compare(this.originalData, o.originalData);
+		}
 	}
 	
 	public List<List<Double>> getRankNormalizedDataPoints()
@@ -1700,6 +1707,66 @@ public class OtuWrapper
 		writer.flush();  writer.close();
 	}
 
+	
+	private Integer[] getRankForSample(int sampleIndex) throws Exception
+	{
+		List<RankHolder> rankedList = new ArrayList<RankHolder>();
+		
+		for( int x=0; x < this.getDataPointsUnnormalized().get(sampleIndex).size(); x++)
+		{
+			RankHolder rh = new RankHolder();
+			rh.originalIndex = x;
+			rh.originalData = this.getDataPointsUnnormalized().get(sampleIndex).get(x);
+		}
+		
+		Collections.sort(rankedList);
+		
+		int lastIndex =0;
+		double lastCount = 0;
+		
+		for(int x=0; x < rankedList.size();x++)
+		{
+			RankHolder rh = rankedList.get(x);
+			if( rh.originalData > lastCount )
+			{
+				rh.tieMark = false;
+				
+				int backIndex = x-1;
+				
+				while( backIndex > 0 && rankedList.get(x).tieMark == true)
+				{
+					RankHolder priorH = rankedList.get(backIndex);
+					priorH.tieMark = false;
+					
+					//0's and 1's stay 0's and 1's in the rank transformed spreadsheet
+					if( priorH.originalData > 1 )
+						priorH.rank = lastIndex;
+					else
+						priorH.rank = priorH.originalData;
+					
+					backIndex--;
+				}
+				
+				lastIndex = x;
+			}
+			else
+			{
+				rh.tieMark = true;
+			}
+			
+
+			lastCount = rh.originalData;
+			rh.rank = lastIndex;
+		}
+		
+		Integer[] returnVals = new Integer[ this.getDataPointsUnnormalized().get(sampleIndex).size()];
+		
+		for( RankHolder rh : rankedList)
+			returnVals[rh.originalIndex] = (int) (rh.rank + 0.001);
+		
+		return returnVals;
+	}
+
 	public OtuWrapper(File f, HashSet<String> excludedSamples,
 			HashSet<String> excludedTaxa, double threshold) throws Exception
 	{
@@ -1933,6 +2000,7 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 					+ File.separator + 
 				"raw_100.txt", 
@@ -1940,5 +2008,17 @@ public class OtuWrapper
 						+ File.separator + 
 					"raw_100_taxaAsColumns.txt", true
 				);
+		*/
+		
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
+				+ File.separator + 
+			"raw_100.txt");
+		
+		Integer[] ranks= wrapper.getRankForSample(0);
+		
+		for(int x=0; x < wrapper.getOtuNames().size(); x++)
+		{
+			System.out.println(wrapper.getDataPointsUnnormalized().get(0).get(x) + " " + ranks[x]);
+		}
 	}
 }
