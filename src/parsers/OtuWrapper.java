@@ -1722,7 +1722,7 @@ public class OtuWrapper
 		
 		Collections.sort(rankedList);
 		
-		double lastCount = 0;
+		double lastCount = 0.0;
 		
 		for(int x=0; x < rankedList.size();x++)
 		{
@@ -1733,7 +1733,7 @@ public class OtuWrapper
 			{
 				int backIndex = x-1;
 				
-				while( backIndex > 0 && rankedList.get(backIndex).tieMark == true)
+				while( backIndex >= 0 && rankedList.get(backIndex).tieMark == true)
 				{
 					RankHolder priorH = rankedList.get(backIndex);
 					priorH.tieMark = false;
@@ -1751,7 +1751,7 @@ public class OtuWrapper
 		{
 			RankHolder priorH = rankedList.get(backIndex);
 			priorH.tieMark = false;
-			priorH.rank = rankedList.size()-1;
+			priorH.rank = rankedList.size();
 			backIndex--;
 		}
 		
