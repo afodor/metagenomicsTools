@@ -1,6 +1,6 @@
 rm(list=ls())
-setwd("D:\\BigDataScalingFactors\\risk")
-myT <- read.table("riskRawTaxaAsColumn.txt", sep="\t", header=TRUE,row.names=1)
+setwd("D:\\BigDataScalingFactors\\June24_risk")
+myT <- read.table("raw_100_taxaAsColumns.txt", sep="\t", header=TRUE,row.names=1)
 
 
 seqNums <- vector()
@@ -10,8 +10,12 @@ for( i in 1:nrow(myT))
 	seqNums[i] = sum(myT[i,])
 }
 
-#myPCA <- prcomp(myT)
-myPCA <- prcomp(myT,scale=TRUE)
+myTRanked <- read.table("raw_100_taxaAsColumnsRanked.txt", sep="\t", header=TRUE,row.names=1)
+
+
+
+myPCA <- prcomp(myTRanked)
+#myPCA <- prcomp(myT,scale=TRUE)
 plot(seqNums, myPCA$x[,1])
 summary(lm(seqNums~ myPCA$x[,1]))
 
