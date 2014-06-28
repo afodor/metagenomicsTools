@@ -1707,6 +1707,34 @@ public class OtuWrapper
 		writer.flush();  writer.close();
 	}
 
+	public void writeRankedSpreadsheet(String newFilePath) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(newFilePath));
+		
+		writer.write("taxa");
+		
+		for( String s : this.getOtuNames())
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for( int x=0; x < this.getSampleNames().size(); x++)
+		{
+			writer.write(this.getSampleNames().get(x));
+			
+			Integer[] ranked= this.getRankForSample(x);
+			
+			if( ranked.length != this.getDataPointsNormalized().get(x).size())
+				throw new Exception("Logic error");
+			
+			for( int y=0; y < ranked.length; y++)
+				writer.write("\t" + ranked[y]);
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
 	
 	private Integer[] getRankForSample(int sampleIndex) throws Exception
 	{
@@ -2006,21 +2034,12 @@ public class OtuWrapper
 				);
 		*/
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("c:\\temp\\temp.txt")));
-		
-		writer.write("counts\trank\n");
-		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 				+ File.separator + 
 			"raw_100_taxaAsColumns.txt");
 		
-		Integer[] ranks= wrapper.getRankForSample(0);
-		
-		for(int x=0; x < wrapper.getOtuNames().size(); x++)
-		{
-			writer.write(wrapper.getDataPointsUnnormalized().get(0).get(x) + "\t" + ranks[x] + "\n");
-		}
-		
-		writer.flush();  writer.close();
+		wrapper.writeRankedSpreadsheet( ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
+				+ File.separator + 
+			"raw_100_taxaAsColumnsRanked.txt"  );
 	}
 }
