@@ -1738,13 +1738,7 @@ public class OtuWrapper
 				{
 					RankHolder priorH = rankedList.get(backIndex);
 					priorH.tieMark = false;
-					
-					//0's and 1's stay 0's and 1's in the rank transformed spreadsheet
-					if( priorH.originalData > 1 )
-						priorH.rank = lastIndex;
-					else
-						priorH.rank = priorH.originalData;
-					
+					priorH.rank = lastIndex;
 					backIndex--;
 				}
 				
