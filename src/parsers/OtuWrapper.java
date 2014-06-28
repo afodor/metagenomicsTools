@@ -1722,36 +1722,37 @@ public class OtuWrapper
 		
 		Collections.sort(rankedList);
 		
-		int lastIndex =0;
 		double lastCount = 0;
 		
 		for(int x=0; x < rankedList.size();x++)
 		{
 			RankHolder rh = rankedList.get(x);
+			rh.tieMark = true;
+			
 			if( rh.originalData > lastCount )
 			{
-				rh.tieMark = false;
-				
 				int backIndex = x-1;
 				
-				while( backIndex > 0 && rankedList.get(x).tieMark == true)
+				while( backIndex > 0 && rankedList.get(backIndex).tieMark == true)
 				{
 					RankHolder priorH = rankedList.get(backIndex);
 					priorH.tieMark = false;
-					priorH.rank = lastIndex;
+					priorH.rank = x;
 					backIndex--;
 				}
-				
-				lastIndex = x;
-			}
-			else
-			{
-				rh.tieMark = true;
 			}
 			
-
 			lastCount = rh.originalData;
-			rh.rank = lastIndex;
+		}
+		
+		int backIndex = rankedList.size()-1;
+		
+		while( backIndex > 0 && rankedList.get(backIndex).tieMark == true)
+		{
+			RankHolder priorH = rankedList.get(backIndex);
+			priorH.tieMark = false;
+			priorH.rank = rankedList.size()-1;
+			backIndex--;
 		}
 		
 		Integer[] returnVals = new Integer[ this.getDataPointsUnnormalized().get(sampleIndex).size()];
