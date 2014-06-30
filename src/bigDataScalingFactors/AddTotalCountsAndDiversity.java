@@ -35,7 +35,7 @@ public class AddTotalCountsAndDiversity
 				"June24_risk" + File.separator +"raw_100_taxaAsColumns.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"June24_risk" + File.separator +"raw_100_taxaAsColumnsWithMetaNormalized.txt" )));
+				"June24_risk" + File.separator +"raw_100_taxaAsColumnsWithMetaLogNormalized.txt" )));
 		
 		writer.write("sample\tshannonDiversity\tshannonDiveristyFromLogged\ttotalSeqs");
 		
@@ -55,7 +55,7 @@ public class AddTotalCountsAndDiversity
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)
 				if( included.contains( wrapper.getOtuNames().get(y)))
 				{
-					writer.write("\t" + wrapper.getDataPointsNormalized().get(x).get(y));
+					writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(x).get(y));
 				}
 				
 			writer.write("\n");
