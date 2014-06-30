@@ -1722,7 +1722,7 @@ public class OtuWrapper
 		{
 			writer.write(this.getSampleNames().get(x));
 			
-			Integer[] ranked= this.getRankForSample(x);
+			Integer[] ranked= this.getSimpleRankForSample(x);
 			
 			if( ranked.length != this.getDataPointsNormalized().get(x).size())
 				throw new Exception("Logic error");
@@ -1734,6 +1734,36 @@ public class OtuWrapper
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	public Integer[] getSimpleRankForSample(int sampleIndex) throws Exception
+	{
+		List<RankHolder> rankedList = new ArrayList<RankHolder>();
+		
+		for( int x=0; x < this.getDataPointsUnnormalized().get(sampleIndex).size(); x++)
+		{
+			RankHolder rh = new RankHolder();
+			rh.originalIndex = x;
+			rh.originalData = this.getDataPointsUnnormalized().get(sampleIndex).get(x);
+			rankedList.add(rh);
+		}
+		
+		//	Collections.shuffle(rankedList);
+		Collections.sort(rankedList);
+		Collections.reverse(rankedList);
+		
+		for(int x=0; x < rankedList.size();x++)
+		{
+			RankHolder rh = rankedList.get(x);
+			rh.rank = (x+1);
+		}
+		
+		Integer[] returnVals = new Integer[ this.getDataPointsUnnormalized().get(sampleIndex).size()];
+		
+		for( RankHolder rh : rankedList)
+			returnVals[rh.originalIndex] = (int) (rh.rank + 0.001);
+		
+		return returnVals;
 	}
 	
 	private Integer[] getRankForSample(int sampleIndex) throws Exception
@@ -2056,6 +2086,6 @@ public class OtuWrapper
 		
 		wrapper.writeRankedSpreadsheet( ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 				+ File.separator + 
-			"raw_100_taxaAsColumnsRanked.txt"  );
+			"raw_100_taxaAsColumnsRankedSimple.txt"  );
 	}
 }
