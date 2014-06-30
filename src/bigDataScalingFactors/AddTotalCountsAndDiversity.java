@@ -20,7 +20,7 @@ public class AddTotalCountsAndDiversity
 		writer.write("sample\tshannonDiversity\ttotalSeqs");
 		
 		for(String s : wrapper.getOtuNames())
-			if( wrapper.getCountsForTaxa(s) > 1000 )
+			if( wrapper.getCountsForTaxa(s) > 30000 )
 			writer.write("\t" + s);
 		
 		writer.write("\n");
@@ -32,7 +32,7 @@ public class AddTotalCountsAndDiversity
 			writer.write(wrapper.getCountsForSample(x) + "");
 			
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)
-				if( wrapper.getCountsForTaxa(y) > 1000)
+				if( wrapper.getCountsForTaxa(y) > 30000)
 				{
 					writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
 				}
