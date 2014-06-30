@@ -1237,6 +1237,31 @@ public class OtuWrapper
 		return -sum;
 	}
 	
+	public double getShannonEntropyFromLogNormalized(int sampleIndex) throws Exception
+	{
+		double sum = 0;
+
+		List<Double> innerList = getDataPointsNormalizedThenLogged().get(sampleIndex);
+
+		for (Double d : innerList)
+			sum += d;
+
+		List<Double> newList = new ArrayList<Double>();
+
+		for (Double d : innerList)
+			newList.add(d / sum);
+
+		sum = 0;
+		for (Double d : newList)
+			if (d > 0)
+			{
+				sum += d * Math.log(d);
+
+			}
+
+		return -sum;
+	}
+	
 	public double getSimpsonsIndex(String sample) throws Exception
 	{
 		return getSimpsonsIndex(getIndexForSampleName(sample));

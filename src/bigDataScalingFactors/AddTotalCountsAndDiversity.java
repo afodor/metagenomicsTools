@@ -29,15 +29,15 @@ public class AddTotalCountsAndDiversity
 		HashSet<String> included = getIncluded();
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"June24_risk" + File.separator +"vsd_100_taxaAsColumns.txt" );
+				"June24_risk" + File.separator +"raw_100_taxaAsColumns.txt" );
 		
 		OtuWrapper rawWrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
 				"June24_risk" + File.separator +"raw_100_taxaAsColumns.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"June24_risk" + File.separator +"vsd_100_taxaAsColumnsWithMeta.txt" )));
+				"June24_risk" + File.separator +"raw_100_taxaAsColumnsWithMetaNormalized.txt" )));
 		
-		writer.write("sample\tshannonDiversity\ttotalSeqs");
+		writer.write("sample\tshannonDiversity\tshannonDiveristyFromLogged\ttotalSeqs");
 		
 		for(String s : wrapper.getOtuNames())
 			if( included.contains(s))
@@ -49,12 +49,13 @@ public class AddTotalCountsAndDiversity
 		{
 			writer.write(wrapper.getSampleNames().get(x) + "\t");
 			writer.write(wrapper.getShannonEntropy(x) + "\t");
+			writer.write(wrapper.getShannonEntropyFromLogNormalized(x) + "\t");
 			writer.write(rawWrapper.getCountsForSample(wrapper.getSampleNames().get(x)) + "");
 			
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)
 				if( included.contains( wrapper.getOtuNames().get(y)))
 				{
-					writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
+					writer.write("\t" + wrapper.getDataPointsNormalized().get(x).get(y));
 				}
 				
 			writer.write("\n");
