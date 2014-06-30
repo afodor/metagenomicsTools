@@ -2070,16 +2070,16 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
-		/*
 		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 					+ File.separator + 
-				"raw_100.txt", 
+				"vsd_100.txt", 
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 						+ File.separator + 
-					"raw_100_taxaAsColumns.txt", true
+					"vsd_100_taxaAsColumns.txt", true
 				);
-		*/
 		
+		
+		/*
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 				+ File.separator + 
 			"raw_100_taxaAsColumns.txt");
@@ -2087,5 +2087,6 @@ public class OtuWrapper
 		wrapper.writeRankedSpreadsheet( ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 				+ File.separator + 
 			"raw_100_taxaAsColumnsRankedSimple.txt"  );
+			*/
 	}
 }
