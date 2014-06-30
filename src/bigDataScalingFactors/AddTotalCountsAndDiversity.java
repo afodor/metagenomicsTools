@@ -12,30 +12,31 @@ public class AddTotalCountsAndDiversity
 	public static void main(String[] args) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"June24_risk" + File.separator +"raw_100.txt" );
+				"June24_risk" + File.separator +"raw_100_taxaAsColumns.txt" );
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"June24_risk" + File.separator +"raw_100_WithMeta.txt" )));
-		
+				"June24_risk" + File.separator +"raw_100_taxaAsColumnsWithMeta.txt" )));
 		
 		writer.write("sample\tshannonDiversity\ttotalSeqs");
 		
-		for(String s : wrapper.getSampleNames())
+		for(String s : wrapper.getOtuNames())
+			if( wrapper.getCountsForTaxa(s) > 1000 )
 			writer.write("\t" + s);
 		
 		writer.write("\n");
 		
-		for(int x=0; x < wrapper.getOtuNames().size(); x++)
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
-			writer.write(wrapper.getOtuNames().get(x) + "\t");
+			writer.write(wrapper.getSampleNames().get(x) + "\t");
 			writer.write(wrapper.getShannonEntropy(x) + "\t");
 			writer.write(wrapper.getCountsForSample(x) + "");
 			
-			for( int y=0; y < wrapper.getSampleNames().size(); y++)
-			{
-				writer.write("\t" + wrapper.getDataPointsUnnormalized().get(y).get(x));
-			}
-			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+				if( wrapper.getCountsForTaxa(y) > 1000)
+				{
+					writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
+				}
+				
 			writer.write("\n");
 		}
 		
