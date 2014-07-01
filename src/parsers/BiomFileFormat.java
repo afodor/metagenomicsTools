@@ -33,5 +33,21 @@ public class BiomFileFormat
 		
 		System.out.println(numRows);
 		System.out.println(numCols);
+		
+		Double[][] data = new Double[numRows][numCols];
+		
+		nextToken = sToken.nextToken().replaceAll("\"", "");
+		while( ! nextToken.equals("rows"))
+		{
+			int aRow = Integer.parseInt(nextToken);
+			int aCol = Integer.parseInt(sToken.nextToken().replaceAll("\"", ""));
+			
+			if( data[aRow][aCol] != null)
+				throw new Exception("Parsing error " + aRow + " " + aCol);
+			
+			data[aRow][aCol] = Double.parseDouble(sToken.nextToken().replaceAll("\"", ""));
+			
+			nextToken = sToken.nextToken().replaceAll("\"", "");
+		}
 	}
 }
