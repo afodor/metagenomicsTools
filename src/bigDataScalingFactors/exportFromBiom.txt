@@ -1,0 +1,5 @@
+rm(list=ls())
+library("phyloseq")
+setwd("D:\\BigDataScalingFactors\\July_StoolRemoved")
+myBiom <- import_biom("risk_PL_raw_counts.biom", parseFunction = parse_taxonomy_default)
+write.table(myBiom,sep="\t", file="risk_PL_rawCounts.txt")

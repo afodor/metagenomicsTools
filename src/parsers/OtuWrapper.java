@@ -1956,7 +1956,7 @@ public class OtuWrapper
 
 		if (threshold < 0.1)
 		{
-			assertNoZeros(dataPointsUnnormalized);
+			//assertNoZeros(dataPointsUnnormalized);
 			assertNum(totalCounts, dataPointsUnnormalized);
 		}
 
@@ -2095,12 +2095,12 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
-		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
+		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 					+ File.separator + 
-				"vsd_100.txt", 
+				"risk_PL_rawCounts.txt", 
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
 						+ File.separator + 
-					"vsd_100_taxaAsColumns.txt", true
+					"risk_PL_rawCountsTaxaAsColumnns.txt", false
 				);
 		
 		
