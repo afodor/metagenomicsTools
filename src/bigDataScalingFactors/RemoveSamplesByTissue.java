@@ -1,10 +1,8 @@
 package bigDataScalingFactors;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.HashSet;
 
 import parsers.OtuWrapper;
@@ -26,7 +24,7 @@ public class RemoveSamplesByTissue
 		{
 			String[] splits = s.split("\t");
 			if(splits[23].equals("stool"))
-				set.add(splits[0]);
+				set.add(splits[0].trim());
 		}
 		
 		reader.close();
@@ -40,14 +38,22 @@ public class RemoveSamplesByTissue
 				File.separator + "July_StoolRemoved" + File.separator +"risk_PL_rawCountsTaxaAsColumnns.txt");
 		
 		HashSet<String> set = new HashSet<String>();
+		HashSet<String> duplicates = new HashSet<String>();
 		
-		for(String s: wrapper.getOtuNames())
+		for(String s: wrapper.getSampleNames())
 		{
-			if( set.contains(s))
-				System.out.println("Duplicate " + s);
+			if( set.contains(s.trim()))
+				duplicates.add(s.trim());
 			
-			set.add(s);
+			set.add(s.trim());
 		}
+		
+		HashSet<String> included = getIncluded();
+		
+		for(String s : included)
+			if( ! set.contains(s))
+				System.out.println("Could not find " + s);
+		
 		
 	}
 }	
