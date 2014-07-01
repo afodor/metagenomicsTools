@@ -3,6 +3,8 @@ package parsers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -49,5 +51,33 @@ public class BiomFileFormat
 			
 			nextToken = sToken.nextToken().replaceAll("\"", "");
 		}
+		
+		
+		List<String> rowNames = new ArrayList<String>();
+		
+		for( int x=0; x < numRows; x++)
+		{
+			sToken.nextToken();
+			rowNames.add(sToken.nextToken().replaceAll("\"", ""));
+			sToken.nextToken();
+			sToken.nextToken();
+		}
+		
+		
+		if( ! sToken.nextToken().equals("columns") )
+			throw new Exception("Parsing error " );
+		
+		List<String> colNames = new ArrayList<String>();
+		
+		for( int x=0; x < numCols; x++)
+		{
+			sToken.nextToken();
+			colNames.add(sToken.nextToken().replaceAll("\"", ""));
+			sToken.nextToken();
+			sToken.nextToken();
+		}
+		
+		if(sToken.hasMoreTokens())
+			throw new Exception("Parsing error " + sToken.nextToken() );
 	}
 }
