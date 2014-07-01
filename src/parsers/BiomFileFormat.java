@@ -16,7 +16,7 @@ public class BiomFileFormat
 	public static void main(String[] args) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator + "risk_PL_raw_counts.biom")));
+				File.separator + "July_StoolRemoved" + File.separator + "otu_table.biom")));
 		
 		StringTokenizer sToken = new StringTokenizer(reader.readLine(), "[]{,\":} ");
 		
@@ -57,16 +57,24 @@ public class BiomFileFormat
 		
 		List<String> rowNames = new ArrayList<String>();
 		
+		sToken.nextToken();
+		
+		String next=null;
 		for( int x=0; x < numRows; x++)
 		{
-			sToken.nextToken();
-			rowNames.add(sToken.nextToken().replaceAll("\"", ""));
-			sToken.nextToken();
-			sToken.nextToken();
+			
+			String aName = sToken.nextToken();
+			rowNames.add(aName.replaceAll("\"", ""));
+			
+			next = sToken.nextToken().replaceAll("\"", "");
+			
+			while( !next.equals("id") && !next.equals("columns") )
+			{
+				next = sToken.nextToken().replaceAll("\"", "");
+			}
 		}
 		
-		
-		if( ! sToken.nextToken().equals("columns") )
+		if( ! next.equals("columns") )
 			throw new Exception("Parsing error " );
 		
 		List<String> colNames = new ArrayList<String>();
@@ -85,7 +93,7 @@ public class BiomFileFormat
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator + "risk_PL_raw_countsTaxaAsColumns.txt")));
+				File.separator + "July_StoolRemoved" + File.separator + "risk_raw_countsTaxaAsColumns.txt")));
 		
 		writer.write("sample");
 		
