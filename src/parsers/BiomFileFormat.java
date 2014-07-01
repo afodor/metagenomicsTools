@@ -1,8 +1,10 @@
 package parsers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -79,5 +81,31 @@ public class BiomFileFormat
 		
 		if(sToken.hasMoreTokens())
 			throw new Exception("Parsing error " + sToken.nextToken() );
+		
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getBigDataScalingFactorsDir() + 
+				File.separator + "July_StoolRemoved" + File.separator + "risk_PL_raw_countsTaxaAsColumns.txt")));
+		
+		writer.write("sample");
+		
+		for(String s: rowNames)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for( int x=0; x < colNames.size(); x++)
+		{
+			writer.write(colNames.get(x));
+			
+			for( int y=0; y < rowNames.size(); y++)
+			{
+				writer.write("\t" + (data[y][x] == null ? "0" : data[y][x]) );
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 }

@@ -19,15 +19,16 @@ public class PCA_Pivot
 {
 	public static void main(String[] args) throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "July_StoolRemoved"
 				+ File.separator + 
-			"raw_100_taxaAsColumnsRanked_PCA.txt")));
+			"risk100_StoolOnlyPCASummary.txt")));
 		
 		writer.write("taxaRemoved\ttaxaLeft\tsamplesRemoved\tsamplesLeft\trSquared\tpValue\n");
 		
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 				+ File.separator + 
-			"raw_100_taxaAsColumnsRanked.txt"  );
+			"risk_PL_raw_countsTaxaAsColumnsStoolOnly.txt"  );
 		
 		writePCOA(writer, wrapper);
 		
@@ -87,9 +88,9 @@ public class PCA_Pivot
 			
 		categories.add(numSequences); 
 		
-		File outFile = new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
-				+ File.separator + 
-			"PCA_normalizedPearson.txt");
+		File outFile = new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator 
+				+"July_StoolRemoved" + File.separator + 
+			"risk_PL_raw_countsTaxaAsColumnsStoolOnly_PCA.txt");
 			
 		PCA.writePCAFile(sampleIDs, catHeaders, categories,d, outFile, new CorrelationMatrixDistanceMeasure());
 		

@@ -213,6 +213,17 @@ public class OtuWrapper
 		return taxaList.get(taxaList.size() / 2);
 	}
 	
+	public double getCountForTaxaExcludingTheseSamples( int taxaIndex, HashSet<String> samples)
+	{
+		double sum =0;
+		
+		for( int x=0; x < getSampleNames().size(); x++)
+			 if( ! samples.contains(getSampleNames().get(x)))
+				 sum+= dataPointsUnnormalized.get(x).get(taxaIndex);
+		
+		return sum;
+	}
+	
 	public double getTaxaAverageExcludingZeros(int col)
 	{
 		double sum =0;
@@ -1945,7 +1956,7 @@ public class OtuWrapper
 			}
 
 			if (x != skipColumns.size() + otuNames.size())
-				throw new Exception("Logic error");
+				throw new Exception("Logic error " + x + " " +  skipColumns.size() + " " + otuNames.size());
 
 			nextLine = reader.readLine();
 		}

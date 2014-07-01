@@ -35,15 +35,14 @@ public class RemoveSamplesByTissue
 	public static void main(String[] args) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator +"risk_PL_rawCountsTaxaAsColumnns.txt");
+				File.separator + "July_StoolRemoved" + File.separator +"risk_PL_raw_countsTaxaAsColumns.txt");
 		
 		HashSet<String> set = new HashSet<String>();
-		HashSet<String> duplicates = new HashSet<String>();
 		
 		for(String s: wrapper.getSampleNames())
 		{
 			if( set.contains(s.trim()))
-				duplicates.add(s.trim());
+				throw new Exception( "dupliacate " +  s.trim());
 			
 			set.add(s.trim());
 		}
@@ -52,8 +51,33 @@ public class RemoveSamplesByTissue
 		
 		for(String s : included)
 			if( ! set.contains(s))
-				System.out.println("Could not find " + s);
+			System.out.println("Could not find " + s);
 		
+		HashSet<String> excludedSamples = new HashSet<String>();
+		
+		for(String s : wrapper.getSampleNames())
+			if( ! set.contains(s) || wrapper.getCountsForSample(s) < 100)
+				excludedSamples.add(s);
+		
+		System.out.println(excludedSamples.size());
+		
+		HashSet<String> excludedOTU = new HashSet<String>();
+		
+		for( int x=0;x < wrapper.getOtuNames().size(); x++)
+		{
+			System.out.println( x + " " + wrapper.getCountForTaxaExcludingTheseSamples(x, excludedSamples));
+			if( wrapper.getCountForTaxaExcludingTheseSamples(x, excludedSamples) <= 0.01 ) 
+			{
+				excludedOTU.add(wrapper.getOtuNames().get(x));
+			}
+		}
+		
+		wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + 
+				File.separator + "July_StoolRemoved" + File.separator +"risk_PL_raw_countsTaxaAsColumns.txt",
+				excludedSamples, excludedOTU);
+		
+		wrapper.writeRawDataWithTaxaAsColumns(ConfigReader.getBigDataScalingFactorsDir() + 
+				File.separator + "July_StoolRemoved" + File.separator +"risk_PL_raw_countsTaxaAsColumnsStoolOnly.txt");
 		
 	}
 }	

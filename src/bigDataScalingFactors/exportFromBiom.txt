@@ -2,9 +2,12 @@ rm(list=ls())
 library("phyloseq")
 setwd("D:\\BigDataScalingFactors\\July_StoolRemoved")
 myBiom <- import_biom("risk_PL_raw_counts.biom", parseFunction = parse_taxonomy_default)
+
+
 myOTU <- otu_table(myBiom)
 myOTU <- data.frame(myOTU)
 myNames <- names(myOTU)
 myOTU <- t(myOTU)
 myOTU$myNames <- myNames
+#this is throwing an error...
 write.table(myOTU,sep="\t",row.names=FALSE, file="risk_PL_rawCountsTaxaAsColumns.txt")
