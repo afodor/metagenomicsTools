@@ -19,7 +19,7 @@ public class AddTotalCountsAndDiversity
 			//	"June24_risk" + File.separator +"raw_100_taxaAsColumns.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
-				"July_StoolRemoved" + File.separator +"July_StoolRemoved_taxaSummaryNormalized.txt" )));
+				"July_StoolRemoved" + File.separator +"July_StoolRemoved_taxaSummaryLogNorm.txt" )));
 		
 		writer.write("sample\tshannonDiversity\ttotalSeqs");
 		
@@ -39,7 +39,7 @@ public class AddTotalCountsAndDiversity
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)
 				if( wrapper.getCountsForTaxa(wrapper.getOtuNames().get(y)) >= 5000 )
 				{
-					writer.write("\t" + wrapper.getDataPointsNormalized().get(x).get(y));
+					writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(x).get(y));
 				}
 				
 			writer.write("\n");

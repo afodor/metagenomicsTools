@@ -1,6 +1,6 @@
 
 rm(list=ls())
-setwd("D:\\BigDataScalingFactors\\June24_risk\\");
+setwd("D:\\BigDataScalingFactors\\July_StoolRemoved\\");
 
 get10 <- function(filepath)
 {
@@ -10,15 +10,18 @@ get10 <- function(filepath)
 	
 	counts <- log10(myT$totalSeqs)
 	
-	for( i in 1:10)
+	for( i in 4:ncol(myT))
 	{
-		pValues[i] <- Kendall(myT$totalSeqs, myT[,i+4])$sl[1]
+		#pValues[i-3] <- Kendall(myT$totalSeqs, myT[,i+4])$sl[1]
+		pValues[i-3] <- cor(myT$totalSeqs,as.numeric(myT[,i]),method="pearson")
 	}
 	
 	pValues;
 }
 
 
-rawVals <- get10("raw_100_taxaAsColumnsWithMeta.txt");
-normVals <- get10("raw_100_taxaAsColumnsWithMetaNormalized.txt");
-logVals <- get10("raw_100_taxaAsColumnsWithMetaLogNormalized.txt")
+rawVals <- get10("July_StoolRemoved_taxaSummaryRaw.txt");
+normVals <- get10("July_StoolRemoved_taxaSummaryNormalized.txt");
+logVals <- get10("July_StoolRemoved_taxaSummaryLogNorm.txt")
+
+boxplot(rawVals , normVals , logVals )
