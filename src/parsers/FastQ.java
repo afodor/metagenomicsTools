@@ -10,13 +10,13 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package parsers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 public class FastQ
 {
@@ -24,6 +24,25 @@ public class FastQ
 	private String qualScore;
 	private String checkLine;
 	private String header;
+	
+	public static void FastQToFastA(String fastQFilePath, String fastAFilePath)
+		throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(fastQFilePath));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				fastAFilePath)));
+		
+		for(FastQ fq = readOneOrNull(reader); fq != null; fq = readOneOrNull(reader))
+		{
+			writer.write(">" + fq.header + "\n");
+			writer.write(fq.sequence + "\n");
+		}
+		
+		writer.flush();  writer.close();
+		
+		reader.close();
+	}
 	
 	public FastQ(String header, String sequence, String qualScore) throws Exception
 	{

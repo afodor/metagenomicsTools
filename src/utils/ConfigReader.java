@@ -68,6 +68,8 @@ public class ConfigReader
 	public static final String KLEB_DIR="KLEB_DIR";
 	public static final String BIG_DATA_SCALING_FACTORS = "BIG_DATA_SCALING_FACTORS";
 	
+	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -81,6 +83,11 @@ public class ConfigReader
 	public static String getSvmDir() throws Exception
 	{
 		return getConfigReader().getAProperty(SVM_DIR);
+	}
+	
+	public static String getTopeCheckDir() throws Exception
+	{
+		return getConfigReader().getAProperty(TOPE_CHECK_DIR);
 	}
 	
 	public static String getMetabolitesCaseControl() throws Exception
