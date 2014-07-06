@@ -25,3 +25,18 @@ for( i in 1:nrow(myT))
 }
 
 plot(log10(rowSums), corVals)
+
+# from ape's pcoa() function.....#
+centre <- function(D, n) {
+        One <- matrix(1, n, n)
+        mat <- diag(n) - One/n
+        mat.cen <- mat %*% D %*% mat
+    }
+ D<-myDist
+D <- as.matrix(D)
+    n <- nrow(D)
+   delta1 <- centre((-0.5 * D^2), n)
+   
+    D.eig <- eigen(delta1)
+ 
+ plot(D.eig$vectors[,1], myPCOA$vectors[,1])
