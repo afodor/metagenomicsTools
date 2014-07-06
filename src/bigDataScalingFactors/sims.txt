@@ -4,6 +4,7 @@ setwd("G:\\BigDataScalingFactors\\July_StoolRemoved");
 
 myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnly.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep="\t", header=TRUE, row.names=1)
+myTNormLogged <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalizedAndLogged.txt", sep="\t", header=TRUE, row.names=1)
 
 rowSums <- apply(myT, 1, sum)
 otuSums <- apply(myT, 2, sum)
@@ -48,5 +49,26 @@ for( i in 1:nrow(myT))
 }
 
 plot(log10(rowSums), corValsNorm)
+
+
+
+meanSubtractedTNormLogged <- matrix(nrow=nrow(myT), ncol=ncol(myT))
+for( i in 1:ncol(meanSubtractedT ))
+{
+	meanSubtractedTNormLogged[,i] = as.numeric(myTNormLogged[,i]) - mean(as.numeric(myTNormLogged[,i]))
+}
+
+aCovNormLogged <- cov(meanSubtractedTNormLogged)
+anEigenNormLogged <- eigen(aCovNormLogged)
+
+corValsNormLogged <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	corValsNormLogged[i] <- cor( as.numeric(myTNormLogged[i,]) , anEigenNormLogged$vectors[,1],method="spear")
+}
+
+plot(log10(rowSums), corValsNormLogged)
+
 
 
