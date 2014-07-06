@@ -21,3 +21,6 @@ aCov <- cov(myT)
 anEigen <- eigen(cov(myT))
 comps<- meanSubtractedT %*% anEigen$vectors
 plot(log10(rowSums),comps[,1])
+
+compsFirst5<- meanSubtractedT %*% anEigen$vectors[,1:5]
+plot(log10(rowSums),compsFirst5[,1])
