@@ -1,0 +1,10 @@
+library("ecodist")
+library("ape")
+
+rm(list=ls())
+
+setwd("C:\\temp")
+
+myT <- read.table("c:\\temp\\try.txt", header=TRUE, sep="\t", row.names=1)
+myDist <- bcdist(myT)
+myPCOA <- pcoa(myDist)
