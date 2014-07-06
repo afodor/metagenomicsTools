@@ -3,8 +3,25 @@ library("ape")
 
 rm(list=ls())
 
-setwd("C:\\temp")
+setwd("G:\\BigDataScalingFactors\\July_StoolRemoved");
 
-myT <- read.table("c:\\temp\\try.txt", header=TRUE, sep="\t", row.names=1)
+myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnly.txt", sep="\t", header=TRUE,row.names=1)
+myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep="\t", header=TRUE, row.names=1)
+myTNormLogged <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalizedAndLogged.txt", sep="\t", header=TRUE, row.names=1)
+
+
 myDist <- bcdist(myT)
 myPCOA <- pcoa(myDist)
+
+rowSums <- apply(myT, 1, sum)
+
+plot(log10(rowSums), myPCOA$vectors[,1])
+
+corVals<- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	corVals[i] <- cor(  myPCOA$vectors[,1],as.numeric(myT[,i]) ,method="spear")
+}
+
+plot(log10(rowSums), corVals)
