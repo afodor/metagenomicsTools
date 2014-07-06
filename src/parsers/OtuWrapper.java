@@ -1971,8 +1971,8 @@ public class OtuWrapper
 			assertNum(totalCounts, dataPointsUnnormalized);
 		}
 
-		avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
-		//avgNumber =1;	
+		//avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
+		avgNumber =1;	
 		
 		for (x = 0; x < dataPointsUnnormalized.size(); x++)
 		{
@@ -2106,6 +2106,15 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
+		OtuWrapper wrapper = new OtuWrapper(
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
+						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+		
+		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "July_StoolRemoved" 
+				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt"));
+		
+		/*
 		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 					+ File.separator + 
 				"risk_PL_rawCounts.txt", 
