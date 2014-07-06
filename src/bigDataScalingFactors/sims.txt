@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("c:\\temp");
+
+myT <- read.table("try.txt",header=TRUE,sep="\t",row.names=1)
+
+meanSubtractedT <- matrix(nrow=nrow(myT), ncol=ncol(myT))
+
+for( i in 1:ncol(meanSubtractedT ))
+{
+	meanSubtractedT[,i] = myT[,i] - mean(myT[,i])
+}
+
+cov(myT)
+eigen(cov(myT))
+meanSubtractedT %*% eigen(cov(myT))$vectors
