@@ -5,10 +5,8 @@ setwd("G:\\BigDataScalingFactors\\July_StoolRemoved");
 myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnly.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep="\t", header=TRUE, row.names=1)
 
-
-
 rowSums <- apply(myT, 1, sum)
-
+otuSums <- apply(myT, 2, sum)
 
 meanSubtractedT <- matrix(nrow=nrow(myT), ncol=ncol(myT))
 
@@ -22,5 +20,33 @@ anEigen <- eigen(cov(myT))
 comps<- meanSubtractedT %*% anEigen$vectors
 plot(log10(rowSums),comps[,1])
 
-compsFirst5<- meanSubtractedT %*% anEigen$vectors[,1:5]
-plot(log10(rowSums),compsFirst5[,1])
+#compsFirst5<- meanSubtractedT %*% anEigen$vectors[,1:5]
+#plot(log10(rowSums),compsFirst5[,1])
+
+corVals <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	corVals[i] <- cor( as.numeric(myT[i,]) , anEigen$vectors[,1],method="spear")
+}
+
+plot(log10(rowSums), corVals)
+
+meanSubtractedTNorm <- matrix(nrow=nrow(myT), ncol=ncol(myT))
+for( i in 1:ncol(meanSubtractedT ))
+{
+	meanSubtractedTNorm[,i] = as.numeric(myTNorm[,i]) - mean(as.numeric(myTNorm[,i]))
+}
+aCovNorm <- cov(meanSubtractedTNorm)
+anEigenNorm <- eigen(aCovNorm)
+
+corValsNorm <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	corValsNorm[i] <- cor( as.numeric(myTNorm[i,]) , anEigenNorm$vectors[,1],method="spear")
+}
+
+plot(log10(rowSums), corValsNorm)
+
+
