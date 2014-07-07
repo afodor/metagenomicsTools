@@ -26,6 +26,20 @@ for( i in 1:nrow(myT))
 
 plot(log10(rowSums), corVals)
 
+countDist<- vector(length=length(rowSums)*(length(rowSums)-1)/2)
+
+x <- 1
+for( i in 1:(length(rowSums)-1) )
+{
+	for( j in ( (i+1):length(rowSums)) )
+	{
+		countDist[x] <- abs( rowSums[i] - rowSums[j] )
+		x = x + 1
+	}
+}
+
+plot(myDist, countDist)
+
 # from ape's pcoa() function.....#
 centre <- function(D, n) {
         One <- matrix(1, n, n)
