@@ -14,7 +14,8 @@ public class ConfirmDistances
 		HashMap<String, String> map = getSequencesByTag();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getKlebDir() + File.separator + "distances.txt")));
+				ConfigReader.getKlebDir() + File.separator +
+				"distancesUpperTriangle.txt")));
 		
 		reader.readLine();
 		
@@ -36,9 +37,18 @@ public class ConfirmDistances
 			System.out.println(seq1.length() + " " + distance + " "+ Integer.parseInt(splits[2]));
 			
 			if( distance != Integer.parseInt(splits[2]))
-				throw new Exception("No");
+				throw new Exception("No " + distance + " " + splits[2]);
 		}
 				
+	}
+	
+	private static void checkLine(String s) throws Exception
+	{
+		for(char c : s.toCharArray())
+		{
+			if ( c != 'A' && c != 'C' && c != 'G' && c != 'T')
+				throw new Exception("NO");
+		}
 	}
 	
 	private static HashMap<String, String> getSequencesByTag() throws Exception
@@ -70,6 +80,7 @@ public class ConfirmDistances
 			}
 		}
 		map.put(oldKey, buff.toString());
+		checkLine(map.get(oldKey));
 			
 		return map;
 	}

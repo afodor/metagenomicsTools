@@ -22,12 +22,12 @@ public class QuickSnpDistance
 		HashMap<String, FastaSequence> map = getAsMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getKlebDir() + File.separator +"setOf48" + File.separator + 
-				"distancesAllUpperTriangleNoDiagOnly48_Thresh6.txt")));
+				ConfigReader.getKlebDir() + File.separator +
+				"distancesUpperTriangle.txt")));
 		
 		writer.write("xGenome\tyGenome\tdistance\n");
 		
-		HashMap<Integer, Integer> threshMap = NumberVsEntropy.getPositionVsNumChangesMap();
+		//HashMap<Integer, Integer> threshMap = NumberVsEntropy.getPositionVsNumChangesMap();
 		
 		List<String> aList = new ArrayList<String>(map.keySet());
 		Collections.sort(aList);
@@ -38,7 +38,7 @@ public class QuickSnpDistance
 					System.out.println(x + " " + y);
 					writer.write(aList.get(x) + "\t");
 					writer.write(aList.get(y) + "\t");
-					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y)), threshMap, 6) 
+					writer.write(getNumDifferent(map.get(aList.get(x)), map.get(aList.get(y))) 
 								+ "\n");
 					writer.flush();
 				}
@@ -55,8 +55,7 @@ public class QuickSnpDistance
 		
 		List<FastaSequence> list = 
 				FastaSequence.readFastaFile(ConfigReader.getKlebDir() +File.separator + 
-						"setOf48" + File.separator + 
-						"reduced_set_of_48.mfa");
+						"all76.mfa");
 		
 		for(FastaSequence fs : list)
 		{
