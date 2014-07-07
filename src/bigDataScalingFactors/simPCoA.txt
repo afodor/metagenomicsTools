@@ -9,8 +9,7 @@ myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnly.txt", sep="\t", header=
 myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep="\t", header=TRUE, row.names=1)
 myTNormLogged <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalizedAndLogged.txt", sep="\t", header=TRUE, row.names=1)
 
-
-myDist <- bcdist(myT)
+myDist <- bcdist(myTNormLogged)
 myPCOA <- pcoa(myDist)
 
 rowSums <- apply(myT, 1, sum)
@@ -43,7 +42,11 @@ summary(lm(myDist~ countDist))
 
 corDist<- vector(length=length(rowSums)*(length(rowSums)-1)/2)
 
-myPearsonCov <- cor( t(myT), method="kendall") 
+myFrame <- as.matrix(myTNorm)
+myFrame <- t(myFrame)
+myFrame <- as.numeric(myFrame)
+myFrame <- as.matrix(myFrame)
+myPearsonCov <- cor( myFrame) 
 
 x <- 1
 for( i in 1:(length(rowSums)-1) )
@@ -55,7 +58,8 @@ for( i in 1:(length(rowSums)-1) )
 	}
 }
 
-plot(myDist, corDist)
+plot( corDist, countDist)
+summary( lm(corDist ~ countDist))
 
 
 # from ape's pcoa() function.....#
