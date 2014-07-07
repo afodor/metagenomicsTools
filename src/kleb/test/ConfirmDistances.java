@@ -49,6 +49,7 @@ public class ConfirmDistances
 			if ( c != 'A' && c != 'C' && c != 'G' && c != 'T')
 				throw new Exception("NO");
 		}
+		System.out.println(s.length());
 	}
 	
 	private static HashMap<String, String> getSequencesByTag() throws Exception
