@@ -11,7 +11,34 @@ public class ReparseDates
 {
 	public static void main(String[] args) throws Exception
 	{
-		s
+		HashMap<String, String> datesMap = getMap();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getKlebDir() + File.separator + 
+				"distanceVsTimeForAbstract.txt"));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s !=null; s=reader.readLine())
+		{
+			System.out.println(s);
+			String[] splits = s.split("\t");
+			String firstKey = splits[0];
+			String secondKey = splits[1];
+			
+			if( firstKey.equals(secondKey))
+				throw new Exception("NO");
+			
+			if( ! datesMap.get(firstKey).equals(splits[2]))
+				throw new Exception("NO " );
+			
+			if( ! datesMap.get(secondKey).equals(splits[3]))
+				throw new Exception("NO " );
+			
+			
+		}
+		
+		reader.close();
+		System.out.println("PASSED");
 	}
 	
 	private static HashMap<String, String> getMap() throws Exception
