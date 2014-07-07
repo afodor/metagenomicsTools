@@ -69,6 +69,7 @@ public class ConfirmDistances
 				if( oldKey != null)
 				{
 					map.put(oldKey, buff.toString());
+					checkLine(map.get(oldKey));
 					buff = new StringBuffer();
 				
 				}
