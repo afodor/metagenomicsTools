@@ -73,3 +73,29 @@ D <- as.matrix(D)
     D.eig <- eigen(delta1)
  
  plot(D.eig$vectors[,1], myPCOA$vectors[,1])
+
+ 
+#RLE normalization 
+library("edgeR")
+edgeRT <- myT
+edgeRT <- edgeRT + 1
+edgeRT <- t( edgeRT )
+myEdgeR = DGEList(counts=edgeRT)
+myNormFactors = calcNormFactors(myEdgeR, method = "RLE")
+myCommonDisp = estimateCommonDisp(myNormFactors);
+myPseudoCounts = myCommonDisp$pseudo.counts;
+myPseudoCounts = t(myPseudoCounts)
+myDist <- bcdist(myPseudoCounts)
+
+
+rVal <- cor( myDist, countDist, method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(myDist, countDist, main=title, xlab="BC Dist", ylab = "difference in number of sequences")
+
+myPCOA <- pcoa(myDist)
+
+rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
+ 

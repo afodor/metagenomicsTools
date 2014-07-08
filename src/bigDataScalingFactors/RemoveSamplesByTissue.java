@@ -34,8 +34,9 @@ public class RemoveSamplesByTissue
 	
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator +"risk_raw_countsTaxaAsColumns.txt");
+		String filepath = ConfigReader.getBigDataScalingFactorsDir() + 
+				File.separator + "June24_risk" + File.separator +"RLE_100_taxaAsColumn.txt";
+		OtuWrapper wrapper = new OtuWrapper(filepath);
 		
 		HashSet<String> set = new HashSet<String>();
 		
@@ -72,12 +73,10 @@ public class RemoveSamplesByTissue
 			}
 		}
 		
-		wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator +"risk_raw_countsTaxaAsColumns.txt",
-				excludedSamples, excludedOTU);
+		wrapper = new OtuWrapper(filepath,excludedSamples, excludedOTU);
 		
 		wrapper.writeRawDataWithTaxaAsColumns(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator +"risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+				File.separator + "July_StoolRemoved" + File.separator +"risk_rle_countsTaxaAsColumnsStoolOnly.txt");
 		
 	}
 }	
