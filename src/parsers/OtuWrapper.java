@@ -1784,7 +1784,7 @@ public class OtuWrapper
 			rankedList.add(rh);
 		}
 		
-		//	Collections.shuffle(rankedList);
+		Collections.shuffle(rankedList);
 		Collections.sort(rankedList);
 		Collections.reverse(rankedList);
 		
@@ -2106,6 +2106,14 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
+		OtuWrapper wrapper = new OtuWrapper(
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
+						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+		
+		wrapper.writeRankedSpreadsheet(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
+						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyRanked.txt");
+		
+		/*
 		OtuWrapper wrapper = new OtuWrapper(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
