@@ -98,4 +98,17 @@ rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
 
+library("DESeq2")
+library("phyloseq")
+deseqT <- myT
+deseqT <- deseqT + 1
+deseqT <- t(deseqT )
+colData <- data.frame(condition=factor(rep( "1", ncol(deseqT))))
+diagdds = DESeqDataSetFromMatrix(deseqT , colData, formula(~ 1))
+diagdds = estimateSizeFactors(diagdds )
+diagdds = estimateDispersions(diagdds, fitType='local')
+diagvst = getVarianceStabilizedData(diagdds)
+dseqOut <- otu_table(diagvst, taxa_are_rows=T)
+dseqOut <- t(dseqOut)
+
  
