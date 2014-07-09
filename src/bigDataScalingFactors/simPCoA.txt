@@ -5,13 +5,13 @@ rm(list=ls())
 
 setwd("D:\\BigDataScalingFactors\\July_StoolRemoved");
 
-myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnly.txt", sep="\t", header=TRUE,row.names=1)
+myT <- read.table("risk_rle_countsTaxaAsColumnsAllButStool.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep="\t", header=TRUE, row.names=1)
 myTNormLogged <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalizedAndLogged.txt", sep="\t", header=TRUE, row.names=1)
 myTRand<- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyWithRandomNoise.txt", sep="\t", header=TRUE, row.names=1)
 
 
-myDist <- bcdist(myTRand)
+myDist <- bcdist(myT)
 myPCOA <- pcoa(myDist)
 rowSums <- apply(myT, 1, sum)
 
@@ -34,6 +34,11 @@ plot(myDist, countDist, main=title, xlab="BC Dist", ylab = "difference in number
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
+
+rVal <- cor( log10(rowSums), myPCOA$vectors[,2], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOA$vectors[,2], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
 
 
 summary(lm(myDist~ countDist))
@@ -98,6 +103,11 @@ myPCOA <- pcoa(myDist)
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
+rVal <- cor( log10(rowSums), myPCOA$vectors[,2], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOA$vectors[,2], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
 
 library("DESeq2")
 library("phyloseq")
