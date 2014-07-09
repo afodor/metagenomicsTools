@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -953,6 +954,36 @@ public class OtuWrapper
 
 		writer.flush();
 		writer.close();
+	}
+	
+	public void writeRawCountsWithRandomNoise(String file, long seed) throws Exception
+	{
+		Random random = new Random(seed);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+		writer.write("sample");
+
+		for (String s : getOtuNames())
+			writer.write("\t" + s);
+
+		writer.write("\n");
+
+		for (int x = 0; x < getSampleNames().size(); x++)
+		{
+			writer.write(getOtuNames().get(x));
+
+			for (int y = 0; y < getOtuNames().size(); y++)
+			{
+				writer.write("\t" + (dataPointsUnnormalized.get(x).get(y) + random.nextDouble()/10000 ) );
+			}
+
+			writer.write("\n");
+		}
+
+		writer.flush();
+		writer.close();
+
 	}
 	
 	public void writeNormalizedUnloggedDataWithSamplesAsColumns(File file) throws Exception
@@ -2110,6 +2141,12 @@ public class OtuWrapper
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
 		
+		wrapper.writeRawCountsWithRandomNoise(  
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
+				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyWithRandomNoise.txt", 3242321);
+
+		
+		/*
 		wrapper.writeRankedSpreadsheet(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyRanked.txt");
 		
