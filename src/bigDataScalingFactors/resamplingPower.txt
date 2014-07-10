@@ -13,14 +13,40 @@ myT <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt",
 myTData <- myT[,2:ncol(myT)]
 caseControl <- factor( myT[,1] )
 
+pValuesWithCounts <- vector()
+pValues <- vector()
+cors <- vector()
+
 myDist <- bcdist(myTData)
 myPCOA <- pcoa(myDist)
 rowSums <- apply(myTData, 1, sum)
 
-myLm <- lm(  myPCOA$vectors[,2] ~ caseControl + rowSums ) 
+countDist<- vector(length=length(rowSums)*(length(rowSums)-1)/2)
 
-summary(myLm)
+x <- 1
+for( i in 1:(length(rowSums)-1) )
+{
+	for( j in ( (i+1):length(rowSums)) )
+	{
+		countDist[x] <- abs( rowSums[i] - rowSums[j] )
+		x = x + 1
+	}
+}
 
-myLm <- lm(  myPCOA$vectors[,2] ~ caseControl ) 
-summary(myLm)
- 
+
+for( i in 1:5 )
+{
+	myLm <- lm(  myPCOA$vectors[,i] ~ caseControl + log10(rowSums) ) 
+	pValuesWithCounts[i] <- summary(myLm)$coef[,4][2]
+	
+	myLm <- lm(  myPCOA$vectors[,i] ~ caseControl ) 
+	pValues[i] <- summary(myLm)$coef[,4][2]
+	
+	cors[i] <- cor( log10(rowSums), myPCOA$vectors[,i], method="spear" )
+	
+}
+
+plot( 1:5, log10(pValues), col="RED")
+points(1:5, log10(pValuesWithCounts), col="BLUE")
+
+
