@@ -5,9 +5,9 @@ library("ape")
 
 rm(list=ls())
 
-setwd("G:\\BigDataScalingFactors\\July_StoolRemoved");
+setwd("D:\\BigDataScalingFactors\\July_StoolRemoved");
 
-myT <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt", 
+myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyWithExtent.txt", 
 		sep="\t", header=TRUE,row.names=1)
 
 myTData <- myT[,2:ncol(myT)]
@@ -36,8 +36,8 @@ for( i in 1:(length(rowSums)-1) )
 
 for( i in 1:5 )
 {
-	myLm <- lm(  myPCOA$vectors[,i] ~ caseControl + log10(rowSums) ) 
-	pValuesWithCounts[i] <- summary(myLm)$coef[,4][2]
+	myLm <- lm(  myPCOA$vectors[,i] ~ log10(rowSums)  + caseControl ) 
+	pValuesWithCounts[i] <- summary(myLm)$coef[,4][3]
 	
 	myLm <- lm(  myPCOA$vectors[,i] ~ caseControl ) 
 	pValues[i] <- summary(myLm)$coef[,4][2]
@@ -46,6 +46,8 @@ for( i in 1:5 )
 	
 }
 
+summary(lm ( log10(rowSums) ~ caseControl ))
+boxplot( log10(rowSums)[which(caseControl=='case')] , log10(rowSums)[which(caseControl!='case')] )
 
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
@@ -55,7 +57,7 @@ plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab
 plot( 1:5, log10(pValues), col="RED")
 points(1:5, log10(pValuesWithCounts), col="BLUE")
 
-myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolLogNorm.txt", 
+myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt", 
 		sep="\t", header=TRUE,row.names=1)
 		
 myDistLoggedNorm <- bcdist(myTLoggedNorm)
@@ -68,7 +70,7 @@ corsLoggedNorm <- vector()
 for( i in 1:5 )
 {
 	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl + log10(rowSums) ) 
-	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][2]
+	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][3]
 	
 	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl ) 
 	pValuesLoggedNorm[i] <- summary(myLm)$coef[,4][2]
@@ -77,6 +79,6 @@ for( i in 1:5 )
 	
 }
 
-df <-data.frame( pValues, pValuesWithCounts, pValuesLoggedNorm, pValuesWithCountsLoggedNorm)
+df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
-write.table( df, file="pValueSummary.txt", sep="\t")
+write.table( df, file="pValueSummaryStoolOnly.txt", sep="\t")

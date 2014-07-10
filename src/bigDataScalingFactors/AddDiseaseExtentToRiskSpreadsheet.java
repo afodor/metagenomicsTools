@@ -44,12 +44,12 @@ public class AddDiseaseExtentToRiskSpreadsheet
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStool.txt");
+				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt"
+				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyWithExtent.txt"
 				)));
 		
 		writer.write("sample\textent");

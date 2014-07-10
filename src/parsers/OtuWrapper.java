@@ -2139,11 +2139,11 @@ public class OtuWrapper
 	{
 		OtuWrapper wrapper = new OtuWrapper(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStool.txt");
+						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
 		
 		wrapper.writeLoggedDataWithTaxaAsColumns( new File( ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStoolLogNorm.txt" ));
+						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt" ));
 		
 		/*
 		wrapper.writeRawCountsWithRandomNoise(  

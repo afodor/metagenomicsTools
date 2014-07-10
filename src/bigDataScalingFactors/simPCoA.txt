@@ -136,6 +136,4 @@ title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
 
 
-
-
  
