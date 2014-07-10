@@ -17,7 +17,7 @@ pValuesWithCounts <- vector()
 pValues <- vector()
 cors <- vector()
 
-myDist <- bcdist(myTData)
+myDist <- bcdist(log10(myTData+1))
 myPCOA <- pcoa(myDist)
 rowSums <- apply(myTData, 1, sum)
 
@@ -46,7 +46,37 @@ for( i in 1:5 )
 	
 }
 
+
+rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
+
 plot( 1:5, log10(pValues), col="RED")
 points(1:5, log10(pValuesWithCounts), col="BLUE")
 
+myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolLogNorm.txt", 
+		sep="\t", header=TRUE,row.names=1)
+		
+myDistLoggedNorm <- bcdist(myTLoggedNorm)
+myPCOALoggedNorm <- pcoa(myDistLoggedNorm)
 
+pValuesWithCountsLoggedNorm <- vector()
+pValuesLoggedNorm <- vector()
+corsLoggedNorm <- vector()
+
+for( i in 1:5 )
+{
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl + log10(rowSums) ) 
+	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][2]
+	
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl ) 
+	pValuesLoggedNorm[i] <- summary(myLm)$coef[,4][2]
+	
+	corsLoggedNorm[i] <- cor( log10(rowSums), myPCOALoggedNorm$vectors[,i], method="spear" )
+	
+}
+
+df <-data.frame( pValues, pValuesWithCounts, pValuesLoggedNorm, pValuesWithCountsLoggedNorm)
+
+write.table( df, file="pValueSummary.txt", sep="\t")

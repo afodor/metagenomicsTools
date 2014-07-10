@@ -2002,8 +2002,8 @@ public class OtuWrapper
 			assertNum(totalCounts, dataPointsUnnormalized);
 		}
 
-		//avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
-		avgNumber =1;	
+		avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
+		//avgNumber =1;	
 		
 		for (x = 0; x < dataPointsUnnormalized.size(); x++)
 		{
@@ -2139,8 +2139,13 @@ public class OtuWrapper
 	{
 		OtuWrapper wrapper = new OtuWrapper(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+						+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStool.txt");
 		
+		wrapper.writeLoggedDataWithTaxaAsColumns( new File( ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "July_StoolRemoved" 
+						+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStoolLogNorm.txt" ));
+		
+		/*
 		wrapper.writeRawCountsWithRandomNoise(  
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyWithRandomNoise.txt", 3242321);
