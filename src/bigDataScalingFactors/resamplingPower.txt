@@ -1,0 +1,26 @@
+rm(list=ls())
+
+library("ecodist")
+library("ape")
+
+rm(list=ls())
+
+setwd("G:\\BigDataScalingFactors\\July_StoolRemoved");
+
+myT <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt", 
+		sep="\t", header=TRUE,row.names=1)
+
+myTData <- myT[,2:ncol(myT)]
+caseControl <- factor( myT[,1] )
+
+myDist <- bcdist(myTData)
+myPCOA <- pcoa(myDist)
+rowSums <- apply(myTData, 1, sum)
+
+myLm <- lm(  myPCOA$vectors[,2] ~ caseControl + rowSums ) 
+
+summary(myLm)
+
+myLm <- lm(  myPCOA$vectors[,2] ~ caseControl ) 
+summary(myLm)
+ 
