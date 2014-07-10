@@ -65,7 +65,7 @@ public class RemoveSamplesByTissue
 		wrapper = new OtuWrapper(filepath,excludedSamples, excludedOTU);
 		
 		wrapper.writeRawDataWithTaxaAsColumns(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator +"risk_rle_countsTaxaAsColumnsAllButStool.txt");
+				File.separator + "July_StoolRemoved" + File.separator +"risk_raw_countsTaxaAsColumnsAllButStool.txt");
 		
 	}
 }	

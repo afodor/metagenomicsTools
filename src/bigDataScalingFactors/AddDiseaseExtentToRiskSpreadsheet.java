@@ -1,8 +1,10 @@
 package bigDataScalingFactors;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.OtuWrapper;
@@ -37,10 +39,46 @@ public class AddDiseaseExtentToRiskSpreadsheet
 	{
 		HashMap<String, String> map = getDiseaseExtentMap();
 		
+		for(String s : map.values())
+			System.out.println(s);
+		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStool.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "July_StoolRemoved" 
+				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt"
+				)));
+		
+		writer.write("sample\textent");
+		
+		for( String s : wrapper.getOtuNames())
+			writer.write("\t" + s);
+		
+		writer.write("\n");
 		
 		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = wrapper.getSampleNames().get(x);
+			writer.write(sampleName);
+			
+			if( map.get(sampleName) == null)
+				throw new Exception("No");
+			
+			writer.write( "\t" + 
+			(map.get(sampleName).toLowerCase().equals("none") ? "case" : "control" ));
+			
+			for(int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
+			}
+			
+			writer.write("\n");
+		}
+
+		writer.flush();  writer.close();
 	}
 }
