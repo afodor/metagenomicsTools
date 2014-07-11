@@ -7,8 +7,14 @@ rm(list=ls())
 
 setwd("D:\\BigDataScalingFactors\\July_StoolRemoved");
 
-myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyWithExtent.txt", 
+#myT <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyWithExtent.txt", 
+#		sep="\t", header=TRUE,row.names=1)
+
+myT <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt", 
 		sep="\t", header=TRUE,row.names=1)
+
+#myTOrig <- myT
+#myT <- myT[ which( myT[,1] == 'CD' | myT[,1] == 'UC' ), ];
 
 myTData <- myT[,2:ncol(myT)]
 caseControl <- factor( myT[,1] )
@@ -43,22 +49,30 @@ for( i in 1:5 )
 	pValues[i] <- summary(myLm)$coef[,4][2]
 	
 	cors[i] <- cor( log10(rowSums), myPCOA$vectors[,i], method="spear" )
-	
 }
 
 summary(lm ( log10(rowSums) ~ caseControl ))
 boxplot( log10(rowSums)[which(caseControl=='case')] , log10(rowSums)[which(caseControl!='case')] )
+boxplot( rowSums[which(caseControl=='case')] , rowSums[which(caseControl!='case')] )
+
 
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
 
-
 plot( 1:5, log10(pValues), col="RED")
 points(1:5, log10(pValuesWithCounts), col="BLUE")
 
-myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt", 
+myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsAllButStoolLogNorm.txt", 
 		sep="\t", header=TRUE,row.names=1)
+
+
+#myTLoggedNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt", 
+#		sep="\t", header=TRUE,row.names=1)
+		
+#myTLoggedNorm  <- myTLoggedNorm[ which( myTOrig[,1] == 'CD' | myTOrig[,1] == 'UC' ), ];
+		
+
 		
 myDistLoggedNorm <- bcdist(myTLoggedNorm)
 myPCOALoggedNorm <- pcoa(myDistLoggedNorm)
@@ -69,7 +83,7 @@ corsLoggedNorm <- vector()
 
 for( i in 1:5 )
 {
-	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl + log10(rowSums) ) 
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ caseControl ) 
 	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][3]
 	
 	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ caseControl ) 
@@ -81,4 +95,4 @@ for( i in 1:5 )
 
 df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
-write.table( df, file="pValueSummaryStoolOnly.txt", sep="\t")
+write.table( df, file="pValueSummaryAllButStool.txt", sep="\t")

@@ -29,7 +29,7 @@ public class AddDiseaseExtentToRiskSpreadsheet
 			if( map.containsKey(splits[0]))
 				throw new Exception("Duplicate");
 			
-			map.put(splits[0], splits[41]);
+			map.put(splits[0], splits[47]);
 		}
 		
 		return map;
@@ -44,12 +44,12 @@ public class AddDiseaseExtentToRiskSpreadsheet
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStool.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyWithExtent.txt"
+				+ File.separator + "risk_raw_countsTaxaAsColumnsAllButStoolWithExtent.txt"
 				)));
 		
 		writer.write("sample\textent");
@@ -68,8 +68,8 @@ public class AddDiseaseExtentToRiskSpreadsheet
 			if( map.get(sampleName) == null)
 				throw new Exception("No");
 			
-			writer.write( "\t" + 
-			(map.get(sampleName).toLowerCase().equals("none") ? "case" : "control" ));
+			String val = map.get(sampleName).toLowerCase();
+			writer.write( "\t" + (val.equals("no") || val.equals("control") ? "control" : "case") );
 			
 			for(int y=0; y < wrapper.getOtuNames().size(); y++)
 			{
