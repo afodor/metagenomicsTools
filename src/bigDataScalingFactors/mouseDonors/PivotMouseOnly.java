@@ -1,6 +1,8 @@
 package bigDataScalingFactors.mouseDonors;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -55,5 +57,38 @@ public class PivotMouseOnly
 		
 		wrapper.writeRankedSpreadsheet(ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
 				"MouseDonors" + File.separator + "otu_table_mouseOnlyAllSamplesTaxaAsColumnsRanked.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(
+				new File( 
+				ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
+				"MouseDonors" + File.separator 
+				+ "otu_table_mouseOnlyAllSamplesTaxaAsColumnsPlusMetaData.txt")));
+		
+		writer.write("sample\tinoculum");
+		
+		for(String s: wrapper.getOtuNames())
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = wrapper.getSampleNames().get(x);
+			writer.write(sampleName + "\t");
+			
+			MetadataParserFileLine mpfl = metaMap.get(sampleName);
+			
+			if( mpfl == null)
+				throw new Exception("No");
+			
+			writer.write(mpfl.getInnoculum());
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+				writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 }
