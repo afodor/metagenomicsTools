@@ -16,7 +16,7 @@ public class BiomFileFormat
 	public static void main(String[] args) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator + "otu_table.biom")));
+				File.separator + "dirk" + File.separator + "may2013_refOTU_Table-subset.filtered.biom")));
 		
 		StringTokenizer sToken = new StringTokenizer(reader.readLine(), "[]{,\":} ");
 		
@@ -93,7 +93,7 @@ public class BiomFileFormat
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() + 
-				File.separator + "July_StoolRemoved" + File.separator + "risk_raw_countsTaxaAsColumns.txt")));
+				File.separator + "dirk" + File.separator + "risk_refOTUs_countsTaxaAsColumns.txt")));
 		
 		writer.write("sample");
 		
