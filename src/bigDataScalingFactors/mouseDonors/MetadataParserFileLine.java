@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
@@ -52,7 +53,7 @@ public class MetadataParserFileLine
 	public static HashMap<String, MetadataParserFileLine> parseMetadata() throws Exception
 	{
 		HashMap<String, MetadataParserFileLine> map =
-				new HashMap<String, MetadataParserFileLine>();
+				new LinkedHashMap<String, MetadataParserFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + 
