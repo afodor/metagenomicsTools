@@ -45,9 +45,13 @@ for( i in 1:5 )
 }
 
 summary(lm ( log10(rowSums) ~ donor ))
-boxplot( log10(rowSums)[which(donor=='case')] , log10(rowSums)[which(donor!='case')] )
-boxplot( rowSums[which(donor=='case')] , rowSums[which(donor!='case')] )
 
+boxplot( rowSums[which(donor=='c1')] , rowSums[which(donor=='c2')],
+rowSums[which(donor=='c3')],rowSums[which(donor=='h1')], 
+rowSums[which(donor=='h2')], rowSums[which(donor=='h3')]
+ )
+
+plot(log10(rowSums),myPCOA$vectors[,1])
 
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
@@ -66,6 +70,7 @@ pValuesWithCountsLoggedNorm <- vector()
 pValuesLoggedNorm <- vector()
 corsLoggedNorm <- vector()
 
+
 for( i in 1:5 )
 {
 	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ donor ) 
@@ -77,6 +82,8 @@ for( i in 1:5 )
 	corsLoggedNorm[i] <- cor( log10(rowSums), myPCOALoggedNorm$vectors[,i], method="spear" )
 	
 }
+
+plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
 
 df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
