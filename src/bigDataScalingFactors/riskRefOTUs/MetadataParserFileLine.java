@@ -12,6 +12,12 @@ public class MetadataParserFileLine
 {
 	private final String sampleID;
 	private final String diagnosis;
+	private final String sampleLocation;
+	
+	public String getSampleLocation()
+	{
+		return sampleLocation;
+	}
 	
 	public String getSampleID()
 	{
@@ -26,7 +32,7 @@ public class MetadataParserFileLine
 	@Override
 	public String toString()
 	{
-		return sampleID + " " + diagnosis;
+		return sampleID + " " + diagnosis + " " + sampleLocation;
 	}
 	
 	public static HashMap<String, MetadataParserFileLine> getMetaMap() throws Exception
@@ -59,6 +65,7 @@ public class MetadataParserFileLine
 		String[] splits = s.split("\t");
 		this.sampleID = splits[0];
 		this.diagnosis = splits[3];
+		this.sampleLocation = splits[7];
 	}
 	
 	public static void main(String[] args) throws Exception
