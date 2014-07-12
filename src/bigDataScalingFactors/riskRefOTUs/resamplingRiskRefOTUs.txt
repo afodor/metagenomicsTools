@@ -85,3 +85,4 @@ plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
 df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
 write.table( df, file="pValueExcludedSummary.txt", sep="\t")
+
