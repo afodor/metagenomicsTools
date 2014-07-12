@@ -98,7 +98,9 @@ public class WriteStoolAndNonStoolSamples
 				ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "risk" + 
 						File.separator + "dirk" 
-						+ File.separator + "may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosis.filtered.txt"
+						+ File.separator + "may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosis" + 
+						(stoolOnly ? "stoolOnly" : "stoolExclued") + 
+						".filtered.txt"
 				)));
 		
 		writer.write("sample\tdiagnosis");

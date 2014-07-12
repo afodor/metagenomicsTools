@@ -7,11 +7,11 @@ rm(list=ls())
 
 setwd("D:\\BigDataScalingFactors\\risk\\dirk");
 
-myT <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsstoolOnly.filtered.txt", 
+myT <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosisstoolOnly.filtered.txt", 
 		sep="\t", header=TRUE,row.names=1)
 
 myTData <- myT[,2:ncol(myT)]
-donor <- factor( myT[,1] )
+diagnosis <- factor( myT[,1] )
 
 pValuesWithCounts <- vector()
 pValues <- vector()
@@ -35,21 +35,18 @@ for( i in 1:(length(rowSums)-1) )
 
 for( i in 1:5 )
 {
-	myLm <- lm(  myPCOA$vectors[,i] ~ log10(rowSums)  + donor ) 
+	myLm <- lm(  myPCOA$vectors[,i] ~ log10(rowSums)  + diagnosis ) 
 	pValuesWithCounts[i] <- summary(myLm)$coef[,4][3]
 	
-	myLm <- lm(  myPCOA$vectors[,i] ~ donor ) 
+	myLm <- lm(  myPCOA$vectors[,i] ~ diagnosis ) 
 	pValues[i] <- summary(myLm)$coef[,4][2]
 	
 	cors[i] <- cor( log10(rowSums), myPCOA$vectors[,i], method="spear" )
 }
 
-summary(lm ( log10(rowSums) ~ donor ))
+summary(lm ( log10(rowSums) ~ diagnosis ))
 
-boxplot( rowSums[which(donor=='c1')] , rowSums[which(donor=='c2')],
-rowSums[which(donor=='c3')],rowSums[which(donor=='h1')], 
-rowSums[which(donor=='h2')], rowSums[which(donor=='h3')]
- )
+boxplot( rowSums[which(diagnosis=='CD')] , rowSums[which(diagnosis=='Not IBD')])
 
 plot(log10(rowSums),myPCOA$vectors[,1])
 
@@ -60,7 +57,7 @@ plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab
 plot( 1:5, log10(pValues), col="RED")
 points(1:5, log10(pValuesWithCounts), col="BLUE")
 
-myTLoggedNorm <- read.table("otu_table_mouseOnlyAllSamplesTaxaAsColumnsLogNorm.txt", 
+myTLoggedNorm <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsstoolOnlyLogNormalized.filtered.txt", 
 		sep="\t", header=TRUE,row.names=1)	
 		
 myDistLoggedNorm <- bcdist(myTLoggedNorm)
@@ -73,10 +70,10 @@ corsLoggedNorm <- vector()
 
 for( i in 1:5 )
 {
-	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ donor ) 
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ diagnosis ) 
 	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][3]
 	
-	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ donor ) 
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ diagnosis ) 
 	pValuesLoggedNorm[i] <- summary(myLm)$coef[,4][2]
 	
 	corsLoggedNorm[i] <- cor( log10(rowSums), myPCOALoggedNorm$vectors[,i], method="spear" )
