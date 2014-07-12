@@ -1,0 +1,90 @@
+rm(list=ls())
+
+library("ecodist")
+library("ape")
+
+rm(list=ls())
+
+setwd("D:\\BigDataScalingFactors\\risk\\dirk");
+
+myT <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsstoolOnly.filtered.txt", 
+		sep="\t", header=TRUE,row.names=1)
+
+myTData <- myT[,2:ncol(myT)]
+donor <- factor( myT[,1] )
+
+pValuesWithCounts <- vector()
+pValues <- vector()
+cors <- vector()
+
+myDist <- bcdist(log10(myTData+1))
+myPCOA <- pcoa(myDist)
+rowSums <- apply(myTData, 1, sum)
+
+countDist<- vector(length=length(rowSums)*(length(rowSums)-1)/2)
+
+x <- 1
+for( i in 1:(length(rowSums)-1) )
+{
+	for( j in ( (i+1):length(rowSums)) )
+	{
+		countDist[x] <- abs( rowSums[i] - rowSums[j] )
+		x = x + 1
+	}
+}
+
+for( i in 1:5 )
+{
+	myLm <- lm(  myPCOA$vectors[,i] ~ log10(rowSums)  + donor ) 
+	pValuesWithCounts[i] <- summary(myLm)$coef[,4][3]
+	
+	myLm <- lm(  myPCOA$vectors[,i] ~ donor ) 
+	pValues[i] <- summary(myLm)$coef[,4][2]
+	
+	cors[i] <- cor( log10(rowSums), myPCOA$vectors[,i], method="spear" )
+}
+
+summary(lm ( log10(rowSums) ~ donor ))
+
+boxplot( rowSums[which(donor=='c1')] , rowSums[which(donor=='c2')],
+rowSums[which(donor=='c3')],rowSums[which(donor=='h1')], 
+rowSums[which(donor=='h2')], rowSums[which(donor=='h3')]
+ )
+
+plot(log10(rowSums),myPCOA$vectors[,1])
+
+rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
+plot( 1:5, log10(pValues), col="RED")
+points(1:5, log10(pValuesWithCounts), col="BLUE")
+
+myTLoggedNorm <- read.table("otu_table_mouseOnlyAllSamplesTaxaAsColumnsLogNorm.txt", 
+		sep="\t", header=TRUE,row.names=1)	
+		
+myDistLoggedNorm <- bcdist(myTLoggedNorm)
+myPCOALoggedNorm <- pcoa(myDistLoggedNorm)
+
+pValuesWithCountsLoggedNorm <- vector()
+pValuesLoggedNorm <- vector()
+corsLoggedNorm <- vector()
+
+
+for( i in 1:5 )
+{
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ donor ) 
+	pValuesWithCountsLoggedNorm[i] <- summary(myLm)$coef[,4][3]
+	
+	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ donor ) 
+	pValuesLoggedNorm[i] <- summary(myLm)$coef[,4][2]
+	
+	corsLoggedNorm[i] <- cor( log10(rowSums), myPCOALoggedNorm$vectors[,i], method="spear" )
+	
+}
+
+plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
+
+df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
+
+write.table( df, file="pValueSummary.txt", sep="\t")

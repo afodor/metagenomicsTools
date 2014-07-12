@@ -1,6 +1,8 @@
 package bigDataScalingFactors.riskRefOTUs;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -91,6 +93,40 @@ public class WriteStoolAndNonStoolSamples
 							(stoolOnly ? "stoolOnly" : "stoolExclued") + 
 						"Ranked.filtered.txt"
 				));		
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "risk" + 
+						File.separator + "dirk" 
+						+ File.separator + "may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosis.filtered.txt"
+				)));
+		
+		writer.write("sample\tdiagnosis");
+		
+		for(String s: wrapper.getOtuNames())
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = wrapper.getSampleNames().get(x);
+			writer.write(sampleName + "\t");
+			
+			MetadataParserFileLine mpfl = metaMap.get(sampleName);
+			
+			if( mpfl == null)
+				throw new Exception("No");
+			
+			writer.write(mpfl.getDiagnosis());
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+				writer.write("\t" + wrapper.getDataPointsUnnormalized().get(x).get(y));
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	public static void main(String[] args) throws Exception
