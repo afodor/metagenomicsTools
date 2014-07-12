@@ -7,7 +7,7 @@ rm(list=ls())
 
 setwd("D:\\BigDataScalingFactors\\risk\\dirk");
 
-myT <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosisstoolOnly.filtered.txt", 
+myT <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsWithDiagnosisstoolExclued.filtered.txt", 
 		sep="\t", header=TRUE,row.names=1)
 
 myTData <- myT[,2:ncol(myT)]
@@ -57,7 +57,7 @@ plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab
 plot( 1:5, log10(pValues), col="RED")
 points(1:5, log10(pValuesWithCounts), col="BLUE")
 
-myTLoggedNorm <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsstoolOnlyLogNormalized.filtered.txt", 
+myTLoggedNorm <- read.table("may2013_refOTU_Table-subsetTaxaAsColumnsstoolExcluedLogNormalized.filtered.txt", 
 		sep="\t", header=TRUE,row.names=1)	
 		
 myDistLoggedNorm <- bcdist(myTLoggedNorm)
@@ -84,4 +84,4 @@ plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
 
 df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
-write.table( df, file="pValueSummary.txt", sep="\t")
+write.table( df, file="pValueExcludedSummary.txt", sep="\t")
