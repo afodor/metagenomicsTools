@@ -1998,7 +1998,7 @@ public class OtuWrapper
 
 		if (threshold < 0.1)
 		{
-			//assertNoZeros(dataPointsUnnormalized);
+			assertNoZeros(dataPointsUnnormalized);
 			assertNum(totalCounts, dataPointsUnnormalized);
 		}
 
