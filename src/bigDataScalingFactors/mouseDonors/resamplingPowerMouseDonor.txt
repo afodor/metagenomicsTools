@@ -5,7 +5,7 @@ library("ape")
 
 rm(list=ls())
 
-setwd("G:\\BigDataScalingFactors\\MouseDonors");
+setwd("D:\\BigDataScalingFactors\\MouseDonors");
 
 myT <- read.table("otu_table_mouseOnlyAllSamplesTaxaAsColumnsPlusMetaData.txt", 
 		sep="\t", header=TRUE,row.names=1)
@@ -51,7 +51,6 @@ rowSums[which(donor=='c3')],rowSums[which(donor=='h1')],
 rowSums[which(donor=='h2')], rowSums[which(donor=='h3')]
  )
 
-plot(log10(rowSums),myPCOA$vectors[,1])
 
 rVal <- cor( log10(rowSums), myPCOA$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
@@ -70,7 +69,6 @@ pValuesWithCountsLoggedNorm <- vector()
 pValuesLoggedNorm <- vector()
 corsLoggedNorm <- vector()
 
-
 for( i in 1:5 )
 {
 	myLm <- lm(  myPCOALoggedNorm$vectors[,i] ~ log10(rowSums)+ donor ) 
@@ -88,3 +86,32 @@ plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
 df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
 
 write.table( df, file="pValueSummary.txt", sep="\t")
+
+
+####################3
+
+
+#RLE normalization 
+library("edgeR")
+edgeRT <- myTData
+edgeRT <- edgeRT + 1
+edgeRT <- t( edgeRT )
+myEdgeR = DGEList(counts=edgeRT)
+myNormFactors = calcNormFactors(myEdgeR, method = "RLE")
+myCommonDisp = estimateCommonDisp(myNormFactors);
+myPseudoCounts = myCommonDisp$pseudo.counts;
+myPseudoCounts = t(myPseudoCounts)
+myDistEdgeR <- bcdist(myPseudoCounts)
+
+rVal <- cor( myDist, countDist, method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(myDistEdgeR, countDist, main=title, xlab="BC Dist", ylab = "difference in number of sequences")
+
+
+myPCOAEdgeR<- pcoa(myDistEdgeR)
+
+
+rVal <- cor( log10(rowSums), myPCOAEdgeR$vectors[,1], method="spear" );
+title <- paste("r^2=", round( rVal * rVal ,digits=3))
+plot(log10(rowSums), myPCOAEdgeR$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
+
