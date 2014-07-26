@@ -83,10 +83,6 @@ for( i in 1:5 )
 
 plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
 
-df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm)
-
-write.table( df, file="pValueSummary.txt", sep="\t")
-
 
 ####################3
 
@@ -107,11 +103,27 @@ rVal <- cor( myDist, countDist, method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(myDistEdgeR, countDist, main=title, xlab="BC Dist", ylab = "difference in number of sequences")
 
-
 myPCOAEdgeR<- pcoa(myDistEdgeR)
 
-
-rVal <- cor( log10(rowSums), myPCOAEdgeR$vectors[,1], method="spear" );
+mrVal <- cor( log10(rowSums), myPCOAEdgeR$vectors[,1], method="spear" );
 title <- paste("r^2=", round( rVal * rVal ,digits=3))
 plot(log10(rowSums), myPCOAEdgeR$vectors[,1], xlab="log10(Number of Sequences)", ylab = "PCoA1", main=title)
 
+pValuesEdgeR <- vector()
+corsEdgeR <- vector()
+
+for( i in 1:5 )
+{
+	myLm <- lm(  myPCOAEdgeR$vectors[,i] ~ log10(rowSums)+ donor ) 
+	pValuesEdgeR[i] <- summary(myLm)$coef[,4][3]
+	
+	corsEdgeR[i] <- cor( log10(rowSums), myPCOAEdgeR$vectors[,i], method="spear" )
+	
+}
+
+plot(log10(rowSums),myPCOALoggedNorm$vectors[,1])
+
+df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWithCountsLoggedNorm, corsLoggedNorm,
+	pValuesEdgeR,corsEdgeR )
+
+write.table( df, file="pValueSummary.txt", sep="\t")

@@ -1833,7 +1833,7 @@ public class OtuWrapper
 		return returnVals;
 	}
 	
-	private Integer[] getRankForSample(int sampleIndex) throws Exception
+	Integer[] getRankForSample(int sampleIndex) throws Exception
 	{
 		List<RankHolder> rankedList = new ArrayList<RankHolder>();
 		
