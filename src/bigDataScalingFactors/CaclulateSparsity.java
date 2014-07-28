@@ -12,16 +12,16 @@ public class CaclulateSparsity
 	public static void main(String[] args) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
-				+ File.separator + 
-			"riskRawTaxaAsColumn.txt");
+				+ File.separator + "dirk" + File.separator + 
+			"may2013_refOTU_Table-subsetTaxaAsColumns.filtered.txt");
 		
 		System.out.println("Num otus " + wrapper.getOtuNames().size());
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
-						+ File.separator + 
-					"riskRawTaxaAsColumnSparsityVsSequenceDepth.txt")));
+						+ File.separator + "dirk" + File.separator + 
+					"dirkRawTaxaAsColumnSparsityVsSequenceDepth.txt")));
 		
-		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tlog10Sum\tgeometricMean\n");
+		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tfractionOne\tfractionTwo\tfractionThree\tlog10Sum\tgeometricMean\n");
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
@@ -45,6 +45,45 @@ public class CaclulateSparsity
 				sum+= Math.log10(wrapper.getDataPointsUnnormalized().get(x).get(x2) + 1.0);
 			
 			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			
+			num =0;
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( aVal > 0.999 && aVal < 1.001)
+					num++;
+			}
+			
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			
+			num =0;
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( aVal > 1.999 && aVal < 2.001)
+					num++;
+			}
+			
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			
+			num =0;
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( aVal > 2.999 && aVal < 3.001)
+					num++;
+			}
+			
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			
+			
+			
 			writer.write(sum + "\t");
 			writer.write( wrapper.getGeometricMeanForSample(x) + "\n");
 		}
