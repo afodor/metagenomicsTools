@@ -21,13 +21,12 @@ public class CaclulateSparsity
 						+ File.separator + "dirk" + File.separator + 
 					"dirkRawTaxaAsColumnSparsityVsSequenceDepth.txt")));
 		
-		writer.write("sample\tsequencingDepth\tfractionSparse\tfractionZeroOrOne\tfractionOne\tfractionTwo\tfractionThree\tlog10Sum\tgeometricMean\n");
+		writer.write("sample\tsequencingDepth\tfractionZero\tfractionLessThan20\tfractionOne\tfractionTwo\tfractionThree\tfractionTen\tlog10Sum\tgeometricMean\n");
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
 			writer.write( wrapper.getSampleNames().get(x) + "\t" );
 			writer.write(wrapper.getCountsForSample(x) + "\t");
-			writer.write(wrapper.getFractionZeroForTaxa(x) + "\t");
 			
 			double num =0;
 			
@@ -35,14 +34,22 @@ public class CaclulateSparsity
 			{
 				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
 				
-				if( aVal < 1.001)
+				if( aVal < 0.001)
 					num++;
 			}
 			
-			double sum =0;
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
 			
-			for( int x2=0; x2< wrapper.getOtuNames().size(); x2++)
-				sum+= Math.log10(wrapper.getDataPointsUnnormalized().get(x).get(x2) + 1.0);
+			
+			num =0;
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( aVal < 20.001)
+					num++;
+			}
 			
 			writer.write( num / wrapper.getOtuNames().size()  + "\t");
 			
@@ -82,7 +89,23 @@ public class CaclulateSparsity
 			
 			writer.write( num / wrapper.getOtuNames().size()  + "\t");
 			
+
+			num =0;
 			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( aVal >= 9.99  && aVal <= 10.01)
+					num++;
+			}
+			
+			writer.write( num / wrapper.getOtuNames().size()  + "\t");
+			
+			double sum =0;
+			
+			for( int x2=0; x2< wrapper.getOtuNames().size(); x2++)
+				sum+= Math.log10(wrapper.getDataPointsUnnormalized().get(x).get(x2) + 1.0);
 			
 			writer.write(sum + "\t");
 			writer.write( wrapper.getGeometricMeanForSample(x) + "\n");
