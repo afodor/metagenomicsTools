@@ -44,6 +44,7 @@ for( i in 1:5 )
 	cors[i] <- cor( log10(rowSums), myPCOA$vectors[,i], method="spear" )
 }
 
+
 summary(lm ( log10(rowSums) ~ donor ))
 
 boxplot( rowSums[which(donor=='c1')] , rowSums[which(donor=='c2')],
@@ -62,8 +63,12 @@ points(1:5, log10(pValuesWithCounts), col="BLUE")
 myTLoggedNorm <- read.table("otu_table_mouseOnlyAllSamplesTaxaAsColumnsLogNorm.txt", 
 		sep="\t", header=TRUE,row.names=1)	
 		
+		
 myDistLoggedNorm <- bcdist(myTLoggedNorm)
 myPCOALoggedNorm <- pcoa(myDistLoggedNorm)
+
+myFirstVector <- myPCOALoggedNorm$vectors[,1]
+mySecondVector <- myPCOALoggedNorm$vectors[,2]
 
 pValuesWithCountsLoggedNorm <- vector()
 pValuesLoggedNorm <- vector()
@@ -127,3 +132,12 @@ df <-data.frame( pValues, pValuesWithCounts, cors, pValuesLoggedNorm, pValuesWit
 	pValuesEdgeR,corsEdgeR )
 
 write.table( df, file="pValueSummary.txt", sep="\t")
+
+#############
+
+
+myT$pca1 <- myFirstVector
+myT$pca2 <- mySecondVector
+myT$numSeqs <- rowSums
+write.table(file="myTWithPCOA.txt", myT ,sep="\t", row.names=FALSE)
+
