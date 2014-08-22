@@ -24,7 +24,7 @@ public class RandomProteinGenerator
 	
 	
 	/*
-	 * Returns a randomly generated protein of length.
+	 * Returns a randomly generated protein of length length.
 	 */
 	public String getRandomProtein(int length)
 	{
