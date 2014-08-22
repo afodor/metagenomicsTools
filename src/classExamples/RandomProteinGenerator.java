@@ -46,7 +46,7 @@ public class RandomProteinGenerator
 	* calls getRandomProtein() numIterations times generating a protein with length equal to protSeq.length().
 	 * Returns the number of time protSeq was observed / numIterations
 	 */
-	public double getFrequencyFromSimulation( String protSeq, int numInterations )
+	public double getFrequencyFromSimulation( String protSeq, int numIterations )
 	{
 		return -1;
 	}
