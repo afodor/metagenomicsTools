@@ -21,4 +21,32 @@ public class RandomProteinGenerator
 	public RandomProteinGenerator(boolean useUniformFrequencies)
 	{
 	}
+	
+	/*
+	 * Returns a randomly generated protein of length.
+	 */
+	public String getRandomProtein(int length)
+	{
+		return null;
+	}
+	
+	/*
+	 * Returns the probability of seeing the given sequence
+	 * given the underlying residue frequencies represented by
+	 * this class.  For example, if useUniformFrequencies==false in 
+	 * constructor, the probability of "AC" would be 0.072658 *  0.024692
+	 */
+	public double getExpectedFrequency(String protSeq)
+	{
+		return -1;
+	}
+	
+	/*
+	 * calls getRandomProtein() numIterations times.
+	 * Returns the number of time protSeq was observed / numIterations
+	 */
+	public double getFrequencyFromSimulation( String protSeq, int numInterations )
+	{
+		return -1;
+	}
 }
