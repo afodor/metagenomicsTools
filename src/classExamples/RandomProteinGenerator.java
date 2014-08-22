@@ -50,4 +50,20 @@ public class RandomProteinGenerator
 	{
 		return -1;
 	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		RandomProteinGenerator uniformGen = new RandomProteinGenerator(true);
+		String testProtein = "ACD";
+		int numIterations =  10000000;
+		System.out.println(uniformGen.getExpectedFrequency(testProtein));  // should be 0.05^3 = 0.000125
+		System.out.println(uniformGen.getFrequencyFromSimulation(testProtein,numIterations));  // should be close
+		
+		RandomProteinGenerator realisticGen = new RandomProteinGenerator(false);
+		
+		// should be 0.072658 *  0.024692 * 0.050007 == 8.97161E-05
+		System.out.println(realisticGen.getExpectedFrequency(testProtein));  
+		System.out.println(realisticGen.getFrequencyFromSimulation(testProtein,numIterations));  // should be close
+		
+	}
 }
