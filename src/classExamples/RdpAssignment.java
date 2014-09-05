@@ -46,6 +46,17 @@ public class RdpAssignment
 		return null;
 	}
 	
+	/**
+	 * 
+	 * returns a one line summary of all the assignments in this line
+	 * (for example 
+	 * Root(100);Bacteria(100);Firmicutes(100);Clostridia(100);Clostridiales(100);Lachnospiraceae(97);Lachnospiracea_incertae_sedis(63)
+	 */
+	public String getSummaryString()
+	{
+		return null;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 
