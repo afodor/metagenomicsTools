@@ -16,14 +16,27 @@ public class RdpAssignment
 	}
 	
 	/*
-	 * Returns the taxomon assignment 
+	 * Returns the taxomony assignment for taxonomicLevel or null
+	 * if the taxonomy is not represented by in the assignment line.
+	 * 
+	 * Possible taxonomic levels include RdpAssignment.PHYLUM , 
+	 * 	RdpAssignment.CLASS,  RdpAssignment.ORDER, RdpAssignment.FAMILY and
+	 *  RdpAssignment.GENUS
 	 */
-	public String getTaxomonyName(String taxa)
+	public String getTaxomonyName(String taxonomicLevel)
 	{
 		return null;
 	}
 	
-	public Integer getTaxonomyScore(String taxa)
+	/*
+	 *Returns the score (between 0 and 100 ) for taxonomicLevel or null
+	 * if the taxonomy is not represented by in the assignment line.
+	 * 
+	 * Possible taxonomic levels include RdpAssignment.PHYLUM , 
+	 * 	RdpAssignment.CLASS,  RdpAssignment.ORDER, RdpAssignment.FAMILY and
+	 *  RdpAssignment.GENUS
+	 */
+	public Integer getTaxonomyScore(String taxonomicLevel)
 	{
 		return null;
 	}
