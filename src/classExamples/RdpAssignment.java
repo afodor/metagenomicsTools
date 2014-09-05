@@ -10,7 +10,7 @@ public class RdpAssignment
 	public static final String FAMILY= "family";
 	public static final String GENUS= "genus";
 	
-	private RdpAssignment(String rpdLine)
+	private RdpAssignment(String rdpLine) throws Exception
 	{
 		
 	}
@@ -23,7 +23,7 @@ public class RdpAssignment
 	 * 	RdpAssignment.CLASS,  RdpAssignment.ORDER, RdpAssignment.FAMILY and
 	 *  RdpAssignment.GENUS
 	 */
-	public String getTaxomonyName(String taxonomicLevel)
+	public String getTaxomonyName(String taxonomicLevel) throws Exception
 	{
 		return null;
 	}
@@ -36,12 +36,12 @@ public class RdpAssignment
 	 * 	RdpAssignment.CLASS,  RdpAssignment.ORDER, RdpAssignment.FAMILY and
 	 *  RdpAssignment.GENUS
 	 */
-	public Integer getTaxonomyScore(String taxonomicLevel)
+	public Integer getTaxonomyScore(String taxonomicLevel) throws Exception
 	{
 		return null;
 	}
 	
-	public static List<RdpAssignment> parseFile(String filepath)
+	public static List<RdpAssignment> parseFile(String filepath) throws Exception
 	{
 		return null;
 	}
