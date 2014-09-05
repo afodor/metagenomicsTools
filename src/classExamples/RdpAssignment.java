@@ -53,9 +53,11 @@ public class RdpAssignment
 		long startTime = System.currentTimeMillis();
 		
 		int x=0;
+		
 		// time for iteration
 		for(RdpAssignment rdp : rdpList)
-			if( rdp.getTaxomonyName(PHYLUM) != null);
+			if( rdp.getTaxomonyName(PHYLUM) != null)
+				x++;
 		
 		float elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
 		
@@ -65,6 +67,8 @@ public class RdpAssignment
 		
 		while( rdpList.size() > 0  )
 			rdpList.remove(0);
+		
+		elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
 		
 		System.out.println("Deleted " + x + " assgined records in " + elapsedTime + " seconds ");
 		
