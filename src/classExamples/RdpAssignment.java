@@ -10,8 +10,6 @@ public class RdpAssignment
 	public static final String FAMILY= "family";
 	public static final String GENUS= "genus";
 	
-
-	
 	private RdpAssignment(String rpdLine)
 	{
 		
