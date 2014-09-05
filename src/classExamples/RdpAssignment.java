@@ -48,20 +48,34 @@ public class RdpAssignment
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<RdpAssignment> rdpList = RdpAssignment.parseFile("C:\\classes\\ProgrammingIII_2014\\HW_2\\rdpOutFromLength200");
-		
+
 		long startTime = System.currentTimeMillis();
 		
-		int x=0;
-		
-		// time for iteration
-		for(RdpAssignment rdp : rdpList)
-			if( rdp.getTaxomonyName(PHYLUM) != null)
-				x++;
+		List<RdpAssignment> rdpList = RdpAssignment.parseFile("C:\\classes\\ProgrammingIII_2014\\HW_2\\rdpOutFromLength200");
 		
 		float elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
+		System.out.println("Parsed file in " + elapsedTime + " seconds ");
 		
-		System.out.println("Read " + x + " assgined records in " + elapsedTime + " seconds ");
+		int forwardCounts =0, backwardCounts =0;
+		
+		startTime = System.currentTimeMillis();
+		// iterate forward
+		for(RdpAssignment rdp : rdpList)
+			if( rdp.getTaxomonyName(PHYLUM) != null)
+				forwardCounts++;
+		
+		elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
+		System.out.println("Read " + forwardCounts+ " assigned records forward in " + elapsedTime + " seconds ");
+		
+
+		startTime = System.currentTimeMillis();
+		// iterate a sub-list backwards
+		for( int i= Math.min(rdpList.size() -1,30000); i >= 0; i--)
+			if( rdpList.get(i).getTaxonomyScore(PHYLUM) != null)
+				backwardCounts++;
+		
+		elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
+		System.out.println("Read " + backwardCounts + " assigned records backwards in " + elapsedTime + " seconds ");
 		
 		startTime = System.currentTimeMillis();
 		
@@ -70,7 +84,7 @@ public class RdpAssignment
 		
 		elapsedTime = (System.currentTimeMillis()- startTime )/ 1000f;
 		
-		System.out.println("Deleted " + x + " assgined records in " + elapsedTime + " seconds ");
+		System.out.println("Deleted " + forwardCounts+ " assigned records in " + elapsedTime + " seconds ");
 		
 	}
 }
