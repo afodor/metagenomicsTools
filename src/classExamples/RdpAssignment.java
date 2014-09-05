@@ -59,7 +59,6 @@ public class RdpAssignment
 	
 	public static void main(String[] args) throws Exception
 	{
-
 		long startTime = System.currentTimeMillis();
 		
 		List<RdpAssignment> rdpList = RdpAssignment.parseFile("C:\\classes\\ProgrammingIII_2014\\HW_2\\rdpOutFromLength200");
