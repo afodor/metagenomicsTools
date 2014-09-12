@@ -41,7 +41,13 @@ public class Sevenths
 			dominant[2] = major[2];
 			dominant[3] = addOne( major[3]);
 			
+			
 			printResults(diminished, halfDiminished, minor, major, dominant);
+			
+			diminished[0] = addOne(dominant[0]);
+			diminished[1] = dominant[1];	
+			diminished[2] = dominant[2];
+			diminished[3] = subtractOne(dominant[3]);
 		}
 		
 	}
