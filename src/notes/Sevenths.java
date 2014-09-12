@@ -29,20 +29,26 @@ public class Sevenths
 			minor[2] = addOne( halfDiminished[2]);
 			minor[3] = halfDiminished[3];
 			
+			int[] major = new int[4];
+			major[0] = minor[0];
+			major[1] = addOne(minor[1]);
+			major[2] =  minor[2];
+			major[3] = minor[3];
 			
-			printResults(diminished, halfDiminished, minor);
+			printResults(diminished, halfDiminished, minor, major);
 		}
 		
 	}
 	
-	private static void printResults( int[] diminished, int[] halfDiminished, int [] minor )
+	private static void printResults( int[] diminished, int[] halfDiminished, int [] minor,
+				int [] major)
 	{
-		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] );
-		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  );
-		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]]  );
-		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] );
+		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] + "\t\t" + NOTES[major[3]]);
+		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ major[2]] );
+		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]] + "\t\t" + NOTES[major[1]] );
+		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t" + NOTES[major[0]]);
 		//0x00A1
-		System.out.println("dim\thalfDim\t\tminor\t");
+		System.out.println("dim\thalfDim\t\tminor\t\tmajor\t");
 		System.out.println("\n\n");
 	}
 	
