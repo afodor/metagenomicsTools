@@ -25,9 +25,10 @@ public class Sevenths
 			
 			int[] minor = new int[4];
 			minor[0] = halfDiminished[0];
-			minor[1] = addOne(halfDiminished[1]);
-			minor[2] = halfDiminished[2];
+			minor[1] = halfDiminished[1];
+			minor[2] = addOne( halfDiminished[2]);
 			minor[3] = halfDiminished[3];
+			
 			
 			printResults(diminished, halfDiminished, minor);
 		}
