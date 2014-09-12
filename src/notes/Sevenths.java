@@ -35,20 +35,30 @@ public class Sevenths
 			major[2] =  minor[2];
 			major[3] = minor[3];
 			
-			printResults(diminished, halfDiminished, minor, major);
+			int[] dominant = new int[4];
+			dominant[0] = major[0];
+			dominant[1] = major[1];
+			dominant[2] = major[2];
+			dominant[3] = addOne( major[3]);
+			
+			printResults(diminished, halfDiminished, minor, major, dominant);
 		}
 		
 	}
 	
 	private static void printResults( int[] diminished, int[] halfDiminished, int [] minor,
-				int [] major)
+				int [] major, int [] dominant)
 	{
-		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] + "\t\t" + NOTES[major[3]]);
-		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ major[2]] );
-		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]] + "\t\t" + NOTES[major[1]] );
-		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t" + NOTES[major[0]]);
+		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] + "\t\t" + NOTES[major[3]]
+								+ "\t" + (char)94 + "\t" +  NOTES[dominant[3]]);
+		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ major[2]] 
+				+ "\t\t" +  NOTES[dominant[2]]);
+		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]] + "\t\t" + NOTES[major[1]] 
+				 + "\t\t" +  NOTES[dominant[1]]);
+		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t"
+				 + NOTES[major[0]]+ "\t\t" +  NOTES[dominant[0]]);
 		//0x00A1
-		System.out.println("dim\thalfDim\t\tminor\t\tmajor\t");
+		System.out.println("dim\thalfDim\t\tminor\t\tmajor\t    dominant");
 		System.out.println("\n\n");
 	}
 	
