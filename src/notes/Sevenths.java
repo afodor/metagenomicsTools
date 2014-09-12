@@ -2,7 +2,7 @@ package notes;
 
 public class Sevenths
 {
-	public static final String[] NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
+	public static final String[] NOTES = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab",
 																"A", "Bb"};
 	
 	public static void main(String[] args)
@@ -36,12 +36,12 @@ public class Sevenths
 	
 	private static void printResults( int[] diminished, int[] halfDiminished, int [] minor )
 	{
-		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t " + NOTES[halfDiminished[3]] + "\t" + NOTES[minor[3]] );
-		System.out.println( " " + NOTES[ diminished[2]] + "\t " + NOTES[halfDiminished[2]]+ "\t" + NOTES[minor[2]]  );
-		System.out.println( " " + NOTES[ diminished[1]] + "\t " + NOTES[halfDiminished[1]] + "  " + (char)(94) + "\t" + NOTES[minor[1]]  );
-		System.out.println( " " + NOTES[ diminished[0]] + "\t " + NOTES[halfDiminished[0]] + "\t" + NOTES[minor[0]] );
+		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] );
+		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  );
+		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]]  );
+		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] );
 		//0x00A1
-		System.out.println("dim\thalfDim\tminor\t");
+		System.out.println("dim\thalfDim\t\tminor\t");
 		System.out.println("\n\n");
 	}
 	
