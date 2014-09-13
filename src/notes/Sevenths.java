@@ -13,7 +13,7 @@ public class Sevenths
 		diminished[0] = 0;
 		diminished[1] =3;
 		diminished[2] = 6;
-		diminished[3] = 8;
+		diminished[3] = 9;
 		
 		for(int x=0; x <= NOTES.length; x++)
 		{
