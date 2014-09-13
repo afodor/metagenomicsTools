@@ -29,43 +29,45 @@ public class Sevenths
 			minor[2] = addOne( halfDiminished[2]);
 			minor[3] = halfDiminished[3];
 			
-			int[] major = new int[4];
-			major[0] = minor[0];
-			major[1] = addOne(minor[1]);
-			major[2] =  minor[2];
-			major[3] = minor[3];
+			int[] dom7 = new int[4];
+			dom7[0] = minor[0];
+			dom7[1] = addOne(minor[1]);
+			dom7[2] =  minor[2];
+			dom7[3] = minor[3];
 			
-			int[] dominant = new int[4];
-			dominant[0] = major[0];
-			dominant[1] = major[1];
-			dominant[2] = major[2];
-			dominant[3] = addOne( major[3]);
+			int[] major7 = new int[4];
+			major7[0] = dom7[0];
+			major7[1] = dom7[1];
+			major7[2] = dom7[2];
+			major7[3] = addOne( dom7[3]);
 			
 			
-			printResults(diminished, halfDiminished, minor, major, dominant);
+			printResults(diminished, halfDiminished, minor, dom7, major7);
 			
-			diminished[0] = addOne(dominant[0]);
-			diminished[1] = dominant[1];	
-			diminished[2] = dominant[2];
-			diminished[3] = subtractOne(dominant[3]);
+			diminished[0] = addOne(major7[0]);
+			diminished[1] = major7[1];	
+			diminished[2] = major7[2];
+			diminished[3] = subtractOne(major7[3]);
 		}
 		
 	}
 	
 	private static void printResults( int[] diminished, int[] halfDiminished, int [] minor,
-				int [] major, int [] dominant)
+				int [] dom7, int [] major7)
 	{
-		System.out.println( " " + NOTES[ diminished[3]] + "  " + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] + "\t\t" + NOTES[major[3]]
-								+ "\t" + (char)94 + "\t" +  NOTES[dominant[3]]);
-		System.out.println( " " + NOTES[ diminished[2]] + "\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ major[2]] 
-				+ "\t\t" +  NOTES[dominant[2]]);
-		System.out.println( " " + NOTES[ diminished[1]] + "\t  " + NOTES[halfDiminished[1]] + "   " + (char)(94) + "\t " + NOTES[minor[1]] + "\t\t" + NOTES[major[1]] 
-				 + "\t\t" +  NOTES[dominant[1]]);
-		System.out.println( " " + NOTES[ diminished[0]] + "\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t"
-				 + NOTES[major[0]]+ "\t\t" +  NOTES[dominant[0]]);
+		System.out.println( " " + NOTES[ diminished[3]] + "\t" + (char)(94) +  "\t  " + NOTES[halfDiminished[3]] + "\t\t " + NOTES[minor[3]] + "\t\t" + NOTES[dom7[3]]
+								+ "\t" + (char)94 + "\t" +  NOTES[major7[3]] + "\t" + (char)0x00A1);
+		
+		System.out.println( " " + NOTES[ diminished[2]] + "\t\t  " + NOTES[halfDiminished[2]]+ "\t\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ dom7[2]] 
+				+ "\t\t" +  NOTES[major7[2]]);
+		System.out.println( " " + NOTES[ diminished[1]] + "\t\t  " + NOTES[halfDiminished[1]] + ""
+				+ "\t" + (char)(94) + "\t " + NOTES[minor[1]] + "\t\t" + NOTES[dom7[1]] 
+				 + "\t\t" +  NOTES[major7[1]]);
+		System.out.println( " " + NOTES[ diminished[0]] + "\t\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t"
+				 + NOTES[dom7[0]]+ "\t\t" +  NOTES[major7[0]] + "\t" + (char)94);
 		//0x00A1
-		System.out.println("dim\thalfDim\t\tminor\t\tmajor\t    dominant");
-		System.out.println("\n\n");
+		System.out.println("dim\t\thalfDim\t\tminor\t\tdom\t\tmajor");
+		System.out.println("\n");
 	}
 	
 	private static int addOne(int i)
