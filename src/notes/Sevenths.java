@@ -15,7 +15,7 @@ public class Sevenths
 		diminished[2] = 6;
 		diminished[3] = 8;
 		
-		for(int x=0; x < NOTES.length; x++)
+		for(int x=0; x <= NOTES.length; x++)
 		{
 			int[] halfDiminished = new int[4];
 			halfDiminished[0] = diminished[0];
