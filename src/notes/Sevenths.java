@@ -59,10 +59,10 @@ public class Sevenths
 								+ "\t" + (char)94 + "\t" +  NOTES[major7[3]] + "\t" + (char)0x00A1);
 		
 		System.out.println( " " + NOTES[ diminished[2]] + "\t\t  " 
-		+ NOTES[halfDiminished[2]]+ "\t" + (char)94 + "\t " + NOTES[minor[2]]  + "\t" + (char)(94)+ "\t" + NOTES[ dom7[2]] 
+		+ NOTES[halfDiminished[2]]+ "\t" + (char)94 + "\t " + NOTES[minor[2]]  + "\t\t" + NOTES[ dom7[2]] 
 				+ "\t\t" +  NOTES[major7[2]]);
 		System.out.println( " " + NOTES[ diminished[1]] + "\t\t  " + NOTES[halfDiminished[1]] 
-				+ "\t\t " + NOTES[minor[1]] + "\t\t" + NOTES[dom7[1]] 
+				+ "\t\t " + NOTES[minor[1]] + "\t"  + (char)(94)+ "\t" + NOTES[dom7[1]] 
 				 + "\t\t" +  NOTES[major7[1]]);
 		System.out.println( " " + NOTES[ diminished[0]] + "\t\t  " + NOTES[halfDiminished[0]] + "\t\t " + NOTES[minor[0]] + "\t\t"
 				 + NOTES[dom7[0]]+ "\t\t" +  NOTES[major7[0]] + "\t" + (char)94);
