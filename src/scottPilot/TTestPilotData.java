@@ -1,11 +1,14 @@
 package scottPilot;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import parsers.OtuWrapper;
+import utils.Avevar;
 import utils.ConfigReader;
 import utils.TTest;
 
@@ -31,6 +34,30 @@ public class TTestPilotData
 				"taxaAsColumnsPilot.txt" );
 		
 		List<Holder> list = getHolders(wrapper);
+		writeResults(list);
+	}
+	
+	private static void writeResults(List<Holder> list) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(
+				ConfigReader.getScottPilotDataDir() + File.separator + 
+					"pValuesForPhyla.txt"));
+		
+		writer.write("taxa\tpValue\tfdrPValue\taAvg\tbAvg\taVals\tbVals\n");
+
+		int n=1;
+		for(Holder h : list)
+		{
+			writer.write(h.taxaName + "\t");
+			writer.write(h.pValue + "\t");
+			writer.write(list.size() * h.pValue / n + "\t");
+			writer.write(new Avevar(h.aVals).getAve() + "\t");
+			writer.write(new Avevar(h.bVals).getAve() + "\t");
+			writer.write(h.aVals + "\t");
+			writer.write(h.bVals + "\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static List<Holder> getHolders( OtuWrapper wrapper )
