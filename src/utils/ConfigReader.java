@@ -69,6 +69,7 @@ public class ConfigReader
 	public static final String BIG_DATA_SCALING_FACTORS = "BIG_DATA_SCALING_FACTORS";
 	
 	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
+	public static final String SCOTT_PILOT_DIR = "SCOTT_PILOT_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -98,6 +99,11 @@ public class ConfigReader
 	public static String getKlebDir() throws Exception
 	{
 		return getConfigReader().getAProperty(KLEB_DIR);
+	}
+	
+	public static String getScottPilotDataDir() throws Exception
+	{
+		return getConfigReader().getAProperty(SCOTT_PILOT_DIR);
 	}
 
 	public static String getMachineLearningDir() throws Exception
