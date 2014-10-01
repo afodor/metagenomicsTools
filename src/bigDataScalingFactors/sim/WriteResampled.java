@@ -18,8 +18,10 @@ public class WriteResampled
 		
 		int sampleID = wrapper.getSampleIdWithMostCounts();
 		int numCounts = wrapper.getCountsForSample(sampleID);
+		
+		int minSampleID = wrapper.getSampleIdWithMinCounts();
+		int minNumCounts = wrapper.getCountsForSample(minSampleID);
 		System.out.println(sampleID + " " + numCounts);
-		
-		
+		System.out.println(minSampleID + " " + minNumCounts);
 	}
 }
