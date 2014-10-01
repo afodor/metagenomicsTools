@@ -10,7 +10,6 @@ myTNorm <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt", sep
 myTNormLogged <- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyNormalizedAndLogged.txt", sep="\t", header=TRUE, row.names=1)
 myTRand<- read.table("risk_raw_countsTaxaAsColumnsStoolOnlyWithRandomNoise.txt", sep="\t", header=TRUE, row.names=1)
 
-
 myDist <- bcdist(myT)
 myPCOA <- pcoa(myDist)
 rowSums <- apply(myT, 1, sum)

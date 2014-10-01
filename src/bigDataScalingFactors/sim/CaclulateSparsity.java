@@ -11,7 +11,8 @@ public class CaclulateSparsity
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "risk" 
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
 						"resampled.txt");
