@@ -54,6 +54,25 @@ public class OtuWrapper
 		return avgNumber;
 	}
 	
+	public int getSampleIdWithMostCounts() throws Exception
+	{
+		int returnVal = -1;
+		int maxCounts =0;
+		
+		for( int x=0; x < this.getSampleNames().size(); x++)
+		{
+			int thisCounts = this.getCountsForSample(x);
+			
+			if( thisCounts > maxCounts)
+			{
+				maxCounts = thisCounts;
+				returnVal = x;
+			}
+		}
+		
+		return returnVal;
+	}
+	
 	public String getFilePath()
 	{
 		return filePath;
