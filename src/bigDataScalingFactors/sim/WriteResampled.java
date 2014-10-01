@@ -20,5 +20,6 @@ public class WriteResampled
 		int numCounts = wrapper.getCountsForSample(sampleID);
 		System.out.println(sampleID + " " + numCounts);
 		
+		
 	}
 }
