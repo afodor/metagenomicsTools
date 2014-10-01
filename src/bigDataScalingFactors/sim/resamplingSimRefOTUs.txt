@@ -1,0 +1,61 @@
+rm(list=ls())
+setwd("D:\\BigDataScalingFactors\\risk")
+library("phyloseq")
+library("DESeq2")
+library("ggplot2")
+library("Kendall")
+################################################################################################################################################
+################################################################################################################################################
+"logNormalize" <- function(myIn)
+{
+a2<-t(myIn)
+avgPerSam<-sum(apply(a2,1,sum)) / nrow(a2)
+
+for(i in 1:nrow(a2))
+{
+        totSam<-sum(a2[i,1:ncol(a2)])
+        a2[i,1:ncol(a2)]<-log10(((a2[i,1:ncol(a2)]/totSam)*avgPerSam)+1)
+}
+return(t(a2))
+}
+################################################################################################################################################
+"getPCoA" <- function(phyloObject,method, numAxis)
+{
+myOut<-list()
+if(method == "wUniFrac"){iDist <- phyloseq::distance(phyloObject, method = "unifrac", weighted = TRUE)}else{
+iDist <- phyloseq::distance(phyloObject, method = method)}
+iMDS <- ordinate(phyloObject, "PCoA", distance = iDist)
+explained<-c(paste("PCoA 1  ", round(100 *iMDS$values[1,2],2), "%", sep="") , paste("PCoA 2  ", round(100 *iMDS$values[2,2],2), "%", sep=""))
+p <- plot_ordination(phyloObject, iMDS, color = NULL, shape = NULL, justDF=T, axes=c(1:numAxis))
+myOut[[1]]<-p
+myOut[[2]]<-explained
+return(myOut)
+}
+################################################################################################################################################
+################################################################################################################################################
+load("riskData.dat")
+################################################################################################################################################
+idx03<-names(which(apply(otu_table(riskData),2, sum) >= 100))
+riskData_100<-prune_samples(idx03, riskData)
+################################################################################################################################################
+diagdds = phyloseq_to_deseq2(riskData_100, ~1)
+diagdds = estimateSizeFactors(diagdds)
+diagdds = estimateDispersions(diagdds, fitType='local')
+diagvst = getVarianceStabilizedData(diagdds)
+diagvst<-diagvst + abs( min(diagvst))
+
+riskData_100_VSD<-riskData_100
+otu_table(riskData_100_VSD)<-otu_table(diagvst, taxa_are_rows=T)
+bc_VSD<-getPCoA(riskData_100_VSD, method = "bray", 2)
+
+samSums<-log10(sample_sums(riskData_100))
+plot(samSums, bc_VSD[[1]]$Axis.1, pch=19)
+
+Kendall(  samSums, bc_VSD[[1]]$Axis.1 ) 
+summary( lm(  samSums ~ bc_VSD[[1]]$Axis.1))
+
+=##############################
+
+riskData_100_raw <- riskData_100
+otu_table(riskData_100_raw)<-otu_table(riskData_100_raw, taxa_are_rows=T)
+write.table(otu_table(riskData_100_raw), file="riskRaw.txt", sep="\t") 
