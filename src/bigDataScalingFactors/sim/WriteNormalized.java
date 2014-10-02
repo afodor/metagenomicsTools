@@ -27,7 +27,7 @@ public class WriteNormalized
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledRarified.txt"));
+						"resampledRarifiedWithReplacement.txt"),true);
 		
 		
 		

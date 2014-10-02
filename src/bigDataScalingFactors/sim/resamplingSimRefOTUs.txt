@@ -7,7 +7,7 @@ setwd("C:\\BigDataScalingFactors\\risk\\dirk\\resample");
 
 myT <- read.table("resampled.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- 
-	read.table("resampledRarified.txt", sep="\t", header=TRUE, row.names=1)
+	read.table("resampledRarifiedWithReplacement.txt", sep="\t", header=TRUE, row.names=1)
 
 
 myDistNorm <- bcdist(myTNorm)

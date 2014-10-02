@@ -73,7 +73,7 @@ public class OtuWrapper
 		return returnVal;
 	}
 	
-	public void writeRarifiedSpreadhseet(File filepath) throws Exception
+	public void writeRarifiedSpreadhseet(File filepath, boolean withReplacement) throws Exception
 	{
 		Random random = new Random(24231);
 		int minIndex = getSampleIdWithMinCounts();
@@ -97,8 +97,18 @@ public class OtuWrapper
 
 			Collections.shuffle(sampleList, random);
 			
-			for( int y=0; y < rarificaitonDepth; y++)
-				a[sampleList.get(y)]++;
+			if( ! withReplacement)
+			{
+				for( int y=0; y < rarificaitonDepth; y++)
+					a[sampleList.get(y)]++;	
+			}
+			else
+			{
+				for( int y=0; y < rarificaitonDepth; y++)
+				{
+					a[sampleList.get(random.nextInt(sampleList.size()))]++;
+				}
+			}
 			
 			for( int y=0; y < a.length; y++)
 				writer.write("\t" + a[y]);
