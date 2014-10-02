@@ -73,6 +73,68 @@ public class OtuWrapper
 		return returnVal;
 	}
 	
+	public void writeRarifiedSpreadhseet(File filepath) throws Exception
+	{
+		Random random = new Random(24231);
+		int minIndex = getSampleIdWithMinCounts();
+		int rarificaitonDepth = getCountsForSample(minIndex);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filepath));
+		
+		writer.write("sample");
+		
+		for( String otu : otuNames)
+			writer.write("\t" + otu);
+		
+		writer.write("\n");
+		
+		for( int x=0; x < getSampleNames().size(); x++)
+		{
+			writer.write(getSampleNames().get(x));
+			
+			int[] a = new int[getOtuNames().size()];
+			List<Integer> sampleList = getSamplingList(x);
+
+			Collections.shuffle(sampleList, random);
+			
+			for( int y=0; y < rarificaitonDepth; y++)
+				a[sampleList.get(y)]++;
+			
+			for( int y=0; y < a.length; y++)
+				writer.write("\t" + a[y]);
+			
+			writer.write("\n");
+			
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	public List<Integer> getSamplingList(int sampleID) throws Exception
+	{
+		List<Integer> list = new ArrayList<Integer>();
+		
+
+		for(int x=0; x < getOtuNames().size(); x++)
+		{
+			int intVal = (int) getDataPointsUnnormalized().get(sampleID).get(x).doubleValue();
+			
+			if( intVal != getDataPointsUnnormalized().get(sampleID).get(x))
+				throw new Exception("No");
+			
+			for( int y=0; y < intVal; y++ )
+			{
+				list.add(x);
+			}
+		}
+		
+		if( list.size() != getCountsForSample( sampleID ))
+			throw new Exception("No");
+		
+		return list;
+	}
+
+	
 	public int getSampleIdWithMostCounts() throws Exception
 	{
 		int returnVal = -1;

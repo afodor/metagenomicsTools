@@ -23,5 +23,13 @@ public class WriteNormalized
 				+ File.separator + "resample" + File.separator + 
 						"resampledNormalized.txt"));
 		
+		wrapper.writeRarifiedSpreadhseet(new File(ConfigReader.getBigDataScalingFactorsDir() 
+				+ File.separator + "risk" 
+				+ File.separator + "dirk" 
+				+ File.separator + "resample" + File.separator + 
+						"resampledRarified.txt"));
+		
+		
+		
 	}
 }

@@ -32,7 +32,7 @@ public class RarifyTwice
 		System.out.println(minSampleID + " " + minNumCounts);
 		
 		System.out.println(sampleID + " " + numCounts);
-		List<Integer> list = WriteResampled.getSamplingList(wrapper, sampleID);
+		List<Integer> list = wrapper.getSamplingList(sampleID);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBigDataScalingFactorsDir() 

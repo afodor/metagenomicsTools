@@ -5,9 +5,9 @@ rm(list=ls())
 
 setwd("C:\\BigDataScalingFactors\\risk\\dirk\\resample");
 
-myT <- read.table("dirkRawTaxaAsColumnSparsityVsSequenceDepth.txt", sep="\t", header=TRUE,row.names=1)
+myT <- read.table("resampled.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- 
-	read.table("resampledNormalized.txt", sep="\t", header=TRUE, row.names=1)
+	read.table("resampledRarified.txt", sep="\t", header=TRUE, row.names=1)
 
 
 myDistNorm <- bcdist(myTNorm)

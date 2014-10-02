@@ -3,7 +3,6 @@ package bigDataScalingFactors.sim;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +30,7 @@ public class WriteResampled
 		int minNumCounts = wrapper.getCountsForSample(minSampleID);
 		System.out.println(sampleID + " " + numCounts);
 		System.out.println(minSampleID + " " + minNumCounts);
-		List<Integer> list = getSamplingList(wrapper, sampleID);
+		List<Integer> list = wrapper.getSamplingList(sampleID);
 		writeResampledFile(wrapper, list);
 	}
 	
@@ -83,29 +82,6 @@ public class WriteResampled
 		return a;
 	}
 	
-	static List<Integer> getSamplingList(OtuWrapper wrapper, int sampleID) throws Exception
-	{
-		List<Integer> list = new ArrayList<Integer>();
 		
-
-		for(int x=0; x < wrapper.getOtuNames().size(); x++)
-		{
-			int intVal = (int) wrapper.getDataPointsUnnormalized().get(sampleID).get(x).doubleValue();
-			
-			if( intVal != wrapper.getDataPointsUnnormalized().get(sampleID).get(x))
-				throw new Exception("No");
-			
-			for( int y=0; y < intVal; y++ )
-			{
-				list.add(x);
-			}
-		}
-		
-		if( list.size() != wrapper.getCountsForSample( sampleID ))
-			throw new Exception("No");
-		
-		return list;
-	}
-	
 	
 }
