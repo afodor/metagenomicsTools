@@ -83,7 +83,7 @@ public class WriteResampled
 		return a;
 	}
 	
-	private static List<Integer> getSamplingList(OtuWrapper wrapper, int sampleID) throws Exception
+	static List<Integer> getSamplingList(OtuWrapper wrapper, int sampleID) throws Exception
 	{
 		List<Integer> list = new ArrayList<Integer>();
 		
