@@ -31,11 +31,12 @@ public class WriteResampled
 		System.out.println(sampleID + " " + numCounts);
 		System.out.println(minSampleID + " " + minNumCounts);
 		List<Integer> list = wrapper.getSamplingList(sampleID);
-		writeResampledFile(wrapper, list);
+		writeResampledFile(wrapper, list,true,sampleID, numCounts);
+		writeResampledFile(wrapper, list,false,sampleID, numCounts);
 	}
 	
 	private static void writeResampledFile(OtuWrapper wrapper, 
-				List<Integer> resampledList) throws Exception
+				List<Integer> resampledList, boolean discrete,  int maxIndex, int maxDepth) throws Exception
 	{
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
@@ -43,7 +44,7 @@ public class WriteResampled
 				+ File.separator + "risk" + 
 				File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-				"resampled.txt"
+				"resampled" + (discrete ? "" :"continious") +  ".txt"
 				)));
 		
 		writer.write( "sample" );
@@ -58,7 +59,8 @@ public class WriteResampled
 			int depth = wrapper.getCountsForSample(x);
 			System.out.println( x + " depth= " + depth);
 			writer.write("sample_" + depth);
-			int[] counts = resample(wrapper, resampledList, depth);
+			int[] counts = discrete ? resample(wrapper, resampledList, depth) :
+					 resampleContinious(wrapper, resampledList, x,maxIndex,maxDepth );
 			
 			for( int y=0; y < counts.length; y++)
 				writer.write("\t" + counts[y]);
@@ -69,6 +71,28 @@ public class WriteResampled
 		
 		writer.close();
 		
+	}
+	
+	public static int[] resampleContinious(OtuWrapper wrapper, List<Integer> resampleList, int thisSampleId,
+			int maxSampleID,int maximumDepth) throws Exception
+	{
+		List<Double> list = wrapper.getDataPointsUnnormalized().get(maxSampleID);
+		int[] a = new int[wrapper.getOtuNames().size()];
+		double scaleFactor = ((double)wrapper.getCountsForSample(thisSampleId)) / maximumDepth;
+		
+		// we arbitrarily set the dispersion factor to 2;
+		// todo: Get this from some dateset
+		for(int x=0; x < a.length;x++)
+		{
+			double mean = list.get(x);
+			double sd = Math.sqrt(2 * mean);
+			int outVal =(int) (scaleFactor * (  RANDOM.nextGaussian() * sd + mean ));
+			if( outVal < 0 )
+				outVal =0;
+			a[x] = outVal;
+		}
+		
+		return a;
 	}
 	
 	public static int[] resample(OtuWrapper wrapper, List<Integer> resampleList, int depth) throws Exception
