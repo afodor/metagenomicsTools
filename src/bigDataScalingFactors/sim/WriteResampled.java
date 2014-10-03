@@ -12,7 +12,7 @@ import utils.ConfigReader;
 
 public class WriteResampled
 {
-	private static final Random RANDOM = new Random(342321);
+	private static final Random RANDOM = new Random(17);
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -85,7 +85,7 @@ public class WriteResampled
 		for(int x=0; x < a.length;x++)
 		{
 			double mean = list.get(x);
-			double sd = Math.sqrt(0.5 * mean);
+			double sd = Math.sqrt(2* mean);
 			int outVal =(int) (scaleFactor * (  RANDOM.nextGaussian() * sd + mean ));
 			if( outVal < 0 )
 				outVal =0;
