@@ -14,20 +14,20 @@ public class WriteNormalized
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampled.txt"	));
+						"resampledcontinious.txt"	));
 		
 		
 		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledNormalized.txt"));
+						"resampledNormalizedContinious.txt"));
 		
 		wrapper.writeRarifiedSpreadhseet(new File(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledRarifiedWithReplacement.txt"),true);
+						"resampledRarifiedContinious.txt"),false);
 		
 		
 		

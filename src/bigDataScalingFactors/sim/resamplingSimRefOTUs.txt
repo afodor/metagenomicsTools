@@ -3,11 +3,11 @@ library("ape")
 
 rm(list=ls())
 
-setwd("C:\\BigDataScalingFactors\\risk\\dirk\\resample");
+setwd("G:\\BigDataScalingFactors\\risk\\dirk\\resample");
 
-myT <- read.table("resampled.txt", sep="\t", header=TRUE,row.names=1)
+myT <- read.table("resampledcontinious.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- 
-	read.table("resampledRarifiedWithReplacement.txt", sep="\t", header=TRUE, row.names=1)
+	read.table("resampledRarifiedContinious.txt", sep="\t", header=TRUE, row.names=1)
 
 
 myDistNorm <- bcdist(myTNorm)
