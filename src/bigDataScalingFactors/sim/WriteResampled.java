@@ -44,7 +44,7 @@ public class WriteResampled
 				+ File.separator + "risk" + 
 				File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-				"resampled" + (discrete ? "" :"continious") +  ".txt"
+				"resampledMaxDepth" + (discrete ? "" :"continious") +  ".txt"
 				)));
 		
 		writer.write( "sample" );
@@ -59,7 +59,7 @@ public class WriteResampled
 			int depth = wrapper.getCountsForSample(x);
 			System.out.println( x + " depth= " + depth);
 			writer.write("sample_" + depth);
-			int[] counts = discrete ? resample(wrapper, resampledList, depth) :
+			int[] counts = discrete ? resample(wrapper, resampledList, maxDepth) :
 					 resampleContinious(wrapper, resampledList, x,maxIndex,maxDepth );
 			
 			for( int y=0; y < counts.length; y++)

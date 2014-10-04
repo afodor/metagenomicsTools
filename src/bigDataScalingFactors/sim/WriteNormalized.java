@@ -14,22 +14,19 @@ public class WriteNormalized
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledcontinious.txt"	));
+						"resampledMaxDepth.txt"	));
 		
 		
 		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledNormalizedContinious.txt"));
+						"resampledNormalizedMaxDepth.txt"));
 		
 		wrapper.writeRarifiedSpreadhseet(new File(ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "risk" 
 				+ File.separator + "dirk" 
 				+ File.separator + "resample" + File.separator + 
-						"resampledRarifiedContinious.txt"),false);
-		
-		
-		
+						"resampledRarifiedMaxDepth.txt"),false,4181);
 	}
 }

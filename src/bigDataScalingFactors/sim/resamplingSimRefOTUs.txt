@@ -3,14 +3,17 @@ library("ape")
 
 rm(list=ls())
 
-setwd("G:\\BigDataScalingFactors\\risk\\dirk\\resample");
+setwd("C:\\BigDataScalingFactors\\risk\\dirk\\resample");
 
-myT <- read.table("resampledcontinious.txt", sep="\t", header=TRUE,row.names=1)
+myT <- read.table("resampledMaxDepth.txt", sep="\t", header=TRUE,row.names=1)
 myTNorm <- 
-	read.table("resampledRarifiedContinious.txt", sep="\t", header=TRUE, row.names=1)
+	read.table("resampledRarifiedMaxDepth.txt", sep="\t", header=TRUE, row.names=1)
 
-
+myDist <- bcdist(myT)
 myDistNorm <- bcdist(myTNorm)
+
+	boxplot( myDist, myDistNorm )
+
 myPCOA <- pcoa(myDistNorm)
 
 rowSums <- apply(myT, 1, sum)
@@ -39,7 +42,7 @@ plot(log10(rowSums), myPCOA$vectors[,1], xlab="log10(Number of Sequences)", ylab
  
 #RLE normalization 
 library("edgeR")
-edgeRT <- myT
+edgeRT <- myTNorm
 edgeRT <- edgeRT + 1
 edgeRT <- t( edgeRT )
 myEdgeR = DGEList(counts=edgeRT)
