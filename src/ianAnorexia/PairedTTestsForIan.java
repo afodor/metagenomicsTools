@@ -38,6 +38,15 @@ public class PairedTTestsForIan
 		return h;
 	}
 	
+	private static void addARow(String sampleID, List<Double> list, OtuWrapper wrapper)
+		throws Exception
+	{
+		int sampleInt = wrapper.getIndexForSampleName(sampleID);
+		
+		for( int x=0; x < wrapper.getOtuNames().size(); x++)
+			list.add(wrapper.getDataPointsNormalizedThenLogged().get(sampleInt).get(x));
+	}
+	
 	private static HashMap<Integer, Holder> getHolders( OtuWrapper wrapper ) throws Exception
 	{
 		HashMap<Integer, Holder> map = new HashMap<Integer, Holder>();
@@ -53,10 +62,12 @@ public class PairedTTestsForIan
 				if( s.endsWith("ad"))
 				{
 					h.ad = new ArrayList<Double>();
+					addARow(s, h.ad, wrapper);
 				}
 				else if ( s.endsWith("dis"))
 				{
 					h.dis = new ArrayList<Double>();
+					addARow(s, h.dis, wrapper);
 				}
 				else throw new Exception("Logic error");
 			}
