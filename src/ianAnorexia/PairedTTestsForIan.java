@@ -26,6 +26,21 @@ public class PairedTTestsForIan
 		List<Double> dis = null;
 	}
 	
+	private static class OtuHolder implements Comparable<OtuHolder>
+	{
+		String otuName;
+		double pValue = 1;
+		
+		List<Double> adSamples =  new ArrayList<Double>();
+		List<Double> disSamples = new ArrayList<Double>();
+		
+		@Override
+		public int compareTo(OtuHolder arg0)
+		{
+			return Double.compare(this.pValue, arg0.pValue);
+		}
+	}
+	
 	private static Holder getOrCreate(int id, HashMap<Integer, Holder> map) throws Exception
 	{
 		Holder h = map.get(id);
