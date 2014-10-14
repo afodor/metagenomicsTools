@@ -33,17 +33,25 @@ public class PairedTTestsForIan
 		
 		writer.write("otuID\tavgAD\tavdDS\tprevelance\tpValue\tbhFDR\n");
 		
+		float minPrev = 0.25f;
+		float n =0;
+		
+		for( OtuHolder otu : list)
+			if( otu.getPrevelance() >= minPrev)
+				n++;
+		
 		int rank =1;
 		for(OtuHolder otu : list )
-		{
-			writer.write(otu.otuName + "\t");
-			writer.write(new Avevar(otu.adSamples).getAve() + "\t");
-			writer.write(new Avevar(otu.disSamples).getAve() + "\t");
-			writer.write(otu.getPrevelance() + "\t");
-			writer.write(otu.pValue + "\t");
-			writer.write( (otu.pValue * list.size() / rank) + "\n");
-			rank++;
-		}
+			if( otu.getPrevelance() >= minPrev)
+			{
+				writer.write(otu.otuName + "\t");
+				writer.write(new Avevar(otu.adSamples).getAve() + "\t");
+				writer.write(new Avevar(otu.disSamples).getAve() + "\t");
+				writer.write(otu.getPrevelance() + "\t");
+				writer.write(otu.pValue + "\t");
+				writer.write( (otu.pValue * n / rank) + "\n");
+				rank++;
+			}
 		
 		writer.flush();  writer.close();
 	}
@@ -112,6 +120,7 @@ public class PairedTTestsForIan
 		for( int x=0; x <numOTUS; x++)
 		{
 			OtuHolder o =  new OtuHolder();
+			o.otuName = wrapper.getOtuNames().get(x);
 			list.add(o);
 			
 			for( Integer i : keys)
