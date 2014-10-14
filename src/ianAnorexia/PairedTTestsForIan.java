@@ -24,6 +24,8 @@ public class PairedTTestsForIan
 		
 		 List<OtuHolder> list = getOTUList(map, wrapper);
 		 writeResults(list);
+		 
+		 wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getIanAnorexiaDir() + File.separator + "anSamplesTaxaAsColumnsLogNormal.txt");
 	}
 	
 	private static void writeResults(List<OtuHolder> list) throws Exception
