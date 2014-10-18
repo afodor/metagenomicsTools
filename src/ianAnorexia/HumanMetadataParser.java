@@ -66,6 +66,14 @@ public class HumanMetadataParser
 	{
 		return weightT2;
 	}
+	
+	public Float getWeightDiff()
+	{
+		if( weightT1 == null || weightT2 == null)
+			return null;
+		
+		return weightT2 - weightT1;
+	}
 
 	public Float getBdi()
 	{
