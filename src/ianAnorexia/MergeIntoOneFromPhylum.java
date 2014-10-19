@@ -9,49 +9,47 @@ import java.util.HashMap;
 
 import utils.ConfigReader;
 
-public class MergeIntoOne
+public class MergeIntoOneFromPhylum
 {
 	public static void main(String[] args) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getIanAnorexiaDir() + File.separator + 
-				"mergedPcoa.txt")));
+				"mergedPhylum.txt")));
 		
-		writer.write("sample\tpatientID\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n");
+		///writer.write("sample\ttime\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n");
 		
 		HashMap<Integer, HumanMetadataParser> map = 
 					HumanMetadataParser.getAsMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File( 
 			ConfigReader.getIanAnorexiaDir() + File.separator + 
-			"pcoaOut.txt")));
+			"AN_Data_07.29.14_with clinical data_phylum.txt")));
 		
-		reader.readLine();
+		writer.write( reader.readLine()
+				+ "\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n"	);
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
-			for( int x=0;x  < 6; x++)
-				writer.write(splits[x] + "\t");
+			for( int x=0;x  < splits.length; x++)
+				writer.write("\t" + splits[x]);
 			
-			HumanMetadataParser meta = map.get(Integer.parseInt(splits[1]));
+			HumanMetadataParser meta = map.get(Integer.parseInt(splits[0]));
 			
 			if( meta == null)
 				throw new Exception("No");
 			
-			writer.write(meta.getAge() + "\t");
-			writer.write( getValOrNone(meta.getWeightT1()) + "\t");
-			writer.write(getValOrNone(meta.getWeightT2()) + "\t");
-			writer.write(getValOrNone(meta.getWeightDiff()) + "\t");
-			writer.write(getValOrNone(meta.getBai()) + "\t");
-			writer.write(getValOrNone(meta.getBdi()) + "\n");
-			
+			writer.write("\t" + meta.getAge() );
+			writer.write( "\t" + getValOrNone(meta.getWeightT1()) );
+			writer.write("\t" + getValOrNone(meta.getWeightT2()) );
+			writer.write("\t" + getValOrNone(meta.getWeightDiff()) );
+			writer.write("\t" + getValOrNone(meta.getBai()) );
+			writer.write("\t" + getValOrNone(meta.getBdi()) + "\n");
 		}
 		
 		writer.flush();  writer.close();
-		
-		
 	}
 	
 	private static String getValOrNone(Float f)
