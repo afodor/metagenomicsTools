@@ -17,7 +17,7 @@ public class MergeIntoOne
 				ConfigReader.getIanAnorexiaDir() + File.separator + 
 				"merged.txt")));
 		
-		writer.write("sample\tpatientID\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\n");
+		writer.write("sample\tpatientID\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n");
 		
 		HashMap<Integer, HumanMetadataParser> map = 
 					HumanMetadataParser.getAsMap();
@@ -43,7 +43,10 @@ public class MergeIntoOne
 			writer.write(meta.getAge() + "\t");
 			writer.write( getValOrNone(meta.getWeightT1()) + "\t");
 			writer.write(getValOrNone(meta.getWeightT2()) + "\t");
-			writer.write(getValOrNone(meta.getWeightDiff()) + "\n");
+			writer.write(getValOrNone(meta.getWeightDiff()) + "\t");
+			writer.write(getValOrNone(meta.getBai()) + "\t");
+			writer.write(getValOrNone(meta.getBdi()) + "\n");
+			
 		}
 		
 		writer.flush();  writer.close();
