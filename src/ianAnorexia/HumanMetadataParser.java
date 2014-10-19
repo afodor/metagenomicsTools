@@ -130,6 +130,6 @@ public class HumanMetadataParser
 				getAsMap();
 		
 		for(Integer i : meta.keySet())
-			System.out.println(i  + " " + meta.get(i).getWeightT1());
+			System.out.println(i  + " " + meta.get(i).getAge());
 	} 
 }

@@ -40,7 +40,7 @@ public class MergeIntoOne
 			if( meta == null)
 				throw new Exception("No");
 			
-			writer.write(meta.getAge() + "");
+			writer.write(meta.getAge() + "\t");
 			writer.write( getValOrNone(meta.getWeightT1()) + "\t");
 			writer.write(getValOrNone(meta.getWeightT2()) + "\t");
 			writer.write(getValOrNone(meta.getWeightDiff()) + "\n");
