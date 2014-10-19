@@ -34,14 +34,14 @@ public class MergeIntoOneFromPhylum
 			String[] splits = s.split("\t");
 			
 			for( int x=0;x  < splits.length; x++)
-				writer.write("\t" + splits[x]);
+				writer.write( splits[x] + "\t");
 			
 			HumanMetadataParser meta = map.get(Integer.parseInt(splits[0]));
 			
 			if( meta == null)
 				throw new Exception("No");
 			
-			writer.write("\t" + meta.getAge() );
+			writer.write("" + meta.getAge() );
 			writer.write( "\t" + getValOrNone(meta.getWeightT1()) );
 			writer.write("\t" + getValOrNone(meta.getWeightT2()) );
 			writer.write("\t" + getValOrNone(meta.getWeightDiff()) );
