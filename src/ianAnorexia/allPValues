@@ -27,7 +27,7 @@ for( i in 3:59 )
 	{
 		
 		myLm <- lm(as.numeric(myT[which(myT$Time==1),i])
-				~ as.numeric(myT$weightDiff[myT$Time==1]))
+				~ as.numeric(myT$bdi[myT$Time==1]))
 		pValues[index] = anova(myLm)$"Pr(>F)"[1]
 		myNames[index] = names(myT[i])
 		index = index + 1;
