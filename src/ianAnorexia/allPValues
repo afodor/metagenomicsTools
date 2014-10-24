@@ -1,80 +1,41 @@
- setwd("C:\\IanAnorexia\\powerCalcs")
-  myT <- read.table("mergedOrder.txt", sep="\t",header=TRUE)
-  
-pValues <- vector()
- 
-for( i in 3:32 )
-{
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$bdi[myT$Time==1])$sl[1]
-	
-}  
-
-pValues
-hist(pValues)
-
-pValues <- vector()
- 
-for( i in 3:32 )
-{
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$bai[myT$Time==1])$sl[1]
-	
-}  
-
-pValues
-hist(pValues)
-
-pValues <- vector()
- 
-for( i in 3:32 )
-{
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$weightDiff[myT$Time==1])$sl[1]
-	
-}  
-
-pValues
-hist(pValues)
-
 rm(list=ls())
-setwd("C:\\IanAnorexia\\powerCalcs")
-myT <- read.table("mergedFamily.txt", sep="\t",header=TRUE)
-  
+setwd("G:\\IanAnoxeriaR01\\PowerCalcs")
+myT <- read.table("mergedFamily.txt", 
+		sep="\t",header=TRUE, stringsAsFactors =FALSE)
+
+fractionOverZero <- function( aList ) 
+{
+	numOver <- 0
+	
+	for ( i in 1:length(aList) ) 
+	{
+		if( aList[i] > 0 )
+			numOver = numOver + 1;
+	}
+	
+	return (numOver/length(aList))
+}
+
+library("Kendall") 
 pValues <- vector()
- 
+myNames <- vector()
+
+index =1;
 for( i in 3:59 )
 {
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$bdi[myT$Time==1])$sl[1]
-	
+	if( fractionOverZero( myT[,i] ) > 0.25 )
+	{
+		
+		myLm <- lm(as.numeric(myT[which(myT$Time==1),i])
+				~ as.numeric(myT$weightDiff[myT$Time==1]))
+		pValues[index] = anova(myLm)$"Pr(>F)"[1]
+		myNames[index] = names(myT[i])
+		index = index + 1;
+	}
 }  
 
 pValues
-hist(pValues)
-
-pValues <- vector()
- 
-for( i in 3:59 )
-{
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$bai[myT$Time==1])$sl[1]
-	
-}  
-
-pValues
-hist(pValues)
-
-pValues <- vector()
- 
-for( i in 3:59 )
-{
-	pValues[i-2] = 
-	Kendall(myT[which(myT$Time==1),i], myT$weightDiff[myT$Time==1])$sl[1]
-	
-}  
-
-pValues
-hist(pValues)
-
-
+hist(pValues,breaks=20)
+qobj <- qvalue(pValues)
+summary(qobj)
+myFrame <- data.frame( myNames,pValues, qobj$qvalues )
