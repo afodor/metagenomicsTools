@@ -37,3 +37,43 @@ for( i in 3:32 )
 pValues
 hist(pValues)
 
+rm(list=ls())
+setwd("C:\\IanAnorexia\\powerCalcs")
+myT <- read.table("mergedFamily.txt", sep="\t",header=TRUE)
+  
+pValues <- vector()
+ 
+for( i in 3:59 )
+{
+	pValues[i-2] = 
+	Kendall(myT[which(myT$Time==1),i], myT$bdi[myT$Time==1])$sl[1]
+	
+}  
+
+pValues
+hist(pValues)
+
+pValues <- vector()
+ 
+for( i in 3:59 )
+{
+	pValues[i-2] = 
+	Kendall(myT[which(myT$Time==1),i], myT$bai[myT$Time==1])$sl[1]
+	
+}  
+
+pValues
+hist(pValues)
+
+pValues <- vector()
+ 
+for( i in 3:59 )
+{
+	pValues[i-2] = 
+	Kendall(myT[which(myT$Time==1),i], myT$weightDiff[myT$Time==1])$sl[1]
+	
+}  
+
+pValues
+hist(pValues)
+

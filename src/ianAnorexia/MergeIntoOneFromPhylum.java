@@ -15,7 +15,7 @@ public class MergeIntoOneFromPhylum
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getIanAnorexiaDir() + File.separator + 
-				"mergedOrder.txt")));
+				"mergedFamily.txt")));
 		
 		///writer.write("sample\ttime\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n");
 		
@@ -24,7 +24,7 @@ public class MergeIntoOneFromPhylum
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File( 
 			ConfigReader.getIanAnorexiaDir() + File.separator + 
-			"AN Data_07.29.14_with clinical data_Order.txt")));
+			"AN Data_07.29.14_with clinical data_FAMILY.txt")));
 		
 		writer.write( reader.readLine()
 				+ "\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n"	);
