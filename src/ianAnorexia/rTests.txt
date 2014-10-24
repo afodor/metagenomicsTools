@@ -1,0 +1,12 @@
+rm(list=ls())
+
+setwd("G:\\IanAnoxeriaR01\\PowerCalcs")
+
+myT <- read.table("mergedPhylum.txt", header=TRUE,sep="\t", stringsAsFactors =FALSE)
+
+summary(lm( myT$Proteobacteria ~ myT$bmiDiff ))
+
+summary(lm( myT$Proteobacteria[myT$Time==1] ~ myT$bmiDiff[myT$Time==1] ))
+
+summary(lm( myT$Proteobacteria[myT$Time>0] ~ myT$bmiDiff[myT$Time>0] ))
+

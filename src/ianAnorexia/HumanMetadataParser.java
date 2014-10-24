@@ -18,6 +18,8 @@ public class HumanMetadataParser
 	private final float height;
 	private final Float weightT1;
 	private final Float weightT2;
+	private final Float bmi1;
+	private final Float bmi2;
 	private final Float bdi;
 	private final Float bai;
 	
@@ -74,7 +76,15 @@ public class HumanMetadataParser
 		
 		return weightT2 - weightT1;
 	}
-
+	
+	public Float getBmiDiff()
+	{
+		if( bmi1== null || bmi2== null)
+			return null;
+		
+		return bmi2- bmi1;
+	}
+	
 	public Float getBdi()
 	{
 		return bdi;
@@ -83,6 +93,16 @@ public class HumanMetadataParser
 	public Float getBai()
 	{
 		return bai;
+	}
+	
+	public Float getBmi1()
+	{
+		return bmi1;
+	}
+
+	public Float getBmi2()
+	{
+		return bmi2;
 	}
 
 	private HumanMetadataParser(String s)
@@ -95,7 +115,8 @@ public class HumanMetadataParser
 		this.height = Float.parseFloat(tr.nextToken());
 		this.weightT1 = getFloatOrNull(tr.nextToken());
 		this.weightT2 = getFloatOrNull(tr.nextToken());
-		tr.nextToken(); tr.nextToken();
+		this.bmi1 = getFloatOrNull(tr.nextToken());
+		this.bmi2 = getFloatOrNull(tr.nextToken());
 		this.bdi = getFloatOrNull(tr.nextToken());
 		this.bai = getFloatOrNull(tr.nextToken());
 	}
