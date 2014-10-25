@@ -2,7 +2,7 @@
 
 rm(list=ls())
 
-simulate <- function(n.obs=100, beta=c(5, 3, -2), R.sq=0.8) {
+simulate <- function(n.obs=100, beta=c(5, 3, -2), R.sq) {
     stopifnot(length(beta) == 3)
     df <- data.frame(x1=rnorm(n.obs))  
     var.epsilon <- (beta[2]^2 ) * (1 - R.sq) / R.sq
@@ -20,3 +20,20 @@ df$actual.R.sq <- sapply(df$desired.R.sq, FUN=get.R.sq)
 plot(df)
 abline(a=0, b=1, col="red", lty=2)
 
+numBelow <- 0
+for( i in 1:1000)
+{
+	
+	aSim <- simulate( R.sq=0.22)
+	
+	aLm <- lm( aSim$y ~ aSim$x );
+	
+	aPValue = anova(aLm)$"Pr(>F)"[1];
+	
+	if( aPValue < 0.05/359 )
+	{	
+		numBelow = numBelow + 1
+	} 
+}
+
+numBelow
