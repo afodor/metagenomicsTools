@@ -15,7 +15,7 @@ public class MergeIntoOneFromPhylum
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getIanAnorexiaDir() + File.separator + 
-				"mergedFamily.txt")));
+				"mergedWeighted.txt")));
 		
 		///writer.write("sample\ttime\ttype\tMDS1\tMDS2\tMDS3\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n");
 		
@@ -24,12 +24,12 @@ public class MergeIntoOneFromPhylum
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File( 
 			ConfigReader.getIanAnorexiaDir() + File.separator + 
-			"AN Data_07.29.14_with clinical data_FAMILY.txt")));
+			"AN Data_07.29.14_with clinical data_weightedBeta.txt")));
 		
 		writer.write( reader.readLine()
 				+ "\tage\tweight1\tweight2\tweightDiff\tbai\tbdi\n"	);
 		
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		for(String s= reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
