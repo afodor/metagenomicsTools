@@ -26,6 +26,18 @@ public class MultiThreadPrime extends JFrame
 	private static Random RANDOM = new Random();
 	int threadIdCounter =0;
 	
+	public MultiThreadPrime() throws Exception
+	{
+		super("Multi thread cancel demo");
+		setLayout(new BorderLayout());
+		getContentPane().add( new JScrollPane( myArea), BorderLayout.CENTER);
+		getContentPane().add(getBottomPanel(), BorderLayout.SOUTH);
+		setSize(400,300);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+	
 	private void threadTerminated(PrimeUpdater p)
 	{
 		synchronized( threadset )
@@ -38,18 +50,6 @@ public class MultiThreadPrime extends JFrame
 				cancelButton.setEnabled(false);
 			}
 		}
-	}
-	
-	public MultiThreadPrime() throws Exception
-	{
-		super("Multi thread cancel demo");
-		setLayout(new BorderLayout());
-		getContentPane().add( new JScrollPane( myArea), BorderLayout.CENTER);
-		getContentPane().add(getBottomPanel(), BorderLayout.SOUTH);
-		setSize(400,300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 	
 	private JPanel getBottomPanel() throws Exception
@@ -66,7 +66,6 @@ public class MultiThreadPrime extends JFrame
 		
 		clear.addActionListener( new ActionListener()
 		{
-			
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -107,43 +106,7 @@ public class MultiThreadPrime extends JFrame
 		return panel;
 	}
 	
-	private int findAPrime() throws Exception
-	{
-		int numDone=0;
-		
-		while( true)
-		{
-			int anInt = RANDOM.nextInt(Integer.MAX_VALUE);
-			
-			boolean thisIsPrime = true;
-			
-			int stopPoint = (int) (Math.sqrt(anInt) + 1);
-			
-			// alternatively, if you want to spin the CPUs
-			// do this and comment out the Thread.sleep(...) below
-			//stopPoint = anInt;
-			
-			for( int x=2; x <  stopPoint && thisIsPrime; x++)
-			{
-				if( anInt % x == 0)
-				{
-					thisIsPrime = false;
-				}
-				
-				numDone++;
-				
-				if(numDone % 10000==0)
-					Thread.yield();
-			}
-			
-			if( thisIsPrime)
-			{
-				// this is to simulate doing work if we've used the square root optimization
-				Thread.sleep(2000);
-				return anInt;
-			}		
-		}
-	}
+	
 	
 	private class PrimeUpdater implements Runnable
 	{
@@ -172,6 +135,44 @@ public class MultiThreadPrime extends JFrame
 			{	
 				
 				threadTerminated(this);
+			}
+		}
+		
+		private int findAPrime() throws Exception
+		{
+			int numDone=0;
+			
+			while( true)
+			{
+				int anInt = RANDOM.nextInt(Integer.MAX_VALUE);
+				
+				boolean thisIsPrime = true;
+				
+				int stopPoint = (int) (Math.sqrt(anInt) + 1);
+				
+				// alternatively, if you want to spin the CPUs
+				// do this and comment out the Thread.sleep(...) below
+				//stopPoint = anInt;
+				
+				for( int x=2; x <  stopPoint && thisIsPrime; x++)
+				{
+					if( anInt % x == 0)
+					{
+						thisIsPrime = false;
+					}
+					
+					numDone++;
+					
+					if(numDone % 10000==0)
+						Thread.yield();
+				}
+				
+				if( thisIsPrime)
+				{
+					// this is to simulate doing work if we've used the square root optimization
+					Thread.sleep(2000);
+					return anInt;
+				}		
 			}
 		}
 	}
