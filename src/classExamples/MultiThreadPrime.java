@@ -52,7 +52,12 @@ public class MultiThreadPrime extends JFrame
 					@Override
 					public void run()
 					{
-						cancelButton.setEnabled(false);
+						synchronized( threadset )
+						{
+							if( threadset.size() == 0 )
+								cancelButton.setEnabled(false);
+						}
+						
 					}
 				});
 			}
@@ -95,18 +100,15 @@ public class MultiThreadPrime extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				threadIdCounter++;
-				PrimeUpdater pu = new PrimeUpdater(threadIdCounter);
-				
 				synchronized(threadset)
 				{
+					threadIdCounter++;
+					PrimeUpdater pu = new PrimeUpdater(threadIdCounter);
 					threadset.add(pu);
 					addToArea("Spawning concurrent thread " + threadset.size());					
+					cancelButton.setEnabled(true);
+					new Thread(pu).start();
 				}
-				
-				cancelButton.setEnabled(true);
-				new Thread(pu).start();
-				
 			}
 		});
 		
