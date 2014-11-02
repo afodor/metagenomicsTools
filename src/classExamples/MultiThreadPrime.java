@@ -31,11 +31,11 @@ public class MultiThreadPrime extends JFrame
 		synchronized( threadset )
 		{
 			threadset.remove(p);
+			addToArea(threadset.size() + " threads still running ");
 			
 			if( threadset.size() == 0 )
 			{
 				cancelButton.setEnabled(false);
-				addToArea("All threads finished");
 			}
 		}
 	}
@@ -107,6 +107,44 @@ public class MultiThreadPrime extends JFrame
 		return panel;
 	}
 	
+	private int findAPrime() throws Exception
+	{
+		int numDone=0;
+		
+		while( true)
+		{
+			int anInt = RANDOM.nextInt(Integer.MAX_VALUE);
+			
+			boolean thisIsPrime = true;
+			
+			int stopPoint = (int) (Math.sqrt(anInt) + 1);
+			
+			// alternatively, if you want to spin the CPUs
+			// do this and comment out the Thread.sleep(...) below
+			//stopPoint = anInt;
+			
+			for( int x=2; x <  stopPoint && thisIsPrime; x++)
+			{
+				if( anInt % x == 0)
+				{
+					thisIsPrime = false;
+				}
+				
+				numDone++;
+				
+				if(numDone % 10000==0)
+					Thread.yield();
+			}
+			
+			if( thisIsPrime)
+			{
+				// this is to simulate doing work if we've used the square root optimization
+				Thread.sleep(2000);
+				return anInt;
+			}		
+		}
+	}
+	
 	private class PrimeUpdater implements Runnable
 	{
 		private final int threadID;
@@ -120,43 +158,11 @@ public class MultiThreadPrime extends JFrame
 		public void run()
 		{	
 			addToArea("Starting " + threadID);
-			boolean foundAPrime = false;
 			
 			try
 			{
-				int numDone =0;
-				while( ! foundAPrime)
-				{
-					int anInt = RANDOM.nextInt(Integer.MAX_VALUE);
-					
-					boolean thisIsPrime = true;
-					
-					int stopPoint = (int) (Math.sqrt(anInt) + 1);
-					
-					for( int x=2; x <  stopPoint && thisIsPrime; x++)
-					{
-						if( anInt % x == 0)
-						{
-							thisIsPrime = false;
-						}
-						
-						numDone++;
-						
-						if(numDone % 10000==0)
-							Thread.yield();
-					}
-					
-					if( thisIsPrime)
-					{
-						// pretend that we are doing a harder calculation!!!
-						Thread.sleep(2000);
-						
-						foundAPrime =true;
-						addToArea("ThreadID " + threadID + " Found a prime " + anInt);
-					}
-					
-				}
-				
+				int aPrime = findAPrime();
+				addToArea("Thread " + threadID + " Found a prime " + aPrime);
 			}
 			catch(Exception ex)
 			{
