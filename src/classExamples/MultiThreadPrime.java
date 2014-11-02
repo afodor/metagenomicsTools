@@ -115,8 +115,6 @@ public class MultiThreadPrime extends JFrame
 		return panel;
 	}
 	
-	
-	
 	private class PrimeUpdater implements Runnable
 	{
 		private final int threadID;
