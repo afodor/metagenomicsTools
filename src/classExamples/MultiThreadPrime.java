@@ -47,7 +47,14 @@ public class MultiThreadPrime extends JFrame
 			
 			if( threadset.size() == 0 )
 			{
-				cancelButton.setEnabled(false);
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						cancelButton.setEnabled(false);
+					}
+				});
 			}
 		}
 	}
