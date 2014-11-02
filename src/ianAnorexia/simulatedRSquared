@@ -1,0 +1,45 @@
+
+rm(list=ls())
+
+# this function from...
+#http://stackoverflow.com/questions/19096983/when-simulating-multivariate-data-for-regression-how-can-i-set-the-r-squared-e
+simulate <- function(n.obs=100, beta=c(5, 3, -2), R.sq) {
+    stopifnot(length(beta) == 3)
+    df <- data.frame(x1=rnorm(n.obs))  
+    var.epsilon <- (beta[2]^2 ) * (1 - R.sq) / R.sq
+    stopifnot(var.epsilon > 0)
+    df$epsilon <- rnorm(n.obs, sd=sqrt(var.epsilon))
+    df$y <- with(df, beta[1] + beta[2]*x1 + epsilon)
+    return(df)
+}
+get.R.sq <- function(desired) {
+    model <- lm(y ~ x1 , data=simulate(R.sq=desired))
+    return(summary(model)$r.squared)
+}
+
+# confirm that we are acheiving the desired r-squareds..
+df <- data.frame(desired.R.sq=seq(from=0.05, to=0.95, by=0.05))
+df$actual.R.sq <- sapply(df$desired.R.sq, FUN=get.R.sq)
+plot(df)
+abline(a=0, b=1, col="red", lty=2)
+
+# perform 1,000 simulations in order to ask
+# what % of the time you would observe a signifiant value
+# when correcting for 359 tests at a 0.05 threshold
+numBelow <- 0
+for( i in 1:1000)
+{
+	aSim <- simulate( R.sq=0.22)
+	
+	aLm <- lm( aSim$y ~ aSim$x );
+	
+	aPValue = anova(aLm)$"Pr(>F)"[1];
+	
+	if( aPValue < 0.05/359 )
+	{	
+		numBelow = numBelow + 1
+	} 
+}
+
+# print out the power
+numBelow/1000

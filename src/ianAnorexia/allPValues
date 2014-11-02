@@ -25,7 +25,6 @@ for( i in 3:59 )
 {
 	if( fractionOverZero( myT[,i] ) > 0.25 )
 	{
-		
 		myLm <- lm(as.numeric(myT[which(myT$Time==1),i])
 				~ as.numeric(myT$bdi[myT$Time==1]))
 		pValues[index] = anova(myLm)$"Pr(>F)"[1]
