@@ -177,7 +177,9 @@ public class MultiThreadPrime extends JFrame
 				if( thisIsPrime)
 				{
 					// this is to simulate doing work if we've used the square root optimization
-					Thread.sleep(2000);
+					for( int x=0; x < 20; x++)
+						Thread.sleep(100);
+					
 					return anInt;
 				}		
 			}
