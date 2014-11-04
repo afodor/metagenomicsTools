@@ -1,4 +1,4 @@
-package fodor.servlet;
+package classExamples.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
