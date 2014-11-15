@@ -70,6 +70,7 @@ public class ConfigReader
 	
 	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
 	public static final String SCOTT_PILOT_DIR = "SCOTT_PILOT_DIR";
+	public static final String CHINA_DIR = "CHINA_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -94,6 +95,11 @@ public class ConfigReader
 	public static String getMetabolitesCaseControl() throws Exception
 	{
 		return getConfigReader().getAProperty(METABOLITES_CASE_CONTROL);
+	}
+	
+	public static String getChinaDir() throws Exception
+	{
+		return getConfigReader().getAProperty(CHINA_DIR);
 	}
 	
 	public static String getKlebDir() throws Exception
