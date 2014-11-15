@@ -5,6 +5,9 @@ myT <- read.table("phylaVsSamplesPlusMedata.txt", sep="\t",header=TRUE,stringsAs
 
 boxplot(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
 
+stripchart( myT$Tenericutes ~ myT$community,
+	vertical=TRUE,method="jitter", pch=21, color="blue", bg="bisque", add=TRUE )
+
 wilcox.test(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
 
 wilcox.test(myT$Firmicutes[myT$community=="rural"], myT$Firmicutes[myT$community=="urban"])
