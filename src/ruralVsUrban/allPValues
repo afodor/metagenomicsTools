@@ -1,0 +1,29 @@
+rm(list=ls())
+
+setwd("C:\\ChinaData")
+
+myT <- read.table("phylaVsSamplesPlusMedata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
+
+numCols = ncol(myT)
+
+resultsFrame <- as.data.frame( matrix( rep(0,4 * (numCols-2)), ncol=4)) 	
+colnames(resultsFrame)[1] = "Test"
+colnames(resultsFrame)[2] = "pValue"
+colnames(resultsFrame)[3] = "meanUrban"
+colnames(resultsFrame)[4] = "meanRural"
+
+resultsIndex = 0;
+
+for( i in 3 : numCols) 
+{
+	resultsIndex = resultsIndex +1
+	resultsFrame$pValue[resultsIndex] <-
+		t.test( myT[which(myT$community=="urban"),i], myT[which(myT$community=="rural"),i])$p.value
+	resultsFrame$Test[resultsIndex] <- names(myT)[i]
+	resultsFrame$meanUrban[resultsIndex] <- mean( myT[which(myT$community=="urban"),i])
+	resultsFrame$meanRural[resultsIndex] <- mean( myT[which(myT$community=="rural"),i])
+}
+
+resultsFrame <- resultsFrame[order(resultsFrame$pValue),]
+resultsFrame$adjustedP <- p.adjust( resultsFrame$pValue, method = "BH" )
+write.table(resultsFrame, file="rOut.txt",sep="\t",row.names=FALSE)

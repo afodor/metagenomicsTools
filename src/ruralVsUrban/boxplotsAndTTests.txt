@@ -1,0 +1,14 @@
+
+setwd("C:\\ChinaData")
+
+myT <- read.table("phylaVsSamplesPlusMedata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
+
+boxplot(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
+
+wilcox.test(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
+
+wilcox.test(myT$Firmicutes[myT$community=="rural"], myT$Firmicutes[myT$community=="urban"])
+
+boxplot(myT$Firmicutes[myT$community=="rural"], myT$Firmicutes[myT$community=="urban"])
+
+wilcox.test(myT$Bacteroidetes[myT$community=="rural"], myT$Bacteroidetes[myT$community=="urban"])
