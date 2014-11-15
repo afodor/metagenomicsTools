@@ -1,3 +1,4 @@
+rm(list=ls())
 
 setwd("C:\\ChinaData")
 
@@ -6,7 +7,7 @@ myT <- read.table("phylaVsSamplesPlusMedata.txt", sep="\t",header=TRUE,stringsAs
 boxplot(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
 
 stripchart( myT$Tenericutes ~ myT$community,
-	vertical=TRUE,method="jitter", pch=21, color="blue", bg="bisque", add=TRUE )
+	vertical=TRUE,method="jitter", pch=21, col=c("red"), bg=c("red"), add=TRUE )
 
 wilcox.test(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
 
