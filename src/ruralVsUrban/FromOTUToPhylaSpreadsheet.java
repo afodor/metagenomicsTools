@@ -10,10 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import jdk.jfr.events.FileWriteEvent;
-import parsers.OtuWrapper;
-import sun.util.locale.StringTokenIterator;
 import utils.ConfigReader;
 
 public class FromOTUToPhylaSpreadsheet
@@ -33,7 +29,7 @@ public class FromOTUToPhylaSpreadsheet
 		BufferedWriter writer = new BufferedWriter( new FileWriter(new File(ConfigReader.getChinaDir() +
 				File.separator + "phylaVsSamples.txt")));
 		
-		List<String> phyla = new ArrayList<>(phylaCounts.keySet());
+		List<String> phyla = new ArrayList<String>(phylaCounts.keySet());
 		Collections.sort(phyla);
 		
 		writer.write("taxa");

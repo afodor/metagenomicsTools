@@ -15,7 +15,9 @@ package parsers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.BlockingQueue;	
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.zip.GZIPInputStream;
 
 
 public class NewRDPParserFileLine
@@ -281,7 +284,11 @@ public class NewRDPParserFileLine
 	{
 		List<NewRDPParserFileLine> list = new ArrayList<NewRDPParserFileLine>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(rdpFile));
+		
+		BufferedReader reader = rdpFile.getName().toLowerCase().endsWith("gz") ?
+				new BufferedReader(new InputStreamReader( 
+						new GZIPInputStream( new FileInputStream( rdpFile)))) :  
+				new BufferedReader(new FileReader(rdpFile));
 		
 		String nextLine = reader.readLine();
 		
