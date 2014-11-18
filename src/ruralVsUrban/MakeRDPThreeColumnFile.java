@@ -60,7 +60,7 @@ public class MakeRDPThreeColumnFile
 				{
 					writer.write(rdp.getSequenceId() + "\t");
 					writer.write(sampleId  + "\t");
-					writer.write(node.getScore() + "\n");
+					writer.write(node.getTaxaName() + "\n");
 				}
 			}
 		}
