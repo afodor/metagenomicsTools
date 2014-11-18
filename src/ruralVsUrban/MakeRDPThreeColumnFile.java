@@ -13,6 +13,17 @@ public class MakeRDPThreeColumnFile
 {
 	public static int THRESHOLD =80;
 	
+	public static int getReadNumber(String s) throws Exception
+	{
+		int readNum = Integer.parseInt( s.charAt(s.indexOf("fq")-2) + "");
+		
+		if (readNum < 1 || readNum > 2)
+			throw new Exception("No");
+		
+		return readNum;
+		
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -38,7 +49,7 @@ public class MakeRDPThreeColumnFile
 		for(String s: topDir.list())
 		{
 			File rdpFile = new File(topDir.getAbsoluteFile() + File.separator + s);
-			String sampleId = getSampleID(rdpFile.getName());
+			String sampleId = getSampleID(rdpFile.getName()) + "_" + getReadNumber(rdpFile.getName());
 			List<NewRDPParserFileLine> rdpList = 
 					NewRDPParserFileLine.getRdpListSingleThread(rdpFile);
 			
@@ -48,7 +59,7 @@ public class MakeRDPThreeColumnFile
 				if( node != null && node.getScore()>= THRESHOLD)
 				{
 					writer.write(rdp.getSequenceId() + "\t");
-					writer.write(sampleId + "\t");
+					writer.write(sampleId  + "\t");
 					writer.write(node.getScore() + "\n");
 				}
 			}
