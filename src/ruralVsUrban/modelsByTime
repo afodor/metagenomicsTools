@@ -1,0 +1,40 @@
+rm(list=ls())
+
+setwd("G:\\ChinaData")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( taxa,  "_taxaAsColumnsLogNorm_WithMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	# only the forward reads
+	myT <- myT[ which( myT$readNumber == "1"), ]
+	
+	pValuesTime <- vector()
+	pValuesSubject <- vector()
+	pValuesUrbanRural <- vector()
+	percentExplained <- vector()
+	
+	for( i in 6:ncol) 
+	{	
+		myLm <- lm( myT[,i] ~  factor( myT$ruralUrban) + factor( myT$timepoint ) )
+		anova(myLm)
+		pValues[i] <- anova(myLm)$"Pr(>F)"[1]
+		percentExplained[i] <- summary(myLm)$r.squared		
+	}
+	
+}
+
+
+
+plot( 1:50, log10(pValues))
+plot( 1:50, percentExplained)
+
+dFrame <- data.frame( pValues, percentExplained) 
+write.table(dFrame, file="pValuesForRep1VsRep3.txt", sep="\t")
+							s
