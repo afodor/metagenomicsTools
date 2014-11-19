@@ -32,6 +32,52 @@ public class AddMetadata
 		return "first_A";
 	}
 	
+	private static void addSomeMetadata(BufferedReader reader, 
+					BufferedWriter writer,boolean skipFirst) throws Exception
+	{
+		writer.write("sampleID\treadNumber\tpatientID\truralUrban\ttimepoint");
+		
+		if( !skipFirst)
+		{
+			writer.write("\t" + reader.readLine() + "\n");
+		}
+		else
+		{
+			String[] splits = reader.readLine().split("\t");
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t"  + splits[x]);
+			
+			writer.write("\n");
+		}
+		
+		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			writer.write(splits[0] + "\t");
+			writer.write(getreadNumber(splits[0]) + "\t");
+			int patientID = getPatientId(s);
+			writer.write(patientID+ "\t");
+			
+			if( patientID >=1 && patientID <=39)
+				writer.write("rural\t");
+			else if (patientID >=81 && patientID <= 120)
+				writer.write("urban\t");
+			else throw new Exception("No");
+			
+			writer.write(getTimepoint(s));
+			
+			for( int y=1; y < splits.length; y++)
+				writer.write("\t" + splits[y]);
+			
+			writer.write("\n");	
+		}
+		
+		writer.flush();  writer.close();
+		
+		reader.close();
+	}
+	
 	/*
 	 * Something like:
 	 * 
@@ -45,7 +91,6 @@ public class AddMetadata
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
@@ -55,37 +100,22 @@ public class AddMetadata
 			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir() + 
 					File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "_WithMetadata.txt")));
 			
-			writer.write("sampleID\treadNumber\tpatientID\truralUrban\ttimepoint\t");
-			writer.write(reader.readLine() + "\n");
+			addSomeMetadata(reader, writer,false);
+		}
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
+		{
+			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			BufferedReader reader = new BufferedReader(new FileReader(new File( 
+				ConfigReader.getChinaDir() + File.separator 
+				+ NewRDPParserFileLine.TAXA_ARRAY[x] +
+				"_taxaAsColumnsLogNorm.txt")));
 			
+			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir() + File.separator 
+					+ NewRDPParserFileLine.TAXA_ARRAY[x] +
+					"_taxaAsColumnsLogNorm" + "_WithMetadata.txt")));
 			
-			for(String s = reader.readLine(); s != null; s = reader.readLine())
-			{
-				String[] splits = s.split("\t");
-				
-				writer.write(splits[0] + "\t");
-				writer.write(getreadNumber(splits[0]) + "\t");
-				int patientID = getPatientId(s);
-				writer.write(patientID+ "\t");
-				
-				if( patientID >=1 && patientID <=39)
-					writer.write("rural\t");
-				else if (patientID >=81 && patientID <= 120)
-					writer.write("urban\t");
-				else throw new Exception("No");
-				
-				writer.write(getTimepoint(s));
-				
-				for( int y=1; y < splits.length; y++)
-					writer.write("\t" + splits[y]);
-				
-				writer.write("\n");
-				
-			}
-			
-			writer.flush();  writer.close();
-			
-			reader.close();
+			addSomeMetadata(reader, writer,true);
 		}
 	}
 }
