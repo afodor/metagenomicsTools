@@ -71,6 +71,7 @@ public class ConfigReader
 	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
 	public static final String SCOTT_PILOT_DIR = "SCOTT_PILOT_DIR";
 	public static final String CHINA_DIR = "CHINA_DIR";
+	public static final String RAT_SACH_REANALYSIS_DIR = "RAT_SACH_REANALYSIS_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -80,6 +81,11 @@ public class ConfigReader
 	public static String getNinaWithDuplicatesDir() throws Exception
 	{
 		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
+	}
+	
+	public static String getRachSachReanalysisDir() throws Exception
+	{
+		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);
 	}
 	
 	public static String getSvmDir() throws Exception
