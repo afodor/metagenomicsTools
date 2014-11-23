@@ -153,7 +153,7 @@ public class NewRDPParserFileLine
 		for(NewRDPParserFileLine fileLine: list)
 		{
 			NewRDPNode node =	fileLine.getTaxaMap().get(level);
-			if( node.getScore() >= threshold)
+			if( node != null && node.getScore() >= threshold)
 			{
 				Integer count = map.get(node.getTaxaName());
 				

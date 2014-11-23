@@ -31,9 +31,10 @@ public class WriteSparseThreeColumns
 		File rdpResultsDir = new File(ConfigReader.getChinaDir() + File.separator + 
 				"hmpRdpResults");
 		
+		int x=0;
 		for(String s : rdpResultsDir.list())
 		{
-			System.out.println(s);
+			System.out.println(s + " " + x++ );
 			File rdpFile = new File(rdpResultsDir.getAbsolutePath() + File.separator + s);
 			List<NewRDPParserFileLine> rpdList = NewRDPParserFileLine.getRdpListSingleThread(rdpFile);
 			addToWriters(rpdList, threeColWriters, s);
