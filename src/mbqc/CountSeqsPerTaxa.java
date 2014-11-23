@@ -8,14 +8,10 @@ import java.io.FileWriter;
 
 import utils.ConfigReader;
 
-public class RemoveRare
+public class CountSeqsPerTaxa
 {
 	public static void main(String[] args) throws Exception
-	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir()
-				+ File.separator + "otuCounts.txt")));
-		
-		writer.write("otu\tassignment\tcount\n");
+	{	
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getMbqcDir() + File.separator + "merged_otu_filtered.txt")));
@@ -24,9 +20,20 @@ public class RemoveRare
 		
 		System.out.println(headers.length);
 		
-		for( int x=0; x < 10; x++)
-			System.out.println(headers[x]);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir()+
+				File.separator + "headers.txt")));
 		
+		for( int x=0; x < headers.length; x++)
+			writer.write(headers[x] + "\n");
+		
+		writer.flush();  writer.close();
+	
+/*
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir()
+				+ File.separator + "otuCounts.txt")));
+				writer.write("otu\tassignment\tcount\n");
+		
+	
 		int numDone =0;
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
@@ -50,5 +57,6 @@ public class RemoveRare
 		
 		writer.flush(); writer.close();
 		reader.close();
+		*/
 	}
 }
