@@ -144,6 +144,31 @@ public class NewRDPParserFileLine
 		
 	}
 	
+
+	public static HashMap<String, Integer> 
+		getCountsForLevel(List<NewRDPParserFileLine> list, String level, int threshold) throws Exception
+	{
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		for(NewRDPParserFileLine fileLine: list)
+		{
+			NewRDPNode node =	fileLine.getTaxaMap().get(level);
+			if( node != null && node.getScore() >= threshold)
+			{
+				Integer count = map.get(node.getTaxaName());
+				
+				if(count == null)
+					count = 0;
+				
+				count++;
+				
+				map.put(node.getTaxaName(), count);
+			}
+		}
+		
+		return map;
+	}
+	
 	private NewRDPParserFileLine(String fileLine) throws Exception
 	{
 		//System.out.println(fileLine);

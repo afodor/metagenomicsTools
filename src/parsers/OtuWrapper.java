@@ -431,6 +431,7 @@ public class OtuWrapper
 		
 		List<String> otuList = new ArrayList<String>();
 		otuList.addAll(otuSet);
+		Collections.sort(otuList);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
@@ -446,28 +447,33 @@ public class OtuWrapper
 	}
 	
 	private static void addWrapper(OtuWrapper wrapper, BufferedWriter writer, List<String> otuList)
-		throws Exception
-	{
-		for(String s : wrapper.getOtuNames() )
+			throws Exception
 		{
-			int sampleIndex = wrapper.getIndexForSampleName(s);
-			writer.write(s);
-			
-			for( String s2 : otuList )
+			for(String s : wrapper.getSampleNames())
 			{
-				int index = wrapper.getIndexForOtuName(s2);
-				if( index == -1 )
-					writer.write("\t0");
-				else
-					writer.write("\t" + wrapper.getDataPointsUnnormalized().get(sampleIndex).get(index));
+				int sampleIndex = wrapper.getIndexForSampleName(s);
+				writer.write(s);
+				
+				for( String s2 : otuList )
+				{
+					int index = wrapper.getIndexForOtuName(s2);
+					if( index == -1 )
+					{
+						writer.write("\t0");
+					}
+					else
+					{
+						writer.write("\t" + wrapper.getDataPointsUnnormalized().get(sampleIndex).get(index));
+					}
+						
+				}
+				
+				writer.write("\n");
 			}
 			
-			writer.write("\n");
-		}
-		
-		writer.flush();
+			writer.flush();
 
-	}
+		}
 
 	public int getIndexForOtuName(String s) throws Exception
 	{
