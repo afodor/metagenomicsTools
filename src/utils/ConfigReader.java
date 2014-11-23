@@ -71,6 +71,7 @@ public class ConfigReader
 	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
 	public static final String SCOTT_PILOT_DIR = "SCOTT_PILOT_DIR";
 	public static final String CHINA_DIR = "CHINA_DIR";
+	public static final String MBQC_DIR = "MBQC_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -110,6 +111,11 @@ public class ConfigReader
 	public static String getScottPilotDataDir() throws Exception
 	{
 		return getConfigReader().getAProperty(SCOTT_PILOT_DIR);
+	}
+	
+	public static String getMbqcDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MBQC_DIR);
 	}
 
 	public static String getMachineLearningDir() throws Exception

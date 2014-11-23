@@ -20,6 +20,8 @@ public class NormalizeRDPs
 			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getChinaDir() +
 					File.separator + NewRDPParserFileLine.TAXA_ARRAY[x] + 
 					"_taxaAsColumnsLogNorm.txt");
+			
+			
 		}
 	}
 }
