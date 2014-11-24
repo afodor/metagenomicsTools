@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("G:\\MarkLyteTasteManuscript")
+
+
+inFileName <- "pcoa_otu_Cecal Content_taxaAsColsLogNormWithMetadataOnePerCage.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",4), rep("numeric", numCols-4))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+t.test( myT$MDS1[ myT$condition == "High"] ,  myT$MDS1[ myT$condition == "Low"] )
+t.test( myT$MDS2[ myT$condition == "High"] ,  myT$MDS2[ myT$condition == "Low"] )
+t.test( myT$MDS3[ myT$condition == "High"] ,  myT$MDS3[ myT$condition == "Low"] )
+t.test( myT$MDS4[ myT$condition == "High"] ,  myT$MDS4[ myT$condition == "Low"] )
+t.test( myT$MDS5[ myT$condition == "High"] ,  myT$MDS5[ myT$condition == "Low"] )
