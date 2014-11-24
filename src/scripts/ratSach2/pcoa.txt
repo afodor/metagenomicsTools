@@ -1,0 +1,15 @@
+
+rm(list=ls())
+library("vegan")
+
+setwd("G:\\MarkLyteTasteManuscript")
+
+inFileName <- "otu_Cecal Content_taxaAsColsLogNorm.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c("character", rep("numeric", numCols-1))
+myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+myPCOA <- capscale(myT~1,distance="bray")
+
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", inFileName,sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_", inFileName, ".txt", sep=""), sep="\t")
