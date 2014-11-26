@@ -73,6 +73,7 @@ public class ConfigReader
 	public static final String CHINA_DIR = "CHINA_DIR";
 	public static final String MBQC_DIR = "MBQC_DIR";
 	public static final String RAT_SACH_REANALYSIS_DIR = "RAT_SACH_REANALYSIS_DIR";
+	public static final String MICROBES_VS_METABOLITES_DIR = "MICROBES_VS_METABOLITES_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -112,6 +113,11 @@ public class ConfigReader
 	public static String getKlebDir() throws Exception
 	{
 		return getConfigReader().getAProperty(KLEB_DIR);
+	}
+	
+	public static String getMicrboesVsMetabolitesDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MICROBES_VS_METABOLITES_DIR);
 	}
 	
 	public static String getScottPilotDataDir() throws Exception
