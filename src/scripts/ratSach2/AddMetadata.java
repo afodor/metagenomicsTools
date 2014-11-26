@@ -35,15 +35,17 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
-		//boolean onlyOnePerCage = true;
+		boolean onlyOnePerCage = false;
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getRachSachReanalysisDir() + File.separator + 
-			"pcoa_otu_Cecal Content_taxaAsColsLogNorm.txt")));
+			"pcoa_otu_Colon Content_taxaAsColsLogNorm.txt")));
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getRachSachReanalysisDir() + File.separator + 
-				"pcoa_otu_Cecal Content_taxaAsColsLogNormWithMetadataOnePerCage.txt")));
+				ConfigReader.getRachSachReanalysisDir() + File.separator +
+				(onlyOnePerCage ?"pcoa_otu_Colon Content_taxaAsColsLogNormWithMetadataOnePerCage.txt" :
+				"pcoa_otu_Colon Content_taxaAsColsLogNormWithMetadataAllMice.txt"
+					))));
 		
 		writer.write("sample\tcondition\ttissue\tcage\t");
 		writer.write(reader.readLine() + "\n");
@@ -58,11 +60,10 @@ public class AddMetadata
 			MappingFileLine mfl = map.get(splits[0].replaceAll("\"", ""));
 			String cage = cageMap.get(mfl.getRatID());
 			
-			if(! cages.contains(cage))
+			if( ! onlyOnePerCage ||  ! cages.contains(cage) )
 			{
-				
 				writer.write(splits[0].replaceAll("\"", "") + "\t");
-				writer.write(mfl.getCondition() + "\t");
+				writer.write(mfl.getLine() + "\t");
 				writer.write(mfl.getTissue() + "\t");
 				writer.write(cage);
 				

@@ -10,7 +10,7 @@ import utils.ConfigReader;
 public class MappingFileLine
 {
 	private final String sampleID;
-	private final String condition;
+	private final String line;
 	private final String ratID;
 	private final String tissue;
 	
@@ -19,9 +19,9 @@ public class MappingFileLine
 		return sampleID;
 	}
 
-	public String getCondition()
+	public String getLine()
 	{
-		return condition;
+		return line;
 	}
 
 	public String getRatID()
@@ -39,11 +39,11 @@ public class MappingFileLine
 		HashMap<String, MappingFileLine> map =new HashMap<String, MappingFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getRachSachReanalysisDir() + 
-				File.separator + "Dess150_05262014_try02_mapping.txt"));
+				File.separator + "Dess150_05262014_try02_mapping NKD.txt"));
 		
 		reader.readLine();
 		
-		for( String s= reader.readLine() ; s != null; s= reader.readLine())
+		for( String s= reader.readLine() ; s != null && s.trim().length() > 0;  s= reader.readLine())
 		{
 			MappingFileLine mfl = new MappingFileLine(s);
 			
@@ -63,8 +63,8 @@ public class MappingFileLine
 	{
 		String[] splits = s.split("\t");
 		this.tissue = splits[4];
-		this.condition = splits[7];
-		this.ratID = splits[8];
+		this.line = splits[7];
+		this.ratID = splits[9];
 		this.sampleID = splits[0];
 		
 	}

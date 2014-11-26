@@ -19,7 +19,7 @@ public class WriteSpreadsheetsForR
 	public static void main(String[] args) throws Exception
 	{
 		writeAndNormalize("Cecal Content");
-		//writeForATissue("Colon content");
+		writeAndNormalize("Colon content");
 		//writeForATissue("Fecal content");
 	}
 	
@@ -64,7 +64,7 @@ public class WriteSpreadsheetsForR
 			
 			boolean include =false;
 			
-			if( mfl.getCondition().equals("Low") || mfl.getCondition().equals("High"))
+			if( mfl != null && ( mfl.getLine().equals("Low") || mfl.getLine().equals("High")) )
 			{
 				if( mfl.getTissue().equals(tissue))
 					include= true;

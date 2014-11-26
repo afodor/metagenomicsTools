@@ -4,7 +4,7 @@ library("vegan")
 
 setwd("G:\\MarkLyteTasteManuscript")
 
-inFileName <- "otu_Cecal Content_taxaAsColsLogNorm.txt"
+inFileName <- "otu_Colon Content_taxaAsColsLogNorm.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c("character", rep("numeric", numCols-1))
