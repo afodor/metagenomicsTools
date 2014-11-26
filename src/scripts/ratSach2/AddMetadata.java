@@ -12,7 +12,7 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	public static HashMap<String, String> getCageMap() throws Exception
+	private static HashMap<String, String> getCageMap() throws Exception
 	{
 		HashMap<String, String> cageMap = new HashMap<String, String>();
 		
@@ -35,16 +35,23 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
-		boolean onlyOnePerCage = false;
+		writeFile("Colon Content", true);
+		writeFile("Colon Content", false);
+		writeFile("Cecum Content", true);
+		writeFile("Cecum Content", false);
+	}
+ 	
+	private static void writeFile(String tissue, boolean onlyOnePerCage ) throws Exception
+	{
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getRachSachReanalysisDir() + File.separator + 
-			"pcoa_otu_Colon Content_taxaAsColsLogNorm.txt")));
+			"pcoa_otu_" + tissue + "_taxaAsColsLogNorm.txt")));
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getRachSachReanalysisDir() + File.separator +
 				(onlyOnePerCage ?"pcoa_otu_Colon Content_taxaAsColsLogNormWithMetadataOnePerCage.txt" :
-				"pcoa_otu_Colon Content_taxaAsColsLogNormWithMetadataAllMice.txt"
+				"pcoa_otu_" + tissue + "_taxaAsColsLogNormWithMetadataAllMice.txt"
 					))));
 		
 		writer.write("sample\tcondition\ttissue\tcage\t");
