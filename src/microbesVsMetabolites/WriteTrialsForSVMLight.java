@@ -328,7 +328,7 @@ public class WriteTrialsForSVMLight
 			writeATrialFile(x, false);
 		}
 	}
-	
+	 
 	public static void writeATrialFile(int  component, boolean scramble) throws Exception
 	{
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
