@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import utils.Avevar;
 import utils.ConfigReader;
 import utils.Pearson;
 import utils.ProcessWrapper;
@@ -326,6 +327,36 @@ public class WriteTrialsForSVMLight
 				
 		}
 		
+		for( List<Double> list : map.values() )
+		{
+			double sum =0;
+			int n=0;
+			
+			for( int y=0; y < list.size(); y++)
+			{
+				boolean addin = true;
+				
+				if( metaboliteClass.equals(MetaboliteClass.METADATA) && 
+					Math.abs(	list.get(y) + 1 ) <= 0.0001 ) 
+					addin = false;
+				
+				if( addin)
+				{
+					sum += list.get(y);
+					n++;
+				}
+			}
+			
+			if ( n > 0 )
+			{
+				double average = sum / n;
+				for( int y=0; y < list.size(); y++)
+				{
+					list.set(y, list.get(y) / average);
+				}
+			}			
+		}
+		
 		return map;
 	}
 	
@@ -333,8 +364,8 @@ public class WriteTrialsForSVMLight
 	{
 		for( int x=1; x <=40; x++)
 		{
-			writeATrialFile(x, true);
 			writeATrialFile(x, false);
+			writeATrialFile(x, true);
 		}
 	}
 	 
