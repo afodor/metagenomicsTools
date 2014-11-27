@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
+import utils.Pearson;
 import utils.ProcessWrapper;
 import utils.Regression;
 import utils.TabReader;
@@ -54,7 +55,13 @@ public class WriteTrialsForSVMLight
 			throw new Exception("Could not delete " + file.getAbsolutePath());
 	}
 	
-	public static Regression runATrial(MetaboliteClass metabolite, int component) throws Exception
+	private static class Holder
+	{
+		List<Double> actual;
+		List<Double> predicted;
+	}
+	
+	private static Holder runATrial(MetaboliteClass metabolite, int component) throws Exception
 	{
 		HashMap<Integer,Double> pcoaMap = getPCOA(component);
 		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite);
@@ -158,9 +165,10 @@ public class WriteTrialsForSVMLight
 		classifiedReader.close();
 		svmOutReader.close();
 		
-		Regression r = new Regression();
-		r.fitFromList(predicted, actual);
-		return r;
+		Holder h= new Holder();
+		h.actual= actual;
+		h.predicted = predicted;
+		return h;
 		
 	}
 	
@@ -246,7 +254,7 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
-		Regression r = runATrial(MetaboliteClass.PLASMA, 1);
-		System.out.println(r.getPValueForSlope() + "\n");
+		Holder h = runATrial(MetaboliteClass.BOTH, 1);
+		System.out.println(Pearson.getPearsonR(h.actual, h.predicted));
 	}
 }
