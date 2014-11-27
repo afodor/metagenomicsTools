@@ -14,5 +14,12 @@ public class PivotMicrobes
 				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 				"Microbiome_Metabolomics_taxaAsColumns.txt"
 				 , false);
+		
+
+		OtuWrapper.transpose(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"sampleInfoHandCoded.txt", 
+				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"sampleInfoHandCodedSubjectsAsColumns.txt"
+				 , false);
 	}
 }

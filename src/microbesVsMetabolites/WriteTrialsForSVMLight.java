@@ -45,7 +45,7 @@ public class WriteTrialsForSVMLight
 		return map;
 	}
 	
-	public enum MetaboliteClass { URINE, PLASMA , BOTH } ;
+	public enum MetaboliteClass { URINE, PLASMA , BOTH, METADATA, ALL } ;
 	
 	private static void deleteOrThrow(File file) throws Exception
 	{
@@ -194,6 +194,23 @@ public class WriteTrialsForSVMLight
 			return map1;
 		}
 		
+		if( metaboliteClass.equals(MetaboliteClass.ALL))
+		{
+			HashMap<Integer, List<Double>> map1 = 
+					getMetabolites(MetaboliteClass.BOTH);
+			
+			HashMap<Integer, List<Double>> map2 = 
+					getMetabolites(MetaboliteClass.METADATA);
+			
+			for(Integer i : map2.keySet())
+				if( map1.containsKey(i))
+				{
+					map1.get(i).addAll(map2.get(i));
+				}
+				
+			return map1;
+		}
+		
 		HashMap<Integer, List<Double>> map = new LinkedHashMap<Integer, List<Double>>();
 		
 		BufferedReader reader = null;
@@ -213,35 +230,53 @@ public class WriteTrialsForSVMLight
 							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 							"plasmaMetabolites.txt")));
 		}
+		else if ( metaboliteClass.equals(MetaboliteClass.METADATA))
+		{
+			reader = 
+					new BufferedReader(new FileReader(new File( 
+							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+							"sampleInfoHandCodedSubjectsAsColumns.txt")));
+		}
 		else throw new Exception("No");
 		
 		String firstLine = reader.readLine();
 		
 		TabReader tr = new TabReader(firstLine);
 		
-		tr.nextToken(); tr.nextToken(); tr.nextToken();
+		tr.nextToken();
 		
-		for(int x=1; x <= 124; x++)
+		if (! metaboliteClass.equals(MetaboliteClass.METADATA))
 		{
-			int aVal = Integer.parseInt(tr.nextToken());
-			
-			map.put(aVal, new ArrayList<Double>());
+			tr.nextToken(); tr.nextToken(); 
 		}
 		
-		if(tr.hasMore() && tr.nextToken().trim().length() > 0 )
-			throw new Exception("No " + tr.nextToken());
+		while( tr.hasMore() )
+		{
+			String nextToken = tr.nextToken();
+			
+			if( nextToken.trim().length() > 0 )
+			{
+				int aVal = Integer.parseInt(nextToken);
+				map.put(aVal, new ArrayList<Double>());
+			}
+		}
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			tr =new TabReader(s);
-			tr.nextToken(); tr.nextToken(); tr.nextToken();
+			
+			tr.nextToken(); 
+		
+			if (! metaboliteClass.equals(MetaboliteClass.METADATA))
+			{
+				tr.nextToken(); tr.nextToken(); 
+			}
 			
 			for( Integer key : map.keySet())
 			{
 				List<Double> list =map.get(key);
 				list.add(Double.parseDouble(tr.nextToken()));
 			}
-			
 
 			if( tr.hasMore() && tr.nextToken().trim().length() > 0 )
 				throw new Exception("No " + tr.nextToken());
@@ -258,9 +293,11 @@ public class WriteTrialsForSVMLight
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 			"trials.txt")));
 		
-		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\n");
+		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
+		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueMetadata\n");
 		
-		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH };
+		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH,
+				MetaboliteClass.METADATA, MetaboliteClass.ALL};
 		
 		for( int x=0; x < 100; x++)
 		{
@@ -271,7 +308,7 @@ public class WriteTrialsForSVMLight
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
 				writer.write( Pearson.getPearsonR(h.actual, h.predicted) + 
-						(y==2 ? "\n" : "\t") );
+						(y==4 ? "\n" : "\t") );
 				writer.flush();
 				//.write(cbuf); (Pearson.getPearsonR(h.actual, h.predicted));
 			}
