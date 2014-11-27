@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import utils.Avevar;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 import utils.Pearson;
 import utils.ProcessWrapper;
@@ -22,26 +22,40 @@ import utils.TabReader;
 
 public class WriteTrialsForSVMLight
 {
-	static HashMap<Integer,Double> getPCOA(int component) throws Exception
+	static HashMap<Integer,Double> getPCOA(int component, boolean otu) throws Exception
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer,Double>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"pcoa_Microbiome_Metabolomics_taxaAsColumns.txt")));
-		
-		reader.readLine();
-		
-		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		if( otu)
 		{
-			String[] splits = s.split("\t");
+			BufferedReader reader = new BufferedReader(new FileReader(new File(
+					ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+					"pcoa_Microbiome_Metabolomics_taxaAsColumns.txt")));
 			
-			int key = Integer.parseInt(splits[0].replaceAll("\"", ""));
+			reader.readLine();
 			
-			if( map.containsKey(key))
-				throw new Exception("No");
+			for(String s = reader.readLine(); s != null; s = reader.readLine())
+			{
+				String[] splits = s.split("\t");
+				
+				int key = Integer.parseInt(splits[0].replaceAll("\"", ""));
+				
+				if( map.containsKey(key))
+					throw new Exception("No");
+				
+				map.put(key, Double.parseDouble(splits[component]));
+			}
+		}
+		else
+		{
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + 
+					File.separator + "Microbiome_Metabolomics_taxaAsColumns.txt");
 			
-			map.put(key, Double.parseDouble(splits[component]));
+			int indexID = wrapper.getIndexForOtuName("Consensus" + component);
+			
+			for( int x=0; x < wrapper.getSampleNames().size(); x++)
+				map.put( Integer.parseInt(wrapper.getSampleNames().get(x)), 
+						wrapper.getDataPointsUnnormalized().get(x).get(indexID));
 		}
 		
 		return map;
@@ -63,10 +77,10 @@ public class WriteTrialsForSVMLight
 		List<Double> predicted;
 	}
 	
-	private static Holder runATrial(MetaboliteClass metabolite, int component, List<Integer> keys, boolean scramble) 
+	private static Holder runATrial(MetaboliteClass metabolite, int component, List<Integer> keys, 
+			boolean scramble, boolean taxa, HashMap<Integer,Double> pcoaMap ) 
 			throws Exception
 	{
-		HashMap<Integer,Double> pcoaMap = getPCOA(component);
 		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite, scramble);
 		
 		int halfPoint = keys.size() / 2;
@@ -362,16 +376,18 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
+		boolean taxa = true;
 		for( int x=1; x <=40; x++)
 		{
-			writeATrialFile(x, false);
-			writeATrialFile(x, true);
+			writeATrialFile(x, false, taxa);
+			writeATrialFile(x, true, taxa);
 		}
 	}
 	 
-	public static void writeATrialFile(int  component, boolean scramble) throws Exception
+	public static void writeATrialFile(int  component, boolean scramble, boolean taxa) throws Exception
 	{
-		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
+		HashMap<Integer,Double> pcoaMap = getPCOA(component,taxa);
+		List<Integer> keys = new ArrayList<Integer>(pcoaMap.keySet());
 		Random random= new Random(324234);
 		
 		/*
@@ -395,7 +411,7 @@ public class WriteTrialsForSVMLight
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-			"trials_comp" + component + (scramble ? "scramble" : "") +  ".txt")));
+			"trials_comp" + component + (scramble ? "scramble" : "") + (taxa ? "taxa" : "") +  ".txt")));
 		
 		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
 		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueAll\n");
@@ -408,7 +424,7 @@ public class WriteTrialsForSVMLight
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
 			{
-				Holder h = runATrial(mClass[y], component,keys, scramble);
+				Holder h = runATrial(mClass[y], component,keys, scramble,taxa, pcoaMap);
 				Regression r = new Regression();
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
