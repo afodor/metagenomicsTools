@@ -84,8 +84,19 @@ public class WriteTrialsForSVMLight
 			List<Double> list = metaboliteMap.get(keys.get(x));
 			
 			for(  int y=0; y < list.size(); y++ )
-				writer.write( (y+1) + ":" + list.get(y) + " " );
-			
+			{
+				boolean skip = false;
+				
+				if(  metabolite.equals(MetaboliteClass.METADATA) && Math.abs( list.get(y) + 1 ) < 0.0001)
+					skip =true;
+					
+				if( ! skip)
+					writer.write( (y+1) + ":" + list.get(y) + " " );
+				else
+					System.out.println("SKIP!!!!!!!!");
+				
+			}
+				
 			writer.write("\n");
 		}
 		
@@ -291,6 +302,7 @@ public class WriteTrialsForSVMLight
 		int component= 1;
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
 		Random random= new Random(324234);
+		
 		Collections.shuffle(keys,random);
 		
 		Holder h = runATrial(MetaboliteClass.METADATA, component,keys);
@@ -309,8 +321,7 @@ public class WriteTrialsForSVMLight
 			
 		writer.flush();  writer.close();
 		
-		/*
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
+		writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 			"trials_comp" + component +  ".txt")));
 		
@@ -325,17 +336,16 @@ public class WriteTrialsForSVMLight
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
 			{
-				Holder h = runATrial(mClass[y], component,keys);
-				Regression r = new Regression();
+				h = runATrial(mClass[y], component,keys);
+				r = new Regression();
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
 				writer.write( Pearson.getPearsonR(h.actual, h.predicted) + 
 						(y==4 ? "\n" : "\t") );
 				writer.flush();
-				//.write(cbuf); (Pearson.getPearsonR(h.actual, h.predicted));
 			}
-		}*/
+		}
 		
-		//writer.flush();  writer.close();
+		writer.flush();  writer.close();
 	}
 }
