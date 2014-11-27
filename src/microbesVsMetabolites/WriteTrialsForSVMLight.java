@@ -291,7 +291,25 @@ public class WriteTrialsForSVMLight
 		int component= 1;
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
 		Random random= new Random(324234);
+		Collections.shuffle(keys,random);
 		
+		Holder h = runATrial(MetaboliteClass.METADATA, component,keys);
+		Regression r = new Regression();
+		r.fitFromList(h.actual, h.predicted);
+		System.out.println(r.getPValueForSlope());
+		System.out.println( Pearson.getPearsonR(h.actual, h.predicted));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMicrboesVsMetabolitesDir()+
+				File.separator + "metaExample.txt")));
+		
+		writer.write("actual\tpredited\n");
+		
+		for(int x=0; x < h.actual.size(); x++)
+			writer.write(h.actual.get(x) + "\t" + h.predicted.get(x) + "\n");
+			
+		writer.flush();  writer.close();
+		
+		/*
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 			"trials_comp" + component +  ".txt")));
@@ -316,8 +334,8 @@ public class WriteTrialsForSVMLight
 				writer.flush();
 				//.write(cbuf); (Pearson.getPearsonR(h.actual, h.predicted));
 			}
-		}
+		}*/
 		
-		writer.flush();  writer.close();
+		//writer.flush();  writer.close();
 	}
 }

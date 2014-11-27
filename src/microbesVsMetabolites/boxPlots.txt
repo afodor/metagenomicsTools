@@ -1,0 +1,12 @@
+setwd("G:\\microbesVsMetabolites")
+
+myT <- read.table("trials_Comp1.txt", sep="\t", header=TRUE)
+
+boxplot( myT$rValuePlasma, myT$rValueUrine, myT$rValueBoth, myT$rValueMetadata, myT$rValueAll)
+
+wilcox.test(myT$rValuePlasma, myT$rValueUrine, paired=TRUE)
+
+wilcox.test(myT$rValuePlasma, myT$rValueBoth, paired=TRUE)
+wilcox.test(myT$rValueUrine, myT$rValueBoth, paired=TRUE)
+
+wilcox.test(myT$rValueAll, myT$rValueBoth, paired=TRUE)
