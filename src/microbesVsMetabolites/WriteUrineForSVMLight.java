@@ -17,7 +17,7 @@ import utils.TabReader;
 
 public class WriteUrineForSVMLight
 {
-	private static HashMap<Integer,Double> getPCOA() throws Exception
+	static HashMap<Integer,Double> getPCOA() throws Exception
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer,Double>();
 		
