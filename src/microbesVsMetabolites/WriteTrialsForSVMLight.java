@@ -234,7 +234,7 @@ public class WriteTrialsForSVMLight
 			reader = 
 					new BufferedReader(new FileReader(new File( 
 							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-							"sampleInfoHandCodedSubjectsAsColumns.txt")));
+							"patientMetadataSubjectsAsColumns.txt")));
 		}
 		else throw new Exception("No");
 		
@@ -294,7 +294,7 @@ public class WriteTrialsForSVMLight
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-			"trials.txt")));
+			"trials_comp" + component +  ".txt")));
 		
 		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
 		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueAll\n");

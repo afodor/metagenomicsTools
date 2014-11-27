@@ -17,9 +17,9 @@ public class PivotMicrobes
 		
 
 		OtuWrapper.transpose(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"sampleInfoHandCoded.txt", 
+				"patientMetadata.txt", 
 				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"sampleInfoHandCodedSubjectsAsColumns.txt"
+				"patientMetadataSubjectsAsColumns.txt"
 				 , false);
 	}
 }
