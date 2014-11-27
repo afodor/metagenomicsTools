@@ -220,7 +220,7 @@ public class WriteTrialsForSVMLight
 			map.put(aVal, new ArrayList<Double>());
 		}
 		
-		if(tr.hasMore())
+		if(tr.hasMore() && tr.nextToken().trim().length() > 0 )
 			throw new Exception("No " + tr.nextToken());
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
@@ -234,9 +234,9 @@ public class WriteTrialsForSVMLight
 				list.add(Double.parseDouble(tr.nextToken()));
 			}
 			
-			if( tr.hasMore())
-				throw new Exception("No");
-				
+
+			if( tr.hasMore() && tr.nextToken().trim().length() > 0 )
+				throw new Exception("No " + tr.nextToken());
 		}
 		
 		reader.close();
@@ -246,7 +246,7 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
-		Regression r = runATrial(MetaboliteClass.URINE, 1);
+		Regression r = runATrial(MetaboliteClass.PLASMA, 1);
 		System.out.println(r.getPValueForSlope() + "\n");
 	}
 }
