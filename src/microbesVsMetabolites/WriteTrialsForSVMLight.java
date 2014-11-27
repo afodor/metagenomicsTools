@@ -322,13 +322,21 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
-		int component= 1;
+		for( int x=1; x <=40; x++)
+		{
+			writeATrialFile(x, true);
+			writeATrialFile(x, false);
+		}
+	}
+	
+	public static void writeATrialFile(int  component, boolean scramble) throws Exception
+	{
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
 		Random random= new Random(324234);
-		boolean scramble = true;
 		
 		Collections.shuffle(keys,random);
 		
+		/*
 		Holder h = runATrial(MetaboliteClass.METADATA, component,keys, false);
 		Regression r = new Regression();
 		r.fitFromList(h.actual, h.predicted);
@@ -344,8 +352,9 @@ public class WriteTrialsForSVMLight
 			writer.write(h.actual.get(x) + "\t" + h.predicted.get(x) + "\n");
 			
 		writer.flush();  writer.close();
+		*/
 		
-		writer = new BufferedWriter(new FileWriter(new File( 
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 			"trials_comp" + component + (scramble ? "scramble" : "") +  ".txt")));
 		
@@ -360,8 +369,8 @@ public class WriteTrialsForSVMLight
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
 			{
-				h = runATrial(mClass[y], component,keys, scramble);
-				r = new Regression();
+				Holder h = runATrial(mClass[y], component,keys, scramble);
+				Regression r = new Regression();
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
 				writer.write( Pearson.getPearsonR(h.actual, h.predicted) + 
