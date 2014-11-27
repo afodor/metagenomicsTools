@@ -334,9 +334,8 @@ public class WriteTrialsForSVMLight
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
 		Random random= new Random(324234);
 		
-		Collections.shuffle(keys,random);
-		
 		/*
+		 * Collections.shuffle(keys,random);
 		Holder h = runATrial(MetaboliteClass.METADATA, component,keys, false);
 		Regression r = new Regression();
 		r.fitFromList(h.actual, h.predicted);
