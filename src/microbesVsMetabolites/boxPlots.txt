@@ -1,4 +1,4 @@
-setwd("G:\\microbesVsMetabolites")
+setwd("C:\\microbesVsMetabolites")
 
 myT <- read.table("trials_Comp1.txt", sep="\t", header=TRUE)
 

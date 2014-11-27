@@ -302,16 +302,25 @@ public class WriteTrialsForSVMLight
 		if( scramble)
 		{
 			HashMap<Integer, List<Double>> newMap = new LinkedHashMap<Integer, List<Double>>();
-			List<Integer> newKeys = new ArrayList<Integer>(newMap.keySet());
+			List<Integer> newKeys = new ArrayList<Integer>(map.keySet());
 			Collections.shuffle(newKeys);
 			
 			int counter = 0;
 			
-			for( List<Double> innerList : newMap.values() )
+			for( List<Double> innerList : map.values() )
 			{
 				newMap.put(newKeys.get(counter), innerList);
 				counter++;
 			}
+			
+			if( map.size() != newMap.size())
+				throw new Exception("No");
+
+			if( map.keySet().size() != newMap.keySet().size())
+				throw new Exception("No");
+			
+			if( ! map.keySet().equals( newMap.keySet()))
+				throw new Exception("No");
 			
 			map = newMap;
 				
