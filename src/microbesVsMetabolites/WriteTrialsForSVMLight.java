@@ -254,7 +254,29 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
-		Holder h = runATrial(MetaboliteClass.BOTH, 1);
-		System.out.println(Pearson.getPearsonR(h.actual, h.predicted));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
+			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+			"trials.txt")));
+		
+		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\n");
+		
+		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH };
+		
+		for( int x=0; x < 100; x++)
+		{
+			for( int y=0; y < mClass.length; y++)
+			{
+				Holder h = runATrial(mClass[y], 1);
+				Regression r = new Regression();
+				r.fitFromList(h.actual, h.predicted);
+				writer.write(r.getPValueForSlope()+ "\t");
+				writer.write( Pearson.getPearsonR(h.actual, h.predicted) + 
+						(y==2 ? "\n" : "\t") );
+				writer.flush();
+				//.write(cbuf); (Pearson.getPearsonR(h.actual, h.predicted));
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 }
