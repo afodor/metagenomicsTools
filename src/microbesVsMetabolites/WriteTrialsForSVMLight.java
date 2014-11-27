@@ -62,10 +62,11 @@ public class WriteTrialsForSVMLight
 		List<Double> predicted;
 	}
 	
-	private static Holder runATrial(MetaboliteClass metabolite, int component, List<Integer> keys) throws Exception
+	private static Holder runATrial(MetaboliteClass metabolite, int component, List<Integer> keys, boolean scramble) 
+			throws Exception
 	{
 		HashMap<Integer,Double> pcoaMap = getPCOA(component);
-		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite);
+		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite, scramble);
 		
 		int halfPoint = keys.size() / 2;
 		
@@ -182,16 +183,20 @@ public class WriteTrialsForSVMLight
 		
 	}
 	
-	private static HashMap<Integer, List<Double>> getMetabolites(MetaboliteClass metaboliteClass) throws Exception
+	/*
+	 * Scramble will not preserve IDs across categories..
+	 */
+	private static HashMap<Integer, List<Double>> getMetabolites(MetaboliteClass metaboliteClass,
+			boolean scramble) throws Exception
 	{
 
 		if( metaboliteClass.equals(MetaboliteClass.BOTH))
 		{
 			HashMap<Integer, List<Double>> map1 = 
-					getMetabolites(MetaboliteClass.PLASMA);
+					getMetabolites(MetaboliteClass.PLASMA,scramble);
 			
 			HashMap<Integer, List<Double>> map2 = 
-					getMetabolites(MetaboliteClass.URINE);
+					getMetabolites(MetaboliteClass.URINE,scramble);
 			
 			if( ! map1.keySet().equals(map2.keySet()) )
 				throw new Exception("Unexpected parse");
@@ -207,10 +212,10 @@ public class WriteTrialsForSVMLight
 		if( metaboliteClass.equals(MetaboliteClass.ALL))
 		{
 			HashMap<Integer, List<Double>> map1 = 
-					getMetabolites(MetaboliteClass.BOTH);
+					getMetabolites(MetaboliteClass.BOTH, scramble);
 			
 			HashMap<Integer, List<Double>> map2 = 
-					getMetabolites(MetaboliteClass.METADATA);
+					getMetabolites(MetaboliteClass.METADATA, scramble);
 			
 			for(Integer i : map2.keySet())
 				if( map1.containsKey(i))
@@ -294,6 +299,24 @@ public class WriteTrialsForSVMLight
 		
 		reader.close();
 		
+		if( scramble)
+		{
+			HashMap<Integer, List<Double>> newMap = new LinkedHashMap<Integer, List<Double>>();
+			List<Integer> newKeys = new ArrayList<Integer>(newMap.keySet());
+			Collections.shuffle(newKeys);
+			
+			int counter = 0;
+			
+			for( List<Double> innerList : newMap.values() )
+			{
+				newMap.put(newKeys.get(counter), innerList);
+				counter++;
+			}
+			
+			map = newMap;
+				
+		}
+		
 		return map;
 	}
 	
@@ -302,10 +325,11 @@ public class WriteTrialsForSVMLight
 		int component= 1;
 		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
 		Random random= new Random(324234);
+		boolean scramble = true;
 		
 		Collections.shuffle(keys,random);
 		
-		Holder h = runATrial(MetaboliteClass.METADATA, component,keys);
+		Holder h = runATrial(MetaboliteClass.METADATA, component,keys, false);
 		Regression r = new Regression();
 		r.fitFromList(h.actual, h.predicted);
 		System.out.println(r.getPValueForSlope());
@@ -323,7 +347,7 @@ public class WriteTrialsForSVMLight
 		
 		writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-			"trials_comp" + component +  ".txt")));
+			"trials_comp" + component + (scramble ? "scramble" : "") +  ".txt")));
 		
 		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
 		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueAll\n");
@@ -336,7 +360,7 @@ public class WriteTrialsForSVMLight
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
 			{
-				h = runATrial(mClass[y], component,keys);
+				h = runATrial(mClass[y], component,keys, scramble);
 				r = new Regression();
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
