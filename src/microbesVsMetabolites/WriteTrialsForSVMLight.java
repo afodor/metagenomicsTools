@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -61,14 +62,12 @@ public class WriteTrialsForSVMLight
 		List<Double> predicted;
 	}
 	
-	private static Holder runATrial(MetaboliteClass metabolite, int component) throws Exception
+	private static Holder runATrial(MetaboliteClass metabolite, int component, List<Integer> keys) throws Exception
 	{
 		HashMap<Integer,Double> pcoaMap = getPCOA(component);
 		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite);
 		
-		List<Integer> keys = new ArrayList<Integer>(pcoaMap.keySet());
 		int halfPoint = keys.size() / 2;
-		Collections.shuffle(keys);
 		
 		File trainingSetFile = new File(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 				"trainingSet.txt");
@@ -289,21 +288,26 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
+		int component= 1;
+		List<Integer> keys = new ArrayList<Integer>(getPCOA(component).keySet());
+		Random random= new Random(324234);
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 			"trials.txt")));
 		
 		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
-		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueMetadata\n");
+		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueAll\n");
 		
 		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH,
 				MetaboliteClass.METADATA, MetaboliteClass.ALL};
 		
 		for( int x=0; x < 100; x++)
 		{
+			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
 			{
-				Holder h = runATrial(mClass[y], 1);
+				Holder h = runATrial(mClass[y], component,keys);
 				Regression r = new Regression();
 				r.fitFromList(h.actual, h.predicted);
 				writer.write(r.getPValueForSlope()+ "\t");
