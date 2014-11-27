@@ -69,6 +69,22 @@ public class WriteUrineForSVMLight
 		if(tr.hasMore())
 			throw new Exception("No");
 		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			tr =new TabReader(s);
+			tr.nextToken(); tr.nextToken(); tr.nextToken();
+			
+			for( Integer key : map.keySet())
+			{
+				List<Double> list =map.get(key);
+				list.add(Double.parseDouble(tr.nextToken()));
+			}
+			
+			if( tr.hasMore())
+				throw new Exception("No");
+				
+		}
+		
 		reader.close();
 		
 		return map;
