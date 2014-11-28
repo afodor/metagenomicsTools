@@ -22,11 +22,28 @@ import utils.TabReader;
 
 public class WriteTrialsForSVMLight
 {
+	private static OtuWrapper wrapper = null;
+	
+	/*
+	 * Not thread safe
+	 */
+	private static OtuWrapper lazyInitWrapper() throws Exception
+	{
+		if( wrapper == null)
+		{
+			wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + 
+					File.separator + "Microbiome_Metabolomics_taxaAsColumns.txt");
+	
+		}
+		
+		return wrapper;
+	}
+	
 	static HashMap<Integer,Double> getPCOA(int component, boolean otu) throws Exception
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer,Double>();
 		
-		if( otu)
+		if( ! otu)
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
@@ -48,9 +65,8 @@ public class WriteTrialsForSVMLight
 		}
 		else
 		{
-			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + 
-					File.separator + "Microbiome_Metabolomics_taxaAsColumns.txt");
-			
+			OtuWrapper wrapper = lazyInitWrapper();
+					
 			int indexID = wrapper.getIndexForOtuName("Consensus" + component);
 			
 			for( int x=0; x < wrapper.getSampleNames().size(); x++)
@@ -419,7 +435,7 @@ public class WriteTrialsForSVMLight
 		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH,
 				MetaboliteClass.METADATA, MetaboliteClass.ALL};
 		
-		for( int x=0; x < 100; x++)
+		for( int x=0; x < 10; x++)
 		{
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
