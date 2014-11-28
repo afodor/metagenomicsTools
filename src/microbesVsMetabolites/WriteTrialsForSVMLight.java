@@ -392,7 +392,7 @@ public class WriteTrialsForSVMLight
 	
 	public static void main(String[] args) throws Exception
 	{
-		boolean taxa = true;
+		boolean taxa = false;
 		for( int x=1; x <=40; x++)
 		{
 			writeATrialFile(x, false, taxa);
@@ -435,7 +435,7 @@ public class WriteTrialsForSVMLight
 		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH,
 				MetaboliteClass.METADATA, MetaboliteClass.ALL};
 		
-		for( int x=0; x < 10; x++)
+		for( int x=0; x < 100; x++)
 		{
 			Collections.shuffle(keys, random);
 			for( int y=0; y < mClass.length; y++)
