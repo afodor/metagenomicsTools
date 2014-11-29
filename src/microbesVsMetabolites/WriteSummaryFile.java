@@ -24,7 +24,7 @@ public class WriteSummaryFile
 		writer.write("metadataAvgR\tmetadataSDR\tmetadataScrambedAvgR\tmetadataScrambledSDR\n");
 		
 		
-		for( int x=1; x <= 14; x++)
+		for( int x=1; x <= 7; x++)
 		{
 			writer.write(x+ "\t");
 			writeASet(writer, x, 1, false);
