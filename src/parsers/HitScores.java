@@ -262,7 +262,12 @@ public class HitScores implements Comparable<HitScores>
 	{	
 		HashMap<String, HitScores> map= new LinkedHashMap<String, HitScores>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(filepath));
+		BufferedReader reader = 	filepath.toLowerCase().endsWith("gz") ?
+				new BufferedReader(new InputStreamReader( 
+						new GZIPInputStream( new FileInputStream( filepath) ) ))
+				:
+					new BufferedReader(new FileReader(filepath));
+
 		
 		String nextLine = reader.readLine();
 		
