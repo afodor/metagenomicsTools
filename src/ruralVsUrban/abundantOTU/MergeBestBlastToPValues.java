@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.HitScores;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeBestBlastToPValues
@@ -17,7 +18,11 @@ public class MergeBestBlastToPValues
 		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir()+
 				File.separator + "abundantOTU" + File.separator + "abundantOTUMergedToSilva.txt")));
 		
-		writer.write("otuID\tpValue\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\n");
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getChinaDir() + 
+				File.separator + "abundantOTU" + File.separator + 
+				"abundantOTUForwardTaxaAsColumns.txt");
+		
+		writer.write("otuID\tpValue\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\n");
 		
 		HashMap<String, HitScores> topHitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
@@ -43,8 +48,10 @@ public class MergeBestBlastToPValues
 			writer.write(hs.getTargetId() + "\t");
 			writer.write(hs.getQueryAlignmentLength() + "\t");
 			writer.write(hs.getPercentIdentity() + "\t");
-			writer.write(hs.getBitScore() + "\n");
+			writer.write(hs.getBitScore() + "\t");
+			writer.write(wrapper.getCountsForTaxa(splits[1].replaceAll("X", "").replaceAll("\"", "")) + "\n");
 		}
 		writer.flush(); writer.close();
 	}
 }
+ 
