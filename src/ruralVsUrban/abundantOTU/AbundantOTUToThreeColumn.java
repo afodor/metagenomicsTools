@@ -8,7 +8,7 @@ import java.util.HashMap;
 import parsers.AbundOTUClustParser;
 import utils.ConfigReader;
 
-public class PivotAbundantOTU
+public class AbundantOTUToThreeColumn
 {	
 	public static void main(String[] args) throws Exception
 	{
