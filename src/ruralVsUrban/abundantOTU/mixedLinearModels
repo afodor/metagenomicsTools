@@ -28,6 +28,11 @@ for( i in 5:numCols)
 	meanRural[index] <- mean( myT[myT$ruralUrban=="rural",i])
 	meanUrban[index] <- mean( myT[myT$ruralUrban=="urban",i])
 	ruralDivUrban[index] <- meanRural[index]  / meanUrban[index] 
+	
+	if ( ruralDivUrban[index]  < 1 ) 
+		ruralDivUrban[index]  = -1 / ruralDivUrban[index]  
+	
+	
 	index <- index + 1
 }
 
