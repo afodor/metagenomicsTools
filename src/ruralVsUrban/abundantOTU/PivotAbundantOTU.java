@@ -3,8 +3,9 @@ package ruralVsUrban.abundantOTU;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashSet;
+import java.util.HashMap;
 
+import parsers.AbundOTUClustParser;
 import utils.ConfigReader;
 
 public class PivotAbundantOTU
@@ -14,22 +15,30 @@ public class PivotAbundantOTU
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getChinaDir() +
 				File.separator + "forwardReadToSample"));
 		
-		HashSet<String> set = new HashSet<String>();
+		HashMap<String, String> map = new HashMap<String, String>();
 		
+		int x=0;
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
-			set.add(s.split("\t")[1].substring(2));
+		{
+			String[] splits = s.split("\t");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put( splits[0], splits[1].substring(2));
+			
+			x++;
+			
+			if( x % 1000000==0)
+				System.out.println(x);
+			
+		}
+					
+		System.out.println("Got map " + map.size());
 		
-		for(String s: set)
-			System.out.println(s);
-		
-		System.out.println(set.size());
-		
-		int num=0;
-		
-		for(String s: set)
-			if( s.startsWith("B"))
-				num++;
-		
-		System.out.println(num);
+		AbundOTUClustParser.abundantOTUToSparseThreeColumn(ConfigReader.getChinaDir() + File.separator + 
+				"abundantOTU" + File.separator +  "chinaForward.clust.gz", 
+				ConfigReader.getChinaDir() + File.separator + "abundantOTU" + File.separator + 
+					"sparseForwardThreeFileColumn.txt", map);
 	}
 }
