@@ -1,0 +1,30 @@
+rm(list=ls())
+
+setwd("C:\\PennyChinaDataset\\abundantOTU")
+require(lme4) 
+require(lmerTest)
+
+
+inFileName <- "abundantOTUForwardTaxaAsColumns_WithMetadata.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",4), rep("numeric", numCols-4))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+pValuesUrbanRural <- vector()
+names <- vector()
+
+index <-1
+for( i in 6:numCols) 
+{	
+	myLm <- lmer( myT[,i] ~  myT$timepoint + myT$ruralUrban + ( 1| factor(myT$patientID) ) )
+	coefs <- data.frame(coef(summary(myLm)))
+	coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
+	pValuesUrbanRural[index] <- coefs[5]$Pr...t..[3];
+	names[index] <- names(myT)[i]
+	index <- index + 1
+}
+
+dFrame <- data.frame( pValuesUrbanRural, names) 
+dFrame$adjustedP <- p.adjust( dFrame$pValuesUrbanRural, method = "BH" )
+write.table(dFrame, file="pValuesFromMixedLinearModel.txt", sep="\t", row.names=false)
