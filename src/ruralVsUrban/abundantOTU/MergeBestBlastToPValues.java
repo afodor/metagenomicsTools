@@ -22,7 +22,7 @@ public class MergeBestBlastToPValues
 				File.separator + "abundantOTU" + File.separator + 
 				"abundantOTUForwardTaxaAsColumns.txt");
 		
-		writer.write("otuID\tpValue\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\n");
+		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\n");
 		
 		HashMap<String, HitScores> topHitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
@@ -40,6 +40,11 @@ public class MergeBestBlastToPValues
 			System.out.println(key);
 			writer.write(key + "\t");
 			writer.write(splits[0] + "\t");
+			writer.write(splits[5] + "\t");
+			
+			writer.write( (Double.parseDouble(splits[2])  >
+							Double.parseDouble(splits[3]) ? "rural" : "urban" ) + "\t");
+			
 			writer.write(splits[2] + "\t");
 			writer.write(splits[3] + "\t");
 			writer.write(splits[4] + "\t");
