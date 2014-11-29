@@ -71,12 +71,12 @@ public class AddMetadata
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getChinaDir() + 
 				File.separator + "abundantOTU" + File.separator + 
-				"abundantOTUForwardTaxaAsColumns.txt")));
+				"abundantOTUForwardTaxaAsColumnsLogNormal.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getChinaDir() + 
 				File.separator + "abundantOTU" + File.separator + 
-				"abundantOTUForwardTaxaAsColumns_WithMetadata.txt"	)));
+				"abundantOTUForwardTaxaAsColumnsLogNormalWithMetadata.txt"	)));
 		
 		addSomeMetadata(reader, writer);
 	}

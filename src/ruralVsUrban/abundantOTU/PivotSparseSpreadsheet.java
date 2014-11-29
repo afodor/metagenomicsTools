@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
+import parsers.OtuWrapper;
 import parsers.PivotOTUs;
 import utils.ConfigReader;
 
@@ -20,9 +21,16 @@ public class PivotSparseSpreadsheet
 		getMap(ConfigReader.getChinaDir() + File.separator + "abundantOTU" + File.separator + 
 				"sparseForwardThreeFileColumn.txt");
 		
-		PivotOTUs.writeResults(map, ConfigReader.getChinaDir() + 
+		String outPath = ConfigReader.getChinaDir() + 
 				File.separator + "abundantOTU" + File.separator + 
-				"abundantOTUForwardTaxaAsColumns.txt");
+				"abundantOTUForwardTaxaAsColumns.txt";
+		
+		PivotOTUs.writeResults(map, outPath);
+		
+		OtuWrapper wrapper = new OtuWrapper(outPath);
+		wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getChinaDir() + 
+				File.separator + "abundantOTU" + File.separator + 
+				"abundantOTUForwardTaxaAsColumnsLogNormal.txt");
 	}
 	
 	/*
