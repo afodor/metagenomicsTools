@@ -63,7 +63,7 @@ public class MergeBestBlastToPValuesForAbundantOTU
 			}
 			else
 			{
-				writer.write("NA\t0\t0\t0t");
+				writer.write("NA\t0\t0\t0\t");
 			}
 			
 			writer.write(wrapper.getCountsForTaxa(splits[1].replaceAll("X", "").replaceAll("\"", "")) + "\n");

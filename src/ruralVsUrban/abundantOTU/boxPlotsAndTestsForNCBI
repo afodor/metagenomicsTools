@@ -17,3 +17,15 @@ boxplot(myT$percentIdentity[myT$higherIn=="rural" & myT$pValue < 0.01 ],
 
 t.test( myT$percentIdentity[myT$higherIn=="rural" & myT$pValue < 0.01 ],
 	myT$percentIdentity[myT$higherIn=="urban" & myT$pValue < 0.01 ] )
+	
+
+rm(list=ls())
+
+myT <- read.table("F:\\PennyChinaDataset\\mostWanted\\abundantOTUMostWanted.txt", header=TRUE, sep="\t")
+
+boxplot(myT$percentIdentity[myT$higherIn=="rural" & myT$pValue < 0.01 ],
+	myT$percentIdentity[myT$higherIn=="urban" & myT$pValue < 0.01 ])
+
+t.test( myT$percentIdentity[myT$higherIn=="rural" & myT$pValue < 0.01 ],
+	myT$percentIdentity[myT$higherIn=="urban" & myT$pValue < 0.01 ] )
+	
