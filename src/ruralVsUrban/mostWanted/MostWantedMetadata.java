@@ -14,6 +14,12 @@ public class MostWantedMetadata
 	private final String priority;
 	private final String rdpSummaryString;
 	private final double goldGlobal;
+	private final String goldGlobalBestHit;
+	
+	public String getGoldGlobalBestHit()
+	{
+		return goldGlobalBestHit;
+	}
 	
 	public double getGoldGlobal()
 	{
@@ -48,6 +54,7 @@ public class MostWantedMetadata
 		this.priority = splits[1];
 		this.rdpSummaryString = splits[6];
 		this.goldGlobal = Double.parseDouble(splits[11]);
+		this.goldGlobalBestHit= splits[getIndex("toGoldGlobalBestHit", firstLine)];
 	}
 	
 	private static int getIndex(String query, String firstLine) throws Exception
