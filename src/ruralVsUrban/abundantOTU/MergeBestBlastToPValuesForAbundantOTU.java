@@ -30,7 +30,7 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				"abundantOTUForwardTaxaAsColumns.txt");
 		
 		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\t" + 
-		"mostWantedID\tmostWantedPriority\tmaxFraction\tstoolSubjectFraction\tgoldGlobalMostWanted\tgoldGlobalBestHit\trdpMetadata\tncbiPercentIdentity\tncbiHeader\n");
+		"mostWantedID\tmostWantedPriority\tmaxFraction\tstoolSubjectFraction\trelativeAbundanceStool\tgoldGlobalMostWanted\tgoldGlobalBestHit\trdpMetadata\tncbiPercentIdentity\tncbiHeader\n");
 		
 		HashMap<String, MostWantedMetadata> mostMetaMap = MostWantedMetadata.getMap();
 		
@@ -94,13 +94,14 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				writer.write(mostMeta.getPriority() + "\t");
 				writer.write(mostMeta.getMaxFraction() + "\t");
 				writer.write(mostMeta.getSubjectFractionStool() + "\t");
+				writer.write(mostMeta.getRelativeAbundanceStool() + "\t");
 				writer.write(mostMeta.getGoldGlobal() + "\t");
 				writer.write(mostMeta.getGoldGlobalBestHit() + "\t");
 				writer.write(mostMeta.getRdpSummaryString() + "\t");
 			}
 			else
 			{
-				writer.write("NA\tNA\t0\t0\t0\tNA\tNA\t");
+				writer.write("NA\tNA\t0\t0\t0\t0\tNA\tNA\t");
 			}
 			
 			writer.write(ncbiMap.get(key).getPercentIdentity() + "\t");
