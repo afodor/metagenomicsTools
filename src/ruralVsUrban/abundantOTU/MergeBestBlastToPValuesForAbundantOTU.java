@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.FastaSequence;
 import parsers.HitScores;
 import parsers.OtuWrapper;
 import ruralVsUrban.mostWanted.MostWantedMetadata;
@@ -17,6 +18,10 @@ public class MergeBestBlastToPValuesForAbundantOTU
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, FastaSequence> fastaMap = 
+				FastaSequence.getFirstTokenSequenceMap(ConfigReader.getChinaDir() + File.separator + 
+						"ncbi" + File.separator + "ncib16.fasta");
+		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir()+
 				File.separator + "mostWanted" + File.separator + "abundantOTUMostWanted.txt")));
 		
@@ -25,7 +30,7 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				"abundantOTUForwardTaxaAsColumns.txt");
 		
 		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\t" + 
-		"mostWantedPriority\tmaxFraction\tstoolSubjectFraction\tgoldGlobalMostWanted\trdpMetadata\tncbiPercentIdentity\n");
+		"mostWantedPriority\tmaxFraction\tstoolSubjectFraction\tgoldGlobalMostWanted\trdpMetadata\tncbiPercentIdentity\tncbiHeader\n");
 		
 		HashMap<String, MostWantedMetadata> mostMetaMap = MostWantedMetadata.getMap();
 		
@@ -96,7 +101,8 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				writer.write("NA\t0\t0\tNA\t0\t");
 			}
 			
-			writer.write(ncbiMap.get(key).getPercentIdentity() + "\n");
+			writer.write(ncbiMap.get(key).getPercentIdentity() + "\t");
+			writer.write(fastaMap.get(ncbiMap.get(key).getTargetId()).getHeader().substring(1) + "\n");
 			
 		}
 		writer.flush(); writer.close();
