@@ -9,10 +9,12 @@ import java.util.HashMap;
 
 import parsers.HitScores;
 import parsers.OtuWrapper;
+import ruralVsUrban.mostWanted.MostWantedMetadata;
 import utils.ConfigReader;
 
 public class MergeBestBlastToPValuesForAbundantOTU
 {
+	
 	public static void main(String[] args) throws Exception
 	{
 		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir()+
@@ -22,7 +24,10 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				File.separator + "abundantOTU" + File.separator + 
 				"abundantOTUForwardTaxaAsColumns.txt");
 		
-		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\n");
+		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\t" + 
+		"mostWantedPriority\tmaxFraction\tstoolSubjectFraction\n");
+		
+		HashMap<String, MostWantedMetadata> mostMetaMap = MostWantedMetadata.getMap();
 		
 		HashMap<String, HitScores> topHitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
@@ -66,7 +71,24 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				writer.write("NA\t0\t0\t0\t");
 			}
 			
-			writer.write(wrapper.getCountsForTaxa(splits[1].replaceAll("X", "").replaceAll("\"", "")) + "\n");
+			writer.write(wrapper.getCountsForTaxa(splits[1].replaceAll("X", "").replaceAll("\"", "")) + "\t");
+			
+			if( hs != null)
+			{
+				MostWantedMetadata mostMeta = mostMetaMap.get(hs.getTargetId());
+				
+				if( mostMeta == null)
+					throw new Exception("Could not find " + hs.getTargetId());
+				
+				writer.write(mostMeta.getPriority() + "\t");
+				writer.write(mostMeta.getMaxFraction() + "\t");
+				writer.write(mostMeta.getSubjectFractionStool() + "\n");
+			}
+			else
+			{
+				writer.write("NA\t0\t0\n");
+			}
+			
 		}
 		writer.flush(); writer.close();
 	}
