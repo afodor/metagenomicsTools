@@ -25,7 +25,7 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				"abundantOTUForwardTaxaAsColumns.txt");
 		
 		writer.write("otuID\tpValue\tadjustedp\thigherIn\tmeanRural\tmeanUrban\truralDivUrban\ttargetId\tqueryAlignmentLength\tpercentIdentity\tbitScore\tnumSequences\t" + 
-		"mostWantedPriority\tmaxFraction\tstoolSubjectFraction\n");
+		"mostWantedPriority\tmaxFraction\tstoolSubjectFraction\tgoldGlobal\trdpMetadata\n");
 		
 		HashMap<String, MostWantedMetadata> mostMetaMap = MostWantedMetadata.getMap();
 		
@@ -82,11 +82,13 @@ public class MergeBestBlastToPValuesForAbundantOTU
 				
 				writer.write(mostMeta.getPriority() + "\t");
 				writer.write(mostMeta.getMaxFraction() + "\t");
-				writer.write(mostMeta.getSubjectFractionStool() + "\n");
+				writer.write(mostMeta.getSubjectFractionStool() + "\t");
+				writer.write(mostMeta.getGoldGlobal() + "\t");
+				writer.write(mostMeta.getRdpSummaryString() + "\n");
 			}
 			else
 			{
-				writer.write("NA\t0\t0\n");
+				writer.write("NA\t0\t0\tNA\t0\n");
 			}
 			
 		}

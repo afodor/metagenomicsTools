@@ -12,6 +12,18 @@ public class MostWantedMetadata
 	private final double maxFraction;
 	private final double subjectFractionStool;
 	private final String priority;
+	private final String rdpSummaryString;
+	private final double goldGlobal;
+	
+	public double getGoldGlobal()
+	{
+		return goldGlobal;
+	}
+	
+	public String getRdpSummaryString()
+	{
+		return rdpSummaryString;
+	}
 	
 	public double getMaxFraction()
 	{
@@ -34,6 +46,8 @@ public class MostWantedMetadata
 		this.maxFraction = Double.parseDouble( splits[getIndex("maxFraction", firstLine)]);
 		this.subjectFractionStool = Double.parseDouble( splits[getIndex("454_subjectfractions_Stool", firstLine)]); 
 		this.priority = splits[1];
+		this.rdpSummaryString = splits[6];
+		this.goldGlobal = Double.parseDouble(splits[11]);
 	}
 	
 	private static int getIndex(String query, String firstLine) throws Exception
