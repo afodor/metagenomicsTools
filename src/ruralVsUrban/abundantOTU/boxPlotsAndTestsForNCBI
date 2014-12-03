@@ -34,9 +34,7 @@ boxplot(myT$goldGlobalMostWanted[myT$higherIn=="rural" & myT$pValue < 0.01 ],
 
 t.test( myT$goldGlobalMostWanted[myT$higherIn=="rural" & myT$pValue < 0.01 ],
 	myT$goldGlobalMostWanted[myT$higherIn=="urban" & myT$pValue < 0.01 ] )
-	
-
-	
+		
 boxplot(myT$stoolSubjectFraction[myT$higherIn=="rural" & myT$pValue < 0.01 ],
 	myT$stoolSubjectFraction[myT$higherIn=="urban" & myT$pValue < 0.01 ])
 
