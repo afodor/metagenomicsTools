@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.StringTokenizer;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -26,10 +27,10 @@ public class AddMetadata
 		return "first_A";
 	}
 	
-	private static void addSomeMetadata(BufferedReader reader, 
+	private static void addSomeMetadata( OtuWrapper wrapper, BufferedReader reader, 
 					BufferedWriter writer) throws Exception
 	{
-		writer.write("sampleID\tpatientID\truralUrban\ttimepoint");
+		writer.write("sampleID\tpatientID\truralUrban\ttimepoint\tshannonDiversity\tshannonEveness\tunRarifiedRichness");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -53,7 +54,11 @@ public class AddMetadata
 				writer.write("urban\t");
 			else throw new Exception("No");
 			
-			writer.write(getTimepoint(s));
+			writer.write(getTimepoint(s) + "\t");
+			
+			writer.write(wrapper.getShannonEntropy(splits[0]) + "\t");
+			writer.write(wrapper.getEvenness(splits[0]) + "\t");
+			writer.write(wrapper.getRichness(splits[0]) + "");
 			
 			for( int y=1; y < splits.length; y++)
 				writer.write("\t" + splits[y]);
@@ -68,6 +73,10 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getChinaDir() + 
+				File.separator + "abundantOTU" + File.separator + 
+				"abundantOTUForwardTaxaAsColumns.txt");
+		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getChinaDir() + 
 				File.separator + "abundantOTU" + File.separator + 
@@ -78,6 +87,6 @@ public class AddMetadata
 				File.separator + "abundantOTU" + File.separator + 
 				"abundantOTUForwardTaxaAsColumnsLogNormalWithMetadata.txt"	)));
 		
-		addSomeMetadata(reader, writer);
+		addSomeMetadata(wrapper, reader, writer);
 	}
 }
