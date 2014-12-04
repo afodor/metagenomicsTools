@@ -4,7 +4,6 @@ setwd("C:\\PennyChinaDataset\\abundantOTU")
 require(lme4) 
 require(lmerTest)
 
-
 inFileName <- "abundantOTUForwardTaxaAsColumnsLogNormalWithMetadata.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
