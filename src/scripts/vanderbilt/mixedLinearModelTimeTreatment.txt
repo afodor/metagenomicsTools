@@ -19,7 +19,7 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[ which( myT$stoolOrSwab== "swab") , ]
+	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
 	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
@@ -44,6 +44,6 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentswab_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
