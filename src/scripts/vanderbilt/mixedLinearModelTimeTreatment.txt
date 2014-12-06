@@ -28,7 +28,7 @@ for(taxa in taxaLevels )
 	index <- 1
 	for( i in 7:numCols) 
 	{	
-		if( sum(myT[,i] != 0) >= length(numCols)/4 )
+		if( sum(myT[,i] != 0) >= numCols/4 )
 		{
 			myLm <- lmer( myT[,i] ~  myT$type + myT$treatment+ ( 1| factor(myT$subjectID) ) )
 			coefs <- data.frame(coef(summary(myLm)))
