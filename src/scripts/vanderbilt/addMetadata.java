@@ -29,7 +29,7 @@ public class addMetadata
 		
 		
 		writer.write("numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t" + 
-				"run\tstoolOrSwab\tsubjectID\ttreatment\t" + ( rOutput ? "sample\t" : "" ) + 
+				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + ( rOutput ? "sample\t" : "" ) + 
 				reader.readLine().replaceAll("\"", "") + "\n");
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
@@ -55,10 +55,11 @@ public class addMetadata
 			{
 				writer.write(metaMap.get(sampleID).getStudyID() + "\t");
 				writer.write(metaMap.get(sampleID).getTreatment()+ "\t");
+				writer.write(metaMap.get(sampleID).getType()+ "\t");
 			}
 			else
 			{
-				writer.write("NA\tNA\t");
+				writer.write("NA\tNA\tNA\t");
 			}
 			
 			

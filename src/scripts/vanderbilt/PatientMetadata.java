@@ -12,6 +12,12 @@ public class PatientMetadata
 	private final String sample;
 	private final String studyID;
 	private final String treatment;
+	private final String type;
+	
+	public String getType()
+	{
+		return type;
+	}
 	
 	public String getSample()
 	{
@@ -34,6 +40,7 @@ public class PatientMetadata
 		this.sample = splits[0];
 		this.studyID = splits[5];
 		this.treatment = splits[6];
+		this.type = splits[29];
 	}
 	
 	public static HashMap<String, PatientMetadata> getAsMap() throws Exception
