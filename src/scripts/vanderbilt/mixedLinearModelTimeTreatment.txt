@@ -34,7 +34,7 @@ for(taxa in taxaLevels )
 	}
 	
 	
-	dFrame <- data.frame( names, pValuesTime,pValuesTreatment,percentExplained  ) 
+	dFrame <- data.frame( names, pValuesTime,pValuesTreatment  ) 
 	write.table(dFrame, file=paste("pValuesTimeTreatmentStool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
