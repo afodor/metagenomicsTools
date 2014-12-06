@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
@@ -16,6 +17,9 @@ public class addMetadata
 				String inFile, String outFile, boolean rOutput )
 		throws Exception
 	{
+		HashMap<String, PatientMetadata> metaMap = 
+				PatientMetadata.getAsMap();
+		
 		System.out.println(outFile);
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				inFile)));
@@ -25,7 +29,7 @@ public class addMetadata
 		
 		
 		writer.write("numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t" + 
-				"run\tstoolOrSwab\t" + ( rOutput ? "sample\t" : "" ) + 
+				"run\tstoolOrSwab\tsubjectID\ttreatment\t" + ( rOutput ? "sample\t" : "" ) + 
 				reader.readLine().replaceAll("\"", "") + "\n");
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
@@ -44,6 +48,19 @@ public class addMetadata
 			else if ( sampleKey.startsWith("SW"))
 				writer.write("swab\t");
 			else throw new Exception(" NO " );
+			
+			String sampleID = sampleKey.split("_")[0];
+			
+			if(metaMap.get(sampleID) != null)
+			{
+				writer.write(metaMap.get(sampleID).getStudyID() + "\t");
+				writer.write(metaMap.get(sampleID).getTreatment()+ "\t");
+			}
+			else
+			{
+				writer.write("NA\tNA\t");
+			}
+			
 			
 			writer.write(s + "\n");
 		}
