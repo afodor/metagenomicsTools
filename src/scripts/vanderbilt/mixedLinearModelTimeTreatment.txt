@@ -16,7 +16,7 @@ for(taxa in taxaLevels )
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
@@ -26,7 +26,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 7:numCols) 
+	for( i in 8:numCols) 
 	{	
 		if( sum(myT[,i] != 0) >= numCols/4 )
 		{

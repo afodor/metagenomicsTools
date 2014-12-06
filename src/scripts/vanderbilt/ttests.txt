@@ -9,7 +9,7 @@ for(taxa in taxaLevels )
 	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# only the forward reads
@@ -21,7 +21,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 7:27) 
+	for( i in 8:27) 
 	{	
 		myLm <- lm( myT[,i] ~  factor( myT$stoolOrSwab) + factor( myT$subjectID) )
 		myAnova <- anova(myLm)

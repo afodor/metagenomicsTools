@@ -28,7 +28,7 @@ public class AddMetadata
 				outFile));
 		
 		writer.write("sample\t" + 
-				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + 
+				"run\tstoolOrSwab\tsubjectID\tgenotype\ttreatment\ttype\t" + 
 				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness");
 		
 		if( rOutput) 
@@ -66,6 +66,7 @@ public class AddMetadata
 				else throw new Exception(" NO " );
 			
 				writer.write(metaMap.get(sampleID).getStudyID() + "\t");
+				writer.write(metaMap.get(sampleID).getGenotype() + "\t");
 				writer.write(metaMap.get(sampleID).getTreatment()+ "\t");
 				writer.write(metaMap.get(sampleID).getType()+ "\t");
 			

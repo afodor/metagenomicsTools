@@ -13,6 +13,7 @@ public class PatientMetadata
 	private final String studyID;
 	private final String treatment;
 	private final String type;
+	private final String genotype;
 	
 	public String getType()
 	{
@@ -33,6 +34,11 @@ public class PatientMetadata
 	{
 		return treatment;
 	}
+	
+	public String getGenotype()
+	{
+		return genotype;
+	}
 
 	public PatientMetadata(String s) throws Exception
 	{
@@ -41,6 +47,7 @@ public class PatientMetadata
 		this.studyID = splits[5];
 		this.treatment = splits[6];
 		this.type = splits[29];
+		this.genotype = splits[9];
 	}
 	
 	public static HashMap<String, PatientMetadata> getAsMap() throws Exception
