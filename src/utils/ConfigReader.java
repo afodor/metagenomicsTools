@@ -74,6 +74,7 @@ public class ConfigReader
 	public static final String MBQC_DIR = "MBQC_DIR";
 	public static final String RAT_SACH_REANALYSIS_DIR = "RAT_SACH_REANALYSIS_DIR";
 	public static final String MICROBES_VS_METABOLITES_DIR = "MICROBES_VS_METABOLITES_DIR";
+	public static final String VANDERBILT_DIR = "VANDERBILT_DIR";
 	
 	public static boolean isVerboseConsole() throws Exception
 	{
@@ -88,6 +89,11 @@ public class ConfigReader
 	public static String getRachSachReanalysisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);
+	}
+	
+	public static String getVanderbiltDir() throws Exception
+	{
+		return getConfigReader().getAProperty(VANDERBILT_DIR);
 	}
 	
 	public static String getSvmDir() throws Exception
