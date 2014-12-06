@@ -29,8 +29,23 @@ public class addMetadata
 		
 		writer.write("sample\t" + 
 				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + 
-				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t"+ 
-				reader.readLine().replaceAll("\"", "") + "\n");
+				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness");
+		
+		if( rOutput) 
+		{
+			writer.write("\t" + reader.readLine().replaceAll("\"", "") + "\n");
+		}
+		else
+		{
+			String[] lineSplits = reader.readLine().split("\t");
+			
+			for( int x=1; x < lineSplits.length; x++ )
+			{
+				writer.write("\t" + lineSplits[x]);
+			}
+			
+			writer.write("\n");
+		}
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
@@ -92,6 +107,19 @@ public class addMetadata
 			
 			
 			addSomeMetadata(wrapper, pcoaFile.getAbsolutePath(), outPCOAFile.getAbsolutePath(), true);
+			
+			String taxaPath = ConfigReader.getVanderbiltDir() 
+					+ File.separator + "spreadsheets" +
+					File.separator + "pivoted_" + 
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt";
+			
+			String outPath =  ConfigReader.getVanderbiltDir() 
+					+ File.separator + "spreadsheets" +
+					File.separator + "pivoted_" + 
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsWithMetadata.txt";
+			
+			addSomeMetadata(wrapper, taxaPath, outPath, false);
+
 		}
 	}
 }
