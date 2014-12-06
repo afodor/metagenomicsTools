@@ -13,7 +13,7 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# only the forward reads
-	myT <- myT[ which( myT$type== "swab_pre" | myT$type== "stool_pre") , ]
+	myT <- myT[ which( myT$type== "swab_post" | myT$type== "stool_post") , ]
 	
 	pValuesStoolSwab <- vector()
 	pValuesSubject <- vector()
@@ -34,7 +34,7 @@ for(taxa in taxaLevels )
 	
 	
 	dFrame <- data.frame( names, pValuesStoolSwab,pValuesSubject,percentExplained  ) 
-	write.table(dFrame, file=paste("pValuesForPre_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForpost_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 	
 }
