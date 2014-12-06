@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
-import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import parsers.PivotOTUs;
