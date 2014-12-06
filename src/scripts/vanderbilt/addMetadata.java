@@ -28,18 +28,17 @@ public class addMetadata
 				outFile));
 		
 		
-		writer.write("numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t" + 
-				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + ( rOutput ? "sample\t" : "" ) + 
+		
+		writer.write("sample\t" + 
+				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + 
+				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t"+ 
 				reader.readLine().replaceAll("\"", "") + "\n");
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			String sampleKey = splits[0].replaceAll("\"", "");
-			writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
-			writer.write(wrapper.getRichness(sampleKey) + "\t");
-			writer.write(wrapper.getShannonEntropy(sampleKey) + "\t" );
-			writer.write(wrapper.getEvenness(sampleKey) + "\t" );
+			writer.write(sampleKey + "\t");
 			
 			writer.write(sampleKey.split("_")[1] + "\t");
 			
@@ -62,10 +61,20 @@ public class addMetadata
 				writer.write("NA\tNA\tNA\t");
 			}
 			
+			writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
+			writer.write(wrapper.getRichness(sampleKey) + "\t");
+			writer.write(wrapper.getShannonEntropy(sampleKey) + "\t" );
+			writer.write(wrapper.getEvenness(sampleKey) + "" );
 			
-			writer.write(s + "\n");
+			String[] lineSplits = s.split("\t");
+			
+			for( int x=1; x < lineSplits.length; x++)
+			writer.write("\t" + lineSplits[x]);
+			
+			writer.write("\n");
 		}
 		
+		writer.flush(); writer.close();
 		reader.close();
 	}
 	
