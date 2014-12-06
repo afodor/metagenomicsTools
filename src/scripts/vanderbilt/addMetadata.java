@@ -23,11 +23,10 @@ public class addMetadata
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				outFile));
 		
-		if( ! rOutput)
-			writer.write("sample\t");
 		
 		writer.write("numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t" + 
-				"run\tstoolOrSwab\t" + reader.readLine());
+				"run\tstoolOrSwab\t" + ( rOutput ? "sample\t" : "" ) + 
+				reader.readLine().replaceAll("\"", "") + "\n");
 		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
