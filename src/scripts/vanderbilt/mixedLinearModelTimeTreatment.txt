@@ -1,0 +1,40 @@
+rm(list=ls())
+require(lme4) 
+require(lmerTest)
+
+
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
+	
+	pValuesTime <- vector()
+	pValuesTreatment <- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in 7:27) 
+	{	
+		myLm <- lmer( myT[,i] ~  myT$type + myT$treatment+ ( 1| factor(myT$subjectID) ) )
+		coefs <- data.frame(coef(summary(myLm)))
+		coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
+		pValuesTreatment[index] <- coefs[5]$Pr...t..[3];
+		pValuesTime[index] <- coefs[5]$Pr...t..[2]
+		names[index] = names(myT)[i]
+		index <- index + 1	
+	}
+	
+	
+	dFrame <- data.frame( names, pValuesTime,pValuesTreatment,percentExplained  ) 
+	write.table(dFrame, file=paste("pValuesTimeTreatmentStool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
+							

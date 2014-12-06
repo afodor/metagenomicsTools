@@ -27,8 +27,6 @@ public class addMetadata
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				outFile));
 		
-		
-		
 		writer.write("sample\t" + 
 				"run\tstoolOrSwab\tsubjectID\ttreatment\ttype\t" + 
 				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness\t"+ 
@@ -38,40 +36,36 @@ public class addMetadata
 		{
 			String[] splits = s.split("\t");
 			String sampleKey = splits[0].replaceAll("\"", "");
-			writer.write(sampleKey + "\t");
-			
-			writer.write(sampleKey.split("_")[1] + "\t");
-			
-			if( sampleKey.startsWith("ST"))
-				writer.write("stool\t");
-			else if ( sampleKey.startsWith("SW"))
-				writer.write("swab\t");
-			else throw new Exception(" NO " );
-			
 			String sampleID = sampleKey.split("_")[0];
 			
-			if(metaMap.get(sampleID) != null)
+			if( metaMap.get(sampleID) != null )
 			{
+				writer.write(sampleKey + "\t");
+				
+				writer.write(sampleKey.split("_")[1] + "\t");
+				
+				if( sampleKey.startsWith("ST"))
+					writer.write("stool\t");
+				else if ( sampleKey.startsWith("SW"))
+					writer.write("swab\t");
+				else throw new Exception(" NO " );
+			
 				writer.write(metaMap.get(sampleID).getStudyID() + "\t");
 				writer.write(metaMap.get(sampleID).getTreatment()+ "\t");
 				writer.write(metaMap.get(sampleID).getType()+ "\t");
+			
+				writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
+				writer.write(wrapper.getRichness(sampleKey) + "\t");
+				writer.write(wrapper.getShannonEntropy(sampleKey) + "\t" );
+				writer.write(wrapper.getEvenness(sampleKey) + "" );
+			
+				String[] lineSplits = s.split("\t");
+			
+				for( int x=1; x < lineSplits.length; x++)
+					writer.write("\t" + lineSplits[x]);
+			
+				writer.write("\n");
 			}
-			else
-			{
-				writer.write("NA\tNA\tNA\t");
-			}
-			
-			writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
-			writer.write(wrapper.getRichness(sampleKey) + "\t");
-			writer.write(wrapper.getShannonEntropy(sampleKey) + "\t" );
-			writer.write(wrapper.getEvenness(sampleKey) + "" );
-			
-			String[] lineSplits = s.split("\t");
-			
-			for( int x=1; x < lineSplits.length; x++)
-			writer.write("\t" + lineSplits[x]);
-			
-			writer.write("\n");
 		}
 		
 		writer.flush(); writer.close();
