@@ -64,4 +64,12 @@ public class PatientMetadata
 		return map;
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<String, PatientMetadata> map = getAsMap();
+		
+		PatientMetadata pm = map.get("ST00110A");
+		System.out.println( pm.sample + " " +  pm.type);
+	}
+	
 }

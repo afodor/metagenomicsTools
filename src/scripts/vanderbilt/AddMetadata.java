@@ -11,7 +11,7 @@ import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
-public class addMetadata
+public class AddMetadata
 {
 	private static void addSomeMetadata( OtuWrapper wrapper,
 				String inFile, String outFile, boolean rOutput )
