@@ -111,12 +111,12 @@ public class addMetadata
 			String taxaPath = ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt";
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt";
 			
 			String outPath =  ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsWithMetadata.txt";
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalWithMetadata.txt";
 			
 			addSomeMetadata(wrapper, taxaPath, outPath, false);
 
