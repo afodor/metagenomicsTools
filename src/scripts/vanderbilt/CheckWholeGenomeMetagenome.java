@@ -20,6 +20,7 @@ public class CheckWholeGenomeMetagenome
 	{
 		HashSet<String> set = getMatchingSequences();
 		System.out.println(set);
+		System.out.println(set.size());
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader( 
 				new GZIPInputStream( new FileInputStream( ConfigReader.getVanderbiltDir() + 
@@ -31,8 +32,8 @@ public class CheckWholeGenomeMetagenome
 		{
 			numChecked++;
 			
-			String aSeq = fq.getSequence();
-			String backSeq = Translate.safeReverseTranscribe(fq.getSequence());
+			String aSeq = fq.getSequence().trim();
+			String backSeq = Translate.safeReverseTranscribe(fq.getSequence().trim());
 			
 			boolean match = false;
 			for(String s : set)
@@ -44,7 +45,7 @@ public class CheckWholeGenomeMetagenome
 			if( match)
 				numMatched++;
 			
-			if(numChecked % 1000 ==0)
+			if(numChecked % 100000 ==0)
 				System.out.println(numChecked + " " + numMatched);
 		}
 	}
@@ -62,12 +63,11 @@ public class CheckWholeGenomeMetagenome
 			String[] splits = s.split("\t");
 			set.add(splits[1].trim());
 			set.add(splits[2].trim());
-			System.out.println(splits[1]);
 			set.add( Translate.reverseTranscribe(splits[1].trim()));
-			System.out.println(splits[2]);
 			set.add( Translate.reverseTranscribe(splits[2].trim()));
-			
 		}
+		
+		reader.close();
 		
 		return set;
 	}
