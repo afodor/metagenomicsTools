@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import utils.Avevar;
 import utils.ConfigReader;
 import utils.ProcessWrapper;
 import utils.TabReader;
@@ -313,6 +314,16 @@ public class OtuWrapper
 		}
 		
 		return richness + singetons*(singetons-1) / 2*(doubletons +1);
+	}
+	
+	public double getAverageRelativeAbundnace(int col)
+	{
+		List<Double> list = new ArrayList<Double>();
+		
+		for( int x=0; x < getSampleNames().size(); x++)
+			list.add(getDataPointsUnnormalized().get(x).get(col));
+		
+		return new Avevar(list).getAve();
 	}
 	
 	/*
