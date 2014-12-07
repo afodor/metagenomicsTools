@@ -42,7 +42,7 @@ public class MergeTTestsWithRelativeAbundance
 				if( taxaIndex != -1)
 				{
 					writer.write(s + "\t" + wrapper.getCountsForTaxa(taxaIndex));
-					writer.write(wrapper.getAverageRelativeAbundnace(taxaIndex) + "\n");
+					writer.write("\t" + wrapper.getAverageRelativeAbundnace(taxaIndex) + "\n");
 				}
 			}
 			
