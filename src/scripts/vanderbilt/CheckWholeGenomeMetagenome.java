@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 
-
 import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
