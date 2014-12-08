@@ -8,6 +8,7 @@ import java.util.List;
 
 import parsers.OtuWrapper;
 import utils.Avevar;
+import utils.TTest;
 
 public class QuickEffectSizes
 {
@@ -16,7 +17,7 @@ public class QuickEffectSizes
 		OtuWrapper wrapper =new OtuWrapper("D:\\MachineLearningJournalClub\\testData.txt");
 		List<Holder> holders = getHolders(wrapper);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("D:\\MachineLearningJournalClub\\effectSizes.txt")));
-		writer.write("name\tmeanCase\tmeanControl\tdiff\tpooledSD\teffectSize\n");
+		writer.write("name\tmeanCase\tmeanControl\tcaseSampleSize\tcontrolSampleSize\tdiff\tpooledSD\teffectSize\tpValue\n");
 		
 		for(Holder h : holders ) 
 		{
@@ -28,11 +29,26 @@ public class QuickEffectSizes
 			combined.addAll(h.controlVals);
 			Avevar combinedAve =new Avevar(combined);
 			writer.write(caseAve.getAve() + "\t");
+			writer.write(h.caseVals.size() + "\t");
+			writer.write(h.controlVals.size() + "\t");
 			writer.write(controlAve.getAve() + "\t");
 			double diff = Math.abs(caseAve.getAve()  - controlAve.getAve() );
 			writer.write(diff + "\t");
 			writer.write(combinedAve.getSD() + "\t");
-			writer.write((diff/combinedAve.getSD()) + "\n");
+			writer.write((diff/combinedAve.getSD()) + "\t");
+			
+			double pValue = 1;
+			
+			try
+			{
+				pValue = TTest.ttestFromNumberUnequalVariance(h.caseVals, h.controlVals).getPValue();
+			}
+			catch(Exception ex)
+			{
+				
+			}
+			
+			writer.write(pValue + "\n");
 		}
 		
 		writer.flush();  writer.close();
