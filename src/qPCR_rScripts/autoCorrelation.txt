@@ -9,11 +9,18 @@ M1 <- gls( LogPseudo ~ treatmentStatus , data= myT )
 M2 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT )
 M3 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT , correlation = corCompSymm(form=~sampleDays ))
 M4 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT , correlation = corAR1(form=~sampleDays ))
+M5 <- gls( LogPseudo ~ treatmentStatus * sampleDays , data= myT  )
+
+M6 <- gls( LogPseudo ~ treatmentStatus + poly(sampleDays,2) , data= myT ) 
+M7 <- gls( LogPseudo ~ treatmentStatus + poly(sampleDays,2) , data= myT ,correlation = corCompSymm(form=~sampleDays )) 
+M8 <- gls( LogPseudo ~ treatmentStatus + poly(sampleDays,2) , data= myT ,correlation = corAR1(form=~sampleDays )) 
+
 
 E <- residuals( M3, type="normalized")
 acf(E)
 
-anova(M1,M2,M3,M4)
+anova(M2,M3,M4, M5,M6)
+anova(M6,M7,M8)
 summary(M2)
 summary(M4)
 plot(residuals(M2), myT$sampleDays)
