@@ -6,9 +6,10 @@ numPersonsGroupB <- 10
 
 data<- vector();
 persons <- vector()
+treatment <- vector();
 
 meansA <- rnorm(numPersonsGroupA , mean=0)
-meansB <- rnorm(numPersonsGroupB , mean=2)
+meansB <- rnorm(numPersonsGroupB , mean=0.5)
 person = 1;
 
 index <-1 
@@ -18,6 +19,7 @@ for( i in 1:numPersonsGroupA )
 	{
 		data[index] <- rnorm(1, mean=meansA[i])
 		persons[index] <- paste("Aperson", person, sep="")
+		treatment[index] <- "A"
 		index = index + 1
 	}
 	person = person + 1;
@@ -29,11 +31,15 @@ for( j in 1:numPersonsGroupB )
 	{
 		data[index] <- rnorm(1, mean=meansB[i])
 		persons[index] <- paste("Bperson", person, sep="")
+		treatment[index] <- "B"
 		index = index + 1
 	}
 	
 	person = person + 1;
 }
 
-dFrame <- data.frame(data,persons)
+dFrame <- data.frame(data,persons, treatment)
 boxplot(data ~ persons)
+
+myLm <- lm( data ~ factor(treatment) + factor(persons) )
+anova(myLm)
