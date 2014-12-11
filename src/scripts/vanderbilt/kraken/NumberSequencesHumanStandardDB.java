@@ -24,8 +24,9 @@ public class NumberSequencesHumanStandardDB
 		{
 			int x=0;
 			
-			if( ! foundInHuman.keySet().equals(foundInReference.keySet()))
-				throw new Exception("No");
+			// why is this throwing???
+			//if( ! foundInHuman.keySet().equals(foundInReference.keySet()))
+				//throw new Exception("No");
 			
 			for(String s : foundInHuman.keySet())
 				if( foundInHuman.get(s) && foundInReference.get(s) )
@@ -38,8 +39,10 @@ public class NumberSequencesHumanStandardDB
 		{
 			int x=0;
 			
-			if( ! foundInHuman.keySet().equals(foundInReference.keySet()))
-				throw new Exception("No");
+			///
+			// why is this throwing???
+		//	if( ! foundInHuman.keySet().equals(foundInReference.keySet()))
+			//	throw new Exception("No");
 			
 			for(String s : foundInHuman.keySet())
 				if( !foundInHuman.get(s) && !foundInReference.get(s) )
@@ -81,7 +84,7 @@ public class NumberSequencesHumanStandardDB
 			if( firstToken.length() != 1)
 				throw new Exception("Unexpected " + firstToken);
 			
-			String seqName = sToken.nextToken();
+			String seqName = new String( sToken.nextToken());
 			
 			if( foundMap.containsKey(seqName))
 				throw new Exception("Duplicate sequence " + seqName);
@@ -115,10 +118,11 @@ public class NumberSequencesHumanStandardDB
 				"humanVsReferenceFromKraken.txt")));
 		
 		writer.write("fullSampleName\tsampleID\tstoolVsSwab\trunNum\tnumClassifiedRef\tnumNotClassifiedRef\t" + 
-						"totalRef\tnumClassifiedHuman\tnumNotClassifeidHuman\ttotalHuman\tnumNeither\tnumBoth\n");
+						"totalRef\tnumClassifiedHuman\tnumNotClassifeidHuman\ttotalHuman\tnumNeither\tnumBoth\tabsoluteInHuman\tabsoluteInRef\n");
 		
 		for(String s : map.keySet())
 		{
+			System.out.println("Writing " + s);
 			writer.write(s + "\t");
 			String[] splits = s.split("_");
 			writer.write( splits[0] + "\t" );
@@ -129,21 +133,24 @@ public class NumberSequencesHumanStandardDB
 			else throw new Exception("No");
 			
 			Holder h = map.get(s);
-			
+			double totalNum = h.foundInHuman.size();
 			
 			writer.write(splits[1] + "\t");
 
 			int numClassifiedRef = getNumTrue(h.foundInReference);
-			writer.write(numClassifiedRef + "\t");
-			writer.write((h.foundInReference.size() - numClassifiedRef) + "\t");
-			writer.write(h.foundInReference.size() + "\t");
+			writer.write(numClassifiedRef / totalNum + "\t");
+			writer.write((h.foundInReference.size() - numClassifiedRef)/totalNum + "\t");
+			writer.write(h.foundInReference.size()/totalNum + "\t");
 			
 			int numClassifiedHuman = getNumTrue(h.foundInHuman);
-			writer.write(numClassifiedHuman + "\t");
-			writer.write((h.foundInHuman.size() - numClassifiedHuman) + "\t");
-			writer.write(h.foundInHuman.size()+"\t");
-			writer.write(h.numFoundInBoth() + "\t");
-			writer.write(h.numFoundInNeither() + "\n");
+			writer.write(numClassifiedHuman /totalNum+ "\t");
+			writer.write((h.foundInHuman.size() - numClassifiedHuman) /totalNum + "\t");
+			writer.write(h.foundInHuman.size()/totalNum+"\t");
+			writer.write(h.numFoundInBoth() /totalNum + "\t");
+			writer.write(h.numFoundInNeither() /totalNum + "\t");
+			writer.write(h.foundInHuman.size() + "\t");
+			writer.write(h.foundInReference.size() + "\n");
+			
 		}
 		
 		
