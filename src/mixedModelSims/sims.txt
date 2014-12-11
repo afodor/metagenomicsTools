@@ -28,7 +28,7 @@ for( i in 1:numPersonsGroupA )
 	person = person + 1;
 }
 
-for( j in 1:numPersonsGroupB )
+for( i in 1:numPersonsGroupB )
 {
 	for( j in 1: samplePerPerson)
 	{
