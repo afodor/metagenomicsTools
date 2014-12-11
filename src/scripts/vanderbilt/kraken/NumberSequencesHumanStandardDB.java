@@ -146,8 +146,8 @@ public class NumberSequencesHumanStandardDB
 			writer.write(numClassifiedHuman /totalNum+ "\t");
 			writer.write((h.foundInHuman.size() - numClassifiedHuman) /totalNum + "\t");
 			writer.write(h.foundInHuman.size()/totalNum+"\t");
-			writer.write(h.numFoundInBoth() /totalNum + "\t");
 			writer.write(h.numFoundInNeither() /totalNum + "\t");
+			writer.write(h.numFoundInBoth() /totalNum + "\t");
 			writer.write(h.foundInHuman.size() + "\t");
 			writer.write(h.foundInReference.size() + "\n");
 			
