@@ -1,0 +1,54 @@
+setwd("D:\\JoshManuscript\\R_Code_And_Data")
+library(nlme)
+
+rm(list=ls())
+
+myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
+
+M1 <- gls( LogPseudo ~ treatmentStatus , data= myT )
+M2 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT )
+M3 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT , correlation = corCompSymm(form=~sampleDays ))
+M4 <- gls( LogPseudo ~ treatmentStatus + sampleDays , data= myT , correlation = corAR1(form=~sampleDays ))
+
+E <- residuals( M3, type="normalized")
+acf(E)
+
+anova(M1,M2,M3,M4)
+summary(M2)
+summary(M4)
+plot(residuals(M2), myT$sampleDays)
+boxplot( residuals(M2) ~ myT$treatmentStatus)
+
+rm(list=ls())
+
+myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
+
+M1 <- gls( LogBurk ~ treatmentStatus , data= myT )
+M2 <- gls( LogBurk ~ treatmentStatus + sampleDays , data= myT )
+M3 <- gls( LogBurk ~ treatmentStatus + sampleDays , data= myT , correlation = corCompSymm(form=~sampleDays ))
+M4 <- gls( LogBurk ~ treatmentStatus + sampleDays , data= myT , correlation = corAR1(form=~sampleDays ))
+
+E <- residuals( M2, type="normalized")
+acf(E)
+
+anova(M1,M2,M3,M4)
+summary(M2)
+summary(M4)
+
+rm(list=ls())
+
+myT <- read.table( "qPCRWithSampleDays.txt", sep="\t", header=TRUE )
+
+M1 <- gls( Log16S ~ treatmentStatus , data= myT )
+M2 <- gls( Log16S ~ treatmentStatus + sampleDays , data= myT )
+M3 <- gls( Log16S ~ treatmentStatus + sampleDays , data= myT , correlation = corCompSymm(form=~sampleDays ))
+M4 <- gls( Log16S ~ treatmentStatus + sampleDays , data= myT , correlation = corAR1(form=~sampleDays ))
+
+E <- residuals( M2, type="normalized")
+acf(E)
+
+anova(M1,M2,M3,M4)
+summary(M2)
+summary(M4)
+
+
