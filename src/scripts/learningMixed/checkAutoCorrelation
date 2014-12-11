@@ -1,0 +1,17 @@
+rm(list=ls())
+
+setwd("D:\\Kylie16SFromRaad\\fromRoshonda")
+sampleData=read.delim("KylieSampleMetadata.txt");
+pcaPhylum=read.delim("brayCurtForMothur_Phylum.pcoa.axes");
+pcaPhylum=cbind(sampleData,pcaPhylum);
+
+write.table(pcaPhylum, file="boundPhylum.txt",sep="\t")
+
+library(nlme)
+
+M1 <- lme( axis1 ~ Diet + Days, random = ~ 1 | Cage/Sample.ID, pcaPhylum, subset = Days > 0 )
+M2 <- lme( axis1 ~ Diet + Days, random = ~ 1 | Cage/Sample.ID, pcaPhylum, subset = Days > 0 , corCompSymm(form=~Days))
+acf( residuals(M1))
+
+M3 <- lme( axis1 ~ Diet + Days + Cage, random = ~ 1 | Sample.ID, pcaPhylum, subset = Days > 0 )
+anova(M3)
