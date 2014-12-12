@@ -1,7 +1,7 @@
 rm(list=ls())
 require(lme4) 
 require(lmerTest)
-
+require(nlme)
 
 samplePerPerson <- 20
 numPersonsGroupA <- 30
@@ -44,7 +44,7 @@ for( i in 1:numPersonsGroupB )
 dFrame <- data.frame(data,persons, treatment)
 boxplot(data ~ persons)
 
-myLm <- lm( dFrame$data ~ dFrame$treatment + dFrame$persons)
+myLm <- gls( data ~ persons, data=dFrame)
 anova(myLm)
 
 mixedLM <- lmer( dFrame$data ~ dFrame$treatment + 1| dFrame$persons)
@@ -52,3 +52,4 @@ coefs <- data.frame(coef(summary(mixedLM )))
 coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
 coefs[5]$Pr...t..[1];
 	
+anova(myLm, mixedLM)
