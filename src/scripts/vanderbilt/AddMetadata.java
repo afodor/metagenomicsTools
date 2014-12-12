@@ -111,6 +111,21 @@ public class AddMetadata
 					);
 			addSomeMetadata(wrapper, inFile.getAbsolutePath(), 
 								outFile.getAbsolutePath(), false);
+		
+			// couldn't do strains
+			if( x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length - 1 )
+			{
+
+				File pcoaFile = new File(ConfigReader.getVanderbiltDir() + File.separator +
+						"spreadsheets" + File.separator + 
+						"krakenPcoa_" + PivotKrakenReportToTaxaAsColumns.RDP_LEVELS[x] + ".txt");
+			
+				File pcoaOutFile = new File(ConfigReader.getVanderbiltDir() + File.separator +
+						"spreadsheets" + File.separator + 
+						"krakenPcoa_" + PivotKrakenReportToTaxaAsColumns.RDP_LEVELS[x] + "withMetadata.txt");	
+				
+				addSomeMetadata(wrapper, pcoaFile.getAbsolutePath(), pcoaOutFile.getAbsolutePath(), true);
+			}
 			
 		}
 		
