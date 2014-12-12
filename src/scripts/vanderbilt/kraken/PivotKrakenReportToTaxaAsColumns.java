@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import bigDataScalingFactors.AddTotalCountsAndDiversity;
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import parsers.PivotOTUs;

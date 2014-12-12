@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
+import scripts.vanderbilt.kraken.PivotKrakenReportToTaxaAsColumns;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -90,6 +91,29 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		for(int x=0; x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length; x++)
+		{
+			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getVanderbiltDir() + File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + PivotKrakenReportToTaxaAsColumns.RDP_LEVELS[x] +"_taxaAsColumns.txt");
+			
+			File inFile = new File(ConfigReader.getVanderbiltDir() 
+					+ File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + PivotKrakenReportToTaxaAsColumns.RDP_LEVELS[x]
+							+"_taxaAsColumnsLogNorm.txt");
+			
+			File outFile = new File(ConfigReader.getVanderbiltDir() 
+					+ File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + PivotKrakenReportToTaxaAsColumns.RDP_LEVELS[x]
+							+"_taxaAsColumnsLogNormWithMetadata.txt"
+					);
+			addSomeMetadata(wrapper, inFile.getAbsolutePath(), 
+								outFile.getAbsolutePath(), false);
+			
+		}
+		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			OtuWrapper wrapper = new OtuWrapper(
