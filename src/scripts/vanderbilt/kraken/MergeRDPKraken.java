@@ -11,13 +11,15 @@ import utils.ConfigReader;
 
 public class MergeRDPKraken
 {
-	private static  HashSet<String> getTaxaToInclude(OtuWrapper rdpWrapper, OtuWrapper krakenWrapper, HashSet<String> samples)
+	private static  HashSet<String> getTaxaToInclude(OtuWrapper rdpWrapper, OtuWrapper krakenWrapper,
+				OtuWrapper kraken16SWrapper,HashSet<String> samples)
 		throws Exception
 	{
 
 		HashSet<String> taxa = new HashSet<String>();
 		taxa.addAll(rdpWrapper.getOtuNames());
 		taxa.addAll(krakenWrapper.getOtuNames());
+		taxa.addAll(kraken16SWrapper.getOtuNames());
 		
 		HashSet<String> taxaToRemove = new HashSet<String>();
 		
@@ -26,6 +28,7 @@ public class MergeRDPKraken
 			boolean removeTaxa = true;
 			int rdpOTUKey = rdpWrapper.getIndexForOtuName(otu);
 			int krakenOTUKey = krakenWrapper.getIndexForOtuName(otu);
+			int kraken16SOTUKey = kraken16SWrapper.getIndexForOtuName(otu);
 			
 			for(String s : samples)
 			{
@@ -42,6 +45,15 @@ public class MergeRDPKraken
 					int krakenSampleKey = krakenWrapper.getIndexForSampleName(s);
 					
 					if( krakenWrapper.getDataPointsUnnormalized().get(krakenSampleKey).get(krakenOTUKey) > 0)
+						removeTaxa = false;
+				}
+				
+
+				if( kraken16SOTUKey!= -1)
+				{
+					int kraken16SSampleKey = kraken16SWrapper.getIndexForSampleName(s);
+					
+					if( kraken16SWrapper.getDataPointsUnnormalized().get(kraken16SSampleKey).get(kraken16SOTUKey) > 0)
 						removeTaxa = false;
 				}
 			}
@@ -77,23 +89,30 @@ public class MergeRDPKraken
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getVanderbiltDir() + File.separator + 
 				"spreadsheets" + File.separator + 
 				"mergedKrakenRDP_" + level + ".txt")));
-		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\n");
+		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\n");
 		
 		OtuWrapper rdpWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
-							File.separator + "pivoted_"+ level  + "asColumnsLogNormal.txt");
+							File.separator + "pivoted_"+ level  + "asColumns.txt");
 		
 		OtuWrapper krakenWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
-				File.separator + "kraken_" + level + "_taxaAsColumnsLogNorm.txt");
+				File.separator + "kraken_" + level + "_taxaAsColumns.txt");
+		
+		OtuWrapper kraken16SWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() 
+					+ File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + level +"_taxaAsColumnsFor16S.txt");
 		
 		HashSet<String> samples = new HashSet<String>();
-		samples.addAll(rdpWrapper.getSampleNames());
+		samples.addAll(kraken16SWrapper.getSampleNames());
 		samples.retainAll(krakenWrapper.getSampleNames());
-		HashSet<String> taxa = getTaxaToInclude(rdpWrapper, krakenWrapper, samples);
+		samples.retainAll(rdpWrapper.getSampleNames());
+		HashSet<String> taxa = getTaxaToInclude(rdpWrapper, krakenWrapper, kraken16SWrapper, samples);
 		
 		for(String s : samples)
 		{
 			int rdpSampleKey = rdpWrapper.getIndexForSampleName(s);
 			int krakenSampleKey = krakenWrapper.getIndexForSampleName(s);
+			int kraken16SSampleKey = kraken16SWrapper.getIndexForSampleName(s);
 			
 			for(String otu : taxa)
 			{
@@ -107,7 +126,8 @@ public class MergeRDPKraken
 				
 				writer.write(otu + "\t");
 				writer.write( getVal(krakenWrapper, krakenSampleKey, otu) + "\t" );
-				writer.write( getVal(rdpWrapper, rdpSampleKey, otu) + "\n" );
+				writer.write( getVal(rdpWrapper, rdpSampleKey, otu) + "\t" );
+				writer.write( getVal(kraken16SWrapper, kraken16SSampleKey, otu) + "\n" );
 			}
 		}
 		

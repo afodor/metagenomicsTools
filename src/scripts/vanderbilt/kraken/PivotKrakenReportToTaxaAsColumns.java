@@ -36,10 +36,14 @@ public class PivotKrakenReportToTaxaAsColumns
 			
 			System.out.println(KRAKEN_LEVELS[x]);
 			for(String s : topDir.list())
-				if( s.startsWith("standardReport_for_Sample_"))
+				if( s.startsWith("standardReport_for_Sample_") && s.indexOf("16S") == -1)
+				{
+					//System.out.println("NON 16S " + s);
 					addToMap(new File(topDir.getAbsolutePath() + File.separator + s),
-									map, KRAKEN_LEVELS[x]);
-			
+							map, KRAKEN_LEVELS[x]);
+	
+				}
+					
 			File outFile = new File(ConfigReader.getVanderbiltDir() + File.separator + 
 					"spreadsheets" + File.separator + 
 					"kraken_" + RDP_LEVELS[x] +"_taxaAsColumns.txt");
@@ -51,21 +55,65 @@ public class PivotKrakenReportToTaxaAsColumns
 					"spreadsheets" + File.separator + 
 					"kraken_" + RDP_LEVELS[x] +"_taxaAsColumnsLogNorm.txt");
 		}
+		
+		for( int x=0; x < KRAKEN_LEVELS.length; x++)
+		{
+			HashMap<String, HashMap<String, Integer>> map = 
+						new HashMap<String, HashMap<String,Integer>>();
+			
+			System.out.println(KRAKEN_LEVELS[x]);
+			for(String s : topDir.list())
+			{
+				//System.out.println(s);
+				if( s.startsWith("standardReport_for_") && s.indexOf("16S") != -1)
+				{
+					//System.out.println("For 16S " + s);
+					addToMap(new File(topDir.getAbsolutePath() + File.separator + s),
+							map, KRAKEN_LEVELS[x]);
+	
+				}
+			}
+				
+					
+			File outFile = new File(ConfigReader.getVanderbiltDir() + File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + RDP_LEVELS[x] +"_taxaAsColumnsFor16S.txt");
+			PivotOTUs.writeResults(map, outFile.getAbsolutePath());
+			
+			OtuWrapper wrapper = new OtuWrapper(outFile);
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getVanderbiltDir() 
+					+ File.separator + 
+					"spreadsheets" + File.separator + 
+					"kraken_" + RDP_LEVELS[x] +"_taxaAsColumnsLogNormFor16S.txt");
+		}
 	}
 	
 	private static void addToMap(File file, HashMap<String, HashMap<String, Integer>> countMap,
 					String level)
 		throws Exception
 	{
-		String name = file.getName().replace("standardReport_for_Sample_", "").replace(".txt", "");
+		String name = file.getName().replace("standardReport_for_Sample_", "").replace(".txt", "")
+				.replace("_to16S", "").replace("standardReport_for_", "");
 		String[] splits = name.split("_");
 		String sampleID = splits[0];
 		
-		if( splits[1].equals("MSHRM1"))
-			sampleID = sampleID + "_all1";
-		else if( splits[1].equals("MSHRM2"))
-			sampleID = sampleID + "_all2";
-		else throw new Exception("Unexpected " + file.getName());
+		boolean needToTrim = true;
+		
+		if( splits[1].equals("all1") || splits[1].equals("all2"))
+		{
+			needToTrim = false;
+			sampleID = sampleID + "_" + splits[1];
+		}
+			
+		if( needToTrim)
+		{
+			if( splits[1].equals("MSHRM1"))
+				sampleID = sampleID + "_all1";
+			else if( splits[1].equals("MSHRM2"))
+				sampleID = sampleID + "_all2";
+			else throw new Exception("Unexpected " + splits[1]);
+		}
+		
 		
 		if( countMap.containsKey(sampleID))
 			throw new Exception("Duplicate " + sampleID);
@@ -90,8 +138,8 @@ public class PivotKrakenReportToTaxaAsColumns
 				
 				if (innerMap.containsKey(taxaName))
 				{
-					System.out.println("Waring duplicate " + taxaName + " " 
-								+ innerMap.get(taxaName));
+					//System.out.println("Waring duplicate " + taxaName + " " 
+						//		+ innerMap.get(taxaName));
 					counts = counts + innerMap.get(taxaName);
 				}
 					
