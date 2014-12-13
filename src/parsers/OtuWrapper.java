@@ -2136,8 +2136,8 @@ public class OtuWrapper
 			assertNum(totalCounts, dataPointsUnnormalized);
 		}
 
-		avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
-		//avgNumber =1;	
+		//avgNumber = ((double) totalCounts) / dataPointsNormalized.size();
+		avgNumber =1;	
 		
 		for (x = 0; x < dataPointsUnnormalized.size(); x++)
 		{

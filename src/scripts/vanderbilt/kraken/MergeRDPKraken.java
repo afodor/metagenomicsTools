@@ -73,7 +73,7 @@ public class MergeRDPKraken
 		if( otuIndex == -1)
 			return 0;
 		
-		return wrapper.getDataPointsNormalizedThenLogged().get(sampleIndex).get(otuIndex);
+		return wrapper.getDataPointsNormalized().get(sampleIndex).get(otuIndex);
 	}
 	
 	public static void main(String[] args) throws Exception
