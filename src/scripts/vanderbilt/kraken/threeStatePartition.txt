@@ -1,0 +1,39 @@
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets");
+
+rm(list=ls())
+
+myT <- read.table("mergedKrakenRDP_phylum.txt", sep="\t", header=TRUE)
+
+samples <- levels(myT$sample)
+
+fractionKrakenOnly <- vector()
+fractionRDPOnly <- vector()
+fractionBoth <- vector()
+fractionAll <- vector()
+pearsonRValues <- vector()
+pearsonRValuesLog <- vector()
+
+for( i in 1:length(samples))
+{
+	fractionKrakenOnly[i] <- 
+	sum( myT$krakenLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel == 0 ])
+	
+	fractionRDPOnly[i] <- 
+	sum( myT$rdpLevel[ myT$krakenLevel == 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ])
+	
+	fractionBoth[i] <- 
+	sum( myT$krakenLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ])
+	
+	fractionAll[i] <- fractionKrakenOnly[i]  + fractionRDPOnly[i] + fractionBoth[i]
+	
+	pearsonRValues[i] <- cor( 
+		myT$krakenLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ],
+		myT$rdpLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ]	 ) 
+		
+	pearsonRValuesLog[i] <- cor( 
+		log10(myT$krakenLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ]),
+		log10(myT$rdpLevel[ myT$krakenLevel > 0  & myT$sample == samples[i] & myT$rdpLevel > 0 ])	 ) 
+}
+
+dFrame <- data.frame(fractionKrakenOnly,fractionRDPOnly,fractionBoth ,fractionAll ,
+				samples ,pearsonRValues, pearsonRValuesLog )
