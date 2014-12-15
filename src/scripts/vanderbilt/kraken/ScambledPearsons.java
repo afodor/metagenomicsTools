@@ -93,8 +93,8 @@ public class ScambledPearsons
 			
 			if( h1 != null && h2 != null && h1.krakenLevel> 0 && h2.rdpLevel >0 )
 			{
-				list1.add(h1.krakenLevel);
-				list2.add(h2.rdpLevel);
+				list1.add( Math.log10( h1.krakenLevel));
+				list2.add( Math.log10( h2.rdpLevel));
 			}
 		}
 		
@@ -118,7 +118,7 @@ public class ScambledPearsons
 			ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 
 						File.separator + "mergedKrakenRDP_" + level + "_pearsons.txt")));
 		
-		writer.write("sample\trealR\tscambledRAvg\tscrambedRSD\n");
+		writer.write("sample\tindex\trealR\tscambledRAvg\tscrambedRSD\n");
 		
 		HashMap<String, HashMap<String, Holder>>  map = getMap(level);
 		List<String> samples = new ArrayList<String>(map.keySet());
@@ -130,6 +130,7 @@ public class ScambledPearsons
 			usedSamples.add(x);
 			
 			writer.write(samples.get(x) + "\t");
+			writer.write( (x+1) +"\t");
 			writer.write( getAPearson(x, x, samples,map) + "\t" );
 			List<Double> permutations =new ArrayList<Double>();
 			
