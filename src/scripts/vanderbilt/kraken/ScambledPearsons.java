@@ -94,8 +94,8 @@ public class ScambledPearsons
 			if( h1 != null && h2 != null &&  ( (compareSame16S? h2.rdpLevel: h2.krakenLevel))> 0
 					&& (h2.kraken16SLevel) >0 )
 			{
-				list1.add( Math.log10(compareSame16S? h2.rdpLevel: h2.krakenLevel));
-				list2.add(  Math.log10(h2.kraken16SLevel));
+				list1.add( compareSame16S? h2.rdpLevel: h2.krakenLevel);
+				list2.add(  h2.kraken16SLevel);
 			}
 		}
 		
