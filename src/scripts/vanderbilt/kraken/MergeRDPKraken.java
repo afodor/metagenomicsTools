@@ -89,7 +89,7 @@ public class MergeRDPKraken
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getVanderbiltDir() + File.separator + 
 				"spreadsheets" + File.separator + 
 				"mergedKrakenRDP_" + level + ".txt")));
-		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\tmaxFraction\n");
+		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\tmaxKrakenFraction\n");
 		
 		OtuWrapper rdpWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
 							File.separator + "pivoted_"+ level  + "asColumns.txt");
@@ -129,12 +129,26 @@ public class MergeRDPKraken
 				writer.write( getVal(rdpWrapper, rdpSampleKey, otu) + "\t" );
 				writer.write( getVal(kraken16SWrapper, kraken16SSampleKey, otu) + "\t" );
 				
-				double max = Math.max(getVal(krakenWrapper, krakenSampleKey, otu), 
-						getVal(rdpWrapper, rdpSampleKey, otu) );
+				double krakenFraction = 0;
 				
-				max = Math.max(max,getVal(kraken16SWrapper, kraken16SSampleKey, otu));
+				if( krakenWrapper.getIndexForOtuName(otu) != -1  )
+				{
+					krakenFraction = (double)krakenWrapper.getCountsForTaxa(otu) /
+							krakenWrapper.getTotalCounts();
+
+				}
 				
-				writer.write(max + "\n");
+				double kraken16Fraction = 0;
+				
+				if( kraken16SWrapper.getIndexForOtuName(otu) != -1 )
+				{
+					kraken16Fraction = (double)kraken16SWrapper.getCountsForTaxa(otu) /
+							kraken16SWrapper.getTotalCounts();
+					
+				}
+				
+				
+				writer.write(Math.max(krakenFraction , kraken16Fraction )+ "\n");
 			}
 		}
 		
