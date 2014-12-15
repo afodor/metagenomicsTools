@@ -8,19 +8,18 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import parsers.NewRDPParserFileLine;
+import utils.Avevar;
 import utils.ConfigReader;
+import utils.Pearson;
 
-public class scambledPearsons
+public class ScambledPearsons
 {
 	private static final Random RANDOM = new Random(3423423);
-	
-	public static void main(String[] args) 
-	{
-		
-	}
 	
 	private static class Holder
 	{
@@ -74,27 +73,47 @@ public class scambledPearsons
 		return map;
 	}
 	
-	private double getAPearson(int sampleID, List<String> samples, 
-							boolean shuffle, HashMap<String, HashMap<String, Holder>>  dataMap)
+	private static double getAPearson(int sample1ID, int sample2ID, List<String> samples, 
+							 HashMap<String, HashMap<String, Holder>>  dataMap)
 	{
 		List<Double> list1 = new ArrayList<Double>();
 		List<Double> list2 = new ArrayList<Double>();
 		
-		HashMap<String, Holder> realMap = dataMap.get(samples.get(sampleID));
+		HashMap<String, Holder> firstMap= dataMap.get(samples.get(sample1ID));
+		HashMap<String, Holder> secondMap= dataMap.get(samples.get(sample2ID));
 		
-		int randomIndex= RANDOM.nextInt( samples.size() );
+		HashSet<String> taxaSet = new HashSet<String>();
+		taxaSet.addAll(firstMap.keySet());
+		taxaSet.addAll(secondMap.keySet());
 		
-		while(randomIndex== sampleID)
-			randomIndex= RANDOM.nextInt( samples.size() );
+		for(String s : taxaSet)
+		{
+			Holder h1 = firstMap.get(s);
+			Holder h2 = secondMap.get(s);
+			
+			if( h1 != null && h2 != null && h1.krakenLevel> 0 && h2.rdpLevel >0 )
+			{
+				list1.add(h1.krakenLevel);
+				list2.add(h2.rdpLevel);
+			}
+		}
 		
-		//HashMap<String, Holder> randomMap= dataMap.get(sampleID.get(randomIndex));
+		if( list1.size() <= 2 )
+			return 0;
 		
-		return 0;
+		return Pearson.getPearsonR(list1, list2);
 		
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+			writePivotsForALevel(NewRDPParserFileLine.TAXA_ARRAY[x]);
 	}
 	
 	private static void writePivotsForALevel(String level) throws Exception
 	{
+		System.out.println(level);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 
 						File.separator + "mergedKrakenRDP_" + level + "_pearsons.txt")));
@@ -104,6 +123,31 @@ public class scambledPearsons
 		HashMap<String, HashMap<String, Holder>>  map = getMap(level);
 		List<String> samples = new ArrayList<String>(map.keySet());
 		Collections.sort(samples);
+		
+		for( int x=0; x < samples.size(); x++)
+		{
+			HashSet<Integer> usedSamples = new HashSet<Integer>();
+			usedSamples.add(x);
+			
+			writer.write(samples.get(x) + "\t");
+			writer.write( getAPearson(x, x, samples,map) + "\t" );
+			List<Double> permutations =new ArrayList<Double>();
+			
+			for( int y=0; y < 20; y++)
+			{
+				int randomVal = RANDOM.nextInt(samples.size());
+				
+				while( usedSamples.contains(randomVal) )
+					randomVal= RANDOM.nextInt(samples.size());
+				
+				usedSamples.add(randomVal);
+				permutations.add(getAPearson(x, randomVal, samples,map));
+			}
+			
+			Avevar aVar = new Avevar(permutations);
+			writer.write(aVar.getAve() + "\t");
+			writer.write(aVar.getSD() + "\n");
+		}
 		
 		
 		writer.flush();  writer.close();
