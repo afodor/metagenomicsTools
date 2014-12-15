@@ -37,3 +37,7 @@ for( i in 1:length(samples))
 
 dFrame <- data.frame(fractionKrakenOnly,fractionRDPOnly,fractionBoth ,fractionAll ,
 				samples ,pearsonRValues, pearsonRValuesLog )
+				
+boxplot( dFrame$pearsonRValuesLog, dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="ST"],
+dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="SW"])
+
