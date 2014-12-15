@@ -2,7 +2,7 @@ setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets");
 
 rm(list=ls())
 
-myT <- read.table("mergedKrakenRDP_phylum.txt", sep="\t", header=TRUE)
+myT <- read.table("mergedKrakenRDP_order.txt", sep="\t", header=TRUE)
 
 samples <- levels(myT$sample)
 
