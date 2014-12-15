@@ -89,7 +89,7 @@ public class MergeRDPKraken
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getVanderbiltDir() + File.separator + 
 				"spreadsheets" + File.separator + 
 				"mergedKrakenRDP_" + level + ".txt")));
-		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\n");
+		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\tmaxFraction\n");
 		
 		OtuWrapper rdpWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
 							File.separator + "pivoted_"+ level  + "asColumns.txt");
@@ -127,7 +127,14 @@ public class MergeRDPKraken
 				writer.write(otu + "\t");
 				writer.write( getVal(krakenWrapper, krakenSampleKey, otu) + "\t" );
 				writer.write( getVal(rdpWrapper, rdpSampleKey, otu) + "\t" );
-				writer.write( getVal(kraken16SWrapper, kraken16SSampleKey, otu) + "\n" );
+				writer.write( getVal(kraken16SWrapper, kraken16SSampleKey, otu) + "\t" );
+				
+				double max = Math.max(getVal(krakenWrapper, krakenSampleKey, otu), 
+						getVal(rdpWrapper, rdpSampleKey, otu) );
+				
+				max = Math.max(max,getVal(kraken16SWrapper, kraken16SSampleKey, otu));
+				
+				writer.write(max + "\n");
 			}
 		}
 		
