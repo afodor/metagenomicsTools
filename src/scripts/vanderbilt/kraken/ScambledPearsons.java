@@ -74,7 +74,7 @@ public class ScambledPearsons
 	}
 	
 	private static double getAPearson(int sample1ID, int sample2ID, List<String> samples, 
-							 HashMap<String, HashMap<String, Holder>>  dataMap)
+							 HashMap<String, HashMap<String, Holder>>  dataMap, boolean compareSame16S)
 	{
 		List<Double> list1 = new ArrayList<Double>();
 		List<Double> list2 = new ArrayList<Double>();
@@ -91,10 +91,11 @@ public class ScambledPearsons
 			Holder h1 = firstMap.get(s);
 			Holder h2 = secondMap.get(s);
 			
-			if( h1 != null && h2 != null && h1.krakenLevel> 0 && h2.rdpLevel >0 )
+			if( h1 != null && h2 != null &&  ( (compareSame16S? h2.rdpLevel: h2.krakenLevel))> 0
+					&& (h2.kraken16SLevel) >0 )
 			{
-				list1.add( Math.log10( h1.krakenLevel));
-				list2.add( Math.log10( h2.rdpLevel));
+				list1.add( Math.log10(compareSame16S? h2.rdpLevel: h2.krakenLevel));
+				list2.add(  Math.log10(h2.kraken16SLevel));
 			}
 		}
 		
@@ -108,15 +109,20 @@ public class ScambledPearsons
 	public static void main(String[] args) throws Exception
 	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
-			writePivotsForALevel(NewRDPParserFileLine.TAXA_ARRAY[x]);
+		{
+			writePivotsForALevel(NewRDPParserFileLine.TAXA_ARRAY[x],true);
+			writePivotsForALevel(NewRDPParserFileLine.TAXA_ARRAY[x],false);
+		}
+			
 	}
 	
-	private static void writePivotsForALevel(String level) throws Exception
+	private static void writePivotsForALevel(String level, boolean compareSame16S) throws Exception
 	{
 		System.out.println(level);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 
-						File.separator + "mergedKrakenRDP_" + level + "_pearsons.txt")));
+						File.separator + "mergedKrakenRDP_" + level + "_pearsons" 
+					+ (compareSame16S? "16S_to_16S" : "wgs_to_16S") + ".txt")));
 		
 		writer.write("sample\tindex\trealR\tscambledRAvg\tscrambedRSD\n");
 		
@@ -131,7 +137,7 @@ public class ScambledPearsons
 			
 			writer.write(samples.get(x) + "\t");
 			writer.write( (x+1) +"\t");
-			writer.write( getAPearson(x, x, samples,map) + "\t" );
+			writer.write( getAPearson(x, x, samples,map, compareSame16S) + "\t" );
 			List<Double> permutations =new ArrayList<Double>();
 			
 			for( int y=0; y < 20; y++)
@@ -142,7 +148,7 @@ public class ScambledPearsons
 					randomVal= RANDOM.nextInt(samples.size());
 				
 				usedSamples.add(randomVal);
-				permutations.add(getAPearson(x, randomVal, samples,map));
+				permutations.add(getAPearson(x, randomVal, samples,map, compareSame16S));
 			}
 			
 			Avevar aVar = new Avevar(permutations);
