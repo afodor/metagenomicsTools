@@ -41,3 +41,14 @@ dFrame <- data.frame(fractionKrakenOnly,fractionRDPOnly,fractionBoth ,fractionAl
 boxplot( dFrame$pearsonRValuesLog, dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="ST"],
 dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="SW"])
 
+boxplot( dFrame$fractionKrakenOnly, dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="ST"],
+dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="SW"])
+
+t.test( dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="ST"], 
+dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="SW"] )
+
+t.test( dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="ST"], 
+dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="SW"] )
+
+t.test( dFrame$fractionRDPOnly[substring(dFrame$samples,1,2)=="ST"], 
+dFrame$fractionRDPOnly[substring(dFrame$samples,1,2)=="SW"] )
