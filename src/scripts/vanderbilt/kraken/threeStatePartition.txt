@@ -2,7 +2,7 @@ setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets");
 
 rm(list=ls())
 
-myT <- read.table("mergedKrakenRDP_phylum.txt", sep="\t", header=TRUE)
+myT <- read.table("mergedKrakenRDP_genus.txt", sep="\t", header=TRUE)
 
 samples <- levels(myT$sample)
 
@@ -43,6 +43,9 @@ dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="SW"])
 
 boxplot( dFrame$fractionKrakenOnly, dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="ST"],
 dFrame$fractionKrakenOnly[substring(dFrame$samples,1,2)=="SW"])
+
+boxplot( dFrame$fractionRDPOnly, dFrame$fractionRDPOnly[substring(dFrame$samples,1,2)=="ST"],
+dFrame$fractionRDPOnly[substring(dFrame$samples,1,2)=="SW"])
 
 t.test( dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="ST"], 
 dFrame$pearsonRValuesLog[substring(dFrame$samples,1,2)=="SW"] )
