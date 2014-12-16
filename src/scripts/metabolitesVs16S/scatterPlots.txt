@@ -1,0 +1,30 @@
+
+rm(list=ls())
+
+setwd("F:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+myT <- read.table("mergedKrakenRDP_phylum.txt", header=TRUE, sep="\t")
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "stool" )
+			colors[i] <- "red"
+		else
+			colors[i] <- "blue"
+	}
+	
+	return (colors)
+}
+
+taxa <- c("Actinobacteria")
+
+for( i in 1 : length(taxa)) 
+{
+	
+	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]),
+				col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) )
+}
