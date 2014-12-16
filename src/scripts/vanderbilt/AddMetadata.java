@@ -159,7 +159,16 @@ public class AddMetadata
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalWithMetadata.txt";
 			
 			addSomeMetadata(wrapper, taxaPath, outPath, false);
-
+			
+			String mergedPath = ConfigReader.getVanderbiltDir()
+					 + File.separator + "spreadsheets" + 
+					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt";
+			
+			String outMergedPath = ConfigReader.getVanderbiltDir()
+					 + File.separator + "spreadsheets" + 
+					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "_WithMetadata.txt";
+			
+			addSomeMetadata(wrapper, mergedPath, outMergedPath, false);
 		}
 	}
 }
