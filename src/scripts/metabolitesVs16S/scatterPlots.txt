@@ -20,15 +20,36 @@ getColors <- function(data)
 	return (colors)
 }
 
-taxa <- c("Actinobacteria", "Proteobacteria", "Bacteroidetes", "Firmicutes", "Verrucomicrobia")
+getIncludedTaxa <- function(myT)
+{
+	taxa <- vector();
+	data <- myT$maxKrakenFraction
+	index <-1
+	
+	for ( i in 1:nrow(myT))
+	{
+		if(data[i] > 0.01) 
+		{
+			taxa[index] <- paste( myT[i,]$taxa, "", sep="")
+			index <- index + 1;
+		}
+	}
+	
+	taxa <- unique( taxa )
+	return ( taxa )
+	
+}
+
+taxa <- getIncludedTaxa(myT)
 minVal <- 0.001
 
 for( i in 1 : length(taxa)) 
 {
+	windows()
 	myLm <- lm( log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal) ~ log10(myT$krakenLevel[myT$taxa==taxa[i]]+minVal) )	
 	aTitle <- paste( taxa[i], " r-squared = ", round( summary(myLm)$r.squared, 3) , " p = ", round(anova(myLm)$"Pr(>F)"[1],6), sep = "")
 	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal),
 				col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) , main=aTitle)
 	abline(myLm)
-	windows()
+
 }
