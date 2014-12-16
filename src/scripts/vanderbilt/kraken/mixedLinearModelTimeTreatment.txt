@@ -1,0 +1,48 @@
+rm(list=ls())
+require(lme4) 
+require(lmerTest)
+
+setwd("F:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+    # uncomment for pcoa
+	inFileName <- paste( "krakenPcoa_", taxa, "withMetadata.txt", sep ="")
+	
+	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
+	
+	pValuesTime <- vector()
+	pValuesTreatment <- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in 8:28) 
+	{	
+		if( sum(myT[,i] != 0) >= numCols/4 )
+		{
+			myLm <- lmer( myT[,i] ~  myT$type + myT$treatment+ ( 1| factor(myT$subjectID) ) )
+			coefs <- data.frame(coef(summary(myLm)))
+			coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
+			pValuesTreatment[index] <- coefs[5]$Pr...t..[3];
+			pValuesTime[index] <- coefs[5]$Pr...t..[2]
+			names[index] = names(myT)[i]
+			index <- index + 1
+		}		
+	}
+	
+	dFrame <- data.frame( names, pValuesTime,pValuesTreatment  ) 
+	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
+	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
+	
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstoolKraken_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
+							
