@@ -1,0 +1,41 @@
+rm(list=ls())
+
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "krakenPcoa_", taxa, "withMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	# only the forward reads
+	myT <- myT[ which( myT$type== "swab_post" | myT$type== "stool_post") , ]
+	
+	pValuesStoolSwab <- vector()
+	pValuesSubject <- vector()
+	percentExplained <- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in 8:27) 
+	{	
+		myLm <- lm( myT[,i] ~  factor( myT$stoolOrSwab) + factor( myT$subjectID) )
+		myAnova <- anova(myLm)
+		pValuesStoolSwab[index] <- myAnova$"Pr(>F)"[1]
+		pValuesSubject[index] <- myAnova$"Pr(>F)"[2]
+		percentExplained[index] <- summary(myLm)$r.squared	
+		names[index] = names(myT)[i]
+		index <- index + 1	
+	}
+	
+	
+	dFrame <- data.frame( names, pValuesStoolSwab,pValuesSubject,percentExplained  ) 
+	write.table(dFrame, file=paste("pValuesForpostKraken_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	
+}
+							
