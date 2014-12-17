@@ -3,7 +3,7 @@ rm(list=ls())
 
 setwd("F:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
-myT <- read.table("mergedKrakenRDP_order_WithMetadata.txt", header=TRUE, sep="\t")
+myT <- read.table("mergedKrakenRDP_phylum_WithMetadata.txt", header=TRUE, sep="\t")
 
 getColors <- function(data) 
 {	
@@ -91,3 +91,5 @@ for( i in 1 : length(taxa))
 	abline(myLm)
 
 }
+
+write.table(myT, file="quickCheck.txt", sep ="\t", row.names=FALSE)

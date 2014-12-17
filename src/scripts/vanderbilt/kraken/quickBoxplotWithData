@@ -1,0 +1,23 @@
+rm(list=ls())
+setwd("F:\\VanderbiltSequences_Dec52014")
+myT <- read.table("humanVsReferenceFromKraken.txt",header=TRUE, sep="\t")
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "stool" )
+			colors[i] <- "red"
+		else
+			colors[i] <- "blue"
+	}
+	
+	return (colors)
+}
+
+boxplot(myT$numClassifiedHuman~myT$stoolVsSwab,ylab="fraction classified as human")
+stripchart(numClassifiedHuman ~ stoolVsSwab, data = myT,vertical = TRUE, method = "jitter", pch = 21, 
+col = getColors(myT$stoolVsSwab), bg = "bisque", add = TRUE) 
+
