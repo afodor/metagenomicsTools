@@ -45,7 +45,7 @@ public class PivotByInitialID
 			boolean hasNonZero =false;
 			
 			for(int x=1; x < splits.length && ! hasNonZero; x++)
-				if( keepSet.contains(x) && Double.parseDouble(splits[x]) >0 )
+				if( keepSet.contains(x) && Double.parseDouble(splits[x]) >50 )
 					hasNonZero = true;
 			
 			if( hasNonZero)
