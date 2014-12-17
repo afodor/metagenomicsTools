@@ -2,7 +2,6 @@ package mbqc;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 import parsers.OtuWrapper;
 import utils.ConfigReader;
@@ -23,12 +22,9 @@ public class AddMetadata
 		int numNotFound =0;
 		for(String s : wrapper.getSampleNames())
 		{
-			String key = s.replace(prefix + ".", "");
+			String key = s.replace(prefix + ".", "").replaceAll("\"", "").trim();
 			
-			if( ! map.containsKey(key))
-			{
-				
-			}
+			
 			MetadataTSVParser tsv = map.get(key);
 			
 			if( tsv == null)

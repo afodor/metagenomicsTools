@@ -15,7 +15,12 @@ public class MetadataTSVParser
 	private String wetLabId;
 	private String blindedID;
 	private String bioinformaticsID;
+	private String sampleType;
 	
+	public String getSampleType()
+	{
+		return sampleType;
+	}
 
 	public Integer getSampleID()
 	{
@@ -56,20 +61,29 @@ public class MetadataTSVParser
 			
 			tsv.bioinformaticsID = tReader.nextToken().trim().replaceAll("\"", "");
 			
+			while(tsv.bioinformaticsID.startsWith("0"))
+				tsv.bioinformaticsID = tsv.bioinformaticsID.substring(1);
+			
 			if( tsv.bioinformaticsID.length() > 0 )
 			{
 				String sampleIDString= tReader.nextToken().trim().replaceAll("\"", "");
+				tsv.sampleType = tReader.nextToken().trim().replaceAll("\"", "");
 				
 				if( sampleIDString.length() > 0 )
 				{
 					tsv.sampleID = Integer.parseInt(sampleIDString);
-					String key = tsv.blindedID + "." + tsv.bioinformaticsID;
-					
-					if( map.containsKey(key))
-						throw new Exception("Duplicate key");
-					
-					map.put(key, tsv);
 				}
+				else
+				{
+					tsv.sampleID = -1;
+				}
+				
+				String key = tsv.blindedID + "." + tsv.bioinformaticsID;
+					
+				if( map.containsKey(key))
+					throw new Exception("Duplicate key");
+					
+				map.put(key, tsv);
 			}
 		}
 		
@@ -79,12 +93,14 @@ public class MetadataTSVParser
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MetadataTSVParser> map= getMap();
-		System.out.println("got map with " + map.size());
+		System.out.println(map.get("conecalo62.506170089").getSampleID());
 		
-		int stop =0;
-		
+		/*
 		for(String s: map.keySet())
-			//if( ++stop < 20)
+			if(s.startsWith("conecalo62"))
 				System.out.println(s);
+				*/
 	}
 }
+
+
