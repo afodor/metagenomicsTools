@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 import utils.TabReader;
@@ -38,7 +39,7 @@ public class MetadataTSVParser
 
 	public static HashMap<String, MetadataTSVParser> getMap() throws Exception
 	{
-		HashMap<String, MetadataTSVParser> map = new HashMap<String, MetadataTSVParser>();
+		HashMap<String, MetadataTSVParser> map = new LinkedHashMap<String, MetadataTSVParser>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getMbqcDir() + 
 				File.separator + "metadata" + File.separator + "metadata.tsv")));
@@ -49,9 +50,9 @@ public class MetadataTSVParser
 		{
 			TabReader tReader = new TabReader(s);
 			MetadataTSVParser tsv = new MetadataTSVParser();
-			tsv.wetLabId = tReader.nextToken();
+			tsv.wetLabId = tReader.nextToken().replaceAll("\"", "");
 			
-			tsv.blindedID = tReader.nextToken();
+			tsv.blindedID = tReader.nextToken().replaceAll("\"", "");
 			
 			tsv.bioinformaticsID = tReader.nextToken().trim().replaceAll("\"", "");
 			
@@ -70,7 +71,6 @@ public class MetadataTSVParser
 					map.put(key, tsv);
 				}
 			}
-			
 		}
 		
 		return map;
@@ -80,5 +80,11 @@ public class MetadataTSVParser
 	{
 		HashMap<String, MetadataTSVParser> map= getMap();
 		System.out.println("got map with " + map.size());
+		
+		int stop =0;
+		
+		for(String s: map.keySet())
+			//if( ++stop < 20)
+				System.out.println(s);
 	}
 }
