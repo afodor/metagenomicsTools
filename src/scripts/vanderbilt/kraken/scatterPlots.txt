@@ -51,7 +51,7 @@ for( i in 1 : length(taxa))
 	aTitle <- paste( taxa[i], " r-squared = ", round( summary(myLm)$r.squared, 3) , " p = ", format(anova(myLm)$"Pr(>F)"[1],digits=3))
 	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal),
 				,col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) , main=aTitle, xlab="1og10(krakenWholeGenome)",
-				ylab="log10(kraken16S)")
+				ylab="log10(kraken16S)",pch=15,cex=2)
 	abline(myLm)
 
 }
