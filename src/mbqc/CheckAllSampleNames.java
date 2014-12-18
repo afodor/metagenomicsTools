@@ -13,7 +13,7 @@ public class CheckAllSampleNames
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, List<MetadataTSVParser>> collapsedMap = MetadataTSVParser.collapseByBioinformaticsID();
+		HashMap<String, List<RawDesignMatrixParser>> map = RawDesignMatrixParser.getByLastTwoTokens();
 		List<File> fileList = getAllSamples();
 		
 		int numSamples=0;
@@ -21,12 +21,15 @@ public class CheckAllSampleNames
 		for(File f : fileList)
 		{
 			//System.out.println(f.getAbsolutePath());
-			//String labID = f.getParentFile().getParentFile().getName();
+			String labID = f.getParentFile().getParentFile().getName();
 			String bioinformaticsID = new StringTokenizer(f.getName(), "_").nextToken();
 			
-			//String key = labID + "." + bioinformaticsID;
+			while(bioinformaticsID.startsWith("0"))
+				bioinformaticsID = bioinformaticsID.substring(1);
 			
-			if( !bioinformaticsID.equals("unmatched") &&  ! collapsedMap.containsKey(bioinformaticsID))
+			String key = labID + "." + bioinformaticsID;
+			
+			if( !bioinformaticsID.equals("unmatched") &&  ! map.containsKey(key))
 			{
 				System.out.println("Could not find " + bioinformaticsID + " " + f.getAbsolutePath());
 				numNotFound++;
