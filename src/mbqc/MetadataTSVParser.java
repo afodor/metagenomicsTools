@@ -3,8 +3,10 @@ package mbqc;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import utils.ConfigReader;
 import utils.TabReader;
@@ -40,6 +42,49 @@ public class MetadataTSVParser
 	public String getBioinformaticsID()
 	{
 		return bioinformaticsID;
+	}
+
+	
+	public static HashMap<String, List<MetadataTSVParser>> collapseByBioinformaticsID() throws Exception
+	{
+		HashMap<String, List<MetadataTSVParser>> map = new HashMap<String, List<MetadataTSVParser>>();
+		
+		HashMap<String, MetadataTSVParser> oldMap = getMap();
+		 
+		for(String s : oldMap.keySet())
+		{
+			MetadataTSVParser mParser = oldMap.get(s);
+			
+			List<MetadataTSVParser> innerList = map.get(mParser.getBioinformaticsID());
+			
+			if( innerList == null)
+			{
+				innerList = new ArrayList<MetadataTSVParser>();
+				map.put(mParser.getBioinformaticsID(), innerList);
+			}
+			
+			innerList.add(mParser);
+			
+			String anID = mParser.getBioinformaticsID();
+			
+			// allow these to be accessed stripping off leading zeros...
+			while(anID.startsWith("0"))
+			{
+				anID = anID.substring(1);
+				
+				innerList = map.get(anID);
+				
+				if( innerList == null)
+				{
+					innerList = new ArrayList<MetadataTSVParser>();
+					map.put(anID, innerList);
+				}
+				
+				innerList.add(mParser);
+			}
+		}
+		
+		return map;
 	}
 
 	public static HashMap<String, MetadataTSVParser> getMap() throws Exception
