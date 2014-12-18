@@ -60,10 +60,7 @@ public class MetadataTSVParser
 			tsv.blindedID = tReader.nextToken().replaceAll("\"", "");
 			
 			tsv.bioinformaticsID = tReader.nextToken().trim().replaceAll("\"", "");
-			
-			while(tsv.bioinformaticsID.startsWith("0"))
-				tsv.bioinformaticsID = tsv.bioinformaticsID.substring(1);
-			
+		
 			if( tsv.bioinformaticsID.length() > 0 )
 			{
 				String sampleIDString= tReader.nextToken().trim().replaceAll("\"", "");
@@ -84,6 +81,22 @@ public class MetadataTSVParser
 					throw new Exception("Duplicate key");
 					
 				map.put(key, tsv);
+				
+				String aBioID = tsv.bioinformaticsID;
+				
+				// sometimes ids like conecalo62.0238403120 lose their leading 0 in downstream analysis...
+				// here we allow those ids to be founds without their leading zeros.
+				while(aBioID.startsWith("0"))
+				{
+					aBioID = aBioID.substring(1);
+					
+					key = tsv.blindedID + "." + aBioID;
+					
+					if( map.containsKey(key))
+						throw new Exception("Duplicate key");
+						
+					map.put(key, tsv);
+				}
 			}
 		}
 		
