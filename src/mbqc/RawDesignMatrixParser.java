@@ -3,7 +3,10 @@ package mbqc;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
@@ -16,9 +19,50 @@ public class RawDesignMatrixParser
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, RawDesignMatrixParser> map = getByFullId();
+		HashMap<String, List<RawDesignMatrixParser>> map = getByLastTwoTokens();
 		
 		System.out.println("Got map with " + map.size());
+		
+		int numDups =0;
+		
+		for(String s : map.keySet())
+			if( map.get(s).size() > 1)
+				numDups++;
+		
+		System.out.println(numDups);
+	}
+	
+	public static HashMap<String, List<RawDesignMatrixParser>> getByLastTwoTokens() throws Exception
+	{
+		HashMap<String, List<RawDesignMatrixParser>> map = new HashMap<String, List<RawDesignMatrixParser>>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
+				"dropbox" + File.separator + 
+				"raw_design_matrix.txt"));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits = s.split("\t");
+		
+			StringTokenizer sToken = new StringTokenizer(splits[0], ".");
+			sToken.nextToken();
+			String key = sToken.nextToken() + "." + sToken.nextToken();
+			
+			List<RawDesignMatrixParser> list = map.get(key);
+			
+			if( list == null)
+			{
+				list= new ArrayList<RawDesignMatrixParser>();
+				map.put(key, list);
+			}
+			
+			list.add(new RawDesignMatrixParser(splits));
+			
+		}
+		
+		return map;
 	}
 	
 	public static HashMap<String, RawDesignMatrixParser> getByFullId() throws Exception
