@@ -26,10 +26,15 @@ public class RawDesignMatrixParser
 		int numDups =0;
 		
 		for(String s : map.keySet())
+		{
 			if( map.get(s).size() > 1)
 				numDups++;
 		
+			System.out.println(map.get(s).size());
+		}
+			
 		System.out.println(numDups);
+		
 	}
 	
 	public static HashMap<String, List<RawDesignMatrixParser>> getByLastTwoTokens() throws Exception
@@ -60,6 +65,28 @@ public class RawDesignMatrixParser
 			
 			list.add(new RawDesignMatrixParser(splits));
 			
+		}
+		
+		for(String s : map.keySet())
+		{
+			List<RawDesignMatrixParser> list = map.get(s);
+			String mbqcID = null;
+			String wetlabSequencigID = null;
+			
+			for(RawDesignMatrixParser rdmp : list)
+			{
+				if(mbqcID ==null)
+					mbqcID = rdmp.mbqcID;
+				
+				if( wetlabSequencigID == null)
+					wetlabSequencigID = rdmp.extractionWetlab;
+				
+				if( ! mbqcID.equals(rdmp.mbqcID))
+					throw new Exception("No");
+				
+				if( ! wetlabSequencigID.equals(rdmp.extractionWetlab))
+					throw new Exception("No");
+			}
 		}
 		
 		return map;
