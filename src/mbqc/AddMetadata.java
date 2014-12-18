@@ -2,6 +2,7 @@ package mbqc;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 
 import parsers.OtuWrapper;
 import utils.ConfigReader;
@@ -16,18 +17,16 @@ public class AddMetadata
 				File.separator + "dropbox" + 
 					File.separator +  "merged_otu_filtered_"+ prefix + "TaxaAsColumns.txt");
 		
-		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
+		//HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
+		HashMap<String, List<RawDesignMatrixParser>> map = RawDesignMatrixParser.getByLastTwoTokens();
 		
 		int numFound =0;
 		int numNotFound =0;
 		for(String s : wrapper.getSampleNames())
 		{
-			String key = s.replaceAll("\"", "").trim();
+			String key = s.replaceAll("\"", "").trim().replace(prefix, "").substring(1);
 			
-			
-			RawDesignMatrixParser rdmp = map.get(key);
-			
-			if( rdmp== null)
+			if( ! map.containsKey(key))
 			{
 				numNotFound++;
 				System.out.println("Could not find " + key);
