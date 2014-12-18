@@ -16,18 +16,18 @@ public class AddMetadata
 				File.separator + "dropbox" + 
 					File.separator +  "merged_otu_filtered_"+ prefix + "TaxaAsColumns.txt");
 		
-		HashMap<String, MetadataTSVParser> map = MetadataTSVParser.getMap();
+		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
 		
 		int numFound =0;
 		int numNotFound =0;
 		for(String s : wrapper.getSampleNames())
 		{
-			String key = s.replace(prefix + ".", "").replaceAll("\"", "").trim();
+			String key = s.replaceAll("\"", "").trim();
 			
 			
-			MetadataTSVParser tsv = map.get(key);
+			RawDesignMatrixParser rdmp = map.get(key);
 			
-			if( tsv == null)
+			if( rdmp== null)
 			{
 				numNotFound++;
 				System.out.println("Could not find " + key);
