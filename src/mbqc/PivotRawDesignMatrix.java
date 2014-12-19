@@ -18,7 +18,7 @@ public class PivotRawDesignMatrix
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<String, HashMap<String, Double>>> map = getMap();
+		HashMap<String, HashMap<String, Double>> map = getMap();
 		System.out.println("Got map " + map.size());
 		
 		/*
@@ -40,59 +40,44 @@ public class PivotRawDesignMatrix
 		writeResults(map, "jpetrosino.");
 	}
 	
-	private static List<String> getSampleIDs(HashMap<String, HashMap<String, HashMap<String, Double>>> map, 
+	private static List<String> getSampleIDs(HashMap<String, HashMap<String, Double>> map, 
 			String prefix ) throws Exception
 	{
-		List<String> mbqcCats = new ArrayList<String>(map.keySet());
+		List<String> sampleIdList = new ArrayList<String>();
 		
-		HashSet<String> sampleIds = new HashSet<String>();
-		
-		for(String s : mbqcCats)
+		for(String s : map.keySet())
 		{
-			HashMap<String, HashMap<String, Double>> middleMap = map.get(s);
-			
-			for(String s2 : middleMap.keySet())
-				if( s2.startsWith(prefix))
-					sampleIds.add(s2);
+			if( s.startsWith(prefix))
+					sampleIdList.add(s);
 		}
 		
-		List<String> sampleIdList = new ArrayList<String>(sampleIds);
-		Collections.sort(sampleIdList);
 		return sampleIdList;
 	}
 	
-	private static List<String> getTaxa(HashMap<String, HashMap<String, HashMap<String, Double>>> map, 
+	private static List<String> getTaxa(HashMap<String, HashMap<String, Double>> map, 
 			String prefix, List<String> samples ) throws Exception
 	{
-		List<String> mbqcCats = new ArrayList<String>(map.keySet());
 		
 		HashSet<String> taxaIds = new HashSet<String>();
 		
-		for(String s: mbqcCats)
+		for(String s: map.keySet())
 		{
-			HashMap<String, HashMap<String, Double>> middleMap = map.get(s);
-			
-			for(String s2 : samples)
-			{
-				HashMap<String, Double> innerMap = middleMap.get(s2);
+			HashMap<String, Double> innerMap = map.get(s);
 				
-				if( innerMap != null)
-				{
-					for(String taxa : innerMap.keySet())
-					{
-						if( innerMap.get(taxa) > 0 )
+			for(String taxa : innerMap.keySet())
+			{
+				if( innerMap.get(taxa) > 0 )
 							taxaIds.add(taxa);
-					}
-				}
 			}
 		}
+		
 		List<String> list = new ArrayList<String>(taxaIds);
 		Collections.sort(list);
 		return list;
 	}
 	
 	
- 	private static void writeResults( HashMap<String, HashMap<String, HashMap<String, Double>>> map, String prefix )
+ 	private static void writeResults( HashMap<String, HashMap<String, Double>> map, String prefix )
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigReader.getMbqcDir() + 
@@ -100,7 +85,7 @@ public class PivotRawDesignMatrix
 		
 		List<String> sampleIds = getSampleIDs(map, prefix);
 		
-		writer.write("MBQC.ID\ttaxaName");
+		writer.write("taxaName");
 		
 		for(String s : sampleIds)
 			writer.write("\t" + s.replaceAll(prefix, ""));
@@ -109,49 +94,40 @@ public class PivotRawDesignMatrix
 		
 		List<String> taxa =getTaxa(map, prefix, sampleIds);
 		
-		for(String mbqc : map.keySet())
+		for(String taxaId : taxa)
 		{
-			for(String taxaId : taxa)
-			{
-				writer.write(mbqc + "\t" + taxaId );
+			writer.write(taxaId );
 				
-				for(String s : sampleIds)
-				{
-					HashMap<String, HashMap<String, Double>> middleMap = map.get(mbqc);
+			for(String s : sampleIds)
+			{
 					
-					HashMap<String, Double> innerMap = middleMap.get(s);
+				HashMap<String, Double> innerMap = map.get(s);
 					
-					Double val = null;
+				Double val = innerMap.get(taxaId);
 					
-					if (innerMap != null)
-						val = innerMap.get(taxaId);
-					
-					if( val == null)
-						writer.write("\t");
-					else
-						writer.write("\t" + val);
+				if( val == null)
+					writer.write("\t");
+				else
+					writer.write("\t" + val);
 				}
 				
 				writer.write("\n");
-			}
 		}
 
 		writer.flush();  writer.close();
 	}
 	
 	/*
-	 * The outer key is MBQCID
-	 * the middle key is taxa
-	 * the inner key is bioinformatics tagged sampleID
+	 * The outer key is bioinformatics tagged sampleID
+	 * the inner key is taxa
 	 */
-	private static HashMap<String, HashMap<String, HashMap<String, Double>>> getMap() throws Exception
+	private static HashMap<String, HashMap<String, Double>> getMap() throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
 				"dropbox" + File.separator + 
 				"raw_design_matrix.txt"));
 		
-		HashMap<String, HashMap<String, HashMap<String, Double>>>  map =
-				new LinkedHashMap<String, HashMap<String,HashMap<String,Double>>>();
+		HashMap<String, HashMap<String, Double>>  map =new LinkedHashMap<String, HashMap<String,Double>>();
 		
 		List<String> taxa = new ArrayList<String>();
 		String[] headerSplits = reader.readLine().split("\t");
@@ -170,21 +146,12 @@ public class PivotRawDesignMatrix
 		{
 			//System.out.println(s);
 			String[] splits = s.split("\t");
-			String mbqcID = splits[3];
 			
-			HashMap<String, HashMap<String, Double>> middleMap = map.get(mbqcID);
-			
-			if( middleMap == null)
-			{
-				middleMap = new HashMap<String, HashMap<String,Double>>();
-				map.put(mbqcID, middleMap);
-			}
-			
-			HashMap<String, Double> innerMap = middleMap.get(splits[0]);
+			HashMap<String, Double> innerMap = map.get(splits[0]);
 			if( innerMap == null)
 			{
 				innerMap = new HashMap<String, Double>();
-				middleMap.put(splits[0], innerMap);
+				map.put(splits[0], innerMap);
 			}
 
 			for(int y=0; y < taxa.size(); y++)
