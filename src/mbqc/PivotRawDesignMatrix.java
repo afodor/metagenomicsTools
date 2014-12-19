@@ -80,6 +80,9 @@ public class PivotRawDesignMatrix
  	private static void writeResults( HashMap<String, HashMap<String, Double>> map, String prefix )
 		throws Exception
 	{
+ 	
+ 		HashMap<String, RawDesignMatrixParser> metaMap = RawDesignMatrixParser.getByFullId();
+ 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigReader.getMbqcDir() + 
 				File.separator + "af_out" + File.separator + "rawDesignPivoted_" + prefix + ".txt"));
 		
@@ -88,7 +91,7 @@ public class PivotRawDesignMatrix
 		writer.write("taxaName");
 		
 		for(String s : sampleIds)
-			writer.write("\t" + s.replaceAll(prefix, ""));
+			writer.write("\t" + metaMap.get(s).getMbqcID() +"_" +  s.replaceAll(prefix, ""));
 		
 		writer.write("\n");
 		
