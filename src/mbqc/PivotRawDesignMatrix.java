@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -76,6 +77,24 @@ public class PivotRawDesignMatrix
 		return list;
 	}
 	
+	private static class SampleComparator implements Comparator<String>
+	{
+		final HashMap<String, RawDesignMatrixParser> metaMap;
+		
+		public SampleComparator(HashMap<String, RawDesignMatrixParser> metaMap)
+		{
+			this.metaMap = metaMap;
+		}
+		
+		@Override
+		public int compare(String o1, String o2)
+		{
+			o1 = metaMap.get(o1).getMbqcID() +"_" +  o1;
+			o2 = metaMap.get(o2).getMbqcID() +"_" +  o2;
+			return o1.compareTo(o2);
+		}
+	}
+	
 	
  	private static void writeResults( HashMap<String, HashMap<String, Double>> map, String prefix )
 		throws Exception
@@ -87,6 +106,7 @@ public class PivotRawDesignMatrix
 				File.separator + "af_out" + File.separator + "rawDesignPivoted_" + prefix + ".txt"));
 		
 		List<String> sampleIds = getSampleIDs(map, prefix);
+		Collections.sort(sampleIds, new SampleComparator(metaMap));
 		
 		writer.write("taxaName");
 		
@@ -111,7 +131,7 @@ public class PivotRawDesignMatrix
 				if( val == null)
 					writer.write("\t");
 				else
-					writer.write("\t" + val);
+					writer.write("\t" + Math.log10( val + 0.0001));
 				}
 				
 				writer.write("\n");
