@@ -72,6 +72,35 @@ public class RawDesignMatrixParser
 		
 	}
 	
+	public static HashMap<String, List<RawDesignMatrixParser>> pivotBySampleID( 
+					HashMap<String, RawDesignMatrixParser> map, String bioinformaticsID, String wetlabID ) 
+				throws Exception
+	{
+		HashMap<String, List<RawDesignMatrixParser>> returnMap= new HashMap<String, List<RawDesignMatrixParser>>();
+		
+		for(String s : map.keySet())
+		{
+			RawDesignMatrixParser rdmp = map.get(s);
+			
+			if( rdmp.sequecingWetlab.equals(wetlabID) && rdmp.id.startsWith(bioinformaticsID))
+			{
+				List<RawDesignMatrixParser> list = returnMap.get(rdmp.mbqcID);
+				
+				if(list==null)
+				{
+					list = new ArrayList<RawDesignMatrixParser>();
+					returnMap.put(rdmp.mbqcID, list);
+				}
+				
+				list.add(rdmp);
+			}
+		}
+		
+		return returnMap;
+	}
+	
+	
+	
 	public static HashMap<String, List<RawDesignMatrixParser>> getByLastTwoTokens() throws Exception
 	{
 		List<String> headers = getTaxaIds();

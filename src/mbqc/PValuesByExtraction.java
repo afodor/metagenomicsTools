@@ -30,6 +30,8 @@ public class PValuesByExtraction
 		System.out.println(aPValue);
 	}
 	
+	
+	
 	/*
 	 * For each sample, return a p-value for the null hypothesis that the distribution of NA
 	 * is the same as the extraction protocol with the most total samples for that wetlabID 
@@ -42,10 +44,15 @@ public class PValuesByExtraction
 									List<String>  mbqcIDs,
 									String wetlabID,
 									String drylabID,
-									String taxa)
+									String taxa) throws Exception
 	{
-		for(String s : mbqcIDs)
-			System.out.println(s);
+		 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap = 
+				RawDesignMatrixParser.pivotBySampleID(map, drylabID, wetlabID);
+		
+		for(String s : mbqcIDMap.keySet())
+		{
+			System.out.println(s + " "+ mbqcIDMap.get(s).size());
+		}
 		
 		return 0;
 	}
