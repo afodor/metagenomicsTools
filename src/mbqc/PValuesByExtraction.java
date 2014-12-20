@@ -32,10 +32,12 @@ public class PValuesByExtraction
 		List<String> wetlabIds = RawDesignMatrixParser.getAllWetlabIDs(map);
 		//System.out.println(wetlabIds);
 		
+		HashMap<String, Double> avgVals = RawDesignMatrixParser.getTaxaAverages(map, taxaHeaders);
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\n");
+		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tavgTaxa\n");
 		
 		for(String bio : bioinformaticsIds)
 			for( String wet : wetlabIds)
@@ -49,9 +51,11 @@ public class PValuesByExtraction
 					writer.write("\t" + h.sampleSize + "\t");
 					
 					if( h.pairedResults != null)
-						writer.write(h.pairedResults.getPValue() + "\n");
+						writer.write(h.pairedResults.getPValue() + "\t");
 					else
-						writer.write("\n");
+						writer.write("\t");
+					
+					writer.write(avgVals.get(taxa) + "\n");
 				}
 		
 		writer.flush();  writer.close();

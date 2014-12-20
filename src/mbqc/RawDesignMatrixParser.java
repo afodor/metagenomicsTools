@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import utils.Avevar;
 import utils.ConfigReader;
 
 public class RawDesignMatrixParser
@@ -79,6 +80,43 @@ public class RawDesignMatrixParser
 			
 		System.out.println(numDups);
 		
+	}
+	
+	public static HashMap<String, Double> getTaxaAverages(
+			HashMap<String, RawDesignMatrixParser> map, List<String> taxaHeaders) throws Exception
+	{
+		HashMap<String, List<Double>> rawMap= new HashMap<String, List<Double>>();
+		
+		for(String s : map.keySet())
+		{
+			RawDesignMatrixParser rdmp = map.get(s);
+			
+			for(int x=0; x < taxaHeaders.size(); x++)
+			{
+				if( rdmp.taxaVals.get(x) != null)
+				{
+					List<Double> innerList = rawMap.get(taxaHeaders.get(x));
+					
+					if( innerList == null)
+					{
+						innerList = new ArrayList<Double>();
+						rawMap.put(taxaHeaders.get(x),innerList);
+					}
+					
+					innerList.add(rdmp.taxaVals.get(x));
+						
+				}
+			}
+		}
+	
+		HashMap<String, Double> returnMap = new HashMap<String, Double>();
+		
+		for(String s : rawMap.keySet())
+		{
+			returnMap.put(s, new Avevar(rawMap.get(s)).getAve());
+		}
+		
+		return returnMap;
 	}
 	
 	public static HashMap<String, List<RawDesignMatrixParser>> pivotBySampleID( 
@@ -216,7 +254,8 @@ public class RawDesignMatrixParser
 		List<String> headers = getTaxaIds();
 		HashMap<String, RawDesignMatrixParser> map = new HashMap<String, RawDesignMatrixParser>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() 
+				+ File.separator + 
 				"dropbox" + File.separator + 
 				"raw_design_matrix.txt"));
 		
