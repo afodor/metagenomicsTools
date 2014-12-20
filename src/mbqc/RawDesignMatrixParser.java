@@ -46,6 +46,15 @@ public class RawDesignMatrixParser
 		return list;
 	}
 	
+	public static int getTaxaID(List<String> taxaList, String taxa) 
+	{
+		for( int x=0;x < taxaList.size(); x++)
+			if(taxaList.get(x).equals(taxa))
+				return x;
+		
+		return -1;
+	}
+	
 	public List<Double> getTaxaVals()
 	{
 		return taxaVals;
