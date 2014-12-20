@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -16,6 +18,39 @@ public class RawDesignMatrixParser
 	private final String extractionWetlab;
 	private final String sequecingWetlab;
 	private final String mbqcID;
+	private final List<Double> taxaVals;
+	
+	public static final List<String> getTaxaIds() throws Exception
+	{
+		List<String> list = new ArrayList<String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
+				"dropbox" + File.separator + 
+				"raw_design_matrix.txt"));
+		
+		String[] splits = reader.readLine().split("\t");
+		
+		int x=4;
+		
+		while(splits[x].startsWith("k__"))
+		{
+			StringTokenizer sToken = new StringTokenizer(splits[x], ".");
+			sToken.nextToken();
+			
+			list.add(sToken.nextToken().replace("p__", ""));
+			x++;
+		}
+		
+		reader.close();
+		
+		return list;
+	}
+	
+	public List<Double> getTaxaVals()
+	{
+		return taxaVals;
+	}
+	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -39,6 +74,7 @@ public class RawDesignMatrixParser
 	
 	public static HashMap<String, List<RawDesignMatrixParser>> getByLastTwoTokens() throws Exception
 	{
+		List<String> headers = getTaxaIds();
 		HashMap<String, List<RawDesignMatrixParser>> map = new HashMap<String, List<RawDesignMatrixParser>>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
@@ -63,7 +99,7 @@ public class RawDesignMatrixParser
 				map.put(key, list);
 			}
 			
-			list.add(new RawDesignMatrixParser(splits));
+			list.add(new RawDesignMatrixParser(splits,headers));
 			
 		}
 		
@@ -92,8 +128,24 @@ public class RawDesignMatrixParser
 		return map;
 	}
 	
+	public static List<String> getAllBioinformaticsIDs(HashMap<String, RawDesignMatrixParser> map) throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : map.keySet())
+		{
+			set.add( new StringTokenizer(s.split("\t")[0], ".").nextToken());
+		}
+		
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
+		
+		return list;
+	}
+	
 	public static HashMap<String, RawDesignMatrixParser> getByFullId() throws Exception
 	{
+		List<String> headers = getTaxaIds();
 		HashMap<String, RawDesignMatrixParser> map = new HashMap<String, RawDesignMatrixParser>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getMbqcDir() + File.separator + 
@@ -109,18 +161,32 @@ public class RawDesignMatrixParser
 			if (map.containsKey(splits[0]))
 				throw new Exception("No");
 			
-			map.put(splits[0], new RawDesignMatrixParser(splits));
+			map.put(splits[0], new RawDesignMatrixParser(splits, headers));
 		}
 		
 		return map;
 	}
 	
-	private RawDesignMatrixParser(String[] splits)
+	private RawDesignMatrixParser(String[] splits, List<String> headers)
 	{
 		this.id = new String(splits[0]);
 		this.extractionWetlab = new String(splits[1]);
 		this.sequecingWetlab = new String(splits[2]);
 		this.mbqcID = new String(splits[3]);
+		
+		List<Double> list = new ArrayList<Double>();
+		
+		for( int x=0; x < headers.size(); x++)
+		{
+			String aVal = splits[x+4];
+			
+			if( aVal.equals("NA"))
+				list.add(null);
+			else
+				list.add(Double.parseDouble(aVal));
+		}
+		
+		this.taxaVals = Collections.unmodifiableList(list);
 	}
 
 	public String getId()
