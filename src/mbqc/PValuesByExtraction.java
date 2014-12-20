@@ -1,6 +1,7 @@
 package mbqc;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class PValuesByExtraction
@@ -30,6 +31,55 @@ public class PValuesByExtraction
 		System.out.println(aPValue);
 	}
 	
+	/*
+	 * Returns the most common extraction id (the one in the most # of distinct mbqcIDs) that is not NA
+	 */
+	private static String getMostCommonExtraction( HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap) throws Exception
+	{
+		HashMap<String, Integer> extractionCounts = new HashMap<String, Integer>();
+		
+		for(String s : mbqcIDMap.keySet())
+		{
+			HashSet<String> extractionIDs = new HashSet<String>();
+			List<RawDesignMatrixParser> innerList = mbqcIDMap.get(s);
+			
+			for(RawDesignMatrixParser rdmp : innerList)
+			{
+				if( !rdmp.getExtractionWetlab().equals("NA") && !extractionIDs.contains(rdmp.getExtractionWetlab()))
+				{
+					extractionIDs.add(rdmp.getExtractionWetlab());
+					
+					Integer count = extractionCounts.get(rdmp.getExtractionWetlab());
+					
+					if( count == null)
+						count =0;
+					
+					count++;
+					
+					extractionCounts.put(rdmp.getExtractionWetlab(), count);
+				}
+			}
+		}
+		
+		if(extractionCounts.size() == 0 )
+			return null;
+		
+		String maxExtraction = null;
+		int maxCount =-1;
+		
+		for(String s : extractionCounts.keySet())
+		{
+			int count = extractionCounts.get(s);
+			
+			if( count > maxCount)
+			{
+				maxCount = count;
+				maxExtraction = s;
+			}
+		}
+		
+		return maxExtraction;
+	}
 	
 	
 	/*
@@ -49,11 +99,10 @@ public class PValuesByExtraction
 		 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap = 
 				RawDesignMatrixParser.pivotBySampleID(map, drylabID, wetlabID);
 		
-		for(String s : mbqcIDMap.keySet())
-		{
-			System.out.println(s + " "+ mbqcIDMap.get(s).size());
-		}
+		 String extractionID = getMostCommonExtraction(mbqcIDMap);
+		 
+		 System.out.println("Extraction= " + extractionID);
 		
-		return 0;
+	     return 0;
 	}
 }
