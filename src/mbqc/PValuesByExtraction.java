@@ -1,11 +1,16 @@
 package mbqc;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import utils.Avevar;
+import utils.ConfigReader;
+import utils.StatisticReturnObject;
 import utils.TTest;
 
 public class PValuesByExtraction
@@ -27,14 +32,36 @@ public class PValuesByExtraction
 		List<String> wetlabIds = RawDesignMatrixParser.getAllWetlabIDs(map);
 		//System.out.println(wetlabIds);
 		
-		String sequencingLab = "agoodman";
-		String bioinformaticsID = "jpetrosino";
-		String taxa = "Proteobacteria";
-		int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
+				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		double aPValue = getPValueForNAVsOther(map, mbqcIDs, sequencingLab, bioinformaticsID, taxaID);
-		System.out.println(aPValue);
+		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\n");
+		
+		for(String bio : bioinformaticsIds)
+			for( String wet : wetlabIds)
+				for(String taxa : taxaHeaders)
+				{
+					System.out.println(bio + "\t" + wet + "\t" + taxa );
+					writer.write(bio + "\t" + wet + "\t" + taxa );
+					int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
+					Holder h= getPValueForNAVsOther(map, mbqcIDs, wet, bio, taxaID);
+					
+					writer.write("\t" + h.sampleSize + "\t");
+					
+					if( h.pairedResults != null)
+						writer.write(h.pairedResults.getPValue() + "\n");
+					else
+						writer.write("\n");
+				}
+		
+		writer.flush();  writer.close();
 
+	}
+	
+	private static class Holder
+	{
+		StatisticReturnObject pairedResults=null;
+		int sampleSize=0;
 	}
 	
 	/*
@@ -96,7 +123,20 @@ public class PValuesByExtraction
 		{
 			//System.out.println(  rdmp.getExtractionWetlab() + " " + extractionID ); 
 			if( rdmp.getExtractionWetlab().equals(extractionID))
-				vals.add(rdmp.getTaxaVals().get(taxaId));
+			{
+				List<Double> innerList= rdmp.getTaxaVals();
+				
+				if( innerList != null)
+				{
+					Double aVal = innerList.get(taxaId);
+					
+					if( aVal != null)
+					{
+						vals.add(Math.log10(  aVal+ 0.00001));
+					}
+				}
+				
+			}
 		
 		}
 			
@@ -115,7 +155,7 @@ public class PValuesByExtraction
 	 * This is accomplished by paired test for samples with at least one NA and one other extraction.
 	 * An average is taken across multiple samples for NA and other.
 	 */
-	private static Double getPValueForNAVsOther( HashMap<String, RawDesignMatrixParser> map,
+	private static Holder getPValueForNAVsOther( HashMap<String, RawDesignMatrixParser> map,
 									List<String>  mbqcIDs,
 									String wetlabID,
 									String drylabID,
@@ -141,18 +181,19 @@ public class PValuesByExtraction
 				naList.add(naVal);
 			 }
 		 }
+	
+		 Holder h = new Holder();
+		 h.sampleSize = extractionList.size();
 		 
-		 Double pValue = null;
-		
 		 try
 		 {
-			 pValue = TTest.pairedTTest(extractionList,naList).getPValue();
+			h.pairedResults = TTest.pairedTTest(extractionList, naList);
 		 }
 		 catch(Exception ex)
 		 {
 			 
 		 }
 		 
-		 return pValue;
+		 return h;
 	}
 }
