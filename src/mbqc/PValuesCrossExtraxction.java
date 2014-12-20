@@ -39,7 +39,7 @@ public class PValuesCrossExtraxction
 			{
 				if( ! wetlabIds.get(x).equals("jravel") && 
 						! wetlabIds.get(y).equals("jravel") &&
-							! wetlabIds.get(x).equals("degevers") &&
+							! wetlabIds.get(x).equals("dgevers") &&
 								! wetlabIds.get(y).equals("dgevers"))
 				{
 					System.out.println( wetlabIds.get(x) + " "+ wetlabIds.get(y) );
