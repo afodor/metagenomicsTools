@@ -45,6 +45,7 @@ public class PValuesCrossExtraxction
 					System.out.println( wetlabIds.get(x) + " "+ wetlabIds.get(y) );
 					for(String bio : bioinformaticsIds)
 						for(String taxa : taxaHeaders)
+							if( avgVals.get(taxa) > 0.01)
 							for( Boolean b1 : bArray)
 								for(Boolean b2 : bArray)
 								{
