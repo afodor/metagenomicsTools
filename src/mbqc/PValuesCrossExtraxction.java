@@ -27,7 +27,7 @@ public class PValuesCrossExtraxction
 		HashMap<String, Double> avgVals = RawDesignMatrixParser.getTaxaAverages(map, taxaHeaders);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
-				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
+				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
 		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tnaFor1\tnaFor2\t" + 
 							"taxa\tsampleSize\tpValue\tavgTaxa\n");
