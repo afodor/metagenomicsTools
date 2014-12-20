@@ -71,7 +71,7 @@ public class PValuesByExtraction
 	/*
 	 * Returns the most common extraction id (the one in the most # of distinct mbqcIDs) that is not NA
 	 */
-	private static String getMostCommonExtraction( HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap) throws Exception
+	static String getMostCommonExtraction( HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap) throws Exception
 	{
 		HashMap<String, Integer> extractionCounts = new HashMap<String, Integer>();
 		
@@ -118,7 +118,7 @@ public class PValuesByExtraction
 		return maxExtraction;
 	}
 	
-	private static Double getAverageForExtractionID(List<RawDesignMatrixParser> list, String extractionID,
+	static Double getAverageForExtractionID(List<RawDesignMatrixParser> list, String extractionID,
 			int taxaId)
 	{
 		List<Double> vals= new ArrayList<Double>();
