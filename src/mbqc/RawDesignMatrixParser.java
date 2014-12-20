@@ -128,6 +128,36 @@ public class RawDesignMatrixParser
 		return map;
 	}
 	
+	public static List<String> getAllMBQCIDs(HashMap<String, RawDesignMatrixParser> map) throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : map.keySet())
+		{
+			RawDesignMatrixParser rdmp = map.get(s);
+			set.add( rdmp.mbqcID);
+		}
+		
+		List<String> list = new ArrayList<String>(set);
+		
+		return list;
+	}
+	
+	public static List<String> getAllWetlabIDs(HashMap<String, RawDesignMatrixParser> map) throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : map.keySet())
+		{
+			RawDesignMatrixParser rdmp = map.get(s);
+			set.add( rdmp.sequecingWetlab);
+		}
+		
+		List<String> list = new ArrayList<String>(set);
+		
+		return list;
+	}
+	
 	public static List<String> getAllBioinformaticsIDs(HashMap<String, RawDesignMatrixParser> map) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();

@@ -17,6 +17,17 @@ public class PValuesByExtraction
 		
 		for(String s : taxaHeaders)
 			System.out.println(s);
+		
+		List<String> mbqcIDs = RawDesignMatrixParser.getAllMBQCIDs(map);
+		List<String> wetlabIds = RawDesignMatrixParser.getAllWetlabIDs(map);
+		System.out.println(wetlabIds);
+		
+		String sequencingLab = "agoodman";
+		String bioinformaticsID = "jpetrosino";
+		String taxa = "Proteobacteria";
+		
+		double aPValue = getPValueForNAVsOther(map, mbqcIDs, sequencingLab, bioinformaticsID, taxa);
+		System.out.println(aPValue);
 	}
 	
 	/*
@@ -28,10 +39,14 @@ public class PValuesByExtraction
 	 * An average is taken across multiple samples for NA and other.
 	 */
 	private static double getPValueForNAVsOther( HashMap<String, RawDesignMatrixParser> map,
+									List<String>  mbqcIDs,
 									String wetlabID,
 									String drylabID,
 									String taxa)
 	{
+		for(String s : mbqcIDs)
+			System.out.println(s);
+		
 		return 0;
 	}
 }
