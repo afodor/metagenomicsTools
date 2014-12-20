@@ -30,7 +30,7 @@ public class PValuesCrossExtraxction
 				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
 		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tnaFor1\tnaFor2\t" + 
-							"taxa\tsampleSize\tpValue\tavgTaxa\n");
+							"naCategory\ttaxa\tsampleSize\tpValue\tavgTaxa\n");
 		
 		Boolean[] bArray = { true, false}; 
 		
@@ -51,7 +51,7 @@ public class PValuesCrossExtraxction
 								{
 									writer.write(bio + "\t" + wetlabIds.get(x) + "\t" +
 											wetlabIds.get(y) + "\t" + 
-									b1 + "\t" + b2 + "\t"+ taxa );
+									b1 + "\t" + b2 + "\t" + getCategory(b1, b2) + "\t"+ taxa );
 									int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
 									Holder h= 
 											getPValueAcrossSamples(map, 
@@ -86,8 +86,25 @@ public class PValuesCrossExtraxction
 		int sampleSize=0;
 	}
 	
+	private static String getCategory(Boolean b1, Boolean b2)
+		throws Exception
+	{
+		if( b1 && b2)
+			return "NA_for_both";
+		
+		if( b1 && ! b2)
+			return "NA_for_first";
+		
+		if( ! b1 && b2)
+			return "NA_for_second";
+					
+		if( !b1 && !b2)
+			return "extraction_for_both";
+		
+		throw new Exception("Logic error");
+	}
 	
-		private static Holder getPValueAcrossSamples( 
+	private static Holder getPValueAcrossSamples( 
 									HashMap<String, RawDesignMatrixParser> map,
 									List<String>  mbqcIDs,
 									String wetlabID1,
