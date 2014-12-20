@@ -42,14 +42,14 @@ public class PValuesCrossExtraxction
 							! wetlabIds.get(x).equals("degevers") &&
 								! wetlabIds.get(y).equals("dgevers"))
 				{
+					System.out.println( wetlabIds.get(x) + " "+ wetlabIds.get(y) );
 					for(String bio : bioinformaticsIds)
 						for(String taxa : taxaHeaders)
 							for( Boolean b1 : bArray)
 								for(Boolean b2 : bArray)
 								{
-									System.out.println(bio + "\t" + taxa );
 									writer.write(bio + "\t" + wetlabIds.get(x) + "\t" +
-											wetlabIds.get(y) + 
+											wetlabIds.get(y) + "\t" + 
 									b1 + "\t" + b2 + "\t"+ taxa );
 									int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
 									Holder h= 
@@ -65,7 +65,9 @@ public class PValuesCrossExtraxction
 										writer.write("\t");
 										
 										writer.write(avgVals.get(taxa) + "\n");
-									}
+										
+									writer.flush();
+					}
 
 				}
 			}
