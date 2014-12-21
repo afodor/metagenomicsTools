@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.HashSet;	
 import java.util.List;
 
 import utils.Avevar;
@@ -136,7 +136,7 @@ public class PValuesByExtraction
 					
 					if( aVal != null)
 					{
-						vals.add(Math.log10(  aVal+ 0.00001));
+						vals.add(aVal+ 0.00001);
 					}
 				}
 				
