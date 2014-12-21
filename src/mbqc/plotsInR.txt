@@ -9,6 +9,31 @@ labIDs <- c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
 
 par(mfrow=c(4,3))
 
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "Actinobacteria" )
+			colors[i] <- "red"
+		else if(data[i]== "Bacteroidetes" ) 
+			colors[i] <- "blue"
+		else if(data[i]== "Firmicutes" ) 
+			colors[i] <- "black"
+		else if(data[i]== "Fusobacteria" ) 
+			colors[i] <- "yellow"
+		else if(data[i]== "Proteobacteria" ) 
+			colors[i] <- "green"
+		else if ( data[i]== "Verrucomicrobia")
+			colors[i] <- "cyan"
+	}
+	
+	return (colors)
+}
+
+
 for( i in 1:length(labIDs))
 {
 	dataToPlot <- myT[ myT$sequencingLab == labIDs[i] & myT$sampleSize >= 17,  ]
@@ -19,10 +44,8 @@ for( i in 1:length(labIDs))
 		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
 				main=aTitle, xlab="-1og10(pValue)",
 				ylab="log2(fold change)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3,
-				xlim=c(-6,0),ylim=c(-2.7,4))
+				xlim=c(-6,0),ylim=c(-2.7,4), col =  getColors(dataToPlot$taxa) )
 				
 		lines(c(1,-6),c(0,0),col="red")
-	}
-	
-	
+	}	
 }
