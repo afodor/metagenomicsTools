@@ -37,11 +37,12 @@ public class PValuesByExtraction
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tmeanDifference\tlog2FoldChange\tavgTaxa\n");
+		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		for(String bio : bioinformaticsIds)
 			for( String wet : wetlabIds)
 				for(String taxa : taxaHeaders)
+					if( avgVals.get(taxa) >= 0.01 )
 				{
 					System.out.println(bio + "\t" + wet + "\t" + taxa );
 					writer.write(bio + "\t" + wet + "\t" + taxa );
@@ -51,7 +52,7 @@ public class PValuesByExtraction
 					writer.write("\t" + h.sampleSize + "\t");
 					
 					if( h.pairedResults != null)
-						writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t" + h.log2FoldChange + "\t");
+						writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t" + h.foldChange + "\t");
 					else
 						writer.write("\t\t\t");
 					
@@ -67,7 +68,7 @@ public class PValuesByExtraction
 		StatisticReturnObject pairedResults=null;
 		int sampleSize=0;
 		Double meanDifference=null;
-		Double log2FoldChange = null;
+		Double foldChange = null;
 	}
 	
 	/*
@@ -196,19 +197,18 @@ public class PValuesByExtraction
 			h.pairedResults = TTest.pairedTTest(extractionList, naList);
 			h.meanDifference = new Avevar(extractionList).getAve() -new Avevar(naList).getAve();
 			
-			h.log2FoldChange = new Avevar(extractionList).getAve()  / new Avevar(naList).getAve();
+			h.foldChange = (new Avevar(extractionList).getAve() +0.00001) / 
+							(new Avevar(naList).getAve() +0.00001);
 			
-			if( h.log2FoldChange < 1)
+			if( h.foldChange< 1)
 			{
-				h.log2FoldChange = 1/h.log2FoldChange;
-				h.log2FoldChange = - Math.log( h.log2FoldChange) / Math.log(2);
+				h.foldChange= - Math.log( 1/h.foldChange)/Math.log(2);
 			}
 			else
 			{
-				h.log2FoldChange = Math.log( h.log2FoldChange) / Math.log(2);
+				h.foldChange = Math.log(h.foldChange) / Math.log(2);
 			}
-				
-			
+
 		 }
 		 catch(Exception ex)
 		 {

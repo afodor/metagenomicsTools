@@ -8,9 +8,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import utils.Avevar;
 import utils.ConfigReader;
-import utils.StatisticReturnObject;
 import utils.TTest;
+import mbqc.PValuesByExtraction.Holder;
 
 public class PValuesAcrossBioinformaticsPipelines
 {
@@ -28,7 +29,7 @@ public class PValuesAcrossBioinformaticsPipelines
 				File.separator + "af_out" + File.separator + "pValuesAcrossBioinformaticsIDs.txt")));
 		
 		writer.write("bioinformaticsLab1\tbioinformaticsLab2\tsequencingLab\tusingNAextraction\t" + 
-							"taxa\tsampleSize\tpValue\tavgTaxa\n");
+							"taxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		Boolean[] boolVals = { true, false };
 		
@@ -64,11 +65,16 @@ public class PValuesAcrossBioinformaticsPipelines
 								writer.write("\t" + h.sampleSize + "\t");
 									
 								if( h.pairedResults != null)
-									writer.write(h.pairedResults.getPValue() + "\t");
+								{
+									writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
+												+ h.foldChange + "\t");
+								}
 								else
-									writer.write("\t");
-									
-									writer.write(avgVals.get(taxa) + "\n");
+								{
+									writer.write("\t\t\t");
+								}
+								
+								writer.write(avgVals.get(taxa) + "\n");
 									
 								writer.flush();
 							}
@@ -80,13 +86,7 @@ public class PValuesAcrossBioinformaticsPipelines
 		writer.flush();  writer.close();
 
 	}
-
-	private static class Holder
-	{
-		StatisticReturnObject pairedResults=null;
-		int sampleSize=0;
-	}
-
+	
 	private static Holder getPValueAcrossSamples( 
 			HashMap<String, RawDesignMatrixParser> map,
 			List<String>  mbqcIDs,
@@ -138,7 +138,20 @@ public class PValuesAcrossBioinformaticsPipelines
 
 		try
 		{
-		h.pairedResults = TTest.pairedTTest(val1List, val2List);
+			h.pairedResults = TTest.pairedTTest(val1List, val2List);
+			h.meanDifference = new Avevar(val1List).getAve() -new Avevar(val2List).getAve();
+			
+			h.foldChange = (new Avevar(val1List).getAve() +0.00001) / 
+					(new Avevar(val2List).getAve() +0.00001);
+	
+			if( h.foldChange< 1)
+			{
+				h.foldChange= - Math.log( 1/h.foldChange)/Math.log(2);
+			}
+			else
+			{
+				h.foldChange = Math.log(h.foldChange) / Math.log(2);
+			}
 		}
 		catch(Exception ex)
 		{

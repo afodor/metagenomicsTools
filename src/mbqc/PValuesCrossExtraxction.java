@@ -31,7 +31,7 @@ public class PValuesCrossExtraxction
 				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
 		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tnaFor1\tnaFor2\t" + 
-							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tlog2FoldChange\tavgTaxa\n");
+							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		Boolean[] bArray = { true, false}; 
 		
@@ -63,12 +63,14 @@ public class PValuesCrossExtraxction
 										
 									if( h.pairedResults != null)
 									{
-										writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t");
+										writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
+													+ h.foldChange + "\t");
 									}
 									else
 									{
-										writer.write("\t\t");
+										writer.write("\t\t\t");
 									}
+									
 										
 										writer.write(avgVals.get(taxa) + "\n");
 										
@@ -163,6 +165,19 @@ public class PValuesCrossExtraxction
 		 {
 			h.pairedResults = TTest.pairedTTest(val1List, val2List);
 			h.meanDifference = new Avevar(val1List).getAve() -new Avevar(val2List).getAve();
+			
+			h.foldChange = (new Avevar(val1List).getAve() +0.00001) / 
+					(new Avevar(val2List).getAve() +0.00001);
+	
+			if( h.foldChange< 1)
+			{
+				h.foldChange= - Math.log( 1/h.foldChange)/Math.log(2);
+			}
+			else
+			{
+				h.foldChange = Math.log(h.foldChange) / Math.log(2);
+			}
+
 		 }
 		 catch(Exception ex)
 		 {
