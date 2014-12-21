@@ -64,21 +64,9 @@ public class RawDesignMatrixParser
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, List<RawDesignMatrixParser>> map = getByLastTwoTokens();
-		
-		System.out.println("Got map with " + map.size());
-		
-		int numDups =0;
-		
-		for(String s : map.keySet())
-		{
-			if( map.get(s).size() > 1)
-				numDups++;
-		
-			System.out.println(map.get(s).size());
-		}
-			
-		System.out.println(numDups);
+		HashMap<String, RawDesignMatrixParser> map = getByFullId();
+		System.out.println(getAllMBQCIDs(map));
+		System.out.println(getAllMBQCIDs(map).size());
 		
 	}
 	
@@ -204,15 +192,21 @@ public class RawDesignMatrixParser
 		return map;
 	}
 	
+	/**
+	 * 
+	 * Does not include Blank
+	 */
 	public static List<String> getAllMBQCIDs(HashMap<String, RawDesignMatrixParser> map) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
 		for(String s : map.keySet())
-		{
-			RawDesignMatrixParser rdmp = map.get(s);
-			set.add( rdmp.mbqcID);
-		}
+			{
+				RawDesignMatrixParser rdmp = map.get(s);
+				
+				if( ! rdmp.mbqcID.trim().toLowerCase().equals("blank"))
+					set.add( rdmp.mbqcID);
+			}
 		
 		List<String> list = new ArrayList<String>(set);
 		
