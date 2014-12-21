@@ -136,7 +136,7 @@ public class PValuesByExtraction
 					
 					if( aVal != null)
 					{
-						vals.add(aVal+ 0.00001);
+						vals.add(aVal);
 					}
 				}
 				
