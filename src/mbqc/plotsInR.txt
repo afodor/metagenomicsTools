@@ -33,10 +33,11 @@ getColors <- function(data)
 	return (colors)
 }
 
-
+numPlotted <-0
 for( i in 1:length(labIDs))
 {
 	dataToPlot <- myT[ myT$sequencingLab == labIDs[i] & myT$sampleSize >= 17,  ]
+	numPlotted <- numPlotted + nrow(dataToPlot)
 	
 	if(length(dataToPlot) > 5) 
 	{
@@ -49,3 +50,9 @@ for( i in 1:length(labIDs))
 		lines(c(1,-6),c(0,0),col="red")
 	}	
 }
+
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("topleft",bty="n", c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
+"Proteobacteria","Verrucomicrobia"),lty=c(1.5,1.5), lwd=c(4,4), col=c("red", "blue", "black", "yellow", "green", "cyan"))
+
+numPlotted
