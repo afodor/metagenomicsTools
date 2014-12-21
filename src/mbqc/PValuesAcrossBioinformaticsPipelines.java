@@ -36,7 +36,8 @@ public class PValuesAcrossBioinformaticsPipelines
 		for( int x=0; x < wetlabIds.size(); x++)
 		{
 			if( ! wetlabIds.get(x).equals("jravel") && 
-						! wetlabIds.get(x).equals("dgevers") )
+						! wetlabIds.get(x).equals("dgevers") && 
+							! wetlabIds.get(x).equals("pturnbaugh"))
 			{
 				System.out.println( wetlabIds.get(x)  );
 				for( Boolean b1 : boolVals)

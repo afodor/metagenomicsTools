@@ -4,13 +4,11 @@ setwd("G:\\MBQC\\af_out")
 
 myT <- read.table("pValuesAcrossBioinformaticsIDs.txt", sep="\t", header=TRUE)
 
-sequencingLab <- "pschloss"
-
-labIDs <- c("rknight","dlittman", "dmills",  "ggloor", "rburk",
-	      "kjones",     "rflores", "jpetrosino")
+baseID <- "chuttenhower";
+labIDs <- c( "deblur" ,"evogtmann", "gcaporaso", "jpetrosino", "jravel", "qiime", "xchen")
 
 labIDs <- sort(labIDs )
-par(mfrow=c(4,3))
+par(mfrow=c(3,3))
 
 taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
 "Proteobacteria","Verrucomicrobia")
@@ -44,15 +42,14 @@ numPlotted <-0
 for( i in 1:length(labIDs))
 {
 	otherID <- 
-	dataToPlot <- myT[ (myT$sequencingLab1 ==compareAgainst | myT$sequencingLab2 ==compareAgainst )  
-							& (myT$sequencingLab1 ==labIDs[i] | myT$sequencingLab2 ==labIDs[i] ) 
-						&	myT$naCategory == "NA_for_both"
+	dataToPlot <- myT[ (myT$bioinformaticsLab1 ==baseID | myT$bioinformaticsLab1 ==baseID )  
+							& (myT$bioinformaticsLab2 ==labIDs[i] | myT$bioinformaticsLab2 ==labIDs[i] ) 
 					& myT$sampleSize >= 17,  ]
 	numPlotted <- numPlotted + nrow(dataToPlot)
 	
 	if(length(dataToPlot) > 5) 
 	{
-		aTitle <- paste(compareAgainst , " vs " ,labIDs[i])
+		aTitle <- paste(baseID , " vs " ,labIDs[i])
 		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
 				main=aTitle, xlab="1og10(pValue)",
 				ylab="log2(fold change)",pch=15,cex=2,cex.lab=1.3,cex.main=1.3,
