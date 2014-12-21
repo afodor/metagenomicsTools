@@ -7,6 +7,10 @@ myT <- read.table("pValuesNAVsNonNA.txt", sep="\t", header=TRUE)
 taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
 "Proteobacteria","Verrucomicrobia")
 
+labIDs = c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
+	      "kjones",     "pturnbaugh","rflores", "jpetrosino")
+labIDs =sort(labIDs)
+
 par(mfrow=c(2,4))
 
 getColors <- function(data) 
@@ -59,9 +63,8 @@ for( i in 1:length(taxaIDs))
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("topleft",bty="n", c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
-	      "kjones",     "pturnbaugh","rflores", "jpetrosino"),lty=c(2.0,2.0), lwd=c(5,5), 
-	      col=c("red", "blue", "black", "yellow", "green", "cyan","gray","goldenrod", "darkmagenta","darkorange2"))
+legend("topleft",bty="n", labIDs ,lty=c(2.0,2.0), lwd=c(5,5), 
+	      col=getColors(labIDs))
 	      
 
 numPlotted
