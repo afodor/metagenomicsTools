@@ -1,0 +1,67 @@
+rm(list=ls())
+
+setwd("G:\\MBQC\\af_out")
+
+myT <- read.table("pValuesNAVsNonNA.txt", sep="\t", header=TRUE)
+
+taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
+"Proteobacteria","Verrucomicrobia")
+
+par(mfrow=c(4,2))
+
+getColors <- function(data) 
+{	
+	colors <- vector()
+
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "rknight" )
+			colors[i] <- "red"
+		else if(data[i]== "dlittman" ) 
+			colors[i] <- "blue"
+		else if(data[i]== "dmills" ) 
+			colors[i] <- "black"
+		else if(data[i]== "pschloss" ) 
+			colors[i] <- "yellow"
+		else if(data[i]== "ggloor" ) 
+			colors[i] <- "green"
+		else if ( data[i]== "rburk")
+			colors[i] <- "cyan"
+		else if ( data[i]== "kjones")
+			colors[i] <- "gray"
+		else if ( data[i]== "pturnbaugh")
+			colors[i] <- "goldenrod"
+		else if ( data[i]== "rflores")
+			colors[i] <- "darkmagenta"
+		else if ( data[i]== "jpetrosino")
+			colors[i] <- "darkorange2"
+	}
+	
+	return (colors)
+}
+
+numPlotted <-0
+for( i in 1:length(taxaIDs))
+{
+	dataToPlot <- myT[ myT$taxa== taxaIDs[i] & myT$sampleSize >= 17,  ]
+	numPlotted <- numPlotted + nrow(dataToPlot)
+	
+	if(length(dataToPlot) > 5) 
+	{
+		aTitle <- paste(taxaIDs[i])
+		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
+				main=aTitle, xlab="-1og10(pValue)",
+				ylab="log2(fold change)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3,
+				xlim=c(-6,0),ylim=c(-2.7,4), col =  getColors(dataToPlot$sequencingLab ) )
+				
+		lines(c(1,-6),c(0,0),col="red")
+	}	
+}
+
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("topleft",bty="n", c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
+	      "kjones",     "pturnbaugh","rflores", "jpetrosino"),lty=c(1.5,1.5), lwd=c(4,4), 
+	      col=c("red", "blue", "black", "yellow", "green", "cyan","gray","goldenrod", "darkmagenta","darkorange2"))
+	      
+
+numPlotted
