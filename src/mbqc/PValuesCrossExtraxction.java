@@ -8,9 +8,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import utils.Avevar;
 import utils.ConfigReader;
-import utils.StatisticReturnObject;
 import utils.TTest;
+import mbqc.PValuesByExtraction.Holder;
 
 public class PValuesCrossExtraxction
 {
@@ -30,7 +31,7 @@ public class PValuesCrossExtraxction
 				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
 		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tnaFor1\tnaFor2\t" + 
-							"naCategory\ttaxa\tsampleSize\tpValue\tavgTaxa\n");
+							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tlog2FoldChange\tavgTaxa\n");
 		
 		Boolean[] bArray = { true, false}; 
 		
@@ -61,9 +62,13 @@ public class PValuesCrossExtraxction
 									writer.write("\t" + h.sampleSize + "\t");
 										
 									if( h.pairedResults != null)
-										writer.write(h.pairedResults.getPValue() + "\t");
+									{
+										writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t");
+									}
 									else
-										writer.write("\t");
+									{
+										writer.write("\t\t");
+									}
 										
 										writer.write(avgVals.get(taxa) + "\n");
 										
@@ -79,12 +84,6 @@ public class PValuesCrossExtraxction
 	}
 	
 	
-
-	private static class Holder
-	{
-		StatisticReturnObject pairedResults=null;
-		int sampleSize=0;
-	}
 	
 	private static String getCategory(Boolean b1, Boolean b2)
 		throws Exception
@@ -163,6 +162,7 @@ public class PValuesCrossExtraxction
 		 try
 		 {
 			h.pairedResults = TTest.pairedTTest(val1List, val2List);
+			h.meanDifference = new Avevar(val1List).getAve() -new Avevar(val2List).getAve();
 		 }
 		 catch(Exception ex)
 		 {

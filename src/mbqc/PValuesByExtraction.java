@@ -37,7 +37,7 @@ public class PValuesByExtraction
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tavgTaxa\n");
+		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tmeanDifference\tlog2FoldChange\tavgTaxa\n");
 		
 		for(String bio : bioinformaticsIds)
 			for( String wet : wetlabIds)
@@ -51,9 +51,9 @@ public class PValuesByExtraction
 					writer.write("\t" + h.sampleSize + "\t");
 					
 					if( h.pairedResults != null)
-						writer.write(h.pairedResults.getPValue() + "\t");
+						writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t" + h.log2FoldChange + "\t");
 					else
-						writer.write("\t");
+						writer.write("\t\t\t");
 					
 					writer.write(avgVals.get(taxa) + "\n");
 				}
@@ -62,10 +62,12 @@ public class PValuesByExtraction
 
 	}
 	
-	private static class Holder
+	static class Holder
 	{
 		StatisticReturnObject pairedResults=null;
 		int sampleSize=0;
+		Double meanDifference=null;
+		Double log2FoldChange = null;
 	}
 	
 	/*
@@ -192,6 +194,21 @@ public class PValuesByExtraction
 		 try
 		 {
 			h.pairedResults = TTest.pairedTTest(extractionList, naList);
+			h.meanDifference = new Avevar(extractionList).getAve() -new Avevar(naList).getAve();
+			
+			h.log2FoldChange = new Avevar(extractionList).getAve()  / new Avevar(naList).getAve();
+			
+			if( h.log2FoldChange < 1)
+			{
+				h.log2FoldChange = 1/h.log2FoldChange;
+				h.log2FoldChange = - Math.log( h.log2FoldChange) / Math.log(2);
+			}
+			else
+			{
+				h.log2FoldChange = Math.log( h.log2FoldChange) / Math.log(2);
+			}
+				
+			
 		 }
 		 catch(Exception ex)
 		 {
