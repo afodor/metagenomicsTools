@@ -50,8 +50,11 @@ public class PValuesCrossExtraxction
 							for( Boolean b1 : bArray)
 								for(Boolean b2 : bArray)
 								{
+									
+									
 									writer.write(bio + "\t" + wetlabIds.get(x) + "\t" +
-											wetlabIds.get(y) + "\t" + wetlabIds.get(x) +"_" + wetlabIds.get(y) + "\t"
+											wetlabIds.get(y) + "\t" +
+										getComparisonID(wetlabIds.get(x) ,wetlabIds.get(y)) + "\t"
 									+ b1 + "\t" + b2 + "\t" + getCategory(b1, b2) + "\t"+ taxa );
 									int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
 									Holder h= 
@@ -85,6 +88,17 @@ public class PValuesCrossExtraxction
 
 	}
 	
+	private static String getComparisonID(String s1, String s2)
+	{
+		if ( s1.compareTo(s2) <0 )
+		{
+			String temp =s1;
+			s1 = s2;
+			s2 = temp;
+		}
+		
+		return s1 + "_" + s2;
+	}
 	
 	
 	private static String getCategory(Boolean b1, Boolean b2)
