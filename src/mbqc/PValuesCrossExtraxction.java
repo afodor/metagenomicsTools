@@ -30,7 +30,7 @@ public class PValuesCrossExtraxction
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tnaFor1\tnaFor2\t" + 
+		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tcomparisonString\tnaFor1\tnaFor2\t" + 
 							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		Boolean[] bArray = { true, false}; 
@@ -51,8 +51,8 @@ public class PValuesCrossExtraxction
 								for(Boolean b2 : bArray)
 								{
 									writer.write(bio + "\t" + wetlabIds.get(x) + "\t" +
-											wetlabIds.get(y) + "\t" + 
-									b1 + "\t" + b2 + "\t" + getCategory(b1, b2) + "\t"+ taxa );
+											wetlabIds.get(y) + "\t" + wetlabIds.get(x) +"_" + wetlabIds.get(y) + "\t"
+									+ b1 + "\t" + b2 + "\t" + getCategory(b1, b2) + "\t"+ taxa );
 									int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
 									Holder h= 
 											getPValueAcrossSamples(map, 
