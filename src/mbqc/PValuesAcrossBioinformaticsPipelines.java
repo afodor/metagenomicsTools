@@ -28,7 +28,7 @@ public class PValuesAcrossBioinformaticsPipelines
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesAcrossBioinformaticsIDs.txt")));
 		
-		writer.write("bioinformaticsLab1\tbioinformaticsLab2\tsequencingLab\tusingNAextraction\t" + 
+		writer.write("bioinformaticsLab1\tbioinformaticsLab2\tcompareString\tsequencingLab\tusingNAextraction\t" + 
 							"taxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		Boolean[] boolVals = { true, false };
@@ -49,6 +49,7 @@ public class PValuesAcrossBioinformaticsPipelines
 								String bioinformaitcs2 = bioinformaticsIds.get(z);
 								
 								writer.write(bioinformatics1+ "\t" + bioinformaitcs2 + "\t" + 
+										PValuesCrossExtraxction.getComparisonID(bioinformatics1, bioinformaitcs2) + "\t"+
 								wetlabIds.get(x) + "\t" + b1 + "\t" +  taxa);
 								
 								int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );

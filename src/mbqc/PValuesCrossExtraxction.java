@@ -88,7 +88,7 @@ public class PValuesCrossExtraxction
 
 	}
 	
-	private static String getComparisonID(String s1, String s2)
+	static String getComparisonID(String s1, String s2)
 	{
 		if ( s1.compareTo(s2) >0 )
 		{
