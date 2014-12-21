@@ -48,7 +48,7 @@ for( i in 1:length(labIDs))
 	{
 		aTitle <- paste(labIDs[i])
 		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
-				main=aTitle, xlab="-1og10(pValue)",
+				main=aTitle, xlab="1og10(pValue)",
 				ylab="log2(fold change)",pch=15,cex=2,cex.lab=1.3,cex.main=1.3,
 				xlim=c(-6,0),ylim=c(-2.7,4), col =  getColors(dataToPlot$taxa) )
 				

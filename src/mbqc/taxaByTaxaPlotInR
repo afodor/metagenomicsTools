@@ -54,7 +54,7 @@ for( i in 1:length(taxaIDs))
 	{
 		aTitle <- paste(taxaIDs[i])
 		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
-				main=aTitle, xlab="-1og10(pValue)",
+				main=aTitle, xlab="1og10(pValue)",
 				ylab="log2(fold change)",pch=15,cex=1.7,cex.lab=1.3,cex.main=1.3,
 				xlim=c(-6,0),ylim=c(-2.7,4), col =  getColors(dataToPlot$sequencingLab ) )
 				
@@ -63,7 +63,7 @@ for( i in 1:length(taxaIDs))
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("topleft",bty="n", labIDs ,lty=c(4,4), lwd=c(10,10), col=getColors(labIDs))
+legend("topleft",bty="n", labIDs ,lty=c(4,4), lwd=c(8,8), col=getColors(labIDs))
 	      
 
 numPlotted
