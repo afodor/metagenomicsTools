@@ -1,0 +1,28 @@
+rm(list=ls())
+
+setwd("G:\\MBQC\\af_out")
+
+myT <- read.table("pValuesNAVsNonNA.txt", sep="\t", header=TRUE)
+
+labIDs <- c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
+	      "kjones",     "pturnbaugh","rflores", "jpetrosino")
+
+par(mfrow=c(4,3))
+
+for( i in 1:length(labIDs))
+{
+	dataToPlot <- myT[ myT$sequencingLab == labIDs[i] & myT$sampleSize >= 17,  ]
+	
+	if(length(dataToPlot) > 5) 
+	{
+		aTitle <- paste(labIDs[i])
+		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
+				main=aTitle, xlab="-1og10(pValue)",
+				ylab="log2(fold change)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3,
+				xlim=c(-6,0),ylim=c(-2.7,4))
+				
+		lines(c(1,-6),c(0,0),col="red")
+	}
+	
+	
+}
