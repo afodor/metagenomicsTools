@@ -70,10 +70,11 @@ public class PValuesCrossExtraxction
 												,wetlabIds.get(y) + "_" +  extraction2 );
 										
 										String category = getCategory(extraction1, extraction2);
+										String key = comparisonID + "_" + category + "_" + bio + "_" + taxa;
 										
-										if( ! completed.contains(comparisonID + "_" + category))
+										if( ! completed.contains(key))
 										{
-											completed.add(comparisonID+ "_" + category);
+											completed.add(key);
 											
 											writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
 													wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
