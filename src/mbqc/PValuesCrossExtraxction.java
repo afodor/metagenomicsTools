@@ -35,8 +35,9 @@ public class PValuesCrossExtraxction
 							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 	
+		HashSet<String> completed = new HashSet<String>();
 		for( int x=0; x < wetlabIds.size(); x++)
-			for (int y=0; y < wetlabIds.size(); y++)
+			for (int y=x; y < wetlabIds.size(); y++)
 			{
 				if( ! wetlabIds.get(x).equals("jravel") && 
 						! wetlabIds.get(y).equals("jravel") &&
@@ -65,35 +66,42 @@ public class PValuesCrossExtraxction
 									for(String extraction2: list2)
 										if( x != y || !extraction1.equals(extraction2) )
 									{
-										writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
-												wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
-											getComparisonID(wetlabIds.get(x) + "_" + extraction1 
-													,wetlabIds.get(y) + "_" +  extraction2 ) + "\t"
-										+ extraction1.equals("NA") + "\t" + extraction2.equals("NA")+ "\t"
-												+ getCategory(extraction1, extraction2) + "\t"+ taxa );
-										int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
-										Holder h= 
-												getPValueAcrossSamples(map, 
-														mbqcIDs, wetlabIds.get(x), wetlabIds.get(y), 
-															bio, taxaID, extraction1, extraction2,
-															mbqcIDMap1, mbqcIDMap2);
-												
-										writer.write("\t" + h.sampleSize + "\t");
-											
-										if( h.pairedResults != null)
-										{
-											writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
-														+ h.foldChange + "\t");
-										}
-										else
-										{
-											writer.write("\t\t\t");
-										}
+										String comparisonID = getComparisonID(wetlabIds.get(x) + "_" + extraction1 
+												,wetlabIds.get(y) + "_" +  extraction2 );
 										
+										if( ! completed.contains(comparisonID))
+										{
+											completed.add(comparisonID);
 											
-											writer.write(avgVals.get(taxa) + "\n");
+											writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
+													wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
+													comparisonID + "\t"
+											+ extraction1.equals("NA") + "\t" + extraction2.equals("NA")+ "\t"
+													+ getCategory(extraction1, extraction2) + "\t"+ taxa );
+											int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
+											Holder h= 
+													getPValueAcrossSamples(map, 
+															mbqcIDs, wetlabIds.get(x), wetlabIds.get(y), 
+																bio, taxaID, extraction1, extraction2,
+																mbqcIDMap1, mbqcIDMap2);
+													
+											writer.write("\t" + h.sampleSize + "\t");
+												
+											if( h.pairedResults != null)
+											{
+												writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
+															+ h.foldChange + "\t");
+											}
+											else
+											{
+												writer.write("\t\t\t");
+											}
 											
-										writer.flush();
+												
+												writer.write(avgVals.get(taxa) + "\n");
+												
+											writer.flush();
+										}
 									}
 					}
 
