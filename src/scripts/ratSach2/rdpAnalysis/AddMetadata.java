@@ -13,8 +13,6 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	
-	
 	private static void addSomeMetadata(BufferedReader reader, 
 					BufferedWriter writer,boolean skipFirst) throws Exception
 	{

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
@@ -33,7 +34,13 @@ public class PivotSparseSpreadsheet
 			
 			PivotOTUs.writeResults(map, outFile.getAbsolutePath());
 			
-			OtuWrapper wrapper = new OtuWrapper(outFile);
+			HashSet<String> excludedSamples = new HashSet<String>();
+			
+			// remove the controls --- 
+			excludedSamples.add("sample0153"); excludedSamples.add("sample0154");
+			OtuWrapper wrapper = new OtuWrapper(outFile, excludedSamples, new HashSet<String>());
+			
+			
 			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
 					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 

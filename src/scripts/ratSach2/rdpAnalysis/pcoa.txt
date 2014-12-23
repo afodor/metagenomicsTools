@@ -8,7 +8,7 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
-	inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumns.txt", sep ="")
+	inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalized.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c("character", rep("numeric", numCols-1))
