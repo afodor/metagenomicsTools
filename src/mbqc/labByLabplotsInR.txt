@@ -4,11 +4,10 @@ setwd("G:\\MBQC\\af_out")
 
 myT <- read.table("pValuesNAVsNonNA.txt", sep="\t", header=TRUE)
 
-labIDs <- c("rknight","dlittman", "dmills", "pschloss",   "ggloor", "rburk",
-	      "kjones",     "pturnbaugh","rflores", "jpetrosino")
+labIDs <- myT$seqPlusExtraction
+labIDs <- unique(labIDs)
+labIDs <- sort(labIDs)
 
-labIDs <- sort(labIDs )
-par(mfrow=c(4,3))
 
 taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
 "Proteobacteria","Verrucomicrobia")
@@ -39,12 +38,14 @@ getColors <- function(data)
 }
 
 numPlotted <-0
+
+par(mfrow=c(5,3))
 for( i in 1:length(labIDs))
 {
-	dataToPlot <- myT[ myT$sequencingLab == labIDs[i] & myT$sampleSize >= 17,  ]
+	dataToPlot <- myT[ myT$seqPlusExtraction == labIDs[i] & myT$sampleSize >= 17,  ]
 	numPlotted <- numPlotted + nrow(dataToPlot)
 	
-	if(length(dataToPlot) > 5) 
+	if(nrow(dataToPlot) > 5) 
 	{
 		aTitle <- paste(labIDs[i])
 		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
@@ -57,6 +58,6 @@ for( i in 1:length(labIDs))
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("topleft",bty="n",taxaIDs ,lty=c(7,7), lwd=c(10,10), col=getColors(taxaIDs))
+legend("left",y=0,bty="n",taxaIDs ,lty=c(6,6), lwd=c(6,6), col=getColors(taxaIDs),cex=0.85)
 
 numPlotted
