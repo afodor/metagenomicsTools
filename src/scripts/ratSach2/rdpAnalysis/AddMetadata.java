@@ -17,7 +17,8 @@ public class AddMetadata
 					BufferedWriter writer,boolean skipFirst) throws Exception
 	{
 		HashMap<String, MappingFileLine> metaMap = MappingFileLine.getMap();
-		writer.write("sampleID\tline\ttissue");
+		HashMap<String, String> ratToCageMap = getCageMappings();
+		writer.write("sampleID\tline\ttissue\tratID\tcage");
 		
 		if( !skipFirst)
 		{
@@ -40,7 +41,9 @@ public class AddMetadata
 			writer.write(key+ "\t");
 			MappingFileLine mfl = metaMap.get(key);
 			writer.write(mfl.getLine() + "\t");
-			writer.write(mfl.getTissue()  );
+			writer.write(mfl.getTissue() + "\t"  );
+			writer.write(mfl.getRatID() + "\t");
+			writer.write( ratToCageMap.get(mfl.getRatID()) +"");
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x] );
@@ -51,6 +54,29 @@ public class AddMetadata
 		writer.flush();  writer.close();
 		
 		reader.close();
+	}
+	
+	public static HashMap<String, String> getCageMappings() throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getRachSachReanalysisDir()+
+				File.separator + "TTULyteCages.txt")));
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( map.containsKey(splits[1]))
+				throw new Exception("NO");
+			
+			map.put(splits[1], splits[0]);
+		}
+		
+		reader.close();
+		return map;
 	}
 	
 	
