@@ -15,7 +15,6 @@ import mbqc.PValuesByExtraction.Holder;
 
 public class PValuesCrossExtraxction
 {
-	/*
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
@@ -31,11 +30,11 @@ public class PValuesCrossExtraxction
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesAcrossSamples.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab1\tsequencingLab2\tcomparisonString\tnaFor1\tnaFor2\t" + 
+		writer.write("bioinformaticsLab\tsequencingPlusExtraction1\tsequencingPlusExtraction2\t" + 
+						"comparisonString\tnaFor1\tnaFor2\t" + 
 							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
-		Boolean[] bArray = { true, false}; 
-		
+	
 		for( int x=0; x < wetlabIds.size()-1; x++)
 			for (int y=x+1; y < wetlabIds.size(); y++)
 			{
@@ -48,37 +47,52 @@ public class PValuesCrossExtraxction
 					for(String bio : bioinformaticsIds)
 						for(String taxa : taxaHeaders)
 							if( avgVals.get(taxa) > 0.01)
-							for( Boolean b1 : bArray)
-								for(Boolean b2 : bArray)
-								{
+							{
+								 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap1 = 
+											RawDesignMatrixParser.pivotBySampleID(map, bio, wetlabIds.get(x));
 									
-									
-									writer.write(bio + "\t" + wetlabIds.get(x) + "\t" +
-											wetlabIds.get(y) + "\t" +
-										getComparisonID(wetlabIds.get(x) ,wetlabIds.get(y)) + "\t"
-									+ b1 + "\t" + b2 + "\t" + getCategory(b1, b2) + "\t"+ taxa );
-									int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
-									Holder h= 
-											getPValueAcrossSamples(map, 
-													mbqcIDs, wetlabIds.get(x), wetlabIds.get(y), 
-														bio, taxaID, b1, b2);
+								HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap2 = 
+											RawDesignMatrixParser.pivotBySampleID(map, bio, wetlabIds.get(y));
+								
+								
+								List<String> list1 = PValuesByExtraction.getAllExtractionNotNA(mbqcIDMap1);
+								list1.add("NA");
+								
+								List<String> list2 = PValuesByExtraction.getAllExtractionNotNA(mbqcIDMap2);
+								list2.add("NA");
+								
+								for(String extraction1: list1)
+									for(String extraction2: list2)
+									{
+										writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
+												wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
+											getComparisonID(wetlabIds.get(x) ,wetlabIds.get(y)) + "\t"
+										+ extraction1.equals("NA") + "\t" + extraction2.equals("NA")+ "\t"
+												+ getCategory(extraction1, extraction2) + "\t"+ taxa );
+										int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
+										Holder h= 
+												getPValueAcrossSamples(map, 
+														mbqcIDs, wetlabIds.get(x), wetlabIds.get(y), 
+															bio, taxaID, extraction1, extraction2,
+															mbqcIDMap1, mbqcIDMap2);
+												
+										writer.write("\t" + h.sampleSize + "\t");
 											
-									writer.write("\t" + h.sampleSize + "\t");
+										if( h.pairedResults != null)
+										{
+											writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
+														+ h.foldChange + "\t");
+										}
+										else
+										{
+											writer.write("\t\t\t");
+										}
 										
-									if( h.pairedResults != null)
-									{
-										writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t"
-													+ h.foldChange + "\t");
+											
+											writer.write(avgVals.get(taxa) + "\n");
+											
+										writer.flush();
 									}
-									else
-									{
-										writer.write("\t\t\t");
-									}
-									
-										
-										writer.write(avgVals.get(taxa) + "\n");
-										
-									writer.flush();
 					}
 
 				}
@@ -102,19 +116,19 @@ public class PValuesCrossExtraxction
 	}
 	
 	
-	private static String getCategory(Boolean b1, Boolean b2)
+	private static String getCategory(String b1, String b2)
 		throws Exception
 	{
-		if( b1 && b2)
+		if( b1.equals("NA") && b2.equals("NA"))
 			return "NA_for_both";
 		
-		if( b1 && ! b2)
+		if( b1.equals("NA") && ! b2.equals("NA"))
 			return "NA_for_first";
 		
-		if( ! b1 && b2)
+		if( ! b1.equals("NA") && b2.equals("NA"))
 			return "NA_for_second";
 					
-		if( !b1 && !b2)
+		if( !b1.equals("NA") && !b2.equals("NA"))
 			return "extraction_for_both";
 		
 		throw new Exception("Logic error");
@@ -127,27 +141,12 @@ public class PValuesCrossExtraxction
 									String wetlabID2,
 									String drylabID,
 									int taxaID, 
-									Boolean useNAFor1,
-									Boolean useNAFor2) throws Exception
+									String extractionID1,
+									String extractionID2,
+									HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap1,
+									HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap2) 
+												throws Exception
 	{
-		 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap1 = 
-				RawDesignMatrixParser.pivotBySampleID(map, drylabID, wetlabID1);
-		
-		 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap2 = 
-				RawDesignMatrixParser.pivotBySampleID(map, drylabID, wetlabID2);
-		 
-		 String extractionID1 = "NA";
-		 String extractionID2 = "NA";
-		 
-		 if ( ! useNAFor1)
-		 {
-			 extractionID1 = PValuesByExtraction.getMostCommonExtraction(mbqcIDMap1);
-		 }
-		 
-		 if( ! useNAFor2)
-		 {
-			 extractionID2 = PValuesByExtraction.getMostCommonExtraction(mbqcIDMap2);
-		 }
 		 
 		 List<Double> val1List= new ArrayList<Double>();
 		 List<Double> val2List = new ArrayList<Double>();
@@ -201,5 +200,4 @@ public class PValuesCrossExtraxction
 		 
 		 return h;
 	}
-	*/
 }
