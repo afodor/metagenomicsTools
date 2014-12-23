@@ -69,9 +69,11 @@ public class PValuesCrossExtraxction
 										String comparisonID = getComparisonID(wetlabIds.get(x) + "_" + extraction1 
 												,wetlabIds.get(y) + "_" +  extraction2 );
 										
-										if( ! completed.contains(comparisonID))
+										String category = getCategory(extraction1, extraction2);
+										
+										if( ! completed.contains(comparisonID + "_" + category))
 										{
-											completed.add(comparisonID);
+											completed.add(comparisonID+ "_" + category);
 											
 											writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
 													wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
