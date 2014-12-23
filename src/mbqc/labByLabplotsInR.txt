@@ -58,6 +58,6 @@ for( i in 1:length(labIDs))
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("left",y=0,bty="n",taxaIDs ,lty=c(6,6), lwd=c(6,6), col=getColors(taxaIDs),cex=0.85)
+legend("left",y=0,bty="n",taxaIDs ,lty=c(6,6), lwd=c(6,6), col=getColors(taxaIDs),cex=0.84)
 
 numPlotted
