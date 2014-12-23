@@ -35,8 +35,8 @@ public class PValuesCrossExtraxction
 							"naCategory\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 	
-		for( int x=0; x < wetlabIds.size()-1; x++)
-			for (int y=x+1; y < wetlabIds.size(); y++)
+		for( int x=0; x < wetlabIds.size(); x++)
+			for (int y=0; y < wetlabIds.size(); y++)
 			{
 				if( ! wetlabIds.get(x).equals("jravel") && 
 						! wetlabIds.get(y).equals("jravel") &&
@@ -63,10 +63,12 @@ public class PValuesCrossExtraxction
 								
 								for(String extraction1: list1)
 									for(String extraction2: list2)
+										if( x != y || !extraction1.equals(extraction2) )
 									{
 										writer.write(bio + "\t" + wetlabIds.get(x) + "_" + extraction1 + "\t" +
 												wetlabIds.get(y) + "_" +  extraction2 +  "\t" +
-											getComparisonID(wetlabIds.get(x) ,wetlabIds.get(y)) + "\t"
+											getComparisonID(wetlabIds.get(x) + "_" + extraction1 
+													,wetlabIds.get(y) + "_" +  extraction2 ) + "\t"
 										+ extraction1.equals("NA") + "\t" + extraction2.equals("NA")+ "\t"
 												+ getCategory(extraction1, extraction2) + "\t"+ taxa );
 										int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );

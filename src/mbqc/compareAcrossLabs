@@ -4,11 +4,10 @@ setwd("G:\\MBQC\\af_out")
 
 myT <- read.table("pValuesAcrossSamples.txt", sep="\t", header=TRUE)
 
-labIDs <- c("rknight","dlittman", "dmills",  "ggloor", "rburk",
-	      "kjones",     "rflores", "jpetrosino")
-
+labIDs <- c( as.character(myT$sequencingPlusExtraction1) ,  as.character(myT$sequencingPlusExtraction2 ))
+labIDs <- unique(labIDs )
 labIDs <- sort(labIDs )
-par(mfrow=c(4,3))
+
 
 taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
 "Proteobacteria","Verrucomicrobia")
@@ -38,30 +37,36 @@ getColors <- function(data)
 	return (colors)
 }
 
-compareAgainst <- "pschloss"
+
+par(mfrow=c(4,4))
+compareAgainst <- "kjones_jravel"
 numPlotted <-0
 for( i in 1:length(labIDs))
 {
-	otherID <- 
-	dataToPlot <- myT[ (myT$sequencingLab1 ==compareAgainst | myT$sequencingLab2 ==compareAgainst )  
-							& (myT$sequencingLab1 ==labIDs[i] | myT$sequencingLab2 ==labIDs[i] ) 
-						&	myT$naCategory == "NA_for_both"
-					& myT$sampleSize >= 17,  ]
-	numPlotted <- numPlotted + nrow(dataToPlot)
+	otherString = paste("", labIDs[i], sep="")
 	
-	if(length(dataToPlot) > 5) 
-	{
-		aTitle <- paste(compareAgainst , " vs " ,labIDs[i])
-		plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
-				main=aTitle, xlab="1og10(pValue)",
-				ylab="log2(fold change)",pch=15,cex=2,cex.lab=1.3,cex.main=1.3,
-				xlim=c(-8,0),ylim=c(-4,4), col =  getColors(dataToPlot$taxa) )
-				
-		lines(c(1,-9),c(0,0),col="red")
-	}	
+	if( otherString != compareAgainst )
+	{	dataToPlot <- myT[ (myT$sequencingPlusExtraction1 ==compareAgainst | myT$sequencingPlusExtraction2 ==compareAgainst )  
+							& (myT$sequencingPlusExtraction1 ==otherString | myT$sequencingPlusExtraction2 ==otherString ) 
+							&	myT$naCategory == "extraction_for_both"
+						& myT$sampleSize >= 17,  ]
+		numPlotted <- numPlotted + nrow(dataToPlot)
+		
+		if(nrow(dataToPlot) > 5) 
+		{
+			aTitle <- paste(compareAgainst , " vs " ,labIDs[i])
+			plot( log10( dataToPlot$pValue) , dataToPlot$foldChange,
+					main=aTitle, xlab="1og10(pValue)",
+					ylab="log2(fold change)",pch=15,cex=2,cex.lab=1.3,cex.main=0.9,
+					xlim=c(-8,0),ylim=c(-4,4), col =  getColors(dataToPlot$taxa) )
+					
+			lines(c(1,-9),c(0,0),col="red")
+		}	
+	}
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("top",bty="n",taxaIDs ,lty=c(7,7), lwd=c(10,10), col=getColors(taxaIDs))
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("left",y=0,bty="n",taxaIDs ,lty=c(6,6), lwd=c(6,6), col=getColors(taxaIDs),cex=0.85)
 
 numPlotted
