@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;	
 import java.util.List;
@@ -37,27 +38,41 @@ public class PValuesByExtraction
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
+		writer.write("bioinformaticsLab\tsequencingLab\textractionProtocol\tseqPlusExtraction\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
+		
 		
 		for(String bio : bioinformaticsIds)
 			for( String wet : wetlabIds)
 				for(String taxa : taxaHeaders)
 					if( avgVals.get(taxa) >= 0.01 )
-				{
-					System.out.println(bio + "\t" + wet + "\t" + taxa );
-					writer.write(bio + "\t" + wet + "\t" + taxa );
-					int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
-					Holder h= getPValueForNAVsOther(map, mbqcIDs, wet, bio, taxaID);
-					
-					writer.write("\t" + h.sampleSize + "\t");
-					
-					if( h.pairedResults != null)
-						writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t" + h.foldChange + "\t");
-					else
-						writer.write("\t\t\t");
-					
-					writer.write(avgVals.get(taxa) + "\n");
-				}
+					{
+						HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap = 
+								RawDesignMatrixParser.pivotBySampleID(map, bio, wet);
+						
+
+						System.out.println(bio + "\t" + wet + "\t" + taxa );
+						List<String> extractionProtocols = getAllExtractionNotNA(mbqcIDMap);
+						
+						for(String extraction : extractionProtocols)
+						{
+							writer.write(bio + "\t" + wet + "\t" + extraction + "\t" + wet + "_" + extraction + "\t" + 
+											taxa );
+							int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
+							Holder h= getPValueForNAVsOther(map, mbqcIDs, wet, bio, taxaID, extraction,
+											mbqcIDMap);
+							
+							writer.write("\t" + h.sampleSize + "\t");
+							
+							if( h.pairedResults != null)
+								writer.write(h.pairedResults.getPValue() + "\t" + h.meanDifference + "\t" + h.foldChange + "\t");
+							else
+								writer.write("\t\t\t");
+							
+							writer.write(avgVals.get(taxa) + "\n");
+						}
+						
+						
+					}
 		
 		writer.flush();  writer.close();
 
@@ -71,9 +86,34 @@ public class PValuesByExtraction
 		Double foldChange = null;
 	}
 	
+	static List<String> getAllExtractionNotNA( HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap )
+		throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : mbqcIDMap.keySet())
+		{
+			List<RawDesignMatrixParser> innerList = mbqcIDMap.get(s);
+			
+			for(RawDesignMatrixParser rdmp : innerList)
+			{
+				if( !rdmp.getExtractionWetlab().equals("NA") )
+					set.add(rdmp.getExtractionWetlab());
+			}
+		}
+		
+		if( set.size() < 1)
+			System.out.println(" WARNING: Could not find extraction lab " );
+		
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
+		return list;
+	}
+	
 	/*
 	 * Returns the most common extraction id (the one in the most # of distinct mbqcIDs) that is not NA
 	 */
+	/*
 	static String getMostCommonExtraction( HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap) throws Exception
 	{
 		HashMap<String, Integer> extractionCounts = new HashMap<String, Integer>();
@@ -120,6 +160,7 @@ public class PValuesByExtraction
 		
 		return maxExtraction;
 	}
+	*/
 	
 	static Double getAverageForExtractionID(List<RawDesignMatrixParser> list, String extractionID,
 			int taxaId)
@@ -156,8 +197,7 @@ public class PValuesByExtraction
 	
 	/*
 	 * For each sample, return a p-value for the null hypothesis that the distribution of NA
-	 * is the same as the extraction protocol with the most total samples for that wetlabID 
-	 * and drylabID
+	 * is the same as the extraction protocol 
 	 * 
 	 * This is accomplished by paired test for samples with at least one NA and one other extraction.
 	 * An average is taken across multiple samples for NA and other.
@@ -166,12 +206,11 @@ public class PValuesByExtraction
 									List<String>  mbqcIDs,
 									String wetlabID,
 									String drylabID,
-									int taxaID) throws Exception
+									int taxaID, 
+									String nonNAExtractionProtocol,
+									HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap) throws Exception
 	{
-		 HashMap<String, List<RawDesignMatrixParser>> mbqcIDMap = 
-				RawDesignMatrixParser.pivotBySampleID(map, drylabID, wetlabID);
-		
-		 String extractionID = getMostCommonExtraction(mbqcIDMap);
+		 
 		 
 		 List<Double> extractionList = new ArrayList<Double>();
 		 List<Double> naList = new ArrayList<Double>();
@@ -179,7 +218,7 @@ public class PValuesByExtraction
 		 {
 			 List<RawDesignMatrixParser> innerList = mbqcIDMap.get(s);
 			 
-			 Double extractionVal =  getAverageForExtractionID(innerList, extractionID, taxaID);
+			 Double extractionVal =  getAverageForExtractionID(innerList, nonNAExtractionProtocol, taxaID);
 			 Double naVal = getAverageForExtractionID(innerList, "NA", taxaID);
 			 
 			 if(extractionVal != null && naVal != null)

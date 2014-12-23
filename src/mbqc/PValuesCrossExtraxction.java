@@ -15,6 +15,7 @@ import mbqc.PValuesByExtraction.Holder;
 
 public class PValuesCrossExtraxction
 {
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
@@ -200,4 +201,5 @@ public class PValuesCrossExtraxction
 		 
 		 return h;
 	}
+	*/
 }

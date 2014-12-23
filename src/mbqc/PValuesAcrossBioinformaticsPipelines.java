@@ -15,6 +15,7 @@ import mbqc.PValuesByExtraction.Holder;
 
 public class PValuesAcrossBioinformaticsPipelines
 {
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
@@ -162,5 +163,6 @@ public class PValuesAcrossBioinformaticsPipelines
 
 		return h;
 }
+*/
 	
 }
