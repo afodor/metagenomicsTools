@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import parsers.PivotOTUs;
 import utils.ConfigReader;
 
@@ -26,9 +27,17 @@ public class PivotSparseSpreadsheet
 					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
 					".txt.gz");
 			
-			PivotOTUs.writeResults(map,ConfigReader.getRachSachReanalysisDir()+ File.separator + "rdpAnalysis" 
+			File outFile = new File(ConfigReader.getRachSachReanalysisDir()+ File.separator + "rdpAnalysis" 
 					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
 					"_AsColumns.txt");
+			
+			PivotOTUs.writeResults(map, outFile.getAbsolutePath());
+			
+			OtuWrapper wrapper = new OtuWrapper(outFile);
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
+					"_AsColumnsLogNormalized.txt");
 		}
 		
 	}

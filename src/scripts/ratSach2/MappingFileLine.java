@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
@@ -36,7 +37,7 @@ public class MappingFileLine
 
 	public static HashMap<String, MappingFileLine> getMap() throws Exception
 	{
-		HashMap<String, MappingFileLine> map =new HashMap<String, MappingFileLine>();
+		HashMap<String, MappingFileLine> map =new LinkedHashMap<String, MappingFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getRachSachReanalysisDir() + 
 				File.separator + "Dess150_05262014_try02_mapping NKD.txt"));
@@ -71,7 +72,13 @@ public class MappingFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, MappingFileLine> map = getMap();
 		
+		for(String s : map.keySet())
+		{
+			MappingFileLine mfl = map.get(s);
+			System.out.println(s +  " " + mfl.getLine() + " " + mfl.getTissue() );
+		}
 	}
 	
 }
