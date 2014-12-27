@@ -64,10 +64,10 @@ public class RawDesignMatrixParser
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, RawDesignMatrixParser> map = getByFullId();
-		System.out.println(getAllMBQCIDs(map));
-		System.out.println(getAllMBQCIDs(map).size());
-		
+		HashMap<String, List<RawDesignMatrixParser>> map =  getByLastTwoTokens();
+		for(String s : map.keySet())
+			System.out.println(s);
+			
 	}
 	
 	public static HashMap<String, Double> getTaxaAverages(
