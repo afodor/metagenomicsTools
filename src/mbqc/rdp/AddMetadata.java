@@ -15,11 +15,17 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	/*
-	private static void addSomeMetadata(BufferedReader reader, 
-					BufferedWriter writer,boolean skipFirst) throws Exception
+	private static String r1OrR2(String rdpID ) throws Exception
 	{
-		writer.write("sampleID\treadNumber\tpatientID\truralUrban\ttimepoint");
+		String[] splits = rdpID.split("_");
+		return splits[2].substring(0,2);
+	}
+	
+	private static void addSomeMetadata(BufferedReader reader, 
+					BufferedWriter writer,boolean skipFirst, 
+					HashMap<String, List<RawDesignMatrixParser>> metaMap) throws Exception
+	{
+		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\tmbqcID\twetlabID");
 		
 		if( !skipFirst)
 		{
@@ -37,49 +43,30 @@ public class AddMetadata
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
-
-			writer.write(splits[0].replaceAll("_TO_RDP.txt.gz", "").replaceAll("\"", "") + "\t");
 			
-			if( ! splits[0].replaceAll("\"", "").endsWith("TO_RDP.txt.gz"))
+			String id = attemptCompoundID(splits[0]);
+			
+			List<RawDesignMatrixParser> list= metaMap.get(id);
+			
+			writer.write(splits[0]+ "\t");
+			writer.write(id + "\t");
+			writer.write(r1OrR2(splits[0]) + "\t");
+			
+			if( list != null)
 			{
-				writer.write(getreadNumber(splits[0]) + "\t");
-				int patientID = getPatientId(s);
-				writer.write(patientID+ "\t");
-				
-				if( patientID >=1 && patientID <=39)
-					writer.write("rural\t");
-				else if (patientID >=81 && patientID <= 120)
-					writer.write("urban\t");
-				else throw new Exception("No");
-				
-				writer.write(getTimepoint(s));
+				RawDesignMatrixParser rdmp = list.get(0);
+				writer.write( rdmp.getMbqcID() + "\t" + rdmp.getExtractionWetlab() + "\n" );
 			}
 			else
 			{
-				writer.write("-1\t");
-				writer.write("-1\t");
-				
-				if( splits[0].indexOf("V1-V3") != -1 || splits[0].indexOf("V3-V1") != -1 )
-					writer.write("HMP_V1_V3\t");
-				else if ( splits[0].indexOf("V3-V5") != -1 || splits[0].indexOf("V5-V3") != -1  )
-					writer.write("HMP_V3_V5\t");
-				else if ( splits[0].indexOf("V6-V9") != -1 || splits[0].indexOf("V9-V6") != -1  )
-					writer.write("HMP_V6_V9\t");
-				else throw new Exception("Parsing error " + splits[0]);
-				
-				writer.write("na");
+				writer.write("\t\n");
 			}
-				
-			for( int y=1; y < splits.length; y++)
-				writer.write("\t" + splits[y]);
-			
-			writer.write("\n");	
 		}
 		
 		writer.flush();  writer.close();
 		
 		reader.close();
-	}*/
+	}
 	
 	private static String attemptCompoundID(String id) throws Exception
 	{
@@ -108,32 +95,13 @@ public class AddMetadata
 					+ "_" + NewRDPParserFileLine.TAXA_ARRAY[x] +".txt"
 					)));
 			
-			int numFound=0;  int numNull=0;
-			
-			reader.readLine();
-			
-			for(String s= reader.readLine(); s != null; s = reader.readLine())
-			{
-				String[] splits = s.split("\t");
-				String id = attemptCompoundID(splits[0]);
-				
-				List<RawDesignMatrixParser> list= metaMap.get(id);
-				
-				if( list != null )
-					numFound++;
-				else
-					numNull++;
-				
-				System.out.println( id + " " +  numFound + " " + numNull);
-			}
-		
-			/*
 			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getMbqcDir() + 
 					File.separator +  "rdpAnalysis" +  File.separator 
 					+ "pcoa_" +  WriteFirstColumns.NUM_COLUMNS 
 					+ "_" + NewRDPParserFileLine.TAXA_ARRAY[x] +"_withMetadata.txt")));
 			
-			addSomeMetadata(reader, writer,false);*/
+			addSomeMetadata(reader, writer,true,metaMap);
 		}
 	}
 }
