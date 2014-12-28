@@ -91,37 +91,40 @@ public class MBQC_SampleParser
 		return Extracted_DNA;
 	}
 
-
-	private MBQC_SampleParser(String s)
+	private MBQC_SampleParser(String s) throws Exception
 	{
+		System.out.println(s);
 		TabReader tr = new TabReader(s);
-		this.MBQC_ID = tr.nextToken();
-		this.NCI_Label = tr.nextToken();
-		this.NCI_Subj = tr.nextToken();
-		this.UC_ID = tr.nextToken();
-		this.Sample_ID = tr.nextToken();
-		this.Sample_type = tr.nextToken();
-		this.Health_status = tr.nextToken();
-		this.Visit = tr.nextToken();
-		this.Sex = tr.nextToken();
+		this.MBQC_ID = tr.nextToken().trim();
+		this.NCI_Label = tr.nextToken().trim();
+		this.NCI_Subj = tr.nextToken().trim();
+		this.UC_ID = tr.nextToken().trim();
+		this.Sample_ID = tr.nextToken().trim();
+		this.Sample_type = tr.nextToken().trim();
+		this.Health_status = tr.nextToken().trim();
+		this.Visit = tr.nextToken().trim();
+		this.Sex = tr.nextToken().trim();
 		
 		String ageString = tr.nextToken();
 		
-		this.Age = ageString == null ? null : Integer.parseInt(ageString);
+		this.Age = (ageString == null | ageString.equals("Unknown")) ? null : Integer.parseInt(ageString);
 		
 		String bmiString = tr.nextToken();
-		this.BMI = bmiString == null ? null : Double.parseDouble(bmiString);
+		this.BMI = (bmiString == null | bmiString.equals("Unknown")) ? null : Double.parseDouble(bmiString);
 		
 		this.Extracted_DNA = tr.nextToken();
+		
+		if( tr.hasMore())
+			throw new Exception("Could not find " + tr.nextToken());
 	}
-	
 	
 	public static HashMap<String, MBQC_SampleParser> getMetaMap() throws Exception
 	{
 		HashMap<String, MBQC_SampleParser> map = new HashMap<String, MBQC_SampleParser>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getMbqcDir() + File.separator + "MBQC samples.txt")));
+				ConfigReader.getMbqcDir() + File.separator + "metadata" + File.separator + 
+						"MBQC samples.txt")));
 
 		reader.readLine();
 		
@@ -129,10 +132,24 @@ public class MBQC_SampleParser
 		{
 			TabReader tReader = new TabReader(s);
 			
-			String key = tReader.nextToken();
+			String key = tReader.nextToken().trim();
+			
+			if( key.length() != 0)
+			{
+				if( map.containsKey(key))
+					throw new Exception("No");
+				
+				MBQC_SampleParser sp = new MBQC_SampleParser(s);
+				map.put(key, sp);
+			}
 			
 		}
 		
 		return map;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<String, MBQC_SampleParser> map = getMetaMap();
 	}
 }
