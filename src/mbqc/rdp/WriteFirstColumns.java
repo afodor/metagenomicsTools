@@ -45,7 +45,6 @@ public class WriteFirstColumns
 				for( int y=0; y <= NUM_COLUMNS; y++)
 					writer.write(splits[y].replaceAll("\"", "") + ( y==NUM_COLUMNS ? "\n" : "\t" ));
 				
-				writer.write("\n");
 			}
 			
 			reader.close();
