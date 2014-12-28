@@ -134,8 +134,6 @@ public class RawDesignMatrixParser
 		return returnMap;
 	}
 	
-	
-	
 	public static HashMap<String, List<RawDesignMatrixParser>> getByLastTwoTokens() throws Exception
 	{
 		List<String> headers = getTaxaIds();
