@@ -113,9 +113,6 @@ public class MBQC_SampleParser
 		this.BMI = (bmiString == null | bmiString.equals("Unknown")) ? null : Double.parseDouble(bmiString);
 		
 		this.Extracted_DNA = tr.nextToken();
-		
-		if( tr.hasMore())
-			throw new Exception("Could not find " + tr.nextToken());
 	}
 	
 	public static HashMap<String, MBQC_SampleParser> getMetaMap() throws Exception
