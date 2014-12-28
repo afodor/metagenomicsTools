@@ -22,27 +22,20 @@ public class AddMetadata
 	}
 	
 	private static void addSomeMetadata(BufferedReader reader, 
-					BufferedWriter writer,boolean skipFirst, 
+					BufferedWriter writer,
 					HashMap<String, List<RawDesignMatrixParser>> metaMap) throws Exception
 	{
 		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\tmbqcID\twetlabID");
 		
-		if( !skipFirst)
-		{
-			writer.write("\t" + reader.readLine() + "\n");
-		}
-		else
-		{
-			String[] splits = reader.readLine().split("\t");
+		String[] splits = reader.readLine().split("\t");
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t"  + splits[x]);
 			
-			writer.write("\n");
-		}
+		writer.write("\n");
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
-			String[] splits = s.split("\t");
+			splits = s.split("\t");
 			
 			String id = attemptCompoundID(splits[0]);
 			
@@ -55,12 +48,20 @@ public class AddMetadata
 			if( list != null)
 			{
 				RawDesignMatrixParser rdmp = list.get(0);
-				writer.write( rdmp.getMbqcID() + "\t" + rdmp.getExtractionWetlab() + "\n" );
+				
+				// leave off leading tab
+				writer.write( rdmp.getMbqcID() + "\t" + rdmp.getExtractionWetlab() );
 			}
 			else
 			{
-				writer.write("\t\n");
+				// leave off leading tab..
+				writer.write("\t");
 			}
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -101,7 +102,7 @@ public class AddMetadata
 					+ "pcoa_" +  WriteFirstColumns.NUM_COLUMNS 
 					+ "_" + NewRDPParserFileLine.TAXA_ARRAY[x] +"_withMetadata.txt")));
 			
-			addSomeMetadata(reader, writer,true,metaMap);
+			addSomeMetadata(reader, writer,metaMap);
 		}
 	}
 }
