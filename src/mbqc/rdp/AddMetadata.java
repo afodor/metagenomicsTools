@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import mbqc.MBQC_SampleParser;
 import mbqc.RawDesignMatrixParser;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
@@ -23,9 +24,11 @@ public class AddMetadata
 	
 	private static void addSomeMetadata(BufferedReader reader, 
 					BufferedWriter writer,
-					HashMap<String, List<RawDesignMatrixParser>> metaMap) throws Exception
+					HashMap<String, List<RawDesignMatrixParser>> metaMap,
+					HashMap<String, MBQC_SampleParser> mbqcSampleMetaMap) throws Exception
 	{
-		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID\twetlabExtractionID");
+		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID\twetlabExtractionID\t");
+		writer.write("NCI_Label\tNCI_Subj\tUC_ID\tSample_ID\tSampletype\tHealthstatus\tVisit\tSex\tAge\tBMI_Extracted_DNA");
 		
 		String[] splits = reader.readLine().split("\t");
 			for( int x=1; x < splits.length; x++)
@@ -49,14 +52,42 @@ public class AddMetadata
 			{
 				RawDesignMatrixParser rdmp = list.get(0);
 				
-				// leave off leading tab
 				writer.write( "true\t" +  rdmp.getMbqcID() + "\t" + rdmp.getSequecingWetlab() + "\t" + 
-								rdmp.getExtractionWetlab() );
+								rdmp.getExtractionWetlab() + "\t");
 			}
 			else
 			{
-				// leave off leading tab..
-				writer.write("false\t\t\t");
+				writer.write("false\t\t\t\t");
+			}
+			
+			MBQC_SampleParser mbq = null;
+			
+			if( list != null)
+			{
+				RawDesignMatrixParser rdmp = list.get(0);
+				
+				if( rdmp.getMbqcID() != null && rdmp.getMbqcID().trim().length() > 0)
+					mbq = mbqcSampleMetaMap.get(rdmp.getMbqcID());
+			}
+			
+			if( mbq != null  )
+			{
+				//writer.write("BMI_Extracted_DNA");
+				writer.write( mbq.getNCI_Label() + "\t");
+				writer.write( mbq.getNCI_Subj() + "\t");
+				writer.write( mbq.getUC_ID() + "\t");
+				writer.write( mbq.getSample_ID() + "\t");
+				writer.write( mbq.getSample_type() + "\t");
+				writer.write( mbq.getHealth_status() + "\t");
+				writer.write(mbq.getVisit() + "\t");
+				writer.write( mbq.getSex() + "\t");
+				writer.write( mbq.getAge() + "\t");
+				writer.write( mbq.getExtracted_DNA() );
+			}
+			else
+			{
+				writer.write("\t\t\t\t\t\t\t\t\t");
+				
 			}
 			
 			for( int x=1; x < splits.length; x++)
@@ -85,6 +116,8 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, MBQC_SampleParser> mbqcSampleMetaMap = 
+					MBQC_SampleParser.getMetaMap();
 		HashMap<String, List<RawDesignMatrixParser>> metaMap =  RawDesignMatrixParser.getByLastTwoTokens();
 				
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
@@ -103,7 +136,7 @@ public class AddMetadata
 					+ "pcoa_" +  WriteFirstColumns.NUM_COLUMNS 
 					+ "_" + NewRDPParserFileLine.TAXA_ARRAY[x] +"_withMetadata.txt")));
 			
-			addSomeMetadata(reader, writer,metaMap);
+			addSomeMetadata(reader, writer,metaMap, mbqcSampleMetaMap);
 		}
 	}
 }

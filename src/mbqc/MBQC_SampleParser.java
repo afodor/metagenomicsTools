@@ -144,9 +144,4 @@ public class MBQC_SampleParser
 		
 		return map;
 	}
-	
-	public static void main(String[] args) throws Exception
-	{
-		HashMap<String, MBQC_SampleParser> map = getMetaMap();
-	}
 }
