@@ -28,7 +28,7 @@ public class AddMetadata
 					HashMap<String, MBQC_SampleParser> mbqcSampleMetaMap) throws Exception
 	{
 		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID\twetlabExtractionID\t");
-		writer.write("NCI_Label\tNCI_Subj\tUC_ID\tSample_ID\tSampletype\tHealthstatus\tVisit\tSex\tAge\tBMI_Extracted_DNA");
+		writer.write("NCI_Label\tNCI_Subj\tUC_ID\tSample_ID\tSampletype\tHealthstatus\tVisit\tSex\tAge\tBMI\tExtracted_DNA");
 		
 		String[] splits = reader.readLine().split("\t");
 			for( int x=1; x < splits.length; x++)
@@ -82,11 +82,12 @@ public class AddMetadata
 				writer.write(mbq.getVisit() + "\t");
 				writer.write( mbq.getSex() + "\t");
 				writer.write( mbq.getAge() + "\t");
+				writer.write( mbq.getBMI()+ "\t");
 				writer.write( mbq.getExtracted_DNA() );
 			}
 			else
 			{
-				writer.write("\t\t\t\t\t\t\t\t\t");
+				writer.write("\t\t\t\t\t\t\t\t\t\t");
 				
 			}
 			
