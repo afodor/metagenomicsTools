@@ -25,7 +25,7 @@ public class AddMetadata
 					BufferedWriter writer,
 					HashMap<String, List<RawDesignMatrixParser>> metaMap) throws Exception
 	{
-		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\tmbqcID\twetlabID");
+		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID");
 		
 		String[] splits = reader.readLine().split("\t");
 			for( int x=1; x < splits.length; x++)
@@ -50,12 +50,12 @@ public class AddMetadata
 				RawDesignMatrixParser rdmp = list.get(0);
 				
 				// leave off leading tab
-				writer.write( rdmp.getMbqcID() + "\t" + rdmp.getExtractionWetlab() );
+				writer.write( "true\t" +  rdmp.getMbqcID() + "\t" + rdmp.getExtractionWetlab() );
 			}
 			else
 			{
 				// leave off leading tab..
-				writer.write("\t");
+				writer.write("false\t\t");
 			}
 			
 			for( int x=1; x < splits.length; x++)
