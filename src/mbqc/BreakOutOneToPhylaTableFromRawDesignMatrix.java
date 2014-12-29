@@ -1,8 +1,10 @@
 package mbqc;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -17,12 +19,41 @@ public class BreakOutOneToPhylaTableFromRawDesignMatrix
 				ConfigReader.getMbqcDir() + File.separator + "dropbox" + File.separator + 
 				"raw_design_matrix.txt")));
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getMbqcDir() + File.separator + "dropbox" + File.separator + 
+				"huttenhower_raw_design_matrixPhylaAsColumns.txt")));
+		
 		String firstLine = reader.readLine();
 		
 		List<String> list = getPhylaHeaders(firstLine);
-		
+
+		writer.write("sample");
 		for(String s : list)
-			System.out.println(s);
+			if( s != null)
+				writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		int lastIndex =0;
+		
+		for( int x=0; x < list.size(); x++)
+			if( list.get(x) != null)
+				lastIndex = x;
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			if(  s.startsWith("chuttenhower"))
+			{
+				String[] splits = s.split("\t");
+				writer.write(splits[0]);
+				
+				for( int x=0; x <= lastIndex; x++)
+					if( list.get(x) != null)
+						writer.write(splits[x] + ( x == lastIndex ? "\n" : "\t" ));
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static List<String> getPhylaHeaders(String firstLine) throws Exception
