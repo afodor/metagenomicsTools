@@ -49,7 +49,9 @@ public class BreakOutOneToPhylaTableFromRawDesignMatrix
 				
 				for( int x=0; x <= lastIndex; x++)
 					if( list.get(x) != null)
-						writer.write(splits[x] + ( x == lastIndex ? "\n" : "\t" ));
+						writer.write("\t" + splits[x] );
+				
+				writer.write("\n");
 			}
 		}
 		
