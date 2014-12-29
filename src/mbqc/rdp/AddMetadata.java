@@ -27,7 +27,7 @@ public class AddMetadata
 					HashMap<String, List<RawDesignMatrixParser>> metaMap,
 					HashMap<String, MBQC_SampleParser> mbqcSampleMetaMap) throws Exception
 	{
-		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID\twetlabExtractionID\t");
+		writer.write("fromRDPsampleID\tmbqcSampleID\tr1OrR2\thasLookup\tmbqcID\twetlabID\twetlabExtractionID\tisNAExtraction\t");
 		writer.write("NCI_Label\tNCI_Subj\tUC_ID\tSample_ID\tSampletype\tHealthstatus\tVisit\tSex\tAge\tBMI\tExtracted_DNA");
 		
 		String[] splits = reader.readLine().split("\t");
@@ -53,7 +53,8 @@ public class AddMetadata
 				RawDesignMatrixParser rdmp = list.get(0);
 				
 				writer.write( "true\t" +  rdmp.getMbqcID() + "\t" + rdmp.getSequecingWetlab() + "\t" + 
-								rdmp.getExtractionWetlab() + "\t");
+								rdmp.getExtractionWetlab() 
+								+ "\t" + rdmp.getExtractionWetlab().toLowerCase().equals("na") + "\t");
 			}
 			else
 			{
