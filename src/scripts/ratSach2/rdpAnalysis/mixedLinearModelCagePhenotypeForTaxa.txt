@@ -25,7 +25,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 6:numCols) 
+	for( i in 9:numCols) 
 	{	
 		if( sum(myT[,i] != 0) >= nrow(myT)/4 )
 		{
