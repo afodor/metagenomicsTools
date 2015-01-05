@@ -88,6 +88,7 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
@@ -108,6 +109,7 @@ public class AddMetadata
 			
 			addSomeMetadata(reader, writer,false, wrapper);
 		}
+		*/
 		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
@@ -132,6 +134,28 @@ public class AddMetadata
 						"_AsColumns.txt");
 			
 			addSomeMetadata(reader, writer,true, wrapper);
+			
+			String[] tissues = { "Cecal Content", "Colon content" };
+			
+			for(String tissue : tissues)
+			{
+				reader = new BufferedReader(new FileReader(new File(
+						ConfigReader.getRachSachReanalysisDir()
+						+ File.separator + "rdpAnalysis" 
+						+ File.separator +
+						"pcoa_" +  NewRDPParserFileLine.TAXA_ARRAY[x] + "_" + tissue  +".txt"
+						)));
+				
+				writer = new BufferedWriter(new FileWriter(new File(
+						ConfigReader.getRachSachReanalysisDir()
+						+ File.separator + "rdpAnalysis" 
+						+ File.separator +
+						"pcoa_" +  NewRDPParserFileLine.TAXA_ARRAY[x] + "_" + tissue  +"PlusMetadata.txt"
+						)));
+				
+				addSomeMetadata(reader, writer,false, wrapper);
+				
+			}
 		}
 	}
 }
