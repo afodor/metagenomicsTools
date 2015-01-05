@@ -8,17 +8,19 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import scripts.ratSach2.MappingFileLine;
 import utils.ConfigReader;
 
 public class AddMetadata
 {
 	private static void addSomeMetadata(BufferedReader reader, 
-					BufferedWriter writer,boolean skipFirst) throws Exception
+					BufferedWriter writer,boolean skipFirst,
+					OtuWrapper unnormalizedWrapper) throws Exception
 	{
 		HashMap<String, MappingFileLine> metaMap = MappingFileLine.getMap();
 		HashMap<String, String> ratToCageMap = getCageMappings();
-		writer.write("sampleID\tline\ttissue\tratID\tcage");
+		writer.write("sampleID\tline\ttissue\tratID\tcage\tnumSequences\tshannonDiversity\tunrarifiedRichness");
 		
 		if( !skipFirst)
 		{
@@ -43,7 +45,11 @@ public class AddMetadata
 			writer.write(mfl.getLine() + "\t");
 			writer.write(mfl.getTissue() + "\t"  );
 			writer.write(mfl.getRatID() + "\t");
-			writer.write( ratToCageMap.get(mfl.getRatID()) +"");
+			writer.write( ratToCageMap.get(mfl.getRatID()) +"\t");
+			
+			writer.write(unnormalizedWrapper.getCountsForSample(key) + "\t");
+			writer.write(unnormalizedWrapper.getShannonEntropy(key) + "\t");
+			writer.write(unnormalizedWrapper.getRichness(key) + "");
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x] );
@@ -95,9 +101,12 @@ public class AddMetadata
 					+ File.separator + "rdpAnalysis" 
 					+ File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "WithMetadata.txt" )));
 			
-			addSomeMetadata(reader, writer,false);
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
+						"_AsColumns.txt");
+			
+			addSomeMetadata(reader, writer,false, wrapper);
 		}
-		
-		
 	}
 }
