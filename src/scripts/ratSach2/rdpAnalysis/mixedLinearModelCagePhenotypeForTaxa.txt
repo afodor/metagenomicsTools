@@ -2,7 +2,7 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
@@ -20,6 +20,8 @@ for(taxa in taxaLevels )
 	myT <- myT[ which( myT$tissue== tissue) , ]
 	
 	pValuesLine <- vector()
+	averageHigh <- vector()
+	averageLow <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -36,12 +38,14 @@ for(taxa in taxaLevels )
 			{
 				pValuesLine[index] <- coefs[5]$Pr...t..[2]
 				names[index] = names(myT)[i]
+				averageHigh[index] <- mean( myT[myT$line=="High",i])
+				averageLow[index] <- mean( myT[myT$line=="Low",i])
 				index <- index + 1
 			}
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesLine) 
+	dFrame <- data.frame( names, pValuesLine, averageHigh, averageLow) 
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
 	
