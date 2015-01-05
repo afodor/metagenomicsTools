@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeLinearModelsAcrossTissues
@@ -24,12 +25,21 @@ public class MergeLinearModelsAcrossTissues
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
+			
+			System.out.println(level);
+			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 				ConfigReader.getRachSachReanalysisDir()
 				+ File.separator + "rdpAnalysis" 
 				+ File.separator + "pValuesAcrossMixed_taxa_" + level +".txt"	)));
 			
-			writer.write("taxa\tcecum\tcolon\n");
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator + "sparseThreeColumn_" + level +  "_AsColumns.txt");
+			
+			double totalCounts = wrapper.getTotalCounts();
+			
+			writer.write("taxa\tcecum\tcolon\trelativeAbundance\n");
 			
 			HashMap<String, Holder> map = getMap(level);
 			
@@ -39,8 +49,22 @@ public class MergeLinearModelsAcrossTissues
 				
 				if( h.pValueCecum != null && h.pValueColon != null)
 				{
+					String key = s;
+					
+					if( ! s.startsWith("Escherichia"))
+						key =s.replaceAll("\\.", " ").replaceAll("\"", "");
+					else
+						key =s.replaceAll("\\.", "/").replaceAll("\"", "");
+					
 					writer.write( s + "\t" );
-					writer.write( h.pValueCecum + "\t" + h.pValueColon + "\n");
+					writer.write( h.pValueCecum + "\t" + h.pValueColon + "\t");
+					
+					int index =wrapper.getIndexForOtuName(key);
+					
+					if( index == -1)
+						throw new Exception("Could not find " + key);
+					
+					writer.write(( wrapper.getCountsForTaxa(key) / totalCounts) + "\n");
 				}
 			}
 			
