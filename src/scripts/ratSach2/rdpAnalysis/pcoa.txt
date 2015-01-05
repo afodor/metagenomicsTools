@@ -2,19 +2,27 @@
 rm(list=ls())
 library("vegan")
 
-setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
 taxaLevels <- c("phylum","class","order","family","genus")
+tissueTypes <- c("Cecal Content", "Colon content")
 
 for(taxa in taxaLevels ) 
+	for(tissue in tissueTypes)
 {
-	inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalized.txt", sep ="")
+	inFileName <- paste("sparseThreeColumn_",taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c("character", rep("numeric", numCols-1))
+	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	oldT <- myT
+	myT <- myT[ myT$tissue == tissue,  ]
+	myT <- myT[ , 7:numCols-1]	
+
 	myPCOA <- capscale(myT~1,distance="bray")
 	
-	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""))
-	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+	dFrame <- data.frame( oldT[  oldT$tissue == tissue,1:7], myPCOA$CA$u)
+	
+	write.table(dFrame, sep="\t", file=paste("pcoa_", taxa, "_", tissue, ".txt",sep=""),row.names=FALSE)
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, "_", tissue, ".txt", sep=""), sep="\t")
 }
