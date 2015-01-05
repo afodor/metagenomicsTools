@@ -30,7 +30,7 @@ for(taxa in taxaLevels )
 			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
 			coefs <- data.frame( coef(summary(myLm)))
 			
-			if( length(coefs$p.t.value > 0 )) 
+			if( length(coefs$p.t.value) > 0) 
 			{
 				coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
 				pValuesLine[index] <- coefs[5]$Pr...t..[2]
