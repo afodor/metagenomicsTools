@@ -108,5 +108,30 @@ public class AddMetadata
 			
 			addSomeMetadata(reader, writer,false, wrapper);
 		}
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
+		{
+			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			BufferedReader reader = new BufferedReader(new FileReader(new File( 
+					ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator +
+					"sparseThreeColumn_" +  NewRDPParserFileLine.TAXA_ARRAY[x] +
+						"_AsColumnsLogNormalized.txt" )));
+			
+			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator +
+					"sparseThreeColumn_" +  NewRDPParserFileLine.TAXA_ARRAY[x] +
+						"_AsColumnsLogNormalizedPlusMetadata.txt" )));
+			
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
+						"_AsColumns.txt");
+			
+			addSomeMetadata(reader, writer,false, wrapper);
+		}
 	}
 }
