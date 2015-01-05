@@ -131,7 +131,7 @@ public class AddMetadata
 					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
 						"_AsColumns.txt");
 			
-			addSomeMetadata(reader, writer,false, wrapper);
+			addSomeMetadata(reader, writer,true, wrapper);
 		}
 	}
 }
