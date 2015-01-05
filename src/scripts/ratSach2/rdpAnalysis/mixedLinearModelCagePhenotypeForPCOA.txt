@@ -11,24 +11,20 @@ for(taxa in taxaLevels )
 	for(tissue in tissueTypes) 
 {
     # uncomment for pcoa
-	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
-	
-	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	inFileName <- paste( "pcoa_" , taxa, "_" , tissue, "PlusMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[ which( myT$tissue== tissue) , ]
-	
 	pValuesLine <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in 6:16) 
+	for( i in 9:13) 
 	{	
-		if( sum(myT[,i] != 0) >= numCols/4 )
+		#if( sum(myT[,i] != 0) >= numCols/4 )
 		{
 			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
 			coefs <- data.frame(coef(summary(myLm)))
