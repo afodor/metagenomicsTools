@@ -1,8 +1,10 @@
 package scripts.ratSach2.rdpAnalysis;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.NumberFormat;
 
 import parsers.NewRDPParserFileLine;
@@ -14,12 +16,20 @@ public class ListSignificantTaxaAcrossLevels
 	{
 		NumberFormat nf = NumberFormat.getInstance();
 		
-		nf.setMinimumFractionDigits(2);
+		nf.setMinimumFractionDigits(3);
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
 			System.out.println(level);
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator + "pValueTaxaSummary.txt")));
+			
+			writer.write("taxa\tfdrPValue\tupIn\n");
+			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
@@ -37,15 +47,18 @@ public class ListSignificantTaxaAcrossLevels
 				
 				if( Double.parseDouble(splits[4]) < 0.10 )
 				{
-					String higher = "higher in high sac";
+					String higher = "high sac";
 					
 					if( Double.parseDouble(splits[3] ) > Double.parseDouble(splits[2]))
-						higher = "higher in low sac";
+						higher = "low sac";
 					
-					System.out.println( key + " " 
-							+ nf.format(Double.parseDouble(splits[4]))  + " " +  higher );
+					writer.write( key + "\t" 
+							+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\n");
+					writer.flush();
 				}
 			}
+			
+			writer.flush();  writer.close();
 		}
 	}
 }
