@@ -29,6 +29,10 @@ for(taxa in taxaLevels )
 	{	
 		if( sum(myT[,i] != 0) >= nrow(myT)/4 )
 		{
+			print( paste(i , " of ", numCols, " with ", index ,sep=""))
+			
+			if (.Platform$OS.type == "windows") flush.console()
+			
 			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
 			coefs <- data.frame( coef(summary(myLm)))
 			
