@@ -19,6 +19,7 @@ public class ListSignificantTaxaAcrossLevels
 		
 		nf.setMinimumFractionDigits(3);
 		HashMap<String, String> otuTaxMap = GreengenesOtuLookup.getLookupMap();
+		HashMap<String, String> genusMap = RDPLookup.getRDPLookupByGenus();
 		
 		String[] tissues = { "Cecal Content", "Colon content" };
 		
@@ -52,6 +53,9 @@ public class ListSignificantTaxaAcrossLevels
 					
 					String key = splits[0].replaceAll("\"","");
 					
+					if( key.equals("Clostridium.XVIII"))
+						key = "Clostridium XVIII";
+					
 					if( level.equals("otu"))
 						key = key.replaceAll("X", "");
 					
@@ -67,6 +71,8 @@ public class ListSignificantTaxaAcrossLevels
 						
 						if( level.equals("otu") )
 							writer.write(otuTaxMap.get(key) + "\n");
+						else if( level.equals("genus"))
+							writer.write(genusMap.get(key) + "\n");
 						else
 							writer.write("NA\n");
 						

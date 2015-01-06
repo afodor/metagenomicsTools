@@ -23,7 +23,7 @@ public class RDPLookup
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
-			String[] splits = s.split("\t");
+			String[] splits = s.split(";");
 			
 			String genus = splits[splits.length-1].substring(3);
 			
@@ -43,6 +43,6 @@ public class RDPLookup
 		HashMap<String, String> genusMap = getRDPLookupByGenus();
 		
 		for(String s : genusMap.keySet())
-			System.out.println(s + " " + genusMap.get(s));
+			System.out.println(s );
 	}
 }
