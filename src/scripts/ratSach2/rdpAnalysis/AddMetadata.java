@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import scripts.ratSach2.MappingFileLine;
 import utils.ConfigReader;
@@ -103,12 +102,12 @@ public class AddMetadata
 			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "pcoa_" + "pcoa_" + level + "_" + tissue +  "WithMetadata.txt" )));
+					+ File.separator + "pcoa_" + level + "_" + tissue +  "WithMetadata.txt" )));
 			
 			OtuWrapper wrapper = level.equals("otu") ? 
 					new OtuWrapper(
-					ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
-					"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + tissue +  ".txt") : 
+							ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
+							"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + "all"+  ".txt") : 
 					
 					new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
@@ -116,6 +115,22 @@ public class AddMetadata
 						"_AsColumns.txt");
 			
 			addSomeMetadata(reader, writer,false, wrapper);
+			
+			reader = new BufferedReader(new FileReader(new File( 
+					ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator +
+					"sparseThreeColumn_" + level +
+						"_AsColumnsLogNormalized.txt" )));
+			
+			writer =new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getRachSachReanalysisDir()
+					+ File.separator + "rdpAnalysis" 
+					+ File.separator +
+					"sparseThreeColumn_" +  level +
+						"_AsColumnsLogNormalizedPlusMetadata.txt" )));
+			
+			addSomeMetadata(reader, writer,true, wrapper);
 		}
 	}
 		

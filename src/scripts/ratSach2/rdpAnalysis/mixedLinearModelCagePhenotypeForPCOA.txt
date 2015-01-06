@@ -11,7 +11,7 @@ for(taxa in taxaLevels )
 	for(tissue in tissueTypes) 
 {
     # uncomment for pcoa
-	inFileName <- paste( "pcoa_" , taxa, "_" , tissue, "PlusMetadata.txt", sep ="")
+	inFileName <- paste( "pcoa_" , taxa, "_" , tissue, "WithMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)

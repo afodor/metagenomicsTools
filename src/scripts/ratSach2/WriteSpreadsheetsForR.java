@@ -18,6 +18,7 @@ public class WriteSpreadsheetsForR
 {
 	public static void main(String[] args) throws Exception
 	{
+		writeAndNormalize("all");
 		writeAndNormalize("Cecal Content");
 		writeAndNormalize("Colon content");
 		//writeForATissue("Fecal content");
@@ -25,34 +26,39 @@ public class WriteSpreadsheetsForR
 	
 	private static void writeAndNormalize(String tissue) throws Exception
 	{
+		String tissueString = "_" + tissue;
+		
+		if( tissue.equals("all"))
+			tissueString = "";
+		
 		File aFile = writeForATissue(tissue);
 		File countFile = new File(
-				ConfigReader.getRachSachReanalysisDir() + File.separator + "otu_" + tissue + "_taxaAsCols.txt" );
+				ConfigReader.getRachSachReanalysisDir() + File.separator + "otu" + tissueString + "taxaAsCols.txt" );
 		OtuWrapper.transpose(aFile.getAbsolutePath(),countFile.getAbsolutePath(), false);
 		
 		OtuWrapper wrapper = new OtuWrapper(countFile);
 		
 		File logNormFile = new File(
-				ConfigReader.getRachSachReanalysisDir() + File.separator + "otu_" + tissue + "_taxaAsColsLogNorm.txt" );
+				ConfigReader.getRachSachReanalysisDir() + File.separator + "otu" + tissueString + "taxaAsColsLogNorm.txt" );
 		
 		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
 		
 		File anotherFilePath = new File(
 				ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
-				"sparseThreeColumn_" +  "otu" +  "_AsColumnsLogNormalized_" + tissue +  ".txt");
+				"sparseThreeColumn_" +  "otu" +  "_AsColumnsLogNormalized" + tissueString +  ".txt");
 		
 		wrapper.writeNormalizedLoggedDataToFile(anotherFilePath);
 		
 		anotherFilePath = new File(
 				ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
-				"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + tissue +  ".txt");
+				"sparseThreeColumn_" +  "otu" +  "_AsColumns" + tissueString+  ".txt");
 		
 		OtuWrapper.transpose(aFile.getAbsolutePath(),anotherFilePath.getAbsolutePath(), false);
 	}
 	
 	private static File writeForATissue(String tissue) throws Exception
 	{
-		File pivotFile = new File(ConfigReader.getRachSachReanalysisDir() + File.separator + "otu_" + tissue + ".txt");
+		File pivotFile = new File(ConfigReader.getRachSachReanalysisDir() + File.separator + "otu_" + tissue+ ".txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(pivotFile));
 		
@@ -81,6 +87,9 @@ public class WriteSpreadsheetsForR
 				if( mfl.getTissue().equals(tissue))
 					include= true;
 			}
+			
+			if( tissue.equals("all"))
+				include = true;
 			
 			includeList.add(include);
 		}
