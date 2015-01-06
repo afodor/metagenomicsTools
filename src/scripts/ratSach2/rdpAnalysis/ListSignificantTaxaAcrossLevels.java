@@ -25,10 +25,10 @@ public class ListSignificantTaxaAcrossLevels
 		
 		writer.write("taxa\tfdrPValue\tupIn\n");
 		
+		String[] levels = { "phylum","class","order","family","genus", "otu" };
 		
-		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		for(String level : levels)
 		{
-			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
 			
 			writer.write("\n" + level + "\n");
 			
