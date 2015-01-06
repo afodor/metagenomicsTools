@@ -31,7 +31,6 @@ for(taxa in taxaLevels )
 		{
 			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
 			coefs <- data.frame( coef(summary(myLm)))
-			coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
 			
 			# if the model has errors, not all the coefs will be defined...
 			if( length( coefs) > 4 )
