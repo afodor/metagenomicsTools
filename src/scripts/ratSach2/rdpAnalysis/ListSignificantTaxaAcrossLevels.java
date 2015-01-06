@@ -18,17 +18,19 @@ public class ListSignificantTaxaAcrossLevels
 		
 		nf.setMinimumFractionDigits(3);
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getRachSachReanalysisDir()
+				+ File.separator + "rdpAnalysis" 
+				+ File.separator + "pValueTaxaSummary.txt")));
+		
+		writer.write("taxa\tfdrPValue\tupIn\n");
+		
+		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
-			System.out.println(level);
 			
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					ConfigReader.getRachSachReanalysisDir()
-					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "pValueTaxaSummary.txt")));
-			
-			writer.write("taxa\tfdrPValue\tupIn\n");
+			writer.write("\n" + level + "\n");
 			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getRachSachReanalysisDir()
@@ -57,8 +59,8 @@ public class ListSignificantTaxaAcrossLevels
 					writer.flush();
 				}
 			}
-			
-			writer.flush();  writer.close();
 		}
+
+		writer.flush();  writer.close();
 	}
 }
