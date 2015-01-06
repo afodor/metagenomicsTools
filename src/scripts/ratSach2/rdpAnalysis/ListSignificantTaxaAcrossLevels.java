@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.NumberFormat;
+import java.util.HashMap;
 
+import scripts.ratSach2.GreengenesOtuLookup;
 import utils.ConfigReader;
 
 public class ListSignificantTaxaAcrossLevels
@@ -16,6 +18,7 @@ public class ListSignificantTaxaAcrossLevels
 		NumberFormat nf = NumberFormat.getInstance();
 		
 		nf.setMinimumFractionDigits(3);
+		HashMap<String, String> otuTaxMap = GreengenesOtuLookup.getLookupMap();
 		
 		String[] tissues = { "Cecal Content", "Colon content" };
 		
@@ -26,7 +29,7 @@ public class ListSignificantTaxaAcrossLevels
 					+ File.separator + "rdpAnalysis" 
 					+ File.separator + "pValueTaxaSummary" + tissue +  ".txt")));
 			
-			writer.write("taxa\tfdrPValue\tupIn\n");
+			writer.write("taxa\tfdrPValue\tupIn\tfullTax\n");
 			
 			String[] levels = { "phylum","class","order","family","genus", "otu" };
 				for( String level: levels)
@@ -49,6 +52,9 @@ public class ListSignificantTaxaAcrossLevels
 					
 					String key = splits[0].replaceAll("\"","");
 					
+					if( level.equals("otu"))
+						key = key.replaceAll("X", "");
+					
 					if( Double.parseDouble(splits[4]) < 0.10 )
 					{
 						String higher = "high sac";
@@ -57,7 +63,13 @@ public class ListSignificantTaxaAcrossLevels
 							higher = "low sac";
 						
 						writer.write( key + "\t" 
-								+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\n");
+								+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\t");
+						
+						if( level.equals("otu") )
+							writer.write(otuTaxMap.get(key) + "\n");
+						else
+							writer.write("NA\n");
+						
 						writer.flush();
 					}
 				}
