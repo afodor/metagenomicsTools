@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 
-import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class ListSignificantTaxaAcrossLevels
@@ -18,49 +17,53 @@ public class ListSignificantTaxaAcrossLevels
 		
 		nf.setMinimumFractionDigits(3);
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getRachSachReanalysisDir()
-				+ File.separator + "rdpAnalysis" 
-				+ File.separator + "pValueTaxaSummary.txt")));
+		String[] tissues = { "Cecal Content", "Colon content" };
 		
-		writer.write("taxa\tfdrPValue\tupIn\n");
-		
-		String[] levels = { "phylum","class","order","family","genus", "otu" };
-		
-		for(String level : levels)
+		for(String tissue: tissues)
 		{
-			
-			writer.write("\n" + level + "\n");
-			
-			BufferedReader reader = new BufferedReader(new FileReader(new File(
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "pValuesForTime_taxa_Cecal Content_" + level + ".txt")));
+					+ File.separator + "pValueTaxaSummary" + tissue +  ".txt")));
 			
-			reader.readLine();
+			writer.write("taxa\tfdrPValue\tupIn\n");
 			
-			for(String s = reader.readLine() ; s != null; s= reader.readLine())
+			String[] levels = { "phylum","class","order","family","genus", "otu" };
+				for( String level: levels)
 			{
-				String[] splits = s.split("\t");
-				if( splits.length != 5)
-					throw new Exception("Parsing error");
+				System.out.println(level);
+				writer.write("\n" + level + "\n");
 				
-				String key = splits[0].replaceAll("\"","");
+				BufferedReader reader = new BufferedReader(new FileReader(new File(
+						ConfigReader.getRachSachReanalysisDir()
+						+ File.separator + "rdpAnalysis" 
+						+ File.separator + "pValuesForTime_taxa_"+ tissue +  "_" + level + ".txt")));
 				
-				if( Double.parseDouble(splits[4]) < 0.10 )
+				reader.readLine();
+				
+				for(String s = reader.readLine() ; s != null; s= reader.readLine())
 				{
-					String higher = "high sac";
+					String[] splits = s.split("\t");
+					if( splits.length != 5)
+						throw new Exception("Parsing error");
 					
-					if( Double.parseDouble(splits[3] ) > Double.parseDouble(splits[2]))
-						higher = "low sac";
+					String key = splits[0].replaceAll("\"","");
 					
-					writer.write( key + "\t" 
-							+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\n");
-					writer.flush();
+					if( Double.parseDouble(splits[4]) < 0.10 )
+					{
+						String higher = "high sac";
+						
+						if( Double.parseDouble(splits[3] ) > Double.parseDouble(splits[2]))
+							higher = "low sac";
+						
+						writer.write( key + "\t" 
+								+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\n");
+						writer.flush();
+					}
 				}
 			}
+				
+			writer.flush();  writer.close();
 		}
-
-		writer.flush();  writer.close();
 	}
 }
