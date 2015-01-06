@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
-import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class GatherMDSAcrossTree
@@ -20,10 +19,10 @@ public class GatherMDSAcrossTree
 		
 		writer.write("level\tminCecum\tminColon\n");
 		
-		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		String[] levels = { "phylum","class","order","family","genus", "otu" };
+		
+		for(String level : levels )
 		{
-			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
-			
 			writer.write(level + "\t");
 			writer.write(getVal(level, "Cecal Content")  + "\t");
 			writer.write(getVal(level, "Colon content")  + "\n");

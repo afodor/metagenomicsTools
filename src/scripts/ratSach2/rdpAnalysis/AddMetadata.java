@@ -88,29 +88,38 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
-		/*
-		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
+		String[] levels = { "phylum","class","order","family","genus", "otu" };
+		String[] tissues = { "Cecal Content", "Colon content" };
+		
+		for(String level : levels)
+			for( String tissue : tissues )
 		{
-			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			System.out.println(level);
 			BufferedReader reader = new BufferedReader(new FileReader(new File( 
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt" )));
+					+ File.separator + "pcoa_" + level + "_" + tissue + ".txt")));
 			
 			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "WithMetadata.txt" )));
+					+ File.separator + "pcoa_" + "pcoa_" + level + "_" + tissue +  "WithMetadata.txt" )));
 			
-			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
+			OtuWrapper wrapper = level.equals("otu") ? 
+					new OtuWrapper(
+					ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
+					"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + tissue +  ".txt") : 
+					
+					new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
-					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
+					+ File.separator + "sparseThreeColumn_" + level + 
 						"_AsColumns.txt");
 			
 			addSomeMetadata(reader, writer,false, wrapper);
 		}
-		*/
+	}
 		
+		/*
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
@@ -135,7 +144,7 @@ public class AddMetadata
 			
 			addSomeMetadata(reader, writer,true, wrapper);
 			
-			String[] tissues = { "Cecal Content", "Colon content" };
+		
 			
 			for(String tissue : tissues)
 			{
@@ -156,6 +165,5 @@ public class AddMetadata
 				addSomeMetadata(reader, writer,false, wrapper);
 				
 			}
-		}
-	}
+		}*/
 }

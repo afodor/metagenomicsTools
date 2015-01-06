@@ -43,6 +43,11 @@ public class WriteSpreadsheetsForR
 		
 		wrapper.writeNormalizedLoggedDataToFile(anotherFilePath);
 		
+		anotherFilePath = new File(
+				ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
+				"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + tissue +  ".txt");
+		
+		OtuWrapper.transpose(aFile.getAbsolutePath(),anotherFilePath.getAbsolutePath(), false);
 	}
 	
 	private static File writeForATissue(String tissue) throws Exception
