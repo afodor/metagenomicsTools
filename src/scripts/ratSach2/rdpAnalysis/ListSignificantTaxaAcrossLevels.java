@@ -43,9 +43,9 @@ public class ListSignificantTaxaAcrossLevels
 			if( mfl.getTissue().equals(tissue))
 			{
 				if(mfl.getLine().equals("Low"))
-					h.lowSach.add(wrapper.getDataPointsUnnormalized().get(x).get(taxaIndex));
+					h.lowSach.add(wrapper.getDataPointsNormalized().get(x).get(taxaIndex));
 				else if( mfl.getLine().equals("High"))
-					h.hiSach.add(wrapper.getDataPointsUnnormalized().get(x).get(taxaIndex));
+					h.hiSach.add(wrapper.getDataPointsNormalized().get(x).get(taxaIndex));
 				else throw new Exception("Unexpected line " + mfl.getLine());
 			}
 		}
