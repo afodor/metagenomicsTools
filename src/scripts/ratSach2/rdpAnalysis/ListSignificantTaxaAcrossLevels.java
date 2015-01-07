@@ -142,7 +142,7 @@ public class ListSignificantTaxaAcrossLevels
 						double ratio= meanHigh / meanLow;
 						
 						if( ratio< 1)
-							ratio = 1/ ratio;
+							ratio = -1/ ratio;
 						
 						writer.write(meanHigh + "\t");
 						writer.write(meanLow + "\t");
