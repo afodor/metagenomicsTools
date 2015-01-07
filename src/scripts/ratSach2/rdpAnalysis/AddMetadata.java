@@ -85,6 +85,9 @@ public class AddMetadata
 	}
 	
 	
+	/*
+	 * This is run after running r scripts.
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		String[] levels = { "phylum","class","order","family","genus", "otu" };
@@ -107,8 +110,7 @@ public class AddMetadata
 			OtuWrapper wrapper = level.equals("otu") ? 
 					new OtuWrapper(
 							ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
-							"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + "all"+  ".txt") : 
-					
+							"sparseThreeColumn_otu_AsColumns.txt") : 
 					new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
 					+ File.separator + "sparseThreeColumn_" + level + 
@@ -133,8 +135,11 @@ public class AddMetadata
 			addSomeMetadata(reader, writer,true, wrapper);
 		}
 	}
-		
-		/*
+}
+	
+	/*  This run prior to running r scripts
+	public static void main(String[] args) throws Exception
+	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
@@ -159,7 +164,11 @@ public class AddMetadata
 			
 			addSomeMetadata(reader, writer,true, wrapper);
 			
+		}
+		*/
 		
+		
+		/*
 			
 			for(String tissue : tissues)
 			{
@@ -181,4 +190,3 @@ public class AddMetadata
 				
 			}
 		}*/
-}

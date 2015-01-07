@@ -81,7 +81,7 @@ public class ListSignificantTaxaAcrossLevels
 					OtuWrapper wrapper = level.equals("otu") ? 
 							new OtuWrapper(
 									ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
-									"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + "all"+  ".txt") : 
+									"sparseThreeColumn_otu_AsColumns.txt") : 
 							
 							new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
 							+ File.separator + "rdpAnalysis" 
