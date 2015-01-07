@@ -6,15 +6,58 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import parsers.OtuWrapper;
 import scripts.ratSach2.GreengenesOtuLookup;
+import scripts.ratSach2.MappingFileLine;
+import utils.Avevar;
 import utils.ConfigReader;
 
 public class ListSignificantTaxaAcrossLevels
 {
+	private static class Holder
+	{
+		List<Double> hiSach = new ArrayList<Double>();
+		List<Double> lowSach = new ArrayList<Double>();
+	}
+	
+	private static Holder getUnnormalizedData( HashMap<String, MappingFileLine> metaMap ,
+							String tissue, String taxa, OtuWrapper wrapper ) throws Exception
+	{
+		Holder h= new Holder();
+		
+		int taxaIndex = wrapper.getIndexForOtuName(taxa);
+		
+		if( taxaIndex == -1 )
+			throw new Exception("Could not find " + taxa);
+		
+		
+		for( int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = wrapper.getSampleNames().get(x);
+			MappingFileLine mfl = metaMap.get(sampleName);
+			
+			if( mfl.getTissue().equals(tissue))
+			{
+				if(mfl.getLine().equals("Low"))
+					h.lowSach.add(wrapper.getDataPointsUnnormalized().get(x).get(taxaIndex));
+				else if( mfl.getLine().equals("High"))
+					h.hiSach.add(wrapper.getDataPointsUnnormalized().get(x).get(taxaIndex));
+				else throw new Exception("Unexpected line " + mfl.getLine());
+			}
+		}
+		
+		
+		return h;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, MappingFileLine> metaMap = MappingFileLine.getMap();
+		
 		NumberFormat nf = NumberFormat.getInstance();
 		
 		nf.setMinimumFractionDigits(3);
@@ -30,11 +73,21 @@ public class ListSignificantTaxaAcrossLevels
 					+ File.separator + "rdpAnalysis" 
 					+ File.separator + "pValueTaxaSummary" + tissue +  ".txt")));
 			
-			writer.write("taxa\tfdrPValue\tupIn\tfullTax\n");
+			writer.write("taxa\tfdrPValue\tupIn\tfullTax\tavgHigh\tavgLow\tratio\n");
 			
 			String[] levels = { "phylum","class","order","family","genus", "otu" };
 				for( String level: levels)
 			{
+					OtuWrapper wrapper = level.equals("otu") ? 
+							new OtuWrapper(
+									ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" + File.separator + 
+									"sparseThreeColumn_" +  "otu" +  "_AsColumns_" + "all"+  ".txt") : 
+							
+							new OtuWrapper(ConfigReader.getRachSachReanalysisDir()
+							+ File.separator + "rdpAnalysis" 
+							+ File.separator + "sparseThreeColumn_" + level + 
+								"_AsColumns.txt");	
+					
 				System.out.println(level);
 				writer.write("\n" + level + "\n");
 				
@@ -55,9 +108,16 @@ public class ListSignificantTaxaAcrossLevels
 					
 					if( key.equals("Clostridium.XVIII"))
 						key = "Clostridium XVIII";
+					else 
+						key = key.replaceAll("\\.", " ");
+					
+					if( key.equals("Escherichia Shigella"))
+						key = "Escherichia/Shigella";
 					
 					if( level.equals("otu"))
 						key = key.replaceAll("X", "");
+					
+					Holder h = getUnnormalizedData(metaMap, tissue, key, wrapper);
 					
 					if( Double.parseDouble(splits[4]) < 0.10 )
 					{
@@ -70,11 +130,23 @@ public class ListSignificantTaxaAcrossLevels
 								+ nf.format(Double.parseDouble(splits[4]))  + "\t" +  higher + "\t");
 						
 						if( level.equals("otu") )
-							writer.write(otuTaxMap.get(key) + "\n");
+							writer.write(otuTaxMap.get(key) + "\t");
 						else if( level.equals("genus"))
-							writer.write(genusMap.get(key) + "\n");
+							writer.write(genusMap.get(key) + "\t");
 						else
-							writer.write("NA\n");
+							writer.write("NA\t");
+						
+						double meanHigh = new Avevar(h.hiSach).getAve();
+						double meanLow= new Avevar(h.lowSach).getAve();
+						
+						double ratio= meanHigh / meanLow;
+						
+						if( ratio< 1)
+							ratio = 1/ ratio;
+						
+						writer.write(meanHigh + "\t");
+						writer.write(meanLow + "\t");
+						writer.write(ratio + "\n");
 						
 						writer.flush();
 					}
