@@ -24,11 +24,24 @@ for( t in taxa )
 {
 	colIndex = which(names(myT) == t)
 	
-	boxplot( myT[ myT$tissue=="Cecal Content" & myT$line == "High" ,colIndex ],
-				myT[ myT$tissue=="Cecal Content" & myT$line == "Low", colIndex ],
-					myT[ myT$tissue=="Colon content" & myT$line == "High",colIndex ],
-					myT[ myT$tissue=="Colon content" & myT$line == "Low",colIndex ],
+	c1 <- myT[ myT$tissue=="Cecal Content" & myT$line == "High" ,colIndex ];
+	c2 <- myT[ myT$tissue=="Cecal Content" & myT$line == "Low", colIndex ]
+	c3 <- myT[ myT$tissue=="Colon content" & myT$line == "High",colIndex ]
+	c4 <- myT[ myT$tissue=="Colon content" & myT$line == "Low",colIndex ]
+	
+	dataVector <- c(c1,c2,c3,c4)
+	factorVector <- factor( c( rep("C1", length( c1)),rep("C2", length( c2)), rep("C3", length( c3)),
+								rep("C4", length( c4)) ))
+								
+	dFrame <- data.frame(dataVector , factorVector ) 
+	
+	boxplot(dFrame$dataVector  ~ dFrame$factorVector,
 					main = t , names = c("cec high", "cec lo", "col high", "col lo"),las=2)
+					
+	stripchart(dataVector~ factorVector, data = dFrame, 
+            vertical = TRUE, method = "jitter", 
+            pch = 21, col = "maroon", bg = "bisque", 
+            add = TRUE) 
 }
 
 	
