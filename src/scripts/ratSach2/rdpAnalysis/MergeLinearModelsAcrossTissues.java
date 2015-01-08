@@ -39,7 +39,7 @@ public class MergeLinearModelsAcrossTissues
 			
 			double totalCounts = wrapper.getTotalCounts();
 			
-			writer.write("taxa\tcecum\tcolon\trelativeAbundance\n");
+			writer.write("taxa\tcecum\tcolon\trelativeAbundance\ttaxaIfSigInEither\n");
 			
 			HashMap<String, Holder> map = getMap(level);
 			
@@ -64,7 +64,12 @@ public class MergeLinearModelsAcrossTissues
 					if( index == -1)
 						throw new Exception("Could not find " + key);
 					
-					writer.write(( wrapper.getCountsForTaxa(key) / totalCounts) + "\n");
+					writer.write(( wrapper.getCountsForTaxa(key) / totalCounts) + "\t");
+					
+					if( Math.abs(h.pValueCecum)  >= 1 || Math.abs( h.pValueColon)  > 1 )
+						writer.write(s + "\n");
+					else
+						writer.write("\n");
 				}
 			}
 			
@@ -132,7 +137,7 @@ public class MergeLinearModelsAcrossTissues
 	
 	private static double getLogVal( String[] splits ) throws Exception
 	{
-		double pValue = Math.log10(Double.parseDouble(splits[1]));
+		double pValue = Math.log10(Double.parseDouble(splits[4]));
 		
 		if( Double.parseDouble(splits[3]) > Double.parseDouble(splits[2]))
 			pValue = -pValue;
