@@ -27,7 +27,8 @@ for( t in taxa )
 	boxplot( myT[ myT$tissue=="Cecal Content" & myT$line == "High" ,colIndex ],
 				myT[ myT$tissue=="Cecal Content" & myT$line == "Low", colIndex ],
 					myT[ myT$tissue=="Colon content" & myT$line == "High",colIndex ],
-					myT[ myT$tissue=="Colon content" & myT$line == "Low",colIndex ] )
+					myT[ myT$tissue=="Colon content" & myT$line == "Low",colIndex ],
+					main = t , names = c("cec high", "cec lo", "col high", "col lo"),las=2)
 }
 
 	
