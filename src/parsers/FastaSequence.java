@@ -87,7 +87,7 @@ public class FastaSequence implements Comparable<FastaSequence>
 	public static void main(String[] args) throws Exception
 	{
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(
-				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\gcOut.txt\\hamp-fodor-090810.fna");
+				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\hamp-fodor-090810.fna");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\gcOut.txt")));
