@@ -59,6 +59,49 @@ public class FastaSequence implements Comparable<FastaSequence>
 		this.sequence = new StringBuffer( sequence);
 	}
 	
+	public double getGCRatioCheckingForValid() throws Exception
+	{
+		double numGC = 0;
+		double numValid =0;
+		String seq = this.sequence.toString().toUpperCase();
+		
+		for( int x=0; x < seq.length(); x++)
+		{
+			char c = seq.charAt(x);
+			
+			if( c == 'C' || c == 'G')
+			{
+				numGC++;
+				numValid++;
+				
+			} 
+			else if ( c== 'A' || c == 'T')
+			{
+				numValid++;
+			}
+		}
+		
+		return numGC /numValid;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(
+				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\gcOut.txt\\hamp-fodor-090810.fna");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\gcOut.txt")));
+		
+		writer.write("gccontent\n");
+		
+		for(FastaSequence fs= fsoat.getNextSequence(); fs != null;
+				fs = fsoat.getNextSequence() )
+		{
+			writer.write(fs.getGCRatioCheckingForValid() + "\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
 
 	public static HashMap<String, FastaSequence> getFirstTokenSequenceMap(String filePath)
 		throws Exception
