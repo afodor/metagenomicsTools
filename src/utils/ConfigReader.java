@@ -76,9 +76,16 @@ public class ConfigReader
 	public static final String MICROBES_VS_METABOLITES_DIR = "MICROBES_VS_METABOLITES_DIR";
 	public static final String VANDERBILT_DIR = "VANDERBILT_DIR";
 	
+	public static final String TANYA_DIR="TANYA_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
+	}
+	
+	public static String getTanyaDir() throws Exception
+	{
+		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
 	}
 	
 	public static String getNinaWithDuplicatesDir() throws Exception
