@@ -38,7 +38,7 @@ public class Write5Levels
 			{
 				String level = getTaxonomy(firstLineSplits[x]);
 				BufferedWriter writer =  writers.get(level);
-				writer.write("\t" + splits[x]);
+				writer.write("\t" + Double.parseDouble(splits[x]));
 			}
 			
 
