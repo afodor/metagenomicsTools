@@ -14,8 +14,9 @@
 package utils;
 
 import java.io.InputStream;
-
 import java.util.Properties;
+
+import jdk.internal.org.objectweb.asm.tree.TypeAnnotationNode;
 
 public class ConfigReader
 {
@@ -85,7 +86,7 @@ public class ConfigReader
 	
 	public static String getTanyaDir() throws Exception
 	{
-		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
+		return getConfigReader().getAProperty(TANYA_DIR);
 	}
 	
 	public static String getNinaWithDuplicatesDir() throws Exception
