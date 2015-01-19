@@ -26,19 +26,19 @@ public class AddMetadata
 					ConfigReader.getTanyaDir() + File.separator + 
 					"pcoa_" + level + "plusMetata.txt")));
 			
-			writer.write("jointID\tpatientID\tnafld\t" + reader.readLine() + "\n");
+			writer.write("jointID\tpatientID\tnafld\t" + reader.readLine().replaceAll("\"", "") + "\n");
 			 
 			for(String s= reader.readLine(); s != null; s= reader.readLine())
 			{
 				String[] splits = s.split("\t");
-				writer.write(splits[0] + "\t");
+				writer.write(splits[0].replaceAll("\"", "") + "\t");
 				
-				StringTokenizer sToken = new StringTokenizer(splits[0], "_");
+				StringTokenizer sToken = new StringTokenizer(splits[0].replaceAll("\"", ""), "_");
 				
 				writer.write(sToken.nextToken() + "\t" + sToken.nextToken());
 				
 				for( int y=1; y< splits.length; y++)
-					writer.write("\t" + splits[y]);
+					writer.write("\t" + splits[y].replaceAll("\"", ""));
 				
 				writer.write("\n");
 			}

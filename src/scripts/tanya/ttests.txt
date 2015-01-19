@@ -1,0 +1,32 @@
+rm(list=ls())
+
+setwd("G:\\tanya")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "pcoa_",taxa,"plusMetata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	pValuesNAFD <- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in 4:ncol(myT)) 
+	{	
+		myLm <- lm( myT[,i] ~  factor( myT$nafld) )
+		myAnova <- anova(myLm)
+		pValuesNAFD[index] <- myAnova$"Pr(>F)"[1]
+		names[index] = names(myT)[i]
+		index <- index + 1	
+	}
+
+	dFrame <- data.frame( names, pValuesNAFD  ) 
+	dFrame <- dFrame [order(dFrame$pValuesNAFD  ),]
+	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
+							
