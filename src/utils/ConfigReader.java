@@ -16,8 +16,6 @@ package utils;
 import java.io.InputStream;
 import java.util.Properties;
 
-import jdk.internal.org.objectweb.asm.tree.TypeAnnotationNode;
-
 public class ConfigReader
 {
 	public static final String PROPERTIES_FILE = "MetagenomicsTools.properties";
