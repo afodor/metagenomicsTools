@@ -21,8 +21,19 @@ public class ConfirmPValuesAcrossDirection
 			
 			reader.readLine();
 			
-			
+			for(String s= reader.readLine(); s != null ; s= reader.readLine())
+			{
+				String[] splits = s.split("\t");
+				double expected = Double.parseDouble(splits[1]);
+				
+				double written = getAPValue(splits[0].replaceAll("\"", ""),level, "Cecal Content");
+				
+				if(Math.abs(expected-written) > 0.00001)
+					throw new Exception("No " + expected + " " + written);
+			}
 		}
+		
+		System.out.println("Global pass ");
 	}
 	
 	private static double getAPValue(String taxa, String level, String tissue) throws Exception
@@ -35,11 +46,11 @@ public class ConfirmPValuesAcrossDirection
 		{
 			String[] splits = s.split("\t");
 			
-			if( splits[0].equals(taxa))
+			if( splits[0].replaceAll("\"", "").equals(taxa))
 			{
 				double returnVal = Math.log10(Double.parseDouble(splits[4]));
 				
-				if( Double.parseDouble(splits[4]) > Double.parseDouble(splits[3]))
+				if( Double.parseDouble(splits[3]) > Double.parseDouble(splits[2]))
 					returnVal = -returnVal;
 				
 				return returnVal;
