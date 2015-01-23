@@ -29,8 +29,13 @@ public class ConfirmPValuesAcrossDirection
 				
 				double written = getAPValue(splits[0].replaceAll("\"", ""),level, "Cecal Content");
 				
+				boolean isSig =false;
+				
 				if(Math.abs(expected-written) > 0.00001)
 					throw new Exception("No " + expected + " " + written);
+				
+				if( Math.abs(expected) >= 1)
+					isSig = true;
 				
 				expected = Double.parseDouble(splits[2]);
 				
@@ -39,6 +44,18 @@ public class ConfirmPValuesAcrossDirection
 				if(Math.abs(expected-written) > 0.00001)
 					throw new Exception("No " + expected + " " + written);
 				
+				if( Math.abs(expected) >= 1)
+					isSig = true;
+				
+				if(isSig)
+					System.out.println(level + " " + splits[0] + " " + splits[4]);
+				
+				if( isSig && ! splits[0].replaceAll("\"", "").equals(splits[4].replaceAll("\"", "")))
+						throw new Exception("No");
+				
+				if( !isSig && splits.length > 4)
+						throw new Exception("No");
+						
 			}
 		}
 		
