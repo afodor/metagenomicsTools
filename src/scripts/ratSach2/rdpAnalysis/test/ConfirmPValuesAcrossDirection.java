@@ -14,6 +14,7 @@ public class ConfirmPValuesAcrossDirection
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
+			System.out.println(level);
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getRachSachReanalysisDir() + File.separator + "rdpAnalysis" +
 							File.separator +
@@ -30,6 +31,14 @@ public class ConfirmPValuesAcrossDirection
 				
 				if(Math.abs(expected-written) > 0.00001)
 					throw new Exception("No " + expected + " " + written);
+				
+				expected = Double.parseDouble(splits[2]);
+				
+				written = getAPValue(splits[0].replaceAll("\"", ""),level,"Colon content");
+				
+				if(Math.abs(expected-written) > 0.00001)
+					throw new Exception("No " + expected + " " + written);
+				
 			}
 		}
 		
