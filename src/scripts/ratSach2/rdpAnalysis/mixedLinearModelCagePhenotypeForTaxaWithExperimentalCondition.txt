@@ -55,8 +55,8 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names, pValuesLine, pValuesCondition, averageHigh, averageLow) 
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
-	hist(pValuesLine,breaks=25)
-	hist(pValuesCondition,breaks=25)
+	hist(pValuesLine,breaks=10)
+	hist(pValuesCondition,breaks=10)
 	
 	write.table(dFrame, file=paste("pValuesForTimeWithCondition_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
