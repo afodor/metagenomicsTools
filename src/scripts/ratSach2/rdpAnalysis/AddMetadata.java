@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import scripts.ratSach2.MappingFileLine;
 import utils.ConfigReader;
@@ -19,7 +20,7 @@ public class AddMetadata
 	{
 		HashMap<String, MappingFileLine> metaMap = MappingFileLine.getMap();
 		HashMap<String, String> ratToCageMap = getCageMappings();
-		writer.write("sampleID\tline\ttissue\tratID\tcage\tnumSequences\tshannonDiversity\tunrarifiedRichness");
+		writer.write("sampleID\tline\ttissue\tratID\tcage\tcondition\tnumSequences\tshannonDiversity\tunrarifiedRichness");
 		
 		if( !skipFirst)
 		{
@@ -45,7 +46,7 @@ public class AddMetadata
 			writer.write(mfl.getTissue() + "\t"  );
 			writer.write(mfl.getRatID() + "\t");
 			writer.write( ratToCageMap.get(mfl.getRatID()) +"\t");
-			
+			writer.write( mfl.getCondition() + "\t");
 			writer.write(unnormalizedWrapper.getCountsForSample(key) + "\t");
 			writer.write(unnormalizedWrapper.getShannonEntropy(key) + "\t");
 			writer.write(unnormalizedWrapper.getRichness(key) + "");
@@ -88,6 +89,7 @@ public class AddMetadata
 	/*
 	 * This is run after running r scripts.
 	 */
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		String[] levels = { "phylum","class","order","family","genus", "otu" };
@@ -134,10 +136,9 @@ public class AddMetadata
 			
 			addSomeMetadata(reader, writer,true, wrapper);
 		}
-	}
-}
+	}*/
 	
-	/*  This run prior to running r scripts
+	// This run prior to running r scripts
 	public static void main(String[] args) throws Exception
 	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
@@ -165,7 +166,8 @@ public class AddMetadata
 			addSomeMetadata(reader, writer,true, wrapper);
 			
 		}
-		*/
+	}
+}
 		
 		
 		/*

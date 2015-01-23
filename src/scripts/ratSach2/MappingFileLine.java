@@ -14,10 +14,16 @@ public class MappingFileLine
 	private final String line;
 	private final String ratID;
 	private final String tissue;
+	private final String condition;
 	
 	public String getSampleID()
 	{
 		return sampleID;
+	}
+	
+	public String getCondition()
+	{
+		return condition;
 	}
 
 	public String getLine()
@@ -67,7 +73,7 @@ public class MappingFileLine
 		this.line = splits[7];
 		this.ratID = splits[9];
 		this.sampleID = splits[0];
-		
+		this.condition = splits[8];
 	}
 	
 	public static void main(String[] args) throws Exception
