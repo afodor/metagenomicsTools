@@ -7,6 +7,8 @@ setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
 taxaLevels <- c("phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
 
+par(mfrow=c(5,2))
+
 for(taxa in taxaLevels ) 
 	for(tissue in tissueTypes) 
 {
@@ -53,6 +55,8 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names, pValuesLine, pValuesCondition, averageHigh, averageLow) 
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
+	hist(pValuesLine,breaks=25)
+	hist(pValuesCondition,breaks=25)
 	
 	write.table(dFrame, file=paste("pValuesForTimeWithCondition_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
