@@ -47,6 +47,13 @@ public class VerifyAxis
 			
 			if(metaSplits.length - 7 != nonMetaSplits.length)
 				throw new Exception("No");
+			
+			if( ! metaSplits[0].replaceAll("\"", "").equals(nonMetaSplits[0].replaceAll("\"", "")))
+				throw new Exception("No");
+			
+			for( int x=8; x < metaSplits.length; x++)
+				if( ! metaSplits[x].equals(nonMetaSplits[x-7]))
+					throw new Exception("No");
 		}
 	}
 	
