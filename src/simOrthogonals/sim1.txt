@@ -1,0 +1,28 @@
+rm(list=ls())
+
+#http://stackoverflow.com/questions/19096983/when-simulating-multivariate-data-for-regression-how-can-i-set-the-r-squared-e
+simulate <- function(n.obs=10^4, beta=c(5, 3, -2), R.sq=0.001) {
+    stopifnot(length(beta) == 3)
+    df <- data.frame(x1=rnorm(n.obs), x2=rnorm(n.obs))  # x1 and x2 are independent
+    var.epsilon <- (beta[2]^2 + beta[3]^2) * (1 - R.sq) / R.sq
+    stopifnot(var.epsilon > 0)
+    df$epsilon <- rnorm(n.obs, sd=sqrt(var.epsilon))
+    df$y <- with(df, beta[1] + beta[2]*x1 + beta[3]*x2 + epsilon)
+    return(df)
+}
+
+myFrame <- simulate()
+plot(myFrame)
+
+summary( lm ( y ~ x1 + x2, data=myFrame ))
+
+yCentered <- myFrame$y - mean(myFrame$y)
+x1Centered <- myFrame$x1 - mean(myFrame$x1)
+x2Centered <- myFrame$x2 - mean(myFrame$x2)
+
+summary( lm ( yCentered  ~ x1Centered + x2Centered , data=myFrame ))
+
+gHat <- yCentered - cor(yCentered,x1Centered)*x1Centered 
+sHat <- x2Centered - cor(x1Centered, x2Centered)*x1Centered
+
+summary( lm( gHat ~ sHat ))
