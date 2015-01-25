@@ -10,6 +10,12 @@ import java.util.HashSet;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
+/*
+ * Actually, this it turns out had already been done in the R layer
+ * so this class should only be used for testing...
+ * 
+ * 
+ */
 public class WriteTaxaRemovingStoolSamplesInSwab
 {
 	public static void main(String[] args) throws Exception
