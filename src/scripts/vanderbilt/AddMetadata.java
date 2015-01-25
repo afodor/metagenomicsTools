@@ -29,7 +29,7 @@ public class AddMetadata
 				outFile));
 		
 		writer.write("sample\t" + 
-				"run\tstoolOrSwab\tsubjectID\tgenotype\ttreatment\ttype\t" + 
+				"run\tstoolOrSwab\tsubjectID\tgenotype\ttreatment\ttype\ttime\t" + 
 				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness");
 		
 		if( rOutput) 
@@ -70,6 +70,14 @@ public class AddMetadata
 				writer.write(metaMap.get(sampleID).getGenotype() + "\t");
 				writer.write(metaMap.get(sampleID).getTreatment()+ "\t");
 				writer.write(metaMap.get(sampleID).getType()+ "\t");
+				
+				String type = metaMap.get(sampleID).getType();
+				
+				if( type.equals("stool_post") || type.equals("swab_post"))
+					writer.write("post\t");
+				else if( type.equals("stool_pre") || type.equals("swab_pre"))
+					writer.write("pre\t");
+				else throw new Exception("Could not find timepoint " + type);
 			
 				writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
 				writer.write(wrapper.getRichness(sampleKey) + "\t");
