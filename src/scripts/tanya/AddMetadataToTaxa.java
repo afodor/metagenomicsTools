@@ -26,7 +26,12 @@ public class AddMetadataToTaxa
 					ConfigReader.getTanyaDir() + File.separator + 
 					level + "AsColumnsplusMetata.txt")));
 			
-			writer.write("jointID\tpatientID\tnafld\t" + reader.readLine().replaceAll("\"", "") + "\n");
+			writer.write("jointID\tpatientID\tnafld");
+			String[] topSlipts = reader.readLine().replaceAll("\"", "").split("\t");
+			for( int y=1; y < topSlipts.length; y++)
+				writer.write("\t" + topSlipts[y]);
+			
+			writer.write("\n");
 			 
 			for(String s= reader.readLine(); s != null; s= reader.readLine())
 			{

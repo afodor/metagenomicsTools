@@ -37,4 +37,4 @@ plot( 1:50, percentExplained)
 
 dFrame <- data.frame( pValues, percentExplained) 
 write.table(dFrame, file="pValuesForRep1VsRep3.txt", sep="\t")
-							s
+							
