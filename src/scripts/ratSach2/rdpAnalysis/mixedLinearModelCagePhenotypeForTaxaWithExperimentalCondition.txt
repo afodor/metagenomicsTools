@@ -2,7 +2,7 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("C:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
@@ -55,8 +55,8 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names, pValuesLine, pValuesCondition, averageHigh, averageLow) 
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesCondition, method = "BH" )
-	hist(pValuesLine,breaks=10)
-	hist(pValuesCondition,breaks=10)
+	#hist(pValuesLine,breaks=10)
+	#hist(pValuesCondition,breaks=10)
 	
 	write.table(dFrame, file=paste("pValuesForTimeWithCondition_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
