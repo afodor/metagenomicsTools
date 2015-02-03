@@ -16,7 +16,7 @@ public class ReCheckMetadata
 		
 		for(String s : topDir.list())
 		{
-			if( s.toLowerCase().indexOf("metadata") != -1)
+			if( s.toLowerCase().indexOf("metadata") != -1 && s.toLowerCase().indexOf("otu") == -1)
 			{
 				File f=  new File(topDir.getAbsolutePath() + File.separator + s);
 				verifyAFile(f.getAbsolutePath());
@@ -44,6 +44,7 @@ public class ReCheckMetadata
 			String id = splits[3].replaceAll("\"", "");
 			String tissue = splits[2].replaceAll("\"", "");
 			String cage = splits[4].replaceAll("\"", "");
+			String condition = splits[5].replaceAll("\"", "");
 			
 			Holder h = metaMap.get(key);
 			
@@ -55,6 +56,9 @@ public class ReCheckMetadata
 			
 			if( ! h.line.equals(line))
 				throw new Exception("No");
+			
+			if( ! h.condition.equals(condition))
+				throw new Exception("No " + h.condition + " " + condition);
 			
 			String expectedCage = animalToCageMap.get(id);
 			
@@ -73,6 +77,7 @@ public class ReCheckMetadata
 		String animal;
 		String line;
 		String tissue;
+		String condition;
 	}
 	
 	private static HashMap<String, String> getAnimalToCageMap() throws Exception
@@ -123,6 +128,7 @@ public class ReCheckMetadata
 			h.animal = splits[9].replaceAll("\"", "");
 			h.line = splits[7].replaceAll("\"", "");
 			h.tissue = splits[4].replaceAll("\"", "");
+			h.condition = splits[8].replaceAll("\"", "");
 			
 			map.put(key,h);
 		}
