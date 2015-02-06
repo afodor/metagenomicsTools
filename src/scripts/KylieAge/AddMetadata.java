@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -19,7 +20,13 @@ public class AddMetadata
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
+
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
+			
+			OtuWrapper wrapper = new OtuWrapper( 
+					ConfigReader.getKylieAgeDir()+
+					File.separator + "rdp" + File.separator + 
+					"all" + level +  "asColumns.txt");
 			System.out.println(level);
 			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKylieAgeDir()+
@@ -28,7 +35,8 @@ public class AddMetadata
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKylieAgeDir()+
 					File.separator + "rdp" + File.separator + "pcoa_" + level  + "PlusMetadata.txt")));
 			
-			writer.write("sampleID\tmonkey\toldYoung\tlocation\toldShare\tcohab_neighbor\t" + reader.readLine() + "\n");
+			writer.write("sampleID\tnumSequences\tshannonEvenness\tshannonDiversity\tunrarifiedRichness\t" + 
+			"monkey\toldYoung\tlocation\toldShare\tcohab_neighbor\t" + reader.readLine() + "\n");
 			
 			for( String s = reader.readLine() ; s != null; s= reader.readLine())
 			{
@@ -40,7 +48,16 @@ public class AddMetadata
 				if( mp == null)
 					throw new Exception("Could not find " + key);
 				
-				writer.write( splits[0].replaceAll("\"", "") + "\t" +  mp.getMonkey() + "\t" + mp.getOldYoung() + "\t" + mp.getLocation() +"\t" + mp.getOldShare() + "\t" + mp.getCohabitationNeighbor());
+
+				String sampleID = splits[0].replaceAll("\"", "");
+				writer.write( sampleID+ "\t");
+				
+				writer.write( wrapper.getCountsForSample(sampleID) + "\t" );
+				writer.write( wrapper.getEvenness(sampleID) + "\t" );
+				writer.write( wrapper.getShannonEntropy(sampleID) + "\t" );
+				writer.write( wrapper.getRichness(sampleID) + "\t");
+				
+				writer.write(mp.getMonkey() + "\t" + mp.getOldYoung() + "\t" + mp.getLocation() +"\t" + mp.getOldShare() + "\t" + mp.getCohabitationNeighbor());
 				
 				for( int y=1; y < splits.length; y++)
 					writer.write("\t" + splits[y].replaceAll("\"", "") );
