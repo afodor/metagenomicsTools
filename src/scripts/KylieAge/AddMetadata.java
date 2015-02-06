@@ -35,7 +35,7 @@ public class AddMetadata
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKylieAgeDir()+
 					File.separator + "rdp" + File.separator + "pcoa_" + level  + "PlusMetadata.txt")));
 			
-			writer.write("sampleID\tnumSequences\tshannonEvenness\tshannonDiversity\tunrarifiedRichness\t" + 
+			writer.write("sampleID\tread1_2\tnumSequences\tshannonEvenness\tshannonDiversity\tunrarifiedRichness\t" + 
 			"monkey\toldYoung\tlocation\toldShare\tcohab_neighbor\t" + reader.readLine() + "\n");
 			
 			for( String s = reader.readLine() ; s != null; s= reader.readLine())
@@ -51,6 +51,7 @@ public class AddMetadata
 
 				String sampleID = splits[0].replaceAll("\"", "");
 				writer.write( sampleID+ "\t");
+				writer.write( sampleID.split("_")[3] + "\t" );
 				
 				writer.write( wrapper.getCountsForSample(sampleID) + "\t" );
 				writer.write( wrapper.getEvenness(sampleID) + "\t" );
