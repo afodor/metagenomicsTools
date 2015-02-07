@@ -1,23 +1,23 @@
 rm(list=ls())
 
-setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("C:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
 level <- "genus"
 inFileName <- paste( "sparseThreeColumn_", level, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 
 myT <-read.table(inFileName,header=TRUE,sep="\t")
-	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
-	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
-taxa <- c(
-"Olsenella","Blautia","Desulfovibrio","Collinsella","Clostridium.XVIII","Acetitomaculum",
-	"Asaccharobacter","Flavonifractor","Papillibacter","Marvinbryantia","Clostridium.IV",
-	"Barnesiella","Desulfomicrobium","Anaerovorax","Anaerofustis",
-	"Mogibacterium"
+
+taxa <- c("Blautia","Clostridium.XVIII","Collinsella","Desulfomicrobium","Acetitomaculum",
+"Anaerovorax","Anaerofustis","Asaccharobacter","Barnesiella",
+"Clostridium.IV","Desulfovibrio","Flavonifractor","Marvinbryantia","Mogibacterium",
+"Olsenella","Papillibacter"
 )
 
-taxa<- sort(taxa)
+#taxa<- sort(taxa)
 
 par(mfrow=c(4,4))
 for( t in taxa ) 
@@ -38,10 +38,10 @@ for( t in taxa )
 	boxplot(dFrame$dataVector  ~ dFrame$factorVector,
 					main = t , names = c("cec high", "cec lo", "col high", "col lo"),las=2)
 					
-	stripchart(dataVector~ factorVector, data = dFrame, 
-            vertical = TRUE, method = "jitter", 
-            pch = 21, col = "maroon", bg = "bisque", 
-            add = TRUE) 
+	#stripchart(dataVector~ factorVector, data = dFrame, 
+    #        vertical = TRUE, method = "jitter", 
+    #        pch = 21, col = "maroon", bg = "bisque", 
+     #       add = TRUE) 
 }
 
 	
