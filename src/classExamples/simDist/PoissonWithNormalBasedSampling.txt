@@ -1,4 +1,5 @@
 rm(list=ls())
+library("gap")
 
 numSimulations <- 10000
 numReadsPerSimulation <- 100000
@@ -40,5 +41,6 @@ for( i in 1:numSimulations)
 	plot(expectedNumberFound, variance)
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
+	Sys.sleep(.1)
 	
 }
