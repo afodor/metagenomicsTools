@@ -2,9 +2,11 @@
 rm(list=ls())
 library("vegan")
 
-setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
+# these are available at
+# https://github.com/afodor/metagenomicsTools/tree/master/src/scripts/ratSach2/rdpAnalysis/spreadsheets
+setwd("C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
 
-taxaLevels <- c("otu", "phylum","class","order","family","genus")
+taxaLevels <- c( "phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
 
 for(taxa in taxaLevels ) 

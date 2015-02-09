@@ -2,7 +2,10 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
+
+# these are available at
+# https://github.com/afodor/metagenomicsTools/tree/master/src/scripts/ratSach2/rdpAnalysis/spreadsheets
+setwd("C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
@@ -52,6 +55,6 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForTime_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForLine_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
