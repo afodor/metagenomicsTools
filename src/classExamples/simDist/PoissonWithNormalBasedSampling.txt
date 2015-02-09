@@ -1,0 +1,44 @@
+rm(list=ls())
+
+numSimulations <- 10000
+numReadsPerSimulation <- 100000
+oneToNumSims <- 1:numReadsPerSimulation 
+
+pValues <- vector();
+numberFound<- vector();
+variance <- vector();
+expectedNumberFound <- vector();
+
+for( i in 1:numSimulations)
+{
+	rateOfGeneExperession <- runif(1) / 100;  # no gene is more than 1%
+	expectedMean <- rateOfGeneExperession  * numReadsPerSimulation 
+	
+	#null hypothesis always true under Poisson distribution
+	var = expectedMean
+	
+	numFound<- rnorm( 1,mean=expectedMean , sd = sqrt(var))
+	
+	if( numFound < 0 ) 
+		numFound =0;
+	
+	numFound= round(numFound)
+	numberFound[i] = numFound
+	
+	expectedNumberFound[i] <- expectedMean
+	variance[i] <- var
+
+	pValues[i] <- 
+		poisson.test( numFound, numReadsPerSimulation, rateOfGeneExperession,alternative="two.sided")$p.value	
+	
+	par( mfrow = c( 2, 2 ) )
+
+	titleStr <- paste("Number of simulated genes = ",i,sep="")
+
+	# load package gap first
+	plot(numberFound, expectedNumberFound,main=titleStr)
+	plot(expectedNumberFound, variance)
+	qqunif(pValues,logscale=FALSE,)
+	hist(pValues,plot=TRUE,breaks=10)
+	
+}
