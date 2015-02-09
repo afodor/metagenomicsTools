@@ -16,11 +16,12 @@ public class AddMetadata
 {
 	private static void addSomeMetadata(BufferedReader reader, 
 					BufferedWriter writer,boolean skipFirst,
-					OtuWrapper unnormalizedWrapper) throws Exception
+					OtuWrapper unnormalizedWrapper,
+					HashMap<String, Double> rarifiedMap ) throws Exception
 	{
 		HashMap<String, MappingFileLine> metaMap = MappingFileLine.getMap();
 		HashMap<String, String> ratToCageMap = getCageMappings();
-		writer.write("sampleID\tline\ttissue\tratID\tcage\tcondition\tnumSequences\tshannonDiversity\tunrarifiedRichness");
+		writer.write("sampleID\tline\ttissue\tratID\tcage\tcondition\tnumSequences\tshannonDiversity\trarifiedRichness50\tunrarifiedRichness");
 		
 		if( !skipFirst)
 		{
@@ -49,6 +50,11 @@ public class AddMetadata
 			writer.write( mfl.getCondition() + "\t");
 			writer.write(unnormalizedWrapper.getCountsForSample(key) + "\t");
 			writer.write(unnormalizedWrapper.getShannonEntropy(key) + "\t");
+			
+			Double rarified = rarifiedMap.get(key);
+			
+			writer.write( (rarified == null ? "NA\t" : rarified + "\t" )  );
+			
 			writer.write(unnormalizedWrapper.getRichness(key) + "");
 			
 			for( int x=1; x < splits.length; x++)
@@ -163,9 +169,34 @@ public class AddMetadata
 					+ File.separator + "sparseThreeColumn_" + NewRDPParserFileLine.TAXA_ARRAY[x] + 
 						"_AsColumns.txt");
 			
-			addSomeMetadata(reader, writer,true, wrapper);
+			HashMap<String, Double> rarifiedMap = 
+					getRarifiedRichnessMap(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			
+			addSomeMetadata(reader, writer,true, wrapper,rarifiedMap );
 			
 		}
+	}
+	
+	private static HashMap<String, Double> getRarifiedRichnessMap(String level) throws Exception
+	{
+		HashMap<String, Double> map = new HashMap<String, Double>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+			ConfigReader.getRachSachReanalysisDir() + File.separator + 
+			"rdpAnalysis" + File.separator + "sparseThreeColumn_" + level + "rarified.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s=  reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put(splits[0], Double.parseDouble(splits[1]));
+		}
+		
+		return map;
 	}
 }
 		
