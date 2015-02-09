@@ -2,9 +2,9 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("G:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
-taxaLevels <- c("otu", "phylum","class","order","family","genus")
+taxaLevels <- c("phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
 
 for(taxa in taxaLevels ) 
@@ -14,7 +14,7 @@ for(taxa in taxaLevels )
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
+	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myT <- myT[ which( myT$tissue== tissue) , ]
@@ -25,7 +25,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 9:numCols) 
+	for( i in 7:numCols) 
 	{	
 		if( sum(myT[,i] != 0) >= nrow(myT)/4 )
 		{
