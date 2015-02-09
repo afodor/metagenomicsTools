@@ -1,0 +1,51 @@
+library("gap")
+
+rm(list=ls())
+
+#no gene more than 0.01
+geneExpressionLane1 <- runif(1) / 100 
+geneExpressionLane2 <- geneExpressionLane1;
+
+pValues <- vector()
+
+for( i in 1:10000)
+{
+	x1 <- 0
+	x2 <- 0
+
+	numReadsLane1 <- ceiling( 5000 + runif(1) * 5000)
+	numReadsLane2 <- ceiling( 5000 + runif(1) * 5000)
+
+	for( j in 1:numReadsLane1)
+		if( runif(1) < geneExpressionLane1 ) 
+			x1 <- x1+ 1;
+			
+			
+	for( j in 1:numReadsLane2)
+		if( runif(1) < geneExpressionLane2 ) 
+			x2 <- x2 + 1;
+			
+	totalReads <- numReadsLane1 + numReadsLane2;
+	
+	m <- matrix( c(x1,x2,numReadsLane1-x1,numReadsLane2-x2 ), nrow=2)
+	pValue <- fisher.test(m,alternative="greater")$p.value;
+		
+	
+	if( pValue  < 0.5 ) 
+	{
+		pValue = pValue * 2;
+	}
+	else
+	{
+		pValue = (1-pValue) * 2;
+	}
+	
+	pValues[i] <- pValue;
+	
+	titleStr <- paste("Number of simulated genes = ",i,sep="")
+
+	par( mfrow = c( 2, 1 ) )
+	# load package gap first
+	qqunif(pValues,main=titleStr)
+	hist(pValues,plot=TRUE,breaks=10)
+}

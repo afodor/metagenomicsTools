@@ -10,7 +10,7 @@ i <- 1;
 sum <- 0;
 for( x in xVals )
 {
-	# our prior with 9 heads and 9 flips 
+	# our prior with 9 heads and 9 tails
 	# our new data with 14 heads and 10 tails
 	posteriorDist[i] <- dbeta( x, 10,10 ) * dbinom( 14, 24, x)
 	sum = sum + posteriorDist[i];

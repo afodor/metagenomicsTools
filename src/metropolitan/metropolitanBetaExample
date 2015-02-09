@@ -7,7 +7,7 @@ posteiorDist <- vector(length=numIterations )
 
 for( i in 1:numIterations )
 {
-	# our prior with 9 heads and 9 flips 
+	# our prior with 9 heads and 9 tails
 	# our new data with 14 heads and 10 tails
 	pOld <- dbeta( piOld, 10,10 ) * dbinom( 14, 24, piOld )
 	
