@@ -44,7 +44,7 @@ for( x in xVals )
 
 for( i in 1:numIterations )
 {
-	# our prior with 9 heads and 9 tails
+	# our prior from dexp
 	# our new data with 14 heads and 10 tails
 	pOld <- dexp( piOld,x=5) * dbinom( numHeads, numTails+numHeads, piOld )
 	
