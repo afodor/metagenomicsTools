@@ -26,14 +26,15 @@ for( i in 1:numSimulations)
 	numFound= round(numFound)
 	numberFound[i] = numFound
 	
-	p = numFound / var
-	r = numFound * numFound / (var - numFound ) 
+	# under the null hypothesis for the negative binomial distribution
+	p = expectedMean / var
+	r = expectedMean * expectedMean / (var - expectedMean ) 
 	r = round(r)
 	
 	expectedNumberFound[i] <- expectedMean
 	variance[i] <- var
 
-	pValues[i] <- 2 * (1 - pnbinom(numReadsPerSimulation - r , r,p))	
+	pValues[i] <- (1 - pnbinom(numFound, r,p))	
 	
 	par( mfrow = c( 2, 2 ) )
 
