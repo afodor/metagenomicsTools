@@ -10,7 +10,7 @@ r = 3
 # distribution of wins
 k = 0:40
 
-numTrials <- 10000
+numTrials <- 100000
 
 simTournaments <- vector(length=numTrials)
 
@@ -42,3 +42,6 @@ lines(k, myNegBinom(k,r,p)* numTrials, col="blue")
 
 # or equivalently
 lines(k, dnbinom(k,r,p) * numTrials, col = "red")
+
+mean(simTournaments)
+var(simTournaments)
