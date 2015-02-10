@@ -1,0 +1,44 @@
+
+rm(list=ls())
+
+#prob of losing a game
+p = 0.4
+
+# the number of losses before you are removed from the tournament
+r = 3
+
+# distribution of wins
+k = 0:40
+
+numTrials <- 10000
+
+simTournaments <- vector(length=numTrials)
+
+for( i in 1: numTrials)
+{
+	numWins <- 0
+	numLosses <- 0
+	
+	
+	while( numLosses < r ) 
+	{
+		if( runif(1) <= p)
+		{
+			numLosses = numLosses + 1;
+		}
+		else
+		{
+			numWins = numWins + 1;
+		}
+	}
+	
+	simTournaments[i] = numWins
+}
+
+myNegBinom <- function(k,r,p) { choose(k+r-1,r-1) * (1-p)^k * p ^ r } 
+
+hist(simTournaments, breaks=40)
+lines(k, myNegBinom(k,r,p)* numTrials, col="blue")
+
+# or equivalently
+lines(k, dnbinom(k,r,p) * numTrials, col = "red")
