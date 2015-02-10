@@ -2,7 +2,7 @@ rm(list=ls())
 library("gap")
 
 numSimulations <- 10000
-numReadsPerSimulation <- 100000
+numReadsPerSimulation <- 10000000
 oneToNumSims <- 1:numReadsPerSimulation 
 
 pValues <- vector();
@@ -16,7 +16,7 @@ for( i in 1:numSimulations)
 	expectedMean <- rateOfGeneExperession  * numReadsPerSimulation 
 	
 	#null hypothesis always true under Poisson distribution
-	var = 10 * expectedMean
+	var = 100 * expectedMean
 	
 	numFound<- rnorm( 1,mean=expectedMean , sd = sqrt(var))
 	
