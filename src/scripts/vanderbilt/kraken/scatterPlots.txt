@@ -1,9 +1,11 @@
 
 rm(list=ls())
 
-setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 myT <- read.table("mergedKrakenRDP_phylum_WithMetadata.txt", header=TRUE, sep="\t")
+# remove outlier samples
+myT <- myT[ myT$sample != "ST00046_all2" & myT$sample != "ST00045_all1", ]
 
 getColors <- function(data) 
 {	
@@ -78,7 +80,7 @@ getIncludedTaxa <- function(myT)
 
 myT <- removeDuplicateStool(myT)
 taxa <- getIncludedTaxa(myT)
-minVal <- 0.001
+minVal <- 1
 
 par(mfrow=c(3,3))
 for( i in 1 : length(taxa)) 
