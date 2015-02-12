@@ -87,15 +87,30 @@ for( i in 1 : length(taxa))
 {
 	myLm <- lm( log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal) ~ log10(myT$krakenLevel[myT$taxa==taxa[i]]+minVal) )	
 	
-	kraken16ST = 
-		t.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab']+minVal) ,myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool']+minVal)$p.value
+	kraken16STPre = 
+		t.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
+							& myT$time=="pre"]+minVal) 
+							,myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'
+							& myT$time=="pre"]+minVal)$p.value
 	
-	krakenWG= 
-		t.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab']+minVal) ,myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool']+minVal)$p.value
+	krakenWGPre= 
+		t.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="pre"]+minVal) 
+			,myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'& myT$time=="pre"]+minVal)$p.value
+			
+	kraken16STPost= 
+		t.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
+							& myT$time=="post"]+minVal) 
+							,myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'
+							& myT$time=="post"]+minVal)$p.value
+						
+	krakenWGPost= 
+		t.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="post"]+minVal) 
+			,myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'& myT$time=="post"]+minVal)$p.value
 	
 			
 	aTitle <- paste( taxa[i],"\nr2 = ", round( summary(myLm)$r.squared, 3) , " p = ", format(anova(myLm)$"Pr(>F)"[1],digits=3),
-	"\n 16S =", format(kraken16ST,digits=3), " WG=", format(krakenWG, digits=3))
+	"\n Pre: 16S =", format(kraken16STPre,digits=3), " WG=", format(krakenWGPre, digits=3),
+	"\n Post: 16S =", format(kraken16STPost,digits=3), " WG=", format(krakenWGPost, digits=3))
 	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal),
 				,col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) , main=aTitle, xlab="1og10(krakenWholeGenome)",
 				ylab="log10(kraken16S)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3)
