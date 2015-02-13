@@ -21,6 +21,9 @@ public class AddMetadata
 		HashMap<String, PatientMetadata> metaMap = 
 				PatientMetadata.getAsMap();
 		
+		HashMap<String, NewBiomarkerParser> bioMarkerMetaMap = 
+				NewBiomarkerParser.getMetaMap();
+		
 		System.out.println(outFile);
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				inFile)));
@@ -30,6 +33,7 @@ public class AddMetadata
 		
 		writer.write("sample\t" + 
 				"run\tstoolOrSwab\tsubjectID\tgenotype\ttreatment\ttype\ttime\t" + 
+				"bax_overall\tbax_surface\tbax_bottom\tbax_overall_quant\tbax_surface_quant\tbax_bottom_quant\t" + 
 				"numSequencesPerSample\tunrarifiedRichness\tshannonDiversity\tshannonEveness");
 		
 		if( rOutput) 
@@ -73,11 +77,35 @@ public class AddMetadata
 				
 				String type = metaMap.get(sampleID).getType();
 				
-				if( type.equals("stool_post") || type.equals("swab_post"))
-					writer.write("post\t");
-				else if( type.equals("stool_pre") || type.equals("swab_pre"))
-					writer.write("pre\t");
-				else throw new Exception("Could not find timepoint " + type);
+				String timepoint = getTimePoint(type);
+				writer.write(timepoint + "\t");
+				
+				String bioKey = sampleID + "_" + getLookupTime(type);
+				
+				NewBiomarkerParser nbp = bioMarkerMetaMap.get(bioKey);
+				
+				/*
+				 * private final Integer bax_overall;
+	private final Integer bax_surface;
+	private final Integer bax_bottom;
+	private final Double bax_overall_quant;
+	private final Double bax_surface_quant;
+	private final Double bax_bottom_quant;
+				 */
+				//"bax_overall\tbax_surface\tbax_bottom\tbax_overall_quant\tbax_surface_quant\tbax_bottom_quant\t
+				
+				if( nbp != null)
+				{
+					writer.write(nbp.getBax_overall() + "\t" + nbp.getBax_surface() + "\t" + nbp.getBax_bottom() + "\t" + 
+											nbp.getBax_overall_quant() + "\t" + nbp.getBax_surface_quant() + "\t" + nbp.getBax_bottom_quant() + "\t");
+					
+				}
+				else
+				{
+					writer.write("NA"+ "\t" + "NA"+ "\t" + "NA"+ "\t" + 
+							"NA"+ "\t" + "NA"+ "\t" + "NA"+ "\t");
+				}
+					
 			
 				writer.write( wrapper.getCountsForSample(sampleKey) + "\t");
 				writer.write(wrapper.getRichness(sampleKey) + "\t");
@@ -95,6 +123,24 @@ public class AddMetadata
 		
 		writer.flush(); writer.close();
 		reader.close();
+	}
+	
+	private static String getLookupTime(String type) throws Exception
+	{
+		if( type.equals("stool_post") || type.equals("swab_post"))
+			return "1";
+		else if( type.equals("stool_pre") || type.equals("swab_pre"))
+			return "3";
+		else throw new Exception("Could not find timepoint " + type);
+	}
+	
+	private static String getTimePoint(String type) throws Exception
+	{
+		if( type.equals("stool_post") || type.equals("swab_post"))
+			return "post";
+		else if( type.equals("stool_pre") || type.equals("swab_pre"))
+			return "pre";
+		else throw new Exception("Could not find timepoint " + type);
 	}
 	
 	public static void main(String[] args) throws Exception
