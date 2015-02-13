@@ -1,5 +1,12 @@
 package scripts.vanderbilt;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import utils.ConfigReader;
 import utils.TabReader;
 
 public class NewBiomarkerParser
@@ -16,6 +23,97 @@ public class NewBiomarkerParser
 	private final Double bax_surface_quant;
 	private final Double bax_bottom_quant;
 	
+	public String getStudyID()
+	{
+		return studyID;
+	}
+
+	public String getVisit()
+	{
+		return visit;
+	}
+
+	public String getStoolID()
+	{
+		return stoolID;
+	}
+
+	public String getSwabID()
+	{
+		return swabID;
+	}
+
+	public Integer getBax_overall()
+	{
+		return bax_overall;
+	}
+
+	public Integer getBax_surface()
+	{
+		return bax_surface;
+	}
+
+	public Integer getBax_bottom()
+	{
+		return bax_bottom;
+	}
+
+	public Double getBax_overall_quant()
+	{
+		return bax_overall_quant;
+	}
+
+	public Double getBax_surface_quant()
+	{
+		return bax_surface_quant;
+	}
+
+	public Double getBax_bottom_quant()
+	{
+		return bax_bottom_quant;
+	}
+	
+	/*
+	 * Key is stoolID (or swabID) followed by "_" visot
+	 */
+	public static HashMap<String, NewBiomarkerParser> getMetaMap() throws Exception
+	{
+		HashMap<String, NewBiomarkerParser> map = new LinkedHashMap<String, NewBiomarkerParser>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File( 
+				ConfigReader.getVanderbiltDir() + File.separator + "biomarker_new1.txt"	)));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null && s.length() > 0; s = reader.readLine())
+		{
+			NewBiomarkerParser nbp = new NewBiomarkerParser(s);
+			
+			//System.out.println( nbp.studyID + " "  +  nbp.stoolID + "_" + nbp.visit + " " + nbp.swabID+ "_" + nbp.visit);
+			
+			if( map.containsKey(nbp.stoolID + "_" + nbp.visit) || map.containsKey(nbp.swabID+ "_" + nbp.visit))
+			{
+				System.out.println("Duplicate ignored " + nbp.studyID + " "  +  nbp.stoolID + "_" + nbp.visit + " " + nbp.swabID+ "_" + nbp.visit);
+			}
+			else
+			{
+				map.put(nbp.stoolID + "_" + nbp.visit,nbp);
+				map.put(nbp.swabID + "_" + nbp.visit, nbp);
+			}
+			
+		}
+		
+		return map;
+	}
+	
+	private Double getNullOrVal(String s)
+	{
+		if( s.trim().length() == 0 )
+			return null;
+		
+		return Double.parseDouble(s);
+	}
+
 	private NewBiomarkerParser(String s) throws Exception
 	{
 		TabReader tr = new TabReader(s);
@@ -27,19 +125,9 @@ public class NewBiomarkerParser
 		this.bax_surface = Integer.parseInt(tr.nextToken());
 		this.bax_bottom = Integer.parseInt(tr.nextToken());
 	
-		if( tr.hasMore())
-		{
-			this.bax_overall_quant = Double.parseDouble(tr.nextToken());
-			this.bax_surface_quant = Double.parseDouble(tr.nextToken());
-			this.bax_bottom_quant = Double.parseDouble(tr.nextToken());
-		}
-		else
-		{
-
-			this.bax_overall_quant = null;
-			this.bax_surface_quant = null;
-			this.bax_bottom_quant = null;
-		}
+		this.bax_overall_quant = getNullOrVal(tr.nextToken());
+		this.bax_surface_quant = getNullOrVal(tr.nextToken());
+		this.bax_bottom_quant = getNullOrVal(tr.nextToken());
 		
 		if( tr.hasMore())
 			throw new Exception("No");
@@ -48,6 +136,11 @@ public class NewBiomarkerParser
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, NewBiomarkerParser> map = getMetaMap();
 		
+		for(NewBiomarkerParser nbp : map.values() )
+		{
+			System.out.println( nbp.studyID + " " + nbp.bax_bottom_quant);
+		}
 	}
 }
