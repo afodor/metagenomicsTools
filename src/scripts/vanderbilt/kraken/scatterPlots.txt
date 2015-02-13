@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 myT <- read.table("mergedKrakenRDP_phylum_WithMetadata.txt", header=TRUE, sep="\t")
 # remove outlier samples
