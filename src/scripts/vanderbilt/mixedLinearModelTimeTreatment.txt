@@ -16,7 +16,7 @@ for(taxa in taxaLevels )
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",79), rep("numeric", numCols-9))
+	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
@@ -26,16 +26,17 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 9:numCols) 
+	for( i in 9:20) 
 	{	
-		if( sum(myT[,i] != 0) >= numCols/4 )
+		subTable <- myT[ ! is.na(myT[,i]) ,]
+		if( sum(subTable[,i] != 0,rm.NA=TRUE) >= numCols/4 )
 		{
-			myLm <- lmer( myT[,i] ~  myT$type + myT$treatment+ ( 1| factor(myT$subjectID) ) )
+			myLm <- lmer( subTable[,i] ~  subTable$type + subTable$treatment+ ( 1| factor(subTable$subjectID) ) )
 			coefs <- data.frame(coef(summary(myLm)))
 			coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
 			pValuesTreatment[index] <- coefs[5]$Pr...t..[3];
 			pValuesTime[index] <- coefs[5]$Pr...t..[2]
-			names[index] = names(myT)[i]
+			names[index] = names(subTable)[i]
 			index <- index + 1
 		}		
 	}
@@ -44,6 +45,6 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForPCOATimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
