@@ -74,7 +74,7 @@ public class NewBiomarkerParser
 	}
 	
 	/*
-	 * Key is stoolID (or swabID) followed by "_" visot
+	 * Key is studyID followed by "_" visot
 	 */
 	public static HashMap<String, NewBiomarkerParser> getMetaMap() throws Exception
 	{
@@ -91,14 +91,15 @@ public class NewBiomarkerParser
 			
 			//System.out.println( nbp.studyID + " "  +  nbp.stoolID + "_" + nbp.visit + " " + nbp.swabID+ "_" + nbp.visit);
 			
-			if( map.containsKey(nbp.stoolID + "_" + nbp.visit) || map.containsKey(nbp.swabID+ "_" + nbp.visit))
+			String key = nbp.studyID + "_" + nbp.visit;
+			
+			if( map.containsKey(key))
 			{
-				System.out.println("Duplicate ignored " + nbp.studyID + " "  +  nbp.stoolID + "_" + nbp.visit + " " + nbp.swabID+ "_" + nbp.visit);
+				throw new Exception("Could not find key  " + nbp.studyID + " "  +  nbp.stoolID + "_" + nbp.visit + " " + nbp.swabID+ "_" + nbp.visit);
 			}
 			else
 			{
-				map.put(nbp.stoolID + "_" + nbp.visit,nbp);
-				map.put(nbp.swabID + "_" + nbp.visit, nbp);
+				map.put(key,nbp);
 			}
 			
 		}
@@ -138,9 +139,9 @@ public class NewBiomarkerParser
 	{
 		HashMap<String, NewBiomarkerParser> map = getMetaMap();
 		
-		for(NewBiomarkerParser nbp : map.values() )
+		for(String s : map.keySet() )
 		{
-			System.out.println( nbp.studyID + " " + nbp.bax_bottom_quant);
+			System.out.println( s);
 		}
 	}
 }

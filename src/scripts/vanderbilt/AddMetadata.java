@@ -24,7 +24,7 @@ public class AddMetadata
 		HashMap<String, NewBiomarkerParser> bioMarkerMetaMap = 
 				NewBiomarkerParser.getMetaMap();
 		
-		System.out.println(outFile);
+		//System.out.println(outFile);
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				inFile)));
 		
@@ -80,7 +80,7 @@ public class AddMetadata
 				String timepoint = getTimePoint(type);
 				writer.write(timepoint + "\t");
 				
-				String bioKey = sampleID + "_" + getLookupTime(type);
+				String bioKey = metaMap.get(sampleID).getStudyID()  + "_" + getLookupTime(type);
 				
 				NewBiomarkerParser nbp = bioMarkerMetaMap.get(bioKey);
 				
@@ -98,12 +98,14 @@ public class AddMetadata
 				{
 					writer.write(nbp.getBax_overall() + "\t" + nbp.getBax_surface() + "\t" + nbp.getBax_bottom() + "\t" + 
 											nbp.getBax_overall_quant() + "\t" + nbp.getBax_surface_quant() + "\t" + nbp.getBax_bottom_quant() + "\t");
+					System.out.println("Found " + bioKey );
 					
 				}
 				else
 				{
 					writer.write("NA"+ "\t" + "NA"+ "\t" + "NA"+ "\t" + 
 							"NA"+ "\t" + "NA"+ "\t" + "NA"+ "\t");
+					System.out.println("Could not find " + bioKey );
 				}
 					
 			
