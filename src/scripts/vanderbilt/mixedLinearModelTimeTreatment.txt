@@ -3,20 +3,20 @@ require(lme4)
 require(lmerTest)
 
 
-setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
+setwd("F:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
     # uncomment for pcoa
-	#inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
 	
-	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myColClasses <- c(rep("character",79), rep("numeric", numCols-9))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myT <- myT[ which( myT$stoolOrSwab== "stool") , ]
@@ -26,7 +26,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 8:numCols) 
+	for( i in 9:numCols) 
 	{	
 		if( sum(myT[,i] != 0) >= numCols/4 )
 		{

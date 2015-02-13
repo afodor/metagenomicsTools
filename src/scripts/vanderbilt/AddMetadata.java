@@ -97,7 +97,8 @@ public class AddMetadata
 				if( nbp != null)
 				{
 					writer.write(nbp.getBax_overall() + "\t" + nbp.getBax_surface() + "\t" + nbp.getBax_bottom() + "\t" + 
-											nbp.getBax_overall_quant() + "\t" + nbp.getBax_surface_quant() + "\t" + nbp.getBax_bottom_quant() + "\t");
+										getValueOrNA(nbp.getBax_overall_quant()) + "\t" 
+							 +  getValueOrNA(nbp.getBax_surface_quant()) + "\t" + getValueOrNA(nbp.getBax_bottom_quant()) + "\t");
 					System.out.println("Found " + bioKey );
 					
 				}
@@ -125,6 +126,15 @@ public class AddMetadata
 		
 		writer.flush(); writer.close();
 		reader.close();
+	}
+	
+	private static String getValueOrNA(Double d)
+	{
+		if(d== null)
+			return "NA";
+		
+		return d.toString();
+		
 	}
 	
 	private static String getLookupTime(String type) throws Exception
