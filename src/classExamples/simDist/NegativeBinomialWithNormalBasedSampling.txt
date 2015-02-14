@@ -3,7 +3,6 @@ library("gap")
 
 numSimulations <- 10000
 numReadsPerSimulation <- 10000000
-oneToNumSims <- 1:numReadsPerSimulation 
 
 pValues <- vector();
 numberFound<- vector();
