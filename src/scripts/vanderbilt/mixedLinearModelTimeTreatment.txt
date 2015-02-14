@@ -2,7 +2,6 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-
 setwd("F:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")

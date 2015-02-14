@@ -1,0 +1,55 @@
+
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+rm(list=ls())
+
+types  <- c("stool_pre", "stool_post", "swab_pre", "swab_post")
+typesVector <- vector()
+quantVector <- vector()
+targetVector <- vector()
+pValues <- vector()
+
+require(lme4) 
+require(lmerTest)
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+index <- 1;
+for(taxa in taxaLevels ) 
+{
+    # uncomment for pcoa
+	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	
+	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	for( type in types )
+	{
+		typesT <- myT[ myT$type == type, ]
+		
+		for( bioCol in 12:14 )
+		{
+			typesTNoNa <- typesT[ ! is.na(typesT[,bioCol]), ]
+		
+			for ( i in 15:24 ) 
+			{
+				myLm <- lm( typesTNoNa[,i] ~ typesTNoNa[,bioCol] )
+				
+				typesVector[index] = type;
+				quantVector[index] = names(typesTNoNa)[bioCol]
+				targetVector[index] = names(typesTNoNa)[i]
+				pValues[index] =  anova(myLm)$"Pr(>F)"[1]
+				index <- index + 1;
+			}
+		}
+	}
+	
+	dFrame <- data.frame( typesVector, quantVector,targetVector ,pValues ) 
+	dFrame <- dFrame [order(dFrame$pValues ),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues , method = "BH" )
+	write.table(dFrame, file=paste("pValuesForCorrelationsPCOA_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
