@@ -8,9 +8,9 @@ typesVector <- vector()
 quantVector <- vector()
 targetVector <- vector()
 pValues <- vector()
+kendallPValues <- vector()
 
-require(lme4) 
-require(lmerTest)
+library("Kendall")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
@@ -18,9 +18,9 @@ index <- 1;
 for(taxa in taxaLevels ) 
 {
     # uncomment for pcoa
-	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	#inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
 	
-	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -35,21 +35,25 @@ for(taxa in taxaLevels )
 		{
 			typesTNoNa <- typesT[ ! is.na(typesT[,bioCol]), ]
 		
-			for ( i in 15:24 ) 
+			for ( i in 15:ncol(typesTNoNa))
 			{
-				myLm <- lm( typesTNoNa[,i] ~ typesTNoNa[,bioCol] )
-				
-				typesVector[index] = type;
-				quantVector[index] = names(typesTNoNa)[bioCol]
-				targetVector[index] = names(typesTNoNa)[i]
-				pValues[index] =  anova(myLm)$"Pr(>F)"[1]
-				index <- index + 1;
+				if( sum(typesTNoNa[,i] != 0) >= nrow(typesTNoNa)/4 ) 
+				{
+					myLm <- lm( typesTNoNa[,i] ~ typesTNoNa[,bioCol] )
+					
+					typesVector[index] = type;
+					quantVector[index] = names(typesTNoNa)[bioCol]
+					targetVector[index] = names(typesTNoNa)[i]
+					pValues[index] =  anova(myLm)$"Pr(>F)"[1]
+					kendallPValues[index] =  Kendall(typesTNoNa[,i] ,typesTNoNa[,bioCol])$sl[1]
+					index <- index + 1;
+				}
 			}
 		}
 	}
 	
-	dFrame <- data.frame( typesVector, quantVector,targetVector ,pValues ) 
+	dFrame <- data.frame( typesVector, quantVector,targetVector ,pValues, kendallPValues ) 
 	dFrame <- dFrame [order(dFrame$pValues ),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues , method = "BH" )
-	write.table(dFrame, file=paste("pValuesForCorrelationsPCOA_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForCorrelationsTaxa_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
