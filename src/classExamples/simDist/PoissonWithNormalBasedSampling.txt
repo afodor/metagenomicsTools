@@ -8,7 +8,6 @@ pValues <- vector();
 numberFound<- vector();
 variance <- vector();
 expectedNumberFound <- vector();
-ratio <- vector()
 
 for( i in 1:numSimulations)
 {
@@ -23,17 +22,10 @@ for( i in 1:numSimulations)
 	if( numFound < 0 ) 
 		numFound =0;
 		
-	numFound = numFound + 1
-	
 	numFound= round(numFound)
 	numberFound[i] = numFound
 	
 	expectedNumberFound[i] <- expectedMean
-	
-	ratio[i] = expectedMean/numFound
-	
-	if( ratio[i] < 1 ) 
-		ratio[i] = - ratio[i]
 	
 	variance[i] <- var
 
@@ -44,12 +36,10 @@ for( i in 1:numSimulations)
 
 	titleStr <- paste("Number of simulated genes = ",i,sep="")
 
-	# load package gap first
 	colors = ifelse( pValues <0.05 , "red", "black" )
 	plot(expectedNumberFound - numberFound, -log10(pValues),main=titleStr, col=colors)
 	plot(expectedNumberFound , expectedNumberFound - numberFound, col=colors )
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
 	Sys.sleep(.1)
-	
 }
