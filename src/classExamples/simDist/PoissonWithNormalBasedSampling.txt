@@ -2,7 +2,7 @@ rm(list=ls())
 library("gap")
 
 numSimulations <- 10000
-numReadsPerSimulation <- 100000
+numReadsPerSimulation <- 1000000
 
 pValues <- vector();
 numberFound<- vector();
