@@ -46,8 +46,8 @@ for( i in 1:numSimulations)
 
 	# load package gap first
 	colors = ifelse( pValues <0.05 , "red", "black" )
-	plot(numberFound-expectedNumberFound , -log10(pValues),main=titleStr, col=colors)
-	plot(numberFound-expectedNumberFound, ratio, col=colors )
+	plot(expectedNumberFound - numberFound, -log10(pValues),main=titleStr, col=colors)
+	plot(expectedNumberFound , expectedNumberFound - numberFound, col=colors )
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
 	Sys.sleep(.1)
