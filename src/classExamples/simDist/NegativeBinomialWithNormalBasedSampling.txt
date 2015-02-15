@@ -2,13 +2,12 @@ rm(list=ls())
 library("gap")
 
 numSimulations <- 10000
-numReadsPerSimulation <- 100000000
+numReadsPerSimulation <- 1000000
 
 pValues <- vector();
 numberFound<- vector();
 variance <- vector();
 expectedNumberFound <- vector();
-ratio <- vector()
 
 for( i in 1:numSimulations)
 {
@@ -16,24 +15,17 @@ for( i in 1:numSimulations)
 	expectedMean <- rateOfGeneExperession  * numReadsPerSimulation 
 	
 	#null hypothesis always true under Poisson distribution
-	var = 100 * expectedMean
+	var = 10 * expectedMean
 	
 	numFound<- rnorm( 1,mean=expectedMean  , sd = sqrt(var))
 	
 	if( numFound < 0 ) 
 		numFound =0;
 		
-	numFound = numFound + 1
-	
 	numFound= round(numFound)
 	numberFound[i] = numFound
 	
 	expectedNumberFound[i] <- expectedMean
-	
-	ratio[i] = expectedMean/numFound
-	
-	if( ratio[i] < 1 ) 
-		ratio[i] = - ratio[i]
 	
 	variance[i] <- var
 
