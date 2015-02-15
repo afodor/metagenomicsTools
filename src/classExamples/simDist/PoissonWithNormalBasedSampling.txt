@@ -36,7 +36,7 @@ for( i in 1:numSimulations)
 	titleStr <- paste("Number of simulated genes = ",i,sep="")
 
 	# load package gap first
-	plot(numberFound, expectedNumberFound,main=titleStr)
+	plot(numberFound-expectedNumberFound, -log10(pValues),main=titleStr)
 	plot(expectedNumberFound, variance)
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
