@@ -1,6 +1,5 @@
 rm(list=ls())
 library("gap")
-library("ggplot2")
 
 numSimulations <- 10000
 numReadsPerSimulation <- 100000000
@@ -52,8 +51,8 @@ for( i in 1:numSimulations)
 	# load package gap first
 	colors = ifelse( pValues <0.05 , "red", "black" )
 	radiusVals = ifelse( pValues < 0.05, 4, 1 ) 
-	qqplot(numberFound-expectedNumberFound , -log10(pValues),main=titleStr, col=colors)
-	qqplot(numberFound-expectedNumberFound, ratio, col=colors )
+	plot(numberFound-expectedNumberFound , -log10(pValues),main=titleStr, col=colors)
+	plot(numberFound-expectedNumberFound, ratio, col=colors )
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
 	Sys.sleep(.1)
