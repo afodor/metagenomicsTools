@@ -42,7 +42,10 @@ for( i in 1:numSimulations)
 	
 	r = round(r)
 
-	pValues[i] <- (1 - pnbinom(numFound, r,p))
+	if( numFound >= expectedMean )
+		pValues[i] <- 2* (1 - pnbinom(numFound, r,p))
+	else
+		pValues[i] <- 2 * pnbinom(numFound,r,p)
 	
 	par( mfrow = c( 2, 2 ) )
 
