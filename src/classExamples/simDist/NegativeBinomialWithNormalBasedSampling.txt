@@ -2,12 +2,13 @@ rm(list=ls())
 library("gap")
 
 numSimulations <- 10000
-numReadsPerSimulation <- 10000000
+numReadsPerSimulation <- 100000000
 
 pValues <- vector();
 numberFound<- vector();
 variance <- vector();
 expectedNumberFound <- vector();
+ratio <- vector()
 
 for( i in 1:numSimulations)
 {
@@ -17,33 +18,41 @@ for( i in 1:numSimulations)
 	#null hypothesis always true under Poisson distribution
 	var = 100 * expectedMean
 	
-	numFound<- rnorm( 1,mean=expectedMean , sd = sqrt(var))
+	numFound<- rnorm( 1,mean=expectedMean  , sd = sqrt(var))
 	
 	if( numFound < 0 ) 
 		numFound =0;
+		
+	numFound = numFound + 1
 	
 	numFound= round(numFound)
 	numberFound[i] = numFound
 	
-	# under the null hypothesis for the negative binomial distribution
-	p = expectedMean / var
-	r = expectedMean * expectedMean / (var - expectedMean ) 
-	r = round(r)
-	
 	expectedNumberFound[i] <- expectedMean
+	
+	ratio[i] = expectedMean/numFound
+	
+	if( ratio[i] < 1 ) 
+		ratio[i] = - ratio[i]
+	
 	variance[i] <- var
 
-	pValues[i] <- (1 - pnbinom(numFound, r,p))	
+	r = expectedMean * expectedMean / (var - expectedMean ) 
+	p = expectedMean / var
+	
+	r = round(r)
+
+	pValues[i] <- (1 - pnbinom(numFound, r,p))
 	
 	par( mfrow = c( 2, 2 ) )
 
 	titleStr <- paste("Number of simulated genes = ",i,sep="")
 
 	# load package gap first
-	plot(numberFound, expectedNumberFound,main=titleStr)
-	plot(expectedNumberFound, variance)
+	colors = ifelse( pValues <0.05 , "red", "black" )
+	plot(numberFound-expectedNumberFound , -log10(pValues),main=titleStr, col=colors)
+	plot(numberFound-expectedNumberFound, ratio, col=colors )
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
 	Sys.sleep(.1)
-	
 }
