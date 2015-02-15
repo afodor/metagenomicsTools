@@ -18,10 +18,12 @@ for( i in 1:numSimulations)
 	#null hypothesis always true under Poisson distribution
 	var = expectedMean
 	
-	numFound<- rnorm( 1,mean=expectedMean , sd = sqrt(var))
+	numFound<- rnorm( 1,mean=expectedMean  , sd = sqrt(var))
 	
 	if( numFound < 0 ) 
 		numFound =0;
+		
+	numFound = numFound + 1
 	
 	numFound= round(numFound)
 	numberFound[i] = numFound
@@ -44,7 +46,7 @@ for( i in 1:numSimulations)
 
 	# load package gap first
 	colors = ifelse( pValues <0.05 , "red", "black" )
-	plot(numberFound-expectedNumberFound, -log10(pValues),main=titleStr, col=colors)
+	plot(numberFound-expectedNumberFound , -log10(pValues),main=titleStr, col=colors)
 	plot(numberFound-expectedNumberFound, ratio, col=colors )
 	qqunif(pValues,logscale=FALSE,)
 	hist(pValues,plot=TRUE,breaks=10)
