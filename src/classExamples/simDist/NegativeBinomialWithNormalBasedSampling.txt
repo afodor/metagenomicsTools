@@ -14,7 +14,7 @@ for( i in 1:numSimulations)
 	rateOfGeneExperession <- runif(1) / 100;  # no gene is more than 1%
 	expectedMean <- rateOfGeneExperession  * numReadsPerSimulation 
 	
-	#null hypothesis always true under Poisson distribution
+	#null hypothesis violated under Poisson distribution
 	var = 10 * expectedMean
 	
 	numFound<- rnorm( 1,mean=expectedMean  , sd = sqrt(var))
