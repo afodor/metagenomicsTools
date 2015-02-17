@@ -2,11 +2,13 @@ rm(list=ls())
 library("gap")
 
 numSimulations <- 10000
-numReadsPerSimulation <- 1000000
+numReadsPerSimulation <- 10000000
 
 pValues <- vector();
 sumNumFound <- vector();
 expectedMeans <- vector()
+numFound1Vector <- vector()
+numFound2Vector <- vector()
 
 for( i in 1:numSimulations)
 {
@@ -27,6 +29,8 @@ for( i in 1:numSimulations)
 		
 	numFound1= round(numFound1)
 	numFound2= round(numFound2)
+	numFound1Vector[i] = numFound1
+	numFound2Vector[i] = numFound2 
 	
 	expectedMeans[i] <- expectedMean
 	sumNumFound[i] <- numFound1 + numFound2;
@@ -44,9 +48,9 @@ for( i in 1:numSimulations)
 	
 	sumP <- function(a) 
 	{
-		peak = (numFound1 + numFound2) / 2;
-		
-		if( a <= peak) 
+		minVal = min(numFound1, numFound2)		
+
+		if( a == minVal) 
 		{
 			return ( sum( pAB(0:a)))
 		}
@@ -67,3 +71,5 @@ for( i in 1:numSimulations)
 	hist(pValues,plot=TRUE,breaks=50)
 	Sys.sleep(.1)
 }
+
+myFrame=data.frame(pValues, sumNumFound, expectedMeans , numFound1Vector, numFound2Vector) 
