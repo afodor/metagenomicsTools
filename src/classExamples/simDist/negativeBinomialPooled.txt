@@ -12,7 +12,8 @@ numFound2Vector <- vector()
 
 for( i in 1:numSimulations)
 {
-	rateOfGeneExperession <- runif(1) / 100;  # no gene is more than 1%
+	rateOfGeneExperession <-.0001 +  runif(1) / 100;  # no gene is more than 1.1% or less than 0.01%
+													  # the test breaks if this number gets too close to zero..
 	expectedMean <- rateOfGeneExperession  * numReadsPerSimulation 
 	
 	var1 = 10 * expectedMean
