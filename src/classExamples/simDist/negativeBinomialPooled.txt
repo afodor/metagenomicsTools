@@ -64,6 +64,6 @@ for( i in 1:numSimulations)
 
 	# load package gap first
 	qqunif(pValues,logscale=FALSE,)
-	hist(pValues,plot=TRUE,breaks=10)
+	hist(pValues,plot=TRUE,breaks=50)
 	Sys.sleep(.1)
 }
