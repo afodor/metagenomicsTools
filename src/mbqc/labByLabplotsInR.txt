@@ -4,10 +4,9 @@ setwd("G:\\MBQC\\af_out")
 
 myT <- read.table("pValuesNAVsNonNA.txt", sep="\t", header=TRUE)
 
-labIDs <- myT$seqPlusExtraction
+labIDs <- paste(  myT$kitManufacturer ,"_",myT$seqPlusExtraction, sep="")
 labIDs <- unique(labIDs)
 labIDs <- sort(labIDs)
-
 
 taxaIDs <- c("Actinobacteria" , "Bacteroidetes","Firmicutes","Fusobacteria",
 "Proteobacteria","Verrucomicrobia")

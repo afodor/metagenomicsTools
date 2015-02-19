@@ -16,6 +16,28 @@ import utils.TTest;
 
 public class PValuesByExtraction
 {
+	private static HashMap<String,String> getManualKitManufacturer()
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		map.put("agoodman", "Omega biotek");
+		map.put( "dlittman", "MO-BIO");
+		map.put("dmills", "Zymo Research");
+		map.put("ggloor", "Promega");
+		map.put("jpetrosino", "MO-BIO");
+		map.put("jravel", "In house");
+		map.put("kjones", "unknown");
+		map.put("pschloss", "MO-BIO");
+		map.put("pturnbaugh", "MO-BIO");
+		map.put("rburk", "two_methods_Qiaqen_and_Mo_Bio");
+		map.put("rflores", "unknown");
+		map.put("rknight", "MO-BIO");
+		map.put("oshanks", "unknown");
+		map.put("dgevers", "Chemagic DNA");
+		
+		return map;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
@@ -35,10 +57,12 @@ public class PValuesByExtraction
 		
 		HashMap<String, Double> avgVals = RawDesignMatrixParser.getTaxaAverages(map, taxaHeaders);
 		
+		HashMap<String,String> kitMap = getManualKitManufacturer();
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMbqcDir() +
 				File.separator + "af_out" + File.separator + "pValuesNAVsNonNA.txt")));
 		
-		writer.write("bioinformaticsLab\tsequencingLab\textractionProtocol\tseqPlusExtraction\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
+		writer.write("bioinformaticsLab\tsequencingLab\textractionProtocol\tkitManufacturer\tseqPlusExtraction\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
 		
 		for(String bio : bioinformaticsIds)
@@ -55,7 +79,12 @@ public class PValuesByExtraction
 						
 						for(String extraction : extractionProtocols)
 						{
-							writer.write(bio + "\t" + wet + "\t" + extraction + "\t" + wet + "_" + extraction + "\t" + 
+							String kit = kitMap.get(extraction);
+							
+							if( kit == null)
+								throw new Exception("No " + extraction);
+							
+							writer.write(bio + "\t" + wet + "\t" + extraction +  "\t" + kit + "\t" + wet + "_" + extraction + "\t" + 
 											taxa );
 							int taxaID = RawDesignMatrixParser.getTaxaID(taxaHeaders,taxa );
 							Holder h= getPValueForNAVsOther(map, mbqcIDs, wet, bio, taxaID, extraction,
