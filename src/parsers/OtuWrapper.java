@@ -847,7 +847,7 @@ public class OtuWrapper
 			String[] otuSplits = s.split("\t");
 			
 			if( otuSplits.length != firstLineSplits.length)
-				throw new Exception("NO");
+				throw new Exception("NO " + otuSplits.length + " " + firstLineSplits.length + " " +   s);
 			
 			otuNames.add(otuSplits[0]);
 			

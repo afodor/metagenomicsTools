@@ -78,6 +78,8 @@ public class ConfigReader
 	
 	public static final String TANYA_DIR="TANYA_DIR";
 	
+	public static final String GORAN_TRIAL = "GORAN_TRIAL";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -101,6 +103,11 @@ public class ConfigReader
 	public static String getVanderbiltDir() throws Exception
 	{
 		return getConfigReader().getAProperty(VANDERBILT_DIR);
+	}
+	
+	public static String getGoranTrialDir() throws Exception
+	{
+		return getConfigReader().getAProperty(GORAN_TRIAL);
 	}
 	
 	public static String getSvmDir() throws Exception
