@@ -35,7 +35,11 @@ public class AddMetadata
 			MetadataFileLine mfl = metaMap.get(key);
 			
 			writer.write(mfl.getSanVsSol() + "\t" + mfl.getPlq3Orplq4() + "\t" + mfl.getrNumber() );
-			writer.write( reader.readLine() + "\n");
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
 		}
 		
 		writer.flush();  writer.close();
