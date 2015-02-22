@@ -50,7 +50,7 @@ public class MetadataFileLine
 		return rNumber;
 	}
 
-	private static HashMap<String, MetadataFileLine> getMetaMap() throws Exception
+	public static HashMap<String, MetadataFileLine> getMetaMap() throws Exception
 	{
 		HashMap<String, MetadataFileLine> map = new HashMap<String, MetadataFileLine>();
 		
