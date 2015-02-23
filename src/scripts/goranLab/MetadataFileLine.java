@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import utils.ConfigReader;
 
@@ -12,6 +13,12 @@ public class MetadataFileLine
 	private final String sanVsSol;
 	private final String plq3Orplq4;
 	private final String rNumber;
+	private final int patientNumber;
+	
+	public int getPatientNumber()
+	{
+		return patientNumber;
+	}
 	
 	private MetadataFileLine(String firstLineKey, String secondLineKey)
 		throws Exception
@@ -33,6 +40,8 @@ public class MetadataFileLine
 		
 		//if( ! this.sanVsSol.equals(firstLineKey.split("-")[1]))
 			//	throw new Exception("No");
+		
+		this.patientNumber = Integer.parseInt(firstLineKey.split("-")[2]);
 	}
 	
 	public String getSanVsSol()
@@ -77,10 +86,22 @@ public class MetadataFileLine
 	{
 		HashMap<String, MetadataFileLine> map = getMetaMap();
 		
+		HashSet<Integer> patientNumbers= new HashSet<Integer>();
+		
 		for(String s: map.keySet())
 		{
 			MetadataFileLine mfl = map.get(s);
-			System.out.println(s + " " +mfl.getPlq3Orplq4() + " " + mfl.getSanVsSol() + " " + mfl.getrNumber());
+			System.out.println(s + " " +mfl.getPlq3Orplq4() 
+					+ " " + mfl.getSanVsSol() + " " + mfl.getrNumber());
+			
+			if( patientNumbers.contains(mfl.getPatientNumber()))
+			{
+				throw new Exception("No");
+			}
+			
+			patientNumbers.add(mfl.getPatientNumber());
 		}
+		
+		System.out.println(patientNumbers.size());
 	}
 }
