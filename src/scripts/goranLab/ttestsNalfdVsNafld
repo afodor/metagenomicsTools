@@ -18,7 +18,7 @@ nafld_div_nonNafld<- vector()
 index <-1
 for( i in 7:17) 
 {	
-	subset <- myT[myT$sanVsSol=="SAN",i]
+	subset <- myT[myT$sanVsSol!="SAN",i]
 	pValuesNafld[index] <- t.test( subset[myT$nafld=="1"],subset[myT$nafld=="0"]  )$p.value
 	names[index] <- names(myT)[i]
 	
@@ -38,5 +38,5 @@ for( i in 7:17)
 dFrame <- data.frame( names,pValuesNafld, meanNafld ,meanNonNafld, nafld_div_nonNafld)
 dFrame <- dFrame [order(dFrame$pValuesNafld),]
 dFrame$adjustedP <- p.adjust( dFrame$pValuesNafld, method = "BH" )
-write.table(dFrame, file="pValuesPcoa.txt", sep="\t", row.names=FALSE)
+write.table(dFrame, file="pValuesPcoa_not_SAN.txt", sep="\t", row.names=FALSE)
 
