@@ -46,21 +46,22 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		String level = "phylum";
 		File inFile = new File(
 				ConfigReader.getGoranTrialDir() + File.separator + 
-				"familyAsColumns.txt");
+				level + "AsColumns.txt");
 		
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
 		HashMap<String, Double> diversityMap = quickDiversityMap(
 				new File(ConfigReader.getGoranTrialDir() + File.separator + 
-				"familyAsColumns.txt"));
+				level + "AsColumns.txt"));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator + 
-					"family_taxa_withMetadata.txt")));
+					level + "_taxa_withMetadata.txt")));
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tshannonDiversity\t" 
 					+   reader.readLine() + "\n");

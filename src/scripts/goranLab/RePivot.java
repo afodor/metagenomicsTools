@@ -43,21 +43,23 @@ public class RePivot
 	
 	public static void main(String[] args) throws Exception
 	{
+		String level = "phylum";
+		
 		String withDupTabs = 
-				ConfigReader.getGoranTrialDir() + File.separator + "familyOutNo2ndLine.txt";
+				ConfigReader.getGoranTrialDir() + File.separator + level + "OutNo2ndLine.txt";
 		
 		String withNoDupTabs = 
-				ConfigReader.getGoranTrialDir() + File.separator + "familyOutNo2ndLineNoDupTabs.txt";
+				ConfigReader.getGoranTrialDir() + File.separator + level + "OutNo2ndLineNoDupTabs.txt";
 	
 		writeOnlyNonBlankFields(withDupTabs, withNoDupTabs);
 		
-		File outFile = new File(ConfigReader.getGoranTrialDir() + File.separator + "familyAsColumns.txt");
+		File outFile = new File(ConfigReader.getGoranTrialDir() + File.separator + level+ "AsColumns.txt");
 		OtuWrapper.transpose(
 				withNoDupTabs,
 			outFile.getAbsolutePath(), false);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getGoranTrialDir() + File.separator + "familyAsColumnsLogNorm.txt")));
+				ConfigReader.getGoranTrialDir() + File.separator + level + "AsColumnsLogNorm.txt")));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(outFile));
 		
