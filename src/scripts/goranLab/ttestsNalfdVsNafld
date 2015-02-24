@@ -1,0 +1,42 @@
+setwd("G:\\Goran_lab\\")
+
+rm(list=ls())
+
+inFileName <- "family_pcoa_withMetadata.txt"
+myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
+
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+pValuesNafld<- vector()
+names <- vector()
+meanNafld <- vector()
+meanNonNafld <- vector()
+nafld_div_nonNafld<- vector()
+
+index <-1
+for( i in 7:17) 
+{	
+	subset <- myT[myT$sanVsSol=="SAN",i]
+	pValuesNafld[index] <- t.test( subset[myT$nafld=="1"],subset[myT$nafld=="0"]  )$p.value
+	names[index] <- names(myT)[i]
+	
+	meanNafld[index] <- mean( subset[myT$nafld=="1"],na.rm=TRUE)
+	meanNonNafld [index] <- mean( subset[myT$nafld=="0"],na.rm=TRUE)
+		
+	nafld_div_nonNafld[index] <- meanNafld[index]  / meanNonNafld[index] 
+	
+	if (nafld_div_nonNafld[index]  < 1 ) 
+		nafld_div_nonNafld[index]  = -1 / nafld_div_nonNafld[index]  
+	
+	
+	index <- index + 1
+}
+
+
+dFrame <- data.frame( names,pValuesNafld, meanNafld ,meanNonNafld, nafld_div_nonNafld)
+dFrame <- dFrame [order(dFrame$pValuesNafld),]
+dFrame$adjustedP <- p.adjust( dFrame$pValuesNafld, method = "BH" )
+write.table(dFrame, file="pValuesPcoa.txt", sep="\t", row.names=FALSE)
+

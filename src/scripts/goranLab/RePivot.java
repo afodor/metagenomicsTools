@@ -51,8 +51,35 @@ public class RePivot
 	
 		writeOnlyNonBlankFields(withDupTabs, withNoDupTabs);
 		
+		File outFile = new File(ConfigReader.getGoranTrialDir() + File.separator + "familyAsColumns.txt");
 		OtuWrapper.transpose(
 				withNoDupTabs,
-			ConfigReader.getGoranTrialDir() + File.separator + "familyAsColumns.txt", false);
+			outFile.getAbsolutePath(), false);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getGoranTrialDir() + File.separator + "familyAsColumnsLogNorm.txt")));
+		
+		BufferedReader reader = new BufferedReader(new FileReader(outFile));
+		
+		writer.write(reader.readLine() + "\n");
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			writer.write( splits[0]);
+			
+			for( int x=1; x < splits.length; x++)
+			{
+				writer.write("\t" + (3 + Math.log10(Double.parseDouble(splits[x])+0.001)));
+			}
+			
+			writer.write("\n");
+		}
+		
+		reader.close();
+		
+		writer.flush();  writer.close();
+		
 	}
 }
