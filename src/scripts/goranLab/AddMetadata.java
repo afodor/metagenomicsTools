@@ -48,7 +48,7 @@ public class AddMetadata
 	{
 		File inFile = new File(
 				ConfigReader.getGoranTrialDir() + File.separator + 
-				"familyLogNorm_pcoa_.txt");
+				"familyAsColumns.txt");
 		
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
@@ -60,7 +60,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator + 
-					"family_pcoa_withMetadataLogNorm.txt")));
+					"family_taxa_withMetadata.txt")));
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tshannonDiversity\t" 
 					+   reader.readLine() + "\n");
