@@ -1,5 +1,11 @@
 package scripts.goranLab;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+
+import utils.ConfigReader;
 import utils.TabReader;
 
 public class PhenotypeDataLine
@@ -10,6 +16,28 @@ public class PhenotypeDataLine
 	private final Integer franceSequencePlasma;
 	private final Integer nafld;
 	
+	public int getSubjectNumber()
+	{
+		return subjectNumber;
+	}
+
+	public String getStudy()
+	{
+		return study;
+	}
+
+	public Integer getFranceSequencePlasma()
+	{
+		return franceSequencePlasma;
+	}
+
+
+	public Integer getNafld()
+	{
+		return nafld;
+	}
+
+
 	private Integer getInOrNull(String s)
 	{
 		if( s.trim().length() == 0 )
@@ -25,8 +53,28 @@ public class PhenotypeDataLine
 		this.subjectNumber = Integer.parseInt(tReader.nextToken());
 		this.study = tReader.nextToken();
 		this.franceSequencePlasma = Integer.parseInt(tReader.nextToken());
-		this.nafld = Integer.parseInt(tReader.nextToken());
+		this.nafld = getInOrNull(tReader.nextToken());
 	}
 	
+	public static HashMap<Integer, PhenotypeDataLine> getMap() throws Exception
+	{
+		HashMap<Integer, PhenotypeDataLine> map = new HashMap<Integer, PhenotypeDataLine>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getGoranTrialDir() + File.separator + 
+						"SOL SANO Phenotype 021715 1020AM.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			PhenotypeDataLine pdl = new PhenotypeDataLine(s);
+			
+			if( map.containsKey(pdl.subjectNumber))
+				throw new Exception("No");
+		}
+		
+		return map;
+	}
 	
 }
