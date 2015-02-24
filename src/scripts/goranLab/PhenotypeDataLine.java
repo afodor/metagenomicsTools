@@ -37,7 +37,6 @@ public class PhenotypeDataLine
 		return nafld;
 	}
 
-
 	private Integer getInOrNull(String s)
 	{
 		if( s.trim().length() == 0 )
