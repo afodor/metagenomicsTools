@@ -70,11 +70,19 @@ public class PhenotypeDataLine
 		{
 			PhenotypeDataLine pdl = new PhenotypeDataLine(s);
 			
-			if( map.containsKey(pdl.subjectNumber))
+			if( map.containsKey(pdl.getSubjectNumber()))
 				throw new Exception("No");
+			
+			map.put(pdl.getSubjectNumber(), pdl);
 		}
 		
 		return map;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<Integer, PhenotypeDataLine> map = getMap();
+		System.out.println(map.size());
 	}
 	
 }
