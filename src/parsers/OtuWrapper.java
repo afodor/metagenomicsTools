@@ -1039,7 +1039,7 @@ public class OtuWrapper
 
 		for (int x = 0; x < getSampleNames().size(); x++)
 		{
-			writer.write("S_" + newFileNames.get(x));
+			writer.write(newFileNames.get(x));
 
 			for (int y = 0; y < getOtuNames().size(); y++)
 			{
