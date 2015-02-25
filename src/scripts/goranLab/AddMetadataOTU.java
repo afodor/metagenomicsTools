@@ -13,7 +13,6 @@ import utils.ConfigReader;
 public class AddMetadataOTU
 {
 	
-	
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(
