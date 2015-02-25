@@ -16,7 +16,7 @@ public class AddMetadataOTU
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(
-				ConfigReader.getGoranTrialDir() + File.separator +  "otuCountsAsColumnsLogNormal.txt");
+				ConfigReader.getGoranTrialDir() + File.separator +  "familyLogNorm_pcoa_.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getGoranTrialDir() + File.separator + 
 				"otuCountsAsColumns.txt");
@@ -28,13 +28,13 @@ public class AddMetadataOTU
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator 
-					+ "otu_withMetadata.txt")));
+					+ "otu_pcoa_withMetadata.txt")));
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tshannonDiversity\tnumSequences");
 		
 		String[] topHeaders = reader.readLine().split("\t");
 		
-		for( int x=1; x < topHeaders.length; x++)
+		for( int x=0; x < topHeaders.length; x++)
 			writer.write("\t" + topHeaders[x]);
 		
 		writer.write("\n");
