@@ -16,7 +16,7 @@ public class AddMetadataOTU
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(
-				ConfigReader.getGoranTrialDir() + File.separator +  "familyLogNorm_pcoa_.txt");
+				ConfigReader.getGoranTrialDir() + File.separator +  "otuCountsAsColumnsLogNormal.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getGoranTrialDir() + File.separator + 
 				"otuCountsAsColumns.txt");
@@ -28,13 +28,17 @@ public class AddMetadataOTU
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator 
-					+ "otu_pcoa_withMetadata.txt")));
+					+ "otu_withMetadata.txt")));
 		
-		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tshannonDiversity\tnumSequences");
+		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\t");
+		
+		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\t");
+		
+		writer.write("shannonDiversity\tnumSequences");
 		
 		String[] topHeaders = reader.readLine().split("\t");
 		
-		for( int x=0; x < topHeaders.length; x++)
+		for( int x=1; x < topHeaders.length; x++)
 			writer.write("\t" + topHeaders[x]);
 		
 		writer.write("\n");
@@ -50,9 +54,12 @@ public class AddMetadataOTU
 			System.out.println(key);
 			writer.write(mfl.getSanVsSol() + "\t" + mfl.getPlq3Orplq4() + "\t" + mfl.getrNumber() + "\t" );
 			
+			
 			PhenotypeDataLine pdl = phenoMap.get(mfl.getPatientNumber());
 			
 			writer.write(pdl.getFranceSequencePlasma() + "\t" + pdl.getNafld() + "\t" + 
+						pdl.getPNPLA3CODEDGRP() + "\t" + pdl.getmTotSugarMedianSplit() + "\t" + 
+								pdl.getmAddedSugarMedianSplit() + "\t" + pdl.getmFructoseMedianSplit() + "\t" + 
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
 			
 			for( int x=1; x < splits.length; x++)
