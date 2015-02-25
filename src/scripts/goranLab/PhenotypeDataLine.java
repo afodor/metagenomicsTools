@@ -15,7 +15,32 @@ public class PhenotypeDataLine
 	private final String study;
 	private final Integer franceSequencePlasma;
 	private final Integer nafld;
+	private final Integer PNPLA3CODEDGRP;
+	private final Integer mTotSugarMedianSplit;
+	private final Integer mAddedSugarMedianSplit;
+	private final Integer mFructoseMedianSplit;
 	
+		
+	public Integer getPNPLA3CODEDGRP()
+	{
+		return PNPLA3CODEDGRP;
+	}
+
+	public Integer getmTotSugarMedianSplit()
+	{
+		return mTotSugarMedianSplit;
+	}
+
+	public Integer getmAddedSugarMedianSplit()
+	{
+		return mAddedSugarMedianSplit;
+	}
+
+	public Integer getmFructoseMedianSplit()
+	{
+		return mFructoseMedianSplit;
+	}
+
 	public int getSubjectNumber()
 	{
 		return subjectNumber;
@@ -53,6 +78,10 @@ public class PhenotypeDataLine
 		this.study = tReader.nextToken();
 		this.franceSequencePlasma = Integer.parseInt(tReader.nextToken());
 		this.nafld = getInOrNull(tReader.nextToken());
+		this.PNPLA3CODEDGRP = getInOrNull(tReader.nextToken());
+		this.mTotSugarMedianSplit = getInOrNull(tReader.nextToken());
+		this.mAddedSugarMedianSplit = getInOrNull(tReader.nextToken());
+		this.mFructoseMedianSplit = getInOrNull(tReader.nextToken());
 	}
 	
 	public static HashMap<Integer, PhenotypeDataLine> getMap() throws Exception
