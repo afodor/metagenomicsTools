@@ -2,10 +2,14 @@ setwd("G:\\Goran_lab\\")
 
 rm(list=ls())
 
-taxa <- c( "phyla", "class", "order", "family", "genus" );
+#taxa <- c( "phyla", "class", "order", "family", "genus" );
+taxa <- c( "phyla");
+
  
 for( tax in taxa )
 	{
+		par(mfrow=c(4,2))
+		
 		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
 		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
 		numCols <- ncol(myT)
@@ -34,6 +38,9 @@ for( tax in taxa )
 				meanNafld[index] <- mean( leftVals)
 				meanNonNafld [index] <- mean( rightVals)
 				
+				title = paste(names[index], " p= ", pValuesmAddedSugarMedianSplit[index],sep="")
+				boxplot( leftVals, rightVals, main=title)
+				
 				index <- index + 1
 			}
 		
@@ -43,5 +50,5 @@ for( tax in taxa )
 		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit, meanNafld ,meanNonNafld)
 		dFrame <- dFrame [order(dFrame$pValuesmAddedSugarMedianSplit),]
 		dFrame$adjustedP <- p.adjust( dFrame$pValuesmAddedSugarMedianSplit, method = "BH" )
-		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarMedianSplit_SAN.txt",sep=""), sep="\t", row.names=FALSE)		
+		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarMedianSplit_SAN.txt",sep=""), sep="\t", row.names=FALSE)	
 	}
