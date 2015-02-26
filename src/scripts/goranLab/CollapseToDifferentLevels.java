@@ -19,7 +19,17 @@ public class CollapseToDifferentLevels
 	
 	public static void main(String[] args) throws Exception
 	{
-		
+		for( int x=1; x <=4 ; x++)
+		{
+			System.out.println(TAXA[x-1]);
+			HashMap<String, HashMap<String, Double>> map = getCountsMap(x);
+			File aFile = writeCountsFile(map, x);
+			
+			OtuWrapper wrapper = new OtuWrapper(aFile);
+			
+			wrapper.writeLoggedDataWithTaxaAsColumns(new File(ConfigReader.getGoranTrialDir() + 
+				File.separator + TAXA[x-1] + "fromOTUsAsColumnLogNorm.txt"));
+		}
 	}
 	
 	private static File writeCountsFile(HashMap<String, HashMap<String, Double>> map, int level)
