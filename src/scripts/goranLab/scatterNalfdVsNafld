@@ -35,6 +35,7 @@ for( tax in taxa )
 				
 				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),sep="")
 				plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
+				abline(myLm)
 				index <- index + 1
 				#lines(myLm),s
 			}
