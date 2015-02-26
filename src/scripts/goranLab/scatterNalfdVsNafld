@@ -2,8 +2,8 @@ setwd("C:\\Goran_lab\\")
 
 rm(list=ls())
 
-#taxa <- c( "phyla", "class", "order", "family", "genus" );
-taxa <- c( "phyla");
+taxa <- c( "phyla", "class", "order", "family", "genus" );
+#taxa <- c( "phyla");
  
 for( tax in taxa )
 	{
@@ -16,33 +16,34 @@ for( tax in taxa )
 		myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 		
 		pValuesmAddedSugarMedianSplit<- vector()
+		pValueNAFLD <- vector()
 		names <- vector()
 				
 		index <-1
 		for( i in 12:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol=="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug))
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
+										& !is.na(myT$nafld) )
 			subset <- as.numeric( myT[subsetVals ,i])
 			subsetSugar <- as.numeric( myT$m_tsug[subsetVals])
-			
-			subsetFrame <- data.frame( subset , subsetSugar  )	
+			subsetNAFLD <- factor( myT$nafld[subsetVals] )
+			subsetFrame <- data.frame( subset , subsetSugar , subsetNAFLD  )	
 				
 			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
 			{	
-				myLm <- lm( subsetFrame$subset ~ subsetFrame$subsetSugar )
+				myLm <- lm( subsetFrame$subset ~ subsetFrame$subsetSugar +subsetFrame$subsetNAFLD   )
 				pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
+				pValueNAFLD[index] <- anova(myLm)$"Pr(>F)"[2]
 				names[index] <- names(myT)[i]
 				
 				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),sep="")
-				plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
-				abline(myLm)
+				#plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
+				#abline(myLm)
 				index <- index + 1
 			}
-		
-			
 		}
 			
-		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit)
+		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit, pValueNAFLD )
 		dFrame <- dFrame [order(dFrame$pValuesmAddedSugarMedianSplit),]
 		dFrame$adjustedP <- p.adjust( dFrame$pValuesmAddedSugarMedianSplit, method = "BH" )
 		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarRegression_SAN.txt",sep=""), sep="\t", row.names=FALSE)	
