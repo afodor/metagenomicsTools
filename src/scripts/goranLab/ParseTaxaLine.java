@@ -25,13 +25,18 @@ public class ParseTaxaLine
 			String[] splits = s.split("\t");
 		
 			//System.out.println(splits[2]);
-			String familyString =  splits[2].split(";")[level];
-			familyString = new StringTokenizer(familyString, "(").nextToken().replaceAll("\"", "").trim();
 			
-			if( map.containsKey(splits[0]))
-				throw new Exception("No");
+			if( splits[2].split(";").length -1 >= level)
+			{
+				String familyString =  splits[2].split(";")[level];
+				familyString = new StringTokenizer(familyString, "(").nextToken().replaceAll("\"", "").trim();
+				
+				if( map.containsKey(splits[0]))
+					throw new Exception("No");
+				
+				map.put(splits[0], familyString);
+			}
 			
-			map.put(splits[0], familyString);
 		}
 		
 		return map;
