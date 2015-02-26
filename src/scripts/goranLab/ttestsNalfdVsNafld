@@ -8,7 +8,7 @@ taxa <- c( "phyla");
  
 for( tax in taxa )
 	{
-		par(mfrow=c(4,2))
+		par(mfrow=c(3,2))
 		
 		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
 		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
@@ -38,8 +38,16 @@ for( tax in taxa )
 				meanNafld[index] <- mean( leftVals)
 				meanNonNafld [index] <- mean( rightVals)
 				
+				allData <- c(leftVals,rightVals)
+				myFactors <- c(rep("sugarMedian1", length(leftVals)),rep("sugarMedian2", length(rightVals)))
+				myFrame <- data.frame(allData, myFactors)
+				
 				title = paste(names[index], " p= ", pValuesmAddedSugarMedianSplit[index],sep="")
-				boxplot( leftVals, rightVals, main=title)
+				boxplot( allData ~ myFactors,data=myFrame, main=title,names=c("sugarMedian1","sugarMedian0"))
+				stripchart(allData ~ myFactors,data=myFrame, vertical = TRUE, method = "jitter", 
+            		pch = 21, col = c("red","blue","green"), bg = "bisque", add = TRUE,cex=2) 
+				
+				
 				
 				index <- index + 1
 			}
