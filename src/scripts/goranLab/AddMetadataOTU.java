@@ -12,23 +12,33 @@ import utils.ConfigReader;
 
 public class AddMetadataOTU
 {
-	
 	public static void main(String[] args) throws Exception
 	{
-		File inFile = new File(
-				ConfigReader.getGoranTrialDir() + File.separator +  "otuCountsAsColumnsLogNormal.txt");
-		
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getGoranTrialDir() + File.separator + 
-				"otuCountsAsColumns.txt");
+		for( int x=1; x <=4 ; x++)
+		{
+			System.out.println( CollapseToDifferentLevels.TAXA[x-1]);
+			File loggedFile = new File(ConfigReader.getGoranTrialDir() + 
+				File.separator + CollapseToDifferentLevels.TAXA[x-1] + "fromOTUsAsColumnLogNorm.txt");
+			
+			File outFile = new File( ConfigReader.getGoranTrialDir() + 
+					File.separator + CollapseToDifferentLevels.TAXA[x-1] + "fromOTUsAsColumn.txt");
+			
+			addMetadata(loggedFile, outFile, false);
+		}
+	}
+	
+	public static void addMetadata(File logFileToNormalize, File wrapperFile, boolean fromR) throws Exception
+	{
+		OtuWrapper wrapper = new OtuWrapper(wrapperFile);
 		
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		BufferedReader reader = new BufferedReader(new FileReader(logFileToNormalize));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator 
-					+ "otu_withMetadata.txt")));
+					+ logFileToNormalize.getName().replace(".txt", "") + "plusMetadata.txt")));
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\t");
 		
@@ -38,7 +48,7 @@ public class AddMetadataOTU
 		
 		String[] topHeaders = reader.readLine().split("\t");
 		
-		for( int x=1; x < topHeaders.length; x++)
+		for( int x=(fromR ? 0 : 1); x < topHeaders.length; x++)
 			writer.write("\t" + topHeaders[x]);
 		
 		writer.write("\n");
