@@ -40,7 +40,7 @@ public class AddMetadataOTU
 				ConfigReader.getGoranTrialDir() + File.separator 
 					+ logFileToNormalize.getName().replace(".txt", "") + "plusMetadata.txt")));
 		
-		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\t");
+		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tm_tsug\t");
 		
 		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\t");
 		
@@ -67,7 +67,7 @@ public class AddMetadataOTU
 			
 			PhenotypeDataLine pdl = phenoMap.get(mfl.getPatientNumber());
 			
-			writer.write(pdl.getFranceSequencePlasma() + "\t" + pdl.getNafld() + "\t" + 
+			writer.write(pdl.getFranceSequencePlasma() + "\t" + pdl.getNafld() + "\t" + pdl.getmTotalSugar() + "\t"+
 						pdl.getPNPLA3CODEDGRP() + "\t" + pdl.getmTotSugarMedianSplit() + "\t" + 
 								pdl.getmAddedSugarMedianSplit() + "\t" + pdl.getmFructoseMedianSplit() + "\t" + 
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
