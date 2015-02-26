@@ -22,7 +22,7 @@ for( tax in taxa )
 		index <-1
 		for( i in 12:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
+			subsetVals <- which(myT$sanVsSol=="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
 										& !is.na(myT$nafld) )
 			subset <- as.numeric( myT[subsetVals ,i])
 			subsetSugar <- as.numeric( myT$m_tsug[subsetVals])
