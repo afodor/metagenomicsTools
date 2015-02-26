@@ -19,7 +19,7 @@ public class CollapseToDifferentLevels
 	
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=1; x <=4 ; x++)
+		for( int x=1; x <=5 ; x++)
 		{
 			System.out.println(TAXA[x-1]);
 			HashMap<String, HashMap<String, Double>> map = getCountsMap(x);
