@@ -19,7 +19,12 @@ public class PhenotypeDataLine
 	private final Integer mTotSugarMedianSplit;
 	private final Integer mAddedSugarMedianSplit;
 	private final Integer mFructoseMedianSplit;
+	private final Double mTotalSugar;
 	
+	public Double getmTotalSugar()
+	{
+		return mTotalSugar;
+	}
 		
 	public Integer getPNPLA3CODEDGRP()
 	{
@@ -70,9 +75,18 @@ public class PhenotypeDataLine
 		return Integer.parseInt(s);
 	}
 	
-	
-	private PhenotypeDataLine(String s)
+	private Double getDoubleOrNull(String s)
 	{
+		if( s.trim().length() == 0)
+			return null;
+		
+		return Double.parseDouble(s);
+	}
+	
+	
+	private PhenotypeDataLine(String s) throws Exception
+	{
+		System.out.println(s);
 		TabReader tReader = new TabReader(s);
 		this.subjectNumber = Integer.parseInt(tReader.nextToken());
 		this.study = tReader.nextToken();
@@ -82,6 +96,25 @@ public class PhenotypeDataLine
 		this.mTotSugarMedianSplit = getInOrNull(tReader.nextToken());
 		this.mAddedSugarMedianSplit = getInOrNull(tReader.nextToken());
 		this.mFructoseMedianSplit = getInOrNull(tReader.nextToken());
+		
+		for( int x=0; x < 9; x++)
+			tReader.nextToken();
+		
+		if( tReader.hasMore())
+		{
+			this.mTotalSugar = getDoubleOrNull(tReader.nextToken());
+			
+			tReader.nextToken();  tReader.nextToken();
+			
+			if( tReader.hasMore())
+				throw new Exception("No");
+		}
+		else
+		{
+			this.mTotalSugar =  null;
+		}
+		
+		
 	}
 	
 	public static HashMap<Integer, PhenotypeDataLine> getMap() throws Exception
