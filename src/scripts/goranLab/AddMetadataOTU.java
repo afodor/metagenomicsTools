@@ -27,6 +27,14 @@ public class AddMetadataOTU
 		}
 	}
 	
+	private static String valueOrNA(Object o)
+	{
+		if( o==null)
+			return "NA";
+		else
+			return o.toString();
+	}
+	
 	public static void addMetadata(File logFileToNormalize, File wrapperFile, boolean fromR) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(wrapperFile);
@@ -62,14 +70,18 @@ public class AddMetadataOTU
 			
 			MetadataFileLine mfl = metaMap.get(key);
 			System.out.println(key);
-			writer.write(mfl.getSanVsSol() + "\t" + mfl.getPlq3Orplq4() + "\t" + mfl.getrNumber() + "\t" );
-			
+			writer.write( valueOrNA(mfl.getSanVsSol()) 
+					+ "\t" + valueOrNA(mfl.getPlq3Orplq4()) + "\t" + 
+					valueOrNA(mfl.getrNumber()) + "\t" );
 			
 			PhenotypeDataLine pdl = phenoMap.get(mfl.getPatientNumber());
 			
-			writer.write(pdl.getFranceSequencePlasma() + "\t" + pdl.getNafld() + "\t" + pdl.getmTotalSugar() + "\t"+
-						pdl.getPNPLA3CODEDGRP() + "\t" + pdl.getmTotSugarMedianSplit() + "\t" + 
-								pdl.getmAddedSugarMedianSplit() + "\t" + pdl.getmFructoseMedianSplit() + "\t" + 
+			writer.write( valueOrNA(pdl.getFranceSequencePlasma()) + "\t" + 
+			valueOrNA(pdl.getNafld()) + "\t" + valueOrNA(pdl.getmTotalSugar()) + "\t"+
+						valueOrNA(pdl.getPNPLA3CODEDGRP()) + "\t" +
+							valueOrNA(pdl.getmTotSugarMedianSplit()) + "\t" + 
+							valueOrNA(pdl.getmAddedSugarMedianSplit()) + "\t" +
+							valueOrNA(pdl.getmFructoseMedianSplit()) + "\t" + 
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
 			
 			for( int x=1; x < splits.length; x++)

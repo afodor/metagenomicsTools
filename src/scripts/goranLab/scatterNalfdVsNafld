@@ -1,0 +1,62 @@
+setwd("G:\\Goran_lab\\")
+
+rm(list=ls())
+
+#taxa <- c( "phyla", "class", "order", "family", "genus" );
+taxa <- c( "phyla");
+ 
+for( tax in taxa )
+	{
+		par(mfrow=c(3,2))
+		
+		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
+		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
+		numCols <- ncol(myT)
+		myColClasses <- c(rep("character",10), rep("numeric", numCols-10))
+		myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+		
+		pValuesmAddedSugarMedianSplit<- vector()
+		names <- vector()
+		meanNafld <- vector()
+		meanNonNafld <- vector()
+		
+		index <-1
+		for( i in 11:ncol(myT))
+		{
+			subset <- myT[myT$sanVsSol=="SAN",i]
+			subsetSugar <-myT$
+				
+			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
+			{	
+				leftVals <- subset[myT$mAddedSugarMedianSplit=="1"];
+				leftVals <- leftVals[!is.na(leftVals)]
+				rightVals <- subset[myT$mAddedSugarMedianSplit=="0"]
+				rightVals <- rightVals[!is.na(rightVals)]
+				pValuesmAddedSugarMedianSplit[index] <- t.test( as.numeric( leftVals), as.numeric(rightVals ) )$p.value
+				names[index] <- names(myT)[i]
+				
+				meanNafld[index] <- mean( leftVals)
+				meanNonNafld [index] <- mean( rightVals)
+				
+				allData <- c(leftVals,rightVals)
+				myFactors <- c(rep("sugarMedian1", length(leftVals)),rep("sugarMedian2", length(rightVals)))
+				myFrame <- data.frame(allData, myFactors)
+				
+				title = paste(names[index], " p= ", pValuesmAddedSugarMedianSplit[index],sep="")
+				boxplot( allData ~ myFactors,data=myFrame, main=title,names=c("sugarMedian1","sugarMedian0"))
+				stripchart(allData ~ myFactors,data=myFrame, vertical = TRUE, method = "jitter", 
+            		pch = 21, col = c("red","blue","green"), bg = "bisque", add = TRUE,cex=2) 
+				
+				
+				
+				index <- index + 1
+			}
+		
+			
+		}
+			
+		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit, meanNafld ,meanNonNafld)
+		dFrame <- dFrame [order(dFrame$pValuesmAddedSugarMedianSplit),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValuesmAddedSugarMedianSplit, method = "BH" )
+		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarMedianSplit_SAN.txt",sep=""), sep="\t", row.names=FALSE)	
+	}
