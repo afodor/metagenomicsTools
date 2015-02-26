@@ -14,7 +14,7 @@ public class AddMetadataOTU
 {
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=1; x <=4 ; x++)
+		for( int x=1; x <=5 ; x++)
 		{
 			System.out.println( CollapseToDifferentLevels.TAXA[x-1]);
 			File loggedFile = new File(ConfigReader.getGoranTrialDir() + 

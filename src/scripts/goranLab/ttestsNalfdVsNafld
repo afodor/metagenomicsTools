@@ -2,7 +2,7 @@ setwd("G:\\Goran_lab\\")
 
 rm(list=ls())
 
-taxa <- c( "phyla", "class", "order", "family" );
+taxa <- c( "phyla", "class", "order", "family", "genus" );
  
 for( tax in taxa )
 	{
