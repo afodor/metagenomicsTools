@@ -37,7 +37,6 @@ for( tax in taxa )
 				plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
 				abline(myLm)
 				index <- index + 1
-				#lines(myLm),s
 			}
 		
 			
