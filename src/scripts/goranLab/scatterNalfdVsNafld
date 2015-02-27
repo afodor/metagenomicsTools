@@ -3,11 +3,11 @@ setwd("D:\\Goran_lab\\")
 rm(list=ls())
 
 #taxa <- c( "phyla", "class", "order", "family", "genus" );
-taxa <- c( "phyla");
+taxa <- c( "genus");
  
 for( tax in taxa )
 	{
-		par(mfrow=c(3,3))
+		par(mfrow=c(4,3))
 		
 		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
 		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
@@ -20,12 +20,12 @@ for( tax in taxa )
 		names <- vector()
 				
 		index <-1
-		for( i in 12:ncol(myT))
+		for( i in 13:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice) 
 										& !is.na(myT$nafld) )
 			subset <- as.numeric( myT[subsetVals ,i])
-			subsetSugar <- as.numeric( myT$m_tsug[subsetVals])
+			subsetSugar <- as.numeric( myT$sugbev_plusjuice[subsetVals])
 			subsetNAFLD <- factor( myT$nafld[subsetVals] )
 			subsetFrame <- data.frame( subset , subsetSugar , subsetNAFLD  )	
 				
@@ -39,7 +39,7 @@ for( tax in taxa )
 				
 				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3), ";",
 				format(pValueNAFLD[index] ,digits=3),  sep="")
-				plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
+				plot( subsetSugar, subset, main=title, xlab = "sugar beverages", ylab = names[index])
 				abline(myLm)
 				abline(a=coefs[1] + coefs[3], b=coefs[2], col="red")
 				index <- index + 1

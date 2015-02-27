@@ -1,0 +1,9 @@
+
+rm(list=ls())
+
+setwd("D:\\Goran_lab\\")
+
+myT <- read.table("UpdatedPhenotypeSANSOL022515.txt", sep="\t",header=TRUE)
+
+boxplot(myT$sugbev_plusjuice[myT$Study!="SAN" & myT$NAFLD==0], myT$sugbev_plusjuice[myT$Study!="SAN" & myT$NAFLD==1])
+t.test(myT$sugbev_plusjuice[myT$Study!="SAN" & myT$NAFLD==0], myT$sugbev_plusjuice[myT$Study!="SAN" & myT$NAFLD==1])

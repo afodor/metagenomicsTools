@@ -41,7 +41,8 @@ public class AddMetadataOTU
 		
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
-		
+		HashMap<Integer, UpdatedPhenotypeParser> updateMap = UpdatedPhenotypeParser.getMetaMap();
+
 		BufferedReader reader = new BufferedReader(new FileReader(logFileToNormalize));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
@@ -50,7 +51,7 @@ public class AddMetadataOTU
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tm_tsug\t");
 		
-		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\t");
+		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\tsugbev_plusjuice\t");
 		
 		writer.write("shannonDiversity\tnumSequences");
 		
@@ -82,6 +83,7 @@ public class AddMetadataOTU
 							valueOrNA(pdl.getmTotSugarMedianSplit()) + "\t" + 
 							valueOrNA(pdl.getmAddedSugarMedianSplit()) + "\t" +
 							valueOrNA(pdl.getmFructoseMedianSplit()) + "\t" + 
+							valueOrNA(updateMap.get(mfl.getPatientNumber()).getSugbev_plusjuice()) + "\t" + 
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
 			
 			for( int x=1; x < splits.length; x++)
