@@ -24,6 +24,12 @@ public class AddMetadataOTU
 					File.separator + CollapseToDifferentLevels.TAXA[x-1] + "fromOTUsAsColumn.txt");
 			
 			addMetadata(loggedFile, outFile, false);
+			
+			loggedFile = new File(ConfigReader.getGoranTrialDir() + 
+				File.separator + CollapseToDifferentLevels.TAXA[x-1] + "LogNorm_pcoa_.txt");
+			
+			addMetadata(loggedFile, outFile, true);
+			
 		}
 	}
 	
@@ -47,7 +53,7 @@ public class AddMetadataOTU
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getGoranTrialDir() + File.separator 
-					+ logFileToNormalize.getName().replace(".txt", "") + "plusMetadata.txt")));
+					+ logFileToNormalize.getName().replace(".txt", "") + "plusMetadata" + (fromR ? "_PCOA" : "") +  ".txt")));
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tm_tsug\t");
 		
