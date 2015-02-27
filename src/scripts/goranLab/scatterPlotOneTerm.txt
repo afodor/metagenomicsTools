@@ -1,9 +1,10 @@
 setwd("D:\\Goran_lab\\")
+library("Kendall")
 
 rm(list=ls())
 
 #taxa <- c( "phyla", "class", "order", "family", "genus" ,"otu");
-taxa <- c( "otu");
+taxa <- c( "phyla");
  
 for( tax in taxa )
 	{
@@ -21,7 +22,7 @@ for( tax in taxa )
 		index <-1
 		for( i in 13:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice) 
+			subsetVals <- which(myT$sanVsSol=="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice) 
 										& !is.na(myT$nafld) )
 			subset <- as.numeric( myT[subsetVals ,i])
 			subsetSugar <- as.numeric( myT$sugbev_plusjuice[subsetVals])
@@ -30,7 +31,8 @@ for( tax in taxa )
 			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
 			{	
 				myLm <- lm( subsetFrame$subset ~ subsetFrame$subsetSugar )
-				pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
+				pValuesmAddedSugarMedianSplit[index] <- Kendall(subsetFrame$subset, subsetFrame$subsetSugar)$sl[1]
+				#pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
 				names[index] <- names(myT)[i]
 				
 				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),  sep="")
@@ -46,7 +48,7 @@ for( tax in taxa )
 			}
 		}
 			
-		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit, pValueNAFLD )
+		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit)
 		dFrame <- dFrame [order(dFrame$pValuesmAddedSugarMedianSplit),]
 		dFrame$adjustedP <- p.adjust( dFrame$pValuesmAddedSugarMedianSplit, method = "BH" )
 		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarRegression_SAN.txt",sep=""), sep="\t", row.names=FALSE)	
