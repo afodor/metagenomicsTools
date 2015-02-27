@@ -1,9 +1,9 @@
-setwd("C:\\Goran_lab\\")
+setwd("D:\\Goran_lab\\")
 
 rm(list=ls())
 
-taxa <- c( "phyla", "class", "order", "family", "genus" );
-#taxa <- c( "phyla");
+#taxa <- c( "phyla", "class", "order", "family", "genus" );
+taxa <- c( "phyla");
  
 for( tax in taxa )
 	{
@@ -22,7 +22,7 @@ for( tax in taxa )
 		index <-1
 		for( i in 12:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol=="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$m_tsug) 
 										& !is.na(myT$nafld) )
 			subset <- as.numeric( myT[subsetVals ,i])
 			subsetSugar <- as.numeric( myT$m_tsug[subsetVals])
@@ -35,10 +35,13 @@ for( tax in taxa )
 				pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
 				pValueNAFLD[index] <- anova(myLm)$"Pr(>F)"[2]
 				names[index] <- names(myT)[i]
+				coefs <-coef(myLm)
 				
-				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),sep="")
-				#plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
-				#abline(myLm)
+				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3), ";",
+				format(pValueNAFLD[index] ,digits=3),  sep="")
+				plot( subsetSugar, subset, main=title, xlab = "sugar", ylab = names[index])
+				abline(myLm)
+				abline(a=coefs[1] + coefs[3], b=coefs[2], col="red")
 				index <- index + 1
 			}
 		}
