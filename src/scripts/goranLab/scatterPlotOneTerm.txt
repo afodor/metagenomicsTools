@@ -1,0 +1,53 @@
+setwd("D:\\Goran_lab\\")
+
+rm(list=ls())
+
+#taxa <- c( "phyla", "class", "order", "family", "genus" ,"otu");
+taxa <- c( "otu");
+ 
+for( tax in taxa )
+	{
+		par(mfrow=c(4,3))
+		
+		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
+		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
+		numCols <- ncol(myT)
+		myColClasses <- c(rep("character",10), rep("numeric", numCols-10))
+		myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+		
+		pValuesmAddedSugarMedianSplit<- vector()
+		names <- vector()
+				
+		index <-1
+		for( i in 13:ncol(myT))
+		{
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice) 
+										& !is.na(myT$nafld) )
+			subset <- as.numeric( myT[subsetVals ,i])
+			subsetSugar <- as.numeric( myT$sugbev_plusjuice[subsetVals])
+			subsetFrame <- data.frame( subset , subsetSugar )	
+				
+			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
+			{	
+				myLm <- lm( subsetFrame$subset ~ subsetFrame$subsetSugar )
+				pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
+				names[index] <- names(myT)[i]
+				
+				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),  sep="")
+				plot( subsetSugar, subset, main=title, xlab = "sugar beverages", ylab = names[index])
+				abline(myLm)
+				index <- index + 1
+				
+				if( index %% 12 == 0)
+				{
+					windows()
+					par(mfrow=c(4,3))
+				}
+			}
+		}
+			
+		dFrame <- data.frame( names,pValuesmAddedSugarMedianSplit, pValueNAFLD )
+		dFrame <- dFrame [order(dFrame$pValuesmAddedSugarMedianSplit),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValuesmAddedSugarMedianSplit, method = "BH" )
+		write.table(dFrame, file=paste(tax,"pValuesmAddedSugarRegression_SAN.txt",sep=""), sep="\t", row.names=FALSE)	
+	}
