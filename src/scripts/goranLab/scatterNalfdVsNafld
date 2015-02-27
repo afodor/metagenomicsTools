@@ -2,8 +2,8 @@ setwd("D:\\Goran_lab\\")
 
 rm(list=ls())
 
-#taxa <- c( "phyla", "class", "order", "family", "genus" );
-taxa <- c( "genus");
+#taxa <- c( "phyla", "class", "order", "family", "genus" ,"otu");
+taxa <- c( "otu");
  
 for( tax in taxa )
 	{
@@ -43,6 +43,12 @@ for( tax in taxa )
 				abline(myLm)
 				abline(a=coefs[1] + coefs[3], b=coefs[2], col="red")
 				index <- index + 1
+				
+				if( index %% 12 == 0)
+				{
+					windows()
+					par(mfrow=c(4,3))
+				}
 			}
 		}
 			

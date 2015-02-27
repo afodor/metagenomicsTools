@@ -11,12 +11,12 @@ public class RePivotOTU
 	{
 		OtuWrapper.transpose(ConfigReader.getGoranTrialDir() + File.separator + 
 				"otuCounts.txt",ConfigReader.getGoranTrialDir() + File.separator + 
-				"otuCountsAsColumns.txt" , false);
+				File.separator + "otu" + "fromOTUsAsColumn.txt" , false);
 		
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getGoranTrialDir() + File.separator + 
-				"otuCountsAsColumns.txt");
+				File.separator + "otu" + "fromOTUsAsColumn.txt");
 		
 		wrapper.writeLoggedDataWithTaxaAsColumns(new File(ConfigReader.getGoranTrialDir() + File.separator + 
-				"otuCountsAsColumnsLogNormal.txt"));
+				File.separator + "otu" + "fromOTUsAsColumnLogNorm.txt"));
 	}
 }

@@ -15,7 +15,7 @@ import utils.ConfigReader;
 
 public class CollapseToDifferentLevels
 {
-	public static final String[] TAXA = { "phyla", "class", "order", "family", "genus" };
+	public static final String[] TAXA = { "phyla", "class", "order", "family", "genus", "otu" };
 	
 	public static void main(String[] args) throws Exception
 	{
