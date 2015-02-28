@@ -14,11 +14,67 @@ public class ConirmDiversity
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Double> map = getOTUDiversity();
+		HashMap<Integer,String> sodaMap = getSodaMap();
 		
-		for(String s  : map.keySet() )
+		BufferedReader reader = new BufferedReader(new FileReader(new File(  
+				ConfigReader.getGoranTrialDir() + File.separator + 
+				"otufromOTUsAsColumnLogNormplusMetadata.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
 		{
-			System.out.println( s + " " + map.get(s));
+			String[] splits = s.split("\t");
+			
+			double val = Double.parseDouble(splits[12]);
+			
+			if( Math.abs(val - map.get(splits[0]).doubleValue()) >0.0001)
+			{
+				System.out.println("No " + val + " " + map.get(splits[0]).doubleValue() + " " + splits[0]);
+			
+			}	
+			
+			System.out.println(splits[0]);
+			int key = Integer.parseInt(splits[0].split("-")[2]);
+			
+			if( ! sodaMap.get(key).equals(splits[11] ))
+				throw new Exception( splits[0] + " "+  key+ " " + sodaMap.get(key) + " " + splits[11]);
 		}
+		
+		System.out.println("Confirm diversity");
+		
+		
+	}
+	
+	private static HashMap<Integer, String> getSodaMap() throws Exception
+	{
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File( 
+				ConfigReader.getGoranTrialDir() + File.separator + "UpdatedPhenotypeSANSOL022515.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0; s = reader.readLine())
+		{
+			//System.out.println(s);
+			String[] splits = s.split("\t");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			if( splits.length >22 && splits[23].trim().length() > 0 )
+			{
+				double val = Double.parseDouble( splits[ 23]);
+				map.put(Integer.parseInt(splits[0]),val + "");
+			}
+			else
+			{
+				map.put(Integer.parseInt(splits[0]), "NA");
+			}
+		}
+		
+		return map;
 	}
 	
 	private static HashMap<String, Double> getOTUDiversity() throws Exception
