@@ -1,0 +1,38 @@
+
+setwd("G:\\Goran_lab\\")
+library("Kendall")
+rm(list=ls())
+inFileName <- "phylafromOTUsAsColumnLogNormplusMetadata.txt"
+
+myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
+		numCols <- ncol(myT)
+		myColClasses <- c(rep("character",10), rep("numeric", numCols-10))
+		myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+boxplot(myT$sugbev_plusjuice[myT$sanVsSol=="SAN" & myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$sanVsSol=="SAN" & myT$nafld==1],
+				xlab=c("NAFD==0", "NAFD==1"), main="SAN data")
+			
+
+wilcox.test(myT$sugbev_plusjuice[myT$sanVsSol=="SAN" & myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$sanVsSol=="SAN" & myT$nafld==1])			
+			
+boxplot(myT$sugbev_plusjuice[myT$sanVsSol!="SAN" & myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$sanVsSol!="SAN" & myT$nafld==1],
+				xlab=c("NAFD==0", "NAFD==1"), main="Not SAN data")
+			
+
+wilcox.test(myT$sugbev_plusjuice[myT$sanVsSol!="SAN" & myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$sanVsSol!="SAN" & myT$nafld==1])			
+			
+
+			
+boxplot(myT$sugbev_plusjuice[myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$nafld==1],
+				xlab=c("NAFD==0", "NAFD==1"))
+			
+
+wilcox.test(myT$sugbev_plusjuice[myT$nafld==0], 
+			myT$sugbev_plusjuice[myT$nafld==1])			
+			
+			

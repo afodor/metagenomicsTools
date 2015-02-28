@@ -4,11 +4,11 @@ library("Kendall")
 rm(list=ls())
 
 #taxa <- c( "phyla", "class", "order", "family", "genus" ,"otu");
-taxa <- c( "otu");
+taxa <- c( "phyla");
  
 for( tax in taxa )
 	{
-		par(mfrow=c(4,3))
+		par(mfrow=c(3,3))
 		
 		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
 		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
@@ -22,8 +22,7 @@ for( tax in taxa )
 		index <-1
 		for( i in 13:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol=="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice) 
-										& !is.na(myT$nafld) )
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice))
 			subset <- as.numeric( myT[subsetVals ,i])
 			subsetSugar <- as.numeric( myT$sugbev_plusjuice[subsetVals])
 			subsetFrame <- data.frame( subset , subsetSugar )	
