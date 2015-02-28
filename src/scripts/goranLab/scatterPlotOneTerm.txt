@@ -1,10 +1,10 @@
-setwd("D:\\Goran_lab\\")
+setwd("G:\\Goran_lab\\")
 library("Kendall")
 
 rm(list=ls())
 
 #taxa <- c( "phyla", "class", "order", "family", "genus" ,"otu");
-taxa <- c( "phyla");
+taxa <- c( "otu");
  
 for( tax in taxa )
 	{
