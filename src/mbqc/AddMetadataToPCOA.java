@@ -31,7 +31,7 @@ public class AddMetadataToPCOA
 					)));
 		
 		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\t");
-		writer.write(reader.readLine() + "\n");
+		writer.write("pcoa1\tpcoa2\n");
 		
 		int numFound =0;
 		int numMissed=0;
