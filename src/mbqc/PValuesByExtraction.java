@@ -16,7 +16,7 @@ import utils.TTest;
 
 public class PValuesByExtraction
 {
-	private static HashMap<String,String> getManualKitManufacturer()
+	public static HashMap<String,String> getManualKitManufacturer()
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		
@@ -34,6 +34,9 @@ public class PValuesByExtraction
 		map.put("rknight", "MO-BIO");
 		map.put("oshanks", "unknown");
 		map.put("dgevers", "Chemagic DNA");
+		
+		// from Rashmi on the Feb. 20 conference call
+		map.put("NA", "MO-BIO");
 		
 		return map;
 	}

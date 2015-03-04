@@ -10,12 +10,14 @@ import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
-public class AddMetadataToPCOA
+public class AddMetadataToMDS
 {
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> metaMap = 
 				RawDesignMatrixParser.getByFullId();
+		
+		HashMap<String, String> kitMap = PValuesByExtraction.getManualKitManufacturer();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getMbqcDir() + File.separator + 
@@ -30,7 +32,7 @@ public class AddMetadataToPCOA
 				 File.separator + "mdsOutWithMetadata.txt"
 					)));
 		
-		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\t");
+		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer\t");
 		writer.write("mds1\tmds2\n");
 		
 		int numFound =0;
@@ -55,6 +57,11 @@ public class AddMetadataToPCOA
 				RawDesignMatrixParser rdmp = metaMap.get(splits[0]);
 				writer.write(rdmp.getExtractionWetlab() + "\t" + rdmp.getSequecingWetlab() + "\t" + rdmp.getMbqcID() + "\t"
 						+  rdmp.getExtractionWetlab().equals("NA") + "\t" );
+				
+				String kit = kitMap.get(rdmp.getExtractionWetlab());
+				
+				writer.write(kit + "\t");
+				
 				writer.write(splits[1] + "\t" + splits[2] + "\n");
 				
 				if( splits.length != 3)
