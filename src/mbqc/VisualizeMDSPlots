@@ -49,7 +49,7 @@ getPlotSymbols <- function(data)
 for( id in mbqcIDs )
 {
 	plot( myT$mds1[ myT$mbqcID == id ] ,myT$mds2[ myT$mbqcID == id ], xlab= "MDS1", ylab="MDS2",
-				col = getColors( myT$kitManufactuer[ myT$mbqcID == id ] ),main=id, cex=2,
+				col = getColors( myT$kitManufactuer[ myT$mbqcID == id ] ),main=id, cex=1.5,
 					pch=getPlotSymbols(myT$extractionIsNA[ myT$mbqcID == id ]))
 }
 
