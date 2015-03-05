@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+setwd("C:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
 library("vegan")
 dat <- read.csv( "merged_species.txt", sep = "\t" )
 metaTable <- read.table("metadataForMergedSpecies.txt",sep="\t",header=TRUE)
@@ -22,8 +22,10 @@ getAnMDS <- function(x, included)
  	 cmdscale( dist.use )
 }
 
-
-subSample <- which(metaTable$mbqcID==sampleIDs[1] & metaTable$informaticsToken == bioinformaticIDS[1])
-anMDS <- getAnMDS( dat, subSample )
-
-plot(anMDS[,1], anMDS[,2])
+par(mfrow=c(4,2))
+for( bID in bioinformaticIDS )
+{
+	subSample <- which(metaTable$informaticsToken == bioinformaticIDS[bID])
+	anMDS <- getAnMDS( dat, subSample )
+	plot(anMDS[,1], anMDS[,2])
+}
