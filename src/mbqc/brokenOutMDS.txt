@@ -1,10 +1,28 @@
 rm(list=ls())
 
 setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
-x <- read.csv( "merged_species.txt", sep = "\t" )
+dat <- read.csv( "merged_species.txt", sep = "\t" )
 metaTable <- read.table("metadataForMergedSpecies.txt",sep="\t",header=TRUE)
 
+whichNAs <- which(is.na( metaTable$mbqcID ))
+
+dat <- dat[ !whichNAs, ]
+metaTable <- metaTable[ !whichNAs,]
 
 sampleIDs <- unique( metaTable$mbqcID)
+bioinformaticIDS <- unique(metaTable$informaticsToken)
 
-sID <- "D2301"
+
+getAnMDS <- function(x, included)
+{
+	 #get rid of first row
+ 	 #assume it contains taxa names
+  	 x = x[,-1]
+  	  #to right shape for vegdist
+ 	 x = t(x)
+ 	 x.use = x[included,]
+     dist.use = vegdist( x.use, method = "bray" )
+ 	 cmdscale( dist.use )
+}
+
+which(metaTable$mbqcID==sampleIDs[1] & dat$bioinformaticIDS == bioinformaticIDS[1])
