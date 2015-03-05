@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+myT <- read.table("mdsOut_chuttenhowerplusMetadata.txt",sep="\t",header=TRUE)
+
+mbqcIDs <- c( "D2301", "D2327", "D2497", "D2561", "D2696", "D2698", "DZ15291", "DZ15292", "DZ15293", "DZ15294", 
+		"DZ15295", "DZ15296", "DZ15298", "DZ15300", "DZ15302", "Fecal artificial colony", 
+		"Oral artificial colony", "Robogut (time 1)", "Robogut (time 2)"	  )
+		
+par(mfrow=c(5,4))
+
+for( id in mbqcIDs )
+{
+	plot( myT$mds1[ myT$mbqcID == id ] ,myT$mds2[ myT$mbqcID == id ] )
+}
+		
