@@ -1,44 +1,87 @@
 package mbqc;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
-import java.util.List;
+import java.util.StringTokenizer;
 
-import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
-		String prefix = "jpetrosino";
-		OtuWrapper wrapper = new OtuWrapper(
-				ConfigReader.getMbqcDir() + 
-				File.separator + "dropbox" + 
-					File.separator +  "merged_otu_filtered_"+ prefix + "TaxaAsColumns.txt");
+		HashMap<String, RawDesignMatrixParser> metaMap = 
+				RawDesignMatrixParser.getByFullId();
 		
-		//HashMap<String, RawDesignMatrixParser> map = RawDesignMatrixParser.getByFullId();
-		HashMap<String, List<RawDesignMatrixParser>> map = RawDesignMatrixParser.getByLastTwoTokens();
+		HashMap<String, String> kitMap = PValuesByExtraction.getManualKitManufacturer();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				 File.separator +  "dropbox" + File.separator + 
+				"alpha-beta-div" + File.separator +  "beta-div" +
+						File.separator + "merged_species.txt")));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				 File.separator +  "dropbox" + File.separator + 
+				"alpha-beta-div" + File.separator +  "beta-div" +
+				 File.separator + "metadataForMergedSpecies.txt"
+					)));
+		
+		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsShipped\tkitManufactuer\tindex\n");
 		
 		int numFound =0;
-		int numNotFound =0;
-		for(String s : wrapper.getSampleNames())
+		int numMissed=0;
+		
+		String[] splits = reader.readLine().split("\t");
+		
+		for( int x=1; x < splits.length; x++)
 		{
-			String key = s.replaceAll("\"", "").trim().replace(prefix, "").substring(1);
+			String key = splits[x];
+			writer.write(key+ "\t");
 			
-			if( ! map.containsKey(key))
+			StringTokenizer innerSplits = new StringTokenizer(key, ".");
+			writer.write(innerSplits.nextToken() + "\t" + innerSplits.nextToken() + "\t" + 
+					innerSplits.nextToken()  + "\t");
+			
+			if( innerSplits.hasMoreTokens())
+				throw new Exception("No");
+			
+			if( metaMap.containsKey(key))
 			{
-				numNotFound++;
-				System.out.println("Could not find " + key);
-				
+					numFound++;
+					
+					RawDesignMatrixParser rdmp = metaMap.get(key);
+					writer.write((rdmp.getExtractionWetlab().equals("NA") ? "shipped" :rdmp.getExtractionWetlab())  
+							+ "\t" + rdmp.getSequecingWetlab() + "\t" + rdmp.getMbqcID() + "\t"
+							+  rdmp.getExtractionWetlab().equals("NA") + "\t" );
+					
+					String kit = kitMap.get(rdmp.getExtractionWetlab());
+					
+					writer.write(kit + "\t");
 			}
 			else
 			{
-				numFound++;
+				numMissed++;
+				writer.write("NA"
+						+ "\t" + "NA"+ "\t" + "NA"+ "\t"
+						+  "NA"+ "\t" );
+				
+				writer.write("NA\t");
+		
 			}
+			
+			writer.write(x + "\n");
 		}
 		
-		System.out.println(numFound +  " " + numNotFound);
 		
+		
+		writer.flush();  writer.close();
+		
+		System.out.println(numFound + " " + numMissed);
 	}
 }
