@@ -53,5 +53,8 @@ for( id in mbqcIDs )
 					pch=getPlotSymbols(myT$extractionIsNA[ myT$mbqcID == id ]))
 }
 
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("left",y=0,bty="n",unique(myT$kitManufactuer) ,lty=c(6,6), lwd=c(6,6), col=getColors(unique(myT$kitManufactuer)),cex=0.75)
+
 
 		
