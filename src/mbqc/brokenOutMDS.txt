@@ -9,17 +9,15 @@ whichNAs <- which(is.na( metaTable$mbqcID ))
 dat <- dat[ !whichNAs, ]
 metaTable <- metaTable[ !whichNAs,]
 
+dat <- dat[,-1]
+dat <- t(dat)
+
 sampleIDs <- unique( metaTable$mbqcID)
 bioinformaticIDS <- unique(metaTable$informaticsToken)
 
 
 getAnMDS <- function(x, included)
 {
-	 #get rid of first row
- 	 #assume it contains taxa names
-  	 x = x[,-1]
-  	  #to right shape for vegdist
- 	 x = t(x)
  	 x.use = x[included,]
      dist.use = vegdist( x.use, method = "bray" )
  	 cmdscale( dist.use )
