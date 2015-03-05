@@ -18,7 +18,7 @@ bioinformaticIDS <- unique(metaTable$informaticsToken)
 getAnMDS <- function(x, included)
 {
  	 x.use = x[included,]
- 	 x.use = x[rowSums(x)>0,colSums(x)>0]
+ 	 x.use = x.use[rowSums(x)>0,colSums(x)>0]
      dist.use = vegdist( x.use, method = "bray" )
  	 cmdscale( dist.use )
 }

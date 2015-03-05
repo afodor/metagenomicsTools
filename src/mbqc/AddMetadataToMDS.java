@@ -12,7 +12,7 @@ import utils.ConfigReader;
 
 public class AddMetadataToMDS
 {
-	public static void main(String[] args) throws Exception
+	public static void addMetadata(String fileName) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> metaMap = 
 				RawDesignMatrixParser.getByFullId();
@@ -22,14 +22,12 @@ public class AddMetadataToMDS
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getMbqcDir() + File.separator + 
 				 File.separator +  "dropbox" + File.separator + 
-				"alpha-beta-div" + File.separator +  "beta-div" +
-						File.separator + "mdsOut.txt")));
+				"alpha-beta-div" + File.separator + fileName)));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getMbqcDir() + File.separator + 
 				 File.separator +  "dropbox" + File.separator + 
-				"alpha-beta-div" + File.separator +  "beta-div" +
-				 File.separator + "mdsOutWithMetadata.txt"
+				"alpha-beta-div" + File.separator + fileName + "plusMetadata.txt"
 					)));
 		
 		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer\t");
