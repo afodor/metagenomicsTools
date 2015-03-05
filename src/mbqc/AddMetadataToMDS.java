@@ -12,6 +12,18 @@ import utils.ConfigReader;
 
 public class AddMetadataToMDS
 {
+	public static void main(String[] args) throws Exception
+	{
+		String[] names = 
+			{
+				"jpetrosino",   "chuttenhower", "deblur", "evogtmann",   "gcaporaso",   
+				"jravel"      , "qiime",        "xchen"
+			};
+		
+		for(String s : names ) 
+		addMetadata("mdsOut_" + s +".txt");
+	}
+	
 	public static void addMetadata(String fileName) throws Exception
 	{
 		HashMap<String, RawDesignMatrixParser> metaMap = 
@@ -22,12 +34,13 @@ public class AddMetadataToMDS
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getMbqcDir() + File.separator + 
 				 File.separator +  "dropbox" + File.separator + 
-				"alpha-beta-div" + File.separator + fileName)));
+				"alpha-beta-div" + File.separator + "beta-div" + File.separator + fileName)));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getMbqcDir() + File.separator + 
 				 File.separator +  "dropbox" + File.separator + 
-				"alpha-beta-div" + File.separator + fileName + "plusMetadata.txt"
+				"alpha-beta-div" + File.separator + "beta-div" + File.separator + 
+					fileName.replace(".txt", "") + "plusMetadata.txt"
 					)));
 		
 		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer\t");
@@ -36,23 +49,25 @@ public class AddMetadataToMDS
 		int numFound =0;
 		int numMissed=0;
 		
+		reader.readLine();
 		for(String s= reader.readLine();  s !=null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
-			if( metaMap.containsKey(splits[0]))
+			String key = splits[0].replaceAll("\"", "");
+			if( metaMap.containsKey(key))
 			{
 				numFound++;
-				writer.write(splits[0] + "\t");
+				writer.write(key+ "\t");
 				
-				StringTokenizer innerSplits = new StringTokenizer(splits[0], ".");
+				StringTokenizer innerSplits = new StringTokenizer(key, ".");
 				writer.write(innerSplits.nextToken() + "\t" + innerSplits.nextToken() + "\t" + 
 						innerSplits.nextToken()  + "\t");
 				
 				if( innerSplits.hasMoreTokens())
 					throw new Exception("No");
 				
-				RawDesignMatrixParser rdmp = metaMap.get(splits[0]);
+				RawDesignMatrixParser rdmp = metaMap.get(key);
 				writer.write(rdmp.getExtractionWetlab() + "\t" + rdmp.getSequecingWetlab() + "\t" + rdmp.getMbqcID() + "\t"
 						+  rdmp.getExtractionWetlab().equals("NA") + "\t" );
 				
