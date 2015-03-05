@@ -1,0 +1,8 @@
+rm(list=ls())
+
+setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+x <- read.csv( "merged_species.txt", sep = "\t" )
+metaTable <- read.table("metadataForMergedSpecies.txt)
+
+
+sampleIDs <- unique( metaTab
