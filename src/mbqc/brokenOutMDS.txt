@@ -7,7 +7,7 @@ metaTable <- read.table("metadataForMergedSpecies.txt",sep="\t",header=TRUE)
 whichNAs <- which(is.na( metaTable$mbqcID ))
 
 dat <- dat[,-1]
-dat <- t(x)
+dat <- t(dat)
 dat <- dat[ !whichNAs, ]
 metaTable <- metaTable[ !whichNAs,]
 
@@ -25,3 +25,5 @@ getAnMDS <- function(x, included)
 
 subSample <- which(metaTable$mbqcID==sampleIDs[1] & dat$bioinformaticIDS == bioinformaticIDS[1])
 anMDS <- getAnMDS( dat, subSample )
+
+plot(anMDS[0], anMDS[1])
