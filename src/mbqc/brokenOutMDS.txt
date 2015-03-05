@@ -25,7 +25,8 @@ getAnMDS <- function(x, included)
 par(mfrow=c(4,2))
 for( bID in bioinformaticIDS )
 {
-	subSample <- which(metaTable$informaticsToken == bioinformaticIDS[bID])
+	subSample <- which(metaTable$informaticsToken == bID)
 	anMDS <- getAnMDS( dat, subSample )
 	plot(anMDS[,1], anMDS[,2])
+	
 }
