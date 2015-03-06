@@ -30,9 +30,9 @@ public class PValuesByExtraction
 		map.put("pschloss", "MO-BIO");
 		map.put("pturnbaugh", "MO-BIO");
 		map.put("rburk", "two_methods_Qiaqen_and_Mo_Bio");
-		map.put("rflores", "unknown");
+		map.put("rflores", "Qiagen");
 		map.put("rknight", "MO-BIO");
-		map.put("oshanks", "unknown");
+		map.put("oshanks", "GeneRite");
 		map.put("dgevers", "Chemagic DNA");
 		
 		// from Rashmi on the Feb. 20 conference call

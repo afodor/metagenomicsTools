@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+setwd("F:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
 myT <- read.table("mdsOut_chuttenhowerplusMetadata.txt",sep="\t",header=TRUE)
 
 mbqcIDs <- c( "D2301", "D2327", "D2497", "D2561", "D2696", "D2698", "DZ15291", "DZ15292", "DZ15293", "DZ15294", 
@@ -26,6 +26,11 @@ getColors <- function(data)
 			colors[i] <- "green"
 		else if ( data[i]== "In house")
 			colors[i] <- "cyan"
+		else if( data[i] == "GeneRite")
+			colors[i] <- "darkgoldenrod3"
+		else if ( data[i] == "Qiagen")
+			colors[i] <- "tan4"
+			
 	}
 	
 	return (colors)
@@ -54,7 +59,7 @@ for( id in mbqcIDs )
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")
-legend("left",y=0,bty="n",unique(myT$kitManufactuer) ,lty=c(6,6), lwd=c(6,6), col=getColors(unique(myT$kitManufactuer)),cex=0.75)
+legend("left",y=0,bty="n",sort(unique(myT$kitManufactuer)) ,lty=c(6,6), lwd=c(6,6), col=getColors(unique(myT$kitManufactuer)),cex=0.50)
 
 
 		
