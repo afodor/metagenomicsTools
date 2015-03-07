@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("F:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+setwd("C:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
 library("vegan")
 dat <- read.csv( "merged_species.txt", sep = "\t" )
 metaTable <- read.table("metadataForMergedSpecies.txt",sep="\t",header=TRUE)
