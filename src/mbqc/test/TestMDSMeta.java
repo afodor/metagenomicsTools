@@ -12,10 +12,38 @@ public class TestMDSMeta
 	public static void main(String[] args) throws Exception
 	{
 		simpleTokenCheck();
-		HashMap<String, String> exMap = quickExtractionMap();
+		checkExtractions();
 	}
 	
-	
+	private static void checkExtractions() throws Exception
+	{
+		HashMap<String, String> exMap = quickExtractionMap();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				"dropbox" + File.separator +  "alpha-beta-div" + File.separator +  "beta-div"
+						+ File.separator + "mdsOut_chuttenhowerplusMetadata.txt")));
+		
+		reader.readLine();
+		
+		for( String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			String ex = exMap.get(splits[0]);
+			
+			if( ex == null)
+				throw new Exception("No");
+			
+			if( ! ex.equals(splits[4]))
+				throw new Exception("No " + splits[4] );
+		}
+		
+		reader.close();
+		
+		System.out.println("Extraction test passed");
+	}
+
 	
 	private static HashMap<String, String> quickExtractionMap() throws Exception
 	{
