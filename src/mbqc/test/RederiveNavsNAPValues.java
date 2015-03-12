@@ -53,6 +53,7 @@ public class RederiveNavsNAPValues
 			
 		for(int x=0; x < toMatch.size(); x++)
 		{
+			//System.out.println(toMatch);
 			String[] splits = toMatch.get(x).split("_");
 			
 			for( int y=0; y < taxaNames.size(); y++)
@@ -111,7 +112,7 @@ public class RederiveNavsNAPValues
 				if( innerList.size() != firstListSize)
 					throw new Exception("No");
 				
-				sum += innerList.get(y);
+				sum += innerList.get(x);
 				n++;
 				
 			}
