@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -26,10 +28,11 @@ public class RederiveNavsNAPValues
 	private static void writeTestCompareFile(HashMap<String, HashMap<String, List<List<Double>>>> map) throws Exception
 	{
 		List<String> taxaNames = getTaxaNames();
+		List<String> mbqcNames = getMBQCIDs(map);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 			ConfigReader.getMbqcDir() + File.separator + "af_out" + File.separator + 
-							"testValsForNAvsNonNA"));
+							"testValsForNAvsNonNA.txt"));
 		
 		writer.write("bioinformaticsID\tsequencingLab\textractionLab\ttaxa\tnaVals\textractionVals\tfoldChange\n");
 		
@@ -62,13 +65,61 @@ public class RederiveNavsNAPValues
 				HashMap<String, List<List<Double>>> extractionMap = map.get(toMatch.get(x));
 				HashMap<String, List<List<Double>>> na_Map = map.get(naMatched.get(x));
 				
-				List<List<Double>> extractionList = extractionMap.get(taxaNames.get(y));
-				List<List<Double>> naList = na_Map.get(taxaNames.get(y));
+				List<Double> exVals = new ArrayList<Double>();
+				List<Double> naVals = new ArrayList<Double>();
+				
+				for( int z=0; z < mbqcNames.size();z++)
+				{
+					String mbqcID = mbqcNames.get(z);
+					List<List<Double>> exList = extractionMap.get(mbqcID);
+					List<List<Double>> naList = na_Map.get(mbqcID);
+					
+					if( exList != null && naList != null)
+					{
+						List<Double> exAvg = average(exList);
+						List<Double> naAvg = average(naList);
+						exVals.add(exAvg.get(y));
+						naVals.add(naAvg.get(y));
+					}
+				}
+				
+				writer.write(exVals + "\t");
+				writer.write(naVals + "\t");
+				writer.write("0\n");
 				
 			}
+			
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static List<Double> average(List<List<Double>> inList) throws Exception
+	{
+		List<Double> returnList = new ArrayList<Double>();
+		
+		int firstListSize = inList.get(0).size();
+		
+		for( int x=0; x < firstListSize; x++ )
+		{
+			double sum =0;
+			int n=0;
+			for( int y=0; y < inList.size(); y++)
+			{
+				List<Double> innerList = inList.get(y);
+				
+				if( innerList.size() != firstListSize)
+					throw new Exception("No");
+				
+				sum += innerList.get(y);
+				n++;
+				
+			}
+			
+			returnList.add(sum /n);
+		}
+		
+		return returnList;
 	}
 	
 	private static String getMatched(String toMatch, HashMap<String, HashMap<String, List<List<Double>>>> map)
@@ -98,6 +149,24 @@ public class RederiveNavsNAPValues
 		for( int x=0; x < 42; x++)
 			list.add(  splits[x+4]);
 			
+		return list;
+	}
+	
+	private static List<String> getMBQCIDs(HashMap<String, HashMap<String, List<List<Double>>>> map) 
+		throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : map.keySet())
+		{
+			HashMap<String, List<List<Double>>> iMap = map.get(s);
+			
+			for(String s1 : iMap.keySet())
+				set.add(s1);
+		}
+		
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
 		return list;
 	}
 	
