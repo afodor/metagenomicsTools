@@ -86,13 +86,29 @@ public class RederiveNavsNAPValues
 				
 				writer.write(exVals + "\t");
 				writer.write(naVals + "\t");
-				writer.write("0\n");
-				
+				writer.write( foldChange(exVals, naVals) +  "\n");	
 			}
-			
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static double foldChange(List<Double> list1, List<Double> list2)
+		throws Exception
+	{
+		double sum1 = 0;
+		double sum2 = 0;
+		
+		if( list1.size() != list2.size() )
+			throw new Exception("No");
+		
+		for( int x=0; x < list1.size(); x++)
+		{
+			sum1 += list1.get(x);
+			sum2 += list2.get(x);
+		}
+		
+		return sum1 / sum2;
 	}
 	
 	private static List<Double> average(List<List<Double>> inList) throws Exception
