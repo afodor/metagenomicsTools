@@ -15,6 +15,32 @@ public class CompareFoldChanges
 				File.separator + "af_out" + File.separator +  "pValuesNAVsNonNA.txt")));
 		
 		HashMap<String, Double> expectedMap = getExpected();
+		
+		for(String s : expectedMap.keySet())
+			System.out.println(s);
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			String key = splits[0]  +"_" + splits[1] + "_" + splits[2] + "_" + splits[5];
+			
+			Double expVal = expectedMap.get(key);
+			
+			if( expVal == null)
+				throw new Exception("No " + key);
+			
+			if( splits[9].trim().length() > 0 )
+			{
+
+				if( Math.abs(expVal - Double.parseDouble(splits[9])) > 0.0001)
+					throw new Exception("No");
+			}
+			
+		}
+		
+		System.out.println("Passed foldchange");
 	}
 	
 	private static HashMap<String, Double> getExpected() throws Exception
@@ -29,7 +55,7 @@ public class CompareFoldChanges
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			String key = splits[0] + "_" + splits[1] + "_" + splits[2] + splits[3].split("p__")[1];
+			String key = splits[0] + "_" + splits[1] + "_" + splits[2] + "_" +  splits[3].split("p__")[1];
 			
 			if( map.containsKey(key))
 				throw new Exception("No");
