@@ -108,7 +108,20 @@ public class RederiveNavsNAPValues
 			sum2 += list2.get(x);
 		}
 		
-		return sum1 / sum2;
+		double val = (sum1/list1.size() + 0.00001) / (sum2/list2.size() + 0.00001);
+		
+		if( val< 1)
+		{
+			val= - Math.log( 1/val)/Math.log(2);
+		}
+		else
+		{
+			val= Math.log(val) / Math.log(2);
+		}
+		
+		
+		return val;
+
 	}
 	
 	private static List<Double> average(List<List<Double>> inList) throws Exception
