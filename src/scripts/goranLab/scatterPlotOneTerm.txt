@@ -8,7 +8,7 @@ taxa <- c( "otu");
  
 for( tax in taxa )
 	{
-		par(mfrow=c(3,3))
+		par(mfrow=c(4,3))
 		
 		inFileName <- paste( tax,"fromOTUsAsColumnLogNormplusMetadata.txt", sep="")
 		myT <- read.table(inFileName , sep="\t", header=TRUE,row.names=1)
@@ -30,11 +30,14 @@ for( tax in taxa )
 			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
 			{	
 				myLm <- lm( subsetFrame$subset ~ subsetFrame$subsetSugar )
+				rVal <- cor(subsetFrame$subset ,subsetFrame$subsetSugar, method="spearman" )
 				pValuesmAddedSugarMedianSplit[index] <- Kendall(subsetFrame$subset, subsetFrame$subsetSugar)$sl[1]
 				#pValuesmAddedSugarMedianSplit[index] <- anova(myLm)$"Pr(>F)"[1]
 				names[index] <- names(myT)[i]
 				
-				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3),  sep="")
+				title <- paste(names[index], " p= ", 
+				format(pValuesmAddedSugarMedianSplit[index],digits=3), ";r=" ,
+					format(rVal,digits=3),   sep="")
 				plot( subsetSugar, subset, main=title, xlab = "sugar beverages", ylab = names[index])
 				abline(myLm)
 				index <- index + 1
