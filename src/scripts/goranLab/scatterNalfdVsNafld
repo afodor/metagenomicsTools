@@ -38,7 +38,7 @@ for( tax in taxa )
 				coefs <-coef(myLm)
 				
 				title <- paste(names[index], " p= ", format(pValuesmAddedSugarMedianSplit[index],digits=3), ";",
-				format(pValueNAFLD[index] ,digits=3),  sep="")
+				format(pValueNAFLD[index] ,digits=3), " n = ", length( subsetFrame$subset  ),  sep="")
 				plot( subsetSugar, subset, main=title, xlab = "sugar beverages", ylab = names[index])
 				abline(myLm)
 				abline(a=coefs[1] + coefs[3], b=coefs[2], col="red")
