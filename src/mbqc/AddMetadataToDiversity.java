@@ -34,7 +34,7 @@ public class AddMetadataToDiversity
 					fileName.replace(".txt", "") + "plusMetadata.txt"
 					)));
 		
-		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer\t");
+		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer");
 		writer.write( reader.readLine() +  "\n");
 		
 		int numFound =0;
@@ -66,7 +66,7 @@ public class AddMetadataToDiversity
 				
 				writer.write(kit + "");
 				
-				for(int x=1; x<4; x++)
+				for(int x=1; x<=4; x++)
 					writer.write("\t" + splits[x]);
 				
 				writer.write("\n");
