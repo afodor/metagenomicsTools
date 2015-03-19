@@ -16,16 +16,16 @@ for( id in mbqcIDs )
 			& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
 		{
 				
-			myLm <- lm( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
+			myLm <- lm( myT$observed_species[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
 			~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"])
 			
 			pValue <- anova(myLm)$"Pr(>F)"[1]
 			
 			title <- paste( id, " ; p= ", format( pValue,digits=5), sep="")
 				
-			plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
+			plot( myT$observed_species[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
 			~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"]
-				,ylab = "simpsons reciprocal" ,las=2, xlab="" , main=title  )	
+				,ylab = "observed species" ,las=2, xlab="" , main=title  )	
 		}
 		
 }
