@@ -34,7 +34,7 @@ getColors <- function(data)
 	return (colors)
 }
 
-plot( log10(myT$pValue) ~ myT$extractionProtocol,las=2, xlab="")
+plot( log10(myT$pValue) ~ myT$kitManufacturer ,las=2, xlab="")
 
 
 bioinformaticsIDS <- c("chuttenhower" ,"deblur" ,"evogtmann" ,"gcaporaso","jpetrosino","jravel",
@@ -44,11 +44,16 @@ for (bid in bioinformaticsIDS )
 {
 	myData = myT[ myT$bioinformaticsLab == bid, ]
 
-	stripchart(log10(pValue) ~ extractionProtocol, data = myData, 
+	stripchart(log10(pValue) ~kitManufacturer , data = myData, 
             vertical = TRUE, method = "jitter", 
-            pch = 21, bg = getColors(bid), 
-            add = TRUE) 
+            pch = 25, bg = getColors(bid), 
+            add = TRUE,cex=1.7, ylab="-log10(pValue)") 
 	
 }
+
+windows()
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("left",y=0,bty="n",sort(unique(myT$bioinformaticsLab)) ,lty=c(6,6), lwd=c(6,6), col=getColors(sort(unique(myT$bioinformaticsLab))),cex=.70)
+
 
 
