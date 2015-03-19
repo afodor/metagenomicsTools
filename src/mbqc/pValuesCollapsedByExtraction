@@ -5,9 +5,50 @@ setwd("G:\\MBQC\\af_out")
 
 myT <- read.table("pValuesNAVsNonNA.txt", header=TRUE, sep="\t")
 
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "chuttenhower" )
+			colors[i] <- "red"
+		else if(data[i]== "deblur" ) 
+			colors[i] <- "blue"
+		else if(data[i]== "evogtmann" ) 
+			colors[i] <- "black"
+		else if(data[i]== "gcaporaso" ) 
+			colors[i] <- "yellow"
+		else if(data[i]== "jpetrosino" ) 
+			colors[i] <- "green"
+		else if ( data[i]== "jravel")
+			colors[i] <- "cyan"
+		else if ( data[i]== "qiime")
+			colors[i] <- "gold"
+		else if ( data[i]== "xchen")
+			colors[i] <- "coral2"
+			
+	}
+	
+	return (colors)
+}
+
 plot( log10(myT$pValue) ~ myT$extractionProtocol,las=2, xlab="")
-stripchart(log10(pValue) ~ extractionProtocol, data = myT, 
+
+
+bioinformaticsIDS <- c("chuttenhower" ,"deblur" ,"evogtmann" ,"gcaporaso","jpetrosino","jravel",
+				"qiime", "xchen")
+				
+for (bid in bioinformaticsIDS )
+{
+	myData = myT[ myT$bioinformaticsLab == bid, ]
+
+	stripchart(log10(pValue) ~ extractionProtocol, data = myData, 
             vertical = TRUE, method = "jitter", 
-            pch = 21, col = "maroon", bg = "bisque", 
+            pch = 21, bg = getColors(bid), 
             add = TRUE) 
+	
+}
+
 
