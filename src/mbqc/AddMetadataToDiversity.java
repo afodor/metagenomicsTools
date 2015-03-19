@@ -34,7 +34,7 @@ public class AddMetadataToDiversity
 					fileName.replace(".txt", "") + "plusMetadata.txt"
 					)));
 		
-		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer");
+		writer.write("fullID\tinformaticsToken\tobscuredToken\tnumberToken\textractionWetlab\tsequencingWetlab\tmbqcID\textractionIsNA\tkitManufactuer\tmoBioOrOther");
 		writer.write( reader.readLine() +  "\n");
 		
 		int numFound =0;
@@ -64,7 +64,13 @@ public class AddMetadataToDiversity
 				
 				String kit = kitMap.get(rdmp.getExtractionWetlab());
 				
-				writer.write(kit + "");
+				writer.write(kit + "\t");
+				
+				if( kit.equals("MO-BIO"))
+					writer.write("MO-BIO");
+				else
+					writer.write("other");
+					
 				
 				for(int x=1; x<=4; x++)
 					writer.write("\t" + splits[x]);
