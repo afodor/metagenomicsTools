@@ -1,0 +1,52 @@
+
+rm(list=ls())
+
+setwd("G:\\MBQC\\af_out")
+
+myT <- read.table("pValuesNAVsNonNA.txt", header=TRUE, sep="\t")
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "Actinobacteria" )
+			colors[i] <- "red"
+		else if(data[i]== "Bacteroidetes" ) 
+			colors[i] <- "blue"
+		else if(data[i]== "Firmicutes" ) 
+			colors[i] <- "black"
+		else if(data[i]== "Fusobacteria" ) 
+			colors[i] <- "yellow"
+		else if(data[i]== "Proteobacteria" ) 
+			colors[i] <- "green"
+		else if ( data[i]== "Verrucomicrobia")
+			colors[i] <- "cyan"
+	}
+	
+	return (colors)
+}
+
+
+plot( log10(myT$pValue) ~ myT$extractionProtocol ,las=2, xlab="")
+
+phyla<- c("Actinobacteria" ,"Bacteroidetes" ,"Firmicutes" ,"Proteobacteria","Verrucomicrobia")
+				
+for (p in phyla)
+{
+	myData = myT[ myT$taxa == p, ]
+
+	stripchart(log10(pValue) ~extractionProtocol , data = myData, 
+            vertical = TRUE, method = "jitter", 
+            pch = 25, bg = getColors(p), 
+            add = TRUE,cex=2.5, ylab="-log10(pValue)") 
+	
+}
+
+windows()
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("left",y=0,bty="n",sort(unique(myT$taxa)) ,lty=c(6,6), lwd=c(6,6), col=getColors(sort(unique(myT$taxa))),cex=.70)
+
+
+
