@@ -1,0 +1,13 @@
+
+rm(list=ls())
+
+setwd("G:\\MBQC\\af_out")
+
+myT <- read.table("pValuesNAVsNonNA.txt", header=TRUE, sep="\t")
+
+plot( log10(myT$pValue) ~ myT$extractionProtocol,las=2, xlab="")
+stripchart(log10(pValue) ~ extractionProtocol, data = myT, 
+            vertical = TRUE, method = "jitter", 
+            pch = 21, col = "maroon", bg = "bisque", 
+            add = TRUE) 
+
