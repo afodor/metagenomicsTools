@@ -1,0 +1,34 @@
+
+rm(list=ls())
+
+setwd("G:\\MBQC\\fromGaleb\\")
+
+myT <- read.table("merged-final-unrarefiedplusMetadata.txt", header=TRUE, row.names=1,sep="\t")
+
+mbqcIDs <- unique(myT$mbqcID)
+
+par(mfrow=c(6,4))
+for( id in mbqcIDs )
+{
+	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
+			& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
+		{
+				
+			myLm <- lm( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"] 
+			~  myT$sequencingWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"] 
+			  + myT$moBioOrOther[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"]  )
+			
+			pValue <- anova(myLm)$"Pr(>F)"[1]
+			pValueMfc <- anova(myLm)$"Pr(>F)"[2]
+			
+			title <- paste( id, " ; p= ", format( pValue,digits=5), ";",
+					format(pValueMfc ,digits=5),  sep="")
+				
+			plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"] 
+			~  myT$sequencingWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"]
+				,ylab = "simpson_reciprocal" ,las=2, xlab="" , main=title,
+					col = 
+					ifelse( myT$moBioOrOther[ myT$mbqcID ==  id & myT$informaticsToken=="qiime"]=="MO-BIO", "red", "black"   )  )	
+		}
+		
+}
