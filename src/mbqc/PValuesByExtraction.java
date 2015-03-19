@@ -67,7 +67,6 @@ public class PValuesByExtraction
 		
 		writer.write("bioinformaticsLab\tsequencingLab\textractionProtocol\tkitManufacturer\tseqPlusExtraction\ttaxa\tsampleSize\tpValue\tmeanDifference\tfoldChange\tavgTaxa\n");
 		
-		
 		for(String bio : bioinformaticsIds)
 			for( String wet : wetlabIds)
 				for(String taxa : taxaHeaders)
