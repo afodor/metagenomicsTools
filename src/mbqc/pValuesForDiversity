@@ -21,7 +21,7 @@ for( id in mbqcIDs )
 			
 			pValue <- anova(myLm)$"Pr(>F)"[1]
 			
-			title <- paste( id, " ; p= ", pValue, sep="")
+			title <- paste( id, " ; p= ", format( pValue,digits=5), sep="")
 				
 			plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
 			~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"]
