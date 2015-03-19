@@ -1,0 +1,18 @@
+
+rm(list=ls())
+
+setwd("G:\\MBQC\\fromGaleb\\")
+
+myT <- read.table("merged-final-unrarefiedplusMetadata.txt", header=TRUE, row.names=1,sep="\t")
+
+mbqcIDs <- unique(myT$mbqcID)
+mbqcIDs <- sort(unique(myT$mbqcID))
+
+
+par(mfrow=c(6,4))
+for( id in mbqcIDs )
+{
+	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
+			& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
+		plot( myT$simpson_reciprocal[ myT$mbqcID ==  id] ~ myT$extractionWetlab[ myT$mbqcID ==  id]    )
+}
