@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("F:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
+setwd("G:\\MBQC\\dropbox\\alpha-beta-div\\beta-div")
 myT <- read.table("mdsOut_chuttenhowerplusMetadata.txt",sep="\t",header=TRUE)
 
 mbqcIDs <- c( "D2301", "D2327", "D2497", "D2561", "D2696", "D2698", "DZ15291", "DZ15292", "DZ15293", "DZ15294", 
@@ -51,6 +51,11 @@ getPlotSymbols <- function(data)
 	return (symbols)
 }
 
+pdf(paste("","_mdsForchuttenhower.pdf", sep="" ))
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("left",y=0,bty="n",sort(unique(myT$kitManufactuer)) ,lty=c(6,6), lwd=c(6,6), col=getColors(sort(unique(myT$kitManufactuer))),cex=.70)
+
+	
 for( id in mbqcIDs )
 {
 	val1 <- myT$mds1[ myT$mbqcID == id ]
@@ -62,10 +67,11 @@ for( id in mbqcIDs )
 	
 	plot( myFrame$val1, myFrame$val2, xlab= "MDS1", ylab="MDS2",
 				col = as.character(myFrame$colors),main=id, cex=1.2,pch=myFrame$symbols)
+	
 }
 
-plot(1, type="n", axes=F, xlab="", ylab="")
-legend("left",y=0,bty="n",sort(unique(myT$kitManufactuer)) ,lty=c(6,6), lwd=c(6,6), col=getColors(sort(unique(myT$kitManufactuer))),cex=.70)
+dev.off()
+
 
 
 		
