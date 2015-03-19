@@ -14,5 +14,6 @@ for( id in mbqcIDs )
 {
 	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
 			& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
-		plot( myT$simpson_reciprocal[ myT$mbqcID ==  id] ~ myT$extractionWetlab[ myT$mbqcID ==  id]    )
+		plot( myT$simpson_reciprocal[ myT$mbqcID ==  id] ~ myT$extractionWetlab[ myT$mbqcID ==  id],
+					ylab = "simpsons reciprocal" ,las=2, xlab=""   )
 }
