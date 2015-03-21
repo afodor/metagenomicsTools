@@ -10,6 +10,32 @@ mbqcIDs <- sort(unique(myT$mbqcID))
 
 bioinformaticsIDS <- sort(unique(myT$informaticsToken))
 
+
+getColor <- function(data) 
+{	
+	aColor <- ""
+	
+		if( data== "chuttenhower" )
+			aColor<- "red"
+		else if(data== "deblur" ) 
+			aColor<- "blue"
+		else if(data== "evogtmann" ) 
+			aColor<- "black"
+		else if(data== "gcaporaso" ) 
+			aColor<- "yellow"
+		else if(data== "jpetrosino" ) 
+			aColor<- "green"
+		else if ( data== "jravel")
+			aColor<- "cyan"
+		else if ( data== "qiime")
+			aColor<- "gold"
+		else if ( data== "xchen")
+			aColor<- "coral2"			
+	
+	return (aColor)
+}
+
+
 myFrame <- data.frame(1:length(bioinformaticsIDS ));
 myFrame$bioinfID <- bioinformaticsIDS 
 
@@ -35,6 +61,10 @@ for( id in mbqcIDs )
 }
 
 boxplot(-log10(myFrame[,3:24]),las=2,ylab="-log10(pValue)")
-stripchart(-log10(myFrame[,3:24]), pch=19,
-            vertical = TRUE, 
-            add = TRUE,ylab="-log10(pValue)") 
+
+for( i in 1:length(bioinformaticsIDS ))
+{
+	stripchart(-log10(myFrame[i,3:24]), pch=19,
+            vertical = TRUE, col = getColor(bioinformaticsIDS[i]),
+            add = TRUE,ylab="-log10(pValue)") 	
+}
