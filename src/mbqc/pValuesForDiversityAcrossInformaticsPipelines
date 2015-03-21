@@ -35,3 +35,6 @@ for( id in mbqcIDs )
 }
 
 boxplot(-log10(myFrame[,3:24]),las=2,ylab="-log10(pValue)")
+stripchart(-log10(myFrame[,3:24]), pch=19,
+            vertical = TRUE, 
+            add = TRUE,ylab="-log10(pValue)") 
