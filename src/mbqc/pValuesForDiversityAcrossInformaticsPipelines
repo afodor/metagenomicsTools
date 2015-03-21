@@ -33,3 +33,5 @@ for( id in mbqcIDs )
 		 myFrame[[paste(id)]] <- pValues
 	}
 }
+
+boxplot(-log10(myFrame[,3:24]),las=2,ylab="-log10(pValue)")
