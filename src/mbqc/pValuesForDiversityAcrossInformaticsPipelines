@@ -52,15 +52,19 @@ for( id in mbqcIDs )
 		index <-1 
 		for( bioinf in bioinformaticsIDS )
 		{
-				myLm <- lm( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
-				~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf])
-				
-				pValues[index] <- anova(myLm)$"Pr(>F)"[1]
-				index = index + 1
-				plot(myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
-				~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf],
-				main = paste(id," " , bioinf, " ; p=" ,format(pValues[index-1],digits=5) ,  sep=""),las=2,
-				xlab="",ylab="simpsons_reciprocal")
+			simpsonVals <- myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ];
+			extractionLabs <- myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf]
+			
+			myLm <- lm(simpsonVals  ~  extractionLabs )
+			innerFrame <- data.frame(simpsonVals ,extractionLabs )
+			
+			pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			index = index + 1
+			boxplot(simpsonVals ~ extractionLabs , data = innerFrame,
+			main = paste(id," " , bioinf, " ; p=" ,format(pValues[index-1],digits=5) ,  sep=""),las=2,
+			xlab="",ylab="simpsons_reciprocal")
+			stripchart(simpsonVals ~ extractionLabs , data = innerFrame, 
+            vertical = TRUE, pch = 21, col = "maroon", bg = "bisque", add = TRUE) 
 		}
 		
 		
