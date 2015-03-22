@@ -53,21 +53,30 @@ for( id in mbqcIDs )
 		
 		extractionLabs <- myT$extractionWetlab[ myT$mbqcID ==  id]
 		bioinformaticsLabs <- myT$informaticsToken[myT$mbqcID ==  id]
+		
+		newVals <- vector(length=length(simpsonVals ));
+		
+		for( i in 1:length(simpsonVals))
+		{
+			newVals[i] = simpsonVals[i] / mean( simpsonVals[ which(bioinformaticsLabs==bioinformaticsLabs[i])] )
 			
-		myLm <- lm(simpsonVals  ~  extractionLabs + bioinformaticsLabs  )
-		innerFrame <- data.frame(simpsonVals ,extractionLabs )
+		}
+		
+			
+		myLm <- lm(newVals ~  extractionLabs + bioinformaticsLabs  )
+		innerFrame <- data.frame(newVals,extractionLabs )
 			
 		pValues[index] <- anova(myLm)$"Pr(>F)"[1]
 		informaticsP <- anova(myLm)$"Pr(>F)"[2]
 		index = index + 1
-		boxplot(simpsonVals ~ extractionLabs , data = innerFrame,
+		boxplot(newVals~ extractionLabs , data = innerFrame,
 		main = paste(id," ; p=" ,format(pValues[index-1],digits=5) , " ; " , 
 					format(informaticsP , digits=5) , sep=""),las=2,
 		xlab="",ylab="simpsons_reciprocal")
 		
 		for( i in 1:length(bioinformaticsIDS ))
 		{
-			stripchart(simpsonVals[ which(bioinformaticsLabs==bioinformaticsIDS[i])  ] 
+			stripchart(newVals[ which(bioinformaticsLabs==bioinformaticsIDS[i])  ] 
 					~ extractionLabs[ which(bioinformaticsLabs==bioinformaticsIDS[i])  ]  , data = innerFrame, 
           vertical = TRUE, pch = 21,  col = getColor(bioinformaticsIDS[i]), add = TRUE) 
 		}
