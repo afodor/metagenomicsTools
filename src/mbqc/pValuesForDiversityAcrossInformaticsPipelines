@@ -57,7 +57,7 @@ for( id in mbqcIDs )
 				index = index + 1
 				plot(myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
 				~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf],
-				main = paste(id," " , bioinf, " ; p=" ,pValues[index-1] ,  sep=""))
+				main = paste(id," " , bioinf, " ; p=" ,format(pValues[index-1],digits=5) ,  sep=""),las=2)
 		}
 		
 		
