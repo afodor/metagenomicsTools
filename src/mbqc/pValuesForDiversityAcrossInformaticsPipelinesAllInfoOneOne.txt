@@ -1,0 +1,98 @@
+
+rm(list=ls())
+
+setwd("G:\\MBQC\\fromGaleb\\")
+
+myT <- read.table("merged-final-unrarefiedplusMetadata.txt", header=TRUE, row.names=1,sep="\t")
+
+mbqcIDs <- unique(myT$mbqcID)
+mbqcIDs <- sort(unique(myT$mbqcID))
+
+bioinformaticsIDS <- sort(unique(myT$informaticsToken))
+
+
+getColor <- function(data) 
+{	
+	aColor <- ""
+	
+		if( data== "chuttenhower" )
+			aColor<- "red"
+		else if(data== "deblur" ) 
+			aColor<- "blue"
+		else if(data== "evogtmann" ) 
+			aColor<- "black"
+		else if(data== "gcaporaso" ) 
+			aColor<- "yellow"
+		else if(data== "jpetrosino" ) 
+			aColor<- "green"
+		else if ( data== "jravel")
+			aColor<- "cyan"
+		else if ( data== "qiime")
+			aColor<- "gold"
+		else if ( data== "xchen")
+			aColor<- "coral2"			
+	
+	return (aColor)
+}
+
+
+myFrame <- data.frame(1:length(bioinformaticsIDS ));
+myFrame$bioinfID <- bioinformaticsIDS 
+
+pdf("allSimpsons.pdf")
+for( id in mbqcIDs )
+{
+	
+	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
+				& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
+	{
+		pValues <- vector();
+		
+		index <-1 
+		simpsonVals <- myT$simpson_reciprocal[ myT$mbqcID ==  id ];
+		
+		extractionLabs <- myT$extractionWetlab[ myT$mbqcID ==  id]
+		bioinformaticsLabs <- myT$informaticsToken[myT$mbqcID ==  id]
+			
+		myLm <- lm(simpsonVals  ~  extractionLabs + bioinformaticsLabs  )
+		innerFrame <- data.frame(simpsonVals ,extractionLabs )
+			
+		pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+		informaticsP <- anova(myLm)$"Pr(>F)"[2]
+		index = index + 1
+		boxplot(simpsonVals ~ extractionLabs , data = innerFrame,
+		main = paste(id," ; p=" ,format(pValues[index-1],digits=5) , " ; " , 
+					format(informaticsP , digits=5) , sep=""),las=2,
+		xlab="",ylab="simpsons_reciprocal")
+		
+		for( i in 1:length(bioinformaticsIDS ))
+		{
+			stripchart(simpsonVals[ which(bioinformaticsLabs==bioinformaticsIDS[i])  ] 
+					~ extractionLabs[ which(bioinformaticsLabs==bioinformaticsIDS[i])  ]  , data = innerFrame, 
+          vertical = TRUE, pch = 21,  col = getColor(bioinformaticsIDS[i]), add = TRUE) 
+		}
+		
+		 myFrame[[paste(id)]] <- pValues
+		
+	}
+	
+}
+dev.off();
+
+write.table( myFrame,row.names=FALSE, file="simpsonsSummary.txt",sep="\t")
+
+boxplot(-log10(myFrame[,3:24]),las=2,ylab="-log10(pValue)")
+
+myColors <- vector()
+for( i in 1:length(bioinformaticsIDS ))
+{
+	stripchart(-log10(myFrame[i,3:24]), pch=19,
+            vertical = TRUE, col = getColor(bioinformaticsIDS[i]),
+            add = TRUE,ylab="-log10(pValue)",cex=1.4) 	
+     myColors[i] = getColor(bioinformaticsIDS[i]);
+}
+
+windows()
+plot(1, type="n", axes=F, xlab="", ylab="")
+legend("topleft",bty="n", legend=bioinformaticsIDS,lty=c(4,4), lwd=c(8,8), 
+	col=myColors)
