@@ -42,6 +42,8 @@ myFrame$bioinfID <- bioinformaticsIDS
 pdf("allSimpsons.pdf")
 for( id in mbqcIDs )
 {
+	
+	par(mfrow=c(4,2))
 	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
 				& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
 	{
@@ -57,11 +59,13 @@ for( id in mbqcIDs )
 				index = index + 1
 				plot(myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
 				~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf],
-				main = paste(id," " , bioinf, " ; p=" ,format(pValues[index-1],digits=5) ,  sep=""),las=2)
+				main = paste(id," " , bioinf, " ; p=" ,format(pValues[index-1],digits=5) ,  sep=""),las=2,
+				xlab="",ylab="simpsons_reciprocal")
 		}
 		
 		
 		 myFrame[[paste(id)]] <- pValues
+		 plot(1, type="n", axes=F, xlab="", ylab="")
 	}
 }
 dev.off();
