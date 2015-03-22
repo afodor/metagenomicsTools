@@ -1,39 +1,31 @@
 
 rm(list=ls())
 
-setwd("C:\\MBQC\\fromGaleb\\")
+setwd("G:\\MBQC\\fromGaleb\\")
 
 myT <- read.table("merged-final-unrarefiedplusMetadata.txt", header=TRUE, row.names=1,sep="\t")
 
 mbqcIDs <- unique(myT$mbqcID)
 mbqcIDs <- sort(unique(myT$mbqcID))
 
-bioinformaticsIDS <- sort(unique(myT$informaticsToken))
 
-//for( bioinf in bioinformaticsIDS )
-bioinf="jpetrosino"
+par(mfrow=c(6,4))
+for( id in mbqcIDs )
 {
-	#pdf(paste("plotByPlot", bioinf, ".pdf", sep=""),width=11,height=5)
+	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
+			& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
+		{
+				
+			myLm <- lm( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
+			~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"])
 			
-	for( id in mbqcIDs )
-	{
-		if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
-				& id != "DZ15414" & id != "DZ15417"& id != "DZ15418") 
-			{
-					
-				myLm <- lm( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
-				~  myT$sequencingWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf])
+			pValue <- anova(myLm)$"Pr(>F)"[1]
+			
+			title <- paste( id, " ; p= ", format( pValue,digits=5), sep="")
 				
-				pValue <- anova(myLm)$"Pr(>F)"[1]
-				
-				title <- paste( id, " ; p= ", format( pValue,digits=5), sep="")
-					
-				plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
-				~  myT$sequencingWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ]
-					,ylab = "simpson_reciprocal" ,las=2, xlab="" , main=title  )
-				windows()
-			}	
-	}
-	#dev.off();
-	
+			plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"] 
+			~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken=="chuttenhower"]
+				,ylab = "simpsons reciprocal" ,las=2, xlab="" , main=title  )	
+		}
+		
 }
