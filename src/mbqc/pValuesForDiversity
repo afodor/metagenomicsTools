@@ -10,9 +10,10 @@ mbqcIDs <- sort(unique(myT$mbqcID))
 
 bioinformaticsIDS <- sort(unique(myT$informaticsToken))
 
-for( bioinf in bioinformaticsIDS )
+//for( bioinf in bioinformaticsIDS )
+bioinf="jpetrosino"
 {
-	pdf(paste("plotByPlot", bioinf, ".pdf", sep=""),width=11,height=5)
+	#pdf(paste("plotByPlot", bioinf, ".pdf", sep=""),width=11,height=5)
 			
 	for( id in mbqcIDs )
 	{
@@ -30,8 +31,9 @@ for( bioinf in bioinformaticsIDS )
 				plot( myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
 				~  myT$sequencingWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ]
 					,ylab = "simpson_reciprocal" ,las=2, xlab="" , main=title  )
+				windows()
 			}	
 	}
-	dev.off();
+	#dev.off();
 	
 }
