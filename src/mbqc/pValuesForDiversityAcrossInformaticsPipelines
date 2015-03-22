@@ -39,6 +39,7 @@ getColor <- function(data)
 myFrame <- data.frame(1:length(bioinformaticsIDS ));
 myFrame$bioinfID <- bioinformaticsIDS 
 
+pdf("allSimpsons.pdf")
 for( id in mbqcIDs )
 {
 	if( id != "Blank" & id != "DZ15319" & id != "DZ15325" & id != "DZ15327" & id != "DZ15413"
@@ -54,11 +55,16 @@ for( id in mbqcIDs )
 				
 				pValues[index] <- anova(myLm)$"Pr(>F)"[1]
 				index = index + 1
+				plot(myT$simpson_reciprocal[ myT$mbqcID ==  id & myT$informaticsToken==bioinf ] 
+				~  myT$extractionWetlab[ myT$mbqcID ==  id & myT$informaticsToken==bioinf],
+				main = paste(id," " , bioinf,sep=""))
 		}
+		
 		
 		 myFrame[[paste(id)]] <- pValues
 	}
 }
+dev.off();
 
 write.table( myFrame,row.names=FALSE, file="simpsonsSummary.txt",sep="\t")
 
@@ -69,7 +75,7 @@ for( i in 1:length(bioinformaticsIDS ))
 {
 	stripchart(-log10(myFrame[i,3:24]), pch=19,
             vertical = TRUE, col = getColor(bioinformaticsIDS[i]),
-            add = TRUE,ylab="-log10(pValue)") 	
+            add = TRUE,ylab="-log10(pValue)",cex=1.4) 	
      myColors[i] = getColor(bioinformaticsIDS[i]);
 }
 
