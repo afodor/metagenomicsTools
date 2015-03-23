@@ -29,7 +29,7 @@ getColors <- function(data)
 }
 
 
-plot( log10(myT$pValue) ~ myT$extractionProtocol ,las=2, xlab="")
+plot( log10(myT$pValue) ~ myT$kitManufacturer ,las=2, xlab="",xant="n")
 
 phyla<- c("Actinobacteria" ,"Bacteroidetes" ,"Firmicutes" ,"Proteobacteria","Verrucomicrobia")
 				
@@ -37,7 +37,7 @@ for (p in phyla)
 {
 	myData = myT[ myT$taxa == p, ]
 
-	stripchart(log10(pValue) ~extractionProtocol , data = myData, 
+	stripchart(log10(pValue) ~kitManufacturer , data = myData, 
             vertical = TRUE, method = "jitter", 
             pch = 25, bg = getColors(p), 
             add = TRUE,cex=2.5, ylab="-log10(pValue)") 
