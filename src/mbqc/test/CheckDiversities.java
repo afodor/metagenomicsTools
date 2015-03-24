@@ -44,7 +44,38 @@ public class CheckDiversities
 
 		}
 		
+		checkExtractions();
 		System.out.println("Passed");
+	}
+	
+	
+	private static void checkExtractions() throws Exception
+	{
+		HashMap<String, String> exMap = TestMDSMeta.quickExtractionMap();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				 File.separator +  "fromGaleb" + File.separator + 
+				 "merged-final-unrarefiedplusMetadata.txt")));
+		
+		reader.readLine();
+		
+		for( String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			String ex = exMap.get(splits[0]);
+			
+			if( ex == null)
+				throw new Exception("No");
+			
+			if( ! ex.equals(splits[4]))
+				throw new Exception("No " + splits[4] );
+		}
+		
+		reader.close();
+		
+		System.out.println("Extraction test passed");
 	}
 	
 	private static HashMap<String, String> getDiversities() throws Exception

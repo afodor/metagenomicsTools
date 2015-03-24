@@ -45,7 +45,7 @@ public class TestMDSMeta
 	}
 
 	
-	private static HashMap<String, String> quickExtractionMap() throws Exception
+	static HashMap<String, String> quickExtractionMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		
