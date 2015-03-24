@@ -46,6 +46,7 @@ public class CheckDiversities
 		
 		checkExtractions();
 		simpleTokenCheck();
+		checkMBQC_ID();
 		System.out.println("Passed");
 	}
 	
@@ -69,6 +70,60 @@ public class CheckDiversities
 		reader.close();
 		System.out.println("Passed simple token check");
 	}
+	
+	
+	static HashMap<String, String> quickMBQC_IDMap() throws Exception
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+			ConfigReader.getMbqcDir() + File.separator + "dropbox" +
+						File.separator + "raw_design_matrix.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine() )
+		{
+			String[] splits =s.split("\t");
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put(splits[0], splits[3]);
+		}
+		
+		reader.close();
+		return map;
+	}
+	
+	private static void checkMBQC_ID() throws Exception
+	{
+		HashMap<String, String> exMap = quickMBQC_IDMap();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				 File.separator +  "fromGaleb" + File.separator + 
+				 "merged-final-unrarefiedplusMetadata.txt")));
+		
+		reader.readLine();
+		
+		for( String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			String ex = exMap.get(splits[0]);
+			
+			if( ex == null)
+				throw new Exception("No");
+			
+			if( ! ex.equals(splits[6]))
+				throw new Exception("No " + splits[6] );
+		}
+		
+		reader.close();
+		
+		System.out.println("MBQC ID test passed");
+	}
+	
 	
 	private static void checkExtractions() throws Exception
 	{
