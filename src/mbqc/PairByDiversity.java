@@ -57,7 +57,9 @@ public class PairByDiversity
 				ConfigReader.getMbqcDir() + File.separator + 
 		 File.separator +  "fromGaleb" + File.separator + "simpsonsPaired.txt")));
 		
-		writer.write("informaticsID\textractionID\tsequencingID\tmbqcID\textractionsimpson_reciprocal\tshippedsimpson_reciprocal\n");
+		HashMap<String, String> kitMap = PValuesByExtraction.getManualKitManufacturer();
+		
+		writer.write("informaticsID\textractionID\tsequencingID\tmbqcID\tkit\textractionsimpson_reciprocal\tshippedsimpson_reciprocal\n");
 		
 		for(String s : map.keySet())
 		{
@@ -72,6 +74,7 @@ public class PairByDiversity
 				if( match != null)
 				{
 					writer.write(splits[0] + "\t" + splits[1] + "\t" + splits[2] + "\t" + splits[3] + "\t" + 
+								kitMap.get(splits[1])  + "\t" + 
 								new Avevar(map.get(s)).getAve() + "\t" + new Avevar(match).getAve() + "\n");
 				}
 			}
