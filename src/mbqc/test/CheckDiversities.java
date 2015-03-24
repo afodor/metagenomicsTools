@@ -45,9 +45,30 @@ public class CheckDiversities
 		}
 		
 		checkExtractions();
+		simpleTokenCheck();
 		System.out.println("Passed");
 	}
 	
+	private static void simpleTokenCheck() throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getMbqcDir() + File.separator + 
+				 File.separator +  "fromGaleb" + File.separator + 
+				 "merged-final-unrarefiedplusMetadata.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( ! splits[0].startsWith(splits[1]))
+				throw new Exception("No ");
+		}
+		
+		reader.close();
+		System.out.println("Passed simple token check");
+	}
 	
 	private static void checkExtractions() throws Exception
 	{
