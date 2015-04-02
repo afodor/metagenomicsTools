@@ -80,6 +80,8 @@ public class ConfigReader
 	
 	public static final String GORAN_TRIAL = "GORAN_TRIAL";
 	
+	public static final String JENNIFER_TEST_DIR = "JENNIFER_TEST_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -98,6 +100,11 @@ public class ConfigReader
 	public static String getRachSachReanalysisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);
+	}
+	
+	public static String getJenniferTestDir() throws Exception
+	{
+		return getConfigReader().getAProperty(JENNIFER_TEST_DIR);
 	}
 	
 	public static String getVanderbiltDir() throws Exception
