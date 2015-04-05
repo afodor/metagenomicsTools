@@ -48,7 +48,7 @@ for (i in 1:1000)
 	pValuesFixed[index] <- anova(myLm)$"Pr(>F)"[1]	
 	
 	M.gls <- gls( data ~ drug , method = "REML", correlation = corCompSymm( form = ~ 1 | hospital),data=myT)
-	pValuesGLS[index] <- anova(M.gls)$"Pr(>F)"[1]
+	pValuesGLS[index] <- anova(M.gls)$"p-value"[2]
 	
 	index = index + 1
 }
