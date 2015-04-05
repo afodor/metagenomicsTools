@@ -57,6 +57,7 @@ for (i in 1:1000)
 	index = index + 1
 }
 
+par(mfrow=c(2,3))
 
 hist(pValuesFixed)
 hist(pValuesGLS)
@@ -65,3 +66,4 @@ hist(pValuesMixed)
 library("gap")
 qqunif(pValuesFixed)
 qqunif(pValuesGLS)
+qqunif(pValuesMixed)
