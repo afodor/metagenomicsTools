@@ -1,4 +1,4 @@
-
+library("nlme")
 rm(list=ls())
 
 numHospitalsPerGroup <- 3
@@ -37,6 +37,7 @@ getSimData <- function()
 }
 
 pValuesFixed <- vector()
+pValuesGLS <- vector()
 
 index <- 1
 
@@ -45,6 +46,10 @@ for (i in 1:1000)
 	myT<- getSimData()
 	myLm <- lm( myT$data ~ myT$drug + myT$hospital)
 	pValuesFixed[index] <- anova(myLm)$"Pr(>F)"[1]	
+	
+	M.gls <- gls( data ~ drug , method = "REML", correlation = corCompSymm( form = ~ 1 | hospital),data=myT)
+	pValuesGLS[index] <- anova(M.gls)$"Pr(>F)"[1]
+	
 	index = index + 1
 }
 
