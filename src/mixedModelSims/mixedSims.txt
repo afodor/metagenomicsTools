@@ -38,6 +38,7 @@ getSimData <- function()
 
 pValuesFixed <- vector()
 pValuesGLS <- vector()
+pValuesMixed <- vector()
 
 index <- 1
 
@@ -50,6 +51,17 @@ for (i in 1:1000)
 	M.gls <- gls( data ~ drug , method = "REML", correlation = corCompSymm( form = ~ 1 | hospital),data=myT)
 	pValuesGLS[index] <- anova(M.gls)$"p-value"[2]
 	
+	M.mixed <- lme( data ~ drug, method= "REML", random = ~1 | hospital, data = myT)
+	pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
+	
 	index = index + 1
 }
 
+
+hist(pValuesFixed)
+hist(pValuesGLS)
+hist(pValuesMixed)
+
+library("gap")
+qqunif(pValuesFixed)
+qqunif(pValuesGLS)
