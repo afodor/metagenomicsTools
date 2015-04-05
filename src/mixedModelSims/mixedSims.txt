@@ -4,30 +4,47 @@ rm(list=ls())
 numHospitalsPerGroup <- 3
 sampleSize <- 5
 
-index <- 1
-hospitalIndex <-1
-drugIndex <-1
-data <- vector()
-hospital <- vector()
-drug <- vector()
-
-for( i in 1:(numHospitalsPerGroup*2))
+getSimData <- function()
 {
-	hospitalEffect <- rnorm( 1,mean=0, sd=50)
+	index <- 1
+	hospitalIndex <-1
+	drugIndex <-1
+	data <- vector()
+	hospital <- vector()
+	drug <- vector()
 	
-	for( j in 1:sampleSize)
+	for( i in 1:(numHospitalsPerGroup*2))
 	{
-		data[index] <- rnorm(1,mean=hospitalEffect , sd=50)
-		hospital[index] <- paste("H", hospitalIndex , sep="")
-		drug[index] <- paste("D", drugIndex,sep="")
-		index <- index + 1
+		hospitalEffect <- rnorm( 1,mean=0, sd=50)
+		
+		for( j in 1:sampleSize)
+		{
+			data[index] <- rnorm(1,mean=hospitalEffect , sd=50)
+			hospital[index] <- paste("H", hospitalIndex , sep="")
+			drug[index] <- paste("D", drugIndex,sep="")
+			index <- index + 1
+		}
+		
+		hospitalIndex <- hospitalIndex + 1
+		drugIndex <- drugIndex + 1
+		
+		if( drugIndex > 2 ) 
+			drugIndex = 1
 	}
 	
-	hospitalIndex <- hospitalIndex + 1
-	drugIndex <- drugIndex + 1
-	
-	if( drugIndex > 2 ) 
-		drugIndex = 1
+	myT <- data.frame(data,hospital,drug)
+		
 }
 
-myT <- data.frame(data,hospital,drug)
+pValuesFixed <- vector()
+
+index <- 1
+
+for (i in 1:1000)
+{
+	myT<- getSimData()
+	myLm <- lm( myT$data ~ myT$drug + myT$hospital)
+	pValuesFixed[index] <- anova(myLm)$"Pr(>F)"[1]	
+	index = index + 1
+}
+
