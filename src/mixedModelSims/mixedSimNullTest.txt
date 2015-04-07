@@ -53,6 +53,8 @@ for (i in 1:1000)
 	altLogLike = unclass( logLik(M.gls) )[1]
 	
 	val <- -2 * nulllogLike + 2 * altLogLike
+	
+	# an alternative would be anova(myLm, M.gls)
 	pValueForHospitalNoEffect[i] <- 1-pchisq(val,1)
 	index = index + 1
 }
