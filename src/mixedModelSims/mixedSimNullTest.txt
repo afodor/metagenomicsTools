@@ -1,0 +1,62 @@
+library("nlme")
+rm(list=ls())
+
+numHospitalsPerGroup <- 3
+sampleSize <- 10
+
+getSimData <- function()
+{
+	index <- 1
+	hospitalIndex <-1
+	drugIndex <-1
+	data <- vector()
+	hospital <- vector()
+	drug <- vector()
+	
+	for( i in 1:(numHospitalsPerGroup*2))
+	{
+		#hospitalEffect <- rnorm( 1,mean=0, sd=50)
+		# No hospital effect...
+		hospitalEffect <- 0
+		
+		for( j in 1:sampleSize)
+		{
+			data[index] <- rnorm(1,mean=hospitalEffect , sd=50)
+			hospital[index] <- paste("H", hospitalIndex , sep="")
+			drug[index] <- paste("D", drugIndex,sep="")
+			index <- index + 1
+		}
+		
+		hospitalIndex <- hospitalIndex + 1
+		drugIndex <- drugIndex + 1
+		
+		if( drugIndex > 2 ) 
+			drugIndex = 1
+	}
+	
+	myT <- data.frame(data,hospital,drug)
+		
+}
+
+pValueForHospitalNoEffect <- vector()
+
+index <- 1
+
+for (i in 1:1000)
+{
+	myT<- getSimData()
+	myLm <- gls( data ~ drug , method = "REML",data=myT)
+	
+	nulllogLike = unclass(logLik(myLm))[1] 	
+	
+	M.gls <- gls( data ~ drug , method = "REML", correlation = corCompSymm( form = ~ 1 | hospital),data=myT)
+	altLogLike = unclass( logLik(M.gls) )[1]
+	
+	val <- -2 * nulllogLike + 2 * altLogLike
+	pValueForHospitalNoEffect[i] <- 1-pchisq(val,1)
+	index = index + 1
+}
+
+hist( pValueForHospitalNoEffect)
+library("gap")
+qqunif(pValueForHospitalNoEffect)
