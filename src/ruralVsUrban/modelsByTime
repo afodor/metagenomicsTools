@@ -1,8 +1,10 @@
 rm(list=ls())
 
-setwd("G:\\ChinaData")
+setwd("C:\\PennyChinaDataset")
 
-taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum","class","order","family","genus")
+taxaLevels <- c("genus")
+
 
 for(taxa in taxaLevels ) 
 {
@@ -15,26 +17,29 @@ for(taxa in taxaLevels )
 	# only the forward reads
 	myT <- myT[ which( myT$readNumber == "1"), ]
 	
+	pValues <- vector()
+	names <- vector()
 	pValuesTime <- vector()
 	pValuesSubject <- vector()
 	pValuesUrbanRural <- vector()
 	percentExplained <- vector()
 	
-	for( i in 6:ncol) 
+	for( i in 6:numCols) 
 	{	
 		myLm <- lm( myT[,i] ~  factor( myT$ruralUrban) + factor( myT$timepoint ) )
 		anova(myLm)
 		pValues[i] <- anova(myLm)$"Pr(>F)"[1]
 		percentExplained[i] <- summary(myLm)$r.squared		
+		names[i] <- names(myT)[i]
 	}
 	
 }
 
 
 
-plot( 1:50, log10(pValues))
-plot( 1:50, percentExplained)
+#plot( 1:50, log10(pValues))
+#plot( 1:50, percentExplained)
 
-dFrame <- data.frame( pValues, percentExplained) 
-write.table(dFrame, file="pValuesForRep1VsRep3.txt", sep="\t")
+dFrame <- data.frame( pValues, percentExplained,names) 
+write.table(dFrame, file=  "pValuesForRep1VsRep3.txt", sep="\t", row.names=FALSE)
 							
