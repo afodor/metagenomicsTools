@@ -24,6 +24,9 @@ public class MungeCageEffectData
 				new File("D:\\classes\\Advanced_Stats_Spring2015\\cageData\\phylumPivotedTaxaAsColumnsLogNormalWithMetadata.txt");
 		
 		addMetadata(loggedData, loggedDataPlusMeta);
+		
+		addMetadata(new File("D:\\classes\\Advanced_Stats_Spring2015\\cageData\\mds_phylum.txt"), 
+						new File("D:\\classes\\Advanced_Stats_Spring2015\\cageData\\mds_phylumWithMetadata.txt"));
 	}
 	
 	private static void addMetadata(File inFile, File outFile) throws Exception
