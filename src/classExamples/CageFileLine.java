@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class CageFileLine
 {
@@ -34,7 +35,7 @@ public class CageFileLine
 
 	public static HashMap<String, CageFileLine> getMetaMap() throws Exception
 	{
-		HashMap<String, CageFileLine> map = new HashMap<String, CageFileLine>();
+		HashMap<String, CageFileLine> map = new LinkedHashMap<String, CageFileLine>();
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				"D:\\classes\\Advanced_Stats_Spring2015\\cageData\\Jobins Library _updated_120311.txt")));
 		
@@ -47,7 +48,7 @@ public class CageFileLine
 			if( map.containsKey(cfl))
 				throw new Exception("No");
 			
-			map.put(s,cfl);
+			map.put(cfl.key,cfl);
 		}
 		
 		reader.close();
@@ -70,6 +71,14 @@ public class CageFileLine
 		else this.time = timeVal;
 		
 		this.genotype = splits[5];
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<String, CageFileLine> map = getMetaMap();
+		
+		for(String s : map.keySet() )
+			System.out.println(s + " "  + map.get(s).time);
 	}
 	
 }
