@@ -19,7 +19,7 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT = myT[myT$time=="post",]
+	myT = myT[myT$time=="pre",]
 	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
@@ -53,6 +53,13 @@ for(taxa in taxaLevels )
 			label = paste(  names(subTable)[i] , "; p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
 			plot( bug ~ factor(subjectID ), main=label)
+			
+			stripchart(bug[myT$stoolOrSwab=="stool"] ~ factor(subjectID[myT$stoolOrSwab=="stool"] ), data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
+						col = "red")
+						
+			stripchart(bug[myT$stoolOrSwab=="swab"] ~ factor(subjectID[myT$stoolOrSwab=="swab"] ), data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
+						col = "blue")
+			
 			index <- index + 1
 			
 			if( index %% 15 == 0 ) 
@@ -67,7 +74,6 @@ for(taxa in taxaLevels )
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
-	#write.table(dFrame, file=paste("pValuesForPCOATimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_post_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_pre_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
