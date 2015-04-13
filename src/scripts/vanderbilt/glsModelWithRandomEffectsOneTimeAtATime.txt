@@ -19,7 +19,7 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[myT$time == "post",]
+	myT <- myT[myT$time == "pre",]
 	pValuesTreatment <- vector()
 	pValuesSubject <- vector()
 	intraclassCoefficient <- vector()
@@ -45,7 +45,7 @@ for(taxa in taxaLevels )
 			names[index] = names(subTable)[i]
 			label = paste(  names(subTable)[i] , "; p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
-			plot( bug ~ factor(subjectID ), main=label)
+			plot( bug ~ factor(subjectID ), main=label,xlab="")
 			index <- index + 1
 		}		
 	}
