@@ -20,6 +20,7 @@ for(taxa in taxaLevels )
 	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
+	pValuesSubject <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -29,27 +30,26 @@ for(taxa in taxaLevels )
 		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
 		{
 			bug <- subTable[,i]
-			type <- subTable$type
 			treatment <- subTable$treatment
+			time<- subTable$time
 			subjectID <- subTable$subjectID
-			myFrame <- data.frame( bug,type,treatment, subjectID )
+			myFrame <- data.frame( bug,treatment,time, subjectID )
 			
-			fullModel <- gls( bug~  treatment, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
-			reducedModel <- gls( bug~  treatment, method="REML",data = myFrame )
+			fullModel <- gls( bug~  treatment + time, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
+			reducedModel <- gls( bug~  treatment + time, method="REML",data = myFrame )
 			
-			coefs <- data.frame(coef(summary(myLm)))
-			coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
-			pValuesTreatment[index] <- coefs[5]$Pr...t..[3];
-			pValuesTime[index] <- coefs[5]$Pr...t..[2]
+			pValuesTreatment[index] <-anova(fullModel)$"p-value"[2]
+			pValuesTime[index] <- anova(fullModel)$"p-value"[3]
+			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
 			names[index] = names(subTable)[i]
 			index <- index + 1
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesTime,pValuesTreatment  ) 
+	dFrame <- data.frame( names, pValuesTreatment,pValuesTime, pValuesSubject ) 
 	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForPCOATimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
