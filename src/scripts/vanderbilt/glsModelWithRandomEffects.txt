@@ -3,8 +3,10 @@ library("nlme")
 
 setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
-taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum","class","order","family","genus")
+taxaLevels <- c("phylum")
 
+par(mfrow=c(5,2))
 for(taxa in taxaLevels ) 
 {
     # uncomment for pcoa
@@ -25,7 +27,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 9:19) 
+	for( i in 9:18) 
 	{	
 		subTable <- myT[ ! is.na(myT[,i]) ,]
 		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
@@ -44,6 +46,9 @@ for(taxa in taxaLevels )
 			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
+			label = paste(  names(subTable)[i] , "; p=" , format(pValuesSubject[index],digits=3) ,
+						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
+			plot( bug ~ factor(subjectID ), main=label)
 			index <- index + 1
 		}		
 	}
