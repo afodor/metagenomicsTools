@@ -6,7 +6,7 @@ setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 #taxaLevels <- c("phylum","class","order","family","genus")
 taxaLevels <- c("family")
 
-par(mfrow=c(5,3))
+#par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
 {
     # uncomment for pcoa
@@ -50,7 +50,7 @@ for(taxa in taxaLevels )
 			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
-			label = paste(  names(subTable)[i] , "; p=" , format(pValuesSubject[index],digits=3) ,
+			label = paste(  names(subTable)[i] , " ; stoolVsSqabP =  ", format(pValuesStoolOrSwab[index],3) , " ; subject p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
 			plot( bug ~ factor(subjectID ), main=label)
 			
@@ -62,10 +62,10 @@ for(taxa in taxaLevels )
 			
 			index <- index + 1
 			
-			if( index %% 15 == 0 ) 
+			#if( index %% 15 == 0 ) 
 			{
 					windows()
-					par(mfrow=c(5,3))
+			#		par(mfrow=c(5,3))
 			}
 		}		
 	}
