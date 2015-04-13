@@ -21,10 +21,11 @@ for(taxa in taxaLevels )
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
 	pValuesSubject <- vector()
+	intraclassCoefficient <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in 9:numCols) 
+	for( i in 9:19) 
 	{	
 		subTable <- myT[ ! is.na(myT[,i]) ,]
 		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
@@ -41,13 +42,14 @@ for(taxa in taxaLevels )
 			pValuesTreatment[index] <-anova(fullModel)$"p-value"[2]
 			pValuesTime[index] <- anova(fullModel)$"p-value"[3]
 			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
+			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
 			index <- index + 1
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesTreatment,pValuesTime, pValuesSubject ) 
-	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
+	dFrame <- data.frame( names, pValuesTreatment,pValuesTime, pValuesSubject,intraclassCoefficient ) 
+	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
 	write.table(dFrame, file=paste("pValuesForPCOATimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
