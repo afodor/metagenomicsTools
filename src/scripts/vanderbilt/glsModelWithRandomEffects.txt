@@ -4,7 +4,7 @@ library("nlme")
 setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 #taxaLevels <- c("phylum","class","order","family","genus")
-taxaLevels <- c("phylum")
+taxaLevels <- c("family")
 
 par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
@@ -19,10 +19,12 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
+	myT = myT[myT$time=="post",]
 	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
 	pValuesSubject <- vector()
+	pValuesStoolOrSwab <- vector()
 	intraclassCoefficient <- vector()
 	names <- vector()
 	
@@ -34,15 +36,17 @@ for(taxa in taxaLevels )
 		{
 			bug <- subTable[,i]
 			treatment <- subTable$treatment
-			time<- subTable$time
+			#time<- subTable$time
 			subjectID <- subTable$subjectID
-			myFrame <- data.frame( bug,treatment,time, subjectID )
+			stoolOrSwab<- subTable$stoolOrSwab
+			myFrame <- data.frame( bug,treatment,subjectID , stoolOrSwab)
 			
-			fullModel <- gls( bug~  treatment + time, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
-			reducedModel <- gls( bug~  treatment + time, method="REML",data = myFrame )
+			fullModel <- gls( bug~  treatment + stoolOrSwab, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
+			reducedModel <- gls( bug~  treatment + stoolOrSwab, method="REML",data = myFrame )
 			
 			pValuesTreatment[index] <-anova(fullModel)$"p-value"[2]
-			pValuesTime[index] <- anova(fullModel)$"p-value"[3]
+			#pValuesTime[index] <- anova(fullModel)$"p-value"[3]
+			pValuesStoolOrSwab[index] <- anova(fullModel)$"p-value"[3]
 			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
@@ -50,14 +54,20 @@ for(taxa in taxaLevels )
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
 			plot( bug ~ factor(subjectID ), main=label)
 			index <- index + 1
+			
+			if( index %% 15 == 0 ) 
+			{
+					windows()
+					par(mfrow=c(5,3))
+			}
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesTreatment,pValuesTime, pValuesSubject,intraclassCoefficient ) 
+	dFrame <- data.frame( names, pValuesTreatment,pValuesStoolOrSwab, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
 	#write.table(dFrame, file=paste("pValuesForPCOATimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_post_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
