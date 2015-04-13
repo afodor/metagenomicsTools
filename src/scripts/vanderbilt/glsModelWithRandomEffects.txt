@@ -52,7 +52,7 @@ for(taxa in taxaLevels )
 			names[index] = names(subTable)[i]
 			label = paste(  names(subTable)[i] , " ; stoolVsSqabP =  ", format(pValuesStoolOrSwab[index],3) , " ; subject p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
-			plot( bug ~ factor(subjectID ), main=label)
+			plot( bug ~ factor(subjectID ), main=label, xaxt="n")
 			
 			stripchart(bug[myT$stoolOrSwab=="stool"] ~ factor(subjectID[myT$stoolOrSwab=="stool"] ), data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
 						col = "red")
