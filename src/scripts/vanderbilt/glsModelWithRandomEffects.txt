@@ -1,0 +1,55 @@
+rm(list=ls())
+library("nlme")
+
+setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+    # uncomment for pcoa
+	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	
+	#inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	
+	pValuesTime <- vector()
+	pValuesTreatment <- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in 9:numCols) 
+	{	
+		subTable <- myT[ ! is.na(myT[,i]) ,]
+		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
+		{
+			bug <- subTable[,i]
+			type <- subTable$type
+			treatment <- subTable$treatment
+			subjectID <- subTable$subjectID
+			myFrame <- data.frame( bug,type,treatment, subjectID )
+			
+			fullModel <- gls( bug~  treatment, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
+			reducedModel <- gls( bug~  treatment, method="REML",data = myFrame )
+			
+			coefs <- data.frame(coef(summary(myLm)))
+			coefs$p.z <- 2 * (1 - pnorm(abs(coefs$t.value)))
+			pValuesTreatment[index] <- coefs[5]$Pr...t..[3];
+			pValuesTime[index] <- coefs[5]$Pr...t..[2]
+			names[index] = names(subTable)[i]
+			index <- index + 1
+		}		
+	}
+	
+	dFrame <- data.frame( names, pValuesTime,pValuesTreatment  ) 
+	dFrame <- dFrame [order(dFrame$pValuesTreatment),]
+	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
+	
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
+							
