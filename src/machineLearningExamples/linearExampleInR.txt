@@ -5,27 +5,27 @@ rm(list=ls())
 
 numDataPoints <- 100
 
-classBlue <- rnorm(10,mean=1);
-classOrange <- rnorm(10);
+classBlue <- rnorm(10,mean=-3);
+classOrange <- rnorm(10, mean=-2);
 
 blueDataX1 <- vector();
-orangeDataX2 <- vector();
 blueDataX2 <- vector();
-orangeDataY<- vector();
+orangeDataX1 <- vector();
+orangeDataX2<- vector();
 
 for( i in 1:numDataPoints)
 {
 	blueDataX1[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
-	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	orangeDataX1[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
 	blueDataX2[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
-	orangeDataY[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
 }
 
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
 
-mergedDataX1 <- c(  blueDataX1, orangeDataX2 );
-mergedDataX2 <-  c(  blueDataX2, orangeDataY);
+mergedDataX1 <- c(  blueDataX1, orangeDataX1 );
+mergedDataX2 <-  c(  blueDataX2, orangeDataX2);
 
 plot(mergedDataX1, mergedDataX2, col=colors)
 
