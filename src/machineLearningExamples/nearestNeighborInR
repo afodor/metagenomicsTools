@@ -24,8 +24,9 @@ for( i in 1:numDataPoints)
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
 
+Ks = c(4,10,20,50)
 
-Ks = c(4,8,16,32)
+par(mfrow=c(2,2))
 
 for( K in Ks)
 {
@@ -89,6 +90,5 @@ for ( x in x1Seqs )
 }
 
 lines(xLines, yLines, col="RED")
-windows()
 		
 }
