@@ -5,8 +5,8 @@ rm(list=ls())
 
 numDataPoints <- 100
 
-classBlue <- rnorm(10,mean=-3);
-classOrange <- rnorm(10, mean=-2);
+classBlue <- rnorm(10,mean=1.5);
+classOrange <- rnorm(10, mean=0);
 
 blueDataX1 <- vector();
 blueDataX2 <- vector();
