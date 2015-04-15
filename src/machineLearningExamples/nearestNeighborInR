@@ -2,35 +2,41 @@
 # elements of statistical learning
 
 rm(list=ls())
-K=16
+
 numDataPoints <- 100
 
 classBlue <- rnorm(10,mean=1);
-classOrange <- rnorm(10);
+classOrange <- rnorm(10, mean=0);
 
 blueDataX1 <- vector();
-orangeDataX2 <- vector();
 blueDataX2 <- vector();
-orangeDataY<- vector();
+orangeDataX1 <- vector();
+orangeDataX2<- vector();
 
 for( i in 1:numDataPoints)
 {
 	blueDataX1[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
-	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	orangeDataX1[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
 	blueDataX2[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
-	orangeDataY[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
 }
 
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
 
-mergedDataX1 <- c(  blueDataX1, orangeDataX2 );
-mergedDataX2 <-  c(  blueDataX2, orangeDataY);
+mergedDataX1 <- c(  blueDataX1, orangeDataX1 );
+mergedDataX2 <-  c(  blueDataX2, orangeDataX2);
 
 plot(mergedDataX1, mergedDataX2, col=colors)
 
+aLm <- lm( values ~ mergedDataX1 + mergedDataX2 )
+summary(aLm)
+coef(aLm)
+
 x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 30)
 x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 30)
+
+K=16
 
 aLm <- lm( values ~ mergedDataX1 + mergedDataX2 )
 summary(aLm)
