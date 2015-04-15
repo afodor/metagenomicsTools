@@ -24,10 +24,16 @@ for( i in 1:numDataPoints)
 colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
 values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
 
+
+Ks = c(4,8,16,32)
+
+for( K in Ks)
+{
+
 mergedDataX1 <- c(  blueDataX1, orangeDataX1 );
 mergedDataX2 <-  c(  blueDataX2, orangeDataX2);
 
-plot(mergedDataX1, mergedDataX2, col=colors)
+plot(mergedDataX1, mergedDataX2, col=colors,main=paste("K=",K))
 
 aLm <- lm( values ~ mergedDataX1 + mergedDataX2 )
 summary(aLm)
@@ -35,9 +41,7 @@ coef(aLm)
 
 x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 30)
 x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 30)
-
-K=16
-
+	
 aLm <- lm( values ~ mergedDataX1 + mergedDataX2 )
 summary(aLm)
 coef(aLm)
@@ -85,3 +89,6 @@ for ( x in x1Seqs )
 }
 
 lines(xLines, yLines, col="RED")
+windows()
+		
+}
