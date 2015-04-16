@@ -1,0 +1,37 @@
+# data from http://www.highstat.com/Book2/ZuurDataMixedModelling.zip
+# code modded from section 9.5 of the Zuur book
+
+rm(list=ls())
+
+setwd("D:\\books\\zuurData")
+
+RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
+
+plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills")
+M1 <- glm(TOT.N ~ D.PARK, family = poisson, data = RK)
+summary(M1)
+
+MyData <- data.frame(D.PARK = seq(from = 0,to = 25000, by = 1000))
+G <- predict(M1, newdata = MyData, type = "link",se = TRUE)
+F <- exp(G$fit)
+FSEUP <- exp(G$fit + 1.96 * G$se.fit)
+FSELOW <- exp(G$fit - 1.96 * G$se.fit)
+lines(MyData$D.PARK, F, lty = 1,col="blue")
+lines(MyData$D.PARK, FSEUP, lty = 2, col="blue")
+lines(MyData$D.PARK, FSELOW, lty = 2, col="blue")
+
+library("MASS")
+#windows()
+#plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills")
+M2 <- glm.nb(TOT.N ~ D.PARK, data = RK)
+G2 <- predict(M2,newdata = MyData, type = "link",se = TRUE)
+F2 <- exp(G2$fit)
+FSEUP2 <- exp(G2$fit + 1.96 * G$se.fit)
+FSELOW2 <- exp(G2$fit - 1.96 * G$se.fit)
+lines(MyData$D.PARK, F2, lty = 1,col="red")
+lines(MyData$D.PARK, FSEUP2, lty = 2, col="red")
+lines(MyData$D.PARK, FSELOW2, lty = 2, col="red")
+
+plot( F, FSEUP )
+lines(0:80,0:80,col="red")
+plot(F2, FSEUP2)
