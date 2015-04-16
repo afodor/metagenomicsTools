@@ -5,9 +5,8 @@ rm(list=ls())
 
 setwd("C:\\books\\zuurData")
 
-par(mfrow=c(4,1))
+par(mfrow=c(2,2))
 RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
-
 
 plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",ylim=c(-30,130))
 
@@ -15,10 +14,10 @@ M0 <- lm( RK$TOT.N ~ RK$D.PARK )
 plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",ylim=c(-30,130),main=paste( "linear AIC=", format(AIC(M0),digits=5)))
 
 xRange<- seq(from = 0,to = 25000, by = 1000)
-library("Hmisc")
 linearMeans <- coef(M0)[1] + coef(M0)[2] * xRange
 lines( xRange, linearMeans)
 
+library("Hmisc")
 meanR <- mean(residuals(M0))
 standardError = sqrt(sum( (residuals(M0)-meanR)^2 / ( length(residuals(M0)) - 2 )))
 
