@@ -5,9 +5,12 @@ rm(list=ls())
 
 setwd("D:\\books\\zuurData")
 
+par(mfrow=c(3,1))
 RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
 
-plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills")
+plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",ylim=c(0,130))
+
+plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",main="Poisson",,ylim=c(0,130))
 M1 <- glm(TOT.N ~ D.PARK, family = poisson, data = RK)
 summary(M1)
 
@@ -16,22 +19,16 @@ modelMeans <- exp( coef(M1)[1] + coef(M1)[2]* xRange)
 lines(xRange, modelMeans )
 
 library("Hmisc")
-# variance equals the means; graph sd
+# variance equals the means
 errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE)
 
 
 library("MASS")
-#windows()
-#plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills")
 M2 <- glm.nb(TOT.N ~ D.PARK, data = RK)
-G2 <- predict(M2,newdata = MyData, type = "link",se = TRUE)
-F2 <- exp(G2$fit)
-FSEUP2 <- exp(G2$fit + 1.96 * G$se.fit)
-FSELOW2 <- exp(G2$fit - 1.96 * G$se.fit)
-lines(MyData$D.PARK, F2, lty = 1,col="red")
-lines(MyData$D.PARK, FSEUP2, lty = 2, col="red")
-lines(MyData$D.PARK, FSELOW2, lty = 2, col="red")
+model2Means <- exp( coef(M2)[1] + coef(M2)[2]* xRange)
+plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",main="Neg. Binomial",ylim=c(0,130))
+lines(xRange, model2Means)
+vars = model2Means  + model2Means^2 /  M2$theta
+errbar(xRange, model2Means, model2Means + sqrt(vars), model2Means - sqrt(vars),add=TRUE, errbar.col="RED")
 
-#plot( F, FSEUP )
-#lines(0:80,0:80,col="red")
-#plot(F2, FSEUP2)
+AIC(M1, M2)
