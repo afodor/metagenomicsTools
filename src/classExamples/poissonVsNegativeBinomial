@@ -11,14 +11,14 @@ plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills")
 M1 <- glm(TOT.N ~ D.PARK, family = poisson, data = RK)
 summary(M1)
 
-MyData <- data.frame(D.PARK = seq(from = 0,to = 25000, by = 1000))
-G <- predict(M1, newdata = MyData, type = "link",se = TRUE)
-F <- exp(G$fit)
-FSEUP <- exp(G$fit + 1.96 * G$se.fit)
-FSELOW <- exp(G$fit - 1.96 * G$se.fit)
-lines(MyData$D.PARK, F, lty = 1,col="blue")
-lines(MyData$D.PARK, FSEUP, lty = 2, col="blue")
-lines(MyData$D.PARK, FSELOW, lty = 2, col="blue")
+xRange<- seq(from = 0,to = 25000, by = 1000)
+modelMeans <- exp( coef(M1)[1] + coef(M1)[2]* xRange)
+lines(xRange, modelMeans )
+
+library("Hmisc")
+# variance equals the means; graph sd
+errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE)
+
 
 library("MASS")
 #windows()
@@ -32,6 +32,6 @@ lines(MyData$D.PARK, F2, lty = 1,col="red")
 lines(MyData$D.PARK, FSEUP2, lty = 2, col="red")
 lines(MyData$D.PARK, FSELOW2, lty = 2, col="red")
 
-plot( F, FSEUP )
-lines(0:80,0:80,col="red")
-plot(F2, FSEUP2)
+#plot( F, FSEUP )
+#lines(0:80,0:80,col="red")
+#plot(F2, FSEUP2)
