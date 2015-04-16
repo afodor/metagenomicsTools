@@ -61,7 +61,7 @@ lines(decisionX, decisionY)
 
 getProb2D <- function( x1,x2,B0,B1,B2)
 {
-	return (1 / (1 + exp(-B0 + B1 * x1 + B2 * x2 )))
+	return (1 / (1 + exp(-(B0 + B1 * x1 + B2 * x2 ))))
 }
 
 myLogReg2D <- glm( values ~ mergedDataX1 +mergedDataX2 ,family = binomial)
@@ -69,8 +69,8 @@ B0 <- coef(myLogReg2D)[1]
 B1 <- coef(myLogReg2D)[2]
 B2 <- coef(myLogReg2D)[3]
 
-x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 100)
-x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 100)
+x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 200)
+x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 200)
 
 xLines <-vector()
 yLines <-vector()
@@ -81,13 +81,12 @@ for ( x in x1Seqs )
 	for( y in x2Seqs ) 
 	{
 		prob <- getProb2D( x,y,B0,B1,B2 );
-		print(prob)
-		if( abs(prob-0.5) < 0.001)
+		if( abs(prob-0.5) < 0.005)
 		{
 			gridIndex = gridIndex + 1;
 			xLines[gridIndex] = x
 			yLines[gridIndex] = y
-			points(x, y, pch=21,col="RED")
+			#points(x, y, pch=21,col="RED")
 		}
 	
 	}
