@@ -39,4 +39,14 @@ getProb <- function(x, B0, B1)
 	return (1 / (1 + exp(-B0 + B1 * x )))
 }
 
-lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]))
+lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]),col="red")
+
+# compare to the linear model..
+myLm <- lm( values ~ mergedDataX1)
+
+getProbLm <- function( x, B0, B1)
+{
+	return ( B0 + B1 * x )
+}
+
+lines( xSeq, getProbLm(xSeq, coef(myLm)[1], -coef(myLm)[2]),col="black")
