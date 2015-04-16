@@ -1,0 +1,42 @@
+# my attempt at R code for Figure 2.1 in 4th edition of 
+# elements of statistical learning
+
+rm(list=ls())
+
+numDataPoints <- 100
+
+classBlue <- rnorm(10,mean=1);
+classOrange <- rnorm(10, mean=0);
+
+blueDataX1 <- vector();
+blueDataX2 <- vector();
+orangeDataX1 <- vector();
+orangeDataX2<- vector();
+
+for( i in 1:numDataPoints)
+{
+	blueDataX1[i] <- rnorm(1, mean=classBlue[ sample(1:10,1) ], sd = 1/5)
+	orangeDataX1[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+	blueDataX2[i] <- rnorm(1, mean=classBlue[sample(1:10,1)],sd = 1/5)
+	orangeDataX2[i] <- rnorm(1, mean=classOrange[sample(1:10,1)],sd = 1/5)
+}
+
+colors <- c( rep("BLUE", numDataPoints), rep ("ORANGE", numDataPoints))
+values <- c( rep(0, numDataPoints), rep (1, numDataPoints))
+
+mergedDataX1 <- c(  blueDataX1, orangeDataX1 );
+mergedDataX2 <-  c(  blueDataX2, orangeDataX2);
+
+plot(mergedDataX1, values,col=colors)
+
+myLogReg <- glm( values ~ mergedDataX1 ,family = binomial)
+summary(myLogReg)
+
+xSeq <- seq(min(mergedDataX1), max(mergedDataX1), 0.001)
+
+getProb <- function(x, B0, B1)
+{
+	return (1 / (1 + exp(-B0 + B1 * x )))
+}
+
+lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]))
