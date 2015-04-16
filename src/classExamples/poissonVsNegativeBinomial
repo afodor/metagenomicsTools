@@ -3,7 +3,7 @@
 
 rm(list=ls())
 
-setwd("D:\\books\\zuurData")
+setwd("C:\\books\\zuurData")
 
 par(mfrow=c(4,1))
 RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
@@ -18,7 +18,11 @@ xRange<- seq(from = 0,to = 25000, by = 1000)
 library("Hmisc")
 linearMeans <- coef(M0)[1] + coef(M0)[2] * xRange
 lines( xRange, linearMeans)
-errbar(xRange, linearMeans , linearMeans + sd(residuals(M0)), linearMeans - sd(residuals(M0)),add=TRUE)
+
+meanR <- mean(residuals(M0))
+standardError = sqrt(sum( (residuals(M0)-meanR)^2 / ( length(residuals(M0)) - 2 )))
+
+errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standardError ,add=TRUE)
 
 M1 <- glm(TOT.N ~ D.PARK, family = poisson, data = RK)
 plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",,main=paste( "Poisson AIC=", format(AIC(M1),digits=5)),ylim=c(-30,130))
