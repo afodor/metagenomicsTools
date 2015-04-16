@@ -36,7 +36,7 @@ errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(mode
 library("MASS")
 M2 <- glm.nb(TOT.N ~ D.PARK, data = RK)
 model2Means <- exp( coef(M2)[1] + coef(M2)[2]* xRange)
-plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",main=paste( "Neg. binomial=", format(AIC(M2),digits=5)),ylim=c(-30,130))
+plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",main=paste( "Neg. binomial AIC =", format(AIC(M2),digits=5)),ylim=c(-30,130))
 lines(xRange, model2Means)
 vars = model2Means  + model2Means^2 /  M2$theta
 errbar(xRange, model2Means, model2Means + sqrt(vars), model2Means - sqrt(vars),add=TRUE, errbar.col="RED")
