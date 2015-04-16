@@ -36,7 +36,7 @@ xSeq <- seq(min(mergedDataX1), max(mergedDataX1), 0.001)
 
 getProb <- function(x, B0, B1)
 {
-	return (1 / (1 + exp(-B0 + B1 * x )))
+	return (1 / (1 + exp(-(B0 + B1 * x ))))
 }
 
 lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]),col="red")
@@ -49,4 +49,50 @@ getProbLm <- function( x, B0, B1)
 	return ( B0 + B1 * x )
 }
 
-lines( xSeq, getProbLm(xSeq, coef(myLm)[1], -coef(myLm)[2]),col="black")
+lines( xSeq, getProbLm(xSeq, coef(myLm)[1], coef(myLm)[2]),col="black")
+
+# now look at two dimensions
+
+plot(mergedDataX1, mergedDataX2, col=colors)
+aLm2D <- lm( values ~ mergedDataX1 + mergedDataX2 )
+decisionX <- seq( min(mergedDataX1), max(mergedDataX1), 0.001)
+decisionY <- ( 0.5 - coef(aLm2D )[1] - coef(aLm2D )[2] * decisionX ) / coef(aLm2D)[3]
+lines(decisionX, decisionY)
+
+getProb2D <- function( x1,x2,B0,B1,B2)
+{
+	return (1 / (1 + exp(-B0 + B1 * x1 + B2 * x2 )))
+}
+
+myLogReg2D <- glm( values ~ mergedDataX1 +mergedDataX2 ,family = binomial)
+B0 <- coef(myLogReg2D)[1]
+B1 <- coef(myLogReg2D)[2]
+B2 <- coef(myLogReg2D)[3]
+
+x1Seqs <- seq( min(mergedDataX1), max(mergedDataX1), (max(mergedDataX1) - min(mergedDataX1)) / 100)
+x2Seqs <- seq( min(mergedDataX2), max(mergedDataX2), (max(mergedDataX2) - min(mergedDataX2)) / 100)
+
+xLines <-vector()
+yLines <-vector()
+gridIndex <-0
+
+for ( x in x1Seqs ) 
+{
+	for( y in x2Seqs ) 
+	{
+		prob <- getProb2D( x,y,B0,B1,B2 );
+		print(prob)
+		if( abs(prob-0.5) < 0.001)
+		{
+			gridIndex = gridIndex + 1;
+			xLines[gridIndex] = x
+			yLines[gridIndex] = y
+			points(x, y, pch=21,col="RED")
+		}
+	
+	}
+	
+}
+
+lines(xLines, yLines, col="RED")
+	
