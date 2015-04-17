@@ -3,7 +3,7 @@
 
 rm(list=ls())
 
-setwd("G:\\books\\zuurData")
+setwd("D:\\books\\zuurData")
 
 par(mfrow=c(2,2))
 RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
@@ -28,8 +28,14 @@ plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",,main=pa
 modelMeans <- exp( coef(M1)[1] + coef(M1)[2]* xRange)
 lines(xRange, modelMeans )
 
+# alternative to the way that we got the model means
+MyData <- data.frame(D.PARK = seq(from = 0,to = 25000, by = 1000))
+exp(predict(M1, newdata = MyData, type = "link",se = TRUE)$fit)
+
 # variance equals the means
 errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE)
+
+
 
 summary(M1)
 
