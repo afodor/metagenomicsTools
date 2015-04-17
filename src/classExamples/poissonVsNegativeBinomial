@@ -35,8 +35,6 @@ exp(predict(M1, newdata = MyData, type = "link",se = TRUE)$fit)
 # variance equals the means
 errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE)
 
-
-
 summary(M1)
 
 library("MASS")
@@ -46,5 +44,10 @@ plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",main=pas
 lines(xRange, model2Means)
 vars = model2Means  + model2Means^2 /  M2$theta
 errbar(xRange, model2Means, model2Means + sqrt(vars), model2Means - sqrt(vars),add=TRUE, errbar.col="RED")
+
+# alternative to model means...
+MyData <- data.frame(D.PARK = seq(from = 0,to = 25000, by = 1000))
+exp(predict(M2, newdata = MyData, type = "link",se = TRUE)$fit)
+
 
 AIC(M0,M1, M2)
