@@ -3,7 +3,7 @@
 
 rm(list=ls())
 
-setwd("C:\\books\\zuurData")
+setwd("G:\\books\\zuurData")
 
 par(mfrow=c(2,2))
 RK <- read.table("RoadKills.txt",header=TRUE, sep="\t")
@@ -25,16 +25,13 @@ errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standar
 
 M1 <- glm(TOT.N ~ D.PARK, family = poisson, data = RK)
 plot(RK$D.PARK, RK$TOT.N, xlab = "Distance to park",ylab = "Road kills",,main=paste( "Poisson AIC=", format(AIC(M1),digits=5)),ylim=c(-30,130))
-
-summary(M1)
-
-
 modelMeans <- exp( coef(M1)[1] + coef(M1)[2]* xRange)
 lines(xRange, modelMeans )
 
 # variance equals the means
 errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE)
 
+summary(M1)
 
 library("MASS")
 M2 <- glm.nb(TOT.N ~ D.PARK, data = RK)
