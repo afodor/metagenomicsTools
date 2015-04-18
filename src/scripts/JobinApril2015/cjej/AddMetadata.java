@@ -30,7 +30,7 @@ public class AddMetadata
 			
 			MetadataFileLine mfl = metaMap.get(splits[0].replaceAll("\"", "").split("_")[0]);
 			
-			writer.write( splits[0] + "\t" );
+			writer.write( splits[0].replaceAll("\"", "").split("_")[0] + "\t" );
 			writer.write( splits[0].charAt(splits[0].length() -2) + "\t");
 			writer.write(mfl.getGroupID() + "\t");
 			writer.write(mfl.getCageID() + "\t");
