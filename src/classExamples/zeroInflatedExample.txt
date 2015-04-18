@@ -9,6 +9,21 @@ myT <- read.table("ParasiteCod.txt", header=TRUE, sep="\t")
 
 myT <- myT[!is.na(myT$Intensity) & ! is.na(myT$Weight) ,]
 
+par(mfrow=c(2,2))
 plot( myT$Weight, myT$Intensity)
 
 sum( myT$Intensity == 0) / nrow(myT)
+
+
+# fit with linear model
+M0 <- lm( myT$Intensity ~ myT$Weight)
+xRange<- seq(from = 0,to = 10000, by = 500)
+linearMeans <- coef(M0)[1] + coef(M0)[2] * xRange
+library("Hmisc")
+meanR <- mean(residuals(M0))
+standardError = sqrt(sum( (residuals(M0)-meanR)^2 / ( length(residuals(M0)) - 2 )))
+plot(myT$Weight, myT$Intensity, main = paste("linear ; AIC = ", format( AIC(M0),digits=5) 
+				," p = " , format(anova(M0)$"Pr(>F)"[1],digits=5),sep="" ))
+lines( xRange, linearMeans, col="red")
+errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standardError ,add=TRUE, col="RED")
+
