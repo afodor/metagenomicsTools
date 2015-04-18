@@ -1,7 +1,6 @@
 rm(list=ls())
 
 # data from http://www.highstat.com/Book2/ZuurDataMixedModelling.zip
-# code modded from Chapter 11 of the Zuur book..
 
 setwd("C:\\books\\zuurData");
 
@@ -27,3 +26,14 @@ plot(myT$Weight, myT$Intensity, main = paste("linear ; AIC = ", format( AIC(M0),
 lines( xRange, linearMeans, col="red")
 errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standardError ,add=TRUE, col="RED")
 
+
+# try the poisson
+M1 <- glm(myT$Intensity ~ myT$Weight, family = poisson, data = myT)
+library(lmtest)
+pValue = lrtest(M1)$"Pr(>Chisq)"[2]
+title = paste( "Poisson AIC=", format(AIC(M1),digits=5), " p = ", format(pValue,digits=5),sep="")
+plot(myT$Weight, myT$Intensity,main=title,ylim=c(-30,130))
+modelMeans <- exp( coef(M1)[1] + coef(M1)[2]* xRange)
+lines(xRange, modelMeans,col="RED" )
+# variance equals the means
+errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE,col="RED")
