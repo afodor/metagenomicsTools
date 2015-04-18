@@ -47,8 +47,25 @@ plot(myT$Weight, myT$Intensity,main=title)
 
 mui = exp(coef(M2)[1] + coef(M2)[2]* xRange)
 pi_i  = 1 / (1 + exp(-(coef(M2)[3] + coef(M2)[4] * xRange )))
+modelMeans <- mui * (1 - pi_i)
 
-modelMeans <- mui * 1 - pi_i
+#alternatively from the Zuur book.. (if xRange is set to myT$weight)
+EstPar <- coef(M2,model = "zero")
+Z <- model.matrix(M2,model = "zero")
+g <- Z %*% EstPar
+p <- exp(g) / (1 + exp(g))
+
+EstPar2 <- coef(M2, model = "count")
+X <- model.matrix(M2, model = "count")
+g <- X %*% EstPar2
+mu1 <- exp(g)
+mu <- (1 - p) * mu1
+
+# or with much less effort
+fitted(M2)
+# or
+predict(M2)
+
 lines(xRange, modelMeans,col="RED" )
 # variance equals the means
 modelVar = (1-pi_i) * (mui + pi_i * mui^2)
