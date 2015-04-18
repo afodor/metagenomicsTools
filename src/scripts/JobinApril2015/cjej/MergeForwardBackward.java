@@ -27,7 +27,6 @@ public class MergeForwardBackward
 		
 		File mergedFile = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjejR_taxaAsColumns_mergedF_R.txt");
-		/*
 		File outFileF = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjej_FreadsNoTax.txt");
 		
@@ -50,10 +49,8 @@ public class MergeForwardBackward
 		OtuWrapper.transpose(outFileF.getAbsolutePath(), transposedFFile.getAbsolutePath(), false);
 		OtuWrapper.transpose(outFileR.getAbsolutePath(), transposedRFile.getAbsolutePath(), false);
 		
-		
-		
 		OtuWrapper.merge(transposedFFile, transposedRFile, mergedFile);
-		*/
+		
 		HashMap<String, String> otuToFamily = new HashMap<String, String>();
 		
 		addotuToFamily(otuToFamily , inFileF);
@@ -63,7 +60,7 @@ public class MergeForwardBackward
 			//System.out.println(otuToFamily + " " + otuToFamily.get(s));
 		
 		File mergedFileFamily = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R_family.txt");
+				"cjejR_taxaAsColumns_mergedF_R_phyla.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(mergedFileFamily));
 		
@@ -168,10 +165,10 @@ public class MergeForwardBackward
 			{
 				String nextToken = sToken.nextToken().trim();
 				
-				if( nextToken.startsWith("f__"))
+				if( nextToken.startsWith("p__"))
 				{
 					
-					String family = nextToken.replaceAll("f__", "").replace("[", "").replace("]", "");
+					String family = nextToken.replaceAll("p__", "").replace("[", "").replace("]", "");
 					
 					if( family.length() == 0 )
 						family = "unassigned_" + getPhyla(lastToken);
