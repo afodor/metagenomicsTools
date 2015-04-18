@@ -82,6 +82,8 @@ public class ConfigReader
 	
 	public static final String JENNIFER_TEST_DIR = "JENNIFER_TEST_DIR";
 	
+	public static final String JOBIN_APRIL_2015_DIR = "JOBIN_APRIL_2015_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -91,6 +93,12 @@ public class ConfigReader
 	{
 		return getConfigReader().getAProperty(TANYA_DIR);
 	}
+	
+	public static String getJobinApril2015Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(JOBIN_APRIL_2015_DIR);
+	}
+	
 	
 	public static String getNinaWithDuplicatesDir() throws Exception
 	{
