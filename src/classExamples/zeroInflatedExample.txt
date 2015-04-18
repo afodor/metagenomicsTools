@@ -13,7 +13,6 @@ plot( myT$Weight, myT$Intensity)
 
 sum( myT$Intensity == 0) / nrow(myT)
 
-
 # fit with linear model
 M0 <- lm( myT$Intensity ~ myT$Weight)
 xRange<- seq(from = 0,to = 10000, by = 500)
@@ -67,6 +66,9 @@ fitted(M2)
 predict(M2)
 
 lines(xRange, modelMeans,col="RED" )
-# variance equals the means
 modelVar = (1-pi_i) * (mui + pi_i * mui^2)
 errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelVar),add=TRUE,col="RED")
+
+# check the pearson residuals (if xRange is set to myT$weight)
+#EP <- (myT$Intensity - mu) / sqrt(modelVar)
+#plot( EP, residuals(M2,type="pearson") )
