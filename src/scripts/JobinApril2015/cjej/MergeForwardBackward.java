@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeForwardBackward
@@ -24,7 +25,24 @@ public class MergeForwardBackward
 		File outFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjej_RreadsNoTax.txt");
 
-		addTag(inFileR, outFileR, "_1");
+		addTag(inFileR, outFileR, "_2");
+		
+		File transposedFFile =  new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjejF_taxaAsColumns.txt");
+		
+
+		File transposedRFile =  new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjejR_taxaAsColumns.txt");
+		
+		
+		OtuWrapper.transpose(outFileF.getAbsolutePath(), transposedFFile.getAbsolutePath(), false);
+		OtuWrapper.transpose(outFileR.getAbsolutePath(), transposedRFile.getAbsolutePath(), false);
+		
+		File mergedFile = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjejR_taxaAsColumns_mergedF_R.txt");
+		
+		OtuWrapper.merge(transposedFFile, transposedRFile, mergedFile);
+		
 	}
 	
 	private static void addTag(File inFile, File outFile, String tag) throws Exception
@@ -47,7 +65,7 @@ public class MergeForwardBackward
 			String[] splits = s.split("\t");
 			writer.write(splits[0]);
 			
-			for( int x=1; x < splits.length; x++ )
+			for( int x=1; x < splits.length-1; x++ )
 				writer.write("\t" + splits[x]);
 			
 			writer.write("\n");
