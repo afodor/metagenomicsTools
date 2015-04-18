@@ -44,8 +44,12 @@ M2 <- zeroinfl( myT$Intensity ~ myT$Weight |myT$Weight , data= myT, link = "logi
 pValue = lrtest(M2)$"Pr(>Chisq)"[2]
 title = paste( "Poisson ZI AIC=", format(AIC(M2),digits=5), " p = ", format(pValue,digits=5),sep="")
 plot(myT$Weight, myT$Intensity,main=title)
-modelMeans <- exp( coef(M2)[1] + coef(M2)[2]* xRange) + (1 / (1 + exp(-(coef(M2)[3] + coef(M2)[4] * xRange ))))
+
+mui = exp(coef(M2)[1] + coef(M2)[2]* xRange)
+pi_i  = 1 / (1 + exp(-(coef(M2)[3] + coef(M2)[4] * xRange )))
+
+modelMeans <- mui * 1 - pi_i
 lines(xRange, modelMeans,col="RED" )
 # variance equals the means
-errbar(xRange, modelMeans, modelMeans + sqrt(modelMeans), modelMeans - sqrt(modelMeans),add=TRUE,col="RED")
-
+modelVar = (1-pi_i) * (mui + pi_i * mui^2)
+errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelVar),add=TRUE,col="RED")
