@@ -1,0 +1,14 @@
+rm(list=ls())
+
+# data from http://www.highstat.com/Book2/ZuurDataMixedModelling.zip
+# code modded from Chapter 11 of the Zuur book..
+
+setwd("C:\\books\\zuurData");
+
+myT <- read.table("ParasiteCod.txt", header=TRUE, sep="\t")
+
+myT <- myT[!is.na(myT$Intensity) & ! is.na(myT$Weight) ,]
+
+plot( myT$Weight, myT$Intensity)
+
+sum( myT$Intensity == 0) / nrow(myT)
