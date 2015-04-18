@@ -72,6 +72,8 @@ errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelV
 # check the pearson residuals (if xRange is set to myT$weight)
 #EP <- (myT$Intensity - mu) / sqrt(modelVar)
 #plot( EP, residuals(M2,type="pearson") )
+#sum (abs(EP -  residuals(M2,type="pearson")) > 0.000001 )
+
 
 # try negative bionomial
 M3 <- glm.nb(myT$Intensity ~ myT$Weight,data = myT) 
@@ -83,4 +85,8 @@ lines(xRange, model3Means,col="RED" )
 vars = model3Means  + model3Means^2 /  M3$theta
 errbar(xRange, model3Means, model3Means + sqrt(vars), model3Means - sqrt(vars),add=TRUE, errbar.col="RED")
 
+# check the pearson residuals (if xRange is set to myT$weight)
+#EP <- (myT$Intensity - model3Means) / sqrt(vars)
+#plot( EP, residuals(M3,type="pearson") )
+#sum (abs(EP -  residuals(M3,type="pearson")) > 0.000001 )
 
