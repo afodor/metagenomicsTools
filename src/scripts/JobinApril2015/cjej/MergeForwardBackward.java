@@ -18,15 +18,22 @@ public class MergeForwardBackward
 {
 	public static void main(String[] args) throws Exception
 	{
+
 		File inFileF = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 						"cjej_Freads.txt");
+		
+		File inFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjej_Rreads.txt");
+		
+		File mergedFile = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjejR_taxaAsColumns_mergedF_R.txt");
+		/*
 		File outFileF = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjej_FreadsNoTax.txt");
 		
 		addTag(inFileF, outFileF, "_1");
 		
-		File inFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjej_Rreads.txt");
+		
 		File outFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjej_RreadsNoTax.txt");
 
@@ -43,15 +50,17 @@ public class MergeForwardBackward
 		OtuWrapper.transpose(outFileF.getAbsolutePath(), transposedFFile.getAbsolutePath(), false);
 		OtuWrapper.transpose(outFileR.getAbsolutePath(), transposedRFile.getAbsolutePath(), false);
 		
-		File mergedFile = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R.txt");
+		
 		
 		OtuWrapper.merge(transposedFFile, transposedRFile, mergedFile);
-		
+		*/
 		HashMap<String, String> otuToFamily = new HashMap<String, String>();
 		
 		addotuToFamily(otuToFamily , inFileF);
 		addotuToFamily(otuToFamily,  inFileR);
+		
+		//for(String s : otuToFamily.keySet())
+			//System.out.println(otuToFamily + " " + otuToFamily.get(s));
 		
 		File mergedFileFamily = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
 				"cjejR_taxaAsColumns_mergedF_R_family.txt");
@@ -78,9 +87,10 @@ public class MergeForwardBackward
 			String[] splits = s.split("\t");
 			writer.write(splits[0]);
 			
-			double sum = 0;
 			for( String f : families)
 			{
+				double sum = 0;
+				
 				List<Integer> list = familyColumns.get(f);
 				
 				for( Integer i : list)
@@ -104,13 +114,16 @@ public class MergeForwardBackward
 		HashMap<String, List<Integer>> map = new HashMap<String, List<Integer>>();
 		String[] splits = line.split("\t");
 		
+		
 		for(int x=1; x < splits.length; x++)
 		{
 			String key = splits[x];
+			//System.out.println(key);
+			
 			String family = otuToFamily.get(key);
 			
 			if( family == null)
-				throw new Exception("No");
+				throw new Exception("No " + key  +  " " + splits[1]);
 			
 			List<Integer> list = map.get(family);
 			
@@ -131,10 +144,10 @@ public class MergeForwardBackward
 	{
 		String[] splits = s.split(";");
 		
-		if( ! splits[1].startsWith("p__"))
+		if( ! splits[1].startsWith(" p__"))
 			throw new Exception("No");
 		
-		return splits[1].replaceAll("p__", "");
+		return splits[1].replaceAll(" p__", "");
 	}
 	
 	private static void addotuToFamily(HashMap<String, String> map, File f) throws Exception
@@ -153,17 +166,18 @@ public class MergeForwardBackward
 			
 			while( sToken.hasMoreTokens())
 			{
-				String nextToken = sToken.nextToken();
+				String nextToken = sToken.nextToken().trim();
 				
 				if( nextToken.startsWith("f__"))
 				{
+					
 					String family = nextToken.replaceAll("f__", "").replace("[", "").replace("]", "");
 					
-					if( map.containsKey(splits[0]) && ! family.equals(map.get(splits[0])) )
-						throw new Exception("No");
-					
 					if( family.length() == 0 )
-						family = "unassigned_" + getPhyla(nextToken);
+						family = "unassigned_" + getPhyla(lastToken);
+					
+					if( map.containsKey(splits[0]) && ! family.equals(map.get(splits[0])) )
+						throw new Exception("No " +  family + " " + map.get(splits[0]));
 					
 					map.put(splits[0], family);
 				}
