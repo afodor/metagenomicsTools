@@ -16,6 +16,36 @@ public class MetadataFileLine
 	private final String timepoint;
 	private final String infected;
 	
+	public String getRgSampleID()
+	{
+		return rgSampleID;
+	}
+
+	public int getGroupID()
+	{
+		return groupID;
+	}
+
+	public int getCageID()
+	{
+		return cageID;
+	}
+
+	public String getMouse()
+	{
+		return mouse;
+	}
+
+	public String getTimepoint()
+	{
+		return timepoint;
+	}
+
+	public String getInfected()
+	{
+		return infected;
+	}
+
 	private MetadataFileLine(String s) throws Exception
 	{
 		String[] splits = s.split("\t");
