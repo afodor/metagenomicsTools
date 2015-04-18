@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import machineLearningExamples.OtuWrapperToSVMLight;
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -102,6 +103,14 @@ public class MergeForwardBackward
 		}
 		
 		writer.flush();  writer.close();
+		
+		
+		File mergedFileFamilyLog = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
+		
+		OtuWrapper wrapper = new OtuWrapper(mergedFileFamily);
+		
+		wrapper.writeNormalizedLoggedDataToFile(mergedFileFamilyLog);
 		
 	}
 	

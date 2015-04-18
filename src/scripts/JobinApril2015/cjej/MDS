@@ -4,7 +4,7 @@ library("vegan")
 
 setwd("G:\\Jobin_April_2015")
 
-inFileName <- "cjejR_taxaAsColumns_mergedF_R_phyla.txt"
+inFileName <- "cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c("character", rep("numeric", numCols-1))
