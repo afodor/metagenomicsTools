@@ -15,7 +15,7 @@ sum( myT$Intensity == 0) / nrow(myT)
 
 # fit with linear model
 M0 <- lm( myT$Intensity ~ myT$Weight)
-xRange<- seq(from = 0,to = 10000, by = 500)
+xRange<- seq(from = 0,to = 10000, by = 250)
 linearMeans <- coef(M0)[1] + coef(M0)[2] * xRange
 library("Hmisc")
 meanR <- mean(residuals(M0))
@@ -89,4 +89,44 @@ errbar(xRange, model3Means, model3Means + sqrt(vars), model3Means - sqrt(vars),a
 #EP <- (myT$Intensity - model3Means) / sqrt(vars)
 #plot( EP, residuals(M3,type="pearson") )
 #sum (abs(EP -  residuals(M3,type="pearson")) > 0.000001 )
+
+# finally zero inflated negative binomial
+library(pscl)
+M4 <- zeroinfl( myT$Intensity ~ myT$Weight |myT$Weight , data= myT, dist="negbin", link = "logit") 
+pValue = lrtest(M4)$"Pr(>Chisq)"[2]
+title = paste( "Neb. Binomial ZI AIC=", format(AIC(M4),digits=5), " p = ", format(pValue,digits=5),sep="")
+plot(myT$Weight, myT$Intensity,main=title)
+
+mui = exp(coef(M4)[1] + coef(M4)[2]* xRange)
+pi_i  = 1 / (1 + exp(-(coef(M4)[3] + coef(M4)[4] * xRange )))
+modelMeans <- mui * (1 - pi_i)
+
+# or with much less effort if xRange is set to myT$Weight
+fitted(M4)
+# or
+predict(M4)
+# should be zero
+#sum( abs(fitted(M4) - modelMeans) > 0.00001) 
+
+lines(xRange, modelMeans,col="RED" )
+modelVar = (1-pi_i) * (mui + mui^2 / M4$theta) + mui^2 * (pi_i + pi_i^2)
+errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelVar),add=TRUE,col="RED")
+
+# check the pearson residuals (if xRange is set to myT$weight)
+#EP <- (myT$Intensity - modelMeans) / sqrt(modelVar)
+
+# a lot of round off error and one point that is off the line, but close enough!
+#sum (abs(EP -  residuals(M4,type="pearson")) > 0.1 )
+
+# fit with 4th order linear model
+#xRange = myT$Weight
+#M5 <- lm( myT$Intensity ~ poly(myT$Weight,4))
+#linearMeans <- fitted(M5)
+#meanR <- mean(residuals(M5))
+#standardError = sqrt(sum( (residuals(M5)-meanR)^2 / ( length(residuals(M5)) - 5 )))
+#plot(myT$Weight, myT$Intensity, main = paste("polynomial linear ; AIC = ", format( AIC(M5),digits=5) 
+				," p = " , format(anova(M0)$"Pr(>F)"[1],digits=5),sep="" ))
+#lines( xRange, linearMeans, col="red")
+#errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standardError ,add=TRUE, col="RED")
+
 
