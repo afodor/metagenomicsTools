@@ -72,3 +72,15 @@ errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelV
 # check the pearson residuals (if xRange is set to myT$weight)
 #EP <- (myT$Intensity - mu) / sqrt(modelVar)
 #plot( EP, residuals(M2,type="pearson") )
+
+# try negative bionomial
+M3 <- glm.nb(myT$Intensity ~ myT$Weight,data = myT) 
+model3Means <- exp( coef(M3)[1] + coef(M3)[2]* xRange)
+pValue = lrtest(M3)$"Pr(>Chisq)"[2]
+title = paste( "Negative Binomial AIC=", format(AIC(M3),digits=5), " p = ", format(pValue,digits=5),sep="")
+plot(myT$Weight, myT$Intensity,main=title)
+lines(xRange, model3Means,col="RED" )
+vars = model3Means  + model3Means^2 /  M3$theta
+errbar(xRange, model3Means, model3Means + sqrt(vars), model3Means - sqrt(vars),add=TRUE, errbar.col="RED")
+
+
