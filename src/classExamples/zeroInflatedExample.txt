@@ -110,7 +110,7 @@ predict(M4)
 
 lines(xRange, modelMeans,col="RED" )
 modelVar = (1-pi_i) * (mui + mui^2 / M4$theta) + mui^2 * (pi_i + pi_i^2)
-errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelVar),add=TRUE,col="RED")
+errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelVar),add=TRUE,errbar.col="RED")
 
 # check the pearson residuals (if xRange is set to myT$weight)
 #EP <- (myT$Intensity - modelMeans) / sqrt(modelVar)
@@ -128,5 +128,20 @@ errbar(xRange, modelMeans, modelMeans + sqrt(modelVar), modelMeans - sqrt(modelV
 				," p = " , format(anova(M0)$"Pr(>F)"[1],digits=5),sep="" ))
 #lines( xRange, linearMeans, col="red")
 #errbar(xRange, linearMeans , linearMeans + standardError , linearMeans - standardError ,add=TRUE, col="RED")
+
+par(mfrow=(c(3,2)))
+plot( fitted(M0), residuals(M0, type="pearson"), main="linear")
+plot( fitted(M1), residuals(M1, type="pearson"), main = "Poisson")
+plot( fitted(M2), residuals(M2, type="pearson"), main = "Poisson - zero adjusted")
+plot( fitted(M3), residuals(M3, type="pearson"), main = "Neg. bin")
+plot( fitted(M4), residuals(M4, type="pearson"), main = "Neg. bin zero adjusted")
+
+
+par(mfrow=(c(3,2)))
+plot( myT$Intensity, residuals(M0, type="pearson"), main="linear")
+plot(myT$Intensity, residuals(M1, type="pearson"), main = "Poisson")
+plot(myT$Intensity, residuals(M2, type="pearson"), main = "Poisson - zero adjusted")
+plot( myT$Intensity, residuals(M3, type="pearson"), main = "Neg. bin")
+plot( myT$Intensity, residuals(M4, type="pearson"), main = "Neg. bin zero adjusted")
 
 
