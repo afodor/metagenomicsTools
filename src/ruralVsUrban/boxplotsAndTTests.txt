@@ -1,18 +1,10 @@
 rm(list=ls())
 
-setwd("C:\\ChinaData")
+setwd("G:\\PennyChinaDataset")
 
-myT <- read.table("phylaVsSamplesPlusMedata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
+myT <- read.table("phylum_taxaAsColumnsLogNorm_WithMetadata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
 
-boxplot(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
+myT <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
 
-stripchart( myT$Tenericutes ~ myT$community,
-	vertical=TRUE,method="jitter", pch=21, col=c("red"), bg=c("red"), add=TRUE )
-
-wilcox.test(myT$Tenericutes[myT$community=="rural"], myT$Tenericutes[myT$community=="urban"])
-
-wilcox.test(myT$Firmicutes[myT$community=="rural"], myT$Firmicutes[myT$community=="urban"])
-
-boxplot(myT$Firmicutes[myT$community=="rural"], myT$Firmicutes[myT$community=="urban"])
-
-wilcox.test(myT$Bacteroidetes[myT$community=="rural"], myT$Bacteroidetes[myT$community=="urban"])
+boxplot(myT$Proteobacteria ~ myT$ruralUrban)
+t.test(myT$Proteobacteria ~ myT$ruralUrban)
