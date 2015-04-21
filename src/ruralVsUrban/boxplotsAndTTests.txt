@@ -1,10 +1,12 @@
 rm(list=ls())
+library("nlme")
 
 setwd("G:\\PennyChinaDataset")
 
-myT <- read.table("phylum_taxaAsColumnsLogNorm_WithMetadata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
+myT <- read.table("genus_taxaAsColumnsLogNorm_WithMetadata.txt", sep="\t",header=TRUE,stringsAsFactors=FALSE);
 
-myT <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
+myT <- myT[ myT$readNumber == 1, ]
 
-boxplot(myT$Proteobacteria ~ myT$ruralUrban)
-t.test(myT$Proteobacteria ~ myT$ruralUrban)
+boxplot(myT$"Escherichia_Shigella"~ myT$ruralUrban)
+
+myModel <- lme( Escherichia_Shigella ~ ruralUrban, method = "REML", random = ~1 | timepoint, data = myT )
