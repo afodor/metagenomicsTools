@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
@@ -25,14 +26,14 @@ public class MetadataFileLine
 	{
 		String[] splits = s.split("\t");
 		
-		this.rgSampleID = splits[0];
+		this.rgSampleID = splits[1].replace("hpc.", "");
 		this.diagnostic = splits[7];
 		
 	}
 	
 	public static HashMap<String, MetadataFileLine> getMap() throws Exception
 	{
-		HashMap<String, MetadataFileLine> map= new HashMap<String, MetadataFileLine>();
+		HashMap<String, MetadataFileLine> map= new LinkedHashMap<String, MetadataFileLine>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_map.txt"	)));
