@@ -22,7 +22,7 @@ public class AddMetadata
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_pcoa_phylaWithMetadata.txt")));
 		
-		writer.write("sample\treadNumber\tdiseaseGroup\tquant\n");
+		writer.write("sample\treadNumber\tdiseaseGroup\tquant\t");
 		writer.write(reader.readLine() + "\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
@@ -40,7 +40,7 @@ public class AddMetadata
 			if( quant == null)
 				throw new Exception("No " +mfl.getRgSampleName() ) ;
 			
-			writer.write(quant + "\n");
+			writer.write(quant + "");
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write( "\t" + splits[x]);
