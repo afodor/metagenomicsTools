@@ -1,4 +1,4 @@
-package scripts.JobinApril2015.cjej;
+package scripts.jobin.April2015.humanHPC;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,30 +20,29 @@ public class MergeForwardBackward
 	{
 
 		File inFileF = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-						"cjej_Freads.txt");
+						"hpc_Freads.txt");
 		
 		File inFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjej_Rreads.txt");
+				"hpc_Rreads.txt");
 		
 		File mergedFile = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R.txt");
+				"hpc_taxaAsColumns_mergedF_R.txt");
 		File outFileF = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjej_FreadsNoTax.txt");
+				"hpc_FreadsNoTax.txt");
 		
 		addTag(inFileF, outFileF, "_1");
 		
-		
 		File outFileR = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjej_RreadsNoTax.txt");
+				"hpc_RreadsNoTax.txt");
 
 		addTag(inFileR, outFileR, "_2");
 		
 		File transposedFFile =  new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejF_taxaAsColumns.txt");
+				"hpcF_taxaAsColumns.txt");
 		
 
 		File transposedRFile =  new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns.txt");
+				"hpcR_taxaAsColumns.txt");
 		
 		
 		OtuWrapper.transpose(outFileF.getAbsolutePath(), transposedFFile.getAbsolutePath(), false);
@@ -60,7 +59,7 @@ public class MergeForwardBackward
 			//System.out.println(otuToFamily + " " + otuToFamily.get(s));
 		
 		File mergedFileFamily = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R_phyla.txt");
+				"hpc_taxaAsColumns_mergedF_R_phyla.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(mergedFileFamily));
 		
@@ -105,7 +104,7 @@ public class MergeForwardBackward
 		
 		
 		File mergedFileFamilyLog = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
+				"hpcR_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(mergedFileFamily);
 		
