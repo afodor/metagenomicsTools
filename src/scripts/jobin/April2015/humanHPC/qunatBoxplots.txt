@@ -1,0 +1,13 @@
+rm(list=ls())
+
+setwd("C:\\Jobin_April_2015");
+
+myT <- read.table("pancreasQuantsPlusAssignments.txt", header=TRUE, sep="\t")
+
+boxplot( myT$quant ~ myT$diseaseCat ) 
+
+t.test( myT$quant[myT$diseaseCat == 'C'],myT$quant[myT$diseaseCat == 'N'] )
+
+t.test( myT$quant[myT$diseaseCat == 'C'],myT$quant[myT$diseaseCat == 'I'] )
+
+t.test( myT$quant[myT$diseaseCat == 'N'],myT$quant[myT$diseaseCat == 'I'] )

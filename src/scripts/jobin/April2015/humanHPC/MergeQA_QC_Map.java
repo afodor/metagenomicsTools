@@ -22,7 +22,7 @@ public class MergeQA_QC_Map
 				ConfigReader.getJobinApril2015Dir() + File.separator + 
 						"pancreasQuantsPlusAssignments.txt")));
 		
-		writer.write("id\tdieseaseCat\tquant\n");
+		writer.write("id\tdiseaseCat\tquant\n");
 		
 		for(String s : map.keySet())
 		{
