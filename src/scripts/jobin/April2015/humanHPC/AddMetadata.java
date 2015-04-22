@@ -21,13 +21,23 @@ public class AddMetadata
 				"hpc_taxaAsColumns_mergedF_R_phyla.txt");
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + 	"hpc_pcoa_phyla.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator 
+			+ "hpcR_taxaAsColumns_mergedF_R_phylaLogNormal.txt")));
+		//+ 	"hpc_pcoa_phyla.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_pcoa_phylaWithMetadata.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
+			//+ "hpc_pcoa_phylaWithMetadata.txt")));
 		
-		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup\tquant\t");
-		writer.write(reader.readLine() + "\n");
+		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup\tquant");
+		
+		String[] topSplits = reader.readLine().split("\t");
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write("\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -36,7 +46,7 @@ public class AddMetadata
 			MetadataFileLine mfl = metaMap.get(splits[0].replaceAll("\"", "").split("_")[0]);
 			
 			writer.write( splits[0].replaceAll("\"", "").split("_")[0] + "\t" );
-			writer.write( splits[0].charAt(splits[0].length() -2) + "\t");
+			writer.write( splits[0].charAt(splits[0].length() -1) + "\t");
 			//System.out.println(splits[0].replaceAll("\"", "").split("_")[0]);
 			writer.write(baseWrapper.getNumberSequences(splits[0].replaceAll("\"", "")) + "\t");
 			writer.write(baseWrapper.getShannonEntropy(splits[0].replaceAll("\"", "")) + "\t");
