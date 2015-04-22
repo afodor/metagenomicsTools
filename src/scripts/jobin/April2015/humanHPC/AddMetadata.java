@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -16,13 +17,16 @@ public class AddMetadata
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMapBySampleID();
 		HashMap<String, Double> quantMap = MergeQA_QC_Map.getQuantEstimates();
 		
+		OtuWrapper baseWrapper = new OtuWrapper(ConfigReader.getJobinApril2015Dir() + File.separator + 
+				"hpc_taxaAsColumns_mergedF_R_phyla.txt");
+		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + 	"hpc_pcoa_phyla.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_pcoa_phylaWithMetadata.txt")));
 		
-		writer.write("sample\treadNumber\tdiseaseGroup\tquant\t");
+		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup\tquant\t");
 		writer.write(reader.readLine() + "\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
@@ -33,6 +37,11 @@ public class AddMetadata
 			
 			writer.write( splits[0].replaceAll("\"", "").split("_")[0] + "\t" );
 			writer.write( splits[0].charAt(splits[0].length() -2) + "\t");
+			//System.out.println(splits[0].replaceAll("\"", "").split("_")[0]);
+			writer.write(baseWrapper.getNumberSequences(splits[0].replaceAll("\"", "")) + "\t");
+			writer.write(baseWrapper.getShannonEntropy(splits[0].replaceAll("\"", "")) + "\t");
+			
+			
 			writer.write(mfl.getDiagnostic() + "\t");
 			
 			Double quant = quantMap.get(mfl.getRgSampleName());
