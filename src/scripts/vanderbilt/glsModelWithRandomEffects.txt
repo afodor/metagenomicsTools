@@ -19,8 +19,6 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT = myT[myT$time=="pre",]
-	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
 	pValuesSubject <- vector()
@@ -36,17 +34,18 @@ for(taxa in taxaLevels )
 		{
 			bug <- subTable[,i]
 			treatment <- subTable$treatment
-			#time<- subTable$time
+			time<- subTable$time
 			subjectID <- subTable$subjectID
 			stoolOrSwab<- subTable$stoolOrSwab
 			myFrame <- data.frame( bug,treatment,subjectID , stoolOrSwab)
 			
-			fullModel <- gls( bug~  treatment + stoolOrSwab, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
-			reducedModel <- gls( bug~  treatment + stoolOrSwab, method="REML",data = myFrame )
+			fullModel <- gls( bug~  treatment + stoolOrSwab + time, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
+			reducedModel <- gls( bug~  treatment + stoolOrSwab + time, method="REML",data = myFrame )
 			
 			pValuesTreatment[index] <-anova(fullModel)$"p-value"[2]
-			#pValuesTime[index] <- anova(fullModel)$"p-value"[3]
 			pValuesStoolOrSwab[index] <- anova(fullModel)$"p-value"[3]
+			pValuesTime[index] <- anova(fullModel)$"p-value"[4]
+			
 			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
@@ -70,10 +69,10 @@ for(taxa in taxaLevels )
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesTreatment,pValuesStoolOrSwab, pValuesSubject,intraclassCoefficient ) 
+	dFrame <- data.frame( names, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool_pre_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
