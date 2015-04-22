@@ -15,7 +15,7 @@ public class MergeQA_QC_Map
 	public static void main(String[] args) throws Exception
 	{
 
-		HashMap<String, MetadataFileLine> map = MetadataFileLine.getMapBySampleID();
+		HashMap<String, MetadataFileLine> map = MetadataFileLine.getMapBySampleName();
 		HashMap<String, Double> quantMap = getQuantEstimates();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
@@ -40,7 +40,7 @@ public class MergeQA_QC_Map
 		writer.flush();  writer.close();
 	}
 	
-	private static HashMap<String, Double> getQuantEstimates() throws Exception
+	static HashMap<String, Double> getQuantEstimates() throws Exception
 	{
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
 		

@@ -19,6 +19,11 @@ public class MetadataFileLine
 		return diagnostic;
 	}
 	
+	public String getRgSampleName()
+	{
+		return rgSampleName;
+	}
+	
 	public String getRgSampleID()
 	{
 		return rgSampleID;
@@ -80,7 +85,7 @@ public class MetadataFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, MetadataFileLine> map =getMapBySampleID();
+		HashMap<String, MetadataFileLine> map =getMapBySampleName();
 		
 		for(String s : map.keySet())
 			System.out.println(s);

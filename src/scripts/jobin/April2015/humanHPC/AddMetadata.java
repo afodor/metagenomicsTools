@@ -13,16 +13,16 @@ public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
-		/*
-		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMapBySampleName();
+		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMapBySampleID();
+		HashMap<String, Double> quantMap = MergeQA_QC_Map.getQuantEstimates();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + 	"pcoa_phyla.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + 	"hpc_pcoa_phyla.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + "pcoa_phyla_withMetadata.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_pcoa_phylaWithMetadata.txt")));
 		
-		writer.write("sample\tread\tgroupID\tcageID\tmouse\ttimepoint\tinfected\t");
+		writer.write("sample\treadNumber\tdiseaseGroup\tquant\n");
 		writer.write(reader.readLine() + "\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
@@ -33,11 +33,14 @@ public class AddMetadata
 			
 			writer.write( splits[0].replaceAll("\"", "").split("_")[0] + "\t" );
 			writer.write( splits[0].charAt(splits[0].length() -2) + "\t");
-			writer.write(mfl.getGroupID() + "\t");
-			writer.write(mfl.getCageID() + "\t");
-			writer.write(mfl.getMouse() + "\t");
-			writer.write("t_" + mfl.getTimepoint() + "\t");
-			writer.write(mfl.getInfected() );
+			writer.write(mfl.getDiagnostic() + "\t");
+			
+			Double quant = quantMap.get(mfl.getRgSampleName());
+			
+			if( quant == null)
+				throw new Exception("No " +mfl.getRgSampleName() ) ;
+			
+			writer.write(quant + "\n");
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write( "\t" + splits[x]);
@@ -48,6 +51,5 @@ public class AddMetadata
 		
 		writer.flush(); writer.close();
 		reader.close();
-		*/
 	}
 }
