@@ -41,12 +41,13 @@ for(taxa in taxaLevels )
 			
 			fullModel <- gls( bug~  treatment + stoolOrSwab + time, method="REML",correlation=corCompSymm(form=~1|factor(subjectID)),data = myFrame )
 			reducedModel <- gls( bug~  treatment + stoolOrSwab + time, method="REML",data = myFrame )
+			fullModelLME <- lme( bug~  treatment + stoolOrSwab + time, method="REML", random = ~1|subjectID, data = myFrame)
 			
-			pValuesTreatment[index] <-anova(fullModel)$"p-value"[2]
-			pValuesStoolOrSwab[index] <- anova(fullModel)$"p-value"[3]
-			pValuesTime[index] <- anova(fullModel)$"p-value"[4]
+			pValuesTreatment[index] <-anova(fullModelLME)$"p-value"[2]
+			pValuesStoolOrSwab[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesTime[index] <- anova(fullModelLME)$"p-value"[4]
 			
-			pValuesSubject[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
+			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
 			label = paste(  names(subTable)[i] , " ; stoolVsSqabP =  ", format(pValuesStoolOrSwab[index],3) , " ; subject p=" , format(pValuesSubject[index],digits=3) ,
