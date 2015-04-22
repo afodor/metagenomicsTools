@@ -15,7 +15,7 @@ public class MergeQA_QC_Map
 	public static void main(String[] args) throws Exception
 	{
 
-		HashMap<String, MetadataFileLine> map = MetadataFileLine.getMap();
+		HashMap<String, MetadataFileLine> map = MetadataFileLine.getMapBySampleID();
 		HashMap<String, Double> quantMap = getQuantEstimates();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(

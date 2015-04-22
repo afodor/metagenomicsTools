@@ -11,6 +11,7 @@ import utils.ConfigReader;
 public class MetadataFileLine
 {
 	private final String rgSampleID;
+	private final String rgSampleName;
 	private final String diagnostic;
 	
 	public String getDiagnostic()
@@ -26,12 +27,36 @@ public class MetadataFileLine
 	{
 		String[] splits = s.split("\t");
 		
-		this.rgSampleID = splits[1].replace("hpc.", "");
+		this.rgSampleID = splits[0];
+		this.rgSampleName = splits[1].replace("hpc.", "");
 		this.diagnostic = splits[7];
 		
 	}
 	
-	public static HashMap<String, MetadataFileLine> getMap() throws Exception
+	public static HashMap<String, MetadataFileLine> getMapBySampleName() throws Exception
+	{
+		HashMap<String, MetadataFileLine> map= new LinkedHashMap<String, MetadataFileLine>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+			ConfigReader.getJobinApril2015Dir() + File.separator + "hpc_map.txt"	)));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s =reader.readLine())
+		{
+			MetadataFileLine mfl = new MetadataFileLine(s);
+			
+			if( map.containsKey(mfl.rgSampleName) )
+				throw new Exception("No");
+			
+			map.put(mfl.rgSampleName, mfl);
+		}
+		
+		return map;
+	}
+	
+	
+	public static HashMap<String, MetadataFileLine> getMapBySampleID() throws Exception
 	{
 		HashMap<String, MetadataFileLine> map= new LinkedHashMap<String, MetadataFileLine>();
 		
@@ -55,7 +80,7 @@ public class MetadataFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, MetadataFileLine> map =getMap();
+		HashMap<String, MetadataFileLine> map =getMapBySampleID();
 		
 		for(String s : map.keySet())
 			System.out.println(s);
