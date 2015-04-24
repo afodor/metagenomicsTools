@@ -10,7 +10,7 @@ myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(c("character","character","numeric","numeric","character"), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-myT <- myT[myT$readNumber==1,]
+myT <- myT[myT$readNumber==2,]
 
 myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O",]
 	
@@ -22,4 +22,5 @@ for( i in vals)
 	pValue = anova(M)$"Pr(>F)"[1]
 		
 	boxplot( myT[,i]  ~ myT$diseaseGroup,main=paste(names(myT)[i], ";", format(pValue,numDigits=3)))
+	stripchart(myT[,i]  ~ myT$diseaseGroup,add=TRUE,vertical = TRUE, pch = 21)
 }
