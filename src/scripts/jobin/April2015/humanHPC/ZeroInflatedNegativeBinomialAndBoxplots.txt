@@ -2,6 +2,8 @@
 rm(list=ls())
 
 setwd("C:\\Jobin_April_2015")
+library("pscl")
+library("lmtest")
 
 inFileName="hpc_taxaAsColumns_mergedF_R_phylaWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
@@ -33,13 +35,17 @@ for( i in 1:nrow(myT))
 	}
 }
 
+myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O",]
 	
-par(mfrow=c(3,2))
+par(mfrow=c(4,4))
 vals <- c(4,6:ncol(myT))
 for( i in vals)
 {
-	if( sum(myT[,i] >0 ) > nrow(myT)/4)
+	if( i >= 9 )
 	{
-		boxplot( myT[,i]  ~ myT$diseaseGroup,main=names(myT)[i])
+		M <- zeroinfl( myTNoControls[,i] ~ myTNoControls$diseaseGroup|myTNoControls$diseaseGroup, link = "logit")
+		pValue = lrtest(M)$"Pr(>Chisq)"[2]
+		
+		boxplot( myT[,i]  ~ myT$diseaseGroup,main=paste(names(myT)[i], ";", pValue))
 	}
 }
