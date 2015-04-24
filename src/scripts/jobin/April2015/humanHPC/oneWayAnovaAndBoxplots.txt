@@ -3,12 +3,19 @@ rm(list=ls())
 
 setwd("C:\\Jobin_April_2015")
 
-myT <- read.table("hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt", header=TRUE, sep="\t")
-
-for( i in 7:col(myT))
+inFileName="hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
+myT <- read.table(inFileName, header=TRUE, sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(c("text","text","numeric","numeric","text"), rep("numeric", numCols-6))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+myT <- myT[myT$readNumber==1,]
+	
+par(mfrow=c(3,2))
+vals <- c(4,6:ncol(myT))
+for( i in vals)
 {
 	if( sum(myT[,i] >0 ) > nrow(myT)/4)
 	{
-		boxplot( myT[,i]  ~ myT$diseaseGroup)
+		boxplot( myT[,i]  ~ myT$diseaseGroup,main=names(myT)[i])
 	}
 }
