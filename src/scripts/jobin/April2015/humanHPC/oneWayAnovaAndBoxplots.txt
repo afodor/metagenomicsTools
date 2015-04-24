@@ -3,12 +3,36 @@ rm(list=ls())
 
 setwd("C:\\Jobin_April_2015")
 
-inFileName="hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
+inFileName="hpc_taxaAsColumns_mergedF_R_phylaWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
-myColClasses <- c(c("text","text","numeric","numeric","text"), rep("numeric", numCols-6))
+myColClasses <- c(c("character","character","numeric","numeric","character"), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 myT <- myT[myT$readNumber==1,]
+
+myRowSums <- vector()
+
+for( i in 1:nrow(myT))
+{
+	myRowSums[i] <-0;
+	
+	for( j in 7: ncol(myT))
+	{
+		print(paste(i, " " , j))
+		myRowSums[i] = myRowSums[i] + myT[i,j]
+	}
+}
+
+avgPerSample <- mean(myRowSums)
+
+for( i in 1:nrow(myT))
+{
+	for( j in 7: ncol(myT))
+	{
+		myT[i,j] = round(avgPerSample *  myT[i,j] / myRowSums[i])
+	}
+}
+
 	
 par(mfrow=c(3,2))
 vals <- c(4,6:ncol(myT))
