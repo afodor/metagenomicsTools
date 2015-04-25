@@ -27,7 +27,7 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 9:ncol(myT)) 
+	for( i in 13:ncol(myT)) 
 	{	
 		subTable <- myT[ ! is.na(myT[,i]) ,]
 		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
@@ -73,6 +73,10 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
+	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
+	dFrame$adjustedPSubject <- p.adjust(dFrame$pValuesSubject, method = "BH" )
+	dFrame$adjustedpValuesStoolOrSwab <- p.adjust(dFrame$pValuesStoolOrSwab, method = "BH" )
+	
 	
 	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
