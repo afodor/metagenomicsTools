@@ -20,11 +20,11 @@ for( tax in taxa )
 		names <- vector()
 				
 		index <-1
-		for( i in 13:ncol(myT))
+		for( i in 14:ncol(myT))
 		{
-			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$sugbev_plusjuice))
+			subsetVals <- which(myT$sanVsSol!="SAN" & !is.na(myT$sanVsSol) & !is.na(myT$updatedsugbev_plusjuice))
 			subset <- as.numeric( myT[subsetVals ,i])
-			subsetSugar <- as.numeric( myT$sugbev_plusjuice[subsetVals])
+			subsetSugar <- as.numeric( myT$updatedsugbev_plusjuice[subsetVals])
 			subsetFrame <- data.frame( subset , subsetSugar )	
 				
 			if( sum(subset != 0,na.rm=TRUE) >= length(subset)/4 ) 
