@@ -24,6 +24,7 @@ for(taxa in taxaLevels )
 	pValuesSubject <- vector()
 	pValuesStoolOrSwab <- vector()
 	intraclassCoefficient <- vector()
+	averageNormCounts <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -43,6 +44,7 @@ for(taxa in taxaLevels )
 			reducedModel <- gls( bug~  treatment + stoolOrSwab + time, method="REML",data = myFrame )
 			fullModelLME <- lme( bug~  treatment + stoolOrSwab + time, method="REML", random = ~1|subjectID, data = myFrame)
 			
+			averageNormCounts[index] <- mean(bug)
 			pValuesTreatment[index] <-anova(fullModelLME)$"p-value"[2]
 			pValuesStoolOrSwab[index] <- anova(fullModelLME)$"p-value"[3]
 			pValuesTime[index] <- anova(fullModelLME)$"p-value"[4]
@@ -70,7 +72,7 @@ for(taxa in taxaLevels )
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
+	dFrame <- data.frame( names,averageNormCounts, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
