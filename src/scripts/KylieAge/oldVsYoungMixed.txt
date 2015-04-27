@@ -14,5 +14,11 @@ for( i in 7:8)
 	animalID <- factor(myT$animalID)
 	myFrame <- data.frame( pca, date, age, animalID)
 	fullModel <- gls( pca~  date + age, method="REML",correlation=corCompSymm(form=~1|animalID), data=myFrame)			
+	fullModelLME <- lme( pca ~  date + age, method="REML", random = ~1|animalID, data = myFrame)
 	anova(fullModel)
+	anova(fullModelLME)
+	
+	reducedModel <-gls( pca~  date + age, method="REML", data=myFrame)		
+	
+	anova(fullModel, reducedModel)$"p-value"
 }
