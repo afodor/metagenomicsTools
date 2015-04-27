@@ -75,6 +75,8 @@ public class ConfigReader
 	public static final String MICROBES_VS_METABOLITES_DIR = "MICROBES_VS_METABOLITES_DIR";
 	public static final String VANDERBILT_DIR = "VANDERBILT_DIR";
 	public static final String KYLIE_AGE_DIR = "KYLIE_AGE";
+	public static final String KYLIE_16S_DIR= "KYLIE_16S_DIR";
+	
 	
 	public static final String TANYA_DIR="TANYA_DIR";
 	
@@ -138,6 +140,11 @@ public class ConfigReader
 	public static String getMetabolitesCaseControl() throws Exception
 	{
 		return getConfigReader().getAProperty(METABOLITES_CASE_CONTROL);
+	}
+	
+	public static String getKylie16SDir() throws Exception
+	{
+		return getConfigReader().getAProperty(KYLIE_16S_DIR);
 	}
 	
 	public static String getKylieAgeDir() throws Exception
