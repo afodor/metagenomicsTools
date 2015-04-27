@@ -10,14 +10,16 @@ import utils.ConfigReader;
 
 public class UpdatedPhenotypeParser2
 {
-	public static HashMap<Integer, Double> getBeverageMap() throws Exception
+	public static String SUGBEV_PLUS_JUICE = "sugbev_plusjuice";
+	
+	public static HashMap<Integer, Double> getBeverageMap(String columnName) throws Exception
 	{
 		HashMap<Integer, Double> map = new LinkedHashMap<Integer, Double>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getGoranTrialDir() + File.separator + "sol16sdiet041915AF.txt")));
 		
-		int index = getIndex(reader.readLine());
+		int index = getIndex(reader.readLine(), columnName);
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -34,12 +36,12 @@ public class UpdatedPhenotypeParser2
 		return map;
 	}
 	
-	private static int getIndex(String header) throws Exception
+	private static int getIndex(String header, String columnName) throws Exception
 	{
 		String[] splits = header.split("\t");
 		
 		for( int x=0; x < splits.length; x++)
-			if( splits[x].equals("sugbev_plusjuice"))
+			if( splits[x].equals(columnName))
 				return x;
 		
 		throw new Exception("Could not find " + header);
@@ -47,7 +49,7 @@ public class UpdatedPhenotypeParser2
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<Integer, Double> map = getBeverageMap();
+		HashMap<Integer, Double> map = getBeverageMap(SUGBEV_PLUS_JUICE);
 		
 		for( int i : map.keySet())
 			System.out.println(i + " " + map.get(i));

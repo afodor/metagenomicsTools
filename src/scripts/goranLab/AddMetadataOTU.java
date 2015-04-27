@@ -48,7 +48,7 @@ public class AddMetadataOTU
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
 		HashMap<Integer, UpdatedPhenotypeParser> updateMap = UpdatedPhenotypeParser.getMetaMap();
-		HashMap<Integer, Double> updateMap2 = UpdatedPhenotypeParser2.getBeverageMap();
+		HashMap<Integer, Double> updateMap2 = UpdatedPhenotypeParser2.getBeverageMap(UpdatedPhenotypeParser2.SUGBEV_PLUS_JUICE);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logFileToNormalize));
 		
