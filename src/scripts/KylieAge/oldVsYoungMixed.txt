@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("D:\\Kylie16S")
+
+library("nlme")
+
+myT <- read.table("PCA_PIVOT_16SfamilyWithOldYoung.txt", sep="\t", header=TRUE)
+
+for( i in 7:8)
+{
+	pca <- myT[,i]
+	date <- myT$date
+	age <- myT$age
+	animalID <- factor(myT$animalID)
+	myFrame <- data.frame( pca, date, age, animalID)
+	fullModel <- gls( pca~  date + age, method="REML",correlation=corCompSymm(form=~1|animalID), data=myFrame)			
+	anova(fullModel)
+}
