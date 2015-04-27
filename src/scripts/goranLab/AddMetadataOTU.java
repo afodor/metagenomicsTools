@@ -48,7 +48,8 @@ public class AddMetadataOTU
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMetaMap();
 		HashMap<Integer, PhenotypeDataLine> phenoMap = PhenotypeDataLine.getMap();
 		HashMap<Integer, UpdatedPhenotypeParser> updateMap = UpdatedPhenotypeParser.getMetaMap();
-		HashMap<Integer, Double> updateMap2 = UpdatedPhenotypeParser2.getBeverageMap(UpdatedPhenotypeParser2.SUGBEV_PLUS_JUICE);
+		HashMap<Integer, Double> sug_Bev_updateMap2 = UpdatedPhenotypeParser2.getBeverageMap(UpdatedPhenotypeParser2.SUGBEV_PLUS_JUICE);
+		HashMap<Integer, Double> liverFat_updateMap2 = UpdatedPhenotypeParser2.getBeverageMap(UpdatedPhenotypeParser2.HFFSOL3T);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logFileToNormalize));
 		
@@ -58,7 +59,8 @@ public class AddMetadataOTU
 		
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tm_tsug\t");
 		
-		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\tsugbev_plusjuice\tupdatedsugbev_plusjuice\t");
+		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\tsugbev_plusjuice\tupdatedsugbev_plusjuice\t"
+				+ UpdatedPhenotypeParser2.HFFSOL3T + "\t");
 		
 		writer.write("shannonDiversity\tnumSequences");
 		
@@ -91,7 +93,8 @@ public class AddMetadataOTU
 							valueOrNA(pdl.getmAddedSugarMedianSplit()) + "\t" +
 							valueOrNA(pdl.getmFructoseMedianSplit()) + "\t" + 
 							valueOrNA(updateMap.get(mfl.getPatientNumber()).getSugbev_plusjuice()) + "\t" + 
-							valueOrNA(updateMap2.get(mfl.getPatientNumber()))+ "\t" + 
+							valueOrNA(sug_Bev_updateMap2.get(mfl.getPatientNumber()))+ "\t" + 
+							valueOrNA(liverFat_updateMap2.get(mfl.getPatientNumber()))+ "\t" + 
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
 			
 			for( int x=1; x < splits.length; x++)

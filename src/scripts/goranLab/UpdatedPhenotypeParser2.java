@@ -11,6 +11,8 @@ import utils.ConfigReader;
 public class UpdatedPhenotypeParser2
 {
 	public static String SUGBEV_PLUS_JUICE = "sugbev_plusjuice";
+	public static String HFFSOL3T = "HFFSOL3T";
+
 	
 	public static HashMap<Integer, Double> getBeverageMap(String columnName) throws Exception
 	{
@@ -30,7 +32,10 @@ public class UpdatedPhenotypeParser2
 			if( map.containsKey(parseInt))
 				throw new Exception("No");
 			
-			map.put(parseInt, Double.parseDouble(splits[index]));
+			if( splits[index].trim().length() > 0 )
+			{
+				map.put(parseInt, Double.parseDouble(splits[index]));
+			}
 		}
 		
 		return map;
