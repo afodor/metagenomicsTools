@@ -76,6 +76,7 @@ public class ConfigReader
 	public static final String VANDERBILT_DIR = "VANDERBILT_DIR";
 	public static final String KYLIE_AGE_DIR = "KYLIE_AGE";
 	public static final String KYLIE_16S_DIR= "KYLIE_16S_DIR";
+	public static final String KYLIE_DROPBOX_DIR = "KYLIE_DROPBOX_DIR";
 	
 	
 	public static final String TANYA_DIR="TANYA_DIR";
@@ -125,6 +126,11 @@ public class ConfigReader
 	public static String getGoranTrialDir() throws Exception
 	{
 		return getConfigReader().getAProperty(GORAN_TRIAL);
+	}
+	
+	public static String getKylieDropoxDir() throws Exception
+	{
+		return getConfigReader().getAProperty(KYLIE_DROPBOX_DIR);
 	}
 	
 	public static String getSvmDir() throws Exception

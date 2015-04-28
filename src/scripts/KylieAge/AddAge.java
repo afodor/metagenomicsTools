@@ -11,7 +11,7 @@ import utils.ConfigReader;
 
 public class AddAge
 {
-	private static HashMap<String, String> getAgeMap() throws Exception
+	public static HashMap<String, String> getAgeMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		
