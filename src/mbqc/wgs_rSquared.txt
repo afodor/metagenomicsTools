@@ -1,0 +1,19 @@
+rm(list=ls())
+
+setwd("G:\\MBQC\\amnon_wgs")
+
+myT <- read.table("wgs.oral_col1_2Removed.txt", header=TRUE, sep="\t")
+
+str(myT)
+
+pearson <- vector()
+pearsonLogged <- vector()
+
+for( i in 2:ncol(myT))
+{
+	subset<- myT[ !is.na(myT[,i]) & ! is.na(myT[,1]),]
+	pearson[i] <- cor(subset[,i], subset[,1])
+	pearsonLogged[i] <- cor(log(subset[,i]+0.0001), log(subset[,1]+0.0001))
+}
+
+boxplot(pearson, pearsonLogged)
