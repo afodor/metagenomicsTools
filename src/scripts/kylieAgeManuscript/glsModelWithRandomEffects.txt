@@ -55,7 +55,7 @@ for(taxa in taxaLevels )
 		}		
 	}
 	
-	dFrame <- data.frame( pValuesTime,pValuesDiet ,pValuesSubjectCage ,intraclassCoefficient ,averageNormCounts ,names  ) 
+	dFrame <- data.frame(names , pValuesTime,pValuesDiet ,pValuesSubjectCage ,intraclassCoefficient ,averageNormCounts  ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet , method = "BH" )
 	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
