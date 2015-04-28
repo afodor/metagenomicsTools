@@ -28,14 +28,14 @@ for(taxa in taxaLevels )
 	names <- vector()
 	
 	index <- 1
-	for( i in 7:ncol(myT)) 
+	for( i in 8:ncol(myT)) 
 	{	
 		subTable <- myT[ ! is.na(myT[,i]) ,]
 		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
 		{
 			bug <- subTable[,i]
 			diet <- subTable$diet
-			time<- subTable$dateAsFactor
+			time<- subTable$days
 			subjectID <- subTable$animalID
 			cage <- subTable$cage
 			age <- subTable$ageCategory

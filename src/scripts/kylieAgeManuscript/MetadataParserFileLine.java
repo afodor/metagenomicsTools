@@ -17,10 +17,16 @@ public class MetadataParserFileLine
 	private final String diet;
 	private final String cage;
 	private final String ageCategory;
+	private final int days;
 	
 	public String getSampleID()
 	{
 		return sampleID;
+	}
+	
+	public int getDays()
+	{
+		return days;
 	}
 
 	public String getAnimalID()
@@ -55,6 +61,7 @@ public class MetadataParserFileLine
 		this.sampleID= "Sample"  + Integer.parseInt(splits[0]);
 		this.animalID = splits[1];
 		this.dateAsFactor = splits[2];
+		this.days = Integer.parseInt(splits[4]);
 		this.diet = splits[5];
 		this.cage = splits[6];
 		this.ageCategory = splits[8];
