@@ -14,6 +14,19 @@ for( i in 2:ncol(myT))
 	subset<- myT[ !is.na(myT[,i]) & ! is.na(myT[,1]),]
 	pearson[i] <- cor(subset[,i], subset[,1])
 	pearsonLogged[i] <- cor(log(subset[,i]+0.0001), log(subset[,1]+0.0001))
+	
 }
 
-boxplot(pearson, pearsonLogged)
+boxplot(pearson, pearsonLogged, names=c("not logged", "logged"), ylab="pearson")
+
+windows()
+
+par(mfrow=c(5,3))
+
+for( i in 2:16)
+{
+	subset<- myT[ !is.na(myT[,i]) & ! is.na(myT[,1]),]
+	myLm <- lm(log(subset[,i]+0.0001) ~ log(subset[,1]+0.0001))
+	plot(log(subset[,1]+0.0001), log(subset[,i]+0.0001))
+	abline(myLm)
+}
