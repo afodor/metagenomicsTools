@@ -22,6 +22,7 @@ for(taxa in taxaLevels )
 	pValuesTime <- vector()
 	pValuesDiet <- vector()
 	pValuesSubjectCage <- vector()
+	pValuesAge <- vector()
 	intraclassCoefficient <- vector()
 	averageNormCounts <- vector()
 	names <- vector()
@@ -37,15 +38,18 @@ for(taxa in taxaLevels )
 			time<- subTable$dateAsFactor
 			subjectID <- subTable$animalID
 			cage <- subTable$cage
-			myFrame <- data.frame( bug,diet,time,subjectID , cage)
+			age <- subTable$ageCategory
 			
-			fullModel <- gls( bug~  diet+ time, method="REML",correlation=corCompSymm(form=~1|cage/subjectID),data = myFrame )
-			reducedModel <- gls( bug~  diet+ time, method="REML", data = myFrame )
-			fullModelLME <- lme( bug~  diet+ time, method="REML", random = ~1|cage/subjectID, data = myFrame)
+			myFrame <- data.frame( bug,diet,time,age,subjectID , cage)
+			
+			fullModel <- gls( bug~  diet+ time+age, method="REML",correlation=corCompSymm(form=~1|cage/subjectID),data = myFrame )
+			reducedModel <- gls( bug~  diet+ time+age, method="REML", data = myFrame )
+			fullModelLME <- lme( bug~  diet+ time+age, method="REML", random = ~1|cage/subjectID, data = myFrame)
 			
 			averageNormCounts[index] <- mean(bug)
 			pValuesDiet[index] <-anova(fullModelLME)$"p-value"[2]
 			pValuesTime[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesAge[index] <- anova(fullModelLME)$"p-value"[4]
 			
 			pValuesSubjectCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
@@ -55,11 +59,12 @@ for(taxa in taxaLevels )
 		}		
 	}
 	
-	dFrame <- data.frame(names , pValuesTime,pValuesDiet ,pValuesSubjectCage ,intraclassCoefficient ,averageNormCounts  ) 
+	dFrame <- data.frame(names , pValuesTime,pValuesDiet ,pValuesSubjectCage , pValuesAge, intraclassCoefficient ,averageNormCounts  ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet , method = "BH" )
 	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 	dFrame$adjustedPSubjectCage <- p.adjust(dFrame$pValuesSubjectCage, method = "BH" )
+	dFrame$adjustedPAge <- p.adjust(dFrame$pValuesAge, method = "BH" )
 	
 	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
