@@ -28,7 +28,7 @@ public class AddMetadata
 		
 		String[] topHeaders = reader.readLine().split("\t");
 		
-		writer.write( topHeaders[0] + "\t" + "sampleID" + "\t" + "animalID\t" + 
+		writer.write( "sampleID" + "\t" + "animalID\t" + 
 		"dateAsFactor\t" + "diet\t" + "cage\t" + "ageCategory");
 		
 		for( int x=1; x < topHeaders.length; x++)
@@ -44,7 +44,7 @@ public class AddMetadata
 			if( meta == null)
 				throw new Exception("No");
 			
-			writer.write(splits[0] + "\t" + meta.getSampleID() + "\t" + meta.getAnimalID() + "\t" +
+			writer.write(meta.getSampleID() + "\t" + meta.getAnimalID() + "\t" +
 			meta.getDateAsFactor() + "\t" + meta.getDiet() + "\t" + meta.getCage() + "\t" + meta.getAgeCategory());
 			
 			for( int x=1; x < topHeaders.length; x++)
