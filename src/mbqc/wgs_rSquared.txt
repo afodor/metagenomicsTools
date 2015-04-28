@@ -27,6 +27,8 @@ for( i in 2:16)
 {
 	subset<- myT[ !is.na(myT[,i]) & ! is.na(myT[,1]),]
 	myLm <- lm(log(subset[,i]+0.0001) ~ log(subset[,1]+0.0001))
-	plot(log(subset[,1]+0.0001), log(subset[,i]+0.0001))
+	cor = cor(log(subset[,1]+0.0001),log(subset[,i]+0.0001))
+	formCor = format(cor, digits=2)
+	plot(log(subset[,1]+0.0001), log(subset[,i]+0.0001), main=paste("r=",formCor))
 	abline(myLm)
 }
