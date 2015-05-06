@@ -16,13 +16,19 @@ public class AddMetadata
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + 	"pcoa_phyla.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + 	"cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + "pcoa_phyla_withMetadata.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
 		
-		writer.write("sample\tread\tgroupID\tcageID\tmouse\ttimepoint\tinfected\t");
-		writer.write(reader.readLine() + "\n");
+		writer.write("sample\tread\tgroupID\tcageID\tmouse\ttimepoint\tinfected");
+		
+		String[] topSplits = reader.readLine().split("\t");
+		
+		for(int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write( "\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -31,7 +37,7 @@ public class AddMetadata
 			MetadataFileLine mfl = metaMap.get(splits[0].replaceAll("\"", "").split("_")[0]);
 			
 			writer.write( splits[0].replaceAll("\"", "").split("_")[0] + "\t" );
-			writer.write( splits[0].charAt(splits[0].length() -2) + "\t");
+			writer.write( splits[0].charAt(splits[0].length() -1) + "\t");
 			writer.write(mfl.getGroupID() + "\t");
 			writer.write(mfl.getCageID() + "\t");
 			writer.write(mfl.getMouse() + "\t");
