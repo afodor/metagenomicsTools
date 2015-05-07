@@ -22,12 +22,12 @@ public class AddMetadata
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator 
-			+ "hpc_taxaAsColumns_mergedF_R_phyla.txt")));
+			+ "hpcR_taxaAsColumns_mergedF_R_phylaLogNormal.txt")));
 		//+ 	"hpc_pcoa_phyla.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"hpc_taxaAsColumns_mergedF_R_phylaWithMetadata.txt")));
+				"hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
 			//+ "hpc_pcoa_phylaWithMetadata.txt")));
 		
 		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup\tquant");

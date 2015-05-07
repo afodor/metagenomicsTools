@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-setwd("C:\\Jobin_April_2015")
+setwd("C:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
 
@@ -10,7 +10,7 @@ myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(c("character","character","numeric","numeric","character"), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-myT <- myT[myT$readNumber==2,]
+myT <- myT[myT$readNumber==1,]
 
 myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O",]
 	
