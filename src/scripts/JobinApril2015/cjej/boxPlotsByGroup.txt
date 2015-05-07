@@ -11,6 +11,8 @@ myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
 myT <- myT[myT$read==1,]
 
+daysInfected <- c (3,6,10,14)
+
 names <- vector()
 index <-1
 for( i in 10:ncol(myT))
@@ -22,9 +24,10 @@ for( i in 10:ncol(myT))
 		
 		for( group in c(1:4))
 		{
+			label = paste( names[index], " group=", group, " days infected=",daysInfected[group],sep="")
 			bug <- myT[ myT$groupID == group ,i]
 			timepoint <- myT[myT$groupID==group,]$numericTime
-			plot( bug ~ timepoint, main = names[index])
+			plot( bug ~ timepoint, main = label)
 		}
 		index <- index + 1
 		windows()
