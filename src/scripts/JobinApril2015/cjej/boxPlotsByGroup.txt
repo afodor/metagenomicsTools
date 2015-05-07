@@ -30,7 +30,7 @@ for( i in 10:ncol(myT))
 			label = paste( names[index], " group=", group, " days infected=",daysInfected[group],sep="")
 			bug <- myT[ myT$groupID == group ,i]
 			timepoint <- myT[myT$groupID==group,]$numericTime
-			myColors <- ifelse(timepoint < 12 , "blue", "red")
+			myColors <- ifelse(timepoint <= 14 , "blue", "red")
 			plot( bug ~ timepoint, main = label,ylim=c(minVal,maxVal),ylab=names[index],cex.main=0.9,
 			col = myColors)
 		}
