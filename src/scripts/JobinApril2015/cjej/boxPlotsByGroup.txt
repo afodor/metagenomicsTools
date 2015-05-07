@@ -13,6 +13,7 @@ myT <- myT[myT$read==1,]
 
 daysInfected <- c (3,6,10,14)
 
+pdf("phyla.pdf")
 names <- vector()
 index <-1
 for( i in 10:ncol(myT))
@@ -21,16 +22,18 @@ for( i in 10:ncol(myT))
 	{
 		par(mfrow=c(2,2))
 		names[index] = names(myT)[i]
+		minVal = min( myT[ myT$groupID >0, i ])
+		maxVal = max( myT[ myT$groupID >0, i ])
 		
 		for( group in c(1:4))
 		{
 			label = paste( names[index], " group=", group, " days infected=",daysInfected[group],sep="")
 			bug <- myT[ myT$groupID == group ,i]
 			timepoint <- myT[myT$groupID==group,]$numericTime
-			plot( bug ~ timepoint, main = label)
+			plot( bug ~ timepoint, main = label,ylim=c(minVal,maxVal),ylab=names[index],cex.main=0.9)
 		}
 		index <- index + 1
-		windows()
 	}
 		
 }
+dev.off()
