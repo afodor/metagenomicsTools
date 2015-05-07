@@ -1,0 +1,33 @@
+
+rm(list=ls())
+
+setwd("G:\\Jobin_April_2015\\secondRun")
+
+inFileName <- "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c("character",rep("numeric", 4),rep("character", 3), rep("numeric", numCols-8))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+myT <- myT[myT$read==1,]
+
+names <- vector()
+index <-1
+for( i in 9:ncol(myT))
+{
+	if( sum(myT[,i] >0) > nrow(myT) / 10)
+	{
+		par(mfrow=c(2,2))
+		names[index] = names(myT)[i]
+		
+		for( group in c(1:4))
+		{
+			bug <- myT[ myT$groupID == group ,i]
+			timepoint <- myT[myT$groupID==group,]$timepoint
+			plot( bug ~ timepoint, main = names[index])
+		}
+		index <- index + 1
+		windows()
+	}
+		
+}
