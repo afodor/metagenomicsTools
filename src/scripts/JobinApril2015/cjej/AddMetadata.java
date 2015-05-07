@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
@@ -26,6 +27,22 @@ public class AddMetadata
 		else throw new Exception("Unknow group id " + group);
 	}
 	
+	private static int getNumericTime(String time) throws Exception
+	{
+		if( time.equals("NC101") || time.equals("H20"))
+			return -1;
+		
+		time = time.replace("t_","");
+		
+		String firstToken = new StringTokenizer(time, "+").nextToken();
+		
+		if( time.indexOf("+") == -1 ) 
+			return Integer.parseInt(firstToken);
+		
+		return Integer.parseInt(firstToken) + 12;
+		
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMap();
@@ -36,7 +53,7 @@ public class AddMetadata
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getJobinApril2015Dir() + File.separator + "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
 		
-		writer.write("sample\tread\tgroupID\tcageID\tdayOfInfection\tmouse\ttimepoint\tinfected");
+		writer.write("sample\tread\tgroupID\tcageID\tdayOfInfection\tnumericTime\tmouse\ttimepoint\tinfected");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -56,6 +73,7 @@ public class AddMetadata
 			writer.write(mfl.getGroupID() + "\t");
 			writer.write(mfl.getCageID() + "\t");
 			writer.write( getDayOfInfection(mfl.getGroupID()) + "\t");
+			writer.write( getNumericTime(mfl.getTimepoint()) + "\t");
 			writer.write(mfl.getMouse() + "\t");
 			writer.write("t_" + mfl.getTimepoint() + "\t");
 			writer.write(mfl.getInfected() );

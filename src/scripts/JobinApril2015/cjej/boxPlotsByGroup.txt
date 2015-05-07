@@ -6,14 +6,14 @@ setwd("G:\\Jobin_April_2015\\secondRun")
 inFileName <- "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
-myColClasses <- c("character",rep("numeric", 4),rep("character", 3), rep("numeric", numCols-8))
+myColClasses <- c("character",rep("numeric", 5),rep("character", 3), rep("numeric", numCols-9))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
 myT <- myT[myT$read==1,]
 
 names <- vector()
 index <-1
-for( i in 9:ncol(myT))
+for( i in 10:ncol(myT))
 {
 	if( sum(myT[,i] >0) > nrow(myT) / 10)
 	{
@@ -23,7 +23,7 @@ for( i in 9:ncol(myT))
 		for( group in c(1:4))
 		{
 			bug <- myT[ myT$groupID == group ,i]
-			timepoint <- myT[myT$groupID==group,]$timepoint
+			timepoint <- myT[myT$groupID==group,]$numericTime
 			plot( bug ~ timepoint, main = names[index])
 		}
 		index <- index + 1
