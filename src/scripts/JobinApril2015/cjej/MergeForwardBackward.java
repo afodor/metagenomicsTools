@@ -60,7 +60,7 @@ public class MergeForwardBackward
 			//System.out.println(otuToFamily + " " + otuToFamily.get(s));
 		
 		File mergedFileFamily = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R_phyla.txt");
+				"cjejR_taxaAsColumns_mergedF_R_family.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(mergedFileFamily));
 		
@@ -105,7 +105,7 @@ public class MergeForwardBackward
 		
 		
 		File mergedFileFamilyLog = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
+				"cjejR_taxaAsColumns_mergedF_R_familyLogNormal.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(mergedFileFamily);
 		
@@ -173,10 +173,10 @@ public class MergeForwardBackward
 			{
 				String nextToken = sToken.nextToken().trim();
 				
-				if( nextToken.startsWith("p__"))
+				if( nextToken.startsWith("f__"))
 				{
 					
-					String family = nextToken.replaceAll("p__", "").replace("[", "").replace("]", "");
+					String family = nextToken.replaceAll("f__", "").replace("[", "").replace("]", "");
 					
 					if( family.length() == 0 )
 						family = "unassigned_" + getPhyla(lastToken);

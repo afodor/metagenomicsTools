@@ -3,7 +3,7 @@ rm(list=ls())
 
 setwd("C:\\Jobin_April_2015\\secondRun")
 
-inFileName <- "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt"
+inFileName <- "cjejR_taxaAsColumns_mergedF_R_familyLogNormalWithMetadata.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c("character",rep("numeric", 5),rep("character", 3), rep("numeric", numCols-9))
@@ -13,7 +13,7 @@ myT <- myT[myT$read==1,]
 
 daysInfected <- c (3,6,10,14)
 
-par(mfrow=c(3,2))
+pdf("familyNoGroup.pdf")
 names <- vector()
 index <-1
 for( i in 10:ncol(myT))
@@ -31,3 +31,5 @@ for( i in 10:ncol(myT))
 	}
 		
 }
+
+dev.off()

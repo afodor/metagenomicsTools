@@ -48,10 +48,10 @@ public class AddMetadata
 		HashMap<String, MetadataFileLine> metaMap = MetadataFileLine.getMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + 	"cjejR_taxaAsColumns_mergedF_R_phylaLogNormal.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + 	"cjejR_taxaAsColumns_mergedF_R_familyLogNormal.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getJobinApril2015Dir() + File.separator + "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
+			ConfigReader.getJobinApril2015Dir() + File.separator + "cjejR_taxaAsColumns_mergedF_R_familyLogNormalWithMetadata.txt")));
 		
 		writer.write("sample\tread\tgroupID\tcageID\tdayOfInfection\tnumericTime\tmouse\ttimepoint\tinfected");
 		
