@@ -1,0 +1,33 @@
+
+rm(list=ls())
+
+setwd("C:\\Jobin_April_2015\\secondRun")
+
+inFileName <- "cjejR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c("character",rep("numeric", 5),rep("character", 3), rep("numeric", numCols-9))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+myT <- myT[myT$read==1,]
+
+daysInfected <- c (3,6,10,14)
+
+par(mfrow=c(3,2))
+names <- vector()
+index <-1
+for( i in 10:ncol(myT))
+{
+	if( sum(myT[,i] >0) > nrow(myT) / 10)
+	{
+		names[index] = names(myT)[i]
+		
+		label = paste( names[index])
+		bug <- myT[ ,i]
+		timepoint <- myT$numericTime
+		myColors <- ifelse(timepoint <= 14 , "blue", "red")
+		plot( bug ~ timepoint, main = label,ylab=names[index],col = myColors)
+		index <- index + 1
+	}
+		
+}
