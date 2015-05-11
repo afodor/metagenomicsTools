@@ -4,9 +4,9 @@ library("nlme")
 setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 #taxaLevels <- c("phylum","class","order","family","genus")
-taxaLevels <- c("family")
+taxaLevels <- c("genus")
 
-pdf("allFamily.pdf")
+pdf("allGenus.pdf")
 #par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
 {
