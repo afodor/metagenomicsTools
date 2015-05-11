@@ -6,6 +6,7 @@ setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
 #taxaLevels <- c("phylum","class","order","family","genus")
 taxaLevels <- c("family")
 
+pdf("allFamily.pdf")
 #par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
 {
@@ -31,7 +32,7 @@ for(taxa in taxaLevels )
 	for( i in 13:ncol(myT)) 
 	{	
 		subTable <- myT[ ! is.na(myT[,i]) ,]
-		if( sum(subTable[,i] != 0) >= nrow(myT)/4 )
+		if( sum(subTable[,i] != 0) >= nrow(myT)/10 )
 		{
 			bug <- subTable[,i]
 			treatment <- subTable$treatment
@@ -66,12 +67,13 @@ for(taxa in taxaLevels )
 			
 			#if( index %% 15 == 0 ) 
 			{
-					windows()
+				#	windows()
 			#		par(mfrow=c(5,3))
 			}
 		}		
 	}
 	
+	dev.off()
 	dFrame <- data.frame( names,averageNormCounts, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
