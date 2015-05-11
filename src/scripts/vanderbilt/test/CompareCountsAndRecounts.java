@@ -16,16 +16,37 @@ public class CompareCountsAndRecounts
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getVanderbiltDir()  + File.separator + "spreadsheets" +
 						File.separator + "pivoted_familyasColumns.txt");
 		
-		for(String s : wrapper.getSampleNames())
+		for(int x=0; x < wrapper.getSampleNames().size();x++)
 		{
-			System.out.println(s);
-			HashMap<String, Integer> map = getCountsMap(s);
+			String sampleName = wrapper.getSampleNames().get(x);
+			System.out.println(sampleName);
+			HashMap<String, Double> map = getCountsMap(sampleName);
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				String otu = wrapper.getOtuNames().get(y);
+				Double expected = map.get(otu);
+				Double wrapperCount = wrapper.getDataPointsUnnormalized().get(x).get(y);
+				
+				if( expected == null)
+				{
+					if( wrapperCount != 0 )
+						throw new Exception("Fail");
+				}
+				else
+				{
+					if( Math.abs( wrapperCount - expected ) > 0.00001)
+						throw new Exception("Fail " + wrapperCount + " " + expected + " "+ otu);
+				}
+			}
 		}
+		
+		System.out.println("test passed");
 	}
 	
-	private static HashMap<String, Integer> getCountsMap(String sample) throws Exception
+	private static HashMap<String, Double> getCountsMap(String sample) throws Exception
 	{
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, Double> map = new HashMap<String, Double>();
 		
 		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getVanderbiltDir() + File.separator + 
 				"recountDir" + File.separator +  
@@ -40,7 +61,7 @@ public class CompareCountsAndRecounts
 			if( map.containsKey(key))
 				throw new Exception("No");
 			
-			map.put(key, Integer.parseInt(sToken.nextToken()));
+			map.put(key, Double.parseDouble(sToken.nextToken()));
 		}
 		
 		return map;
