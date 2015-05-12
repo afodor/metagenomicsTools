@@ -18,13 +18,13 @@ public class AddMetadata
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getKylieDropoxDir() + File.separator +
 			"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-						File.separator + "pcoa_family_rdpClassifier.txt")));
+						File.separator +"pcoa_chowOnly.txt")));
 						//+ "family_rdpClassifier.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getKylieDropoxDir() + File.separator +
 				"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-							File.separator + "pcoa_family_rdpClassifierPlusMetadata.txt")));
+							File.separator + "pcoa_chowOnlyPlusMetadata.txt")));
 							//+ "family_rdpClassifierPlusMetadata.txt"				)));
 		
 		String[] topHeaders = reader.readLine().split("\t");
@@ -40,7 +40,7 @@ public class AddMetadata
 		for(String s= reader.readLine() ; s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			MetadataParserFileLine meta = metaMap.get(splits[0]);
+			MetadataParserFileLine meta = metaMap.get(splits[0].replaceAll("\"", ""));
 			
 			if( meta == null)
 				throw new Exception("No");

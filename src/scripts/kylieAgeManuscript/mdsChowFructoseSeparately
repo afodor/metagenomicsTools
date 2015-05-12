@@ -1,0 +1,13 @@
+rm(list=ls())
+
+setwd("D:\\Kylie_Manuscript_May12_2015\\classifications\\tables\\rdpClassifier")
+myT <- read.table( "family_rdpClassifierPlusMetadata.txt", header=TRUE, sep="\t",row.names=1 )
+
+myTSub <- myT[ myT$dateAsFactor !=  "Date_baseline" &  myT$diet == "Chow", ]
+myTSubData <- myTSub[ , 7:ncol(myTSub) ]
+
+library("vegan")
+myMDS <- capscale(myTSubData~1,distance="bray")
+
+write.table(myMDS$CA$u, sep="\t", file=paste("pcoa_", "chowOnly.txt",sep=""))
+write.table(myMDS$CA$eig,file=paste("eigenValues_", "chowOnly", ".txt", sep=""), sep="\t")
