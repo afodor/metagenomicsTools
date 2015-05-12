@@ -12,7 +12,7 @@ for(taxa in taxaLevels )
     # uncomment for pcoa
 	#inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
 	
-	inFileName <- "pcoa_chowOnlyPlusMetadata.txt"
+	inFileName <- "pcoa_hFROnlyPlusMetadata.txt"
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -67,6 +67,6 @@ for(taxa in taxaLevels )
 	dFrame$adjustedPSubjectCage <- p.adjust(dFrame$pValuesSubjectCage, method = "BH" )
 	dFrame$adjustedPAge <- p.adjust(dFrame$pValuesAge, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForChowPCOA_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForhFRCOA_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
