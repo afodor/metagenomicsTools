@@ -18,13 +18,14 @@ public class AddMetadata
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getKylieDropoxDir() + File.separator +
 			"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-						File.separator + "family_rdpClassifier.txt")));
+						File.separator + "pcoa_family_rdpClassifier.txt")));
+						//+ "family_rdpClassifier.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getKylieDropoxDir() + File.separator +
 				"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-							File.separator + "family_rdpClassifierPlusMetadata.txt"
-				)));
+							File.separator + "pcoa_family_rdpClassifierPlusMetadata.txt")));
+							//+ "family_rdpClassifierPlusMetadata.txt"				)));
 		
 		String[] topHeaders = reader.readLine().split("\t");
 		
