@@ -69,4 +69,9 @@ for(taxa in taxaLevels )
 	
 	write.table(dFrame, file=paste("pValuesForhFRCOA_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
+library(lmtest)
+lrtest(fullModel)
+fullModelNoAge <- gls( bug~  time, method="REML",correlation=corCompSymm(form=~1|cage/subjectID),data = myFrame )
+lrtest(fullModelNoAge)			
 							
