@@ -1,26 +1,29 @@
 
 rm(list=ls())
 
-setwd("C:\\Jobin_April_2015\\secondRun")
+setwd("G:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
 
-inFileName="hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
+inFileName="hpcR_taxaAsColumns_mergedF_R_familyLogNormalWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(c("character","character","numeric","numeric","character"), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 myT <- myT[myT$readNumber==1,]
 
-myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O",]
-	
-par(mfrow=c(4,4))
+myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O" &
+		myT$diseaseGroup != "",]
+
+pdf("family_hpc.pdf")	
+#par(mfrow=c(4,4))
 vals <- c(3,4,6:ncol(myT))
 for( i in vals)
 {
 	M <- lm( myTNoControls[,i] ~ myTNoControls$diseaseGroup)
 	pValue = anova(M)$"Pr(>F)"[1]
 		
-	boxplot( myT[,i]  ~ myT$diseaseGroup,main=paste(names(myT)[i], ";", format(pValue,numDigits=3)))
-	stripchart(myT[,i]  ~ myT$diseaseGroup,add=TRUE,vertical = TRUE, pch = 21)
+	boxplot( myTNoControls[,i]  ~ myTNoControls$diseaseGroup,main=paste(names(myT)[i], ";", format(pValue,numDigits=3)))
+	stripchart(myTNoControls[,i]  ~myTNoControls$diseaseGroup,add=TRUE,vertical = TRUE, pch = 21)
 }
+dev.off()
