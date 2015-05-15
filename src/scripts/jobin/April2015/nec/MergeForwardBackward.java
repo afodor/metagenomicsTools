@@ -105,7 +105,7 @@ public class MergeForwardBackward
 		
 		
 		File mergedFileFamilyLog = new File(ConfigReader.getJobinApril2015Dir() + File.separator + 
-				"necR_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
+				"nec_taxaAsColumns_mergedF_R_phylaLogNormal.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(mergedFileFamily);
 		
