@@ -5,7 +5,7 @@ setwd("G:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
 
-inFileName="hpcR_taxaAsColumns_mergedF_R_familyLogNormalWithMetadata.txt";
+inFileName="hpcR_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(c("character","character","numeric","numeric","character"), rep("numeric", numCols-5))
@@ -15,8 +15,8 @@ myT <- myT[myT$readNumber==1,]
 myTNoControls <- myT[myT$diseaseGroup != "NC101" & myT$diseaseGroup != "H2O" &
 		myT$diseaseGroup != "",]
 
-pdf("family_hpc.pdf")	
-#par(mfrow=c(4,4))
+#pdf("family_hpc.pdf")	
+par(mfrow=c(4,3))
 vals <- c(3,4,6:ncol(myT))
 for( i in vals)
 {
