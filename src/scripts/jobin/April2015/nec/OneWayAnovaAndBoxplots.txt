@@ -1,0 +1,28 @@
+
+rm(list=ls())
+
+setwd("G:\\Jobin_April_2015\\secondRun")
+library("pscl")
+library("lmtest")
+
+inFileName="nec_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
+myT <- read.table(inFileName, header=TRUE, sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(c("character","numeric","numeric","numeric", "character"), rep("numeric", numCols-5))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+myT <- myT[myT$readNumber==1,]
+
+myTNoControls <- myT[myT$diseaseGroup == "ctrl" | myT$diseaseGroup == "NEC",]
+
+#pdf("family_hpc.nec")	
+par(mfrow=c(4,2))
+vals <- c(3,4,6:ncol(myT))
+for( i in vals)
+{
+	M <- lm( myTNoControls[,i] ~ myTNoControls$diseaseGroup)
+	pValue = anova(M)$"Pr(>F)"[1]
+		
+	boxplot( myTNoControls[,i]  ~ myTNoControls$diseaseGroup,main=paste(names(myT)[i], ";", format(pValue,numDigits=3)))
+	stripchart(myTNoControls[,i]  ~myTNoControls$diseaseGroup,add=TRUE,vertical = TRUE, pch = 21)
+}
+#dev.off()
