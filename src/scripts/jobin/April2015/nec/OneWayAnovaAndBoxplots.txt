@@ -6,7 +6,7 @@ library("pscl")
 library("lmtest")
 library("nlme")
 
-inFileName="nec_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
+inFileName="nec_taxaAsColumns_mergedF_R_familyLogNormalWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(c("character","numeric","numeric","numeric", "character"), rep("numeric", numCols-5))
@@ -15,8 +15,8 @@ myT <- myT[myT$readNumber==1,]
 
 myTNoControls <- myT[myT$diseaseGroup == "ctrl" | myT$diseaseGroup == "NEC",]
 
-#pdf("family_hpc.nec")	
-par(mfrow=c(3,2))
+pdf("family_nec_withTime.pdf")	
+#par(mfrow=c(3,2))
 vals <- c(3,4,8:ncol(myT))
 for( i in vals)
 {
@@ -53,4 +53,4 @@ for( i in vals)
 					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
 	}
 }
-#dev.off()
+dev.off()
