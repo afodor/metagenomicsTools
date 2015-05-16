@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-setwd("G:\\Jobin_April_2015\\secondRun")
+setwd("C:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
 
@@ -16,13 +16,10 @@ myTNoControls <- myT[myT$diseaseGroup == "ctrl" | myT$diseaseGroup == "NEC",]
 
 #pdf("family_hpc.nec")	
 par(mfrow=c(4,2))
-vals <- c(3,4,6:ncol(myT))
+vals <- c(3,4,8:ncol(myT))
 for( i in vals)
 {
-	M <- lm( myTNoControls[,i] ~ myTNoControls$diseaseGroup)
-	pValue = anova(M)$"Pr(>F)"[1]
-		
-	boxplot( myTNoControls[,i]  ~ myTNoControls$diseaseGroup,main=paste(names(myT)[i], ";", format(pValue,numDigits=3)))
-	stripchart(myTNoControls[,i]  ~myTNoControls$diseaseGroup,add=TRUE,vertical = TRUE, pch = 21)
+	plot( myTNoControls$week,myTNoControls[,i] , main = names(myTNoControls)[i], 
+			xlab = "week", ylab=names(myTNoControls)[i] )
 }
 #dev.off()
