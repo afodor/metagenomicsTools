@@ -11,6 +11,18 @@ public class MetadataFileLine
 {
 	private final String rgSampleID;
 	private final String caseControlString;
+	private final String patientNum;
+	private final int weekNum;
+	
+	public String getPatientNum()
+	{
+		return patientNum;
+	}
+	
+	public int getWeekNum()
+	{
+		return weekNum;
+	}
 	
 	public String getRgSampleID()
 	{
@@ -27,6 +39,8 @@ public class MetadataFileLine
 		String[] splits = s.split("\t");
 		
 		this.rgSampleID = splits[0];
+		this.patientNum = splits[6];
+		this.weekNum = Integer.parseInt(splits[7]);
 		this.caseControlString = splits[5];
 	}
 	

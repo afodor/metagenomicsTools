@@ -29,7 +29,7 @@ public class AddMetadata
 				"nec_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt")));
 			//+ "hpc_pcoa_phylaWithMetadata.txt")));
 		
-		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup");
+		writer.write("sample\treadNumber\tnumSequences\tshannonDiversity\tdiseaseGroup\tpatientID\tweek");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -50,9 +50,10 @@ public class AddMetadata
 			writer.write(baseWrapper.getNumberSequences(splits[0].replaceAll("\"", "")) + "\t");
 			writer.write(baseWrapper.getShannonEntropy(splits[0].replaceAll("\"", "")) + "\t");
 			
-			writer.write(mfl.getCaseControlString());
+			writer.write(mfl.getCaseControlString() + "\t");
+			writer.write(mfl.getPatientNum() + "\t");
+			writer.write(mfl.getWeekNum() + "");
 			
-
 			for( int x=1; x < splits.length; x++)
 				writer.write( "\t" + splits[x]);
 			
