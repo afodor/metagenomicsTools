@@ -47,7 +47,8 @@ for( i in vals)
 						format(pValueDiseaseGroup , digits=3), 
 						format(pValuesSubject , digits=3), format(intraclassCoefficient,digits=3))	
 			
-		plot( myTNoControls$week,myTNoControls[,i] , main = graphMain, 
+		plot( myTNoControls$week+ rnorm(length(myTNoControls$week))/50,
+				myTNoControls[,i] + rnorm(length(myTNoControls$week))/50, main = graphMain, 
 				xlab = "week", ylab=names(myTNoControls)[i] , 
 					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
 	}
