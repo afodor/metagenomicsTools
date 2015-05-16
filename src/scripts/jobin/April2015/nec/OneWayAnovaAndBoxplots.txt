@@ -20,6 +20,7 @@ vals <- c(3,4,8:ncol(myT))
 for( i in vals)
 {
 	plot( myTNoControls$week,myTNoControls[,i] , main = names(myTNoControls)[i], 
-			xlab = "week", ylab=names(myTNoControls)[i] )
+			xlab = "week", ylab=names(myTNoControls)[i] , 
+				col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))
 }
 #dev.off()
