@@ -16,7 +16,7 @@ myT <- myT[myT$readNumber==1,]
 myTNoControls <- myT[myT$diseaseGroup == "ctrl" | myT$diseaseGroup == "NEC",]
 
 #pdf("family_hpc.nec")	
-par(mfrow=c(4,2))
+par(mfrow=c(3,2))
 vals <- c(3,4,8:ncol(myT))
 for( i in vals)
 {
@@ -37,7 +37,17 @@ for( i in vals)
 				
 		fullModelLME <- lme( bug~  time + diseaseGroup , method="REML", random = ~1|factor(patientID), data = myFrame)		
 	
-		plot( myTNoControls$week,myTNoControls[,i] , main = names(myTNoControls)[i], 
+		pValueTime <- anova(fullModelLME)$"p-value"[2]
+		pValueDiseaseGroup <- anova(fullModelLME)$"p-value"[3]
+		
+		pValuesSubject <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+		intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			
+		graphMain =  paste( names(myTNoControls)[i], format(pValueTime, digits=3),
+						format(pValueDiseaseGroup , digits=3), 
+						format(pValuesSubject , digits=3), format(intraclassCoefficient,digits=3))	
+			
+		plot( myTNoControls$week,myTNoControls[,i] , main = graphMain, 
 				xlab = "week", ylab=names(myTNoControls)[i] , 
 					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
 	}
