@@ -4,6 +4,7 @@ rm(list=ls())
 setwd("C:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
+library("nlme")
 
 inFileName="nec_taxaAsColumns_mergedF_R_phylaLogNormalWithMetadata.txt";
 myT <- read.table(inFileName, header=TRUE, sep="\t")
@@ -19,8 +20,26 @@ par(mfrow=c(4,2))
 vals <- c(3,4,8:ncol(myT))
 for( i in vals)
 {
-	plot( myTNoControls$week,myTNoControls[,i] , main = names(myTNoControls)[i], 
-			xlab = "week", ylab=names(myTNoControls)[i] , 
-				col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))
+	bug <- myTNoControls[,i] 
+	
+	if( sum(bug != 0) >= nrow(myT)/10 )
+	{
+		time <- myTNoControls$week
+		patientID <- myTNoControls$patientID
+		diseaseGroup <- myTNoControls$diseaseGroup
+	
+		myFrame <- data.frame(bug, time, patientID, diseaseGroup )
+	
+		fullModel <- gls( bug~  time + diseaseGroup , method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
+				data = myFrame )
+				
+		reducedModel <- gls( bug~  time + diseaseGroup , method="REML",	data = myFrame )
+				
+		fullModelLME <- lme( bug~  time + diseaseGroup , method="REML", random = ~1|factor(patientID), data = myFrame)		
+	
+		plot( myTNoControls$week,myTNoControls[,i] , main = names(myTNoControls)[i], 
+				xlab = "week", ylab=names(myTNoControls)[i] , 
+					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
+	}
 }
 #dev.off()
