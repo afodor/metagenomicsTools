@@ -14,6 +14,8 @@ public class UpdatedPhenotypeParser2
 	public static String HFFSOL3T = "HFFSOL3T";
 	public static String TOTAL_FAT = "TotalFat";
 	public static String SEX = "sex";
+	public static String AGE = "AGE";
+
 	
 	public static HashMap<Integer, Double> getColumnMap(String columnName) throws Exception
 	{

@@ -52,7 +52,7 @@ public class AddMetadataOTU
 		HashMap<Integer, Double> liverFat_updateMap2 = UpdatedPhenotypeParser2.getColumnMap(UpdatedPhenotypeParser2.HFFSOL3T);
 		HashMap<Integer, Double> totalFat_udpateMap2 = UpdatedPhenotypeParser2.getColumnMap(UpdatedPhenotypeParser2.TOTAL_FAT);
 		HashMap<Integer, Double> sex_udpateMap2 = UpdatedPhenotypeParser2.getColumnMap(UpdatedPhenotypeParser2.SEX);
-		
+		HashMap<Integer, Double> age_udpateMap2 = UpdatedPhenotypeParser2.getColumnMap(UpdatedPhenotypeParser2.AGE);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logFileToNormalize));
 		
@@ -63,7 +63,8 @@ public class AddMetadataOTU
 		writer.write("sample\tsanVsSol\tplq\trNumber\tfranceSequencePlasms\tnafld\tm_tsug\t");
 		
 		writer.write( "PNPLA3CODEDGRP\tmTotSugarMedianSplit\tmAddedSugarMedianSplit\tmFructoseMedianSplit\tsugbev_plusjuice\tupdatedsugbev_plusjuice\t"
-				+ UpdatedPhenotypeParser2.HFFSOL3T + "\t" + UpdatedPhenotypeParser2.TOTAL_FAT + "\t" + UpdatedPhenotypeParser2.SEX + "\t");
+				+ UpdatedPhenotypeParser2.HFFSOL3T + "\t" + UpdatedPhenotypeParser2.TOTAL_FAT + "\t" + UpdatedPhenotypeParser2.SEX + "\t"
+					+ UpdatedPhenotypeParser2.AGE + "\t");
 		
 		writer.write("shannonDiversity\tnumSequences");
 		
@@ -100,6 +101,7 @@ public class AddMetadataOTU
 							valueOrNA(liverFat_updateMap2.get(mfl.getPatientNumber()))+ "\t" + 
 							valueOrNA(totalFat_udpateMap2.get(mfl.getPatientNumber()))+ "\t" +
 							valueOrNA(sex_udpateMap2.get(mfl.getPatientNumber()))+ "\t" +
+							valueOrNA(age_udpateMap2.get(mfl.getPatientNumber()))+ "\t" +
 						wrapper.getShannonEntropy(key) + "\t" + wrapper.getNumberSequences(key) );
 			
 			for( int x=1; x < splits.length; x++)
