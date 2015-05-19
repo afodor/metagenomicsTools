@@ -32,6 +32,8 @@ boxplot(myT$sugbev_plusjuice[myT$nafld==0],
 				xlab=c("NAFD==0", "NAFD==1"))
 			
 
+
+
 wilcox.test(myT$sugbev_plusjuice[myT$nafld==0], 
 			myT$sugbev_plusjuice[myT$nafld==1])			
 			
