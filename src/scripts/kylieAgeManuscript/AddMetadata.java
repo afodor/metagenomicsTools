@@ -7,26 +7,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import utils.ConfigReader;
-
 public class AddMetadata
 {
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MetadataParserFileLine> metaMap = MetadataParserFileLine.getMetaMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getKylieDropoxDir() + File.separator +
-			"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-						File.separator +"pcoa_hFROnly.txt")));
-						//+ "family_rdpClassifier.txt")));
+			"D:\\Kylie_Manuscript_May12_2015\\tables\\pcoa_hFROnly.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getKylieDropoxDir() + File.separator +
-				"classifications" + File.separator +  "tables" + File.separator + "rdpClassifier" +
-							File.separator + "pcoa_hFROnlyPlusMetadata.txt")));
-							//+ "family_rdpClassifierPlusMetadata.txt"				)));
-		
+				"D:\\Kylie_Manuscript_May12_2015\\tables\\pcoa_hFROnlyPlusMetadata.txt")));
+					
 		String[] topHeaders = reader.readLine().split("\t");
 		
 		writer.write( "sampleID" + "\t" + "animalID\t" + 
@@ -43,7 +36,7 @@ public class AddMetadata
 			MetadataParserFileLine meta = metaMap.get(splits[0].replaceAll("\"", ""));
 			
 			if( meta == null)
-				throw new Exception("No");
+				throw new Exception("No " + splits[0].replaceAll("\"", ""));
 			
 			writer.write(meta.getSampleID() + "\t" + meta.getAnimalID() + "\t" +
 			"Date_" + meta.getDateAsFactor() + "\t" + meta.getDiet() + "\t" + meta.getCage() + "\t" +

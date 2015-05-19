@@ -2,9 +2,9 @@
 rm(list=ls())
 library("vegan")
 
-setwd("D:\\Kylie_Manuscript_May12_2015\\classifications\\tables\\rdpClassifier")
+setwd("D:\\Kylie_Manuscript_May12_2015\\tables")
 
-inFileName <- "family_rdpClassifier.txt"
+inFileName <- "family_abundantOTU.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c("character", rep("numeric", numCols-1))

@@ -58,7 +58,7 @@ public class MetadataParserFileLine
 	{
 		String[] splits = s.split("\t");
 		
-		this.sampleID= "Sample"  + Integer.parseInt(splits[0]);
+		this.sampleID= addLeadingZero("sample"  + Integer.parseInt(splits[0]));
 		this.animalID = splits[1];
 		this.dateAsFactor = splits[2];
 		this.days = Integer.parseInt(splits[4]);
@@ -66,6 +66,17 @@ public class MetadataParserFileLine
 		this.cage = splits[6];
 		this.ageCategory = splits[8];
 	}
+	
+	private static String addLeadingZero(String s) throws Exception
+	{
+		s = s.replace("sample", "");
+		
+		if( s.length() == 1)
+			s = "0" + s;
+		
+		return "sample" + s;
+	}
+	
 	
 	public static HashMap<String, MetadataParserFileLine> getMetaMap() throws Exception
 	{
@@ -83,7 +94,7 @@ public class MetadataParserFileLine
 			if( map.containsKey(meta.sampleID))
 				throw new Exception("No");
 			
-			map.put(meta.sampleID, meta);
+			map.put(  meta.sampleID, meta);
 		}
 		
 		reader.close();
@@ -107,7 +118,7 @@ public class MetadataParserFileLine
 			if( ! mpfl.ageCategory.startsWith(shortAge.toLowerCase()))
 				throw new Exception("No " + mpfl.ageCategory + " " + shortAge);
 			
-			System.out.println(mpfl.ageCategory);
+			System.out.println(s + " " + mpfl.ageCategory);
 			
 		}
 	}

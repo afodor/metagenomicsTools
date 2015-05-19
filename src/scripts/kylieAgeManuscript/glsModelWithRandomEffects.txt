@@ -1,7 +1,7 @@
 rm(list=ls())
 library("nlme")
 
-setwd("D:\\Kylie_Manuscript_May12_2015\\classifications\\tables\\rdpClassifier")
+setwd("D:\\Kylie_Manuscript_May12_2015\\tables")
 
 #taxaLevels <- c("phylum","class","order","family","genus")
 taxaLevels <- c("family")
@@ -10,7 +10,7 @@ taxaLevels <- c("family")
 for(taxa in taxaLevels ) 
 {
     # uncomment for pcoa
-	#inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	#inFileName <- paste("pcoa_hFROnlyPlusMetadata.txt", sep ="")
 	
 	inFileName <- "pcoa_hFROnlyPlusMetadata.txt"
 	
