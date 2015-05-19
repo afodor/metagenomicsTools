@@ -13,7 +13,7 @@ public class UpdatedPhenotypeParser2
 	public static String SUGBEV_PLUS_JUICE = "sugbev_plusjuice";
 	public static String HFFSOL3T = "HFFSOL3T";
 	public static String TOTAL_FAT = "TotalFat";
-	
+	public static String SEX = "sex";
 	
 	public static HashMap<Integer, Double> getColumnMap(String columnName) throws Exception
 	{
