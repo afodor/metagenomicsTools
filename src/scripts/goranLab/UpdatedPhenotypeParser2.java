@@ -12,9 +12,10 @@ public class UpdatedPhenotypeParser2
 {
 	public static String SUGBEV_PLUS_JUICE = "sugbev_plusjuice";
 	public static String HFFSOL3T = "HFFSOL3T";
-
+	public static String TOTAL_FAT = "TotalFat";
 	
-	public static HashMap<Integer, Double> getBeverageMap(String columnName) throws Exception
+	
+	public static HashMap<Integer, Double> getColumnMap(String columnName) throws Exception
 	{
 		HashMap<Integer, Double> map = new LinkedHashMap<Integer, Double>();
 		
@@ -54,7 +55,7 @@ public class UpdatedPhenotypeParser2
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<Integer, Double> map = getBeverageMap(SUGBEV_PLUS_JUICE);
+		HashMap<Integer, Double> map = getColumnMap(SUGBEV_PLUS_JUICE);
 		
 		for( int i : map.keySet())
 			System.out.println(i + " " + map.get(i));
