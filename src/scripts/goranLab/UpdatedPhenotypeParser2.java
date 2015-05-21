@@ -15,7 +15,7 @@ public class UpdatedPhenotypeParser2
 	public static String TOTAL_FAT = "TotalFat";
 	public static String SEX = "sex";
 	public static String AGE = "AGE";
-
+	public static String M_ENER = "m_ener";
 	
 	public static HashMap<Integer, Double> getColumnMap(String columnName) throws Exception
 	{
