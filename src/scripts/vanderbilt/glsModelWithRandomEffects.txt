@@ -1,19 +1,20 @@
 rm(list=ls())
 library("nlme")
 
-setwd("G:\\VanderbiltSequences_Dec52014\\spreadsheets")
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
-#taxaLevels <- c("phylum","class","order","family","genus")
-taxaLevels <- c("genus")
+taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("family")
 
-pdf("allGenus.pdf")
 #par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
 {
+	pdf( paste( "all", taxa ,".pdf"))
+	
     # uncomment for pcoa
 	#inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
 	
-	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata.txt", sep ="")
+	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalWithMetadata_Corrected.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -55,7 +56,7 @@ for(taxa in taxaLevels )
 			names[index] = names(subTable)[i]
 			label = paste(  names(subTable)[i] , " ; stoolVsSqabP =  ", format(pValuesStoolOrSwab[index],3) , " ; subject p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
-			plot( bug ~ factor(subjectID ), main=label, xaxt="n")
+			plot( bug ~ factor(subjectID ), main=label, xaxt="n", main.cex=0.7)
 			
 			stripchart(bug[myT$stoolOrSwab=="stool"] ~ factor(subjectID[myT$stoolOrSwab=="stool"] ), data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
 						col = "red")
@@ -80,7 +81,6 @@ for(taxa in taxaLevels )
 	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 	dFrame$adjustedPSubject <- p.adjust(dFrame$pValuesSubject, method = "BH" )
 	dFrame$adjustedpValuesStoolOrSwab <- p.adjust(dFrame$pValuesStoolOrSwab, method = "BH" )
-	
 	
 	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentstool", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
