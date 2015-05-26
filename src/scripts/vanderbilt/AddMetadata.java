@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
-import scripts.vanderbilt.kraken.PivotKrakenReportToTaxaAsColumns;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -157,6 +156,7 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		for(int x=0; x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length; x++)
 		{
 			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getVanderbiltDir() + File.separator + 
@@ -193,7 +193,7 @@ public class AddMetadata
 				addSomeMetadata(wrapper, pcoaFile.getAbsolutePath(), pcoaOutFile.getAbsolutePath(), true);
 			}
 			
-		}
+		}*/
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -201,15 +201,15 @@ public class AddMetadata
 					ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns_Corrected.txt");
 			
 			File pcoaFile = new File(	ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
-					File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt");
+					File.separator + "pcoaCorrected_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt");
 			
 			File outPCOAFile = new File(	ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
-					File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "withMetadata.txt");
+					File.separator + "pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "withMetadataCorrected.txt");
 			
 			
 			addSomeMetadata(wrapper, pcoaFile.getAbsolutePath(), outPCOAFile.getAbsolutePath(), true);
@@ -217,15 +217,16 @@ public class AddMetadata
 			String taxaPath = ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt";
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal_Corrected.txt";
 			
 			String outPath =  ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalWithMetadata.txt";
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalWithMetadata_Corrected.txt";
 			
 			addSomeMetadata(wrapper, taxaPath, outPath, false);
 			
+			/*
 			String mergedPath = ConfigReader.getVanderbiltDir()
 					 + File.separator + "spreadsheets" + 
 					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt";
@@ -235,6 +236,7 @@ public class AddMetadata
 					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "_WithMetadata.txt";
 			
 			addSomeMetadata(wrapper, mergedPath, outMergedPath, false);
+			*/
 		}
 	}
 }

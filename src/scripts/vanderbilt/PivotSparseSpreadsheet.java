@@ -25,21 +25,21 @@ public class PivotSparseSpreadsheet
 			getMap(ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "sparseThreeColumn_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] +	".txt");
+			NewRDPParserFileLine.TAXA_ARRAY[x] +	"_Corrected.txt");
 			
 			File pivotedFile = 
 					new File(
 							ConfigReader.getVanderbiltDir() 
 							+ File.separator + "spreadsheets" +
 							File.separator + "pivoted_" + 
-					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns_Corrected.txt");
 			
 			PivotOTUs.writeResults(map, pivotedFile.getAbsolutePath());
 			OtuWrapper wrapper = new OtuWrapper(pivotedFile);
 			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getVanderbiltDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt");
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal_Corrected.txt");
 		}
 	}
 	
