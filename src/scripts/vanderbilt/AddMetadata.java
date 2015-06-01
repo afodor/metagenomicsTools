@@ -204,6 +204,7 @@ public class AddMetadata
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns_Corrected.txt");
 			
 			File pcoaFile = new File(	ConfigReader.getVanderbiltDir() 
+					
 					+ File.separator + "spreadsheets" +
 					File.separator + "pcoaCorrected_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt");
 			

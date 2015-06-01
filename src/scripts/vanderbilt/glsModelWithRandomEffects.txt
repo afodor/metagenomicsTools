@@ -3,8 +3,8 @@ library("nlme")
 
 setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
-taxaLevels <- c("phylum","class","order","family","genus")
-#taxaLevels <- c("family")
+#taxaLevels <- c("phylum","class","order","family","genus")
+taxaLevels <- c("family")
 
 #par(mfrow=c(5,3))
 for(taxa in taxaLevels ) 
@@ -27,6 +27,8 @@ for(taxa in taxaLevels )
 	pValuesStoolOrSwab <- vector()
 	intraclassCoefficient <- vector()
 	averageNormCounts <- vector()
+	averageStool <- vector()
+	averageSwab <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -51,12 +53,14 @@ for(taxa in taxaLevels )
 			pValuesStoolOrSwab[index] <- anova(fullModelLME)$"p-value"[3]
 			pValuesTime[index] <- anova(fullModelLME)$"p-value"[4]
 			
+			averageStool[index] <- mean( bug[myFrame$stoolOrSwab == "stool"])
+			averageSwab[index] <- mean (bug[myFrame$stoolOrSwab == "swab"] )
 			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			intraclassCoefficient[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(subTable)[i]
 			label = paste(  names(subTable)[i] , " ; stoolVsSqabP =  ", format(pValuesStoolOrSwab[index],3) , " ; subject p=" , format(pValuesSubject[index],digits=3) ,
 						  "; rho=", format(intraclassCoefficient[index], digits=3),sep="")
-			plot( bug ~ factor(subjectID ), main=label, xaxt="n", main.cex=0.7)
+			plot( bug ~ factor(subjectID ), main=label, xaxt="n", cex.main=0.7)
 			
 			stripchart(bug[myT$stoolOrSwab=="stool"] ~ factor(subjectID[myT$stoolOrSwab=="stool"] ), data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
 						col = "red")
@@ -75,7 +79,7 @@ for(taxa in taxaLevels )
 	}
 	
 	dev.off()
-	dFrame <- data.frame( names,averageNormCounts, pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
+	dFrame <- data.frame( names,averageNormCounts,averageStool , averageSwab , pValuesTreatment,pValuesStoolOrSwab,pValuesTime, pValuesSubject,intraclassCoefficient ) 
 	#dFrame <- dFrame [order(dFrame$pValuesTreatment),]
 	dFrame$adjustedPTreatment <- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
