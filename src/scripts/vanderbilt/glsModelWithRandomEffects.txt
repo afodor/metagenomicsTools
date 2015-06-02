@@ -20,6 +20,7 @@ for(taxa in taxaLevels )
 	numCols <- ncol(myT)
 	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	myT <- myT[ myT$numSequencesPerSample >= 1000 ,]
 	
 	pValuesTime <- vector()
 	pValuesTreatment <- vector()
