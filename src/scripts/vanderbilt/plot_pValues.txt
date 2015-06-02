@@ -7,5 +7,6 @@ setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 myT <- read.table("pValuesForTaxaTimeTreatmentstoolfamily.txt", sep="\t", header=TRUE)
 
-plot( log10( myT$pValuesSubject + 1e-17), log10( myT$pValuesStoolOrSwab + 1e-13  ))
+plot( log10( myT$pValuesSubject + 1e-17), log10( myT$pValuesStoolOrSwab + 1e-13  ), 
+	col= ifelse(myT$higherInStool=="TRUE", "red", "blue"), pch=16, cex=1.5)
 textxy(log10( myT$pValuesSubject + 1e-17),log10( myT$pValuesStoolOrSwab + 1e-13  ),labs =myT$names)
