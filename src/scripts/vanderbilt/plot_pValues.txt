@@ -4,3 +4,4 @@ setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 
 myT <- read.table("pValuesForTaxaTimeTreatmentstoolfamily.txt", sep="\t", header=TRUE)
 
+plot( log10( myT$pValuesSubject + 1e-17), log10( myT$pValuesStoolOrSwab + 1e-13  ))
