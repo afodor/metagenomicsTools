@@ -17,7 +17,7 @@ labels <- vector()
 for( i in 1:length(bools) ) 
 {
 	if( bools[i] ) 
-		labels[i] = myT[i,]$names
+		labels[i] = paste("", myT[i,]$names)
 	else
 		labels[i] = ""
 }
