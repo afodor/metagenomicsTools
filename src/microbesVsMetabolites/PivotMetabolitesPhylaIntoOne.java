@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,42 @@ public class PivotMetabolitesPhylaIntoOne
 		
 		if( wrapper.getSampleNames().size() != metMap.size())
 			throw new Exception("No " + wrapper.getSampleNames().size() + " " + metMap.size());
+		
+		for(Integer i : metMap.keySet())
+			if( metMap.get(i).size() != metaboliteNames.size())
+				throw new Exception("No");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"mergedPhyla_" + mc + "_AsColumnsLogNorm.txt")));
+		
+		writer.write("sample");
+		
+		for(String s : wrapper.getOtuNames())
+			writer.write("\t" + s);
+		
+		for(String s : metaboliteNames)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String sample : wrapper.getSampleNames())
+		{
+			writer.write(sample);
+			
+			int sampleID = wrapper.getIndexForSampleName(sample);
+			
+			for( int x=0; x < wrapper.getOtuNames().size(); x++)
+				writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(sampleID).get(x));
+			
+			List<Double> list = metMap.get(Integer.parseInt(sample.replace("sample", "")));
+			
+			for( int x=0; x < list.size(); x++)
+				writer.write("\t" + list.get(x));
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	
 	}
 	
