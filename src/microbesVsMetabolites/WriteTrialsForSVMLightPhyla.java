@@ -352,7 +352,7 @@ public class WriteTrialsForSVMLightPhyla
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File( 
 			ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-			"trials_comp"+ phyla +  ".txt")));
+			"trials_comp"+ phyla + "_scrambled_" +scramble +  ".txt")));
 		
 		writer.write("pValuePlasma\trValuePlasma\tpValueUrine\trValueUrine\tpValueBoth\trValueBoth\t");
 		writer.write("pValueMetadata\trValueMetadata\tpValueAll\trValueAll\n");
@@ -360,7 +360,7 @@ public class WriteTrialsForSVMLightPhyla
 		MetaboliteClass mClass[] = { MetaboliteClass.PLASMA, MetaboliteClass.URINE, MetaboliteClass.BOTH,
 				MetaboliteClass.METADATA, MetaboliteClass.ALL};
 		
-		for( int x=0; x < 100; x++)
+		for( int x=0; x < 10; x++)
 		{
 			List<String> keys = new ArrayList<String>(wrapper.getSampleNames());
 			Collections.shuffle(keys, random);
