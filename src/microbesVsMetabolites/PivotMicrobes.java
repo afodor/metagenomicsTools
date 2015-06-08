@@ -21,5 +21,18 @@ public class PivotMicrobes
 				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 				"patientMetadataSubjectsAsColumns.txt"
 				 , false);
+		
+		OtuWrapper.transpose(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"phylaAsRows.txt", 
+				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"phylaAsColumns.txt"
+				 , false);
+		
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"phylaAsColumns.txt");
+		
+		wrapper.writeNormalizedLoggedDataToFile(new File(
+				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+				"phylaAsColumnsLogNormalized.txt"));
 	}
 }
