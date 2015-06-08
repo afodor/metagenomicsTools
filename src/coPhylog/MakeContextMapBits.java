@@ -10,13 +10,10 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package coPhylog;
-
 
 public class MakeContextMapBits
 {
-	
 	
 	private static final int CONTEXT_SIZE = 12;
 
