@@ -1,0 +1,11 @@
+rm(list=ls())
+
+setwd("D:\\microbesVsMetabolites")
+
+inFileName <-"mergedPhyla_PLASMA_AsColumnsLogNorm.txt"
+	
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+

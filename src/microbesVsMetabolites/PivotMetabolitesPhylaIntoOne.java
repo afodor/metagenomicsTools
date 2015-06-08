@@ -16,6 +16,36 @@ import utils.ConfigReader;
 
 public class PivotMetabolitesPhylaIntoOne
 {
+	private static int TRAIL_NUMBER = 0;
+	
+	private static String alphaNumericOnly(String s)
+	{
+		s =s.replaceAll("\"", "");
+		StringBuffer buff =new StringBuffer();
+		
+		for(int x=0; x < s.length(); x++)
+		{
+			char c= s.charAt(x);
+			if(  Character.isAlphabetic(c) || Character.isDigit(c))
+			{
+				buff.append("" + c);
+			}
+			else
+			{
+				buff.append("_");
+			}
+		}
+		System.out.println(s + " " + buff.toString());
+		
+		if (buff.toString().equals("X"))
+		{
+			TRAIL_NUMBER++;
+			return "X" + TRAIL_NUMBER;
+		}
+		
+		return buff.toString();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 
@@ -42,7 +72,7 @@ public class PivotMetabolitesPhylaIntoOne
 			writer.write("\t" + s);
 		
 		for(String s : metaboliteNames)
-			writer.write("\t" + s);
+			writer.write("\t" + alphaNumericOnly(s));
 		
 		writer.write("\n");
 		
@@ -56,6 +86,9 @@ public class PivotMetabolitesPhylaIntoOne
 				writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(sampleID).get(x));
 			
 			List<Double> list = metMap.get(Integer.parseInt(sample.replace("sample", "")));
+			
+			if( list == null || list.size() != metaboliteNames.size())
+				throw new Exception("No");
 			
 			for( int x=0; x < list.size(); x++)
 				writer.write("\t" + list.get(x));
