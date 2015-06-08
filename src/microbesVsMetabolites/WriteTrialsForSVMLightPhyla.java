@@ -104,9 +104,9 @@ public class WriteTrialsForSVMLightPhyla
 		
 		for( int x=halfPoint; x < keys.size(); x++ ) 
 		{
-			writer.write("sample" + keys.get(x) + " " );
+			writer.write(keys.get(x) + " " );
 			
-			List<Double> list = metaboliteMap.get(keys.get(x));
+			List<Double> list = metaboliteMap.get(Integer.parseInt(keys.get(x).replace("sample", "")));
 			
 			for(  int y=0; y < list.size(); y++ )
 				writer.write( (y+1) + ":" + list.get(y) + " " );
@@ -137,7 +137,8 @@ public class WriteTrialsForSVMLightPhyla
 		for(String s= classifiedReader.readLine(); s != null; s = classifiedReader.readLine())
 		{
 			StringTokenizer sToken = new StringTokenizer(s);
-			int sampleID = wrapper.getIndexForSampleName(sToken.nextToken().replace("sample", ""));
+			String  sample = sToken.nextToken();
+			int sampleID = wrapper.getIndexForSampleName(sample);
 			
 			actual.add(wrapper.getDataPointsNormalizedThenLogged().get(sampleID).get(otuIndex));
 			
