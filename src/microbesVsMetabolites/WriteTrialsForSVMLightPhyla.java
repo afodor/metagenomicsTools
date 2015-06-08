@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -19,7 +18,6 @@ import utils.ConfigReader;
 import utils.Pearson;
 import utils.ProcessWrapper;
 import utils.Regression;
-import utils.TabReader;
 
 public class WriteTrialsForSVMLightPhyla
 {
@@ -43,7 +41,7 @@ public class WriteTrialsForSVMLightPhyla
 			throws Exception
 	{
 		int otuIndex = wrapper.getIndexForOtuName(phyla);
-		HashMap<Integer, List<Double>> metaboliteMap = getMetabolites(metabolite, scramble);
+		HashMap<Integer, List<Double>> metaboliteMap = WriteTrialsForSVMLight.getMetabolites(metabolite, scramble);
 		
 		int halfPoint = keys.size() / 2;
 		
@@ -158,182 +156,7 @@ public class WriteTrialsForSVMLightPhyla
 		
 	}
 	
-	/*
-	 * Scramble will not preserve IDs across categories..
-	 */
-	private static HashMap<Integer, List<Double>> getMetabolites(MetaboliteClass metaboliteClass,
-			boolean scramble) throws Exception
-	{
-
-		if( metaboliteClass.equals(MetaboliteClass.BOTH))
-		{
-			HashMap<Integer, List<Double>> map1 = 
-					getMetabolites(MetaboliteClass.PLASMA,scramble);
-			
-			HashMap<Integer, List<Double>> map2 = 
-					getMetabolites(MetaboliteClass.URINE,scramble);
-			
-			if( ! map1.keySet().equals(map2.keySet()) )
-				throw new Exception("Unexpected parse");
-			
-			for(Integer i : map1.keySet())
-			{
-				map1.get(i).addAll(map2.get(i));
-			}
-			
-			return map1;
-		}
 		
-		if( metaboliteClass.equals(MetaboliteClass.ALL))
-		{
-			HashMap<Integer, List<Double>> map1 = 
-					getMetabolites(MetaboliteClass.BOTH, scramble);
-			
-			HashMap<Integer, List<Double>> map2 = 
-					getMetabolites(MetaboliteClass.METADATA, scramble);
-			
-			for(Integer i : map2.keySet())
-				if( map1.containsKey(i))
-				{
-					map1.get(i).addAll(map2.get(i));
-				}
-				
-			return map1;
-		}
-		
-		HashMap<Integer, List<Double>> map = new LinkedHashMap<Integer, List<Double>>();
-		
-		BufferedReader reader = null;
-		
-		if( metaboliteClass.equals(MetaboliteClass.URINE))
-		{
-			reader = 
-					new BufferedReader(new FileReader(new File( 
-							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-							"urine_metabolites_data.txt")));
-					
-		}
-		else if ( metaboliteClass.equals(MetaboliteClass.PLASMA))
-		{
-			reader = 
-					new BufferedReader(new FileReader(new File( 
-							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-							"plasmaMetabolites.txt")));
-		}
-		else if ( metaboliteClass.equals(MetaboliteClass.METADATA))
-		{
-			reader = 
-					new BufferedReader(new FileReader(new File( 
-							ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-							"patientMetadataSubjectsAsColumns.txt")));
-		}
-		else throw new Exception("No");
-		
-		String firstLine = reader.readLine();
-		
-		TabReader tr = new TabReader(firstLine);
-		
-		tr.nextToken();
-		
-		if (! metaboliteClass.equals(MetaboliteClass.METADATA))
-		{
-			tr.nextToken(); tr.nextToken(); 
-		}
-		
-		while( tr.hasMore() )
-		{
-			String nextToken = tr.nextToken();
-			
-			if( nextToken.trim().length() > 0 )
-			{
-				int aVal = Integer.parseInt(nextToken);
-				map.put(aVal, new ArrayList<Double>());
-			}
-		}
-		
-		for(String s= reader.readLine(); s != null; s = reader.readLine())
-		{
-			tr =new TabReader(s);
-			
-			tr.nextToken(); 
-		
-			if (! metaboliteClass.equals(MetaboliteClass.METADATA))
-			{
-				tr.nextToken(); tr.nextToken(); 
-			}
-			
-			for( Integer key : map.keySet())
-			{
-				List<Double> list =map.get(key);
-				list.add(Double.parseDouble(tr.nextToken()));
-			}
-
-			if( tr.hasMore() && tr.nextToken().trim().length() > 0 )
-				throw new Exception("No " + tr.nextToken());
-		}
-		
-		reader.close();
-		
-		if( scramble)
-		{
-			HashMap<Integer, List<Double>> newMap = new LinkedHashMap<Integer, List<Double>>();
-			List<Integer> newKeys = new ArrayList<Integer>(map.keySet());
-			Collections.shuffle(newKeys);
-			
-			int counter = 0;
-			
-			for( List<Double> innerList : map.values() )
-			{
-				newMap.put(newKeys.get(counter), innerList);
-				counter++;
-			}
-			
-			if( map.size() != newMap.size())
-				throw new Exception("No");
-
-			if( map.keySet().size() != newMap.keySet().size())
-				throw new Exception("No");
-			
-			if( ! map.keySet().equals( newMap.keySet()))
-				throw new Exception("No");
-			
-			map = newMap;
-				
-		}
-		
-		for( List<Double> list : map.values() )
-		{
-			double sum =0;
-			int n=0;
-			
-			for( int y=0; y < list.size(); y++)
-			{
-				boolean addin = true;
-				
-				if( metaboliteClass.equals(MetaboliteClass.METADATA) && 
-					Math.abs(	list.get(y) + 1 ) <= 0.0001 ) 
-					addin = false;
-				
-				if( addin)
-				{
-					sum += list.get(y);
-					n++;
-				}
-			}
-			
-			if ( n > 0 )
-			{
-				double average = sum / n;
-				for( int y=0; y < list.size(); y++)
-				{
-					list.set(y, list.get(y) / average);
-				}
-			}			
-		}
-		
-		return map;
-	}
-	
 	public static void main(String[] args) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + "phylaAsColumns.txt");

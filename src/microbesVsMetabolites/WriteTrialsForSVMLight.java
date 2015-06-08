@@ -217,7 +217,7 @@ public class WriteTrialsForSVMLight
 	/*
 	 * Scramble will not preserve IDs across categories..
 	 */
-	private static HashMap<Integer, List<Double>> getMetabolites(MetaboliteClass metaboliteClass,
+	static HashMap<Integer, List<Double>> getMetabolites(MetaboliteClass metaboliteClass,
 			boolean scramble) throws Exception
 	{
 
