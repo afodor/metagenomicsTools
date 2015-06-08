@@ -50,7 +50,7 @@ public class PivotMetabolitesPhylaIntoOne
 	{
 
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + "phylaAsColumns.txt");
-		MetaboliteClass mc = MetaboliteClass.PLASMA;
+		MetaboliteClass mc = MetaboliteClass.URINE;
 		
 		List<String> metaboliteNames = getNames(mc);
 		
