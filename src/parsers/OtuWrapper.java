@@ -2271,6 +2271,7 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
+		
 		OtuWrapper wrapper = new OtuWrapper(
 				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
 						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
@@ -2278,6 +2279,12 @@ public class OtuWrapper
 		wrapper.writeLoggedDataWithTaxaAsColumns( new File( ConfigReader.getBigDataScalingFactorsDir() 
 				+ File.separator + "July_StoolRemoved" 
 						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt" ));
+		
+		for( int x=0;x < wrapper.getSampleNames().size(); x++)
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				System.out.println( wrapper.getDataPointsNormalizedThenLogged().get(x).get(y) );
+			}
 		
 		/*
 		wrapper.writeRawCountsWithRandomNoise(  
