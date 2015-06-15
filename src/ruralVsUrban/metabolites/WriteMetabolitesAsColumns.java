@@ -1,8 +1,10 @@
 package ruralVsUrban.metabolites;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -60,9 +62,38 @@ public class WriteMetabolitesAsColumns
 			if( tReader.hasMore())
 				throw new Exception("No");
 			
+			metMap.put(key,list);
+			
 		}
 		
 		reader.close();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getChinaDir() + File.separator + 
+				"metabolites" + File.separator + "metabolitesAsColumns.txt")));
+		
+		writer.write("sample\tcategory");
+		
+		List<String> metabolites = new ArrayList<String>( metMap.keySet());
+		
+		for(String s : metabolites)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for( int x=0; x < 40; x++)
+		{
+			writer.write(subjects.get(x) + "\t" + urban_rural.get(x).replace("human ", "") );
+			
+			for(String s : metabolites)
+				writer.write("\t" + metMap.get(s).get(x));
+			
+			writer.write("\n");
+			
+		}
+		
+		
+		writer.flush();  writer.close();
 	}
 	
 	
