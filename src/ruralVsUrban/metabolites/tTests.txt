@@ -1,0 +1,31 @@
+rm(list=ls())
+
+setwd("C:\\PennyChinaDataset\\metabolites")
+
+inFileName <- "metabolitesAsColumns.txt"
+
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",2), rep("numeric", numCols-2))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+names <- vector()
+pValues <- vector()
+index <- 1
+for ( i in 4:ncol(myT))
+{
+	metabolite <- myT[,i]
+	
+	if( var(metabolite) > 0)
+	{
+		names[index] <- names(myT)[i]
+		pValues[index] <- t.test(metabolite[myT$category=="urban"], metabolite[myT$category=="rural"])$p.value
+		index <- index + 1
+	}
+	
+	dFrame <- data.frame( names, pValues) 
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
+	
+	write.table( file="pValuesMetabolites.txt", dFrame, row.names=FALSE, sep="\t")
+}
