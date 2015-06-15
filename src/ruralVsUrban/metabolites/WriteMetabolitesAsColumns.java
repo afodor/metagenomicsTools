@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
+import utils.TabReader;
 
 public class WriteMetabolitesAsColumns
 {
@@ -29,6 +32,35 @@ public class WriteMetabolitesAsColumns
 		
 		System.out.println(urban_rural);
 		System.out.println(subjects);
+		
+		reader.readLine();
+		
+		HashMap<String, List<Double>> metMap = new LinkedHashMap<String, List<Double>>();
+		
+		for( String s= reader.readLine() ; s != null; s = reader.readLine() )
+		{
+			TabReader tReader = new TabReader(s);
+			
+			for( int x=0; x < 4; x++)
+				tReader.nextToken();
+			
+			String key = tReader.nextToken().trim();
+		
+			for(int x=0; x < 8; x++)
+				tReader.nextToken();
+			
+			if( key.length() == 0 || metMap.containsKey(key))
+				throw new Exception("No");
+			
+			List<Double> list = new ArrayList<Double>();
+			
+			for(int x=0; x < 40; x++)
+				list.add(Double.parseDouble(tReader.nextToken()));
+			
+			if( tReader.hasMore())
+				throw new Exception("No");
+			
+		}
 		
 		reader.close();
 	}
