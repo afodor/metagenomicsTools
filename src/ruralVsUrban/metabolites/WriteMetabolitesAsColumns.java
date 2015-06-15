@@ -43,12 +43,12 @@ public class WriteMetabolitesAsColumns
 		{
 			TabReader tReader = new TabReader(s);
 			
-			for( int x=0; x < 4; x++)
+			for( int x=0; x < 1; x++)
 				tReader.nextToken();
 			
 			String key = tReader.nextToken().trim();
 		
-			for(int x=0; x < 8; x++)
+			for(int x=0; x < 11; x++)
 				tReader.nextToken();
 			
 			if( key.length() == 0 || metMap.containsKey(key))
