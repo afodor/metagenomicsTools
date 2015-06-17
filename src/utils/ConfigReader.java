@@ -77,6 +77,7 @@ public class ConfigReader
 	public static final String KYLIE_AGE_DIR = "KYLIE_AGE";
 	public static final String KYLIE_16S_DIR= "KYLIE_16S_DIR";
 	public static final String KYLIE_DROPBOX_DIR = "KYLIE_DROPBOX_DIR";
+	public static final String KATIE_DIR = "KATIE_DIR";
 	
 	
 	public static final String TANYA_DIR="TANYA_DIR";
@@ -100,6 +101,11 @@ public class ConfigReader
 	public static String getJobinApril2015Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(JOBIN_APRIL_2015_DIR);
+	}
+
+	public static String getKatieDir() throws Exception
+	{
+		return getConfigReader().getAProperty(KATIE_DIR);
 	}
 	
 	
