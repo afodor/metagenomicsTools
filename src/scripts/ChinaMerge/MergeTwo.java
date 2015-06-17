@@ -1,13 +1,14 @@
 package scripts.ChinaMerge;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.sun.net.ssl.SSLContext;
 
 import utils.ConfigReader;
 
@@ -17,6 +18,56 @@ public class MergeTwo
 	{
 		HashMap<Integer, String> map = getBPointForwardRead();
 		HashMap<Integer, List<Integer>> globalMap = getMapFromGlobalFile();
+	
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKatieDir() + File.separator + 
+					"mergedOut.txt")));
+		
+		writer.write(getFirstLine());
+		
+		List<String> sampleNames = getSampleNames();
+		
+		for(String s : sampleNames)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(Integer i: globalMap.keySet())
+		{
+			String fileLine = map.get(i);
+			
+			if(fileLine!= null)
+			{
+				writer.write(fileLine);
+				
+				List<Integer> innerList = globalMap.get(i);
+				
+				for(Integer i2 : innerList)
+					writer.write("\t" + i2);
+				
+				writer.write("\n");
+			}
+				
+		}
+		
+		writer.flush();  writer.close();
+		
+	}
+	
+	private static List<String> getSampleNames() throws Exception
+	{
+		List<String> list = new ArrayList<String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKatieDir() + File.separator + 
+				"global_library.fna.txt"
+				+ "")));
+		
+		reader.readLine();
+		for(String s= reader.readLine() ; s != null; s = reader.readLine())
+		{
+			list.add(s.split("\t")[0]);
+		}
+		
+		return list;
 	}
 	
 	private static HashMap<Integer, List<Integer>> getMapFromGlobalFile() throws Exception
@@ -52,6 +103,18 @@ public class MergeTwo
 		}
 		
 		return map;
+	}
+	
+	private static String getFirstLine() throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getKatieDir() + File.separator + 
+				"chinaur.txt")));
+		
+		String a = reader.readLine();
+		
+		
+		reader.close();
+		return a;
 	}
 	
 	private static HashMap<Integer, String> getBPointForwardRead() throws Exception
