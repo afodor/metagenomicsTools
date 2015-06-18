@@ -68,12 +68,13 @@ for( i in vals)
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
 		
 		boxplot( bug[diseaseGroup=="ctrl"] ~ patientID[diseaseGroup=="ctrl"], 
-		main = paste("CNTRL patients p=" ,format(pValueSubject , digits=3))) 
+		main = paste("CNTRL patients ") )
 		
 		stripchart(bug[diseaseGroup=="ctrl"] ~ patientID [diseaseGroup=="ctrl"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "blue")
 		
-		boxplot( bug[diseaseGroup=="NEC"] ~ patientID[diseaseGroup=="NEC"], main = "NEC patients" ) 
+		boxplot( bug[diseaseGroup=="NEC"] ~ patientID[diseaseGroup=="NEC"], 
+				main = paste("NEC patients ; p subjectID=" ,format(pValueSubject , digits=3)) ) 
 			
 		stripchart(bug[diseaseGroup=="NEC"] ~ patientID[diseaseGroup=="NEC"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
