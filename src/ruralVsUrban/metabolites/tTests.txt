@@ -11,6 +11,9 @@ myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
 names <- vector()
 pValues <- vector()
+averageUrban <- vector()
+averageRural <- vector()
+ratioUrbanRural <- vector()
 index <- 1
 for ( i in 4:ncol(myT))
 {
@@ -20,10 +23,13 @@ for ( i in 4:ncol(myT))
 	{
 		names[index] <- names(myT)[i]
 		pValues[index] <- t.test(metabolite[myT$category=="urban"], metabolite[myT$category=="rural"])$p.value
+		averageUrban[index] <- mean(metabolite[myT$category=="urban"])
+		averageRural[index] <- mean(metabolite[myT$category=="rural"])
+		ratioUrbanRural[index] <-  averageRural[index] /  averageUrban[index]
 		index <- index + 1
 	}
 	
-	dFrame <- data.frame( names, pValues) 
+	dFrame <- data.frame( names, pValues,averageUrban,averageRural,ratioUrbanRural ) 
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
 	
