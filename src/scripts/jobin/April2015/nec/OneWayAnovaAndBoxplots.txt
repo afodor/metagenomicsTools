@@ -53,12 +53,24 @@ for( i in vals)
 		graphMain =  paste( names(myTNoControls)[i], " pTime=", format(pValueTime, digits=3),
 						" pDisease ", format(pValueDiseaseGroup , digits=3), 
 						" pSubject " ,format(pValueSubject , digits=3))	
-			
+		
+		par(mfrow=c(2,1))	
 		plot( myTNoControls$week+ rnorm(length(myTNoControls$week))/50,
 				myTNoControls[,i] + rnorm(length(myTNoControls$week))/50, main = graphMain, 
 				xlab = "week", ylab=names(myTNoControls)[i] , 
 					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
-					
+		
+		boxplot( bug ~ diseaseGroup )
+		
+		myFrame <- data.frame(bug, diseaseGroup)
+		
+		stripchart(bug[diseaseGroup=="ctrl"] ~ diseaseGroup[diseaseGroup=="ctrl"], 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "blue")
+			
+		stripchart(bug[diseaseGroup=="NEC"] ~ diseaseGroup[diseaseGroup=="NEC"], 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
+		
+			
 		pValuesTime[index] <- pValueTime
 		names[index] <- names(myTNoControls)[i]
 		pValuesSubject[index] <- pValueSubject;
