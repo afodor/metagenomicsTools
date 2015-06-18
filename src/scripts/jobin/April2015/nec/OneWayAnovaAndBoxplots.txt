@@ -15,6 +15,13 @@ myT <- myT[myT$readNumber==1,]
 
 myTNoControls <- myT[myT$diseaseGroup == "ctrl" | myT$diseaseGroup == "NEC",]
 
+pValuesTime <- vector()
+names <- vector()
+pValuesSubject <- vector()
+pValuesDisease <- vector()
+
+index <- 1
+
 pdf("family_nec_withTime.pdf")	
 #par(mfrow=c(3,2))
 vals <- c(3,4,8:ncol(myT))
@@ -40,17 +47,33 @@ for( i in vals)
 		pValueTime <- anova(fullModelLME)$"p-value"[2]
 		pValueDiseaseGroup <- anova(fullModelLME)$"p-value"[3]
 		
-		pValuesSubject <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+		pValueSubject <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 		intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			
-		graphMain =  paste( names(myTNoControls)[i], format(pValueTime, digits=3),
-						format(pValueDiseaseGroup , digits=3), 
-						format(pValuesSubject , digits=3), format(intraclassCoefficient,digits=3))	
+		graphMain =  paste( names(myTNoControls)[i], " pTime=", format(pValueTime, digits=3),
+						" pDisease ", format(pValueDiseaseGroup , digits=3), 
+						" pSubject " ,format(pValueSubject , digits=3))	
 			
 		plot( myTNoControls$week+ rnorm(length(myTNoControls$week))/50,
 				myTNoControls[,i] + rnorm(length(myTNoControls$week))/50, main = graphMain, 
 				xlab = "week", ylab=names(myTNoControls)[i] , 
 					col = ifelse(myTNoControls$diseaseGroup=="ctrl" , "blue", "red"))	
+					
+		pValuesTime[index] <- pValueTime
+		names[index] <- names(myTNoControls)[i]
+		pValuesSubject[index] <- pValueSubject;
+		pValuesDisease[index] <- pValueDiseaseGroup;
+
+		index <- index + 1
+		
 	}
 }
 dev.off()
+
+dFrame <- data.frame(pValuesTime,names,pValuesSubject,pValuesDisease)
+dFrame <- dFrame [order(dFrame$pValuesDisease),]
+dFrame$adjustedPDisease <- p.adjust( dFrame$pValuesDisease, method = "BH" )
+dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )
+dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
+
+write.table(dFrame, file=paste("pValuesForTaxaTimeTreatmentFamily", ".txt",sep=""), sep="\t",row.names=FALSE)
