@@ -70,7 +70,7 @@ for( i in vals)
 }
 dev.off()
 
-dFrame <- data.frame(pValuesTime,names,pValuesSubject,pValuesDisease)
+dFrame <- data.frame(names,pValuesDisease,pValuesSubject,pValuesTime)
 dFrame <- dFrame [order(dFrame$pValuesDisease),]
 dFrame$adjustedPDisease <- p.adjust( dFrame$pValuesDisease, method = "BH" )
 dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )
