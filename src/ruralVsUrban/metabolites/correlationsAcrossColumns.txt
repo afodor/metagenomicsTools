@@ -3,7 +3,7 @@ library("Kendall")
 
 setwd("C:\\PennyChinaDataset\\metabolites")
 
-taxa <- "genus"
+taxa <- "phylum"
 
 inFileName <- paste( "mergedMetabolites" , taxa,  "WithMedata.txt" , sep="") 
 
@@ -25,7 +25,7 @@ numCols <- ncol(myT)
 myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
-myT <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
+myT <- myT[ myT$readNumber == 1 & myT$timepoint == "second_B", ]
 
 namesA <- vector()
 namesB <- vector()
@@ -71,4 +71,4 @@ dFrame <- data.frame( namesA, namesB,kendallPs, pValues,r)
 dFrame <- dFrame [order(dFrame$kendallPs),]
 dFrame$adjP <-  p.adjust( dFrame$kendallPs, method = "BH" )
 	
-write.table( file= paste( "pValuesMetabolitesVsMicrobes_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+write.table( file= paste( "pValuesMetabolitesVsMicrobesSecondTime_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
