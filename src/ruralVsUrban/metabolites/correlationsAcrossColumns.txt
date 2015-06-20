@@ -4,6 +4,19 @@ setwd("C:\\PennyChinaDataset\\metabolites")
 
 inFileName <- "mergedMetabolitesPhylumWithMedata.txt"
 
+getMetaboliteColumnNum <- function(myT)
+{
+	colNames <- names(myT)
+	
+	for( i in 1:length(colNames))
+	{
+		if( grepl( "benzenetriol", colNames[i]))
+			return (i);
+	}
+	
+	return (-1);
+}
+
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
@@ -17,11 +30,12 @@ r <- vector()
 pValues <- vector()
 index <- 1
 
-for( i in 6:26 )
+metCol <- getMetaboliteColumnNum(myT)
+for( i in 6:(metCol-1) )
 {
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
-		 for ( j in 27:ncol(myT))
+		 for ( j in metCol:ncol(myT))
 		 {
 		 	namesA[index] <- names(myT)[i]
 		 	namesB[index] <- names(myT)[j]
