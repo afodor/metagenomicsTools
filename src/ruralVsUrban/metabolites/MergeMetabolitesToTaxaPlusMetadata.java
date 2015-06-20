@@ -9,12 +9,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class MergeMetabolitesToTaxaPlusMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+			mergeALevel(NewRDPParserFileLine.TAXA_ARRAY[x]);
+	}
+	
+	public static void mergeALevel(String level) throws Exception
+	{
+		System.out.println(level);
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getChinaDir() + File.separator + "metabolites"	 +
 		File.separator + "metabolitesAsColumns.txt")));
@@ -51,11 +59,11 @@ public class MergeMetabolitesToTaxaPlusMetadata
 		reader.close();
 		
 		reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() + 
-				File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
+				File.separator + level + "_taxaAsColumnsLogNorm_WithMetadata.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getChinaDir() + File.separator + "metabolites" + 
-		File.separator + "mergedMetabolitesPhylumWithMedata.txt")));
+		File.separator + "mergedMetabolites" + level +  "WithMedata.txt")));
 		
 		writer.write(reader.readLine());
 		
