@@ -1,4 +1,4 @@
-package scripts.ChinaMerge;
+package ruralVsUrban.metabolites;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
