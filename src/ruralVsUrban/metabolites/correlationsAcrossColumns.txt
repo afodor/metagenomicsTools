@@ -27,14 +27,12 @@ for( i in 6:26 )
 		 	namesB[index] <- names(myT)[j]
 		 	
 		 	r[index] <- cor( myT[,i], myT[,j])
-		 	myLm[index] <- anova(lm(myT[,i] ~ myT[,j]))$"Pr(>F)"[1]
+		 	pValues[index] <- anova(lm(myT[,i] ~ myT[,j]))$"Pr(>F)"[1]
 		 	
 		 	index <- index + 1
 		 }
 	}
 }
-
-
 	
 dFrame <- data.frame( namesA, namesB, pValues,r) 
 dFrame <- dFrame [order(dFrame$pValues),]
