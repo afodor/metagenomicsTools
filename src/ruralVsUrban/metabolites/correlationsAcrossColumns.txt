@@ -2,7 +2,7 @@ rm(list=ls())
 
 setwd("C:\\PennyChinaDataset\\metabolites")
 
-taxa <- "family"
+taxa <- "genus"
 
 inFileName <- paste( "mergedMetabolites" , taxa,  "WithMedata.txt" , sep="") 
 
@@ -32,6 +32,7 @@ r <- vector()
 pValues <- vector()
 index <- 1
 
+pdf( paste(taxa , "plots.pdf",sep=""))
 metCol <- getMetaboliteColumnNum(myT)
 for( i in 6:(metCol-1) )
 {
@@ -43,13 +44,24 @@ for( i in 6:(metCol-1) )
 		 	namesB[index] <- names(myT)[j]
 		 	
 		 	r[index] <- cor( myT[,i], myT[,j])
-		 	pValues[index] <- anova(lm(myT[,i] ~ myT[,j]))$"Pr(>F)"[1]
+		 	aLm <- lm(myT[,i] ~ myT[,j])
+		 	pValues[index] <- anova(aLm)$"Pr(>F)"[1]
+		 	
+		 	if( ! is.na(pValues[index]) &  pValues[index] < 0.001)
+		 	{ 
+		 		myText <- paste( namesA[index] ,namesB[index] , "p=" ,  
+		 			format(	pValues[index] , digits=3), "r=", 
+		 			 format( r[index], digits=3) ) 
+		 		plot(myT[,j],myT[,i] , main=myText)
+		 		abline(aLm)
+		 	}
 		 	
 		 	index <- index + 1
 		 }
 	}
 }
 	
+dev.off()
 dFrame <- data.frame( namesA, namesB, pValues,r) 
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
