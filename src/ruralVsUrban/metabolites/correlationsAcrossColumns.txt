@@ -51,9 +51,9 @@ for( i in 6:(metCol-1) )
 		 	kendallPs[index] <- Kendall(myT[,i], myT[,j])$sl[1]
 		 	
 		 	
-		 	if( ! is.na(pValues[index]) &  pValues[index] < 0.001)
+		 	if( ! is.na(kendallPs[index] ) &  kendallPs[index] < 0.001)
 		 	{ 
-		 		myText <- paste( namesA[index] ,namesB[index] , "p=" ,  
+		 		myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
 		 			format(	pValues[index] , digits=3), "r=", 
 		 			 format( r[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPs[index], digits=3)) 
