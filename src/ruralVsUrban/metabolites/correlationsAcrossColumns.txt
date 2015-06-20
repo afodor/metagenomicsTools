@@ -1,0 +1,12 @@
+rm(list=ls())
+
+setwd("C:\\PennyChinaDataset\\metabolites")
+
+inFileName <- "mergedMetabolitesPhylumWithMedata.txt"
+
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+myT <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
