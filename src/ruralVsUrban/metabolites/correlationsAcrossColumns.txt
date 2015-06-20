@@ -10,3 +10,33 @@ myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
 myT <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
+
+namesA <- vector()
+namesB <- vector()
+r <- vector()
+pValues <- vector()
+index <- 1
+
+for( i in 6:26 )
+{
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{
+		 for ( j in 27:ncol(myT))
+		 {
+		 	namesA[index] <- names(myT)[i]
+		 	namesB[index] <- names(myT)[j]
+		 	
+		 	r[index] <- cor( myT[,i], myT[,j])
+		 	myLm[index] <- lm(myT[,i] ~ myT[,j])
+		 	index <- index + 1
+		 }
+	}
+}
+
+
+	
+dFrame <- data.frame( namesA, namesB, pValues,r) 
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
+	
+write.table( file="pValuesMetabolitesVsMicrobes.txt", dFrame, row.names=FALSE, sep="\t")
