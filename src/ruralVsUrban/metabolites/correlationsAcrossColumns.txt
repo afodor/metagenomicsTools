@@ -2,7 +2,9 @@ rm(list=ls())
 
 setwd("C:\\PennyChinaDataset\\metabolites")
 
-inFileName <- "mergedMetabolitesPhylumWithMedata.txt"
+taxa <- "family"
+
+inFileName <- paste( "mergedMetabolites" , taxa,  "WithMedata.txt" , sep="") 
 
 getMetaboliteColumnNum <- function(myT)
 {
@@ -52,4 +54,4 @@ dFrame <- data.frame( namesA, namesB, pValues,r)
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
 	
-write.table( file="pValuesMetabolitesVsMicrobes.txt", dFrame, row.names=FALSE, sep="\t")
+write.table( file= paste( "pValuesMetabolitesVsMicrobes_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
