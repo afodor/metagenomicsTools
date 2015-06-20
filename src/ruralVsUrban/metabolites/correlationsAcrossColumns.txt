@@ -1,4 +1,5 @@
 rm(list=ls())
+library("Kendall")
 
 setwd("C:\\PennyChinaDataset\\metabolites")
 
@@ -30,6 +31,7 @@ namesA <- vector()
 namesB <- vector()
 r <- vector()
 pValues <- vector()
+kendallPs <- vector()
 index <- 1
 
 pdf( paste(taxa , "plots.pdf",sep=""))
@@ -43,15 +45,18 @@ for( i in 6:(metCol-1) )
 		 	namesA[index] <- names(myT)[i]
 		 	namesB[index] <- names(myT)[j]
 		 	
-		 	r[index] <- cor( myT[,i], myT[,j])
+		 	r[index] <- cor( myT[,i], myT[,j], method="spearman")
 		 	aLm <- lm(myT[,i] ~ myT[,j])
 		 	pValues[index] <- anova(aLm)$"Pr(>F)"[1]
+		 	kendallPs[index] <- Kendall(myT[,i], myT[,j])$sl[1]
+		 	
 		 	
 		 	if( ! is.na(pValues[index]) &  pValues[index] < 0.001)
 		 	{ 
 		 		myText <- paste( namesA[index] ,namesB[index] , "p=" ,  
 		 			format(	pValues[index] , digits=3), "r=", 
-		 			 format( r[index], digits=3) ) 
+		 			 format( r[index], digits=3), "kendall p=" , 
+		 			 	 format( kendallPs[index], digits=3)) 
 		 		plot(myT[,j],myT[,i] , main=myText)
 		 		abline(aLm)
 		 	}
@@ -62,8 +67,8 @@ for( i in 6:(metCol-1) )
 }
 	
 dev.off()
-dFrame <- data.frame( namesA, namesB, pValues,r) 
-dFrame <- dFrame [order(dFrame$pValues),]
-dFrame$adjP <-  p.adjust( dFrame$pValues, method = "BH" )
+dFrame <- data.frame( namesA, namesB,kendallPs, pValues,r) 
+dFrame <- dFrame [order(dFrame$kendallPs),]
+dFrame$adjP <-  p.adjust( dFrame$kendallPs, method = "BH" )
 	
 write.table( file= paste( "pValuesMetabolitesVsMicrobes_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
