@@ -56,27 +56,27 @@ for( i in 6:(metCol-1) )
 		 	kendallPsFirst[index] <- Kendall(myTFirst[,i], myTFirst[,j])$sl[1]
 		 	
 		 	rSecond[index] <- cor( myTSecond[,i], myTSecond[,j], method="spearman")
-		 	aLm <- lm(myTSecond[,i] ~ myTSecond[,j])
-		 	pValuesSecond[index] <- anova(aLm)$"Pr(>F)"[1]
+		 	aLm2 <- lm(myTSecond[,i] ~ myTSecond[,j])
+		 	pValuesSecond[index] <- anova(aLm2)$"Pr(>F)"[1]
 		 	kendallPsSecond[index] <- Kendall(myTSecond[,i], myTSecond[,j])$sl[1]
 		 	
 		 	if( ! is.na(kendallPsFirst[index] ) & ! is.na(kendallPsSecond[index] ) 
 		 			   & (kendallPsFirst[index] < 0.001 | kendallPsSecond[index]  ) ) 
 		 	{ 
-		 		par(mfrow=c(1,2))
-		 		myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
+		 		par(mfrow=c(2,1))
+		 		myText <- paste( "A " , namesA[index] ,namesB[index] ,"\n", "p=" ,  
 		 			format(	pValuesFirst[index] , digits=3), "r=", 
 		 			 format( rFirst[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsFirst[index], digits=3)) 
 		 		plot(myTFirst[,j],myTFirst[,i] , main=myText)
+		 		abline(aLm)
 		 		
-		 		myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
+		 		myText <- paste( "B " , namesA[index] ,namesB[index] ,"\n", "p=" ,  
 		 			format(	pValuesSecond[index] , digits=3), "r=", 
 		 			 format( rSecond[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsSecond[index], digits=3)) 
 		 		plot(myTSecond[,j],myTSecond[,i] , main=myText)
-		 		
-		 		abline(aLm)
+		 		abline(aLm2)
 		 	}
 		 	
 		 	index <- index + 1
