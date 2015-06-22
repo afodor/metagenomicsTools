@@ -61,7 +61,7 @@ for( i in 6:(metCol-1) )
 		 	kendallPsSecond[index] <- Kendall(myTSecond[,i], myTSecond[,j])$sl[1]
 		 	
 		 	if( ! is.na(kendallPsFirst[index] ) & ! is.na(kendallPsSecond[index] ) 
-		 			   & (kendallPsFirst[index] < 0.001 | kendallPsSecond[index]  ) ) 
+		 			   & (kendallPsFirst[index] < 0.001 | kendallPsSecond[index] < 0.001  ) ) 
 		 	{ 
 		 		par(mfrow=c(2,1))
 		 		myText <- paste( "A " , namesA[index] ,namesB[index] ,"\n", "p=" ,  
