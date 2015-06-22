@@ -28,6 +28,8 @@ public class MergeMetabolitesToTaxaPlusMetadata
 		File.separator + "metabolitesAsColumns.txt")));
 		
 		List<String> metaboliteNames = new ArrayList<String>();
+		List<String> dietNames = StripMetadata.getNames();
+		HashMap<Integer, List<Double>> dietMap = StripMetadata.getMap();
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -70,6 +72,9 @@ public class MergeMetabolitesToTaxaPlusMetadata
 		for(String s : metaboliteNames)
 			writer.write("\t" + s);
 		
+		for( String s : dietNames)
+			writer.write("\t" + s);
+		
 		writer.write("\n");
 		
 		for(String s= reader.readLine() ; s != null; s = reader.readLine() )
@@ -85,6 +90,19 @@ public class MergeMetabolitesToTaxaPlusMetadata
 			
 			for( Double d : list)
 				writer.write("\t" + d);
+			
+			List<Double> dietList = dietMap.get(key);
+			
+			if( dietList == null)
+				throw new Exception("No");
+			
+			for( Double d : dietList)
+			{
+				if( d == null)
+					writer.write("\tNA");
+				else
+					writer.write("\t" + d);
+			}
 			
 			writer.write("\n");
 		}
