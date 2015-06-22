@@ -25,13 +25,18 @@ numCols <- ncol(myT)
 myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
 myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
-myT <- myT[ myT$readNumber == 1 & myT$timepoint == "second_B", ]
+myTSecond <- myT[ myT$readNumber == 1 & myT$timepoint == "second_B", ]
+myTFirst <- myT[ myT$readNumber == 1 & myT$timepoint == "first_A", ]
 
 namesA <- vector()
 namesB <- vector()
-r <- vector()
-pValues <- vector()
-kendallPs <- vector()
+rFirst <- vector()
+pValuesFirst <- vector()
+kendallPsFirst <- vector()
+rSecond <- vector()
+pValuesSecond <- vector()
+kendallPsSecond <- vector()
+
 index <- 1
 
 pdf( paste(taxa , "plots.pdf",sep=""))
@@ -45,19 +50,32 @@ for( i in 6:(metCol-1) )
 		 	namesA[index] <- names(myT)[i]
 		 	namesB[index] <- names(myT)[j]
 		 	
-		 	r[index] <- cor( myT[,i], myT[,j], method="spearman")
-		 	aLm <- lm(myT[,i] ~ myT[,j])
-		 	pValues[index] <- anova(aLm)$"Pr(>F)"[1]
-		 	kendallPs[index] <- Kendall(myT[,i], myT[,j])$sl[1]
+		 	rFirst[index] <- cor( myTFirst[,i], myTFirst[,j], method="spearman")
+		 	aLm <- lm(myTFirst[,i] ~ myTFirst[,j])
+		 	pValuesFirst[index] <- anova(aLm)$"Pr(>F)"[1]
+		 	kendallPsFirst[index] <- Kendall(myTFirst[,i], myTFirst[,j])$sl[1]
 		 	
+		 	rSecond[index] <- cor( myTSecond[,i], myTSecond[,j], method="spearman")
+		 	aLm <- lm(myTSecond[,i] ~ myTSecond[,j])
+		 	pValuesSecond[index] <- anova(aLm)$"Pr(>F)"[1]
+		 	kendallPsSecond[index] <- Kendall(myTSecond[,i], myTSecond[,j])$sl[1]
 		 	
-		 	if( ! is.na(kendallPs[index] ) &  kendallPs[index] < 0.001)
+		 	if( ! is.na(kendallPsFirst[index] ) & ! is.na(kendallPsSecond[index] ) 
+		 			   & (kendallPsFirst[index] < 0.001 | kendallPsSecond[index]  ) ) 
 		 	{ 
+		 		par(mfrow=c(1,2))
 		 		myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
-		 			format(	pValues[index] , digits=3), "r=", 
-		 			 format( r[index], digits=3), "kendall p=" , 
-		 			 	 format( kendallPs[index], digits=3)) 
-		 		plot(myT[,j],myT[,i] , main=myText)
+		 			format(	pValuesFirst[index] , digits=3), "r=", 
+		 			 format( rFirst[index], digits=3), "kendall p=" , 
+		 			 	 format( kendallPsFirst[index], digits=3)) 
+		 		plot(myTFirst[,j],myTFirst[,i] , main=myText)
+		 		
+		 		myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
+		 			format(	pValuesSecond[index] , digits=3), "r=", 
+		 			 format( rSecond[index], digits=3), "kendall p=" , 
+		 			 	 format( kendallPsSecond[index], digits=3)) 
+		 		plot(myTSecond[,j],myTSecond[,i] , main=myText)
+		 		
 		 		abline(aLm)
 		 	}
 		 	
@@ -67,8 +85,10 @@ for( i in 6:(metCol-1) )
 }
 	
 dev.off()
-dFrame <- data.frame( namesA, namesB,kendallPs, pValues,r) 
-dFrame <- dFrame [order(dFrame$kendallPs),]
-dFrame$adjP <-  p.adjust( dFrame$kendallPs, method = "BH" )
+dFrame <- data.frame( namesA, namesB,kendallPsFirst, pValuesFirst,rFirst,
+			kendallPsSecond, pValuesSecond,rSecond) 
+dFrame <- dFrame [order(dFrame$kendallPsFirst),]
+dFrame$adjPFirst <-  p.adjust( dFrame$kendallPsFirst, method = "BH" )
+dFrame$adjPSecond <-  p.adjust( dFrame$kendallPsSecond, method = "BH" )
 	
-write.table( file= paste( "pValuesMetabolitesVsMicrobesSecondTime_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+write.table( file= paste( "pValuesMetabolitesVsMicrobesBothTimes_", taxa, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
