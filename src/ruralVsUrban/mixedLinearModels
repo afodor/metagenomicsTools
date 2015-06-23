@@ -1,5 +1,10 @@
 rm(list=ls())
 
+library("pscl")
+library("lmtest")
+library("nlme")
+
+
 setwd("C:\\PennyChinaDataset")
 
 #taxaLevels <- c("phylum","class","order","family","genus")
@@ -26,7 +31,7 @@ for(taxa in taxaLevels )
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
 	
 	for( i in 6:numCols)
-		if( sum[ myT[,i] != 0 ] > nrow(myT) / 4 )
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
 		{
 		
 			bug <- myT[,i]
@@ -48,7 +53,7 @@ for(taxa in taxaLevels )
 			pValuesSubject <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			
-			graphMain =  paste( names(myT)[i], " pTime=", format(pValueTime, digits=3))	
+			graphMain =  paste( names(myT)[i], " pTime=", format(pValuesTime, digits=3))	
 			
 			plot( bug ~ time , main = graphMain, 
 					col = ifelse(myT$ruralUrban=="rural" , "blue", "red"))	
