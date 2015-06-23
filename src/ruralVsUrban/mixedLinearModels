@@ -58,12 +58,12 @@ for(taxa in taxaLevels )
 			
 			par(mfrow=c(2,1))
 			
-			plot( bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"])	
+			plot( bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], ylab = names[index] )	
 			
 			stripchart(bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], 
-			data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index] )		
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			
-			plot( bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"])	
+			plot( bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], ylab=names[index])	
 			
 			stripchart(bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
