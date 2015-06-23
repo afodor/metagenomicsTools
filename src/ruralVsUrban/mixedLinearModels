@@ -1,0 +1,25 @@
+rm(list=ls())
+
+setwd("C:\\PennyChinaDataset")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( taxa,  "_taxaAsColumnsLogNorm_WithMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	# only the forward reads
+	myT <- myT[ which( myT$readNumber == "1"), ]
+	
+	pValues <- vector()
+	names <- vector()
+	pValuesTime <- vector()
+	pValuesSubject <- vector()
+	pValuesUrbanRural <- vector()
+	percentExplained <- vector()
+}
