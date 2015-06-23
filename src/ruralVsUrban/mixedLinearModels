@@ -5,7 +5,7 @@ library("lmtest")
 library("nlme")
 
 
-setwd("C:\\PennyChinaDataset")
+setwd("D:\\PennyChinaDataset")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 #taxaLevels <- c("phylum")
@@ -26,6 +26,8 @@ for(taxa in taxaLevels )
 	pValuesSubject <- vector()
 	pValuesUrbanRural <- vector()
 	meanBug <- vector()
+	meanUrban <- vector()
+	meanRural <- vector()
 	index <- 1
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
 	
@@ -35,6 +37,8 @@ for(taxa in taxaLevels )
 		
 			bug <- myT[,i]
 			meanBug[index] <- mean(bug)
+			meanUrban[index] <- mean(bug[myT$ruralUrban=="urban"])
+			meanRural[index] <- mean(bug[myT$ruralUrban=="rural"])
 			time <- factor(myT$timepoint)
 			patientID <- factor(myT$patientID )
 			urbanRural <- factor(myT$ruralUrban)
@@ -84,7 +88,8 @@ for(taxa in taxaLevels )
 		
 		}
 		
-	dFrame <- data.frame( names, pValuesTime ,pValuesSubject,pValuesUrbanRural ,meanBug) 
+	dFrame <- data.frame( names, pValuesTime ,pValuesSubject,pValuesUrbanRural ,meanBug,meanUrban,meanRural)
+	dFrame$UrbanToRural <- meanUrban / meanRural 
 	dFrame <- dFrame [order(dFrame$pValuesUrbanRural),]
 	dFrame$adjustedPUrbanRural <- p.adjust( dFrame$pValuesUrbanRural, method = "BH" )	
 	write.table(dFrame, file=paste("pValuesForTaxaTimeUrbanRural", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
