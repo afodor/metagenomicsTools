@@ -50,15 +50,18 @@ for(taxa in taxaLevels )
 	
 			pValuesTime[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesUrbanRural[index] <- anova(fullModelLME)$"p-value"[3]
-			pValuesSubject <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(myT)[i]
 			
-			#graphMain =  paste( names(myT)[i], " pTime=", format(pValuesTime, digits=3))	
+			graphMain =  paste( names(myT)[i], " pTime=", format(pValuesTime[index], digits=3), "\n",
+								" pRuralUrban= ", format(pValuesUrbanRural[index],digits=3), 
+									" pSubject= " , format(	pValuesSubject[index], digits=3))
 			
 			par(mfrow=c(2,1))
 			
-			plot( bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], ylab = names[index] )	
+			plot( bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], ylab = names[index],
+					main = graphMain )	
 			
 			stripchart(bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
