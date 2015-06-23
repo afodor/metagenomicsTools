@@ -72,7 +72,7 @@ for(taxa in taxaLevels )
 			stripchart(bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
 			
-			plot(bug ~ patientID  ) 		
+			plot(bug ~ patientID , las=3 , ylab = names[index]) 		
 			
 			stripchart(bug[myT$ruralUrban=="rural"] ~ patientID[myT$ruralUrban=="rural"], 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "blue")
