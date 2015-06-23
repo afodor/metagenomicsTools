@@ -1,9 +1,9 @@
 rm(list=ls())
 library("Kendall")
 
-setwd("C:\\PennyChinaDataset\\metabolites")
+setwd("D:\\PennyChinaDataset\\metabolites")
 
-taxa <- "phylum"
+taxa <- "genus"
 
 inFileName <- paste( "mergedMetabolites" , taxa,  "WithMedata.txt" , sep="") 
 
@@ -14,6 +14,19 @@ getMetaboliteColumnNum <- function(myT)
 	for( i in 1:length(colNames))
 	{
 		if( grepl( "benzenetriol", colNames[i]))
+			return (i);
+	}
+	
+	return (-1);
+}
+
+getStopColumn <- function(myT)
+{
+	colNames <- names(myT)
+	
+	for( i in 1:length(colNames))
+	{
+		if( grepl( "As_water", colNames[i]))
 			return (i);
 	}
 	
@@ -38,6 +51,7 @@ pValuesSecond <- vector()
 kendallPsSecond <- vector()
 
 index <- 1
+stopCol = getStopColumn(myT)
 
 pdf( paste(taxa , "plots.pdf",sep=""))
 metCol <- getMetaboliteColumnNum(myT)
@@ -45,7 +59,7 @@ for( i in 6:(metCol-1) )
 {
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
-		 for ( j in metCol:ncol(myT))
+		 for ( j in metCol:(stopCol-1))
 		 {
 		 	namesA[index] <- names(myT)[i]
 		 	namesB[index] <- names(myT)[j]
@@ -68,14 +82,16 @@ for( i in 6:(metCol-1) )
 		 			format(	pValuesFirst[index] , digits=3), "r=", 
 		 			 format( rFirst[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsFirst[index], digits=3)) 
-		 		plot(myTFirst[,j],myTFirst[,i] , main=myText)
+		 		plot(myTFirst[,j],myTFirst[,i] , main=myText,
+		 		col = ifelse(myTFirst$ruralUrban == "rural", "blue", "red"))
 		 		abline(aLm)
 		 		
 		 		myText <- paste( "B " , namesA[index] ,namesB[index] ,"\n", "p=" ,  
 		 			format(	pValuesSecond[index] , digits=3), "r=", 
 		 			 format( rSecond[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsSecond[index], digits=3)) 
-		 		plot(myTSecond[,j],myTSecond[,i] , main=myText)
+		 		plot(myTSecond[,j],myTSecond[,i] , main=myText,
+		 		col = ifelse(myTFirst$ruralUrban == "rural", "blue", "red"))
 		 		abline(aLm2)
 		 	}
 		 	
