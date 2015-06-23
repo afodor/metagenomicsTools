@@ -7,8 +7,8 @@ library("nlme")
 
 setwd("C:\\PennyChinaDataset")
 
-#taxaLevels <- c("phylum","class","order","family","genus")
-taxaLevels <- c("phylum")
+taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum")
 
 for(taxa in taxaLevels ) 
 {
