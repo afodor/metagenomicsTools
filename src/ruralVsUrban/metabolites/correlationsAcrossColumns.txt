@@ -53,7 +53,7 @@ kendallPsSecond <- vector()
 index <- 1
 stopCol = getStopColumn(myT)
 
-pdf( paste(taxa , "plots.pdf",sep=""))
+pdf( paste(taxa , "plotsMicrobesVsMetabolites.pdf",sep=""))
 metCol <- getMetaboliteColumnNum(myT)
 for( i in 6:(metCol-1) )
 {
