@@ -56,7 +56,8 @@ for(taxa in taxaLevels )
 			
 			graphMain =  paste( names(myT)[i], " pTime=", format(pValuesTime[index], digits=3), "\n",
 								" pRuralUrban= ", format(pValuesUrbanRural[index],digits=3), 
-									" pSubject= " , format(	pValuesSubject[index], digits=3))
+									" pSubject= " , format(	pValuesSubject[index], digits=3), "\n",
+										" icc= " , intraclassCoefficient , sep="")
 			
 			par(mfrow=c(2,1))
 			
