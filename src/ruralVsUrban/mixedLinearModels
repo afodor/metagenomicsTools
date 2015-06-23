@@ -21,12 +21,11 @@ for(taxa in taxaLevels )
 	# only the forward reads
 	myT <- myT[ which( myT$readNumber == "1"), ]
 	
-	pValues <- vector()
 	names <- vector()
 	pValuesTime <- vector()
 	pValuesSubject <- vector()
 	pValuesUrbanRural <- vector()
-	percentExplained <- vector()
+	meanBug <- vector()
 	index <- 1
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
 	
@@ -35,6 +34,7 @@ for(taxa in taxaLevels )
 		{
 		
 			bug <- myT[,i]
+			meanBug[index] <- mean(bug)
 			time <- factor(myT$timepoint)
 			patientID <- factor(myT$patientID )
 			urbanRural <- factor(myT$ruralUrban)
@@ -76,5 +76,9 @@ for(taxa in taxaLevels )
 		
 		}
 		
+	dFrame <- data.frame( names, pValuesTime ,pValuesSubject,pValuesUrbanRural ,meanBug) 
+	dFrame <- dFrame [order(dFrame$pValuesUrbanRural),]
+	dFrame$adjustedPUrbanRural <- p.adjust( dFrame$pValuesUrbanRural, method = "BH" )	
+	write.table(dFrame, file=paste("pValuesForTaxaTimeUrbanRural", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 		dev.off()
 }
