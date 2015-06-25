@@ -1,6 +1,7 @@
 rm(list=ls())
 
 setwd("D:\\microbesVsMetabolites")
+library("Kendall")
 
 getMetaboliteColumnNum <- function(myT)
 {
@@ -42,8 +43,8 @@ for ( taxa in levels )
 			{
 				phylaNames[index] <- allNames[p]
 				metNames[index] <- allNames[t]
-				rValues[index] <- cor(myT[,p], myT[,t])
-				pValues[index] <- anova(lm( myT[,p] ~ myT[,t]))$"Pr(>F)"[1]
+				rValues[index] <- cor(myT[,p], myT[,t], method="spearman")
+				pValues[index] <- Kendall(myT[,p], myT[,t])$sl[1]
 				index = index + 1
 			}
 		}
