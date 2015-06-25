@@ -9,13 +9,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
 public class WritaAsPhyla
 {
+	public static final String[] LEVELS = { "p" , "c", "o", "f", "g" };
+	
 	public static void main(String[] args) throws Exception
 	{
+		for(String s : LEVELS)
+			writeALevel(s);
+	}
+	
+	public static void writeALevel(String level) throws Exception
+	{
+		System.out.println(level);
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
 				"toFodor05182015_PL_shucha_bothLanes_wTaxa.txt")));
 		
@@ -37,10 +47,7 @@ public class WritaAsPhyla
 				thisList.add(Double.parseDouble(splits[x]));
 			
 			String taxaString = splits[splits.length-1];
-			System.out.println(taxaString);
-			
-			if( ! taxaString.equals("Unassigned") && ! taxaString.equals("k__Bacteria") )
-				taxaString = taxaString.split(";")[1].replace("p__", "");
+			taxaString = getAssignment(taxaString, level);
 			
 			List<Double> oldList = map.get(taxaString);
 			
@@ -59,15 +66,16 @@ public class WritaAsPhyla
 			map.put(taxaString, thisList);
  		}
 		
-		writeResults(sampleNames, map);
+		writeResults(sampleNames, map, level);
 	}
 	
-	private static void writeResults(List<String> headers, HashMap<String, List<Double>> map ) throws Exception
+	private static void writeResults(List<String> headers, HashMap<String, List<Double>> map, String level ) 
+				throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"phylaAsRows.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + level + "AsRows.txt")));
 		
-		writer.write("phyla");
+		writer.write(level);
 		
 		for(String s : headers )
 		{
@@ -92,5 +100,34 @@ public class WritaAsPhyla
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static String getAssignment(String  s, String level) throws Exception
+	{
+		if( s.equals("Unassigned"))
+			return s;
+		
+		StringTokenizer sToken = new StringTokenizer(s, ";");
+
+		String start = level + "__";
+		
+		
+		while(sToken.hasMoreTokens())
+		{
+			String nextToken = sToken.nextToken().trim();
+			
+			if( nextToken.startsWith(start))
+			{
+				String val = nextToken.replace(start, "").replace("[", "").replace("]", "");
+				
+				if( val.length() == 0 )
+					val = "Unassigned";
+				
+				return val;
+			}
+				
+		}
+		
+		return "Unassigned";
 	}
 }
