@@ -16,7 +16,9 @@ getMetaboliteColumnNum <- function(myT)
 	return (-1);
 }
 
-levels <- c("p" , "c", "o", "f", "g", "otu" )
+#levels <- c("p" , "c", "o", "f", "g", "otu" )
+
+levels <- c("p")
 
 for ( taxa in levels ) 
 {
