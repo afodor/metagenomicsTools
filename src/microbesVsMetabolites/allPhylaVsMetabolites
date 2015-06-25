@@ -51,7 +51,7 @@ for ( taxa in levels )
 			}
 		}
 
-	dFrame <- data.frame(phylaNames,metNames , ,meanBug, rValues,pValues)
+	dFrame <- data.frame(phylaNames,metNames ,meanBug, rValues,pValues)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
 
