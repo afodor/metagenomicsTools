@@ -68,14 +68,16 @@ for( i in 6:(metCol-1) )
 		 			format(	pValuesFirst[index] , digits=3), "r=", 
 		 			 format( rFirst[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsFirst[index], digits=3)) 
-		 		plot(myTFirst[,j],myTFirst[,i] , main=myText)
+		 		plot(myTFirst[,j],myTFirst[,i] , main=myText,
+		 		col = ifelse(myTFirst$ruralUrban == "rural", "blue", "red"))
 		 		abline(aLm)
 		 		
 		 		myText <- paste( "B " , namesA[index] ,namesB[index] ,"\n", "p=" ,  
 		 			format(	pValuesSecond[index] , digits=3), "r=", 
 		 			 format( rSecond[index], digits=3), "kendall p=" , 
 		 			 	 format( kendallPsSecond[index], digits=3)) 
-		 		plot(myTSecond[,j],myTSecond[,i] , main=myText)
+		 		plot(myTSecond[,j],myTSecond[,i] , main=myText,
+		 		col = ifelse(myTFirst$ruralUrban == "rural", "blue", "red"))
 		 		abline(aLm2)
 		 	}
 		 	
