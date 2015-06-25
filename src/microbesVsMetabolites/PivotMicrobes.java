@@ -22,17 +22,22 @@ public class PivotMicrobes
 				"patientMetadataSubjectsAsColumns.txt"
 				 , false);
 		
-		OtuWrapper.transpose(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"phylaAsRows.txt", 
-				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"phylaAsColumns.txt"
-				 , false);
-		
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"phylaAsColumns.txt");
-		
-		wrapper.writeNormalizedLoggedDataToFile(new File(
-				ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"phylaAsColumnsLogNormalized.txt"));
+		for( String s : WritaAsPhyla.LEVELS)
+		{
+			System.out.println(s);
+			OtuWrapper.transpose(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+					 s+  "AsRows.txt", 
+					ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+					s + "AsColumns.txt"
+					 , false);
+			
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+					s + "AsColumns.txt");
+			
+			wrapper.writeNormalizedLoggedDataToFile(new File(
+					ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
+					s + "AsColumnsLogNormalized.txt"));
+			
+		}
 	}
 }
