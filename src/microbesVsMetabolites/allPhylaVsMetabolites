@@ -31,6 +31,7 @@ for ( taxa in levels )
 	metNames <- vector()
 	rValues <- vector()
 	pValues <- vector()
+	meanBug <- vector()
 	index <- 1
 
 	allNames <- names(myT)
@@ -45,11 +46,12 @@ for ( taxa in levels )
 				metNames[index] <- allNames[t]
 				rValues[index] <- cor(myT[,p], myT[,t], method="spearman")
 				pValues[index] <- Kendall(myT[,p], myT[,t])$sl[1]
+				meanBug[index] <- mean(myT[,p])
 				index = index + 1
 			}
 		}
 
-	dFrame <- data.frame(phylaNames,metNames ,rValues,pValues)
+	dFrame <- data.frame(phylaNames,metNames , ,meanBug, rValues,pValues)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
 
