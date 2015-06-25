@@ -15,7 +15,7 @@ import utils.ConfigReader;
 
 public class WritaAsPhyla
 {
-	public static final String[] LEVELS = { "p" , "c", "o", "f", "g" };
+	public static final String[] LEVELS = { "p" , "c", "o", "f", "g", "otu" };
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -47,7 +47,11 @@ public class WritaAsPhyla
 				thisList.add(Double.parseDouble(splits[x]));
 			
 			String taxaString = splits[splits.length-1];
-			taxaString = getAssignment(taxaString, level);
+			
+			if( level.equals("otu"))
+				taxaString = splits[0];
+			else
+				taxaString = getAssignment(taxaString, level);
 			
 			List<Double> oldList = map.get(taxaString);
 			
