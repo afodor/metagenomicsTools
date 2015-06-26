@@ -24,3 +24,26 @@ for( i in 2:(numColsUrine-1))
 }
 
 hist(coefsWithinUrine)
+
+myTPlasma <- read.table("PLASMAAsColumns.txt", header=TRUE, sep="\t", row.names=1)
+numColsPlasma <- ncol(myTPlasma)
+myColClasses <- c(rep("character",1), rep("numeric", numColsPlasma -1))
+myTPlasma<-read.table("URINEAsColumns.txt",header=TRUE,sep="\t",colClasses=myColClasses)
+
+coefsWithinPlasma<- vector(length=choose(numColsPlasma-1,2))
+
+index <- 1
+
+for( i in 2:(numColsPlasma-1))
+{
+	dataI <- myTPlasma[,i]
+	
+	for( j in (i+1):(numColsPlasma))
+	{
+		dataJ <- myTPlasma[,j]
+		coefsWithinPlasma [index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+hist(coefsWithinPlasma)
