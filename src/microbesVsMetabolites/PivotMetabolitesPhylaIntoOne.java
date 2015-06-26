@@ -107,7 +107,7 @@ public class PivotMetabolitesPhylaIntoOne
 	
 	}
 	
-	private static List<String> getNames(MetaboliteClass metaboliteClass) throws Exception
+	static List<String> getNames(MetaboliteClass metaboliteClass) throws Exception
 	{
 		List<String> list = new ArrayList<String>();
 		BufferedReader reader = null;
