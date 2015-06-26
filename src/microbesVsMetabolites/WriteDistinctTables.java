@@ -42,7 +42,7 @@ public class WriteDistinctTables
 		writer.write("sample");
 		
 		for(int x=0;x  < names.size(); x++)
-			writer.write("\t" + removeAnnoyingCharacters("Met" + (x+1)));
+			writer.write("\t" + removeAnnoyingCharacters(names.get(x)));
 		
 		writer.write("\n");
 		

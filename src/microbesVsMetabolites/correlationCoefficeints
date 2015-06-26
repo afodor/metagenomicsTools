@@ -3,6 +3,24 @@ rm(list=ls())
 setwd("D:\\microbesVsMetabolites")
 
 myTUrine <- read.table("URINEAsColumns.txt", header=TRUE, sep="\t", row.names=1)
+numColsUrine <- ncol(myTUrine)
+myColClasses <- c(rep("character",1), rep("numeric", numColsUrine-1))
+myTUrine <-read.table("URINEAsColumns.txt",header=TRUE,sep="\t",colClasses=myColClasses)
 
+coefsWithinUrine <- vector(length=choose(numColsUrine-1,2))
 
+index <- 1
 
+for( i in 2:(numColsUrine-1))
+{
+	dataI <- myTUrine[,i]
+	
+	for( j in (i+1):(numColsUrine))
+	{
+		dataJ <- myTUrine[,j]
+		coefsWithinUrine [index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+hist(coefsWithinUrine)
