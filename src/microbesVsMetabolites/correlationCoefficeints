@@ -68,26 +68,11 @@ for( i in 2:(numColsPlasma))
 }
 
 
-# from http://stackoverflow.com/questions/3541713/how-to-plot-two-histograms-together-in-r
-densp1 = density(coefsWithinUrine)
-densp2 = density(coefsWithinPlasma)
-densp3 = density(crossMetabolites)
 
-r1Col <- rgb(1,0,0,0.2)
-r2Col <- rgb(0,0,1,0.2)
-r3col = rgb(0,1,0,.2)
-
-xlim <- range(densp1$x,densp2$x,densp3$x)
-ylim <- range(0,densp1$y, densp2$y,densp3$y )
-plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',main = 'Distribution of r', panel.first = grid())
-polygon(densp1, density = -1, col = r1Col)
-polygon(densp2, density = -1, col = r2Col)
-polygon(densp3, density = -1, col = r3col)
-
-myTFamily <- read.table("URINEAsColumns.txt", header=TRUE, sep="\t", row.names=1)
+myTFamily <- read.table("fAsColumnsLogNormalized.txt", header=TRUE, sep="\t", row.names=1)
 numColsFamily <- ncol(myTFamily)
 myColClasses <- c(rep("character",1), rep("numeric", numColsFamily-1))
-myTFamily<-read.table("URINEAsColumns.txt",header=TRUE,sep="\t",colClasses=myColClasses)
+myTFamily<-read.table("fAsColumnsLogNormalized.txt",header=TRUE,sep="\t",colClasses=myColClasses)
 
 crossFamilyToPlasma <- vector()
 index <- 1
@@ -105,3 +90,23 @@ for( i in 2:numColsFamily)
 		}
 	}
 }
+
+
+# from http://stackoverflow.com/questions/3541713/how-to-plot-two-histograms-together-in-r
+densp1 = density(coefsWithinUrine)
+densp2 = density(coefsWithinPlasma)
+densp3 = density(crossMetabolites)
+densp4 = density(crossFamilyToPlasma)
+
+r1Col <- rgb(1,0,0,0.2)
+r2Col <- rgb(0,0,1,0.2)
+r3col = rgb(0,1,0,.2)
+r4col <- rgb(0,0,0,.4)
+
+xlim <- range(densp1$x,densp2$x,densp3$x, densp4$x )
+ylim <- range(0,densp1$y, densp2$y,densp3$y,densp4$y  )
+plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',main = 'Distribution of r', panel.first = grid())
+polygon(densp1, density = -1, col = r1Col)
+polygon(densp2, density = -1, col = r2Col)
+polygon(densp3, density = -1, col = r3col)
+polygon(densp4, density = -1, col = r4col)
