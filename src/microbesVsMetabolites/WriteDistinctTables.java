@@ -13,6 +13,24 @@ import microbesVsMetabolites.WriteTrialsForSVMLight.MetaboliteClass;
 
 public class WriteDistinctTables
 {
+	private static String removeAnnoyingCharacters(String s)
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < s.length(); x++)
+		{
+			char c = s.charAt(x);
+			
+			if( c != '\"' && c != ',')
+				buff.append(c);
+			else
+				buff.append("_");
+		}
+		
+		return buff.toString();
+	}
+	
+	
 	private static void writeMetabolitesFile(MetaboliteClass mc) throws Exception
 	{
 		HashMap<Integer, List<Double>> metMap = WriteTrialsForSVMLight.getMetabolites(mc, false);
@@ -24,7 +42,7 @@ public class WriteDistinctTables
 		writer.write("sample");
 		
 		for(String s : names )
-			writer.write("\t" + s);
+			writer.write("\t" + removeAnnoyingCharacters(s));
 		
 		writer.write("\n");
 		
