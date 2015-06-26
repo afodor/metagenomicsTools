@@ -63,3 +63,24 @@ plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',
      panel.first = grid())
 polygon(densp1, density = -1, col = r1Col)
 polygon(densp2, density = -1, col = r2Col)
+
+crossMetabolites <- vector(length=(numColsPlasma-1) * (numColsUrine-1) )
+
+index <- 1
+
+for( i in 2:(numColsPlasma))
+{
+	dataI <- myTPlasma[,i]
+	
+	for( j in 2:(numColsUrine))
+	{
+		dataJ <- myTUrine[,j]
+		crossMetabolites[index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+densp3 = density(crossMetabolites)
+r3col = rgb(0,1,0,.2)
+polygon(densp3, density = -1, col = r3col)
+
