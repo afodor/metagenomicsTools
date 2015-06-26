@@ -41,8 +41,8 @@ public class WriteDistinctTables
 		
 		writer.write("sample");
 		
-		for(String s : names )
-			writer.write("\t" + removeAnnoyingCharacters(s));
+		for(int x=0;x  < names.size(); x++)
+			writer.write("\t" + removeAnnoyingCharacters("Met" + (x+1)));
 		
 		writer.write("\n");
 		
@@ -63,6 +63,8 @@ public class WriteDistinctTables
 			
 			writer.write("\n");
 		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	public static void main(String[] args) throws Exception
