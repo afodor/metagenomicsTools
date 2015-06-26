@@ -79,9 +79,8 @@ r3col = rgb(0,1,0,.2)
 
 xlim <- range(densp1$x,densp2$x,densp3$x)
 ylim <- range(0,densp1$y, densp2$y,densp3$y )
-plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',
-     main = 'Distribution of r', 
-     panel.first = grid())
+plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',main = 'Distribution of r', panel.first = grid())
+polygon(densp1, density = -1, col = r1Col)
 polygon(densp2, density = -1, col = r2Col)
 polygon(densp3, density = -1, col = r3col)
 
