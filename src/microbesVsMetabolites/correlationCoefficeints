@@ -23,7 +23,7 @@ for( i in 2:(numColsUrine-1))
 	}
 }
 
-hist(coefsWithinUrine)
+p1 <- hist(coefsWithinUrine)
 
 myTPlasma <- read.table("PLASMAAsColumns.txt", header=TRUE, sep="\t", row.names=1)
 numColsPlasma <- ncol(myTPlasma)
@@ -46,4 +46,7 @@ for( i in 2:(numColsPlasma-1))
 	}
 }
 
-hist(coefsWithinPlasma)
+p2 <- hist(coefsWithinPlasma)
+
+plot( p1 , col=rgb(0,0,1,0.25)) 
+plot( p2, col=rgb(1,0,0,0.25), add = T ) 
