@@ -85,7 +85,25 @@ for( i in 2:numColsFamily)
 		for( j in 2:(numColsPlasma))
 		{
 			dataJ <- myTPlasma[,j]
-			crossFamilyToPlasma[index] <- cor(dataI, dataJ, method="spearman")
+			crossFamilyToPlasma[index] <- cor(familyData, dataJ, method="spearman")
+			index = index + 1
+		}
+	}
+}
+
+
+crossFamilyToUrine<- vector()
+index <- 1
+
+for( i in 2:numColsFamily) 
+{
+	familyData <- myTFamily[,i]
+	if( sum( familyData  != 0) > nrow(myTFamily)/4 ) 
+	{
+		for( j in 2:(numColsUrine))
+		{
+			dataJ <- myTUrine[,j]
+			crossFamilyToUrine[index] <- cor(familyData , dataJ, method="spearman")
 			index = index + 1
 		}
 	}
@@ -97,16 +115,19 @@ densp1 = density(coefsWithinUrine)
 densp2 = density(coefsWithinPlasma)
 densp3 = density(crossMetabolites)
 densp4 = density(crossFamilyToPlasma)
+densp5= density(crossFamilyToUrine)
 
 r1Col <- rgb(1,0,0,0.2)
 r2Col <- rgb(0,0,1,0.2)
 r3col = rgb(0,1,0,.2)
 r4col <- rgb(0,0,0,.4)
+r5col <- rgb(.3,.6,.9,.4)
 
-xlim <- range(densp1$x,densp2$x,densp3$x, densp4$x )
-ylim <- range(0,densp1$y, densp2$y,densp3$y,densp4$y  )
+xlim <- range(densp1$x,densp2$x,densp3$x, densp4$x , densp5$x)
+ylim <- range(0,densp1$y, densp2$y,densp3$y,densp4$y , densp5$y )
 plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',main = 'Distribution of r', panel.first = grid())
 polygon(densp1, density = -1, col = r1Col)
 polygon(densp2, density = -1, col = r2Col)
 polygon(densp3, density = -1, col = r3col)
 polygon(densp4, density = -1, col = r4col)
+polygon(densp5, density = -1, col = r5col)
