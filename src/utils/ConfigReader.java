@@ -118,6 +118,11 @@ public class ConfigReader
 		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
 	}
 	
+	public static String getJobinCardioDir() throws Exception
+	{
+		return getConfigReader().getAProperty(JOBIN_CARDIO_DIR);
+	}
+	
 	public static String getRachSachReanalysisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);

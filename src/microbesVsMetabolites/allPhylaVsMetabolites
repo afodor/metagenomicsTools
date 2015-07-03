@@ -1,38 +1,61 @@
 rm(list=ls())
 
 setwd("D:\\microbesVsMetabolites")
+library("Kendall")
 
-inFileName <-"mergedPhyla_URINE_AsColumnsLogNorm.txt"
-	
-myT <-read.table(inFileName,header=TRUE,sep="\t")
-numCols <- ncol(myT)
-myColClasses <- c(rep("character",1), rep("numeric", numCols-1))
-myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-
-phylaNums <- c(2,3,4,5,6,8,10,11,12)
-
-phylaNames <- vector()
-metNames <- vector()
-rValues <- vector()
-pValues <- vector()
-index <- 1
-
-allNames <- names(myT)
-
-for( p in phylaNums ) 
+getMetaboliteColumnNum <- function(myT)
 {
-	for ( t in 15:ncol(myT))
+	colNames <- names(myT)
+	
+	for( i in 1:length(colNames))
 	{
-		phylaNames[index] <- allNames[p]
-		metNames[index] <- allNames[t]
-		rValues[index] <- cor(myT[,p], myT[,t])
-		pValues[index] <- anova(lm( myT[,p] ~ myT[,t]))$"Pr(>F)"[1]
-		index = index + 1
+		if( grepl( "propanediol", colNames[i]))
+			return (i);
 	}
+	
+	return (-1);
 }
 
-dFrame <- data.frame(phylaNames,metNames ,rValues,pValues)
-dFrame <- dFrame [order(dFrame$pValues),]
-dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
+#levels <- c("p" , "c", "o", "f", "g", "otu" )
 
-write.table( dFrame, file="urineVsPhylaPValues.txt", row.names=FALSE,sep="\t")
+levels <- c("p")
+
+for ( taxa in levels ) 
+{
+	
+	inFileName <- paste("merged", taxa, "_URINE_AsColumnsLogNorm.txt", sep = "")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",1), rep("numeric", numCols-1))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+	phylaNames <- vector()
+	metNames <- vector()
+	rValues <- vector()
+	pValues <- vector()
+	meanBug <- vector()
+	index <- 1
+
+	allNames <- names(myT)
+	metStart <- getMetaboliteColumnNum(myT)
+	
+	for( p in 2:(metStart-1) )
+		if( sum(myT[,p] != 0) > nrow(myT) / 4 )  
+		{
+			for ( t in metStart:ncol(myT))
+			{
+				phylaNames[index] <- allNames[p]
+				metNames[index] <- allNames[t]
+				rValues[index] <- cor(myT[,p], myT[,t], method="spearman")
+				pValues[index] <- Kendall(myT[,p], myT[,t])$sl[1]
+				meanBug[index] <- mean(myT[,p])
+				index = index + 1
+			}
+		}
+
+	dFrame <- data.frame(phylaNames,metNames ,meanBug, rValues,pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
+
+	write.table( dFrame, file= paste( "urineVs", taxa, "PValues.txt",sep=""), row.names=FALSE,sep="\t")	
+}

@@ -1,0 +1,133 @@
+rm(list=ls())
+
+setwd("D:\\microbesVsMetabolites")
+
+myTUrine <- read.table("URINEAsColumns.txt", header=TRUE, sep="\t", row.names=1)
+numColsUrine <- ncol(myTUrine)
+myColClasses <- c(rep("character",1), rep("numeric", numColsUrine-1))
+myTUrine <-read.table("URINEAsColumns.txt",header=TRUE,sep="\t",colClasses=myColClasses)
+
+coefsWithinUrine <- vector(length=choose(numColsUrine-1,2))
+
+index <- 1
+
+for( i in 2:(numColsUrine-1))
+{
+	dataI <- myTUrine[,i]
+	
+	for( j in (i+1):(numColsUrine))
+	{
+		dataJ <- myTUrine[,j]
+		coefsWithinUrine [index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+p1 <- hist(coefsWithinUrine)
+
+myTPlasma <- read.table("PLASMAAsColumns.txt", header=TRUE, sep="\t", row.names=1)
+numColsPlasma <- ncol(myTPlasma)
+myColClasses <- c(rep("character",1), rep("numeric", numColsPlasma -1))
+myTPlasma<-read.table("PLASMAAsColumns.txt",header=TRUE,sep="\t",colClasses=myColClasses)
+
+coefsWithinPlasma<- vector(length=choose(numColsPlasma-1,2))
+
+index <- 1
+
+for( i in 2:(numColsPlasma-1))
+{
+	dataI <- myTPlasma[,i]
+	
+	for( j in (i+1):(numColsPlasma))
+	{
+		dataJ <- myTPlasma[,j]
+		coefsWithinPlasma [index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+p2 <- hist(coefsWithinPlasma)
+
+plot( p1 , col=rgb(0,0,1,0.25)) 
+plot( p2, col=rgb(1,0,0,0.25), add = T ) 
+
+crossMetabolites <- vector(length=(numColsPlasma-1) * (numColsUrine-1) )
+
+index <- 1
+
+for( i in 2:(numColsPlasma))
+{
+	dataI <- myTPlasma[,i]
+	
+	for( j in 2:(numColsUrine))
+	{
+		dataJ <- myTUrine[,j]
+		crossMetabolites[index] <- cor(dataI, dataJ, method="spearman")
+		index = index + 1
+	}
+}
+
+
+
+myTFamily <- read.table("fAsColumnsLogNormalized.txt", header=TRUE, sep="\t", row.names=1)
+numColsFamily <- ncol(myTFamily)
+myColClasses <- c(rep("character",1), rep("numeric", numColsFamily-1))
+myTFamily<-read.table("fAsColumnsLogNormalized.txt",header=TRUE,sep="\t",colClasses=myColClasses)
+
+crossFamilyToPlasma <- vector()
+index <- 1
+
+for( i in 2:numColsFamily) 
+{
+	familyData <- myTFamily[,i]
+	if( sum( familyData  != 0) > nrow(myTFamily)/4 ) 
+	{
+		for( j in 2:(numColsPlasma))
+		{
+			dataJ <- myTPlasma[,j]
+			crossFamilyToPlasma[index] <- cor(familyData, dataJ, method="spearman")
+			index = index + 1
+		}
+	}
+}
+
+
+crossFamilyToUrine<- vector()
+index <- 1
+
+for( i in 2:numColsFamily) 
+{
+	familyData <- myTFamily[,i]
+	if( sum( familyData  != 0) > nrow(myTFamily)/4 ) 
+	{
+		for( j in 2:(numColsUrine))
+		{
+			dataJ <- myTUrine[,j]
+			crossFamilyToUrine[index] <- cor(familyData , dataJ, method="spearman")
+			index = index + 1
+		}
+	}
+}
+
+
+# from http://stackoverflow.com/questions/3541713/how-to-plot-two-histograms-together-in-r
+densp1 = density(coefsWithinUrine)
+densp2 = density(coefsWithinPlasma)
+densp3 = density(crossMetabolites)
+densp4 = density(crossFamilyToPlasma)
+densp5= density(crossFamilyToUrine)
+
+r1Col <- rgb(1,0,0,0.2)
+r2Col <- rgb(0,0,1,0.2)
+r3col = rgb(0,1,0,.2)
+r4col <- rgb(0,0,0,.4)
+r5col <- rgb(.3,.6,.9,.4)
+
+xlim <- range(densp1$x,densp2$x,densp3$x, densp4$x , densp5$x)
+ylim <- range(0,densp1$y, densp2$y,densp3$y,densp4$y , densp5$y )
+plot(densp1, xlim = xlim, ylim = ylim, xlab = 'Lengths',main = 'Distribution of r', panel.first = grid())
+polygon(densp1, density = -1, col = r1Col)
+polygon(densp2, density = -1, col = r2Col)
+polygon(densp3, density = -1, col = r3col)
+polygon(densp4, density = -1, col = r4col)
+polygon(densp5, density = -1, col = r5col)

@@ -48,8 +48,15 @@ public class PivotMetabolitesPhylaIntoOne
 	
 	public static void main(String[] args) throws Exception
 	{
-
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + "phylaAsColumns.txt");
+		for(String s : WritaAsPhyla.LEVELS)
+			pivotALevel(s);
+	}
+	
+	public static void pivotALevel(String level) throws Exception
+	{
+		System.out.println(level);
+		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator 
+					+ level +  "AsColumns.txt");
 		MetaboliteClass mc = MetaboliteClass.URINE;
 		
 		List<String> metaboliteNames = getNames(mc);
@@ -64,7 +71,7 @@ public class PivotMetabolitesPhylaIntoOne
 				throw new Exception("No");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getMicrboesVsMetabolitesDir() + File.separator + 
-				"mergedPhyla_" + mc + "_AsColumnsLogNorm.txt")));
+				"merged" + level +  "_" + mc + "_AsColumnsLogNorm.txt")));
 		
 		writer.write("sample");
 		
@@ -100,7 +107,7 @@ public class PivotMetabolitesPhylaIntoOne
 	
 	}
 	
-	private static List<String> getNames(MetaboliteClass metaboliteClass) throws Exception
+	static List<String> getNames(MetaboliteClass metaboliteClass) throws Exception
 	{
 		List<String> list = new ArrayList<String>();
 		BufferedReader reader = null;
