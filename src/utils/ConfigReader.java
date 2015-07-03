@@ -78,7 +78,7 @@ public class ConfigReader
 	public static final String KYLIE_16S_DIR= "KYLIE_16S_DIR";
 	public static final String KYLIE_DROPBOX_DIR = "KYLIE_DROPBOX_DIR";
 	public static final String KATIE_DIR = "KATIE_DIR";
-	
+	public static final String JOBIN_CARDIO_DIR = "JOBIN_CARDIO_DIR";
 	
 	public static final String TANYA_DIR="TANYA_DIR";
 	
@@ -108,6 +108,10 @@ public class ConfigReader
 		return getConfigReader().getAProperty(KATIE_DIR);
 	}
 	
+	public static String getJobinCarioDir() throws Exception
+	{
+		return getConfigReader().getAProperty(JOBIN_CARDIO_DIR);
+	}
 	
 	public static String getNinaWithDuplicatesDir() throws Exception
 	{
