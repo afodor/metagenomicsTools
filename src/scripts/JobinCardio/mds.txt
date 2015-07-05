@@ -15,6 +15,6 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
 	myPCOA <- capscale(myT~1,distance="bray")
 	
-	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoaCorrected_", taxa, ".txt",sep=""))
-	write.table(myPCOA$CA$eig,file=paste("eigenValuesCorrected_", taxa, ".txt", sep=""), sep="\t")
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
 }
