@@ -29,6 +29,14 @@ public class AddMetadata
 					"spreadsheets" + File.separator + "pcoa_" + taxa + "PlusMetadata.txt");
 			
 			addSomeMetadata(inFile, outFile, true, metaMap);
+			
+			File inFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
+					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormal.txt");
+			
+			File outFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
+					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormalPlusMetadata.txt");
+			
+			addSomeMetadata(inFileTaxa, outFileTaxa, false, metaMap);
 		}
 	}
 	
@@ -39,12 +47,20 @@ public class AddMetadata
 		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(outFile));
 		
+		writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup");
 		if( fromR)
 		{
-			writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup\t" + reader.readLine() + "\n");
+			writer.write( "\t" + reader.readLine() + "\n");
 		}
 		else
-			throw new Exception("Not implemented");
+		{
+			String[] splits = reader.readLine().split("\t");
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
+		}
 			
 		for(String s = reader.readLine() ; s != null; s = reader.readLine())
 		{
