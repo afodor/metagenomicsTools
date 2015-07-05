@@ -50,18 +50,18 @@ public class AddMetadata
 		{
 			String[] splits = s.split("\t");
 			
-			StringTokenizer sToken = new StringTokenizer(splits[0], "_");
+			StringTokenizer sToken = new StringTokenizer(splits[0].replaceAll("\"", ""), "_");
 			sToken.nextToken();
 			
 			int sampleId = Integer.parseInt(sToken.nextToken());
-			int readNum = Integer.parseInt(sToken.nextToken());
+			int readNum = Integer.parseInt(sToken.nextToken().replace("R", ""));
 			
 			if( sToken.hasMoreTokens())
 				throw new Exception("No");
 			
 			MetadataFileLine mfl = metaMap.get(sampleId);
 			
-			writer.write(splits[0] + "\t" + sampleId + "\t" + readNum + "\t" + 
+			writer.write(splits[0].replaceAll("\"", "") + "\t" + sampleId + "\t" + readNum + "\t" + 
 							mfl.getExperimentString() + "\t" + mfl.getExperimentInt() + "\t" + 
 									mfl.getGroup() + "\n");
 			
