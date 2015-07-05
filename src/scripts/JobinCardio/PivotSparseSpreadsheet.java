@@ -22,21 +22,21 @@ public class PivotSparseSpreadsheet
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			HashMap<String, HashMap<String, Integer>> map = 
-			getMap(ConfigReader.getJobinCarioDir() 
+			getMap(ConfigReader.getJobinCardioDir() 
 					+ File.separator +
 					"spreadsheets" + File.separator + "spreadsheets" + 
-			NewRDPParserFileLine.TAXA_ARRAY[x] +	"_SparseThreeCol.txt");
+			NewRDPParserFileLine.TAXA_ARRAY[x] +"_SparseThreeCol.txt");
 			
 			File pivotedFile = 
 					new File(
-							ConfigReader.getJobinCarioDir() 
+							ConfigReader.getJobinCardioDir() 
 							+ File.separator + "spreadsheets" +
 							File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
 			
 			PivotOTUs.writeResults(map, pivotedFile.getAbsolutePath());
 			OtuWrapper wrapper = new OtuWrapper(pivotedFile);
-			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getJobinCarioDir() 
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getJobinCardioDir() 
 					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt");

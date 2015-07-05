@@ -108,11 +108,6 @@ public class ConfigReader
 		return getConfigReader().getAProperty(KATIE_DIR);
 	}
 	
-	public static String getJobinCarioDir() throws Exception
-	{
-		return getConfigReader().getAProperty(JOBIN_CARDIO_DIR);
-	}
-	
 	public static String getNinaWithDuplicatesDir() throws Exception
 	{
 		return getConfigReader().getAProperty(NINA_WITH_DUPLICATES_DIR);
@@ -123,10 +118,12 @@ public class ConfigReader
 		return getConfigReader().getAProperty(JOBIN_CARDIO_DIR);
 	}
 	
+	
 	public static String getRachSachReanalysisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);
 	}
+	
 	
 	public static String getJenniferTestDir() throws Exception
 	{
