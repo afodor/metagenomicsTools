@@ -63,8 +63,12 @@ public class AddMetadata
 			
 			writer.write(splits[0].replaceAll("\"", "") + "\t" + sampleId + "\t" + readNum + "\t" + 
 							mfl.getExperimentString() + "\t" + mfl.getExperimentInt() + "\t" + 
-									mfl.getGroup() + "\n");
+									mfl.getGroup() );
 			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
 		}
 		
 		
