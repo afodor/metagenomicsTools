@@ -32,7 +32,10 @@ for(taxa in taxaLevels )
 	}
 	
 	dFrame <- data.frame( names, pValuesGroup) 
-	write.table(dFrame, file=paste("pValuesForpost_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dFrame <- dFrame [order(dFrame$pValuesGroup),]
+	dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )
+	
+	write.table(dFrame, file=paste("pValuesForpostExp2_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
 							
