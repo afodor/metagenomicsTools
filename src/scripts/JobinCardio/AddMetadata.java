@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -22,13 +23,16 @@ public class AddMetadata
 		{
 			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 			
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getJobinCardioDir() + File.separator + 
+					"spreadsheets" + File.separator + "pivoted_" +  taxa +  "asColumns.txt");
+		
 			File inFile = new File(ConfigReader.getJobinCardioDir() + File.separator + 
 					"spreadsheets" + File.separator + "pcoa_" + taxa + ".txt");
 			
 			File outFile = new File(ConfigReader.getJobinCardioDir() + File.separator + 
 					"spreadsheets" + File.separator + "pcoa_" + taxa + "PlusMetadata.txt");
 			
-			addSomeMetadata(inFile, outFile, true, metaMap);
+			addSomeMetadata(wrapper, inFile, outFile, true, metaMap);
 			
 			File inFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
 					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormal.txt");
@@ -36,18 +40,18 @@ public class AddMetadata
 			File outFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
 					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormalPlusMetadata.txt");
 			
-			addSomeMetadata(inFileTaxa, outFileTaxa, false, metaMap);
+			addSomeMetadata(wrapper, inFileTaxa, outFileTaxa, false, metaMap);
 		}
 	}
 	
-	private static void addSomeMetadata(File inFile, File outFile, boolean fromR,
+	private static void addSomeMetadata(OtuWrapper unnormalizedWrapper, File inFile, File outFile, boolean fromR,
 			HashMap<Integer, MetadataFileLine> metaMap) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup");
+		writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup\tnumSequencesPerSample\tshannonDiversity");
 		if( fromR)
 		{
 			writer.write( "\t" + reader.readLine() + "\n");
@@ -79,7 +83,9 @@ public class AddMetadata
 			
 			writer.write(splits[0].replaceAll("\"", "") + "\t" + sampleId + "\t" + readNum + "\t" + 
 							mfl.getExperimentString() + "\t" + mfl.getExperimentInt() + "\t" + 
-									mfl.getGroup() );
+									mfl.getGroup() 
+									+ "\t" + unnormalizedWrapper.getNumberSequences(splits[0].replaceAll("\"", "")) + 
+										"\t" + unnormalizedWrapper.getShannonEntropy(splits[0].replaceAll("\"", "")));	
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
