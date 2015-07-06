@@ -6,36 +6,33 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
-	inFileName <- paste( "pcoa_",taxa,"withMetadata.txt", sep ="")
+	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	# only the forward reads
-	myT <- myT[ which( myT$type== "swab_post" | myT$type== "stool_post") , ]
+	# only the forward reads 
+	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== "2") , ]
 	
-	pValuesStoolSwab <- vector()
-	pValuesSubject <- vector()
-	percentExplained <- vector()
+	pValuesGroup <- vector()
 	names <- vector()
-	
 	index <- 1
-	for( i in 8:27) 
+	for( i in 7:ncol(myT)) 
 	{	
-		myLm <- lm( myT[,i] ~  factor( myT$stoolOrSwab) + factor( myT$subjectID) )
-		myAnova <- anova(myLm)
-		pValuesStoolSwab[index] <- myAnova$"Pr(>F)"[1]
-		pValuesSubject[index] <- myAnova$"Pr(>F)"[2]
-		percentExplained[index] <- summary(myLm)$r.squared	
-		names[index] = names(myT)[i]
-		index <- index + 1	
+		if( sum(  myT[,i] !=0 ) > nrow(myT)/4 ) 
+		{
+			
+			myLm <- lm( myT[,i] ~  factor( myT$group)) 
+			myAnova <- anova(myLm)
+			pValuesGroup [index]<- myAnova$"Pr(>F)"[1]
+			names[index] = names(myT)[i]
+			index <- index + 1
+		}
 	}
 	
-	
-	dFrame <- data.frame( names, pValuesStoolSwab,pValuesSubject,percentExplained  ) 
+	dFrame <- data.frame( names, pValuesGroup) 
 	write.table(dFrame, file=paste("pValuesForpost_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-	
 	
 }
 							
