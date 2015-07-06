@@ -3,7 +3,7 @@ rm(list=ls())
 setwd("D:\\JobinCardio\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
-expNum = "1"
+expNum = "2"
 
 for(taxa in taxaLevels ) 
 {
@@ -49,7 +49,7 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForpostExp", expNum, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForExp", expNum, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
 							
