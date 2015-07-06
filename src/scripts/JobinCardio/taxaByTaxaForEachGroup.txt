@@ -1,11 +1,13 @@
 rm(list=ls())
 
-setwd("C:\\JobinCardio\\spreadsheets")
+setwd("D:\\JobinCardio\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
+expNum = "1"
 
 for(taxa in taxaLevels ) 
 {
+	pdf( paste( taxa, "_Exp", expNum, ".pdf"  ,sep="") )
 	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -13,7 +15,7 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# only the forward reads 
-	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== "1") , ]
+	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== expNum) , ]
 	
 	pValuesGroup <- vector()
 	names <- vector()
@@ -25,17 +27,29 @@ for(taxa in taxaLevels )
 			
 			myLm <- lm( myT[,i] ~  factor( myT$group)) 
 			myAnova <- anova(myLm)
-			pValuesGroup [index]<- myAnova$"Pr(>F)"[1]
+			pValuesGroup[index]<- myAnova$"Pr(>F)"[1]
 			names[index] = names(myT)[i]
+			
+			groupText = ""
+			
+			for( s in sort(unique( myT$group))) 
+			{
+				groupText = paste( groupText, s )
+			}
+			
+			mainText = paste(names(myT)[i], "; p = ", format(pValuesGroup[index],numDigits=3), "\n group=", groupText )
+			boxplot( myT[,i] ~  factor( myT$group),main=mainText, ylab = names[index])
+			stripchart(myT[,i] ~  factor( myT$group),add=TRUE,vertical = TRUE, pch = 21)
 			index <- index + 1
 		}
 	}
-	
+
+	dev.off()	
 	dFrame <- data.frame( names, pValuesGroup) 
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForpostExp1_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForpostExp", expNum, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
 							
