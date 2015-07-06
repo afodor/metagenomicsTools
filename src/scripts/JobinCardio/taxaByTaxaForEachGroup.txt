@@ -13,7 +13,7 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# only the forward reads 
-	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== "2") , ]
+	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== "1") , ]
 	
 	pValuesGroup <- vector()
 	names <- vector()
@@ -35,7 +35,7 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )
 	
-	write.table(dFrame, file=paste("pValuesForpostExp2_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForpostExp1_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
 							
