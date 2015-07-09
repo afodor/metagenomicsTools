@@ -16,13 +16,17 @@ public class MergeTwoRuns
 			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 			HashSet<String> sampleIds = new HashSet<String>();
 			
-			OtuWrapper wrapper1 = new OtuWrapper(ConfigReader.getJobinCardioDir() + 
+			File file1 = new File(ConfigReader.getJobinCardioDir() + 
 					File.separator + "spreadsheets" + File.separator + 
 					"pivoted_" + taxa +  "asColumns.txt" );
 			
-			OtuWrapper wrapper2 = new OtuWrapper(ConfigReader.getJobinCardioDir() + 
+			OtuWrapper wrapper1 = new OtuWrapper(file1);
+			
+			File file2 = new File(ConfigReader.getJobinCardioDir() + 
 					File.separator + "spreadsheetsRun1" + File.separator + 
 					"pivoted_" + taxa +  "asColumns.txt" );
+			
+			OtuWrapper wrapper2 = new OtuWrapper(file2);
 			
 			for(String s : wrapper1.getSampleNames())
 			{
@@ -39,7 +43,20 @@ public class MergeTwoRuns
 				
 				sampleIds.add(s);
 			}
+			
+			File mergedFile = new File(ConfigReader.getJobinCardioDir() + 
+						File.separator + "spreadsheetsMerged" + File.separator + 
+						"pivoted_" + taxa +  "asColumns.txt" );
+			
+			OtuWrapper.merge(file1, file2, mergedFile);
+			
+			OtuWrapper mergedWrapper= new OtuWrapper(mergedFile);
+			
+			mergedWrapper.writeNormalizedLoggedDataToFile(
+					ConfigReader.getJobinCardioDir() + 
+					File.separator + "spreadsheetsMerged" + File.separator + 
+					"pivoted_" + taxa +  "asColumnsLogNormal.txt" );
+			
 		}
-		
 	}
 }
