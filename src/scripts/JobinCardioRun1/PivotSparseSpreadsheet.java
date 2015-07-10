@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.NewRDPParserFileLine;
-import parsers.OtuWrapper;
 import parsers.PivotOTUs;
 import utils.ConfigReader;
 

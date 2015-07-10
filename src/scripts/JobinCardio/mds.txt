@@ -2,7 +2,7 @@
 rm(list=ls())
 library("vegan")
 
-setwd("C:\\JobinCardio\\spreadsheets")
+setwd("C:\\JobinCardio\\spreadsheetsMerged")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 

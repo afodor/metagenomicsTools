@@ -13,12 +13,18 @@ public class MetadataFileLine
 	private final String experimentString;
 	private final int experimentInt;
 	private final String group;
+	private final boolean isRun2;
 	
 	public int getSampleIndex()
 	{
 		return sampleIndex;
 	}
 
+	public boolean getIsrun2()
+	{
+		return isRun2;
+	}
+	
 	public String getExperimentString()
 	{
 		return experimentString;
@@ -34,22 +40,22 @@ public class MetadataFileLine
 		return group;
 	}
 
-	private MetadataFileLine(String s) throws Exception
+	private MetadataFileLine(String s, boolean isRun2) throws Exception
 	{
 		String[] splits = s.split("\t");
+		
 		this.sampleIndex = Integer.parseInt(splits[0]);
 		this.experimentString = splits[3];
 		this.experimentInt = Integer.parseInt(splits[4]);
 		this.group = splits[5];
+		this.isRun2 = isRun2;
 	}
 	
-	public static HashMap<Integer, MetadataFileLine> getMetaMap() throws Exception
+	private static void addToMap(File f, HashMap<Integer, MetadataFileLine> map, boolean isRun2)
+		throws Exception
 	{
-		HashMap<Integer, MetadataFileLine> map = new HashMap<Integer, MetadataFileLine>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJobinCardioDir() + File.separator + 
-					"barcode Run2 5-30-2015.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(f));
 		
 		reader.readLine();
 		
@@ -57,7 +63,7 @@ public class MetadataFileLine
 		{
 			if( s.trim().length() > 0 )
 			{
-				MetadataFileLine mfl = new MetadataFileLine(s);
+				MetadataFileLine mfl = new MetadataFileLine(s, isRun2);
 				
 				if( map.containsKey(mfl.sampleIndex))
 					throw new Exception("No");
@@ -66,6 +72,33 @@ public class MetadataFileLine
 			}
 		}
 		
+	}
+	
+	public static HashMap<Integer, MetadataFileLine> getMetaMap() throws Exception
+	{
+		HashMap<Integer, MetadataFileLine> map = new HashMap<Integer, MetadataFileLine>();
+		
+		File run2 = new File(
+				ConfigReader.getJobinCardioDir() + File.separator + 
+				"barcode Run2 5-30-2015.txt");
+		
+		
+		addToMap(run2, map, true);
+		
+		File run1 = new File(
+				ConfigReader.getJobinCardioDir() + File.separator + 
+				"Barcode Run1 8-6-2015.txt");
+		
+		addToMap(run1, map, false);
+		
 		return map;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<Integer, MetadataFileLine> map = getMetaMap();
+		
+		for(Integer i : map.keySet())
+			System.out.println(i + " " + map.get(i).getIsrun2());
 	}
 }

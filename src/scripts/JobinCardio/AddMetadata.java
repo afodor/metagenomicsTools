@@ -24,21 +24,21 @@ public class AddMetadata
 			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 			
 			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getJobinCardioDir() + File.separator + 
-					"spreadsheets" + File.separator + "pivoted_" +  taxa +  "asColumns.txt");
+					"spreadsheetsMerged" + File.separator + "pivoted_" +  taxa +  "asColumns.txt");
 		
 			File inFile = new File(ConfigReader.getJobinCardioDir() + File.separator + 
-					"spreadsheets" + File.separator + "pcoa_" + taxa + ".txt");
+					"spreadsheetsMerged" + File.separator + "pcoa_" + taxa + ".txt");
 			
 			File outFile = new File(ConfigReader.getJobinCardioDir() + File.separator + 
-					"spreadsheets" + File.separator + "pcoa_" + taxa + "PlusMetadata.txt");
+					"spreadsheetsMerged" + File.separator + "pcoa_" + taxa + "PlusMetadata.txt");
 			
 			addSomeMetadata(wrapper, inFile, outFile, true, metaMap);
 			
 			File inFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
-					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormal.txt");
+					"spreadsheetsMerged" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormal.txt");
 			
 			File outFileTaxa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
-					"spreadsheets" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormalPlusMetadata.txt");
+					"spreadsheetsMerged" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormalPlusMetadata.txt");
 			
 			addSomeMetadata(wrapper, inFileTaxa, outFileTaxa, false, metaMap);
 		}
@@ -51,7 +51,7 @@ public class AddMetadata
 		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup\tnumSequencesPerSample\tshannonDiversity");
+		writer.write("sampleID\tsampleIndex\treadNumber\texperimentString\texperimentInt\tgroup\tisRun2\tnumSequencesPerSample\tshannonDiversity");
 		if( fromR)
 		{
 			writer.write( "\t" + reader.readLine() + "\n");
@@ -83,7 +83,7 @@ public class AddMetadata
 			
 			writer.write(splits[0].replaceAll("\"", "") + "\t" + sampleId + "\t" + readNum + "\t" + 
 							mfl.getExperimentString() + "\t" + mfl.getExperimentInt() + "\t" + 
-									mfl.getGroup() 
+									mfl.getGroup() + "\t" + mfl.getIsrun2() 
 									+ "\t" + unnormalizedWrapper.getNumberSequences(splits[0].replaceAll("\"", "")) + 
 										"\t" + unnormalizedWrapper.getShannonEntropy(splits[0].replaceAll("\"", "")));	
 			
