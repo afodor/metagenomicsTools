@@ -1,9 +1,9 @@
 rm(list=ls())
 
-setwd("D:\\JobinCardio\\spreadsheets")
+setwd("C:\\JobinCardio\\spreadsheetsMerged")
 
 taxaLevels <- c("phylum","class","order","family","genus")
-expNum = "2"
+expNum = "1"
 
 for(taxa in taxaLevels ) 
 {
@@ -11,7 +11,7 @@ for(taxa in taxaLevels )
 	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# only the forward reads 
@@ -20,7 +20,7 @@ for(taxa in taxaLevels )
 	pValuesGroup <- vector()
 	names <- vector()
 	index <- 1
-	for( i in 7:ncol(myT)) 
+	for( i in 9:ncol(myT)) 
 	{	
 		if( sum(  myT[,i] !=0 ) > nrow(myT)/4 ) 
 		{
