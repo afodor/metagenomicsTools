@@ -37,9 +37,16 @@ for(taxa in taxaLevels )
 				groupText = paste( groupText, s )
 			}
 			
+			bug = myT[,i]
+			group = myT$group
+			subFrame = data.frame(bug, group)
+			
 			mainText = paste(names(myT)[i], "; p = ", format(pValuesGroup[index],numDigits=3), "\n group=", groupText )
-			boxplot( myT[,i] ~  factor( myT$group),main=mainText, ylab = names[index])
-			stripchart(myT[,i] ~  factor( myT$group),add=TRUE,vertical = TRUE, pch = 21)
+			boxplot( bug~ group,main=mainText, ylab = names[index],data=subFrame)
+			
+			stripchart(bug[myT$group=="H"] ~  group[myT$group=="H"],add=TRUE,vertical = TRUE, pch = 21,col="red",data=subFrame)
+			stripchart(bug[myT$group=="C"] ~  group[myT$group=="C"],add=TRUE,vertical = TRUE, pch = 21,col="blue",data=subFrame)
+			
 			index <- index + 1
 		}
 	}
