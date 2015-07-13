@@ -1,0 +1,29 @@
+
+rm(list=ls())
+library("vegan")
+
+setwd("D:\\JobinCardio\\spreadsheetsMerged")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+expNum = "2"
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	# only the forward reads 
+	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== expNum) , ]
+	
+	myTData <- myT[,10:ncol(myT)]
+	row.names(myTData) <- myT[,1]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", taxa, "_H_vs_C.txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, "._H_vs_C.txt", sep=""), sep="\t")
+	
+}
