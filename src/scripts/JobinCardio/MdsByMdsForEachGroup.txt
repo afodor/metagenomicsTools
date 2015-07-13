@@ -20,7 +20,7 @@ for(taxa in taxaLevels )
 	pValuesGroup <- vector()
 	names <- vector()
 	index <- 1
-	for( i in 8:20) 
+	for( i in 10:19) 
 	{	
 		if( sum(  myT[,i] !=0 ) > nrow(myT)/4 ) 
 		{
@@ -41,11 +41,20 @@ for(taxa in taxaLevels )
 			group = myT$group
 			subFrame = data.frame(bug, group)
 			
+			par( mfrow=c(2,1))
+			
+			
 			mainText = paste(names(myT)[i], "; p = ", format(pValuesGroup[index],numDigits=3), "\n group=", groupText )
+			
 			boxplot( bug~ group,main=mainText, ylab = names[index],data=subFrame)
 			
 			stripchart(bug[myT$group=="H"] ~  group[myT$group=="H"],add=TRUE,vertical = TRUE, pch = 21,col="red",data=subFrame)
 			stripchart(bug[myT$group=="C"] ~  group[myT$group=="C"],add=TRUE,vertical = TRUE, pch = 21,col="blue",data=subFrame)
+			
+			plot( myT[,10], myT[,i], xlab = "MDS 1", ylab = paste( "MDS", i-9), 
+						col = ifelse( myT$group == "H", "red", "blue"), main= "C (blue) vs. H (red)" )
+			
+			
 			
 			index <- index + 1
 		}
