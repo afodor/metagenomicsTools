@@ -1,0 +1,55 @@
+rm(list=ls())
+
+setwd("D:\\JobinCardio\\spreadsheetsMerged")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+expNum = "2"
+
+for(taxa in taxaLevels ) 
+{
+	pdf( paste( taxa, "_MDS_exp", expNum, ".pdf"  ,sep="") )
+	inFileName <- paste("mds_", taxa, "_H_vs_CPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",7), rep("numeric", numCols-7))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	# only the forward reads 
+	myT <- myT[ which( myT$readNumber== "1" & myT$experimentInt== expNum) , ]
+	
+	pValuesGroup <- vector()
+	names <- vector()
+	index <- 1
+	for( i in 8:20) 
+	{	
+		if( sum(  myT[,i] !=0 ) > nrow(myT)/4 ) 
+		{
+			
+			myLm <- lm( myT[,i] ~  factor( myT$group)) 
+			myAnova <- anova(myLm)
+			pValuesGroup[index]<- myAnova$"Pr(>F)"[1]
+			names[index] = names(myT)[i]
+			
+			groupText = ""
+			
+			for( s in sort(unique( myT$group))) 
+			{
+				groupText = paste( groupText, s )
+			}
+			
+			mainText = paste(names(myT)[i], "; p = ", format(pValuesGroup[index],numDigits=3), "\n group=", groupText )
+			boxplot( myT[,i] ~  factor( myT$group),main=mainText, ylab = names[index])
+			stripchart(myT[,i] ~  factor( myT$group),add=TRUE,vertical = TRUE, pch = 21)
+			index <- index + 1
+		}
+	}
+
+	dev.off()	
+	dFrame <- data.frame( names, pValuesGroup) 
+	dFrame <- dFrame [order(dFrame$pValuesGroup),]
+	dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )
+	
+	write.table(dFrame, file=paste("pValuesForMDSExp", expNum, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+}
+							

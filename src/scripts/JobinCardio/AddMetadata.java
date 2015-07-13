@@ -41,6 +41,15 @@ public class AddMetadata
 					"spreadsheetsMerged" + File.separator + "pivoted_" + taxa +  "asColumnsLogNormalPlusMetadata.txt");
 			
 			addSomeMetadata(wrapper, inFileTaxa, outFileTaxa, false, metaMap);
+			
+			File inCVsHPcoa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
+					"spreadsheetsMerged" + File.separator + "mds_" + taxa + "_H_vs_C.txt");
+			
+			File outCVsHPcoa = new File(ConfigReader.getJobinCardioDir() + File.separator + 
+					"spreadsheetsMerged" + File.separator + "mds_" + taxa + "_H_vs_CPlusMetadata.txt");
+			
+			addSomeMetadata(wrapper, inCVsHPcoa, outCVsHPcoa, true, metaMap);
+			
 		}
 	}
 	
