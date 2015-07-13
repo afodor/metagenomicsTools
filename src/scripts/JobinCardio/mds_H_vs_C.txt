@@ -24,6 +24,6 @@ for(taxa in taxaLevels )
 	myMDS <- capscale(myTData~1,distance="bray")
 	
 	write.table(myMDS$CA$u, sep="\t", file=paste("mds_", taxa, "_H_vs_C.txt",sep=""))
-	write.table(myMDSA$CA$eig,file=paste("eigenValues_", taxa, "._H_vs_C.txt", sep=""), sep="\t")
+	write.table(myMDS$CA$eig,file=paste("eigenValues_", taxa, "_H_vs_C.txt", sep=""), sep="\t")
 	
 }
