@@ -19,7 +19,7 @@ public class LeaveOneOut
 
 		String[] splits = s.split("\t");
 		
-		if( Integer.parseInt(splits[1])== 1 && splits[4].equals("first_A") ) 
+		if( Integer.parseInt(splits[1])== 2 && splits[4].equals("second_B") ) 
 			if( mask || Integer.parseInt(splits[2]) != patientToLeaveOut)
 			{
 				if( mask)
@@ -72,7 +72,7 @@ public class LeaveOneOut
 		String returnString = null;
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() 
-				+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
+				+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadataNonRare.txt")));
 	
 		reader.readLine();
 		
@@ -80,7 +80,7 @@ public class LeaveOneOut
 		{
 			String[] splits = s.split("\t");
 			
-			if( Integer.parseInt(splits[1])== 1 && splits[4].equals("first_A")
+			if( Integer.parseInt(splits[1])== 2 && splits[4].equals("second_B")
 							&& Integer.parseInt(splits[2]) == patientIDToLeaveOut)
 			{
 				if( returnString != null)
@@ -99,7 +99,7 @@ public class LeaveOneOut
 	public static double runATrial(int patientIDToLeaveOut) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() 
-					+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
+					+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadataNonRare.txt")));
 		
 		reader.readLine();
 		
@@ -185,7 +185,7 @@ public class LeaveOneOut
 		HashMap<Integer, String>  patientIDs =new LinkedHashMap<Integer, String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() 
-				+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
+				+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadataNonRare.txt")));
 	
 		reader.readLine();
 		
