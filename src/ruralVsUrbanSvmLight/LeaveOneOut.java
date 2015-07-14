@@ -5,7 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 import utils.ProcessWrapper;
@@ -47,14 +48,23 @@ public class LeaveOneOut
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashSet<Integer> patientIDs = getPatientIDs();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir() + 
+				File.separator + "svmLightPhyla.txt")));
 		
-		for( Integer i : patientIDs)
+		writer.write("category\tscore\n");
+		
+		HashMap<Integer, String> patientIDs = getPatientIDs();
+		
+		for( Integer i : patientIDs.keySet())
 		{
 			System.out.println("Trying "  + i);
-			runATrial(i);
-			System.exit(1);
+			
+			double val  = runATrial(i);
+			writer.write( patientIDs.get(i) + "\t" + val + "\n" );
+			
 		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static String getLeftOut( int patientIDToLeaveOut ) throws Exception
@@ -86,7 +96,7 @@ public class LeaveOneOut
 		return returnString;
 	}
 	
-	public static void runATrial(int patientIDToLeaveOut) throws Exception
+	public static double runATrial(int patientIDToLeaveOut) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() 
 					+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
@@ -160,11 +170,19 @@ public class LeaveOneOut
 		args[2] = trainFile.getAbsolutePath();
 		args[3] = svmOut.getAbsolutePath();
 		new ProcessWrapper(args);
+		
+		BufferedReader scoreReader = new BufferedReader(new FileReader(svmOut));
+		
+		double val = Double.parseDouble(scoreReader.readLine());
+		
+		scoreReader.close();
+		
+		return val;
 	}
 	
-	private static HashSet<Integer> getPatientIDs() throws Exception
+	private static HashMap<Integer, String> getPatientIDs() throws Exception
 	{
-		HashSet<Integer> patientIDs =new HashSet<Integer>();
+		HashMap<Integer, String>  patientIDs =new LinkedHashMap<Integer, String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getChinaDir() 
 				+ File.separator + "phylum_taxaAsColumnsLogNorm_WithMetadata.txt")));
@@ -175,8 +193,16 @@ public class LeaveOneOut
 		{
 			String[] splits = s.split("\t");
 			
-			patientIDs.add( Integer.parseInt(splits[2]));
+			String val = patientIDs.get( Integer.parseInt(splits[2]));
+			
+			if( val != null && ! val.equals(splits[3]))
+				throw new Exception("No");
+			
+			patientIDs.put( Integer.parseInt(splits[2]), splits[3]);
 		}
+		
+		for(Integer i : patientIDs.keySet())
+			System.out.println(i);
 		
 		return patientIDs;
 	}
