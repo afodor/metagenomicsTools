@@ -91,7 +91,7 @@ public class SpuriousResampling
 	}
 
 	
-	private static List<Double> populateGaussian(double av, double sd, int n)
+	static List<Double> populateGaussian(double av, double sd, int n)
 		throws Exception
 	{
 		
