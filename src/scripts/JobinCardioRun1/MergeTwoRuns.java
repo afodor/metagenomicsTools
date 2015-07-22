@@ -57,6 +57,11 @@ public class MergeTwoRuns
 					File.separator + "spreadsheetsMerged" + File.separator + 
 					"pivoted_" + taxa +  "asColumnsLogNormal.txt" );
 			
+			mergedWrapper.writeNormalizedDataToFile( new File(
+					ConfigReader.getJobinCardioDir() + 
+					File.separator + "spreadsheetsMerged" + File.separator + 
+					"pivoted_" + taxa +  "asColumnsNormal.txt" ));
+			
 		}
 	}
 }
