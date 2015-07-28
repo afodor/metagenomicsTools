@@ -12,9 +12,9 @@ public class Sixths
 	{
 		Integer[] chords =  new Integer[3];
 		
-		chords[0] = 0;
+		chords[0] = 7;
 		chords[1] = 4;
-		chords[2] = 7;
+		chords[2] = 0;
  		
 		for( int x=0; x < NOTES.length; x++)
 		{
@@ -25,6 +25,13 @@ public class Sixths
 			list.add(chords);
 			chords = raiseUpper(chords);
 			list.add(chords);
+			chords = raiseMiddle(chords);
+			list.add(chords);
+			chords = raiseUpper(chords);
+			list.add(chords);
+			chords = raiseMiddle(chords);
+			list.add(chords);
+			
 			
 			
 			for( int y=0; y < 3; y++)
@@ -80,6 +87,18 @@ public class Sixths
 		
 		newA[0] = a[0];
 		newA[1] = lower(a[1]);
+		newA[2] = a[2];
+		
+		return newA;
+		
+	}
+	
+	private static Integer[] raiseMiddle( Integer[] a)
+	{
+		Integer[] newA = new Integer[3];
+		
+		newA[0] = a[0];
+		newA[1] = raise(a[1]);
 		newA[2] = a[2];
 		
 		return newA;
