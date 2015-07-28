@@ -31,7 +31,10 @@ public class Sixths
 			list.add(chords);
 			chords = raiseMiddle(chords);
 			list.add(chords);
-			
+			chords = lowerUpper(chords);
+			list.add(chords);
+			chords = raiseLower(chords);
+			list.add(chords);
 			
 			
 			for( int y=0; y < 3; y++)
@@ -81,6 +84,20 @@ public class Sixths
 		
 	}
 	
+	
+	private static Integer[] lowerUpper( Integer[] a)
+	{
+		Integer[] newA = new Integer[3];
+		
+		newA[0] = lower(a[0]);
+		newA[1] = a[1];
+		newA[2] = a[2];
+		
+		return newA;
+		
+	}
+	
+	
 	private static Integer[] lowerMiddle( Integer[] a)
 	{
 		Integer[] newA = new Integer[3];
@@ -100,6 +117,18 @@ public class Sixths
 		newA[0] = a[0];
 		newA[1] = raise(a[1]);
 		newA[2] = a[2];
+		
+		return newA;
+		
+	}
+	
+	private static Integer[] raiseLower( Integer[] a)
+	{
+		Integer[] newA = new Integer[3];
+		
+		newA[0] = a[0];
+		newA[1] = a[1];
+		newA[2] = raise( a[2]);
 		
 		return newA;
 		
