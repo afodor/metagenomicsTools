@@ -21,21 +21,21 @@ public class Sixths
 			List<Integer[]> list= new ArrayList<Integer[]>();
 			List<String[]> prefix = new ArrayList<String[]>();
 			
-			String[] s = {" ", " " , " "};
+			String[] s = {"   ", "   " , "   "};
 			prefix.add(s);
 			list.add(chords);
 			
-			String[] s2 = {" ", "" + (char)0x00A1, " "};
+			String[] s2 = {"   ", "" + (char)0x00A1 + "  ", "   "};
 			prefix.add(s2);
 			chords = lowerMiddle(chords);
 			
 			list.add(chords);
 			
-			String[] s3 = {"" + (char)94, " " , " "};
+			String[] s3 = {"" + (char)94 + "  " , "   " , "   "};
 			chords = raiseUpper(chords);
 			prefix.add(s3);
 			
-			String[] s4 = {" " , "" + (char)94, " " };
+			String[] s4 = {"   " , "" + (char)94 + "  " , "   " };
 			prefix.add(s4);
 			list.add(chords);
 			chords = raiseMiddle(chords);
@@ -50,13 +50,13 @@ public class Sixths
 			prefix.add(s4);
 			
 			list.add(chords);
-			String[] s7 = {(char)0x00A1+"", " ", " " };
+			String[] s7 = {(char)0x00A1+"  ", "   ", "   " };
 			chords = lowerUpper(chords);
 			prefix.add(s7);
 			
 			list.add(chords);
 			
-			String[] s8 = {" " , " ", "" + (char)94};
+			String[] s8 = {"   " , "   ", "" + (char)94 + "  " };
 			
 			prefix.add(s8);
 			chords = raiseLower(chords);
