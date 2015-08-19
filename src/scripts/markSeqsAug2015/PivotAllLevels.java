@@ -1,13 +1,16 @@
 package scripts.markSeqsAug2015;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
-
+	
 import utils.ConfigReader;
 
 public class PivotAllLevels
@@ -26,7 +29,45 @@ public class PivotAllLevels
 		{
 			System.out.println(s);
 			HashMap<String, List<Long>> map = getCounts(s, inFile);
+			writeResults(s, sampleNames, map);
 		}
+	}
+	
+	private static File writeResults(String level,List<String> sampleNames,  HashMap<String, List<Long>> map )
+		throws Exception
+	{
+
+		for(List<Long> list : map.values())
+			if( list.size() != sampleNames.size())
+				throw new Exception("No");
+		
+		File outFile = new File( ConfigReader.getMarkAug2015Batch1Dir() + File.separator +
+				"qiime_" + level + "_freads_asColumns.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("sample");
+		
+		List<String> taxa = new ArrayList<String>( map.keySet() );
+		Collections.sort(taxa);
+		
+		for( String s : taxa)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(int x=0; x < sampleNames.size(); x++)
+		{
+			writer.write(sampleNames.get(x));
+			
+			for(String s : taxa)
+				writer.write( "\t" + map.get(s).get(x)  );
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+		return outFile;
 	}
 	
 	private static HashMap<String, List<Long>> getCounts(String level, File inFile) throws Exception
@@ -54,6 +95,8 @@ public class PivotAllLevels
 				
 				for( int x=1; x < splits.length-1; x++)
 					innerList.add(Long.parseLong( new StringTokenizer(splits[x], ".").nextToken()));
+				
+				map.put(id, innerList);
 			}
 			else
 			{
