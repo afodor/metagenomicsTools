@@ -21,28 +21,60 @@ public class PivotAllLevels
 				ConfigReader.getMarkAug2015Batch1Dir() + File.separator + "qiime18_Freads_cr.txt");
 		
 		List<String> sampleNames = getSampleNames(inFile);
+		
+		for( String s : LEVELS)
+		{
+			System.out.println(s);
+			HashMap<String, List<Long>> map = getCounts(s, inFile);
+		}
 	}
 	
-	private static HashMap<String, Integer> getCounts(String level, File inFile) throws Exception
+	private static HashMap<String, List<Long>> getCounts(String level, File inFile) throws Exception
 	{
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, List<Long>> map = new HashMap<String, List<Long>>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
+		reader.readLine();
 		
+		for(String s= reader.readLine() ; s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			String id = splits[0];
+			
+			if( ! level.equals("otu"))
+				id = getTaxonomy(splits[splits.length-1], level);
+			
+			List<Long> innerList = map.get(id);
+			
+			if( innerList == null)
+			{
+				innerList = new ArrayList<Long>();
+				
+				for( int x=1; x < splits.length-1; x++)
+					innerList.add(Long.parseLong( new StringTokenizer(splits[x], ".").nextToken()));
+			}
+			else
+			{
+				for( int x=1; x < splits.length-1; x++)
+					innerList.set((x-1) , 
+							innerList.get(x-1) + Long.parseLong(new StringTokenizer(splits[x], ".").nextToken()));
+			}
+		}
 		
 		reader.close();
 		
 		return map;
 	}
 	
-	private String getTaxonomy(String lastToken, String level) throws Exception
+	private static String getTaxonomy(String lastToken, String level) throws Exception
 	{
 		StringTokenizer sToken = new StringTokenizer(lastToken, ";");
 		
 		while( sToken.hasMoreTokens())
 		{
-			String nextToken = sToken.nextToken();
+			String nextToken = sToken.nextToken().trim();
 			
 			if( nextToken.startsWith(level))
 			{
