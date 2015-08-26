@@ -1,0 +1,96 @@
+##mixed linear model of NEC bacterial data
+##8/24/15
+
+rm(list=ls())
+library("nlme")
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\NEC")
+
+exts = c("_cr_q19", "_PL_wTaxaRDP80", "_PL_wTaxaUCLUST")
+
+taxaLevels <- c("all otus", "phylum","class","order","family","genus")
+fileLevels = c("", "_L2", "_L3", "_L4", "_L5", "_L6")
+
+for(e in exts) {
+  for(lev in 1:length(fileLevels)) {
+    inFile = paste("nec_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", sep="")
+    print(inFile)
+    tab = read.table(inFile, header=T, sep="\t")
+    nCol = ncol(tab)
+    print(nCol)
+    table = read.table(inFile, header=T, sep="\t", colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", nCol-10)))
+    
+    names = vector()
+    pTime = vector()
+    pSubj = vector()
+    pCondition = vector()
+    meanBug = vector()
+    meanNEC = vector()
+    meanCtrl = vector()
+    index = 1
+    
+    pdf(paste("otuModel_nec_mrg", e, "_", taxaLevels[lev], "_plots.pdf", sep=""), width=9, height=3)
+    
+    for(i in 11:nCol) {
+      # sub = data[!is.na(data[,i]),] #remove NAs -> don't need because sum(is.na(table[,11:1080])) = 0
+      if(sum(table[,i]) > nrow(table)/4) { #at least one quarter of samples are nonzero
+        ##set up
+        bug = table[,i]
+        time = table$JobinLabWeek #fixed effect
+        condition = factor(table$JobinLabPatient_ctrl) #fixed effect
+        patientID = table$JobinLabPatientNum #random effect
+        df = data.frame(bug, patientID, condition, time)
+        
+        meanBug[index] = mean(bug)
+        meanNEC[index] = mean(bug[table$JobinLabPatient_ctrl=="NEC"])
+        meanCtrl[index] = mean(bug[table$JobinLabPatient_ctrl=="ctrl"])
+        names[index] = names(table)[i]
+        
+        ####models
+        fullModel <- gls(bug ~ time + condition, method="REML", correlation=corCompSymm(form=~1|factor(patientID)), data=df)
+        reducedModel <- gls(bug ~ time + condition, method="REML", data=df)
+        fullModelLME <- lme(bug ~ time + condition, method="REML", random = ~1|factor(patientID), data=df)
+        
+        pTime[index] = anova(fullModelLME)$"p-value"[2]
+        pCondition[index] = anova(fullModelLME)$"p-value"[3]
+        pSubj[index] = anova(fullModelLME, reducedModel)$"p-value"[2]
+        intraclassCoeff = coef(fullModel$modelStruct[1]$corStruct, unconstrained=F)[[1]]
+        
+        ####make graphs
+        par(mfrow=c(1,3), mar=c(5.1, 4.1, 4.1, 2.1), cex.main=.75)
+        ##color by condition
+        colors = rep("blue", nrow(table)) #control
+        colors[table$JobinLabPatient_ctrl=="NEC"] = "red"
+        ##shape by time
+        shapes = rep(15, nrow(table)) #week 1
+        shapes[table$JobinLabWeek=="2"] = 16
+        shapes[table$JobinLabWeek=="3"] = 17
+        shapes[table$JobinLabWeek=="4"] = 18
+        
+        ##plot of condition (ctrl vs NEC)
+        boxplot(bug ~ factor(condition), main=paste("pCondition=", format(pCondition[index], digits=3), sep=""), xlab="condition", ylab="log normalized abundance")
+        points(x=factor(condition), y=bug, pch = shapes, col = colors)
+        
+        ##plot of time
+        plot(bug ~ time, main=paste("pTime=", format(pTime[index], digits=3), sep=""), pch=shapes, col=colors, xlab="weeks", ylab="log normalized abundance")
+        
+        ##plot of subject
+        boxplot(bug ~ factor(patientID), main=paste( "pSubject=", format(pSubj[index], digits=3), sep=""), xlab="Subject ID", ylab="log normalized abundance")
+        points(x=factor(patientID), y=bug, pch=shapes, col=colors)
+        
+        ##add title
+        par(new=T, mfrow=c(1,1), mar=c(0,0,1,0), cex.main=.75)
+        plot(1, type="n", axes=0, main=names(table)[i], xlab="", ylab="")
+        
+        index = index+1
+      }
+    }
+    df = data.frame(names, meanBug, meanNEC, meanCtrl, pTime, pSubj, pCondition)
+    df$NECtoCtrl = meanNEC/meanCtrl
+    df$adjustedPTime = p.adjust(pTime, method="BH")
+    df$adjustedPSubj = p.adjust(pSubj, method="BH")
+    df$adjustedPCondition = p.adjust(pCondition, method="BH")
+    df = df[order(df$pCondition),]
+    write.table(df, file=paste("otuModel_nec_mrg", e, "_", taxaLevels[lev],".txt", sep=""), sep="\t", row.names=F, col.names=T, quote=F)
+    dev.off()
+  }
+}

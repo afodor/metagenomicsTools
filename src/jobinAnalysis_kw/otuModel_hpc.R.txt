@@ -1,0 +1,78 @@
+##mixed linear model of HPC bacterial data
+##8/25/15
+
+rm(list=ls())
+library("nlme")
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\HPC")
+
+exts = c("_cr_q19", "_PL_wTaxaRDP80", "_PL_wTaxaUCLUST")
+
+taxaLevels <- c("all otus", "phylum","class","order","family","genus")
+fileLevels = c("", "_L2", "_L3", "_L4", "_L5", "_L6")
+
+for(e in exts) {
+  for(lev in 1:length(fileLevels)) {
+    inFile = paste("hpc_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", sep="")
+    print(inFile)
+    tab = read.table(inFile, header=T, sep="\t")
+    nCol = ncol(tab)
+    print(nCol)
+    table = read.table(inFile, header=T, sep="\t", colClasses = c(rep("character", 10), rep("numeric", nCol-10)))
+    
+    names = vector()
+    pDiagnostic = vector()
+    meanBug = vector()
+    meanN = vector()
+    meanC = vector()
+    meanI = vector()
+    index = 1
+    
+    pdf(paste("otuModel_hpc_mrg", e, "_", taxaLevels[lev], "_plots.pdf", sep=""))
+    
+    for(i in 11:nCol) {
+      # sub = data[!is.na(data[,i]),] #remove NAs -> don't need because for all otus sum(is.na(table[,11:801])) = 0
+      if(sum(table[,i]) > nrow(table)/4) { #at least one quarter of samples are nonzero
+        ##set up
+        bug = table[,i]
+        dx = table$JobinLabDiagnostic #fixed effect
+        df = data.frame(bug, dx)
+        
+        meanBug[index] = mean(bug)
+        meanN[index] = mean(bug[table$JobinLabDiagnostic=="N"])
+        meanC[index] = mean(bug[table$JobinLabDiagnostic=="C"])
+        meanI[index] = mean(bug[table$JobinLabDiagnostic=="I"])
+        names[index] = names(table)[i]
+        
+        ####models
+        model <- gls(bug ~ dx, method="REML", data=df)
+        
+        pDiagnostic[index] = anova(model)$"p-value"[2]
+        
+        ####make graphs
+        par(mar=c(5.1, 4.1, 4.1, 2.1), cex.main=.75)
+        ##color by condition
+        colors = rep("cyan", nrow(table)) #C
+        colors[table$JobinLabDiagnostic=="N"] = "red"
+        colors[table$JobinLabDiagnostic=="I"] = "purple"
+        
+        ##plot of diagnostic
+        #split name at order for formatting
+        sp = strsplit(names(table[i]), ".o", fixed=TRUE)
+        n=sp[[1]][1]
+        if(length(sp[[1]])>1) {
+          n = paste(sp[[1]][1], "\no", sp[[1]][2])
+        }
+        dx = factor(dx)
+        boxplot(bug ~ dx, main=paste(n, "\npDiagnostic=", format(pDiagnostic[index], digits=3), sep=""), xlab="diagnostic", ylab="log normalized abundance")
+        points(x=dx, y=bug, col = colors, pch=16)
+        
+        index = index+1
+      }
+    }
+    df = data.frame(names, meanBug, meanN, meanC, meanI, pDiagnostic)
+    df$adjustedPdiagnostic = p.adjust(pDiagnostic, method="BH")
+    df = df[order(df$pDiagnostic),]
+    write.table(df, file=paste("otuModel_hpc_mrg", e, "_", taxaLevels[lev],".txt", sep=""), sep="\t", row.names=F, col.names=T, quote=F)
+    dev.off()
+  }
+}

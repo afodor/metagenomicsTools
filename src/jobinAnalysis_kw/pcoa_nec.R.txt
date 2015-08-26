@@ -1,0 +1,57 @@
+##make PCoA plot of NEC data, creating files merged with metadata
+##8/24/15
+
+rm(list=ls())
+library("vegan")
+library("ape")
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\NEC")
+
+exts = c("_cr_q19", "_PL_wTaxaRDP80", "_PL_wTaxaUCLUST")
+
+taxaLevels <- c("phylum","class","order","family","genus", "all otus")
+fileLevels = c("_L2", "_L3", "_L4", "_L5", "_L6", "")
+
+map = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\RaadToFodor08022015\\toFodor08022015\\nec_map.txt", sep="\t", header=T, comment.char="", colClasses=rep("character", 10))
+names(map)[1] = "SampleID"
+
+pcoa <- function(table, taxa) {
+  ##color by condition
+  colors = rep("blue", nrow(table)) #control
+  colors[table$JobinLabPatient_ctrl=="NEC"] = "red"
+  
+  ##shape by time
+  shapes = rep(15, nrow(table)) #week 1
+  shapes[table$JobinLabWeek=="2"] = 16
+  shapes[table$JobinLabWeek=="3"] = 17
+  shapes[table$JobinLabWeek=="4"] = 18
+  
+  ##using vegan capscale
+  pcoa <- capscale(table[,-(1:10)]~1,distance="bray")
+  plot(x=pcoa$CA$u[,1], y=pcoa$CA$u[,2], xlab="MDS1", ylab="MDS2", main=taxa, col=colors, pch=shapes)
+  legend("topright", inset=c(-.18, 0), c("control", "NEC", "week 1", "week 2", "week 3", "week 4"), col=c("blue", "red", rep("gray", 4)), pch=c(20, 20, 15:18))
+}
+
+for(e in exts) {
+  pdf(paste("pcoa_nec_mrg", e, ".pdf"))
+  par(xpd=T, mar=c(4,4,3,5)) #legend goes outside
+  for(lev in 1:length(fileLevels)) {
+    fileName <- paste("nec_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm.txt", sep = "")
+    print(fileName)
+    table <-read.table(fileName,header=TRUE,sep="\t")
+    names(table)[1] = "SampleID"
+    
+    ##merge with metadata, remove negative controls and write results
+    mrg = merge(map, table, by="SampleID")
+    mrg = mrg[mrg$JobinLabPatient_ctrl!="nc101" & mrg$JobinLabPatient_ctrl!="water",]
+    fname <- paste("nec_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", sep = "")
+    write.table(mrg, fname, sep="\t", row.names=F, col.names = T, quote=F)
+    
+    ##reread table to get everything numeric
+    ncol = ncol(mrg)
+    tab2 = read.table(fname, header=T, sep="\t", colClasses=c(rep("character", ncol(map)), rep("numeric", ncol-ncol(map))))
+    
+    ##pcoa
+    pcoa(tab2, taxaLevels[lev])
+  }
+  dev.off()
+}

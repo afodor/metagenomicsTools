@@ -1,0 +1,52 @@
+##make PCoA plot of HPC data, creating files merged with metadata
+##8/25/15
+
+rm(list=ls())
+library("vegan")
+library("ape")
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\HPC")
+
+exts = c("_cr_q19", "_PL_wTaxaRDP80", "_PL_wTaxaUCLUST")
+
+taxaLevels <- c("phylum","class","order","family","genus", "all otus")
+fileLevels = c("_L2", "_L3", "_L4", "_L5", "_L6", "")
+
+map = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\RaadToFodor08022015\\toFodor08022015\\hpc_map.txt", sep="\t", header=T, comment.char="", colClasses=rep("character", 10))
+names(map)[1] = "SampleID"
+
+pcoa <- function(table, taxa) {
+  ##color by condition
+  colors = rep("cyan", nrow(table)) #C
+  colors[table$JobinLabDiagnostic=="N"] = "red"
+  colors[table$JobinLabDiagnostic=="I"] = "purple"
+  
+  ##using vegan capscale
+  pcoa <- capscale(table[,-(1:10)]~1,distance="bray")
+  plot(x=pcoa$CA$u[,1], y=pcoa$CA$u[,2], xlab="MDS1", ylab="MDS2", main=taxa, col=colors, pch=16)
+  legend("topright", inset=c(-.1, 0), c("C", "I", "N"), col=c("cyan", "red", "purple"), pch=16)
+}
+
+for(e in exts) {
+  pdf(paste("pcoa_hpc_mrg", e, ".pdf"))
+  par(xpd=T, mar=c(4,4,3,5)) #legend goes outside
+  for(lev in 1:length(fileLevels)) {
+    fileName <- paste("hpc_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm.txt", sep = "")
+    print(fileName)
+    table <-read.table(fileName,header=TRUE,sep="\t")
+    names(table)[1] = "SampleID"
+    
+    ##merge with metadata, remove negative controls and write results
+    mrg = merge(map, table, by="SampleID")
+    mrg = mrg[mrg$JobinLabDiagnostic!="nc101" & mrg$JobinLabDiagnostic!="water",]
+    fname <- paste("hpc_mrg", e, fileLevels[lev], "_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", sep = "")
+    write.table(mrg, fname, sep="\t", row.names=F, col.names = T, quote=F)
+    
+    ##reread table to get everything numeric
+    ncol = ncol(mrg)
+    tab2 = read.table(fname, header=T, sep="\t", colClasses=c(rep("character", ncol(map)), rep("numeric", ncol-ncol(map))))
+    
+    ##pcoa
+    pcoa(tab2, taxaLevels[lev])
+  }
+  dev.off()
+}

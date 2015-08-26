@@ -1,0 +1,99 @@
+##run classifiers on NEC data using cforest
+##8/24/15
+
+rm(list=ls())
+setwd("/projects/afodor_research/kwinglee/jobin/nec")
+# setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\JobinCollaboration\\NEC")
+
+library(rpart)
+library(ROCR)
+
+##function to run permutations from given predictions and true class, adding the lines to the plot
+permut <- function(predClass, trueClass) {
+  for(i in 1:30) {
+    pred = prediction(sample(predClass, size=length(predClass)), trueClass)
+    perf = performance(pred, measure="tpr", x.measure="fpr")
+    lines(x=unlist(slot(perf, "x.values")), y=unlist(slot(perf, "y.values")), col="gray")
+  }
+}
+
+##function that classifies the input table using bagging then draws ROC curve in the color col and runs permutations and returns the AUC
+bagROC <- function(table, col, name) {
+  print(name)
+  ##convert NEC/ctrl to -1/1
+  class = rep(-1, nrow(table)) #control
+  class[table$JobinLabPatient_ctrl == "NEC"] = 1 #NEC
+  
+  dat = cbind(class, table[,-(1:9)])
+  
+  ##get predictions
+  rpart.pred = rep(NA, nrow(table))
+  for(i in 1:nrow(table)) {
+    rp = rpart(class ~ ., data=dat[-i,])
+    rpart.pred[i] = predict(rp, newdata=dat[i,-1])
+  }
+  
+  ##run permutations
+  # permut(bag.pred, class)
+  
+  ##write results
+  write.table(data.frame(actual=class, predicted=rpart.pred), paste("rpart_nec_mrg_cr_q19_", name, "-log-norm.txt", sep=""), sep="\t", quote=F, row.names=F, col.names=T)
+  
+  ##draw ROC curve
+  pred.rocr = prediction(rpart.pred, class)
+  perf.rocr = performance(pred.rocr, measure="tpr", x.measure="fpr")
+  lines(x=unlist(slot(perf.rocr, "x.values")), y=unlist(slot(perf.rocr, "y.values")), col=col)
+  
+  ##return AUC
+  auc = performance(pred.rocr,"auc")
+  return(unlist(slot(auc, "y.values")))
+}
+
+# ##function that returns the AUC from the given prediction
+# aucfunc <- function(pred) {
+#   pred.rocr = prediction(pred, class)
+#   auc = performance(pred.rocr,"auc")
+#   return(unlist(slot(auc, "y.values")))
+# }
+
+jpeg("ROCrpart-nec_mrg_cr_q19-log-norm.jpg", res=200, height=1000, width=1500)
+
+par(xpd=TRUE, mar=c(4.1, 4.1, 1.1, 6.1)) #margins are bottom, left, top, right; default is 5.1, 4.1, 4.1, 2.1
+plot(1, type="n", xlim=c(0,1), ylim=c(0,1), xlab="False positive rate", ylab="True positive rate")
+
+##phylum
+phy.auc = bagROC(read.table("nec_mrg_cr_q19_L2_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1,
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 6))), 
+                 "black", "L2")
+##class
+cla.auc = bagROC(read.table("nec_mrg_cr_q19_L3_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1,
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 12))),
+                 "turquoise", "L3")
+##order
+ord.auc = bagROC(read.table("nec_mrg_cr_q19_L4_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1, 
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 24))), 
+                 "purple", "L4")
+##family
+fam.auc = bagROC(read.table("nec_mrg_cr_q19_L5_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1, 
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 54))),
+                 "red", "L5")
+##genera
+gen.auc = bagROC(read.table("nec_mrg_cr_q19_L6_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1, 
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 94))),
+                 "green", "L6")
+##otu
+otu.auc = bagROC(read.table("nec_mrg_cr_q19_taxaAsCol_logNorm_noNegCtrl_withMetadata.txt", header=T, sep="\t", row.names=1, 
+                            colClasses = c(rep("character", 6), "numeric", "numeric", "character", "character", rep("numeric", 1070))),
+                 "blue", "otu")
+
+# legend("topright", inset=c(-.2, 0),
+#        legend = c(paste("Input Data", "AUC", sep="  "), paste("OTU", otu.auc, sep="          "), paste("Genera", gen.auc, sep="      "), 
+#                   paste("Family", fam.auc, sep="       "), paste("Order", ord.auc, sep="         "), paste("Class", cla.auc, sep="         "),
+#                   paste("Phyla", phy.auc, sep="         "), "permutations"), 
+#        col=c("white", "blue", "green", "red", "purple", "turquoise", "black", "gray"), lty=1, cex=0.5)
+legend("topright", inset=c(-.2, 0),
+       legend = c(paste("Input Data", "AUC", sep="  "), paste("OTU", format(otu.auc, digits=3), sep="          "), paste("Genera", format(gen.auc, digits=3), sep="      "), 
+                  paste("Family", format(fam.auc, digits=3), sep="       "), paste("Order", format(ord.auc, digits=3), sep="         "), paste("Class", format(cla.auc, digits=3), sep="         "),
+                  paste("Phyla", format(phy.auc, digits=3), sep="         ")), 
+       col=c("white", "blue", "green", "red", "purple", "turquoise", "black"), lty=1, cex=0.5)
+dev.off()
