@@ -17,7 +17,7 @@ import utils.ConfigReader;
 
 public class PivotAllLevels
 {
-	private static final String[] LEVELS = { "otu", "k", "p", "c", "o", "f", "g" };
+	public static final String[] LEVELS = { "otu", "k", "p", "c", "o", "f", "g" };
 	public static final String UNCLASSIFIED = "UNCLASSIFIED";
 	
 	public static void main(String[] args) throws Exception
