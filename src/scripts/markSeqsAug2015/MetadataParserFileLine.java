@@ -68,15 +68,15 @@ public class MetadataParserFileLine
 		this.sampleID = splits[0];
 		this.sampleName = splits[1];
 		
-		if( splits[2].length() == 2)
+		if( splits[4].length() == 2)
 		{
-			this.acuteOrChronic = "" + splits[2].charAt(0);
-			this.sex = "" + splits[2].charAt(1);
+			this.acuteOrChronic = "" + splits[4].charAt(0);
+			this.sex = "" + splits[4].charAt(1);
 		}
 		else
 		{
-			this.acuteOrChronic = splits[2];
-			this.sex = splits[2];
+			this.acuteOrChronic = splits[4];
+			this.sex = splits[4];
 		}
 		
 		this.treatment = splits[5];

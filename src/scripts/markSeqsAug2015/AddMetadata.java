@@ -28,7 +28,7 @@ public class AddMetadata
 			
 			String[] topSplits = reader.readLine().split("\t");
 			
-			writer.write("sample\tsampleName\tacuteOrChronic\tsex\t\treatment\tcage\texpriment\tbatch");
+			writer.write("sample\tsampleName\tacuteOrChronic\tsex\ttreatment\tcage\texpriment\tbatch");
 			
 			for( int x=1; x < topSplits.length; x++)
 				writer.write("\t" + topSplits[x]);
@@ -42,6 +42,15 @@ public class AddMetadata
 				
 				if( mpfl == null)
 					throw new Exception("No " + splits[0]);
+				
+				writer.write(splits[0] + "\t" + mpfl.getSampleName() + "\t" + mpfl.getAcuteOrChronic() + "\t");
+				writer.write( mpfl.getSex() + "\t" + mpfl.getTreatment() + "\t" + mpfl.getCage() + "\t" +
+								mpfl.getExpriment() + "\t" + mpfl.getBatch());
+				
+				for( int x=1; x < splits.length; x++ )
+					writer.write("\t" + splits[x]);
+				
+				writer.write("\n");
 			}
 
 			writer.flush();  writer.close();
