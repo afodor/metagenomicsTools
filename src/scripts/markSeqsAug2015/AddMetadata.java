@@ -43,7 +43,7 @@ public class AddMetadata
 				if( mpfl == null)
 					throw new Exception("No " + splits[0]);
 				
-				writer.write(splits[0] + "\t" + mpfl.getSampleName() + "\t" + mpfl.getAcuteOrChronic() + "\t");
+				writer.write("s_" + splits[0] + "\t" + mpfl.getSampleName() + "\t" + mpfl.getAcuteOrChronic() + "\t");
 				writer.write( mpfl.getSex() + "\t" + mpfl.getTreatment() + "\t" + mpfl.getCage() + "\t" +
 								mpfl.getExpriment() + "\t" + mpfl.getBatch());
 				
