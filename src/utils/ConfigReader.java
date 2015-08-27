@@ -88,6 +88,8 @@ public class ConfigReader
 	
 	public static final String JOBIN_APRIL_2015_DIR = "JOBIN_APRIL_2015_DIR";
 	
+	public static final String MARK_AUG_2015_BATCH1_DIR = "MARK_AUG_2015_BATCH1_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -96,6 +98,11 @@ public class ConfigReader
 	public static String getTanyaDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TANYA_DIR);
+	}
+	
+	public static String getMarkAug2015Batch1Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(MARK_AUG_2015_BATCH1_DIR);
 	}
 	
 	public static String getJobinApril2015Dir() throws Exception
