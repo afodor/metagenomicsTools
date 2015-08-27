@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 	
+
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class PivotAllLevels
@@ -29,7 +31,11 @@ public class PivotAllLevels
 		{
 			System.out.println(s);
 			HashMap<String, List<Long>> map = getCounts(s, inFile);
-			writeResults(s, sampleNames, map);
+			File outFile = writeResults(s, sampleNames, map);
+			
+			OtuWrapper wrapper = new OtuWrapper(outFile);
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getMarkAug2015Batch1Dir()
+					+ File.separator + s + "TaxaAsColumnsLogNorm.txt");
 		}
 	}
 	
