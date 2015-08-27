@@ -26,6 +26,8 @@ for(taxa in taxaLevels )
 	pValuesAcuteChronic<- vector()
 		pValuesCage<- vector()
 		iccCage <- vector()
+		
+	# WARNING:  EXPERIMENT IS CONFOUNDED WITH AC  + SEX - INTERPRET WITH CAUTION!!!!!
 	pValuesExperiment <- vector()
 	index <- 1
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
