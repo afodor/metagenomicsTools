@@ -1,0 +1,80 @@
+rm(list=ls())
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+
+setwd("C:\\MarkRatDataAug2015")
+
+taxaLevels <- c( "p", "c", "o", "f", "g", "otu" );
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( taxa, "TaxaAsColumnsLogNormWithMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",8), rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	
+	# squash the negative controls
+	myT <- myT[ which( myT$sex != "Non"), ]
+	
+	# our initial model not worrying about confounders except cage
+	names <- vector()
+	pValuesSex<- vector()
+	pValuesAcuteChronic<- vector()
+	pValuesCage<- vector()
+	iccCage <- vector()
+	index <- 1
+	pdf( paste(taxa, "boxplots.pdf", sep=""))
+	
+	for( i in 9:ncol(myT))
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+		{
+			bug <- myT[,i]
+			ac <- myT$acuteOrChronic  	
+			sex <- myT$sex
+			cage <- myT$cage          
+			
+			myFrame <- data.frame(bug, ac, sex, cage)
+	
+			fullModel <- gls( bug~  ac + sex, method="REML",correlation=corCompSymm(form=~1|factor(cage)),
+				data = myFrame )
+				
+			reducedModel <- gls( bug~  ac + sex, method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  ac + sex , method="REML", random = ~1|factor(cage), data = myFrame)		
+	
+			pValuesAcuteChronic[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesSex[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			iccCage[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			names[index] = names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pSex=", format(pValuesSex[index], digits=3), "\n",
+								" pAcuteChronic= ", format(pValuesAcuteChronic[index],digits=3), 
+									" pCage= " , format(	pValuesCage[index], digits=3), "\n",
+										" icc= " , format( iccCage[index], digits=3 ), sep="")
+			
+			par(mfrow=c(3,1))
+			
+			plot( bug ~ factor(sex), ylab = names[index],main = graphMain )	
+			
+			plot ( bug ~ factor(ac) ) 
+			
+			plot( bug ~ factor(cage), ylab=names[index])
+			index=index+1
+		
+		}
+		
+	dFrame <- data.frame( names, pValuesSex,pValuesAcuteChronic, pValuesCage,iccCage )
+	dFrame <- dFrame [order(pValuesAcuteChronic),]
+	dFrame$adjustedAcuteChronic <- p.adjust( dFrame$pValuesAcuteChronic, method = "BH" )
+	dFrame$adjustedSex<- p.adjust( dFrame$pValuesSex, method = "BH" )
+	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" )
+	
+	write.table(dFrame, file=paste("pValuesForTaxa_Sex_cage_acuteChronic_", taxa, ".txt",sep=""), 
+						sep="\t",row.names=FALSE)
+	dev.off()
+}
