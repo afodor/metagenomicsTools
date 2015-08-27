@@ -24,8 +24,9 @@ for(taxa in taxaLevels )
 	names <- vector()
 	pValuesSex<- vector()
 	pValuesAcuteChronic<- vector()
-	pValuesCage<- vector()
-	iccCage <- vector()
+		pValuesCage<- vector()
+		iccCage <- vector()
+	pValuesExperiment <- vector()
 	index <- 1
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
 	
@@ -36,18 +37,20 @@ for(taxa in taxaLevels )
 			ac <- myT$acuteOrChronic  	
 			sex <- myT$sex
 			cage <- myT$cage          
+			experiment <- myT$expriment
 			
-			myFrame <- data.frame(bug, ac, sex, cage)
+			myFrame <- data.frame(bug, ac, sex, cage, experiment)
 	
-			fullModel <- gls( bug~  ac + sex, method="REML",correlation=corCompSymm(form=~1|factor(cage)),
+			fullModel <- gls( bug~  ac + sex+ experiment, method="REML",correlation=corCompSymm(form=~1|factor(cage)),
 				data = myFrame )
 				
-			reducedModel <- gls( bug~  ac + sex, method="REML",	data = myFrame )
+			reducedModel <- gls( bug~  ac + sex+ experiment, method="REML",	data = myFrame )
 				
-			fullModelLME <- lme(bug~  ac + sex , method="REML", random = ~1|factor(cage), data = myFrame)		
+			fullModelLME <- lme(bug~  ac + sex + experiment, method="REML", random = ~1|factor(cage), data = myFrame)		
 	
 			pValuesAcuteChronic[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesSex[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesExperiment[index] <- anova(fullModelLME)$"p-value"[4]
 			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			iccCage[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(myT)[i]
@@ -57,22 +60,26 @@ for(taxa in taxaLevels )
 									" pCage= " , format(	pValuesCage[index], digits=3), "\n",
 										" icc= " , format( iccCage[index], digits=3 ), sep="")
 			
-			par(mfrow=c(3,1))
+			par(mfrow=c(4,1))
 			
 			plot( bug ~ factor(sex), ylab = names[index],main = graphMain )	
 			
 			plot ( bug ~ factor(ac) ) 
+			
+			plot( bug ~ factor(c( paste( myT$sex, myT$acuteOrChronic,sep=""))))
 			
 			plot( bug ~ factor(cage), ylab=names[index])
 			index=index+1
 		
 		}
 		
-	dFrame <- data.frame( names, pValuesSex,pValuesAcuteChronic, pValuesCage,iccCage )
+	dFrame <- data.frame( names, pValuesSex,pValuesAcuteChronic, pValuesCage,iccCage,pValuesExperiment )
 	dFrame <- dFrame [order(pValuesAcuteChronic),]
 	dFrame$adjustedAcuteChronic <- p.adjust( dFrame$pValuesAcuteChronic, method = "BH" )
 	dFrame$adjustedSex<- p.adjust( dFrame$pValuesSex, method = "BH" )
 	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" )
+	dFrame$adjustedExperiment <- p.adjust( dFrame$pValuesExperiment, method = "BH" )
+	
 	
 	write.table(dFrame, file=paste("pValuesForTaxa_Sex_cage_acuteChronic_", taxa, ".txt",sep=""), 
 						sep="\t",row.names=FALSE)
