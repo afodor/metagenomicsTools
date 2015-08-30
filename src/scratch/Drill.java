@@ -8,7 +8,7 @@ public class Drill
 {
 	
 	
-	public static final int NUM_SECONDS = 60;
+	public static final int NUM_SECONDS = 300;
 	public static final int NUM_QUESTIONS = 100;
 	
 	private static void printIncorrect(List<String> list)
@@ -24,6 +24,21 @@ public class Drill
 		}
 	}
 	
+	private static String ignoreNonNumeric(String s )
+	{
+		StringBuffer buff  = new StringBuffer();
+		
+		for( int x= 0; x < s.length();x++)
+		{
+			char c = s.charAt(x);
+			
+			if( Character.isDigit(c))
+				buff.append(c);
+		}
+		
+		return buff.toString();
+	}
+	
 	public static void main(String[] args)
 	{
 		List<String> incorrect = new ArrayList<String>();
@@ -36,8 +51,7 @@ public class Drill
 		int numWrong =0;
 		for( int x=0; x < NUM_QUESTIONS; x++)
 		{
-			int num1=12;
-			///int num1 = random.nextInt(8) + 5;
+			int num1 = random.nextInt(8) + 5;
 			int num2 = random.nextInt(12) + 1;
 			
 			int inputAnswer = -1;
@@ -62,7 +76,7 @@ public class Drill
 			
 			try
 			{
-				inputAnswer = Integer.parseInt(System.console().readLine());
+				inputAnswer = Integer.parseInt( ignoreNonNumeric( System.console().readLine()));
 			}
 			catch(Exception e)
 			{
