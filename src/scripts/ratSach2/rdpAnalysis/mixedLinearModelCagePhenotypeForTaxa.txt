@@ -1,7 +1,7 @@
 rm(list=ls())
-require(lme4) 
-require(lmerTest)
-
+library("pscl")
+library("lmtest")
+library("nlme")
 
 # these are available at
 # https://github.com/afodor/metagenomicsTools/tree/master/src/scripts/ratSach2/rdpAnalysis/spreadsheets
@@ -13,7 +13,7 @@ tissueTypes <- c("Cecal Content", "Colon content")
 for(taxa in taxaLevels ) 
 	for(tissue in tissueTypes) 
 {
-   inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
+    inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -23,8 +23,10 @@ for(taxa in taxaLevels )
 	myT <- myT[ which( myT$tissue== tissue) , ]
 	
 	pValuesLine <- vector()
+	pValuesCage <- vector()
 	averageHigh <- vector()
 	averageLow <- vector()
+	iccs <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -36,24 +38,39 @@ for(taxa in taxaLevels )
 			
 			if (.Platform$OS.type == "windows") flush.console()
 			
-			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
-			coefs <- data.frame( coef(summary(myLm)))
+			bug <- myT[,i]
+			line <- factor(myT$line)
+			cage <- factor(myT$cage)
+		
+			averageHigh[index] <- mean( myT[myT$line=="High",i])
+			averageLow[index] <- mean( myT[myT$line=="Low",i])
+				
+	
+			myFrame <- data.frame(bug, line, cage)
+	
+			fullModel <- gls( bug~  line , method="REML",correlation=corCompSymm(form=~1|factor(cage)),
+				data = myFrame )
+				
+			reducedModel <- gls( bug~  line , method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  line , method="REML", random = ~1|factor(cage), data = myFrame)		
+	
+			pValuesLine[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			iccs[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			names[index] = names(myT)[i]
 			
-			# if the model has errors, not all the coefs will be defined...
-			if( length( coefs) > 4 )
-			{
-				pValuesLine[index] <- coefs[5]$Pr...t..[2]
-				names[index] = names(myT)[i]
-				averageHigh[index] <- mean( myT[myT$line=="High",i])
-				averageLow[index] <- mean( myT[myT$line=="Low",i])
-				index <- index + 1
-			}
+			index = index + 1
+	
 		}		
 	}
 	
-	dFrame <- data.frame( names, pValuesLine, averageHigh, averageLow) 
+	
+	
+	dFrame <- data.frame( names, pValuesLine,pValuesCage ,iccs, averageHigh, averageLow) 
 	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
+	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" ) 
 	
 	write.table(dFrame, file=paste("pValuesForLine_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }

@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-setwd("G:\\Jobin_April_2015\\secondRun")
+setwd("C:\\Jobin_April_2015\\secondRun")
 library("pscl")
 library("lmtest")
 
