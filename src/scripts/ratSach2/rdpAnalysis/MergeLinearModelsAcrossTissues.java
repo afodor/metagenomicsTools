@@ -18,6 +18,8 @@ public class MergeLinearModelsAcrossTissues
 	{
 		Double pValueCecum;
 		Double pValueColon;
+		Double pValueCecumCage;
+		Double pValueColonCage;
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -39,7 +41,7 @@ public class MergeLinearModelsAcrossTissues
 			
 			double totalCounts = wrapper.getTotalCounts();
 			
-			writer.write("taxa\tcecum\tcolon\trelativeAbundance\ttaxaIfSigInEither\n");
+			writer.write("taxa\tcecumLine\tcolonLine\tcecumCage\tcolonCage\trelativeAbundance\ttaxaIfSigInEither\n");
 			
 			HashMap<String, Holder> map = getMap(level);
 			
@@ -51,25 +53,31 @@ public class MergeLinearModelsAcrossTissues
 				{
 					String key = s;
 					
-					if( ! s.startsWith("Escherichia"))
-						key =s.replaceAll("\\.", " ").replaceAll("\"", "");
-					else
-						key =s.replaceAll("\\.", "/").replaceAll("\"", "");
-					
-					writer.write( s + "\t" );
-					writer.write( h.pValueCecum + "\t" + h.pValueColon + "\t");
-					
-					int index =wrapper.getIndexForOtuName(key);
-					
-					if( index == -1)
-						throw new Exception("Could not find " + key);
-					
-					writer.write(( wrapper.getCountsForTaxa(key) / totalCounts) + "\t");
-					
-					if( Math.abs(h.pValueCecum)  >= 1 || Math.abs( h.pValueColon)  > 1 )
-						writer.write(s + "\n");
-					else
-						writer.write("\n");
+					if( ! key.equals("unrarifiedRichness") && ! key.equals("numSequences")
+									&& ! key.equals("rarifiedRichness50") &&
+										! key.equals("shannonDiversity"))
+					{
+						if( ! s.startsWith("Escherichia"))
+							key =s.replaceAll("\\.", " ").replaceAll("\"", "");
+						else
+							key =s.replaceAll("\\.", "/").replaceAll("\"", "");
+						
+						writer.write( s + "\t" );
+						writer.write( h.pValueCecum + "\t" + h.pValueColon + "\t");
+						writer.write( h.pValueCecumCage + "\t" + h.pValueColonCage+ "\t");
+						
+						int index =wrapper.getIndexForOtuName(key);
+						
+						if( index == -1)
+							throw new Exception("Could not find " + key);
+						
+						writer.write(( wrapper.getCountsForTaxa(key) / totalCounts) + "\t");
+						
+						if( Math.abs(h.pValueCecum)  >= 1 || Math.abs( h.pValueColon)  > 1 )
+							writer.write(s + "\n");
+						else
+							writer.write("\n");
+					}
 				}
 			}
 			
@@ -85,14 +93,14 @@ public class MergeLinearModelsAcrossTissues
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getRachSachReanalysisDir()
 				+ File.separator + "rdpAnalysis" 
-				+ File.separator + "pValuesForTime_taxa_Colon content_" + level + ".txt")));
+				+ File.separator + "pValuesForLine_taxa_Colon content_" + level + ".txt")));
 		
 		reader.readLine();
 		
 		for(String s = reader.readLine() ; s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			if( splits.length != 5)
+			if( splits.length != 8)
 				throw new Exception("Parsing error " + s + " " + splits.length);
 			
 			String key = splits[0].replaceAll("\"","");
@@ -101,7 +109,8 @@ public class MergeLinearModelsAcrossTissues
 				throw new Exception("Duplicate");
 			
 			Holder h = new Holder();
-			h.pValueColon = getLogVal(splits);
+			h.pValueColon = getLogValLine(splits);
+			h.pValueColonCage = getLogValCage(splits);
 			map.put(key,h);
 		}
 		
@@ -109,14 +118,14 @@ public class MergeLinearModelsAcrossTissues
 		reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getRachSachReanalysisDir()
 				+ File.separator + "rdpAnalysis" 
-				+ File.separator + "pValuesForTime_taxa_Cecal Content_" + level + ".txt")));
+				+ File.separator + "pValuesForLine_taxa_Cecal Content_" + level + ".txt")));
 		
 		reader.readLine();
 		
 		for(String s = reader.readLine() ; s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			if( splits.length != 5)
+			if( splits.length != 8)
 				throw new Exception("Parsing error");
 			
 			String key = splits[0].replaceAll("\"","");
@@ -129,19 +138,26 @@ public class MergeLinearModelsAcrossTissues
 				map.put(key, h);
 			}
 			
-			h.pValueCecum = getLogVal(splits);
+			h.pValueCecum = getLogValLine(splits);
+			h.pValueCecumCage = getLogValCage(splits);
 		}
 		
 		return map;
 	}
 	
-	private static double getLogVal( String[] splits ) throws Exception
+	private static double getLogValLine( String[] splits ) throws Exception
 	{
-		double pValue = Math.log10(Double.parseDouble(splits[4]));
+		double pValue = Math.log10(Double.parseDouble(splits[1]));
 		
-		if( Double.parseDouble(splits[3]) > Double.parseDouble(splits[2]))
+		if( Double.parseDouble(splits[5]) > Double.parseDouble(splits[4]))
 			pValue = -pValue;
 		
+		return pValue;
+	}
+	
+	private static double getLogValCage( String[] splits ) throws Exception
+	{
+		double pValue = Math.log10(Double.parseDouble(splits[2]));	
 		return pValue;
 	}
 }

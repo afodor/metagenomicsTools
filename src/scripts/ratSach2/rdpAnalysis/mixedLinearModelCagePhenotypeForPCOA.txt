@@ -67,6 +67,6 @@ for(taxa in taxaLevels )
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
 	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" ) 
 	
-	write.table(dFrame, file=paste("pValuesForLine_taxa_MDS", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForPCOA_taxa_MDS", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
