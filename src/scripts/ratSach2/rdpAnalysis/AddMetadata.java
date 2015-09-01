@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import scripts.ratSach2.MappingFileLine;
 import utils.ConfigReader;
@@ -95,7 +94,6 @@ public class AddMetadata
 	/*
 	 * This is run after running r scripts.
 	 */
-	/*
 	public static void main(String[] args) throws Exception
 	{
 		String[] levels = { "phylum","class","order","family","genus", "otu" };
@@ -105,6 +103,9 @@ public class AddMetadata
 			for( String tissue : tissues )
 		{
 			System.out.println(level);
+			HashMap<String, Double> rarifiedMap = 
+					getRarifiedRichnessMap(level);
+		
 			BufferedReader reader = new BufferedReader(new FileReader(new File( 
 					ConfigReader.getRachSachReanalysisDir()
 					+ File.separator + "rdpAnalysis" 
@@ -124,7 +125,7 @@ public class AddMetadata
 					+ File.separator + "sparseThreeColumn_" + level + 
 						"_AsColumns.txt");
 			
-			addSomeMetadata(reader, writer,false, wrapper);
+			addSomeMetadata(reader, writer,false, wrapper, rarifiedMap);
 			
 			reader = new BufferedReader(new FileReader(new File( 
 					ConfigReader.getRachSachReanalysisDir()
@@ -140,11 +141,12 @@ public class AddMetadata
 					"sparseThreeColumn_" +  level +
 						"_AsColumnsLogNormalizedPlusMetadata.txt" )));
 			
-			addSomeMetadata(reader, writer,true, wrapper);
+			addSomeMetadata(reader, writer,true, wrapper, rarifiedMap);
 		}
-	}*/
+	}
 	
 	// This run prior to running r scripts
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
@@ -176,6 +178,7 @@ public class AddMetadata
 			
 		}
 	}
+	*/
 	
 	private static HashMap<String, Double> getRarifiedRichnessMap(String level) throws Exception
 	{
