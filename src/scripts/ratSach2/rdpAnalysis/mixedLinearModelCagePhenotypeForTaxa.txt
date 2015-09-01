@@ -88,8 +88,13 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValuesLineCecal),]
 	dFrame$adjustedPLineCecal <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
 	dFrame$adjustedCageCecal <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
-	dFrame$adjustedPLineColon <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
-	dFrame$adjustedCageColon <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
+	dFrame$adjustedPLineColon <- p.adjust( dFrame$pValuesLineColon, method = "BH" )
+	dFrame$adjustedCageColon <- p.adjust( dFrame$pValuesCageColon, method = "BH" ) 
+	
+	dFrame$log10pValuesLineCecal <-  -log10(dFrame$pValuesLineCecal)
+	dFrame$log10pValuesLineColon <-  -log10(dFrame$pValuesLineColon)
+	dFrame$log10pValuesCageCecal <-  -log10(dFrame$pValuesCageCecal)
+	dFrame$log10pValuesCageColon <-  -log10(dFrame$pValuesCageColon)
 	
 	write.table(dFrame, file=paste("pValuesForLine_taxa_merged", "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
