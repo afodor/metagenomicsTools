@@ -8,10 +8,9 @@ library("nlme")
 setwd("C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
-tissueTypes <- c("Cecal Content", "Colon content")
+
 
 for(taxa in taxaLevels ) 
-	for(tissue in tissueTypes) 
 {
     inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 	
@@ -20,44 +19,63 @@ for(taxa in taxaLevels )
 	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[ which( myT$tissue== tissue) , ]
+	myTCecal <- myT[ which( myT$tissue== "Cecal Content") , ]
+	myTColon <- myT[ which( myT$tissue== "Colon content") , ]
 	
-	pValuesLine <- vector()
-	pValuesCage <- vector()
-	averageHigh <- vector()
-	averageLow <- vector()
-	iccs <- vector()
+	pValuesLineCecal <- vector()
+	pValuesCageCecal <- vector()
+	averageHighCecal <- vector()
+	averageLowCecal <- vector()
+	
+	pValuesLineColon <- vector()
+	pValuesCageColon <- vector()
+	averageHighColon <- vector()
+	averageLowColon <- vector()
+	
 	names <- vector()
 	
 	index <- 1
 	for( i in 7:numCols) 
 	{	
-		if( sum(myT[,i] != 0) >= nrow(myT)/4 )
+		# skip rarified richness for now..
+		if( i != 9 & sum(myT[,i] != 0) >= nrow(myT)/4 )
 		{
 			print( paste(i , " of ", numCols, " with ", index ,sep=""))
 			
 			if (.Platform$OS.type == "windows") flush.console()
 			
-			bug <- myT[,i]
-			line <- factor(myT$line)
-			cage <- factor(myT$cage)
+			bug <- myTCecal[,i]
+			line <- factor(myTCecal$line)
+			cage <- factor(myTCecal$cage)
 		
-			averageHigh[index] <- mean( myT[myT$line=="High",i])
-			averageLow[index] <- mean( myT[myT$line=="Low",i])
+			averageHighCecal[index] <- mean( myTCecal[myTCecal$line=="High",i])
+			averageLowCecal[index] <- mean( myTCecal[myTCecal$line=="Low",i])
 				
-	
 			myFrame <- data.frame(bug, line, cage)
 	
-			fullModel <- gls( bug~  line , method="REML",correlation=corCompSymm(form=~1|factor(cage)),
-				data = myFrame )
-				
 			reducedModel <- gls( bug~  line , method="REML",	data = myFrame )
 				
 			fullModelLME <- lme(bug~  line , method="REML", random = ~1|factor(cage), data = myFrame)		
 	
-			pValuesLine[index] <- anova(fullModelLME)$"p-value"[2]
-			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
-			iccs[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			pValuesLineCecal[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesCageCecal[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+		
+			bug <- myTColon[,i]
+			line <- factor(myTColon$line)
+			cage <- factor(myTColon$cage)
+		
+			averageHighColon[index] <- mean( myTColon[myTColon$line=="High",i])
+			averageLowColon[index] <- mean( myTColon[myTColon$line=="Low",i])
+				
+			myFrame <- data.frame(bug, line, cage)
+	
+			reducedModel <- gls( bug~  line , method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  line , method="REML", random = ~1|factor(cage), data = myFrame)		
+	
+			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			
 			names[index] = names(myT)[i]
 			
 			index = index + 1
@@ -65,13 +83,14 @@ for(taxa in taxaLevels )
 		}		
 	}
 	
+	dFrame <- data.frame( names, pValuesLineCecal,pValuesCageCecal, averageHighCecal, averageLowCecal,
+		pValuesLineColon,pValuesCageColon, averageHighColon, averageLowColon) 
+	dFrame <- dFrame [order(dFrame$pValuesLineCecal),]
+	dFrame$adjustedPLineCecal <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
+	dFrame$adjustedCageCecal <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
+	dFrame$adjustedPLineColon <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
+	dFrame$adjustedCageColon <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
 	
-	
-	dFrame <- data.frame( names, pValuesLine,pValuesCage ,iccs, averageHigh, averageLow) 
-	dFrame <- dFrame [order(dFrame$pValuesLine),]
-	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
-	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" ) 
-	
-	write.table(dFrame, file=paste("pValuesForLine_taxa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForLine_taxa_merged", "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
