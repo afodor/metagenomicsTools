@@ -66,9 +66,10 @@ for(taxa in taxaLevels )
 			bug <- myTColon[,i]
 			line <- factor(myTColon$line)
 			cage <- factor(myTColon$cage)
-			
-			plot( bug ~ line, main = paste(names[i], " cecal by line p= " ,pValuesLineCecal[index]  ))
-			plot( bug ~ cage, main = paste(names[i], " cecal by cage p= " ,pValuesCageCecal[index]  ))
+		
+			names[index] = names(myT)[i]	
+			plot( bug ~ line, main = paste(names[index], " cecal by line p= " ,format(pValuesLineCecal[index],digits=3)  ))
+			plot( bug ~ cage, main = paste(names[index], " cecal by cage p= " ,format(pValuesCageCecal[index], digits=3)))
 		
 			averageHighColon[index] <- mean( myTColon[myTColon$line=="High",i])
 			averageLowColon[index] <- mean( myTColon[myTColon$line=="Low",i])
@@ -82,11 +83,9 @@ for(taxa in taxaLevels )
 			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			
-			plot( bug ~ line, main = paste(names[i], " colon by line p= " ,pValuesLineColon[index]  ))
-			plot( bug ~ cage, main = paste(names[i], " colon by cage p= " ,pValuesCageColon[index]  ))
+			plot( bug ~ line, main = paste(names[index], " colon by line p= " ,format(pValuesLineColon[index],digits=3)))
+			plot( bug ~ cage, main = paste(names[index], " colon by cage p= " ,format(pValuesCageColon[index],digits=3)))
 		
-			
-			names[index] = names(myT)[i]
 			
 			index = index + 1
 			
