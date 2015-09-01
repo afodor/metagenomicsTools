@@ -12,6 +12,7 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
+	pdf(paste("mergedPlots_" , taxa, ".pdf"))
     inFileName <- paste( "sparseThreeColumn_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
@@ -40,6 +41,8 @@ for(taxa in taxaLevels )
 		# skip rarified richness for now..
 		if( i != 9 & sum(myT[,i] != 0) >= nrow(myT)/4 )
 		{
+			par(mfrow=c(4,1))
+			
 			print( paste(i , " of ", numCols, " with ", index ,sep=""))
 			
 			if (.Platform$OS.type == "windows") flush.console()
@@ -63,6 +66,9 @@ for(taxa in taxaLevels )
 			bug <- myTColon[,i]
 			line <- factor(myTColon$line)
 			cage <- factor(myTColon$cage)
+			
+			plot( bug ~ line, main = paste(names[i], " cecal by line p= " ,pValuesLineCecal[index]  ))
+			plot( bug ~ cage, main = paste(names[i], " cecal by cage p= " ,pValuesCageCecal[index]  ))
 		
 			averageHighColon[index] <- mean( myTColon[myTColon$line=="High",i])
 			averageLowColon[index] <- mean( myTColon[myTColon$line=="Low",i])
@@ -76,10 +82,14 @@ for(taxa in taxaLevels )
 			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			
+			plot( bug ~ line, main = paste(names[i], " colon by line p= " ,pValuesLineColon[index]  ))
+			plot( bug ~ cage, main = paste(names[i], " colon by cage p= " ,pValuesCageColon[index]  ))
+		
+			
 			names[index] = names(myT)[i]
 			
 			index = index + 1
-	
+			
 		}		
 	}
 	
@@ -96,6 +106,7 @@ for(taxa in taxaLevels )
 	dFrame$log10pValuesCageCecal <-  -log10(dFrame$pValuesCageCecal)
 	dFrame$log10pValuesCageColon <-  -log10(dFrame$pValuesCageColon)
 	
+	dev.off()
 	write.table(dFrame, file=paste("pValuesForLine_taxa_merged", "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
