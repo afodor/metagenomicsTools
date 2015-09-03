@@ -32,11 +32,14 @@ for(taxa in taxaLevels )
 	pValuesCageColon <- vector()
 	averageHighColon <- vector()
 	averageLowColon <- vector()
+	globalAverage <- vector()
+	averageColon <- vector()
+	averageCecal <- vector()
 	
 	names <- vector()
 	
 	index <- 1
-	for( i in 7:numCols) 
+	for( i in 11:numCols) 
 	{	
 		# skip rarified richness for now..
 		if( i != 9 & sum(myT[,i] != 0) >= nrow(myT)/4 )
@@ -47,7 +50,9 @@ for(taxa in taxaLevels )
 			
 			if (.Platform$OS.type == "windows") flush.console()
 			
+			globalAverage[index] <- mean(myT[,i])
 			bug <- myTCecal[,i]
+			averageCecal[index] <- mean(bug)
 			line <- factor(myTCecal$line)
 			cage <- factor(myTCecal$cage)
 			
@@ -69,6 +74,7 @@ for(taxa in taxaLevels )
 			plot( bug ~ cage, main = paste(names[index], " cecal by cage p= " ,format(pValuesCageCecal[index], digits=3)))
 		
 			bug <- myTColon[,i]
+			averageColon[index] <- mean(bug)
 			line <- factor(myTColon$line)
 			cage <- factor(myTColon$cage)
 		
@@ -95,7 +101,8 @@ for(taxa in taxaLevels )
 	}
 	
 	dFrame <- data.frame( names, pValuesLineCecal,pValuesCageCecal, averageHighCecal, averageLowCecal,
-		pValuesLineColon,pValuesCageColon, averageHighColon, averageLowColon) 
+		pValuesLineColon,pValuesCageColon, averageHighColon, averageLowColon,globalAverage ,
+				averageColon,averageCecal ) 
 	dFrame <- dFrame [order(dFrame$pValuesLineCecal),]
 	dFrame$adjustedPLineCecal <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
 	dFrame$adjustedCageCecal <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
