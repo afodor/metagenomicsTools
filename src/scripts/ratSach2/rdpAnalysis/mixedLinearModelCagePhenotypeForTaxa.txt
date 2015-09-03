@@ -75,8 +75,8 @@ for(taxa in taxaLevels )
 			pValuesLineCecal[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageCecal[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			
-			pValuesOneWayAnovaCageCecalHigh[index] <- anova(lm(bug[line=="High"] ~ cage[line=="High"] ))$"Pr(>F)"[1]
-			pValuesOneWayAnovaCageCecalLow[index] <- anova(lm(bug[line=="Low"] ~ cage[line=="Low"] ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageCecalHigh[index] <- kruskal.test(bug[line=="High"] ~ cage[line=="High"])$p.value
+			pValuesOneWayAnovaCageCecalLow[index] <- kruskal.test(bug[line=="Low"] ~ cage[line=="Low"])$p.value
 			
 			
 			names[index] = names(myT)[i]	
@@ -100,8 +100,8 @@ for(taxa in taxaLevels )
 	
 			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
-			pValuesOneWayAnovaCageColonHigh[index] <- anova(lm(bug[line=="High"] ~ cage[line=="High"] ))$"Pr(>F)"[1]
-			pValuesOneWayAnovaCageColonLow[index] <- anova(lm(bug[line=="Low"] ~ cage[line=="Low"] ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageColonHigh[index] <- kruskal.test(bug[line=="High"] ~ cage[line=="High"])$p.value
+			pValuesOneWayAnovaCageColonLow[index] <- kruskal.test(bug[line=="Low"] ~ cage[line=="Low"])$p.value
 			
 			plot( bug ~ line, main = paste(names[index], " colon by line p= " ,format(pValuesLineColon[index],digits=3)))
 			plot( bug ~ cage, main = paste(names[index], " colon by cage p= " ,format(pValuesCageColon[index],digits=3)))
