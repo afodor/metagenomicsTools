@@ -5,7 +5,7 @@ library("nlme")
 
 # these are available at
 # https://github.com/afodor/metagenomicsTools/tree/master/src/scripts/ratSach2/rdpAnalysis/spreadsheets
-setwd("C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
+setwd("C:\\Users\\Anthony\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
@@ -35,6 +35,9 @@ for(taxa in taxaLevels )
 	globalAverage <- vector()
 	averageColon <- vector()
 	averageCecal <- vector()
+	
+	pValuesOneWayAnovaCageCecal <- vector()
+	pValuesOneWayAnovaCageColon <- vector()
 	
 	names <- vector()
 	
@@ -69,6 +72,9 @@ for(taxa in taxaLevels )
 			pValuesLineCecal[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageCecal[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			
+			pValuesOneWayAnovaCageCecal[index] <- anova(lm(bug ~ cage ))$"Pr(>F)"[1]
+			
+			
 			names[index] = names(myT)[i]	
 			plot( bug ~ line, main = paste(names[index], " cecal by line p= " ,format(pValuesLineCecal[index],digits=3)  ))
 			plot( bug ~ cage, main = paste(names[index], " cecal by cage p= " ,format(pValuesCageCecal[index], digits=3)))
@@ -90,6 +96,7 @@ for(taxa in taxaLevels )
 	
 			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			pValuesOneWayAnovaCageColon[index] <- anova(lm(bug ~ cage ))$"Pr(>F)"[1]
 			
 			plot( bug ~ line, main = paste(names[index], " colon by line p= " ,format(pValuesLineColon[index],digits=3)))
 			plot( bug ~ cage, main = paste(names[index], " colon by cage p= " ,format(pValuesCageColon[index],digits=3)))
@@ -102,17 +109,24 @@ for(taxa in taxaLevels )
 	
 	dFrame <- data.frame( names, pValuesLineCecal,pValuesCageCecal, averageHighCecal, averageLowCecal,
 		pValuesLineColon,pValuesCageColon, averageHighColon, averageLowColon,globalAverage ,
-				averageColon,averageCecal ) 
+				averageColon,averageCecal,pValuesOneWayAnovaCageCecal , pValuesOneWayAnovaCageColon  ) 
 	dFrame <- dFrame [order(dFrame$pValuesLineCecal),]
 	dFrame$adjustedPLineCecal <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
 	dFrame$adjustedCageCecal <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
 	dFrame$adjustedPLineColon <- p.adjust( dFrame$pValuesLineColon, method = "BH" )
 	dFrame$adjustedCageColon <- p.adjust( dFrame$pValuesCageColon, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageCecal <- p.adjust( dFrame$pValuesOneWayAnovaCageCecal, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageColon <- p.adjust( dFrame$pValuesOneWayAnovaCageColon, method = "BH" ) 
+	
+	
 	
 	dFrame$log10pValuesLineCecal <-  -log10(dFrame$pValuesLineCecal)
 	dFrame$log10pValuesLineColon <-  -log10(dFrame$pValuesLineColon)
 	dFrame$log10pValuesCageCecal <-  -log10(dFrame$pValuesCageCecal)
 	dFrame$log10pValuesCageColon <-  -log10(dFrame$pValuesCageColon)
+	dFrame$log10pValuesOneWayAnovaCageCecal <-  -log10(dFrame$pValuesOneWayAnovaCageCecal)
+	dFrame$log10pValuesOneWayAnovaCageColon <-  -log10(dFrame$pValuesOneWayAnovaCageColon)
+	
 	
 	dev.off()
 	write.table(dFrame, file=paste("pValuesForLine_taxa_merged", "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
