@@ -36,8 +36,11 @@ for(taxa in taxaLevels )
 	averageColon <- vector()
 	averageCecal <- vector()
 	
-	pValuesOneWayAnovaCageCecal <- vector()
-	pValuesOneWayAnovaCageColon <- vector()
+	pValuesOneWayAnovaCageCecalHigh <- vector()
+	pValuesOneWayAnovaCageColonHigh <- vector()
+	
+	pValuesOneWayAnovaCageCecalLow <- vector()
+	pValuesOneWayAnovaCageColonLow <- vector()
 	
 	names <- vector()
 	
@@ -72,7 +75,8 @@ for(taxa in taxaLevels )
 			pValuesLineCecal[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageCecal[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			
-			pValuesOneWayAnovaCageCecal[index] <- anova(lm(bug ~ cage ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageCecalHigh[index] <- anova(lm(bug[line=="High"] ~ cage[line=="High"] ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageCecalLow[index] <- anova(lm(bug[line=="Low"] ~ cage[line=="Low"] ))$"Pr(>F)"[1]
 			
 			
 			names[index] = names(myT)[i]	
@@ -96,7 +100,8 @@ for(taxa in taxaLevels )
 	
 			pValuesLineColon[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCageColon[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
-			pValuesOneWayAnovaCageColon[index] <- anova(lm(bug ~ cage ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageColonHigh[index] <- anova(lm(bug[line=="High"] ~ cage[line=="High"] ))$"Pr(>F)"[1]
+			pValuesOneWayAnovaCageColonLow[index] <- anova(lm(bug[line=="Low"] ~ cage[line=="Low"] ))$"Pr(>F)"[1]
 			
 			plot( bug ~ line, main = paste(names[index], " colon by line p= " ,format(pValuesLineColon[index],digits=3)))
 			plot( bug ~ cage, main = paste(names[index], " colon by cage p= " ,format(pValuesCageColon[index],digits=3)))
@@ -109,14 +114,17 @@ for(taxa in taxaLevels )
 	
 	dFrame <- data.frame( names, pValuesLineCecal,pValuesCageCecal, averageHighCecal, averageLowCecal,
 		pValuesLineColon,pValuesCageColon, averageHighColon, averageLowColon,globalAverage ,
-				averageColon,averageCecal,pValuesOneWayAnovaCageCecal , pValuesOneWayAnovaCageColon  ) 
+				averageColon,averageCecal,pValuesOneWayAnovaCageCecalHigh , pValuesOneWayAnovaCageColonHigh ,
+					pValuesOneWayAnovaCageCecalLow , pValuesOneWayAnovaCageColonLow  ) 
 	dFrame <- dFrame [order(dFrame$pValuesLineCecal),]
 	dFrame$adjustedPLineCecal <- p.adjust( dFrame$pValuesLineCecal, method = "BH" )
 	dFrame$adjustedCageCecal <- p.adjust( dFrame$pValuesCageCecal, method = "BH" ) 
 	dFrame$adjustedPLineColon <- p.adjust( dFrame$pValuesLineColon, method = "BH" )
 	dFrame$adjustedCageColon <- p.adjust( dFrame$pValuesCageColon, method = "BH" ) 
-	dFrame$adjustedOneWayAnovaCageCecal <- p.adjust( dFrame$pValuesOneWayAnovaCageCecal, method = "BH" ) 
-	dFrame$adjustedOneWayAnovaCageColon <- p.adjust( dFrame$pValuesOneWayAnovaCageColon, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageCecalHigh <- p.adjust( dFrame$pValuesOneWayAnovaCageCecalHigh, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageColonHigh <- p.adjust( dFrame$pValuesOneWayAnovaCageColonHigh, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageCecalLow <- p.adjust( dFrame$pValuesOneWayAnovaCageCecalLow, method = "BH" ) 
+	dFrame$adjustedOneWayAnovaCageColonLow <- p.adjust( dFrame$pValuesOneWayAnovaCageColonLow, method = "BH" ) 
 	
 	
 	
@@ -124,8 +132,10 @@ for(taxa in taxaLevels )
 	dFrame$log10pValuesLineColon <-  -log10(dFrame$pValuesLineColon)
 	dFrame$log10pValuesCageCecal <-  -log10(dFrame$pValuesCageCecal)
 	dFrame$log10pValuesCageColon <-  -log10(dFrame$pValuesCageColon)
-	dFrame$log10pValuesOneWayAnovaCageCecal <-  -log10(dFrame$pValuesOneWayAnovaCageCecal)
-	dFrame$log10pValuesOneWayAnovaCageColon <-  -log10(dFrame$pValuesOneWayAnovaCageColon)
+	dFrame$log10pValuesOneWayAnovaCageCecalHigh <-  -log10(dFrame$pValuesOneWayAnovaCageCecalHigh)
+	dFrame$log10pValuesOneWayAnovaCageColonHigh <-  -log10(dFrame$pValuesOneWayAnovaCageColonHigh)
+	dFrame$log10pValuesOneWayAnovaCageCecalLow <-  -log10(dFrame$pValuesOneWayAnovaCageCecalLow)
+	dFrame$log10pValuesOneWayAnovaCageColonLow <-  -log10(dFrame$pValuesOneWayAnovaCageColonLow)
 	
 	
 	dev.off()
