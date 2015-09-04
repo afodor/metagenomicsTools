@@ -5,7 +5,7 @@ library("nlme")
 
 # these are available at
 # https://github.com/afodor/metagenomicsTools/tree/master/src/scripts/ratSach2/rdpAnalysis/spreadsheets
-setwd("C:\\Users\\Anthony\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
+setwd("C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\ratSach2\\rdpAnalysis\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
