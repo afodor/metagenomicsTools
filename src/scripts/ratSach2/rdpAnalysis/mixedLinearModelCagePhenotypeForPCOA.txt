@@ -2,71 +2,42 @@ rm(list=ls())
 require(lme4) 
 require(lmerTest)
 
-setwd("C:\\MarkLyteTasteManuscript\\rdpAnalysis")
+setwd("D:\\MarkLyteTasteManuscript\\rdpAnalysis")
 
-taxaLevels <- c("phylum","class","family","genus")
-#taxaLevels <- c("otu", "phylum","class","order","family","genus")
+taxaLevels <- c("otu", "phylum","class","order","family","genus")
 tissueTypes <- c("Cecal Content", "Colon content")
 
 for(taxa in taxaLevels ) 
 	for(tissue in tissueTypes) 
 {
+    # uncomment for pcoa
 	inFileName <- paste( "pcoa_" , taxa, "_" , tissue, "WithMetadata.txt", sep ="")
 	
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",6), rep("numeric", numCols-6))
+	myColClasses <- c(rep("character",5), rep("numeric", numCols-5))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	pValuesLine <- vector()
-	pValuesCage <- vector()
-	averageHigh <- vector()
-	averageLow <- vector()
-	#iccs <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in 11:16) 
+	for( i in 9:13) 
 	{	
-		if( sum(myT[,i] != 0) >= nrow(myT)/4 )
+		#if( sum(myT[,i] != 0) >= numCols/4 )
 		{
-			print( paste(i , " of ", numCols, " with ", index ,sep=""))
-			
-			if (.Platform$OS.type == "windows") flush.console()
-			
-			bug <- myT[,i]
-			line <- factor(myT$line)
-			cage <- factor(myT$cage)
-		
-			averageHigh[index] <- mean( myT[myT$line=="High",i])
-			averageLow[index] <- mean( myT[myT$line=="Low",i])
-	
-			myFrame <- data.frame(bug, line, cage)
-	
-		#	fullModel <- gls( bug~  line , method="REML",correlation=corCompSymm(form=~1|factor(cage)),
-		#		data = myFrame )
-				
-			reducedModel <- gls( bug~  line , method="REML",	data = myFrame )
-				
-			fullModelLME <- lme(bug~  line , method="REML", random = ~1|factor(cage), data = myFrame)		
-	
-			pValuesLine[index] <- anova(fullModelLME)$"p-value"[2]
-			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
-			#iccs[index]<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			myLm <- lmer( myT[,i] ~  myT$line + ( 1| factor(myT$cage) ) )
+			coefs <- data.frame(coef(summary(myLm)))
+			pValuesLine[index] <- coefs[5]$Pr...t..[2]
 			names[index] = names(myT)[i]
-			
-			index = index + 1
-	
+			index <- index + 1
 		}		
 	}
 	
-	
-	
-	dFrame <- data.frame( names, pValuesLine,pValuesCage ,averageHigh, averageLow) 
-	dFrame <- dFrame [order(dFrame$pValuesLine),]
+	dFrame <- data.frame( names, pValuesLine) 
+	#dFrame <- dFrame [order(dFrame$pValuesLine),]
 	dFrame$adjustedPLine <- p.adjust( dFrame$pValuesLine, method = "BH" )
-	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" ) 
 	
-	write.table(dFrame, file=paste("pValuesForPCOA_taxa_MDS", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTime_pcoa_", tissue, "_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 							
