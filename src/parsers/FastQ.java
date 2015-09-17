@@ -17,6 +17,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.StringTokenizer;
 
 public class FastQ
 {
@@ -99,6 +100,11 @@ public class FastQ
 		return header;
 	}
 
+	public String getFirstTokenOfHeader()
+	{
+		return new StringTokenizer(header).nextToken();
+	}
+	
 	public void writeToFile(BufferedWriter writer) throws Exception
 	{
 		writer.write(header + "\n");
