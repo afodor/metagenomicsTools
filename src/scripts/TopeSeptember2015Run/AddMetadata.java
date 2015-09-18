@@ -47,7 +47,7 @@ public class AddMetadata
 					"pcoa_" 
 					+NewRDPParserFileLine.TAXA_ARRAY[x] + "WithMetadata.txt" );
 			
-			addMetadata(wrapper, pcaFile, pcaFileMeta, false);
+			addMetadata(wrapper, pcaFile, pcaFileMeta, true);
 			
 		}
 	}
