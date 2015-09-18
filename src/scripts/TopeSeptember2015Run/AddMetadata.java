@@ -36,8 +36,18 @@ public class AddMetadata
 			
 			addMetadata(wrapper, logNormal, logNormalMetadata, false);
 			
+			File pcaFile = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator + 
+					"pcoa_" 
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt" );
 			
+
+			File pcaFileMeta = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator + 
+					"pcoa_" 
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "WithMetadata.txt" );
 			
+			addMetadata(wrapper, pcaFile, pcaFileMeta, false);
 			
 		}
 	}
