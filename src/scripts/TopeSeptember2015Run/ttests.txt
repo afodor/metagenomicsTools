@@ -1,0 +1,41 @@
+
+rm(list=ls())
+
+setwd("C:\\tope_diviticulosis_Sep_2015\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for( taxa in taxaLevels)
+{
+	inFileName= paste(taxa, "_asColumnsLogNormalPlusMetadata.txt", sep="");
+	myT <- read.table(inFileName, header=TRUE, sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(c("character","character"), rep("numeric", numCols-2))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	myT <- myT[myT$readNumber==1,]
+		
+	pValuesCaseControl<- vector()
+	names <- vector()
+	index <- 1
+	
+	for( i in 5:ncol(myT))
+	{
+		bug <- myT[,i] 
+		
+		if( sum( bug != 0 ) > nrow(myT) / 4 )
+		{
+			pValuesCaseControl[index] = t.test( bug[myT$caseControl==0],
+										bug[myT$caseControl==1] )$p.value
+			names[index] = names(myT)[i]
+			index = index + 1
+		}
+	}
+	
+	
+	dFrame <- data.frame(names,pValuesCaseControl)
+	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
+	dFrame$adjustedPCaseControl <- p.adjust( dFrame$pValuesCaseControl, method = "BH" )
+	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatment", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+			
+}
+	
