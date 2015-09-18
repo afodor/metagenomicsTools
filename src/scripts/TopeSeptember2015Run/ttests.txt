@@ -12,7 +12,7 @@ for( taxa in taxaLevels)
 	numCols <- ncol(myT)
 	myColClasses <- c(c("character","character"), rep("numeric", numCols-2))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-	myT <- myT[myT$readNumber==1,]
+	myT <- myT[myT$readNumber==1 && myT$numSequences>= 1000,]
 		
 	pValuesCaseControl<- vector()
 	names <- vector()
@@ -24,7 +24,7 @@ for( taxa in taxaLevels)
 		
 		if( sum( bug != 0 ) > nrow(myT) / 4 )
 		{
-			pValuesCaseControl[index] = t.test( bug[myT$caseControl==0],
+			pValuesCaseControl[index] = wilcox.test( bug[myT$caseControl==0],
 										bug[myT$caseControl==1] )$p.value
 			names[index] = names(myT)[i]
 			index = index + 1
