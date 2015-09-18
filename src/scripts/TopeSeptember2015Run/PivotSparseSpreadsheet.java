@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import parsers.PivotOTUs;
 import utils.ConfigReader;
 
@@ -23,9 +24,17 @@ public class PivotSparseSpreadsheet
 			HashMap<String, HashMap<String, Integer>> map = 
 			getMap(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			
-			PivotOTUs.writeResults(map, ConfigReader.getTopeSep2015Dir() + File.separator +
+			File outFile = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
 					"spreadsheets" + File.separator 
-								+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumns.txt");	
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumns.txt");
+			
+			PivotOTUs.writeResults(map, outFile.getAbsolutePath() );
+			
+			OtuWrapper wrapper = new OtuWrapper(outFile);
+			
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator 
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumnsLogNormal.txt");
 		}
 		
 	}
@@ -48,7 +57,7 @@ public class PivotSparseSpreadsheet
 		int numDone =0 ;
 		
 		for(String s : spreadsheetsDir.list())
-			if( s.indexOf(level) != -1)
+			if( s.indexOf(level) != -1 && s.indexOf("SparseThreeCol") != -1)
 			{
 				
 				String filePath = spreadsheetsDir.getAbsolutePath()+ File.separator + 
