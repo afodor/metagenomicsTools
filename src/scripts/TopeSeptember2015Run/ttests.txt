@@ -43,7 +43,7 @@ for( taxa in taxaLevels)
 			myFrame <- data.frame(bug, case)
 			graphMain = paste( names[index], " p= " , pValuesCaseControl[index])
 			
-			plot( bug~ case, ylab = names[index],	main = graphMain )	
+			boxplot( bug~  factor(case), ylab = names[index],	main = graphMain )	
 			
 			stripchart(bug ~ case , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			
