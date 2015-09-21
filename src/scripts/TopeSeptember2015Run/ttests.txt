@@ -12,7 +12,7 @@ for( taxa in taxaLevels)
 	numCols <- ncol(myT)
 	myColClasses <- c(c("character","character"), rep("numeric", numCols-2))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-	myT <- myT[myT$readNumber==1 && myT$numSequences>= 1000,]
+	myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000,]
 		
 	pValuesCaseControl<- vector()
 	mean1<- vector()
