@@ -15,6 +15,8 @@ for( taxa in taxaLevels)
 	myT <- myT[myT$readNumber==1 && myT$numSequences>= 1000,]
 		
 	pValuesCaseControl<- vector()
+	mean1<- vector()
+	mean0 <- vector()
 	names <- vector()
 	index <- 1
 	
@@ -26,13 +28,15 @@ for( taxa in taxaLevels)
 		{
 			pValuesCaseControl[index] = wilcox.test( bug[myT$caseControl==0],
 										bug[myT$caseControl==1] )$p.value
+			mean0[index] = mean(bug[myT$caseControl==0]  ) 
+			mean1[index] = mean(bug[myT$caseControl==1]  ) 
 			names[index] = names(myT)[i]
 			index = index + 1
 		}
 	}
 	
 	
-	dFrame <- data.frame(names,pValuesCaseControl)
+	dFrame <- data.frame(names,pValuesCaseControl, mean0, mean1)
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$adjustedPCaseControl <- p.adjust( dFrame$pValuesCaseControl, method = "BH" )
 	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatment", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
