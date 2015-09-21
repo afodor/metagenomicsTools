@@ -7,12 +7,13 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for( taxa in taxaLevels)
 {
+	pdf( paste(taxa,"boxplots.pdf", sep=""))
 	inFileName= paste(taxa, "_asColumnsLogNormalPlusMetadata.txt", sep="");
 	myT <- read.table(inFileName, header=TRUE, sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c(c("character","character"), rep("numeric", numCols-2))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-	myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000,]
+	myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000 & (myT$caseControl==0 | myT$caseControl==1 ),]
 		
 	pValuesCaseControl<- vector()
 	mean1<- vector()
@@ -36,7 +37,17 @@ for( taxa in taxaLevels)
 			sampleSize1[index] = length(bug[myT$caseControl==1]  ) 
 			
 			names[index] = names(myT)[i]
-			index = index + 1
+			
+			
+			case <- myT$caseControl;
+			myFrame <- data.frame(bug, case)
+			graphMain = paste( names[index], " p= " , pValuesCaseControl[index])
+			
+			plot( bug~ case, ylab = names[index],	main = graphMain )	
+			
+			stripchart(bug ~ case , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			index = index + 1	
 		}
 	}
 	
@@ -45,6 +56,6 @@ for( taxa in taxaLevels)
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$adjustedPCaseControl <- p.adjust( dFrame$pValuesCaseControl, method = "BH" )
 	write.table(dFrame, file=paste("pValuesForTaxaTimeTreatment", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-			
+	dev.off()
 }
 	
