@@ -1,0 +1,23 @@
+setwd("D:\\Ajay_R21")
+rm(list=ls())
+
+myT <- read.table("merged.txt", sep="\t", header=TRUE)
+
+boxplot(myT[myT$Time==2 & myT$Donor=="\"B6\"" &  myT$Recepient=="\"B6\"" ,]$score,
+myT[myT$Time==2 & myT$Donor=="\"B6\"" &  myT$Recepient=="\"M_129\"" ,]$score,
+myT[myT$Time==2 & myT$Donor=="\"M_129\"" &  myT$Recepient=="\"B6\"" ,]$score,
+myT[myT$Time==2 & myT$Donor=="\"M_129\"" &  myT$Recepient=="\"M_129\"" ,]$score
+)
+
+windows()
+
+boxplot(myT[myT$Time==16 & myT$Donor=="\"B6\"" &  myT$Recepient=="\"B6\"" ,]$score,
+myT[myT$Time==16 & myT$Donor=="\"B6\"" &  myT$Recepient=="\"M_129\"" ,]$score,
+myT[myT$Time==16 & myT$Donor=="\"M_129\"" &  myT$Recepient=="\"B6\"" ,]$score,
+myT[myT$Time==16 & myT$Donor=="\"M_129\"" &  myT$Recepient=="\"M_129\"" ,]$score
+)
+
+#score <- myT$score
+#myFrame <- data.frame(score)
+#stripchart( score[myT$Time==2 & myT$Donor=="\"B6\""] ,vertical = TRUE, pch = 21, add=TRUE )		
+			
