@@ -76,8 +76,9 @@ public class InitialPivot
 			{
 				List<Integer> list = map.get(key);
 				writer.write("\t" + list.get(x));
-				writer.write("\n");
 			}
+
+			writer.write("\n");
 		}
 		
 		writer.flush(); writer.close();
