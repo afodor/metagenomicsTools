@@ -12,6 +12,8 @@ for ( taxa in taxas )
 	
 	pValues <- vector()
 	names <- vector()
+	sampleSizeBaseline <- vector()
+	sampleSizeIntevention <- vector()
 	index <- 1
 	
 	for ( i in 1:ncol(myT))
@@ -21,11 +23,13 @@ for ( taxa in taxas )
 			names[index] <- names(myT)[i]
 			pValues[index] <- wilcox.test( myT[ grepl( "Baseline", rowNames),i], 
 			myT[ grepl( "Intervention", rowNames),i])$p.value
+			sampleSizeBaseline  <- length(myT[ grepl( "Baseline", rowNames),i]) 
+			sampleSizeIntevention  <- length(myT[ grepl( "Intervention", rowNames),i]) 
 			index= index + 1
 		}
 	}
 	
-	dFrame <- data.frame( names,pValues)
+	dFrame <- data.frame( names,pValues,sampleSizeBaseline ,sampleSizeIntevention   )
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )
 	write.table(dFrame, file=paste(taxa,"_WilcoxonIntevention.txt",sep=""), sep="\t", row.names=FALSE)
