@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class InitialPivot
@@ -41,9 +42,11 @@ public class InitialPivot
 		if( level > 0 )
 			taxa = NewRDPParserFileLine.TAXA_ARRAY[level];
 		
-		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(
+		File outFile = new File(
 				ConfigReader.getGoranOct2015Dir() + File.separator + 
-				taxa + "_asColumns.txt")));
+				taxa + "_asColumns.txt");
+		
+		BufferedWriter writer= new BufferedWriter(new FileWriter(outFile));
 	
 		HashMap<String, List<Integer>> map = getTaxaMap(level);
 		List<String> keys = new ArrayList<String>( map.keySet());
@@ -83,6 +86,13 @@ public class InitialPivot
 		
 		writer.flush(); writer.close();
 		reader.close();
+		
+		OtuWrapper wrapper = new OtuWrapper(outFile);
+		
+		File loggedFile = new File( ConfigReader.getGoranOct2015Dir() + File.separator + 
+				taxa + "_asColumnsLogNorm.txt");
+		
+		wrapper.writeNormalizedLoggedDataToFile(loggedFile);
 	}
 	
 	private static HashMap<String, List<Integer>> getTaxaMap( int level) throws Exception
