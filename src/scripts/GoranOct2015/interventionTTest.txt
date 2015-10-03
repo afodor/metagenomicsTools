@@ -8,4 +8,20 @@ for ( taxa in taxas )
 {
 	fileName <- paste( taxa, "_asColumnsLogNorm.txt", sep="")
 	myT <- read.table( fileName, sep="\t", header=TRUE, row.names=1 )
+	rowNames <- row.names(myT)
+	
+	pValues <- vector()
+	names <- vector()
+	index <- 1
+	
+	for ( i in 1:ncol(myT))
+	{
+		if( sum( myT[,i] != 0  ) > nrow(myT) / 4 ) 
+		{
+			names[index] <- names(myT)[i]
+			pValues[index] <- wilcox.test( myT[ grepl( "Baseline", rowNames),i], 
+			myT[ grepl( "Intervention", rowNames),i])$p.value
+			index= index + 1
+		}
+	}
 }
