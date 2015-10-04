@@ -94,6 +94,8 @@ public class ConfigReader
 	
 	public static final String GORAN_OCT_2015_DIR = "GORAN_OCT_2015_DIR";
 	
+	public static final String IAN_OCT_2015_DIR = "IAN_OCT_2015_DIR";
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
@@ -143,6 +145,11 @@ public class ConfigReader
 	public static String getRachSachReanalysisDir() throws Exception
 	{
 		return getConfigReader().getAProperty(RAT_SACH_REANALYSIS_DIR);
+	}
+	
+	public static String getIanOct2015Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_OCT_2015_DIR);
 	}
 	
 	
