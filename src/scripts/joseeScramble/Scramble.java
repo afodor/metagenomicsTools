@@ -1,20 +1,56 @@
 package scripts.joseeScramble;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import jdk.jfr.events.FileWriteEvent;
+
 public class Scramble
 {
 	public static void main(String[] args) throws Exception
 	{
-		//File joseeDir =new File()
+		File joseeDir =new File("C:\\JoseeScramble");
 		
 		HashMap<Integer, Integer> groupMap =getGroups();
 		
 		System.out.println(groupMap);
+		
+		BufferedReader reader = new BufferedReader(new FileReader(joseeDir + File.separator + 
+				"Biofilm project DNA extraction sample list.txt"));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(joseeDir + File.separator + 
+				"Biofilm project DNA extraction sample listWithBatch.txt"));
+		
+		writer.write(reader.readLine()  +"\tbatch\n");
+		
+		for(String s = reader.readLine() ; s != null && s.trim().length() > 0 ; s = reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			int id = Integer.parseInt(splits[0]);
+			
+			Integer group = groupMap.get(id);
+			
+			if ( group == null)
+				throw new Exception("No");
+			
+			writer.write(s + "\t" + group + "\n");
+			
+			groupMap.remove(id);
+		}
+		
+		writer.flush();
+		writer.close();
+		
+		if( groupMap.size() != 0)
+			throw new Exception("No");
 	}
 	
 	private static HashMap<Integer, Integer> getGroups() throws Exception
