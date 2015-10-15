@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import jdk.jfr.events.FileWriteEvent;
 
 public class Scramble
 {
