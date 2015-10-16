@@ -1,0 +1,7 @@
+rm(list=ls())
+
+setwd("C:\\JoseeScramble");
+
+myT <- read.table( "Biofilm project DNA extraction sample listWithBatch.txt", header=TRUE, sep="\t",
+	row.names=1)
+

@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import jdk.jfr.events.FileWriteEvent;
-
 public class Scramble
 {
 	public static void main(String[] args) throws Exception
@@ -40,8 +38,11 @@ public class Scramble
 			
 			if ( group == null)
 				throw new Exception("No");
+
+			for( int x=0; x < splits.length; x++)
+				writer.write( "\"" + splits[x] + "\"" + "\t");
 			
-			writer.write(s + "\t" + group + "\n");
+			writer.write(group + "\n");
 			
 			groupMap.remove(id);
 		}
