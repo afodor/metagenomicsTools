@@ -19,7 +19,7 @@ public class KathrynOTUsToNCBI
 				"Kathryn_update_NCBI_MostWanted" + File.separator + 
 						"ncbiRuralVsUrban.txt")));
 		
-		writer.write("meanRural\tmeanUrban\tpValue\talignmentLength\thigherInRural\n");
+		writer.write("meanRural\tmeanUrban\tpercentIdentity\tpValue\talignmentLength\thigherInRural\n");
 		
 		HashMap<String, HitScores> hitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
@@ -52,8 +52,8 @@ public class KathrynOTUsToNCBI
 				double meanRural = (Double.parseDouble(splits[4]) + Double.parseDouble(splits[5])) / 2.0;
 				
 				writer.write(meanRural + "\t" + meanUrban + "\t" + hs.getPercentIdentity() + "\t"+ 
+										Double.parseDouble(splits[8]) + "\t" + 
 									hs.getAlignmentLength() + "\t" + (meanRural > meanUrban) + "\n");
-			
 			}
 			else
 			{
