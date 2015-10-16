@@ -38,7 +38,7 @@ public class KathrynOTUsToNCBI
 		
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
-			if( s.startsWith("X"))
+		//	if( s.startsWith("X"))
 		{
 			String[] splits = s.split("\t");
 			
@@ -46,16 +46,19 @@ public class KathrynOTUsToNCBI
 			
 			HitScores hs = hitMap.get(key);
 			
-			if( hs == null)
-				throw new Exception("No " + key);
+			if( hs != null)
+			{
+				double meanUrban = (Double.parseDouble(splits[2]) + Double.parseDouble(splits[3])) / 2.0;
+				double meanRural = (Double.parseDouble(splits[4]) + Double.parseDouble(splits[5])) / 2.0;
+				
+				writer.write(meanRural + "\t" + meanUrban + "\t" + hs.getPercentIdentity() + "\t"+ 
+									hs.getAlignmentLength() + "\t" + (meanRural > meanUrban) + "\n");
 			
-			double meanUrban = (Double.parseDouble(splits[2]) + Double.parseDouble(splits[3])) / 2.0;
-			double meanRural = (Double.parseDouble(splits[4]) + Double.parseDouble(splits[5])) / 2.0;
-			
-			writer.write(meanRural + "\t" + meanUrban + "\t" + hs.getPercentIdentity() + "\t"+ 
-								hs.getAlignmentLength() + "\t" + (meanRural > meanUrban) + "\n");
-			
-			writer.flush(); 
+			}
+			else
+			{
+				System.out.println("Could not find " + key);
+			}
 		}
 		
 		writer.flush(); writer.close();
