@@ -5,9 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import parsers.HitScores;
 import utils.ConfigReader;
@@ -21,7 +19,7 @@ public class KathrynOTUsToNCBI
 				"Kathryn_update_NCBI_MostWanted" + File.separator + 
 						"ncbiRuralVsUrban")));
 		
-		writer.write("meanRural\tmeanUrban\tpValue\talignmentLength\thigherInRural\n")
+		writer.write("meanRural\tmeanUrban\tpValue\talignmentLength\thigherInRural\n");
 		
 		HashMap<String, HitScores> hitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
