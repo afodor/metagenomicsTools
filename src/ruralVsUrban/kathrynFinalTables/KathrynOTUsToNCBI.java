@@ -17,7 +17,7 @@ public class KathrynOTUsToNCBI
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getChinaDir() + File.separator + 
 				"Kathryn_update_NCBI_MostWanted" + File.separator + 
-						"ncbiRuralVsUrban")));
+						"ncbiRuralVsUrban.txt")));
 		
 		writer.write("meanRural\tmeanUrban\tpValue\talignmentLength\thigherInRural\n");
 		
@@ -38,15 +38,16 @@ public class KathrynOTUsToNCBI
 		
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
+			if( s.startsWith("X"))
 		{
 			String[] splits = s.split("\t");
 			
-			String key = "Consensus" +  splits[0].replace("X", "");
+			String key = "Consensus" +  splits[0].replace("X", "").replaceAll("\"", "");
 			
 			HitScores hs = hitMap.get(key);
 			
 			if( hs == null)
-				throw new Exception("No");
+				throw new Exception("No " + key);
 			
 			double meanUrban = (Double.parseDouble(splits[2]) + Double.parseDouble(splits[3])) / 2.0;
 			double meanRural = (Double.parseDouble(splits[4]) + Double.parseDouble(splits[5])) / 2.0;
@@ -54,7 +55,7 @@ public class KathrynOTUsToNCBI
 			writer.write(meanRural + "\t" + meanUrban + "\t" + hs.getPercentIdentity() + "\t"+ 
 								hs.getAlignmentLength() + "\t" + (meanRural > meanUrban) + "\n");
 			
-			writer.flush();  writer.close();
+			writer.flush(); 
 		}
 		
 		writer.flush(); writer.close();
