@@ -13,12 +13,14 @@ import utils.ConfigReader;
 
 public class RollingValues
 {
-	public static final int WINDOWS_SIZE = 5;
+	public static final int WINDOWS_SIZE = 25;
+	
 	
 	private static class Holder implements Comparable<Holder>
 	{
 		double pValue;
 		double prevelance;
+		double rank;
 		
 		@Override
 		public int compareTo(Holder o)
@@ -32,11 +34,14 @@ public class RollingValues
 		List<Holder> higherInRural = getHolders(true);
 		List<Holder> higherInUrban = getHolders(false);
 		
+		for( Holder h : higherInRural)
+			System.out.println(h.pValue + " " + h.prevelance);
+		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getChinaDir() + File.separator + 
 				"Kathryn_update_NCBI_MostWanted" + File.separator + "rollingWindownPrevelance.txt")));
 		
-		writer.write("pValue\trollingPrevelance\thigherInRural\n");
+		writer.write("rank\tpValue\trollingPrevelance\thigherInRural\n");
 		addResults(higherInRural, writer, true);
 		addResults(higherInUrban, writer, false);
 		
@@ -49,12 +54,13 @@ public class RollingValues
 		{
 			Holder h= list.get(x);
 			
+			writer.write(h.rank + "\t");
 			writer.write(h.pValue + "\t");
 			
 			double sum =0;
 			
 			for( int y= x; y < x + WINDOWS_SIZE; y++)
-				sum = list.get(y).prevelance;
+				sum += list.get(y).prevelance;
 				
 			sum = sum / WINDOWS_SIZE;
 			
@@ -89,6 +95,10 @@ public class RollingValues
 		}
 		
 		Collections.sort(list);
+		
+		for( int x=0; x < list.size(); x++)
+			list.get(x).rank =x +1 ;
+	
 		reader.close();
 		return list;
 	}
