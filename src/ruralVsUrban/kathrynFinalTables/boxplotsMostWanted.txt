@@ -1,0 +1,19 @@
+rm(list=ls())
+
+setwd("C:\\PennyChinaDataset\\Kathryn_update_NCBI_MostWanted")
+
+myT <- read.table("otusToMostWanted.txt", header=TRUE, sep="\t")
+
+boxplot( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIdentity, 
+			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$percentIdentity)
+			
+wilcox.test( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIdentity, 
+			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$percentIdentity)
+			
+
+boxplot( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$stoolPrevelance, 
+			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$stoolPrevelance)
+			
+wilcox.test( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$stoolPrevelance, 
+			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$stoolPrevelance)
+			
