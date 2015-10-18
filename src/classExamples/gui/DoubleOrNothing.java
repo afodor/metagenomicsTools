@@ -39,6 +39,8 @@ public class DoubleOrNothing extends JFrame
 		panel.setLayout(new GridLayout(0,3));
 		
 		JButton doubleButton = new JButton("Double or nothing");
+		doubleButton.setMnemonic('D');
+		doubleButton.setToolTipText("Click here");
 		
 		doubleButton.addActionListener(new ActionListener()
 		{
@@ -102,7 +104,7 @@ public class DoubleOrNothing extends JFrame
 		super("Double your money!");
 		
 		setLocationRelativeTo(null);
-		setSize(200,200);
+		setSize(400,200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(getBottomPanel(), BorderLayout.SOUTH);
