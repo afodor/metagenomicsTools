@@ -26,7 +26,7 @@ public class KathrynOTUToMostWantedPrevelance
 				"Kathryn_update_NCBI_MostWanted" + File.separator + 
 						"otusToMostWanted.txt")));
 		
-		writer.write("meanRural\tmeanUrban\tstoolPrevelance\tpValue\tpercentIdentity\talignmentLength\ttargetName\thigherInRural\n");
+		writer.write("consensusID\tmeanRural\tmeanUrban\tstoolPrevelance\tpValue\tpercentIdentity\talignmentLength\ttargetName\thigherInRural\n");
 		
 		HashMap<String, HitScores> hitMap = 
 		HitScores.getTopHitsAsQueryMap(ConfigReader.getChinaDir() + File.separator + 
@@ -61,7 +61,7 @@ public class KathrynOTUToMostWantedPrevelance
 				double meanUrban = (Double.parseDouble(splits[2]) + Double.parseDouble(splits[3])) / 2.0;
 				double meanRural = (Double.parseDouble(splits[4]) + Double.parseDouble(splits[5])) / 2.0;
 				
-				writer.write(meanRural + "\t" + meanUrban + "\t" + meta.getSubjectFractionStool() + "\t"+ 
+				writer.write(key +"\t" + meanRural + "\t" + meanUrban + "\t" + meta.getSubjectFractionStool() + "\t"+ 
 										Double.parseDouble(splits[8]) + "\t" + hs.getPercentIdentity() + "\t" + 
 									hs.getAlignmentLength() + "\t" + 
 									hs.getTargetId() + "\t" + 	(meanRural > meanUrban) + "\n");
