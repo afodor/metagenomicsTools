@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -184,6 +185,63 @@ public class HitScores implements Comparable<HitScores>
 		
 		return map;
 	}
+	
+
+public void writeALine( PrintWriter writer, boolean endWithNewline) throws Exception
+{
+	writer.write(queryId + "\t");
+	writer.write(targetId + "\t");
+	writer.write(percentIdentity + "\t");
+	writer.write(alignmentLength + "\t");
+	writer.write(numMismatches + "\t");
+	writer.write(gapOpenings + "\t");
+	writer.write(queryStart + "\t");
+	writer.write(queryEnd + "\t");
+	writer.write(targetStart + "\t");
+	writer.write(targetEnd + "\t");
+	writer.write(eScore + "\t");
+	writer.write("" + bitScore);
+	writer.write( endWithNewline ? "\n" : "\t" );
+}
+	
+	public static List<HitScores> getAsList(  File file, 
+						boolean gzipped, 
+							int minQueryAlignmentLength) 
+			throws Exception
+	{
+		System.out.println("PARSING: " + file.getAbsolutePath());
+		BufferedReader reader = 
+			gzipped ?
+				new BufferedReader(new InputStreamReader( 
+						new GZIPInputStream( new FileInputStream( file) ) ))
+				:
+					new BufferedReader(new FileReader(file));
+		
+		List<HitScores> list = new ArrayList<HitScores>();
+		
+		String nextLine = reader.readLine();
+		
+		if(nextLine.startsWith("queryId"))
+			nextLine = reader.readLine();
+		
+		while( nextLine != null )
+		{
+			if( ! nextLine.startsWith("#"))
+			{
+				HitScores hs = new HitScores(nextLine);
+				
+				if( hs.getQueryAlignmentLength() > minQueryAlignmentLength)
+					list.add(new HitScores(nextLine));
+				
+			}
+			
+			nextLine = reader.readLine();
+		}
+		
+		return list;
+	}
+	
+	
 	
 	/*
 	 * Writes the top hit for each query to the file defined by 

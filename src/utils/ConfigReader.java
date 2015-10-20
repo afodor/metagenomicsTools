@@ -96,6 +96,13 @@ public class ConfigReader
 	
 	public static final String IAN_OCT_2015_DIR = "IAN_OCT_2015_DIR";
 	
+	public static final String FRAGMENT_RECRUITER_SUPPORT_DIR = "FRAGMENT_RECRUITER_SUPPORT_DIR";
+	
+	public static String getFragmentRecruiterSupportDir() throws Exception
+	{
+		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
+	}
+	
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
