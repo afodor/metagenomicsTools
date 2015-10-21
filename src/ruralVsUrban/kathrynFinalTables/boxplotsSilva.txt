@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("G:\\PennyChinaDataset\\Kathryn_update_NCBI_MostWanted")
+setwd("C:\\PennyChinaDataset\\Kathryn_update_NCBI_MostWanted")
 
 myT <- read.table("silvaRuralVsUrban.txt", header=TRUE, sep="\t")
 
