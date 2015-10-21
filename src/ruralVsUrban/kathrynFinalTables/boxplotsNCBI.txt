@@ -10,4 +10,6 @@ boxplot( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIdentit
 wilcox.test( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIdentity, 
 			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$percentIdentity)
 			
-			
+
+nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ] )
+nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "false" , ] )		
