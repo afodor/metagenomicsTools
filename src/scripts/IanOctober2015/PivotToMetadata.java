@@ -145,6 +145,10 @@ public class PivotToMetadata
 				ptm = new PivotToMetadata(s);
 				map.put(ptm.patientID, ptm);
 			}
+			else
+			{
+				ptm.setCalorimetery(s);
+			}
 			
 		}
 		
