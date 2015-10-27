@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class PivotToMetadata
@@ -61,28 +62,30 @@ public class PivotToMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=2; x <=6; x++)
-			pivotALevel(x);
+
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+			pivotALevel(NewRDPParserFileLine.TAXA_ARRAY[x]);
 	}
 	
-	private static void pivotALevel(int x) throws Exception
+	private static void pivotALevel(String level) throws Exception
 	{
-		System.out.println("Level " + x);
+		System.out.println("Level " + level);
 		HashMap<Integer, PivotToMetadata> map = getMap();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File( 
-			ConfigReader.getIanOct2015Dir() + File.separator + 
-			"Level_" + x +  "_asColumns.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+					ConfigReader.getIanOct2015Dir() + 
+				File.separator + "spreadsheetAs" + level + ".txt")));
+		
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(		
 				ConfigReader.getIanOct2015Dir() + File.separator + 
-				"Level_" + x +  "_asColumnsWithMetadata.txt")));
+				level +  "_asColumnsWithMetadata.txt")));
 		
-		writer.write("sample\tpatientID\ttimepoint\tcalorimetryData1\tcalorimetryData2");
+		writer.write("patientID\ttimepoint\tcalorimetryData");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		for( int y=1; y < topSplits.length; y++)
+		for( int y=2; y < topSplits.length; y++)
 			writer.write("\t" + topSplits[y]);
 		
 		writer.write("\n");
@@ -95,27 +98,29 @@ public class PivotToMetadata
 			
 			int key = Integer.parseInt(splits[0].replace("ad", "").replace("dis", ""));
 			
-			writer.write(key + "\t");
-			
-			String timepoint = splits[0].replace("" + key, "");
-			
-			if( timepoint.length() == 0 )
-				timepoint = "NA";
-			
+			int timepoint = Integer.parseInt(splits[1]);
 			writer.write(timepoint + "\t");
 			
 			PivotToMetadata ptm = map.get(key);
 			
 			if( ptm == null)
 			{
-				writer.write("NA\tNA");
+				writer.write("NA");
 			}
 			else
 			{
-				writer.write(ptm.calorimetryData1 + "\t" + ptm.getCalorimetryData2());
-			}	
-				
-			for( int y=1; y < splits.length ; y++)
+				if( timepoint == 1)
+				{
+					writer.write(ptm.calorimetryData1 == null ? "NA"  : ptm.calorimetryData1 + "");
+				}
+				else if (timepoint == 2)
+				{
+					writer.write(ptm.calorimetryData2 == null ? "NA"  : ptm.calorimetryData2 + "");
+				}
+				else throw new Exception("No");
+			}
+		
+			for( int y=2; y < splits.length ; y++)
 				writer.write("\t" + splits[y]);
 			
 			writer.write("\n");

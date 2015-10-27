@@ -13,6 +13,10 @@ import utils.ConfigReader;
 
 public class BiomFileFormat
 {
+	/*
+	 * The biom files don't seem to have taxa names, so this pivot is 
+	 * not so useful...
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		for(int i=2; i <=6; i++)
