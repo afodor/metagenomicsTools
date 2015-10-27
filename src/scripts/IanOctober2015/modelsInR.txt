@@ -24,12 +24,12 @@ for(taxa in taxaLevels )
 	pValuesCalromitery <- vector()
 	meanBug <- vector()
 	index <- 1
-	pdf( paste(taxa, "boxplots.pdf", sep=""))
+	pdf( paste(taxa, "plots.pdf", sep=""))
 	
 	for( i in 4:numCols)
 		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
 		{
-			bug <- myT[,i]
+			bug <- log10( myT[,i] + 0.00001)
 			meanBug[index] <- mean(bug)
 			time <- factor(myT$timepoint)
 			patientID <- myT$patientID 
