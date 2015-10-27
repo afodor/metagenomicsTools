@@ -81,7 +81,7 @@ public class PivotToMetadata
 				ConfigReader.getIanOct2015Dir() + File.separator + 
 				level +  "_asColumnsWithMetadata.txt")));
 		
-		writer.write("patientID\ttimepoint\tcalorimetryData");
+		writer.write("patientID\ttimepoint\tcalorimetryData\tshannonDiversity");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -105,20 +105,32 @@ public class PivotToMetadata
 			
 			if( ptm == null)
 			{
-				writer.write("NA");
+				writer.write("NA\t");
 			}
 			else
 			{
 				if( timepoint == 1)
 				{
-					writer.write(ptm.calorimetryData1 == null ? "NA"  : ptm.calorimetryData1 + "");
+					writer.write(ptm.calorimetryData1 == null ? "NA\t"  : ptm.calorimetryData1 + "\t");
 				}
 				else if (timepoint == 2)
 				{
-					writer.write(ptm.calorimetryData2 == null ? "NA"  : ptm.calorimetryData2 + "");
+					writer.write(ptm.calorimetryData2 == null ? "NA\t"  : ptm.calorimetryData2 + "\t");
 				}
 				else throw new Exception("No");
 			}
+			
+			double sum = 0;
+			
+			for (int y=3; y < splits.length; y++)
+			{
+				double aVal = Double.parseDouble(splits[y]);
+				
+				if( aVal > 0 )
+					sum += aVal * Math.log(aVal);
+			}
+			
+			writer.write("" + -sum);
 		
 			for( int y=2; y < splits.length ; y++)
 				writer.write("\t" + splits[y]);
