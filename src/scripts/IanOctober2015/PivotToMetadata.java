@@ -12,26 +12,51 @@ import utils.ConfigReader;
 public class PivotToMetadata
 {
 	private final int patientID;
-	private final double calorimetryData;
+	private Double calorimetryData1 = null;
+	private Double calorimetryData2 = null;
 	
 	public int getPatientID()
 	{
 		return patientID;
 	}
 	
-	public double getCalorimetryData()
+	public Double getCalorimetryData1()
 	{
-		return calorimetryData;
+		return calorimetryData1;
+	}
+	
+	public Double getCalorimetryData2()
+	{
+		return calorimetryData2;
 	}
 	
 	private PivotToMetadata(String s) throws Exception
 	{
 		String[] splits = s.split("\t");
 		this.patientID  = Integer.parseInt(splits[0]);
-		this.calorimetryData = Double.parseDouble(splits[1]);
-		
-		if( splits.length != 2)
+		setCalorimetery(s);
+	}
+	
+	private void setCalorimetery(String s ) throws Exception
+	{
+
+		String[] splits = s.split("\t");
+	
+		if( splits.length != 3)
 			throw new Exception("No " + splits);
+		
+		if( splits[1].equals("1") && this.calorimetryData1 != null)
+			throw new Exception("No");
+		
+		if( splits[1].equals("2") && this.calorimetryData2 != null)
+			throw new Exception("No");
+		
+		if( splits[1].equals("1"))
+			this.calorimetryData1 = Double.parseDouble(splits[2]);
+		else if( splits[1].equals("2"))
+			this.calorimetryData2 = Double.parseDouble(splits[2]);
+		else 
+			throw new Exception("No");
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -53,7 +78,7 @@ public class PivotToMetadata
 				ConfigReader.getIanOct2015Dir() + File.separator + 
 				"Level_" + x +  "_asColumnsWithMetadata.txt")));
 		
-		writer.write("sample\tpatientID\ttimepoint\tcalorimetryData");
+		writer.write("sample\tpatientID\ttimepoint\tcalorimetryData1\tcalorimetryData2");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -66,7 +91,7 @@ public class PivotToMetadata
 		{
 			String[] splits = s.split("\t");
 			
-			writer.write(splits[0]);
+			writer.write(splits[0] + "\t");
 			
 			int key = Integer.parseInt(splits[0].replace("ad", "").replace("dis", ""));
 			
@@ -82,10 +107,14 @@ public class PivotToMetadata
 			PivotToMetadata ptm = map.get(key);
 			
 			if( ptm == null)
-				throw new Exception("No");
-			
-			writer.write(ptm.calorimetryData + "");
-			
+			{
+				writer.write("NA\tNA");
+			}
+			else
+			{
+				writer.write(ptm.calorimetryData1 + "\t" + ptm.getCalorimetryData2());
+			}	
+				
 			for( int y=1; y < splits.length ; y++)
 				writer.write("\t" + splits[y]);
 			
@@ -106,14 +135,17 @@ public class PivotToMetadata
 		
 		reader.readLine();
 		
-		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0 ; s = reader.readLine())
 		{
-			PivotToMetadata ptm = new PivotToMetadata(s);
 			
-			if( map.containsKey(ptm.patientID))
-				throw new Exception("No");
+			PivotToMetadata ptm= map.get( Integer.parseInt(s.split("\t")[0]));
 			
-			map.put(ptm.patientID, ptm);
+			if( ptm== null)
+			{
+				ptm = new PivotToMetadata(s);
+				map.put(ptm.patientID, ptm);
+			}
+			
 		}
 		
 		reader.close();
