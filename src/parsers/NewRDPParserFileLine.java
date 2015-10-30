@@ -14,13 +14,16 @@
 package parsers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,6 +32,8 @@ import java.util.StringTokenizer;
 import java.util.concurrent.BlockingQueue;	
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.zip.GZIPInputStream;
+
+import jdk.jfr.events.FileWriteEvent;
 
 
 public class NewRDPParserFileLine
@@ -108,6 +113,61 @@ public class NewRDPParserFileLine
 		
 		
 		return newLine;
+	}
+	
+	public static void writeXML(File inFile, File outFile)
+		throws Exception
+	{
+		List<NewRDPParserFileLine> list =
+				NewRDPParserFileLine.getRdpList(inFile);
+		
+		List<String> nodeLines = new ArrayList<String>();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(
+				outFile));
+
+		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		writer.write("<!--  input from an RDP file -->\n");
+		writer.write("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\">\n");
+		writer.write("<graph edgedefault=\"undirected\">\n");
+		 
+		writer.write("<!-- data schema -->\n");
+
+		writer.write("<key id=\"name\" for=\"node\" attr.name=\"name\" attr.type=\"string\"/>\n");
+		writer.write("<key id=\"level\" for=\"node\" attr.name=\"level\" attr.type=\"string\"/>\n");
+		
+		writer.write("<!-- nodes -->\n" );
+		
+		HashMap<String, HashSet<String>> includedMap = 
+				new HashMap<String, HashSet<String>>();
+		
+		for( int x= TAXA_ARRAY.length-1; x > 1; x++)
+			includedMap.put(TAXA_ARRAY[x], new HashSet<String>());
+		
+		int nodeID = 0;
+		
+		for(NewRDPParserFileLine fileLine : list)
+		{
+			for( int x=TAXA_ARRAY.length-1; x > 1; x++)
+			{
+				HashSet<String> set = includedMap.get(TAXA_ARRAY[x]);
+				String name = fileLine.getTaxaMap().get(x).getTaxaName();
+				
+				if( ! set.contains(name))
+				{
+					set.add(name);
+					nodeID++;
+					
+					writer.write("<node id=\""+ nodeID + "\">\n");
+					writer.write("<data key=\"name\">" + name + "</data>\n");
+					writer.write("<data key=\"level\">" +  TAXA_ARRAY[x] + "</data>\n");
+				}
+				
+			}
+		}
+		
+		writer.flush();  writer.close();
+			
 	}
 	
 	public static HashMap<String, NewRDPParserFileLine> getMapFromPatrickHMP(String filepath)
