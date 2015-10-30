@@ -33,8 +33,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.zip.GZIPInputStream;
 
-import jdk.jfr.events.FileWriteEvent;
-
 
 public class NewRDPParserFileLine
 {
@@ -115,6 +113,14 @@ public class NewRDPParserFileLine
 		return newLine;
 	}
 	
+	private static void writeANode( BufferedWriter writer, String level, String name,
+					int nodeID) throws Exception
+	{
+		writer.write("<node id=\""+ nodeID + "\">\n");
+		writer.write("<data key=\"name\">" + name + "</data>\n");
+		writer.write("<data key=\"level\">" +  TAXA_ARRAY[nodeID] + "</data>\n");
+	}
+	
 	public static void writeXML(File inFile, File outFile)
 		throws Exception
 	{
@@ -144,7 +150,8 @@ public class NewRDPParserFileLine
 		for( int x= TAXA_ARRAY.length-1; x > 1; x++)
 			includedMap.put(TAXA_ARRAY[x], new HashSet<String>());
 		
-		int nodeID = 0;
+		int nodeID = 1;
+		writeANode(writer, "root", "root", nodeID);
 		
 		for(NewRDPParserFileLine fileLine : list)
 		{
@@ -158,9 +165,13 @@ public class NewRDPParserFileLine
 					set.add(name);
 					nodeID++;
 					
-					writer.write("<node id=\""+ nodeID + "\">\n");
-					writer.write("<data key=\"name\">" + name + "</data>\n");
-					writer.write("<data key=\"level\">" +  TAXA_ARRAY[x] + "</data>\n");
+					writeANode(writer, TAXA_ARRAY[x], name, x);
+					
+					if ( x-1 > 2)
+					{
+						set = includedMap.get(TAXA_ARRAY[x-1]);
+						fileLine.getTaxaMap().get(x-1).getTaxaName();
+					}
 				}
 				
 			}
