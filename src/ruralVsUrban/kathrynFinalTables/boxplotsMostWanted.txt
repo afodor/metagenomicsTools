@@ -17,3 +17,7 @@ boxplot( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$stoolPrevelanc
 wilcox.test( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$stoolPrevelance, 
 			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$stoolPrevelance)
 			
+			
+nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ] )
+nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "false" , ] )		
+			

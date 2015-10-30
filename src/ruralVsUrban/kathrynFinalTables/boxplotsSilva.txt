@@ -2,7 +2,7 @@ rm(list=ls())
 
 setwd("C:\\PennyChinaDataset\\Kathryn_update_NCBI_MostWanted")
 
-myT <- read.table("ncbiRuralVsUrban.txt", header=TRUE, sep="\t")
+myT <- read.table("silvaRuralVsUrban.txt", header=TRUE, sep="\t")
 
 boxplot( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIdentity, 
 			myT[ myT$pValue < 0.05 & myT$higherInRural == "false",  ]$percentIdentity)
@@ -12,4 +12,4 @@ wilcox.test( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ]$percentIde
 			
 
 nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "true" , ] )
-nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "false" , ] )		
+nrow( myT[ myT$pValue < 0.05 & myT$higherInRural == "false" , ] )
