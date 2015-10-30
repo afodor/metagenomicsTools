@@ -156,8 +156,8 @@ public class NewRDPParserFileLine
 				
 				if( node != null)
 				{
-					String key = level + "_" + node.getTaxaName();
 					String name = node.getTaxaName().replaceAll("\"", "");
+					String key = level + "_" + name;
 					
 					if( ! lookup.containsKey(key))
 					{
@@ -177,6 +177,7 @@ public class NewRDPParserFileLine
 			List<NewRDPParserFileLine> list) throws Exception
 	{
 		HashSet<String> nodeLines = new LinkedHashSet<String>();
+		int numProcessed =0;
 		for( NewRDPParserFileLine fileLine : list)
 		{
 			for( int x=TAXA_ARRAY.length- 1; x >=1; x--)
@@ -195,15 +196,19 @@ public class NewRDPParserFileLine
 						String parentLevel = TAXA_ARRAY[x-1];
 						NewRDPNode parentNode = fileLine.taxaMap.get(parentLevel);
 						
-						if( parentNode != null)
+						while( parentNode == null)
 						{
-							String parentName = parentNode.getTaxaName().replaceAll("\"", "");
-							String parentKey = parentLevel + "_" + parentName;
-							int parentID = lookup.get(parentKey);
-							nodeLines.add(
+							x--;
+							parentLevel = TAXA_ARRAY[x-1];
+							parentNode = fileLine.taxaMap.get(parentLevel);
+						}
+						
+						String parentName = parentNode.getTaxaName().replaceAll("\"", "");
+						String parentKey = parentLevel + "_" + parentName;
+						int parentID = lookup.get(parentKey);
+						nodeLines.add(
 									"<edge source=\"" + parentID
 										+"\" target=\"" + id+ "\"></edge>\n");
-						}
 					}
 					else
 					{
@@ -212,6 +217,7 @@ public class NewRDPParserFileLine
 									+"\" target=\"" + id + "\"></edge>\n");
 					}
 				}
+				numProcessed++;
 			}
 		}
 			
