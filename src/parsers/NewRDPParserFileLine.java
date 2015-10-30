@@ -157,7 +157,7 @@ public class NewRDPParserFileLine
 		
 		for(NewRDPParserFileLine fileLine : list)
 		{
-			for( int x=TAXA_ARRAY.length-1; x > 2; x--)
+			for( int x=TAXA_ARRAY.length-1; x > 1; x--)
 			{
 				HashSet<String> set = includedMap.get(TAXA_ARRAY[x]);
 				//System.out.println(TAXA_ARRAY[x]);
@@ -174,28 +174,29 @@ public class NewRDPParserFileLine
 						
 						writeANode(writer, TAXA_ARRAY[x], name, nodeID);
 						
-						set = includedMap.get(TAXA_ARRAY[x-1]);
-						node = fileLine.getTaxaMap().get(TAXA_ARRAY[x-1]);
-						
-						if( node != null)
+						if( x > 2 )
 						{
-							name = node.getTaxaName();
+							set = includedMap.get(TAXA_ARRAY[x-1]);
+							node = fileLine.getTaxaMap().get(TAXA_ARRAY[x-1]);
 							
-							if( ! set.contains(name))
+							if( node != null)
 							{
-								nodeID++;
-								set.add(name);
-								writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
-								nodeLines.add("<edge source=\"" + (nodeID-1)+
-											"\" target=\"" + nodeID + "\"></edge>\n");
+								name = node.getTaxaName();
 								
-								if( TAXA_ARRAY[x-1].equals(PHYLUM) )
+								if( ! set.contains(name))
 								{
-									nodeLines.add("<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
+									nodeID++;
+									set.add(name);
+									writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
+									nodeLines.add("<edge source=\"" + (nodeID-1)+
+												"\" target=\"" + nodeID + "\"></edge>\n");
 								}
 							}
 						}
-						
+						else //phyla level - just add root
+						{	
+							nodeLines.add("<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
+						}
 					}
 				}
 			}
