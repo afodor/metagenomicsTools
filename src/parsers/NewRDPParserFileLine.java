@@ -149,7 +149,7 @@ public class NewRDPParserFileLine
 		HashMap<String, HashSet<String>> includedMap = 
 				new HashMap<String, HashSet<String>>();
 		
-		for( int x= TAXA_ARRAY.length-1; x > 1; x--)
+		for( int x= TAXA_ARRAY.length-1; x >= 1; x--)
 			includedMap.put(TAXA_ARRAY[x], new HashSet<String>());
 		
 		int nodeID = 1;
@@ -174,7 +174,7 @@ public class NewRDPParserFileLine
 						
 						writeANode(writer, TAXA_ARRAY[x], name, nodeID);
 						
-						if( x > 2 )
+						if( x >= 2 )
 						{
 							set = includedMap.get(TAXA_ARRAY[x-1]);
 							node = fileLine.getTaxaMap().get(TAXA_ARRAY[x-1]);
@@ -188,14 +188,16 @@ public class NewRDPParserFileLine
 									nodeID++;
 									set.add(name);
 									writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
-									nodeLines.add("<edge source=\"" + (nodeID-1)+
+									
+									if( x > 2 )
+										nodeLines.add("<edge source=\"" + (nodeID-1)+
 												"\" target=\"" + nodeID + "\"></edge>\n");
+									else
+										nodeLines.add(
+												"<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
+									
 								}
 							}
-						}
-						else //phyla level - just add root
-						{	
-							nodeLines.add("<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
 						}
 					}
 				}
