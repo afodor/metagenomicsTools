@@ -190,11 +190,12 @@ public class NewRDPParserFileLine
 									writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
 									
 									if( x > 2 )
-										nodeLines.add("<edge source=\"" + (nodeID-1)+
-												"\" target=\"" + nodeID + "\"></edge>\n");
+										nodeLines.add("<edge source=\"" + (nodeID)+
+												"\" target=\"" + (nodeID -1)+ "\"></edge>\n");
 									else
 										nodeLines.add(
-												"<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
+												"<edge source=\"" + nodeID 
+													+"\" target=\"" + 1 + "\"></edge>\n");
 									
 								}
 							}
