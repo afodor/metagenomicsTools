@@ -118,9 +118,11 @@ public class NewRDPParserFileLine
 	{
 		writer.write("<node id=\""+ nodeID + "\">\n");
 		writer.write("<data key=\"name\">" + name + "</data>\n");
-		writer.write("<data key=\"level\">" +  TAXA_ARRAY[nodeID] + "</data>\n");
+		writer.write("<data key=\"level\">" +  level + "</data>\n");
+		writer.write( "</node>\n");
+		writer.flush();
 	}
-	
+	// does not handle duplicate names with different parents well
 	public static void writeXML(File inFile, File outFile)
 		throws Exception
 	{
@@ -147,7 +149,7 @@ public class NewRDPParserFileLine
 		HashMap<String, HashSet<String>> includedMap = 
 				new HashMap<String, HashSet<String>>();
 		
-		for( int x= TAXA_ARRAY.length-1; x > 1; x++)
+		for( int x= TAXA_ARRAY.length-1; x > 1; x--)
 			includedMap.put(TAXA_ARRAY[x], new HashSet<String>());
 		
 		int nodeID = 1;
@@ -155,28 +157,56 @@ public class NewRDPParserFileLine
 		
 		for(NewRDPParserFileLine fileLine : list)
 		{
-			for( int x=TAXA_ARRAY.length-1; x > 1; x++)
+			for( int x=TAXA_ARRAY.length-1; x > 2; x--)
 			{
 				HashSet<String> set = includedMap.get(TAXA_ARRAY[x]);
-				String name = fileLine.getTaxaMap().get(x).getTaxaName();
+				//System.out.println(TAXA_ARRAY[x]);
+				NewRDPNode node = fileLine.getTaxaMap().get(TAXA_ARRAY[x]);
 				
-				if( ! set.contains(name))
+				if( node != null)
 				{
-					set.add(name);
-					nodeID++;
+					String name = node.getTaxaName();
 					
-					writeANode(writer, TAXA_ARRAY[x], name, x);
-					
-					if ( x-1 > 2)
+					if( ! set.contains(name))
 					{
+						set.add(name);
+						nodeID++;
+						
+						writeANode(writer, TAXA_ARRAY[x], name, nodeID);
+						
 						set = includedMap.get(TAXA_ARRAY[x-1]);
-						fileLine.getTaxaMap().get(x-1).getTaxaName();
+						node = fileLine.getTaxaMap().get(TAXA_ARRAY[x-1]);
+						
+						if( node != null)
+						{
+							name = node.getTaxaName();
+							
+							if( ! set.contains(name))
+							{
+								nodeID++;
+								set.add(name);
+								writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
+								nodeLines.add("<edge source=\"" + (nodeID-1)+
+											"\" target=\"" + nodeID + "\"></edge>\n");
+								
+								if( TAXA_ARRAY[x-1].equals(PHYLUM) )
+								{
+									nodeLines.add("<edge source=\"1\" target=\"" + nodeID + "\"></edge>\n");
+								}
+							}
+						}
+						
 					}
 				}
-				
 			}
 		}
 		
+		for(String s : nodeLines)
+			writer.write(s);
+		
+
+		writer.write("</graph>\n");
+		writer.write("</graphml>\n");
 		writer.flush();  writer.close();
 			
 	}
@@ -659,5 +689,12 @@ public class NewRDPParserFileLine
 			s = "unclassified|";
 					
 		return s.replace(" ", "_");
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		File inFile = new File("c:\\temp\\F14FTSUSAT0494A-11-43-B_1.fq.gz_082A.fasta_TO_RDP.txt");
+		File outFile = new File("c:\\temp\\someRdpOut.xml");
+		writeXML(inFile, outFile);
 	}
 }
