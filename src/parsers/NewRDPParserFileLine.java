@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -122,18 +123,9 @@ public class NewRDPParserFileLine
 		writer.write( "</node>\n");
 		writer.flush();
 	}
-	// does not handle duplicate names with different parents well
-	public static void writeXML(File inFile, File outFile)
-		throws Exception
+	
+	private static void writeXMLHeader(BufferedWriter writer) throws Exception
 	{
-		List<NewRDPParserFileLine> list =
-				NewRDPParserFileLine.getRdpList(inFile);
-		
-		List<String> nodeLines = new ArrayList<String>();
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(
-				outFile));
-
 		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		writer.write("<!--  input from an RDP file -->\n");
 		writer.write("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\">\n");
@@ -145,76 +137,108 @@ public class NewRDPParserFileLine
 		writer.write("<key id=\"level\" for=\"node\" attr.name=\"level\" attr.type=\"string\"/>\n");
 		
 		writer.write("<!-- nodes -->\n" );
-		
-		HashMap<String, HashSet<String>> includedMap = 
-				new HashMap<String, HashSet<String>>();
-		
-		for( int x= TAXA_ARRAY.length-1; x >= 1; x--)
-			includedMap.put(TAXA_ARRAY[x], new HashSet<String>());
-		
+		writeANode(writer, "root", "root", 1);
+	}
+	
+	private static HashMap<String, Integer> writeNodes(BufferedWriter writer,
+			List<NewRDPParserFileLine> list) throws Exception
+	{
 		int nodeID = 1;
-		writeANode(writer, "root", "root", nodeID);
+		
+		HashMap<String, Integer> lookup = new HashMap<String,Integer>();
 		
 		for(NewRDPParserFileLine fileLine : list)
 		{
-			for( int x=TAXA_ARRAY.length-1; x > 1; x--)
+			for( int x=1; x < TAXA_ARRAY.length; x++)
 			{
-				HashSet<String> set = includedMap.get(TAXA_ARRAY[x]);
-				//System.out.println(TAXA_ARRAY[x]);
-				NewRDPNode node = fileLine.getTaxaMap().get(TAXA_ARRAY[x]);
+				String level = TAXA_ARRAY[x];
+				NewRDPNode node = fileLine.taxaMap.get(level);
 				
 				if( node != null)
 				{
-					String name = node.getTaxaName();
+					String key = level + "_" + node.getTaxaName();
+					String name = node.getTaxaName().replaceAll("\"", "");
 					
-					if( ! set.contains(name))
+					if( ! lookup.containsKey(key))
 					{
-						set.add(name);
 						nodeID++;
-						
-						writeANode(writer, TAXA_ARRAY[x], name, nodeID);
-						
-						if( x >= 2 )
-						{
-							set = includedMap.get(TAXA_ARRAY[x-1]);
-							node = fileLine.getTaxaMap().get(TAXA_ARRAY[x-1]);
-							
-							if( node != null)
-							{
-								name = node.getTaxaName();
-								
-								if( ! set.contains(name))
-								{
-									nodeID++;
-									set.add(name);
-									writeANode(writer, TAXA_ARRAY[x-1], name, nodeID);
-									
-									if( x > 2 )
-										nodeLines.add("<edge source=\"" + (nodeID)+
-												"\" target=\"" + (nodeID -1)+ "\"></edge>\n");
-									else
-										nodeLines.add(
-												"<edge source=\"" + nodeID 
-													+"\" target=\"" + 1 + "\"></edge>\n");
-									
-								}
-							}
-						}
+						lookup.put(key, nodeID);
+						writeANode(writer, level, name, nodeID);
 					}
+					
 				}
 			}
 		}
 		
-		for(String s : nodeLines)
-			writer.write(s);
+		return lookup;
+	}
+	
+	private static void writeEdges(BufferedWriter writer, HashMap<String, Integer> lookup,
+			List<NewRDPParserFileLine> list) throws Exception
+	{
+		HashSet<String> nodeLines = new LinkedHashSet<String>();
+		for( NewRDPParserFileLine fileLine : list)
+		{
+			for( int x=TAXA_ARRAY.length- 1; x >=1; x--)
+			{
+				String level = TAXA_ARRAY[x];
+				NewRDPNode node = fileLine.taxaMap.get(level);
+				
+				if( node != null)
+				{
+					String name = node.getTaxaName().replaceAll("\"", "");
+					String key = level + "_" + name;
+					int id = lookup.get(key);
+					
+					if( x > 1 )
+					{
+						String parentLevel = TAXA_ARRAY[x-1];
+						NewRDPNode parentNode = fileLine.taxaMap.get(parentLevel);
+						
+						if( parentNode != null)
+						{
+							String parentName = parentNode.getTaxaName().replaceAll("\"", "");
+							String parentKey = parentLevel + "_" + parentName;
+							int parentID = lookup.get(parentKey);
+							nodeLines.add(
+									"<edge source=\"" + parentID
+										+"\" target=\"" + id+ "\"></edge>\n");
+						}
+					}
+					else
+					{
+						nodeLines.add(
+								"<edge source=\"" + 1
+									+"\" target=\"" + id + "\"></edge>\n");
+					}
+				}
+			}
+		}
+			
+			for(String s : nodeLines)
+				writer.write(s);
+		}
+	
+	public static void writeXML(File inFile, File outFile)
+		throws Exception
+	{
+		List<NewRDPParserFileLine> list =
+				NewRDPParserFileLine.getRdpList(inFile);
 		
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(
+				outFile));
+		writeXMLHeader(writer);
+
+		HashMap<String, Integer> lookup = writeNodes(writer, list);
+		writeEdges(writer, lookup, list);
+							
 
 		writer.write("</graph>\n");
 		writer.write("</graphml>\n");
 		writer.flush();  writer.close();
-			
-	}
-	
+		}
+		
 	public static HashMap<String, NewRDPParserFileLine> getMapFromPatrickHMP(String filepath)
 		throws Exception
 	{
