@@ -124,6 +124,42 @@ public class NewRDPParserFileLine
 		writer.flush();
 	}
 	
+	public static void writeTabluarTaxa(File inFile, File outFile) throws Exception
+	{
+		List<NewRDPParserFileLine> list = NewRDPParserFileLine.getRdpList(inFile);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		for(int x=1; x < TAXA_ARRAY.length; x++)
+			writer.write( TAXA_ARRAY[x] +  (x == TAXA_ARRAY.length - 1 ? "\n" : "\t") );
+		
+		HashSet<String> outputSet = new HashSet<>();
+		
+		for( NewRDPParserFileLine rdp : list)
+		{
+			StringBuffer buff = new StringBuffer();
+			
+			Map<String, NewRDPNode> map =  rdp.getTaxaMap();
+			
+			for( int x=1; x < TAXA_ARRAY.length; x++)
+			{
+				NewRDPNode node = map.get(TAXA_ARRAY[x]);
+				
+				if( node != null)
+					buff.append(node.getTaxaName());
+				
+				buff.append((x == TAXA_ARRAY.length - 1 ? "\n" : "\t") );
+			}
+			
+			outputSet.add(buff.toString());
+		}
+		
+		for(String s : outputSet)
+			writer.write(s);
+		
+		writer.flush();  writer.close();
+	}
+	
 	private static void writeXMLHeader(BufferedWriter writer) throws Exception
 	{
 		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -177,7 +213,6 @@ public class NewRDPParserFileLine
 			List<NewRDPParserFileLine> list) throws Exception
 	{
 		HashSet<String> nodeLines = new LinkedHashSet<String>();
-		int numProcessed =0;
 		for( NewRDPParserFileLine fileLine : list)
 		{
 			for( int x=TAXA_ARRAY.length- 1; x >=1; x--)
@@ -217,7 +252,6 @@ public class NewRDPParserFileLine
 									+"\" target=\"" + id + "\"></edge>\n");
 					}
 				}
-				numProcessed++;
 			}
 		}
 			
@@ -730,5 +764,8 @@ public class NewRDPParserFileLine
 		File inFile = new File("c:\\temp\\F14FTSUSAT0494A-11-43-B_1.fq.gz_082A.fasta_TO_RDP.txt");
 		File outFile = new File("c:\\temp\\someRdpOut.xml");
 		writeXML(inFile, outFile);
+		
+		outFile = new File("c:\\temp\\someRdpOut.txt");
+		writeTabluarTaxa(inFile, outFile);
 	}
 }
