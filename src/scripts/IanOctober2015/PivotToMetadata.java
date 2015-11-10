@@ -84,7 +84,7 @@ public class PivotToMetadata
 				ConfigReader.getIanOct2015Dir() + File.separator + 
 				level +  "_asColumnsWithMetadata.txt")));
 		
-		writer.write("patientID\ttimepoint\tcalorimetryData\tshannonDiversity");
+		writer.write("patientID\ttimepoint\tcalorimetryData\tenergyIntake\tnormCalormitery\tshannonDiversity");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -115,10 +115,30 @@ public class PivotToMetadata
 				if( timepoint == 1)
 				{
 					writer.write(ptm.calorimetryData1 == null ? "NA\t"  : ptm.calorimetryData1 + "\t");
+					
+					if( ptm.energyIntake1 == null)
+					{
+						writer.write("NA\tNA\t");
+					}
+					else
+					{
+						writer.write(ptm.energyIntake1 + "\t" + (  ptm.calorimetryData1/ ptm.energyIntake1  ) 
+								+ "\t");
+					}
 				}
 				else if (timepoint == 2)
 				{
 					writer.write(ptm.calorimetryData2 == null ? "NA\t"  : ptm.calorimetryData2 + "\t");
+					
+					if( ptm.energyIntake2 == null)
+					{
+						writer.write("NA\tNA\t");
+					}
+					else
+					{
+						writer.write(ptm.energyIntake2 + "\t" + ( ptm.calorimetryData2 /ptm.energyIntake2  ) 
+								+ "\t");
+					}
 				}
 				else throw new Exception("No");
 			}
@@ -177,7 +197,7 @@ public class PivotToMetadata
 		// add the energy intake data from an e-mail from Susan Kleinman on Nov 2, 2015
 		
 		reader = new BufferedReader(new FileReader(new File(ConfigReader.getIanOct2015Dir()
-				+ File.separator + "CalormiteryData.txt")));
+				+ File.separator + "adjustedEnergy.txt")));
 		
 		reader.readLine();
 		
@@ -195,11 +215,10 @@ public class PivotToMetadata
 			int sampleID = Integer.parseInt(tReader.nextToken());
 			
 			double calValue = Double.parseDouble(tReader.nextToken());
+			String intakeString = tReader.nextToken().trim();
 			
-			if( tReader.hasMore())
+			if( intakeString.length() > 0 )
 			{
-				String intakeString = tReader.nextToken().trim();
-				
 				double energyIntake = Double.parseDouble(intakeString);
 				
 				if(sampleID == 1)
