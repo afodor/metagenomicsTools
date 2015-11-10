@@ -9,12 +9,15 @@ import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
+import utils.TabReader;
 
 public class PivotToMetadata
 {
 	private final int patientID;
 	private Double calorimetryData1 = null;
 	private Double calorimetryData2 = null;
+	private Double energyIntake1 = null;
+	private Double energyIntake2 = null;
 	
 	public int getPatientID()
 	{
@@ -170,6 +173,61 @@ public class PivotToMetadata
 		}
 		
 		reader.close();
+		
+		// add the energy intake data from an e-mail from Susan Kleinman on Nov 2, 2015
+		
+		reader = new BufferedReader(new FileReader(new File(ConfigReader.getIanOct2015Dir()
+				+ File.separator + "CalormiteryData.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine() ; s != null && s.trim().length() > 0 ; s = reader.readLine())
+		{
+			TabReader tReader = new TabReader(s);
+			
+			int patientID = Integer.parseInt(tReader.nextToken());
+			
+			PivotToMetadata ptm= map.get( patientID);
+			
+			if( ptm == null)
+				throw new Exception("No");
+			
+			int sampleID = Integer.parseInt(tReader.nextToken());
+			
+			double calValue = Double.parseDouble(tReader.nextToken());
+			
+			if( tReader.hasMore())
+			{
+				String intakeString = tReader.nextToken().trim();
+				
+				double energyIntake = Double.parseDouble(intakeString);
+				
+				if(sampleID == 1)
+				{
+					if( Math.abs(ptm.calorimetryData1 - calValue) > 0.0001)
+						throw new Exception("No");
+					
+					ptm.energyIntake1 = energyIntake;
+					
+					if( Math.abs( ptm.calorimetryData1/ ptm.energyIntake1 -
+								Double.parseDouble(tReader.nextToken())	) > 0.0001)
+						throw new Exception("No");
+				}
+				else if( sampleID == 2)
+				{
+					if( Math.abs(ptm.calorimetryData2 - calValue) > 0.0001)
+						throw new Exception("No");
+					
+					ptm.energyIntake2 = energyIntake;
+					
+					if( Math.abs( ptm.calorimetryData2/ ptm.energyIntake2 -
+								Double.parseDouble(tReader.nextToken())	) > 0.0001)
+						throw new Exception("No");
+				}
+				else throw new Exception("No");
+			}	
+		}
+		
 		return map;
 	}
 	
