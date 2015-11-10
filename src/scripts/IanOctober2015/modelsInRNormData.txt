@@ -1,0 +1,70 @@
+rm(list=ls())
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+setwd("D:\\Susan_Oct2015")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( taxa,  "_asColumnsWithMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",1), rep("numeric", numCols-1))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[ ! is.na(myT$energyIntake), ]
+	
+	names <- vector()
+	pValuesTime <- vector()
+	pValuesSubject <- vector()
+	pValuesCalromitery <- vector()
+	meanBug <- vector()
+	index <- 1
+	pdf( paste(taxa, "plots.pdf", sep=""))
+	
+	for( i in 6:numCols)
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+		{
+			bug <- log10( myT[,i] + 0.00001)
+			meanBug[index] <- mean(bug)
+			time <- factor(myT$timepoint)
+			patientID <- myT$patientID 
+			energyInput<- myT$energyIntake
+	
+			myFrame <- data.frame(bug, time, patientID, energyInput)
+	
+			fullModel <- gls( bug~  time + energyInput,
+				 method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
+				data = myFrame )
+				
+			reducedModel <- gls( bug~  time + energyInput, method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  time + energyInput, method="REML", random = ~1|factor(patientID), data = myFrame)		
+	
+			pValuesTime[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesCalromitery[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			names[index] = names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pTime=", format(pValuesTime[index], digits=3), "\n",
+								" pValuesCalromitery= ", format(pValuesCalromitery[index],digits=3), 
+									" pSubject= " , format(	pValuesSubject[index], digits=3), "\n",
+										" icc= " , format( intraclassCoefficient, digits=3 ), sep="")
+			
+			plot( bug ~ energyInput, ylab = names[index],
+					main = graphMain )		
+			index=index+1
+		
+		}
+		
+	dFrame <- data.frame( names, pValuesTime ,pValuesSubject,pValuesCalromitery ,meanBug)
+	dFrame <- dFrame [order(dFrame$pValuesCalromitery),]
+	dFrame$adjustedpValuesCalromitery <- p.adjust( dFrame$pValuesCalromitery, method = "BH" )	
+	write.table(dFrame, file=paste("pValuesFor", taxa, "EnergyInput.txt",sep=""), sep="\t",row.names=FALSE)
+		dev.off()
+}
