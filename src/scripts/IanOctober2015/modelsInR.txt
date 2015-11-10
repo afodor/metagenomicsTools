@@ -26,7 +26,7 @@ for(taxa in taxaLevels )
 	index <- 1
 	pdf( paste(taxa, "plots.pdf", sep=""))
 	
-	for( i in 4:numCols)
+	for( i in 6:numCols)
 		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
 		{
 			bug <- log10( myT[,i] + 0.00001)
