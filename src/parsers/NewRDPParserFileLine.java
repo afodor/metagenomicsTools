@@ -133,7 +133,7 @@ public class NewRDPParserFileLine
 		for(int x=1; x < TAXA_ARRAY.length; x++)
 			writer.write( TAXA_ARRAY[x] +  (x == TAXA_ARRAY.length - 1 ? "\n" : "\t") );
 		
-		HashSet<String> outputSet = new HashSet<>();
+		HashSet<String> outputSet = new HashSet<String>();
 		
 		for( NewRDPParserFileLine rdp : list)
 		{
