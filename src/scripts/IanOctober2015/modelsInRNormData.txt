@@ -33,7 +33,7 @@ for(taxa in taxaLevels )
 			meanBug[index] <- mean(bug)
 			time <- factor(myT$timepoint)
 			patientID <- myT$patientID 
-			energyInput<- myT$energyIntake
+			energyInput<- myT$energyIntake / myT$calorimetryData
 	
 			myFrame <- data.frame(bug, time, patientID, energyInput)
 	
