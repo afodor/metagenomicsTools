@@ -80,6 +80,8 @@ public class ConfigReader
 	public static final String KATIE_DIR = "KATIE_DIR";
 	public static final String JOBIN_CARDIO_DIR = "JOBIN_CARDIO_DIR";
 	
+	public static final String IAN_NOVEMBER_2015 = "IAN_NOVEMBER_2015";
+	
 	public static final String TANYA_DIR="TANYA_DIR";
 	
 	public static final String GORAN_TRIAL = "GORAN_TRIAL";
@@ -111,6 +113,11 @@ public class ConfigReader
 	public static String getTanyaDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TANYA_DIR);
+	}
+	
+	public static String getIanNov2015Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_NOVEMBER_2015);
 	}
 	
 	public static String getMarkAug2015Batch1Dir() throws Exception
