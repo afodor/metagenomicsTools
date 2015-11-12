@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import parsers.FastQ;
 import utils.ConfigReader;
@@ -13,6 +14,16 @@ public class DeMultiplex
 	private final String barcodeSequence;
 	private final int sampleID;
 	private final String description;
+	
+	public String getDescription()
+	{
+		return description;
+	}
+	
+	public int getSampleID()
+	{
+		return sampleID;
+	}
 	
 	private DeMultiplex(String s) throws Exception
 	{
@@ -25,7 +36,7 @@ public class DeMultiplex
 		this.description = splits[3];
 	}
 	
-	public static HashMap<String, DeMultiplex> getSampleID() throws Exception
+	public static HashMap<String, DeMultiplex> getBarcodeMap() throws Exception
 	{
 		HashMap<String, DeMultiplex> map = new HashMap<String,DeMultiplex>();
 		
@@ -51,8 +62,22 @@ public class DeMultiplex
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, DeMultiplex> sampleIDs = getSampleID();
+		HashMap<String, DeMultiplex> sampleIDs = getBarcodeMap();
 		System.out.println(sampleIDs.size());
+		
+		HashSet<Integer> sampleID = new HashSet<Integer>();
+		
+		for( DeMultiplex d : sampleIDs.values())
+		{
+			if( sampleID.contains(d.sampleID))
+				throw new Exception("No");
+			
+			sampleID.add(d.sampleID);
+		}
+		
+		System.out.println(sampleID);
+		System.out.println(sampleID.size());
+		
 		
 		BufferedReader reader = new BufferedReader(
 					new FileReader(new File(
