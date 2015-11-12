@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 
+import parsers.FastQ;
 import utils.ConfigReader;
 
 public class DeMultiplex
@@ -52,5 +53,29 @@ public class DeMultiplex
 	{
 		HashMap<String, DeMultiplex> sampleIDs = getSampleID();
 		System.out.println(sampleIDs.size());
+		
+		BufferedReader reader = new BufferedReader(
+					new FileReader(new File(
+				ConfigReader.getIanNov2015Dir() + File.separator + 
+				"behavbugs_noindex_l001_r2_001" +  File.separator + "mcsmm" + 
+						File.separator + "mcsmm.behavbugsn")));
+		
+		long numRead =0;
+		long numMatched =0;
+		for( FastQ fastq = FastQ.readOneOrNull(reader); fastq != null; 
+				FastQ.readOneOrNull(reader))
+		{
+			numRead++;
+			
+			for( String s : sampleIDs.keySet())
+				if( fastq.getSequence().startsWith(s))
+					numMatched++;
+			
+			if( numRead % 10000 == 0 )
+				System.out.println(numRead  + " " + numMatched + " " + ((double)numRead) / numMatched);
+		}
+		
+		System.out.println(numRead  + " " + numMatched + " " + ((double)numRead) / numMatched);
+		reader.close();
 	}
 }
