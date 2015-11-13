@@ -22,7 +22,7 @@ for(taxa in taxaLevels )
 	pValuesCalromitery <- vector()
 	meanBug <- vector()
 	index <- 1
-	pdf( paste(taxa, "plots.pdf", sep=""))
+	pdf( paste(taxa, "plotsTimepoint1.pdf", sep=""))
 	
 	for( i in 6:numCols)
 		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )

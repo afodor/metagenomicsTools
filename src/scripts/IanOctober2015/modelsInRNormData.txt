@@ -4,7 +4,7 @@ library("pscl")
 library("lmtest")
 library("nlme")
 
-setwd("D:\\Susan_Oct2015")
+setwd("C:\\Susan_Oct2015")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
@@ -24,7 +24,7 @@ for(taxa in taxaLevels )
 	pValuesCalromitery <- vector()
 	meanBug <- vector()
 	index <- 1
-	pdf( paste(taxa, "plots.pdf", sep=""))
+	pdf( paste(taxa, "plotsNormCal.pdf", sep=""))
 	
 	for( i in 6:numCols)
 		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
@@ -33,17 +33,17 @@ for(taxa in taxaLevels )
 			meanBug[index] <- mean(bug)
 			time <- factor(myT$timepoint)
 			patientID <- myT$patientID 
-			energyInput<- myT$energyIntake / myT$calorimetryData
+			normCalorimetry<- myT$calorimetryData / myT$energyIntake
 	
-			myFrame <- data.frame(bug, time, patientID, energyInput)
+			myFrame <- data.frame(bug, time, patientID, normCalorimetry)
 	
-			fullModel <- gls( bug~  time + energyInput,
+			fullModel <- gls( bug~  time + normCalorimetry,
 				 method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
 				data = myFrame )
 				
-			reducedModel <- gls( bug~  time + energyInput, method="REML",	data = myFrame )
+			reducedModel <- gls( bug~  time + normCalorimetry, method="REML",	data = myFrame )
 				
-			fullModelLME <- lme(bug~  time + energyInput, method="REML", random = ~1|factor(patientID), data = myFrame)		
+			fullModelLME <- lme(bug~  time + normCalorimetry, method="REML", random = ~1|factor(patientID), data = myFrame)		
 	
 			pValuesTime[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesCalromitery[index] <- anova(fullModelLME)$"p-value"[3]
@@ -56,7 +56,7 @@ for(taxa in taxaLevels )
 									" pSubject= " , format(	pValuesSubject[index], digits=3), "\n",
 										" icc= " , format( intraclassCoefficient, digits=3 ), sep="")
 			
-			plot( bug ~ energyInput, ylab = names[index],
+			plot( bug ~ normCalorimetry, ylab = names[index],
 					main = graphMain )		
 			index=index+1
 		
@@ -65,6 +65,6 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names, pValuesTime ,pValuesSubject,pValuesCalromitery ,meanBug)
 	dFrame <- dFrame [order(dFrame$pValuesCalromitery),]
 	dFrame$adjustedpValuesCalromitery <- p.adjust( dFrame$pValuesCalromitery, method = "BH" )	
-	write.table(dFrame, file=paste("pValuesFor", taxa, "EnergyInput.txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesFor", taxa, "normCalorimetry.txt",sep=""), sep="\t",row.names=FALSE)
 		dev.off()
 }
