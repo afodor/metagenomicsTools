@@ -88,7 +88,7 @@ public class DeMultiplex
 		long numRead =0;
 		long numMatched =0;
 		for( FastQ fastq = FastQ.readOneOrNull(reader); fastq != null; 
-				FastQ.readOneOrNull(reader))
+				fastq = FastQ.readOneOrNull(reader))
 		{
 			numRead++;
 			
@@ -97,10 +97,10 @@ public class DeMultiplex
 					numMatched++;
 			
 			if( numRead % 10000 == 0 )
-				System.out.println(numRead  + " " + numMatched + " " + ((double)numRead) / numMatched);
+				System.out.println(numRead  + " " + numMatched + " " + ((double)numMatched) / numRead);
 		}
 		
-		System.out.println(numRead  + " " + numMatched + " " + ((double)numRead) / numMatched);
+		System.out.println(numRead  + " " + numMatched + " " + ((double)numMatched) / numRead);
 		reader.close();
 	}
 }
