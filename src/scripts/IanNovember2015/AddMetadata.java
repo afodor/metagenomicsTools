@@ -94,7 +94,7 @@ public class AddMetadata
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
-		for( int x=0; x < firstSplits.length; x++)
+		for( int x=1; x < firstSplits.length; x++)
 			writer.write("\t" + firstSplits[x]);
 		
 		writer.write("\n");
