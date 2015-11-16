@@ -84,6 +84,7 @@ public class AddMetadata
 	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile) throws Exception
 	{
+		int metaLineSize = getMetaLine().split("\t").length;
 		HashMap<Integer, String> metaMap = getMetadataLines();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
@@ -115,8 +116,8 @@ public class AddMetadata
 			
 			if( metaLine == null)
 			{
-				for( int x=0; x < firstSplits.length; x++)
-					writer.write("NA\t");
+				for( int x=0; x < metaLineSize; x++)
+					writer.write("NA" + (x==metaLineSize-1 ? "" : "\t"));
 			}
 			else
 			{
