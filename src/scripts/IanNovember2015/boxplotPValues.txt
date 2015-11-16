@@ -15,7 +15,7 @@ for( t in taxa )
 	myColClasses <- c(rep("character",2),rep("numeric", numCols-2))
 	myT <-read.table(fileName,header=TRUE,sep="\t",colClasses=myColClasses)
 		
-	hist(myT$kendallP,main=t,breaks=10)
+	hist(myT$kendallP,main=t,breaks=20)
 		 		
 }
 
