@@ -2,7 +2,6 @@ rm(list=ls())
 
 setwd("F:\\Caroll_Nov_2015\\spreadsheets")
 
-
 taxa <- c("phylum","class","order","family","genus")
 
 par(mfrow=c(3,2))
