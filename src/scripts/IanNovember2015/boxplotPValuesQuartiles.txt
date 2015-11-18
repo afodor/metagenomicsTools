@@ -1,0 +1,21 @@
+rm(list=ls())
+
+setwd("F:\\Caroll_Nov_2015\\spreadsheets")
+
+taxa <- c("phylum","class","order","family","genus")
+
+par(mfrow=c(3,2))
+	
+for( t in taxa ) 
+{
+	fileName <- paste("pValuesTaxaVsMetadataLightVsHeavy_", t, ".txt", sep="")
+	
+	myT <- read.table(fileName, sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",1),rep("numeric", numCols-1))
+	myT <-read.table(fileName,header=TRUE,sep="\t",colClasses=myColClasses)
+		
+	hist(myT$pValueTTest,main=t,breaks=20)
+		 		
+}
+
