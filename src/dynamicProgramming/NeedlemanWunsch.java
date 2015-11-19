@@ -1,5 +1,8 @@
 package dynamicProgramming;
 
+import java.util.List;
+
+import parsers.FastaSequence;
 
 public class NeedlemanWunsch
 {
@@ -252,6 +255,28 @@ public class NeedlemanWunsch
 	
 	public static void main(String[] args) throws Exception
 	{
+		SubstitutionMatrix bm = new BlossumMatrix(
+			"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
+		
+		List<FastaSequence> fastaList = 
+				FastaSequence.readFastaFile(
+						"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
+		
+		long startTime = System.currentTimeMillis();
+		PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
+							fastaList.get(1).getSequence(), bm, -8,99,  false);
+		
+		System.out.println( (System.currentTimeMillis() - startTime) / 1000f  );
+
+		System.out.println(pa.getFirstSequence());
+		System.out.println(pa.getMiddleString());
+		System.out.println(pa.getSecondSequence());
+		System.out.println(pa.getAlignmentScore());
+	} 
+	
+	/*  DNA alignment
+	public static void main(String[] args) throws Exception
+	{
 		String seq1 = 
 			"ACCCCCAAAAG";
 			
@@ -266,4 +291,5 @@ public class NeedlemanWunsch
 		System.out.println(pa.getSecondSequence());
 		System.out.println(pa.getAlignmentScore());
 	}
+	*/
 }

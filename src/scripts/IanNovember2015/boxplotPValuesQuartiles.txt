@@ -8,7 +8,7 @@ par(mfrow=c(3,2))
 	
 for( t in taxa ) 
 {
-	fileName <- paste("pValuesTaxaVsMetadataLightVsHeavy_", t, ".txt", sep="")
+	fileName <- paste("pValuesTaxaVsMetadataLowVsHighBAI_", t, ".txt", sep="")
 	
 	myT <- read.table(fileName, sep="\t")
 	numCols <- ncol(myT)

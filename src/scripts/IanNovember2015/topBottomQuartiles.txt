@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("C:\\Caroll_Nov_2015\\spreadsheets")
+setwd("F:\\Caroll_Nov_2015\\spreadsheets")
 library("Kendall")
 
 taxa <- c("phylum","class","order","family","genus")
@@ -13,8 +13,8 @@ for ( t in taxa )
 	myColClasses <- c(rep("character",2),"numeric", "character", rep("numeric", numCols-4))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	myT <- myT[ myT$read== "r1" & ! is.na(myT$AGE) , ]
-	myTLight <- myT[ myT$BMI <= 20 , ]
-	myTHeavy <- myT[ myT$BMI >= 23, ]
+	myTLight <- myT[ myT$BAI <= 1 , ]
+	myTHeavy <- myT[ myT$BAI >= 8, ]
 	names <- vector()	
 	pValueTTest <- vector()
 	pValueWilcoxon <- vector()
@@ -51,6 +51,6 @@ dFrame <- dFrame [order(dFrame$pValueTTest),]
 dFrame$adjT<-  p.adjust( dFrame$pValueTTest, method = "BH" )
 dFrame$adjWilcoxon<-  p.adjust( dFrame$pValueWilcoxon, method = "BH" )
 	
-write.table( file= paste( "pValuesTaxaVsMetadataLightVsHeavy_", t, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+write.table( file= paste( "pValuesTaxaVsMetadataLowVsHighBAI_", t, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 }
 	
