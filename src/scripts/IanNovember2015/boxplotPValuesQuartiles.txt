@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("F:\\Caroll_Nov_2015\\spreadsheets")
+setwd("C:\\Caroll_Nov_2015\\spreadsheets")
 
 taxa <- c("phylum","class","order","family","genus")
 

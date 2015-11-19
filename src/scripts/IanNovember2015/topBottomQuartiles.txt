@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("F:\\Caroll_Nov_2015\\spreadsheets")
+setwd("C:\\Caroll_Nov_2015\\spreadsheets")
 library("Kendall")
 
 taxa <- c("phylum","class","order","family","genus")
@@ -13,8 +13,8 @@ for ( t in taxa )
 	myColClasses <- c(rep("character",2),"numeric", "character", rep("numeric", numCols-4))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	myT <- myT[ myT$read== "r1" & ! is.na(myT$AGE) , ]
-	myTLight <- myT[ myT$BAI <= 1 , ]
-	myTHeavy <- myT[ myT$BAI >= 8, ]
+	myTLight <- myT[ myT$BAI < 1 , ]
+	myTHeavy <- myT[ myT$BAI >= 11, ]
 	names <- vector()	
 	pValueTTest <- vector()
 	pValueWilcoxon <- vector()
