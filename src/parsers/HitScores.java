@@ -66,7 +66,7 @@ public class HitScores implements Comparable<HitScores>
 		}
 	}
 	
-	public HitScores getTopHitByBitScore(File file) throws Exception
+	public static HitScores getTopHitByBitScore(File file) throws Exception
 	{
 		List<HitScores> list = getAsList(file, file.getName().toLowerCase().endsWith("gz"));
 					
