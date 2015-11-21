@@ -66,6 +66,21 @@ public class HitScores implements Comparable<HitScores>
 		}
 	}
 	
+	public HitScores getTopHitByBitScore(File file) throws Exception
+	{
+		List<HitScores> list = getAsList(file, file.getName().toLowerCase().endsWith("gz"));
+					
+		HitScores returnVal = null;
+		
+		for(HitScores hs : list)
+		{
+			if( returnVal == null ||  hs.getBitScore() > returnVal.getBitScore() )
+				returnVal = hs;
+		}
+		
+		return returnVal;
+	}
+	
 	public void setQueryId(String queryId)
 	{
 		this.queryId = queryId;
@@ -530,6 +545,7 @@ public void writeALine( PrintWriter writer, boolean endWithNewline) throws Excep
 		if( nextLine != null)
 			throw new Exception("Parsing error");
 		
+		reader.close();
 		return list;
 	}
 	
