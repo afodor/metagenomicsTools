@@ -100,6 +100,8 @@ public class ConfigReader
 	
 	public static final String FRAGMENT_RECRUITER_SUPPORT_DIR = "FRAGMENT_RECRUITER_SUPPORT_DIR";
 	
+	public static final String CRE_ORTHOLOGS_DIR = "CRE_ORTHOLOGS_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -123,6 +125,11 @@ public class ConfigReader
 	public static String getMarkAug2015Batch1Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(MARK_AUG_2015_BATCH1_DIR);
+	}
+	
+	public static String getCREOrthologsDir() throws Exception
+	{
+		return getConfigReader().getAProperty(CRE_ORTHOLOGS_DIR);
 	}
 	
 	public static String getTopeSep2015Dir() throws Exception
