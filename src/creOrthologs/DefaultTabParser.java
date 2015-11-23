@@ -24,7 +24,6 @@ public class DefaultTabParser
 		
 		for( int x=0; x< 9; x++)
 			reader.readLine();
-		
 
 		int lineNumber = 9;
 		for(String s= reader.readLine();  s != null; s = reader.readLine())
@@ -41,17 +40,22 @@ public class DefaultTabParser
 				
 				if( next.length() >0)
 				{
-					String key = new StringTokenizer(next, "(").nextToken();
+					StringTokenizer innerTokenizer = new StringTokenizer(next);
 					
-					HashSet<Integer> set = map.get(key);
-					
-					if( set == null)
+					while( innerTokenizer.hasMoreTokens())
 					{
-						set = new HashSet<Integer>();
-						map.put(key, set);
+						String key = new StringTokenizer(innerTokenizer.nextToken(), "(").nextToken();
+						
+						HashSet<Integer> set = map.get(key);
+						
+						if( set == null)
+						{
+							set = new HashSet<Integer>();
+							map.put(key, set);
+						}
+						
+						set.add(lineNumber);
 					}
-					
-					set.add(lineNumber);
 				}
 			}
 			
