@@ -3,6 +3,7 @@ rm(list=ls())
 setwd("C:\\af_broad")
 
 myT <- read.table("bitScoreOrthologsAsColumnsPlustMedata.txt", sep="\t", header=TRUE)
+myT <- myT[ substr(myT$genome,1,4) == "kleb" ,]
 
 names <- vector()
 pValuesResVsSuc <- vector()
@@ -10,9 +11,44 @@ pValuesResVsSuc <- vector()
 index <- 1
 for( i in 3:ncol(myT))
 {
-	names[index] <- names(myT)[i]
-	pValuesResVsSuc[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
-											myT[ myT$broadCategory =="susceptible" ,i] )$p.value
-											
-	index = index + 1
+	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0) 
+	{
+		names[index] <- names(myT)[i]
+		pValuesResVsSuc[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
+												myT[ myT$broadCategory =="susceptible" ,i] )$p.value
+												
+		index = index + 1
+	}
+
 }
+
+	
+dFrame <- data.frame( names, pValuesResVsSuc )
+dFrame <- dFrame [order(dFrame$pValuesResVsSuc ),]
+dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesResVsSuc, method = "BH" )
+	
+write.table( file= paste( "pValuesResVsSuc.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+
+pValuesCarVsRes <- vector()
+
+index <- 1
+for( i in 3:ncol(myT))
+{
+	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0 ) 
+	{
+		names[index] <- names(myT)[i]
+		pValuesCarVsRes[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
+											myT[ myT$broadCategory =="carolina" ,i] )$p.value
+											
+		index = index + 1
+	}
+}
+
+	
+dFrame <- data.frame( names, pValuesCarVsRes )
+dFrame <- dFrame [order(dFrame$pValuesCarVsRes ),]
+dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesCarVsRes , method = "BH" )
+	
+write.table( file= paste( "pValuesCarVsRes.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+
+hist(  pValuesCarVsRes ,breaks=30)
