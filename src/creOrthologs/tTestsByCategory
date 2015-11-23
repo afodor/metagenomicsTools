@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\af_broad")
+
+myT <- read.table("bitScoreOrthologsAsColumnsPlustMedata.txt", sep="\t", header=TRUE)
+
+names <- vector()
+pValuesResVsSuc <- vector()
+
+index <- 1
+for( i in 3:ncol(myT))
+{
+	names[index] <- names(myT)[i]
+	pValuesResVsSuc[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
+											myT[ myT$broadCategory =="susceptible" ,i] )$p.value
+											
+	index = index + 1
+}
