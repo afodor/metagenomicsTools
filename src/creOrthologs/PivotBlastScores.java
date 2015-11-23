@@ -3,9 +3,12 @@ package creOrthologs;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import utils.ConfigReader;
@@ -15,6 +18,38 @@ public class PivotBlastScores
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Integer> counts = getCounts();
+		writeFile(counts);
+	}
+	
+	private static void writeFile(HashMap<String, Integer> counts) throws Exception
+	{
+		List<String> orthologKeys = getVals(counts, true);
+		
+		for(String s : orthologKeys)
+			System.out.println(s);
+	}
+	
+	private static List<String> getVals(HashMap<String, Integer> counts ,boolean first)
+		throws Exception
+	{
+		HashSet<String> set= new HashSet<String>();
+		
+		for(String s : counts.keySet())
+		{
+			String[] splits = s.split("@");
+			
+			if( splits.length != 2  )
+				throw new Exception("No");
+			
+			if( first)
+				set.add(splits[0]);
+			else
+				set.add(splits[1]);
+		}
+		
+		List<String> list = new ArrayList<String>(set);
+		Collections.sort(list);
+		return list;
 	}
 	
 	private static String getOrthologKey(String filepath)
@@ -24,6 +59,7 @@ public class PivotBlastScores
 	
 	private static HashMap<String, Integer> getCounts() throws Exception
 	{
+		System.out.println("Reading file...");
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		
 		BufferedReader reader = 
@@ -33,8 +69,6 @@ public class PivotBlastScores
 						
 						
 		reader.readLine();
-		
-		int x=0;
 		
 		for(String s= reader.readLine() ; s != null; s = reader.readLine())
 		{
@@ -54,10 +88,6 @@ public class PivotBlastScores
 			
 			map.put(key, Integer.parseInt(aVal));
 			
-			x++;
-			
-			if( x % 10000 == 0 )
-				System.out.println("read " + x);
 			
 		}
 		
