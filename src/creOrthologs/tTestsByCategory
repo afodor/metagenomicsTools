@@ -51,4 +51,30 @@ dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesCarVsRes , method = "BH" )
 	
 write.table( file= paste( "pValuesCarVsRes.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 
+pValuesCarVsSuc <- vector()
+
+index <- 1
+for( i in 3:ncol(myT))
+{
+	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0 ) 
+	{
+		names[index] <- names(myT)[i]
+		pValuesCarVsSuc[index] <- t.test( myT[ myT$broadCategory =="susceptible" ,i],
+											myT[ myT$broadCategory =="carolina" ,i] )$p.value
+											
+		index = index + 1
+	}
+}
+
+	
+dFrame <- data.frame( names, pValuesCarVsSuc  )
+dFrame <- dFrame [order(dFrame$pValuesCarVsSuc  ),]
+dFrame$adjPCarVsSuc<-  p.adjust( dFrame$pValuesCarVsSuc  , method = "BH" )
+	
+write.table( file= paste( "pValuesCarVsSuc.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+
+par(mfrow=c(3,1))
+
+hist(  pValuesResVsSuc ,breaks=30)
 hist(  pValuesCarVsRes ,breaks=30)
+hist(  pValuesCarVsSuc  ,breaks=30)
