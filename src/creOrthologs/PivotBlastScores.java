@@ -1,8 +1,10 @@
 package creOrthologs;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,14 +21,44 @@ public class PivotBlastScores
 	{
 		HashMap<String, Integer> counts = getCounts();
 		writeFile(counts);
+		System.out.println("finished");
 	}
 	
 	private static void writeFile(HashMap<String, Integer> counts) throws Exception
 	{
+		System.out.println("Writing file");
 		List<String> orthologKeys = getVals(counts, true);
 		
+		List<String> genomes = getVals(counts, false);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getCREOrthologsDir() + File.separator + "bitScoreOrthologsAsColumns.txt")));
+		
+		writer.write("genome");
+		
 		for(String s : orthologKeys)
-			System.out.println(s);
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String g : genomes)
+		{
+			writer.write(g);
+			
+			for(String s : orthologKeys)
+			{
+				Integer val = counts.get(s + "@" + g);
+				
+				if( val == null)
+					val = 0;
+				
+				writer.write("\t" + val);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush(); writer.close();
 	}
 	
 	private static List<String> getVals(HashMap<String, Integer> counts ,boolean first)
