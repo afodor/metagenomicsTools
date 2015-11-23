@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -11,12 +12,11 @@ import utils.TabReader;
 
 public class DefaultTabParser
 {
-	private static final Integer DUPLICATE = -99;
 	
-	public static HashMap<String, Integer> getFileLineMap(  ) throws Exception
+	public static HashMap<String, HashSet<Integer>>  getFileLineMap( ) throws Exception
 	{
 		System.out.println("Reading annotations...");
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, HashSet<Integer>> map = new HashMap<String, HashSet<Integer>>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader( 
 				new File(ConfigReader.getCREOrthologsDir() + 
@@ -43,10 +43,15 @@ public class DefaultTabParser
 				{
 					String key = new StringTokenizer(next, "(").nextToken();
 					
-					if( map.containsKey(key))
-						map.put(key, DUPLICATE);
-					else
-						map.put(key, lineNumber);
+					HashSet<Integer> set = map.get(key);
+					
+					if( set == null)
+					{
+						set = new HashSet<Integer>();
+						map.put(key, set);
+					}
+					
+					set.add(lineNumber);
 				}
 			}
 			
@@ -62,15 +67,10 @@ public class DefaultTabParser
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, Integer> map = getFileLineMap();
+		HashMap<String, HashSet<Integer>> map = getFileLineMap();
 		System.out.println("Got " + map.size() );
 		
-		int numDupes = 0;
-		
-		for( Integer i : map.values())
-			if( i == DUPLICATE)
-				numDupes++;
-		
-		System.out.println(numDupes);
+		for( String s : map.keySet())
+			System.out.println( s + " " + map.get(s));
 	}
 }
