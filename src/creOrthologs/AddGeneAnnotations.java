@@ -146,7 +146,12 @@ public class AddGeneAnnotations
 				ConfigReader.getCREOrthologsDir() + File.separator + 
 				"pValuesResVsSucPlusMetadata.txt"
 				, map);
+		
 
-
+		addGeneAnnotation(ConfigReader.getCREOrthologsDir() + File.separator + 
+				"pValuesMerged.txt", 
+				ConfigReader.getCREOrthologsDir() + File.separator + 
+				"pValuesMergedPlusAnnotations.txt"
+				, map);
 	}
 }
