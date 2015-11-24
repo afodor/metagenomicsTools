@@ -27,9 +27,9 @@ public class RemoveSparse
 		int[] numOverZero = new int[firstSplits.length];
 		
 		int numSamples = 0;
-		for( String s = reader.readLine(); s != null; s = reader.readLine())
+		for( String s = reader.readLine(); s != null ; s = reader.readLine())
 		{
-			String[] splits = reader.readLine().split("\t");
+			String[] splits = s.split("\t");
 			
 			if( splits.length != firstSplits.length)
 				throw new Exception("No");
