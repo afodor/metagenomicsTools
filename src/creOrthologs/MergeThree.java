@@ -11,7 +11,7 @@ import utils.ConfigReader;
 
 public class MergeThree
 {
-	private static class Holder
+	public static class Holder
 	{
 		public Double carVsSuc = null;
 		public Double carVsRes = null;
@@ -41,7 +41,7 @@ public class MergeThree
 		writer.flush();  writer.close();
 	}
 	
-	private static HashMap<String, Holder> getHolderMap() throws Exception
+	public static HashMap<String, Holder> getHolderMap() throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
