@@ -37,7 +37,7 @@ public class GeneAnnotationsToBestHits
 								hitsDir.getAbsolutePath()+ File.separator + s))));		
 				
 				BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					annotatedHitsDir.getAbsoluteFile() + s.replace(".gz", ""))));
+					annotatedHitsDir.getAbsoluteFile() + File.separator +  s.replace(".gz", ""))));
 				
 				writer.write("lineID\tqueryContig\tqueryStart\tqueryEnd\tbitScore\tpValueSucVsRes\tpValueCHSVsSuc\tpValueCHSVsRes\tdesciprtion\n");
 				
@@ -50,7 +50,7 @@ public class GeneAnnotationsToBestHits
 					for( int x=1; x <=4; x++)
 						writer.write(splits[x] + "\t");
 					
-					Holder h = holderMap.get("Line_" + keyInt);
+					Holder h = holderMap.get("\"Line_" + keyInt + "\"");
 					
 					if( h != null)
 						writer.write(h.resVsSuc + "\t" + h.carVsSuc + "\t"+ h.carVsRes + "\t" );
