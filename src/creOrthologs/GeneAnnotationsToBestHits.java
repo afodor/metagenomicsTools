@@ -52,7 +52,10 @@ public class GeneAnnotationsToBestHits
 					
 					Holder h = holderMap.get("Line_" + keyInt);
 					
-					writer.write(h.resVsSuc + "\t" + h.carVsSuc + "\t"+ h.carVsRes + "\t" );
+					if( h != null)
+						writer.write(h.resVsSuc + "\t" + h.carVsSuc + "\t"+ h.carVsRes + "\t" );
+					else 
+						writer.write( "\t\t\t");
 					
 					writer.write( lineMap.get(keyInt) + "\n");
 				}
