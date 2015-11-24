@@ -11,7 +11,7 @@ pValuesResVsSuc <- vector()
 index <- 1
 for( i in 3:ncol(myT))
 {
-	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0) 
+	if( sum(myT[,i]) > 0 & var( myT[myT$broadCategory =="resistant" |myT$broadCategory =="susceptible" ,i]) > 0) 
 	{
 		names[index] <- names(myT)[i]
 		pValuesResVsSuc[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
@@ -29,12 +29,13 @@ dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesResVsSuc, method = "BH" )
 	
 write.table( file= paste( "pValuesResVsSuc.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 
+names <- vector()
 pValuesCarVsRes <- vector()
 
 index <- 1
 for( i in 3:ncol(myT))
 {
-	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0 ) 
+	if( sum(myT[,i]) > 0 & var( myT[myT$broadCategory =="resistant" | myT$broadCategory =="carolina",i]) > 0 ) 
 	{
 		names[index] <- names(myT)[i]
 		pValuesCarVsRes[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
@@ -51,12 +52,13 @@ dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesCarVsRes , method = "BH" )
 	
 write.table( file= paste( "pValuesCarVsRes.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 
+names <- vector()
 pValuesCarVsSuc <- vector()
 
 index <- 1
 for( i in 3:ncol(myT))
 {
-	if( sum(myT[,i]) > 0 & var( myT[,i]) > 0 ) 
+	if( sum(myT[,i]) > 0 & var( myT[ myT$broadCategory =="susceptible" |myT$broadCategory =="carolina"  ,i]) > 0 ) 
 	{
 		names[index] <- names(myT)[i]
 		pValuesCarVsSuc[index] <- t.test( myT[ myT$broadCategory =="susceptible" ,i],
@@ -75,6 +77,6 @@ write.table( file= paste( "pValuesCarVsSuc.txt", sep=""), dFrame, row.names=FALS
 
 par(mfrow=c(3,1))
 
-hist(  pValuesResVsSuc ,breaks=30)
-hist(  pValuesCarVsRes ,breaks=30)
-hist(  pValuesCarVsSuc  ,breaks=30)
+hist(  pValuesResVsSuc ,breaks=100)
+hist(  pValuesCarVsRes ,breaks=100)
+hist(  pValuesCarVsSuc  ,breaks=100)
