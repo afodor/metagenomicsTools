@@ -48,8 +48,8 @@ public class GeneAnnotationsToBestHits
 					int keyInt = Integer.parseInt(new StringTokenizer(splits[0], "@").nextToken());
 					writer.write(keyInt + "\t");
 					
-					writer.write(splits[1] + "\t");
-					writer.write("contig_" + splits[2] + "\t");
+					writer.write("contig_" + splits[1] + "\t");
+					writer.write(splits[2] + "\t");
 					writer.write(splits[3] + "\t");
 					writer.write(splits[4] + "\t");
 					
