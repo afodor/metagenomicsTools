@@ -1,0 +1,53 @@
+ setwd("G:\\JobinLabRnaSeq");
+
+#source("http://www.bioconductor.org/biocLite.R")
+#biocLite("DESeq")
+
+# left read only - ribosomal and unmapped removed
+myT <- read.table("pivotedSamplesAsColumnsR1Only.txt",header=TRUE, row.names=1)
+
+conditions = c( "18day", "2day", "2day","2day",
+"12weeks", "12weeks", "12weeks", "18weeks", "18weeks", "18weeks")
+
+library( "DESeq" )
+cds <- newCountDataSet( myT, conditions)
+cds <- estimateSizeFactors( cds )
+cds <- estimateDispersions( cds )
+
+plotDispEsts <- function( cds )
+{
+plot(
+rowMeans( counts( cds, normalized=TRUE ) ),
+fitInfo(cds)$perGeneDispEsts,
+pch = '.', log="xy" )
+xg <- 10^seq( -.5, 5, length.out=300 )
+lines( xg, fitInfo(cds)$dispFun( xg ), col="red" )
+}
+
+plotDispEsts( cds )
+
+res <- nbinomTest( cds, "2day", "12weeks" )
+
+plotDE <- function( res )
+plot(
+res$baseMean,
+res$log2FoldChange,
+log="x", pch=20, cex=.3,
+col = ifelse( res$padj < .1, "red", "black" ) )
+ 
+plotDE( res ) 
+
+write.table(res,file="2DayVs12Weeks.txt",sep="\t")
+
+res2 <- nbinomTest( cds, "12weeks", "18weeks" )
+
+plotDE( res2 ) 
+
+write.table(res2,file="12WeeksVs18Weeks.txt",sep="\t")
+
+res3 <- nbinomTest( cds, "2day", "18weeks" )
+
+plotDE( res3 ) 
+
+write.table(res3,file="2DayVs18Weeks.txt",sep="\t")
+

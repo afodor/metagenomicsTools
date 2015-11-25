@@ -122,6 +122,11 @@ public class ConfigReader
 		return getConfigReader().getAProperty(IAN_NOVEMBER_2015);
 	}
 	
+	public static String getJobinLabRNASeqDir() throws Exception
+	{
+		throw new Exception("From legacy code");
+	}
+	
 	public static String getMarkAug2015Batch1Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(MARK_AUG_2015_BATCH1_DIR);

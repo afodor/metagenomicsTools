@@ -1,0 +1,16 @@
+setwd("C:\\JobinLabRnaSeq");
+
+#source("http://www.bioconductor.org/biocLite.R")
+#biocLite("DESeq")
+
+# left read only - ribosomal and unmapped removed
+myT <- read.table("pivotedSamplesAsColumnsR1OnlyNormalizedByGeneLength.txt",header=TRUE, row.names=1)
+
+trans <- t(myT)
+trans <- log10(trans+1)
+myPCA <- prcomp(trans)
+
+write.table(myPCA$x, file="rPCAOutR1OnlyNormalizedByGeneLength.txt", sep="\t")
+
+d <- dist(trans)
+plot(hclust(d))

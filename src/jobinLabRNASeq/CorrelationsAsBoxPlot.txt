@@ -1,0 +1,95 @@
+setwd("C:\\JobinLabRnaSeq");
+
+myT <- read.table("pivotedSamplesAsColumnsR1Only.txt",header=TRUE, row.names=1)
+
+conditions = c( "18day", "2day", "2day","2day",
+"12weeks", "12weeks", "12weeks", "18weeks", "18weeks", "18weeks")
+
+only2Day <- conditions == "2day"
+day2Data <- myT[,only2Day]
+numDataPoints2Day <- dim(day2Data)[2]
+TwoDayVsTwoDay <- array()
+day2Index <- 1
+
+for( j in 1 : (numDataPoints2Day -1 ) ) 
+{
+	for ( k in (j +1) : numDataPoints2Day)
+	{
+		TwoDayVsTwoDay[day2Index] =  cor(day2Data[,j], day2Data[,k])
+		day2Index = day2Index+ 1
+	}
+}
+
+
+only12Week <- conditions == "12weeks"
+week12Data <- myT[,only12Week]
+numDataPoints12Weeks <- dim(week12Data)[2]
+twelveWeekVsTwelveWeek <- array()
+twelveWeekIndex <- 1
+
+for( j in 1 : (numDataPoints12Weeks -1 ) ) 
+{
+	for ( k in (j +1) : numDataPoints12Weeks)
+	{
+		twelveWeekVsTwelveWeek[twelveWeekIndex] =  cor(week12Data[,j], week12Data[,k])
+		twelveWeekIndex = twelveWeekIndex + 1
+	}
+}
+
+
+only18Week <- conditions == "18weeks"
+week18Data <- myT[,only18Week]
+numDataPoints18Weeks <- dim(week18Data)[2]
+eighteenWeekVsEighteenWeek <- array()
+eighteenWeekIndex <- 1
+
+for( j in 1 : (numDataPoints18Weeks -1 ) ) 
+{
+	for ( k in (j +1) : numDataPoints18Weeks)
+	{
+		eighteenWeekVsEighteenWeek[eighteenWeekIndex] =  cor(week18Data[,j], week18Data[,k])
+		eighteenWeekIndex = eighteenWeekIndex+ 1
+	}
+}
+
+twoDaysVsTwelveWeek <- array()
+index <- 1
+
+for( j in 1 : numDataPoints2Day ) 
+{
+	for ( k in 1 : numDataPoints12Weeks)
+	{
+		twoDaysVsTwelveWeek[index] = cor(day2Data[,j], week12Data[,k]  )
+		index = index + 1
+	}
+}
+
+
+twoDaysVsEighteenWeek <- array()
+index <- 1
+
+for( j in 1 : numDataPoints2Day ) 
+{
+	for ( k in 1 : numDataPoints18Weeks)
+	{
+		twoDaysVsEighteenWeek[index] = cor(day2Data[,j], week18Data[,k]  )
+		index = index + 1
+	}
+}
+
+
+twelveWeekVsEighteenWeek <- array()
+index <- 1
+
+for( j in 1 : numDataPoints12Weeks) 
+{
+	for ( k in 1 : numDataPoints18Weeks)
+	{
+		twelveWeekVsEighteenWeek [index] = cor(week12Data[,j], week18Data[,k]  )
+		index = index + 1
+	}
+}
+
+
+boxplot(TwoDayVsTwoDay, twelveWeekVsTwelveWeek, eighteenWeekVsEighteenWeek, twoDaysVsTwelveWeek, twoDaysVsEighteenWeek,twelveWeekVsEighteenWeek)
+
