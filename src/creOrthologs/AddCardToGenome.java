@@ -39,7 +39,7 @@ public class AddCardToGenome
 		
 		for(HitScores hs : list ) 
 		{
-			writer.write("\t" +  hs.getTargetId() + "\t" + hs.getTargetStart() 
+			writer.write("\t" + "contig_" +  hs.getTargetId() + "\t" + hs.getTargetStart() 
 			+ "\t" + hs.getTargetEnd()+ "\t" + 
 					hs.getBitScore()  + "\t1e-30\t1e-30\t1e-30\t" +
 			fastaMap.get(hs.getQueryId()) + "\t" + 
