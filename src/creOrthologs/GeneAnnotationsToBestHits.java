@@ -47,8 +47,11 @@ public class GeneAnnotationsToBestHits
 					String[] splits =s2.split("\t");
 					int keyInt = Integer.parseInt(new StringTokenizer(splits[0], "@").nextToken());
 					writer.write(keyInt + "\t");
-					for( int x=1; x <=4; x++)
-						writer.write(splits[x] + "\t");
+					
+					writer.write(splits[0] + "\t");
+					writer.write("contig_" + splits[1] + "\t");
+					writer.write(splits[2] + "\t");
+					writer.write(splits[3] + "\t");
 					
 					Holder h = holderMap.get("\"Line_" + keyInt + "\"");
 					
