@@ -41,7 +41,7 @@ public class DistancesFromFasta
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getCREOrthologsDir() + File.separator + 
 				"contig_7000000220927531_distances.txt")));
 		
-		writer.write("xFasta\tyFasta\txLocation\tyLocation\txLocation_yLocaiton\tmismatchDistance\tgapToNonGap\tsumDistance\n");
+		writer.write("xFasta\tyFasta\txLocation\tyLocation\txLocation_yLocaiton\tmismatchDistance\tgapToNonGap\tsumDistance\tsameLocation\n");
 		
 		for(int x=0;x < list.size() -1 ; x++)
 		{
@@ -80,7 +80,7 @@ public class DistancesFromFasta
 				writer.write(xSeq.getHeader() + "\t" + ySeq.getHeader() + "\t" +
 						xLocation + "\t" + yLocation + "\t" + getMergedLocation(xLocation, yLocation)+ "\t" + 
 						numDiffs + "\t" + numGapDiffs + "\t" +
-									(numDiffs + numGapDiffs) + "\n");	
+									(numDiffs + numGapDiffs) + "\t" + xLocation.equals(yLocation) + "\n");	
 			}
 		}
 		
