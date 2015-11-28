@@ -1,6 +1,5 @@
 package dynamicProgramming;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
@@ -397,7 +396,7 @@ public class NeedlemanWunschMultiThreaded
 		}
 	}
 
-	//@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	/**
 	 *
 	 *This class is experimental and is not thread safe;
@@ -410,27 +409,29 @@ public class NeedlemanWunschMultiThreaded
 		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
-						"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
+						//"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
+						"c:\\temp\\longer.txt");
 		
-		List<Double> times = new ArrayList<Double>();
-		
-		for( int x=0; x < 1; x++)
+		for( int x=0; x < 50; x++)
 		{
-
 			long startTime = System.currentTimeMillis();
 			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
 								fastaList.get(1).getSequence(), bm, -8,99,  false);
 			
 			double time= (System.currentTimeMillis() - startTime) / 1000.0 ;
-			times.add(time);
-			System.out.println(time);
 			
-			System.out.println(pa.getFirstSequence());
-			System.out.println(pa.getMiddleString());
-			System.out.println(pa.getSecondSequence());
-			System.out.println(pa.getAlignmentScore());
+			//if( x > 10)
+				System.out.println(time);
 
 		}
+		
+		
+		/*
+		System.out.println(pa.getFirstSequence());
+		System.out.println(pa.getMiddleString());
+		System.out.println(pa.getSecondSequence());
+		System.out.println(pa.getAlignmentScore());
+		*/
 	} 
 	
 	/*  DNA alignment
