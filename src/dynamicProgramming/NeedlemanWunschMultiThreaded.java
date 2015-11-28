@@ -258,6 +258,51 @@ public class NeedlemanWunschMultiThreaded
 			
 	}
 	
+	private static AlignmentCell getACel(int x, int y, int affinePenalty,AlignmentCell[][] cels,
+				float gapPenalty, SubstitutionMatrix sm, String s1, String s2)
+					throws Exception
+	{
+		float top = Float.NEGATIVE_INFINITY;
+		float left = Float.NEGATIVE_INFINITY;
+		
+		
+		if( affinePenalty >0 )  // linear gap
+		{
+			top = cels[x][y-1].score + gapPenalty;
+			left = cels[x-1][y].score + gapPenalty;
+		}
+		else
+		{
+			if( cels[x][y-1].direction == UP )
+				top = cels[x][y-1].score + affinePenalty;
+			else
+				top = cels[x][y-1].score + gapPenalty;
+				
+			if( cels[x-1][y].direction == LEFT )
+				left = cels[x-1][y].score + affinePenalty;
+			else
+				left =  cels[x-1][y].score + gapPenalty;
+		}
+		
+		float diag = cels[x-1][y-1].score + 
+				sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
+		
+		float max = Math.max(top, Math.max(left, diag));
+		
+		AlignmentCell ac = new AlignmentCell(max);
+		
+		if( max == top)
+			ac.direction = UP;
+		else if ( max == left)
+			ac.direction = LEFT;
+		else if ( max == diag)
+			ac.direction = DIAG;
+		else throw new Exception("Logic error");
+		
+		return ac;
+		
+	}
+	
 	private static class RunAStrip implements Runnable
 	{
 		private final int affinePenalty;
@@ -300,44 +345,12 @@ public class NeedlemanWunschMultiThreaded
 						Thread.yield();
 					}
 					
-					float top = Float.NEGATIVE_INFINITY;
-					float left = Float.NEGATIVE_INFINITY;
-					
-					if( affinePenalty >0 )  // linear gap
-					{
-						top = cels[x][y-1].score + gapPenalty;
-						left = cels[x-1][y].score + gapPenalty;
-					}
-					else
-					{
-						if( cels[x][y-1].direction == UP )
-							top = cels[x][y-1].score + affinePenalty;
-						else
-							top = cels[x][y-1].score + gapPenalty;
-							
-						if( cels[x-1][y].direction == LEFT )
-							left = cels[x-1][y].score + affinePenalty;
-						else
-							left =  cels[x-1][y].score + gapPenalty;
-					}
-					
-					float diag = cels[x-1][y-1].score + 
-							sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
-					
-					float max = Math.max(top, Math.max(left, diag));
-					
-					AlignmentCell ac = new AlignmentCell(max);
-					
-					if( max == top)
-						ac.direction = UP;
-					else if ( max == left)
-						ac.direction = LEFT;
-					else if ( max == diag)
-						ac.direction = DIAG;
-					else throw new Exception("Logic error");
-					
 					synchronized( cels)
 					{
+						AlignmentCell ac = 
+								getACel(
+								x, y, affinePenalty,cels,
+								gapPenalty, sm, s1, s2);
 						cels[x][y] = ac;
 					}
 				}
