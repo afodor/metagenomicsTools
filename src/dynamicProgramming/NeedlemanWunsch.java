@@ -253,12 +253,8 @@ public class NeedlemanWunsch
 			}
 	}
 	
+
 	@SuppressWarnings("unused")
-	/**
-	 *
-	 *This class is experimental and is not thread safe;
-	 *should not be used for real data...
-	 */
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
@@ -266,10 +262,10 @@ public class NeedlemanWunsch
 		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
-					//	"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
-						"c:\\temp\\longer.txt");
+						//"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
+						"c:\\temp\\sequence.fasta");
 		
-		for( int x=0; x < 50; x++)
+		for( int x=0; x < 1; x++)
 		{
 			long startTime = System.currentTimeMillis();
 			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
@@ -279,16 +275,15 @@ public class NeedlemanWunsch
 			
 			//if( x > 10)
 				System.out.println(time);
+				
+				System.out.println(pa.getFirstSequence());
+				System.out.println(pa.getMiddleString());
+				System.out.println(pa.getSecondSequence());
+				System.out.println(pa.getAlignmentScore());
 
 		}
 		
 		
-		/*
-		System.out.println(pa.getFirstSequence());
-		System.out.println(pa.getMiddleString());
-		System.out.println(pa.getSecondSequence());
-		System.out.println(pa.getAlignmentScore());
-		*/
 	} 
 	/*  DNA alignment
 	public static void main(String[] args) throws Exception

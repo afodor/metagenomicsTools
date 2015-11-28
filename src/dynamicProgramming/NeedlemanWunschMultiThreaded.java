@@ -348,9 +348,11 @@ public class NeedlemanWunschMultiThreaded
 				{
 					for (int y=1; y <= s2.length(); y++)
 					{
+						if( y % 1000 == 0 )
+							System.out.println("Starting y " + y);
+						synchronized (cels) {}; //makes sure we have the latest snapshot
 						for( int x= Math.max(lastX.get(), 1); x <= s1.length(); x++)
 						{
-							//System.out.println("From x " + x  + " " + y);
 							AlignmentCell ac = 
 									getACel(
 									x, y, affinePenalty,cels,
@@ -358,7 +360,8 @@ public class NeedlemanWunschMultiThreaded
 							
 							cels[x][y] = ac;
 						}
-						
+
+						synchronized (cels) {}; //publish the latest snapshot
 						lastY.set(y);
 					}
 				}
@@ -366,6 +369,10 @@ public class NeedlemanWunschMultiThreaded
 				{
 					for( int x=1; x <= s1.length(); x++)
 					{
+						if( x % 1000 ==0 )
+							System.out.println("starting x " + x);
+						synchronized (cels) {}; //makes sure we have the latest snapshot
+						
 						for( int y= Math.max(lastY.get(), 1); y <= s2.length(); y++)
 						{
 							//System.out.println("From y " + x  + " " + y);
@@ -376,7 +383,7 @@ public class NeedlemanWunschMultiThreaded
 							
 							cels[x][y] = ac;
 						}
-						
+						synchronized (cels) {}; //publish the latest snapshot
 						lastX.set(x);
 					}
 					
@@ -410,9 +417,9 @@ public class NeedlemanWunschMultiThreaded
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
 						//"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
-						"c:\\temp\\longer.txt");
+						"c:\\temp\\sequence.fasta");
 		
-		for( int x=0; x < 50; x++)
+		for( int x=0; x < 1; x++)
 		{
 			long startTime = System.currentTimeMillis();
 			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
@@ -422,16 +429,15 @@ public class NeedlemanWunschMultiThreaded
 			
 			//if( x > 10)
 				System.out.println(time);
+				
+				System.out.println(pa.getFirstSequence());
+				System.out.println(pa.getMiddleString());
+				System.out.println(pa.getSecondSequence());
+				System.out.println(pa.getAlignmentScore());
 
 		}
 		
 		
-		/*
-		System.out.println(pa.getFirstSequence());
-		System.out.println(pa.getMiddleString());
-		System.out.println(pa.getSecondSequence());
-		System.out.println(pa.getAlignmentScore());
-		*/
 	} 
 	
 	/*  DNA alignment
