@@ -2,9 +2,9 @@ package dynamicProgramming;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsers.FastaSequence;
 
@@ -14,8 +14,6 @@ public class NeedlemanWunschMultiThreaded
 	private static final int LEFT = 2;
 	private static final int DIAG =3;
 	private static final int START = 4;
-	
-	private static final int NUM_THREADS =5;
 	
 	private static class AlignmentCell
 	{
@@ -183,7 +181,6 @@ public class NeedlemanWunschMultiThreaded
 		throws Exception
 	{
 		cels[0][0] = new AlignmentCell(START, 0); 
-		Semaphore semaphore = new Semaphore(NUM_THREADS);
 		
 		if( noPenaltyForBeginningOrEndingGaps )
 		{
@@ -241,36 +238,35 @@ public class NeedlemanWunschMultiThreaded
 		
 		}
 		
-		ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String,String>();
 		
-		for( int x=0;x <= s1.length(); x++)
-			map.put(x +"@" +0 , "yes");
-		
-		for( int y=0; y <= s2.length(); y++)
-			map.put(0 + "@" + y, "yes");
+		Semaphore semaphore = new Semaphore(2);
+		AtomicInteger lastX = new AtomicInteger(1);
+		AtomicInteger lastY = new AtomicInteger(1);
 		
 		for( int y=1; y <= s2.length(); y++)
 		{
 			AlignmentCell cel = getACel(1, y, affinePenalty, cels, gapPenalty, sm, s1, s2);
 			
 			cels[1][y] = cel;
-			map.put("1@"+ y,"yes");
 			
 			semaphore.acquire();
-			
-			new Thread(new RunAStrip(affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,map))
-					.start();
-		}
-		
-		int numAcquired =0;
-		
-		while(numAcquired < NUM_THREADS)
-		{
 			semaphore.acquire();
-			numAcquired++;
+			
+			new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,
+					true, lastX, lastY)).start();
+			
+
+			new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,
+					false, lastX, lastY)).start();
 		}
 		
-		synchronized(cels) {};  // gather up all our published changes
+		// wait for both threads to finish
+		semaphore.acquire();
+		semaphore.acquire();
+		
+		synchronized(cels) {};  // make visible all our published changes to this thread
 			
 	}
 	
@@ -329,11 +325,13 @@ public class NeedlemanWunschMultiThreaded
 		private final int y;
 		private final SubstitutionMatrix sm;
 		private final Semaphore semaphore;
-		private final ConcurrentHashMap<String, String> map;
+		private final boolean runX;
+		private final AtomicInteger lastX;
+		private final AtomicInteger lastY;
 		
 		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
 				String s1, String s2, int y, SubstitutionMatrix sm, Semaphore semaphore,
-				ConcurrentHashMap<String, String> map)
+				boolean runX,AtomicInteger lastX, AtomicInteger lastY)
 		{
 			this.affinePenalty = affinePenalty;
 			this.gapPenalty = gapPenalty2;
@@ -343,7 +341,9 @@ public class NeedlemanWunschMultiThreaded
 			this.y = y;
 			this.sm = sm;
 			this.semaphore = semaphore;
-			this.map = map;
+			this.runX = runX;
+			this.lastX = lastX;
+			this.lastY = lastY;
 		}
 		
 		@Override
@@ -351,32 +351,41 @@ public class NeedlemanWunschMultiThreaded
 		{
 			try
 			{
-				for( int x=2; x <= s1.length(); x++)
+				if( runX)
 				{
-					
-					String key1 = (x-1) + "@" + y;
-					String key2 = x + "@" + (y-1);
-					String key3 = (x-1) + "@" + (y-1);
- 					
-					while(true)
+					for (int y=1; y < s2.length(); y++)
 					{
-						if( map.containsKey(key1) && map.containsKey(key2) && map.containsKey(key3))
-							break;
+						for( int x= Math.max(lastX.get(), 2); x <= s1.length(); x++)
+						{
+							System.out.println("From x " + x  + " " + y);
+							AlignmentCell ac = 
+									getACel(
+									x, y, affinePenalty,cels,
+									gapPenalty, sm, s1, s2);
+							
+							cels[x][y] = ac;
+						}
+					}
+					lastY.set(y);
+				}
+				else
+				{
+					for( int x=1; x < s1.length(); x++)
+					{
+						for( int y= Math.max(lastY.get(), 2); y < s2.length(); y++)
+						{
+							System.out.println("From y " + x  + " " + y);
+							AlignmentCell ac = 
+									getACel(
+									x, y, affinePenalty,cels,
+									gapPenalty, sm, s1, s2);
+							
+							cels[x][y] = ac;
+						}
 						
-						Thread.yield();
-						
-						//System.out.println("Waiting " + x + " " +  y + " " + 
-							//	map.containsKey(key1) + " " +map.containsKey(key2) + " " + 
-								//map.containsKey(key3));
+						lastX.set(x);
 					}
 					
-					AlignmentCell ac = 
-							getACel(
-							x, y, affinePenalty,cels,
-							gapPenalty, sm, s1, s2);
-					
-					cels[x][y] = ac;
-					map.put(x + "@" + y,  "yes");
 				}
 			}
 			catch(Exception ex)
