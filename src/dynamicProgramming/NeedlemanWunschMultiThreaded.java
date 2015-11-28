@@ -260,83 +260,6 @@ public class NeedlemanWunschMultiThreaded
 			
 	}
 	
-	private static class TrailingThread implements Runnable
-	{
-
-		private final int startPosition;
-		
-		//@guarded by cels
-		private int lastPosition;
-		private boolean cancel = false;
-		private final AlignmentCell[][] cels;
-		private final int yRow;
-		private final String s1;
-		private final String s2;
-		private final int affinePenalty;
-		private final float gapPenalty;
-		private final SubstitutionMatrix sm;
-		
-		public TrailingThread(int startPosition, AlignmentCell[][] cels, int yRow,
-							String s1, String s2, int affinePenalty, float gapPenalty,
-									SubstitutionMatrix sm)
-		{
-			this.startPosition = startPosition;
-			this.lastPosition = startPosition;
-			this.cels = cels;
-			this.yRow = yRow;
-			this.s1 = s1;
-			this.s2 = s2;
-			this.affinePenalty = affinePenalty;
-			this.gapPenalty = gapPenalty;
-			this.sm = sm;
-		}
-		
-		public int cancelAndGetLastPosition()
-		{
-			synchronized( cels)
-			{
-				cancel = true;
-				return lastPosition;
-			}
-		}
-
-		@Override
-		public void run()
-		{
-			try
-			{
-				for( int x=startPosition; x < s1.length(); x++)
-				{
-					while(true)
-					{
-
-						Thread.yield();
-						synchronized (cels) {};  // grab the latest view
-						if( cels[x-1][yRow-1] != null && cels[x-1][yRow] != null || cels[x][yRow-1]!=null)
-						{
-							break;
-						}
-						
-					}
-					
-					AlignmentCell ac = getACel(x, yRow, affinePenalty, cels, gapPenalty, sm, s1, s2);
-					
-					// we don't know when this will be cancelled, so here we need the lock
-					// to make sure this write is visible to all threads
-					synchronized (cels)
-					{
-						cels[x][yRow] = ac;
-					}
-				}
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
-				System.exit(1);
-			}
-		}
-	}
-	
 	private static AlignmentCell getACel(int x, int y, int affinePenalty,AlignmentCell[][] cels,
 				float gapPenalty, SubstitutionMatrix sm, String s1, String s2)
 					throws Exception
@@ -416,8 +339,6 @@ public class NeedlemanWunschMultiThreaded
 		{
 			try
 			{
-				TrailingThread xThread = null;
-				
 				if( runX)
 				{
 					for (int y=1; y <= s2.length(); y++)
@@ -425,25 +346,7 @@ public class NeedlemanWunschMultiThreaded
 						if( y % 1000 == 0 )
 							System.out.println("Starting y " + y);
 						int xVal = Math.max(lastX.get(), 1);
-						int oldXVal = xVal;
 						synchronized (cels) {}; //makes sure we have the latest snapshot
-						
-						if( xThread != null)
-						{
-							int lastVal = xThread.cancelAndGetLastPosition();
-							//System.out.println(y + " Trailing did " + (xVal - lastVal));
-							xVal = Math.max(xVal, lastVal);
-						}
-						
-						if ( y < s2.length())
-						{
-							xThread = new TrailingThread(oldXVal, cels, y+1, s1, s2, 
-									affinePenalty, gapPenalty, sm);
-							
-							new Thread(xThread).start();
-									
-						}
-						
 						for( int x=xVal ; x <= s1.length(); x++)
 						{
 							AlignmentCell ac = 
@@ -456,7 +359,6 @@ public class NeedlemanWunschMultiThreaded
 
 						synchronized (cels) {}; //publish the latest snapshot
 						lastY.set(y);
-						
 					}
 				}
 				else
