@@ -15,7 +15,7 @@ public class NeedlemanWunschMultiThreaded
 	private static final int DIAG =3;
 	private static final int START = 4;
 	
-	private static final int NUM_THREADS =100;
+	private static final int NUM_THREADS =5;
 	
 	private static class AlignmentCell
 	{
@@ -253,11 +253,8 @@ public class NeedlemanWunschMultiThreaded
 		{
 			AlignmentCell cel = getACel(1, y, affinePenalty, cels, gapPenalty, sm, s1, s2);
 			
-			synchronized(cels)
-			{
-				cels[1][y] = cel;
-				map.put("1@"+ y,"yes");
-			}
+			cels[1][y] = cel;
+			map.put("1@"+ y,"yes");
 			
 			semaphore.acquire();
 			
