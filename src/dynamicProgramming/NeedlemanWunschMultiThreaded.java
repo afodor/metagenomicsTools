@@ -345,8 +345,9 @@ public class NeedlemanWunschMultiThreaded
 					{
 						if( y % 1000 == 0 )
 							System.out.println("Starting y " + y);
+						int xVal = Math.max(lastX.get(), 1);
 						synchronized (cels) {}; //makes sure we have the latest snapshot
-						for( int x= Math.max(lastX.get(), 1); x <= s1.length(); x++)
+						for( int x=xVal ; x <= s1.length(); x++)
 						{
 							AlignmentCell ac = 
 									getACel(
@@ -366,9 +367,11 @@ public class NeedlemanWunschMultiThreaded
 					{
 						if( x % 1000 ==0 )
 							System.out.println("starting x " + x);
+						
+						int yVal = Math.max(lastY.get(), 1);
 						synchronized (cels) {}; //makes sure we have the latest snapshot
 						
-						for( int y= Math.max(lastY.get(), 1); y <= s2.length(); y++)
+						for( int y=yVal ; y <= s2.length(); y++)
 						{
 							//System.out.println("From y " + x  + " " + y);
 							AlignmentCell ac = 
