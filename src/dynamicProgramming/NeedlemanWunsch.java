@@ -257,7 +257,7 @@ public class NeedlemanWunsch
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
-			"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
+			"C:\\Users\\afodor\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
 		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
