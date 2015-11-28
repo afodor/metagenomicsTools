@@ -16,13 +16,8 @@ public class NeedlemanWunschMultiThreaded
 	
 	private static class AlignmentCell
 	{
-		int direction;
+		final int direction;
 		final float score;
-		
-		public AlignmentCell(float score)
-		{
-			this.score = score;
-		}
 		
 		public AlignmentCell(int direction, float score)
 		{
@@ -296,17 +291,17 @@ public class NeedlemanWunschMultiThreaded
 		
 		float max = Math.max(top, Math.max(left, diag));
 		
-		AlignmentCell ac = new AlignmentCell(max);
+		int direction= -9999;
 		
 		if( max == top)
-			ac.direction = UP;
+			direction = UP;
 		else if ( max == left)
-			ac.direction = LEFT;
+			direction = LEFT;
 		else if ( max == diag)
-			ac.direction = DIAG;
+			direction = DIAG;
 		else throw new Exception("Logic error");
 		
-		return ac;
+		return new AlignmentCell(direction, max);
 		
 	}
 	
@@ -381,6 +376,8 @@ public class NeedlemanWunschMultiThreaded
 									x, y, affinePenalty,cels,
 									gapPenalty, sm, s1, s2);
 							
+							// reference assignment is atomic to a final object (ac)
+							// so don't need the synchronized lock here!
 							cels[x][y] = ac;
 						}
 						synchronized (cels) {}; //publish the latest snapshot
@@ -403,7 +400,6 @@ public class NeedlemanWunschMultiThreaded
 		}
 	}
 
-	@SuppressWarnings("unused")
 	/**
 	 *
 	 *This class is experimental and is not thread safe;

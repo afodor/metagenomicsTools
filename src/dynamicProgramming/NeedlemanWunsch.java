@@ -254,7 +254,6 @@ public class NeedlemanWunsch
 	}
 	
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
