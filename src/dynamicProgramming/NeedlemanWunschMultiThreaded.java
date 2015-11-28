@@ -14,7 +14,7 @@ public class NeedlemanWunschMultiThreaded
 	private static final int DIAG =3;
 	private static final int START = 4;
 	
-	private static final int NUM_THREADS = 5;
+	private static final int NUM_THREADS = 1;
 	
 	private static class AlignmentCell
 	{
