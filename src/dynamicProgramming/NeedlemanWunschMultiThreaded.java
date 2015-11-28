@@ -243,24 +243,20 @@ public class NeedlemanWunschMultiThreaded
 		AtomicInteger lastX = new AtomicInteger(1);
 		AtomicInteger lastY = new AtomicInteger(1);
 		
-		for( int y=1; y <= s2.length(); y++)
-		{
-			AlignmentCell cel = getACel(1, y, affinePenalty, cels, gapPenalty, sm, s1, s2);
+		AlignmentCell cel = getACel(1, 1, affinePenalty, cels, gapPenalty, sm, s1, s2);
 			
-			cels[1][y] = cel;
+		cels[1][1] = cel;
 			
-			semaphore.acquire();
-			semaphore.acquire();
+		semaphore.acquire();
+		semaphore.acquire();
 			
-			new Thread(new RunAStrip(
-					affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,
+		new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, sm, semaphore,
 					true, lastX, lastY)).start();
 			
-
-			new Thread(new RunAStrip(
-					affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,
+		new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, sm, semaphore,
 					false, lastX, lastY)).start();
-		}
 		
 		// wait for both threads to finish
 		semaphore.acquire();
@@ -322,7 +318,6 @@ public class NeedlemanWunschMultiThreaded
 		private final AlignmentCell[][] cels;
 		private final String s1;
 		private final String s2;
-		private final int y;
 		private final SubstitutionMatrix sm;
 		private final Semaphore semaphore;
 		private final boolean runX;
@@ -330,7 +325,7 @@ public class NeedlemanWunschMultiThreaded
 		private final AtomicInteger lastY;
 		
 		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
-				String s1, String s2, int y, SubstitutionMatrix sm, Semaphore semaphore,
+				String s1, String s2,  SubstitutionMatrix sm, Semaphore semaphore,
 				boolean runX,AtomicInteger lastX, AtomicInteger lastY)
 		{
 			this.affinePenalty = affinePenalty;
@@ -338,7 +333,6 @@ public class NeedlemanWunschMultiThreaded
 			this.cels = cels;
 			this.s1 = s1;
 			this.s2 = s2;
-			this.y = y;
 			this.sm = sm;
 			this.semaphore = semaphore;
 			this.runX = runX;
@@ -353,11 +347,11 @@ public class NeedlemanWunschMultiThreaded
 			{
 				if( runX)
 				{
-					for (int y=1; y < s2.length(); y++)
+					for (int y=1; y <= s2.length(); y++)
 					{
-						for( int x= Math.max(lastX.get(), 2); x <= s1.length(); x++)
+						for( int x= Math.max(lastX.get(), 1); x <= s1.length(); x++)
 						{
-							System.out.println("From x " + x  + " " + y);
+							//System.out.println("From x " + x  + " " + y);
 							AlignmentCell ac = 
 									getACel(
 									x, y, affinePenalty,cels,
@@ -365,16 +359,17 @@ public class NeedlemanWunschMultiThreaded
 							
 							cels[x][y] = ac;
 						}
+						
+						lastY.set(y);
 					}
-					lastY.set(y);
 				}
 				else
 				{
-					for( int x=1; x < s1.length(); x++)
+					for( int x=1; x <= s1.length(); x++)
 					{
-						for( int y= Math.max(lastY.get(), 2); y < s2.length(); y++)
+						for( int y= Math.max(lastY.get(), 1); y <= s2.length(); y++)
 						{
-							System.out.println("From y " + x  + " " + y);
+							//System.out.println("From y " + x  + " " + y);
 							AlignmentCell ac = 
 									getACel(
 									x, y, affinePenalty,cels,
