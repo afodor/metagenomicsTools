@@ -1,5 +1,6 @@
 package dynamicProgramming;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import parsers.FastaSequence;
@@ -253,6 +254,7 @@ public class NeedlemanWunsch
 			}
 	}
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
@@ -262,16 +264,28 @@ public class NeedlemanWunsch
 				FastaSequence.readFastaFile(
 						"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
 		
-		long startTime = System.currentTimeMillis();
-		PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
-							fastaList.get(1).getSequence(), bm, -8,99,  false);
+		List<Double> times = new ArrayList<Double>();
 		
-		System.out.println( (System.currentTimeMillis() - startTime) / 1000f  );
+		for( int x=0; x < 10; x++)
+		{
 
+			long startTime = System.currentTimeMillis();
+			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
+								fastaList.get(1).getSequence(), bm, -8,99,  false);
+			
+			double time= (System.currentTimeMillis() - startTime) / 1000.0 ;
+			times.add(time);
+			System.out.println(time);
+
+		}
+		
+		
+		/*
 		System.out.println(pa.getFirstSequence());
 		System.out.println(pa.getMiddleString());
 		System.out.println(pa.getSecondSequence());
 		System.out.println(pa.getAlignmentScore());
+		*/
 	} 
 	
 	/*  DNA alignment

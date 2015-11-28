@@ -1,7 +1,9 @@
 package dynamicProgramming;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 import parsers.FastaSequence;
 
@@ -11,6 +13,8 @@ public class NeedlemanWunschMultiThreaded
 	private static final int LEFT = 2;
 	private static final int DIAG =3;
 	private static final int START = 4;
+	
+	private static final int NUM_THREADS = 2;
 	
 	private static class AlignmentCell
 	{
@@ -168,16 +172,17 @@ public class NeedlemanWunschMultiThreaded
 		}
 	}
 	
-	private static void fillArray( String s1, 
-									String s2, 
-									SubstitutionMatrix sm, 
-									float gapPenalty, 
-									int affinePenalty, 
-									boolean noPenaltyForBeginningOrEndingGaps,
+	private static void fillArray( final String s1, 
+									final String s2, 
+									final SubstitutionMatrix sm, 
+									final float gapPenalty, 
+									final int affinePenalty, 
+									final boolean noPenaltyForBeginningOrEndingGaps,
 									final AlignmentCell[][] cels )
 		throws Exception
 	{
 		cels[0][0] = new AlignmentCell(START, 0); 
+		Semaphore semaphore = new Semaphore(NUM_THREADS);
 		
 		if( noPenaltyForBeginningOrEndingGaps )
 		{
@@ -190,8 +195,6 @@ public class NeedlemanWunschMultiThreaded
 		else if( affinePenalty > 0) // linear gap
 		{
 			final CountDownLatch cdl1 = new CountDownLatch(2);
-			
-			System.out.println("HERE");
 			
 			new Thread( new Runnable()
 			{
@@ -239,48 +242,125 @@ public class NeedlemanWunschMultiThreaded
 		
 		
 		for( int y=1; y <= s2.length(); y++)
-			for( int x=1; x <= s1.length(); x++)
-			{
-				float top = Float.NEGATIVE_INFINITY;
-				float left = Float.NEGATIVE_INFINITY;
-				
-				if( affinePenalty >0 )  // linear gap
-				{
-					top = cels[x][y-1].score + gapPenalty;
-					left = cels[x-1][y].score + gapPenalty;
-				}
-				else
-				{
-					if( cels[x][y-1].direction == UP )
-						top = cels[x][y-1].score + affinePenalty;
-					else
-						top = cels[x][y-1].score + gapPenalty;
-						
-					if( cels[x-1][y].direction == LEFT )
-						left = cels[x-1][y].score + affinePenalty;
-					else
-						left =  cels[x-1][y].score + gapPenalty;
-				}
-				
-				float diag = cels[x-1][y-1].score + 
-						sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
-				
-				float max = Math.max(top, Math.max(left, diag));
-				
-				AlignmentCell ac = new AlignmentCell(max);
-				
-				if( max == top)
-					ac.direction = UP;
-				else if ( max == left)
-					ac.direction = LEFT;
-				else if ( max == diag)
-					ac.direction = DIAG;
-				else throw new Exception("Logic error");
-				
-				cels[x][y] = ac;
-			}
+		{
+			semaphore.acquire();
+			
+			new Thread(new RunAStrip(affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore)).start();
+		}
+		
+		int numAcquired =0;
+		
+		while(numAcquired < NUM_THREADS)
+		{
+			semaphore.acquire();
+			numAcquired++;
+		}
+			
 	}
 	
+	private static class RunAStrip implements Runnable
+	{
+		private final int affinePenalty;
+		private final float gapPenalty;
+		private final AlignmentCell[][] cels;
+		private final String s1;
+		private final String s2;
+		private final int y;
+		private final SubstitutionMatrix sm;
+		private final Semaphore semaphore;
+		
+		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
+				String s1, String s2, int y, SubstitutionMatrix sm, Semaphore semaphore)
+		{
+			this.affinePenalty = affinePenalty;
+			this.gapPenalty = gapPenalty2;
+			this.cels = cels;
+			this.s1 = s1;
+			this.s2 = s2;
+			this.y = y;
+			this.sm = sm;
+			this.semaphore = semaphore;
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				for( int x=1; x <= s1.length(); x++)
+				{
+					while(true)
+					{
+						synchronized (cels)
+						{
+							if( cels[x][y-1] != null && cels[x-1][y-1] != null && cels[x-1][y-1] != null )
+								break;
+						}
+						
+						Thread.yield();
+					}
+					
+					float top = Float.NEGATIVE_INFINITY;
+					float left = Float.NEGATIVE_INFINITY;
+					
+					if( affinePenalty >0 )  // linear gap
+					{
+						top = cels[x][y-1].score + gapPenalty;
+						left = cels[x-1][y].score + gapPenalty;
+					}
+					else
+					{
+						if( cels[x][y-1].direction == UP )
+							top = cels[x][y-1].score + affinePenalty;
+						else
+							top = cels[x][y-1].score + gapPenalty;
+							
+						if( cels[x-1][y].direction == LEFT )
+							left = cels[x-1][y].score + affinePenalty;
+						else
+							left =  cels[x-1][y].score + gapPenalty;
+					}
+					
+					float diag = cels[x-1][y-1].score + 
+							sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
+					
+					float max = Math.max(top, Math.max(left, diag));
+					
+					AlignmentCell ac = new AlignmentCell(max);
+					
+					if( max == top)
+						ac.direction = UP;
+					else if ( max == left)
+						ac.direction = LEFT;
+					else if ( max == diag)
+						ac.direction = DIAG;
+					else throw new Exception("Logic error");
+					
+					synchronized( cels)
+					{
+						cels[x][y] = ac;
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+				System.exit(1);
+			}
+			finally
+			{
+				semaphore.release();
+			}
+			
+		}
+	}
+
+	//@SuppressWarnings("unused")
+	/**
+	 *
+	 *This class is experimental and is not thread safe;
+	 *should not be used for real data...
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
@@ -290,16 +370,25 @@ public class NeedlemanWunschMultiThreaded
 				FastaSequence.readFastaFile(
 						"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
 		
-		long startTime = System.currentTimeMillis();
-		PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
-							fastaList.get(1).getSequence(), bm, -8,99,  false);
+		List<Double> times = new ArrayList<Double>();
 		
-		System.out.println( (System.currentTimeMillis() - startTime) / 1000f  );
+		for( int x=0; x < 1; x++)
+		{
 
-		System.out.println(pa.getFirstSequence());
-		System.out.println(pa.getMiddleString());
-		System.out.println(pa.getSecondSequence());
-		System.out.println(pa.getAlignmentScore());
+			long startTime = System.currentTimeMillis();
+			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
+								fastaList.get(1).getSequence(), bm, -8,99,  false);
+			
+			double time= (System.currentTimeMillis() - startTime) / 1000.0 ;
+			times.add(time);
+			System.out.println(time);
+			
+			System.out.println(pa.getFirstSequence());
+			System.out.println(pa.getMiddleString());
+			System.out.println(pa.getSecondSequence());
+			System.out.println(pa.getAlignmentScore());
+
+		}
 	} 
 	
 	/*  DNA alignment
