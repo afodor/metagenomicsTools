@@ -2,6 +2,7 @@ package dynamicProgramming;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
@@ -14,7 +15,7 @@ public class NeedlemanWunschMultiThreaded
 	private static final int DIAG =3;
 	private static final int START = 4;
 	
-	private static final int NUM_THREADS = 1;
+	private static final int NUM_THREADS =100;
 	
 	private static class AlignmentCell
 	{
@@ -240,6 +241,13 @@ public class NeedlemanWunschMultiThreaded
 		
 		}
 		
+		ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String,String>();
+		
+		for( int x=0;x <= s1.length(); x++)
+			map.put(x +"@" +0 , "yes");
+		
+		for( int y=0; y <= s2.length(); y++)
+			map.put(0 + "@" + y, "yes");
 		
 		for( int y=1; y <= s2.length(); y++)
 		{
@@ -248,11 +256,13 @@ public class NeedlemanWunschMultiThreaded
 			synchronized(cels)
 			{
 				cels[1][y] = cel;
+				map.put("1@"+ y,"yes");
 			}
 			
 			semaphore.acquire();
 			
-			new Thread(new RunAStrip(affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore)).start();
+			new Thread(new RunAStrip(affinePenalty, gapPenalty, cels, s1, s2, y, sm, semaphore,map))
+					.start();
 		}
 		
 		int numAcquired =0;
@@ -262,6 +272,8 @@ public class NeedlemanWunschMultiThreaded
 			semaphore.acquire();
 			numAcquired++;
 		}
+		
+		synchronized(cels) {};  // gather up all our published changes
 			
 	}
 	
@@ -320,9 +332,11 @@ public class NeedlemanWunschMultiThreaded
 		private final int y;
 		private final SubstitutionMatrix sm;
 		private final Semaphore semaphore;
+		private final ConcurrentHashMap<String, String> map;
 		
 		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
-				String s1, String s2, int y, SubstitutionMatrix sm, Semaphore semaphore)
+				String s1, String s2, int y, SubstitutionMatrix sm, Semaphore semaphore,
+				ConcurrentHashMap<String, String> map)
 		{
 			this.affinePenalty = affinePenalty;
 			this.gapPenalty = gapPenalty2;
@@ -332,6 +346,7 @@ public class NeedlemanWunschMultiThreaded
 			this.y = y;
 			this.sm = sm;
 			this.semaphore = semaphore;
+			this.map = map;
 		}
 		
 		@Override
@@ -341,15 +356,21 @@ public class NeedlemanWunschMultiThreaded
 			{
 				for( int x=2; x <= s1.length(); x++)
 				{
+					
+					String key1 = (x-1) + "@" + y;
+					String key2 = x + "@" + (y-1);
+					String key3 = (x-1) + "@" + (y-1);
+ 					
 					while(true)
 					{
-						synchronized(cels)
-						{
-							if( cels[x-1][y] != null && cels[x][y-1] != null && cels[x-1][y-1] != null )
-								break;
-						}
+						if( map.containsKey(key1) && map.containsKey(key2) && map.containsKey(key3))
+							break;
 						
 						Thread.yield();
+						
+						//System.out.println("Waiting " + x + " " +  y + " " + 
+							//	map.containsKey(key1) + " " +map.containsKey(key2) + " " + 
+								//map.containsKey(key3));
 					}
 					
 					AlignmentCell ac = 
@@ -357,10 +378,8 @@ public class NeedlemanWunschMultiThreaded
 							x, y, affinePenalty,cels,
 							gapPenalty, sm, s1, s2);
 					
-					synchronized( cels)
-					{
-						cels[x][y] = ac;
-					}
+					cels[x][y] = ac;
+					map.put(x + "@" + y,  "yes");
 				}
 			}
 			catch(Exception ex)
@@ -370,6 +389,7 @@ public class NeedlemanWunschMultiThreaded
 			}
 			finally
 			{
+				synchronized(cels){}; //publish all our changes  
 				semaphore.release();
 			}
 			
