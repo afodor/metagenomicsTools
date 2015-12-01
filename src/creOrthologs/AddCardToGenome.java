@@ -41,7 +41,7 @@ public class AddCardToGenome
 		{
 			writer.write("\t" + "contig_" +  hs.getTargetId() + "\t" + hs.getTargetStart() 
 			+ "\t" + hs.getTargetEnd()+ "\t" + 
-					hs.getBitScore()  + "\t1e-30\t1e-30\t1e-30\t" +
+					hs.getBitScore()  + "\t1e-65\t1e-65\t1e-65\t" +
 			fastaMap.get(hs.getQueryId()) + "\t" + 
 			hs.getEScore() + "\tcardDatabase\n");
 			
