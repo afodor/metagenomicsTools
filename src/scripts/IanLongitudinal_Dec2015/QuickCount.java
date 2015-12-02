@@ -70,6 +70,11 @@ public class QuickCount
 			map.put( utils.Translate.reverseTranscribe(splits[2]), splits[1]);
 		}
 		
+		for(String s1 : map.keySet())
+			for(String s2 : map.keySet())
+				if( s1 != s2 && ( s1.indexOf(s2) != -1 || s2.indexOf(s1) != -1) )
+					throw new Exception("No " + s1 + " " + s2);
+		
 		return map;
 	}
 }
