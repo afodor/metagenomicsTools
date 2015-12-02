@@ -242,11 +242,11 @@ public class NeedlemanWunschSubThreadSpawned
 			
 		new Thread(new RunAStrip(
 					affinePenalty, gapPenalty, cels, s1, s2, sm, 
-					true, lastX, lastY)).start();
+					true, lastX, lastY,1)).start();
 			
 		new Thread(new RunAStrip(
 					affinePenalty, gapPenalty, cels, s1, s2, sm, 
-					false, lastX, lastY)).start();
+					false, lastX, lastY,1)).start();
 		
 		while( cels[s1.length()][s2.length()] == null )
 		{
@@ -314,10 +314,11 @@ public class NeedlemanWunschSubThreadSpawned
 		private final boolean runX;
 		private final AtomicInteger lastX;
 		private final AtomicInteger lastY;
+		private final int rowOrColumn;
 		
 		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
 				String s1, String s2,  SubstitutionMatrix sm, 
-				boolean runX,AtomicInteger lastX, AtomicInteger lastY)
+				boolean runX,AtomicInteger lastX, AtomicInteger lastY, int rowOrColumn)
 		{
 			this.affinePenalty = affinePenalty;
 			this.gapPenalty = gapPenalty2;
@@ -328,6 +329,8 @@ public class NeedlemanWunschSubThreadSpawned
 			this.runX = runX;
 			this.lastX = lastX;
 			this.lastY = lastY;
+			this.rowOrColumn = rowOrColumn;
+			
 		}
 		
 		@Override
@@ -337,25 +340,25 @@ public class NeedlemanWunschSubThreadSpawned
 			{
 				if( runX)
 				{
-					for (int y=1; y <= s2.length(); y++)
-					{
-						if( y % 1000 == 0 )
-							System.out.println("Starting y " + y);
-						int xVal = Math.max(lastX.get(), 1);
-						synchronized (cels) {}; //makes sure we have the latest snapshot
-						for( int x=xVal ; x <= s1.length(); x++)
+					int xVal = Math.max(lastX.get(), 1);
+					synchronized (cels) {}; //makes sure we have the latest snapshot
+					for( int x=xVal ; x <= s1.length(); x++)
 						{
 							AlignmentCell ac = 
 									getACel(
-									x, y, affinePenalty,cels,
+									x, rowOrColumn, affinePenalty,cels,
 									gapPenalty, sm, s1, s2);
 							
-							cels[x][y] = ac;
+							cels[x][rowOrColumn] = ac;
 						}
 
 						synchronized (cels) {}; //publish the latest snapshot
-						lastY.set(y);
-					}
+						lastY.set(rowOrColumn);
+						
+						if( rowOrColumn +1  < s2.length() )
+						new Thread(new RunAStrip(
+								affinePenalty, gapPenalty, cels, s1, s2, sm, 
+								true, lastX, lastY,rowOrColumn+1)).start();
 				}
 				else
 				{
