@@ -1,7 +1,10 @@
 package dynamicProgramming;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import parsers.FastaSequence;
@@ -238,21 +241,46 @@ public class NeedlemanWunschSubThreadSpawned
 		AlignmentCell cel = getACel(1, 1, affinePenalty, cels, gapPenalty, sm, s1, s2);
 			
 		cels[1][1] = cel;
-			
-			
-		new Thread(new RunAStrip(
-					affinePenalty, gapPenalty, cels, s1, s2, sm, 
-					true, lastX, lastY,1)).start();
-			
-		new Thread(new RunAStrip(
-					affinePenalty, gapPenalty, cels, s1, s2, sm, 
-					false, lastX, lastY,1)).start();
 		
+		BlockingQueue<Holder> queue = new LinkedBlockingQueue<Holder>(1000);
+		
+		Holder h1 = new Holder();
+		h1.startX= 1;
+		h1.endX = s1.length();
+		h1.startY = 1;
+		h1.endY = 1;
+		h1.runX = true;
+		queue.put(h1);
+		
+		Holder h2 = new Holder();
+		h2.startX= 1;
+		h2.endX = 1;
+		h2.startY = 1;
+		h2.endY = s2.length();
+		h2.runX = false;
+		//queue.put(h2);
+		
+		List<RunAStrip> runs = new ArrayList<RunAStrip>();
+		
+		for(int x=0; x < 2; x++)
+		{
+			runs.add(new RunAStrip(
+					affinePenalty, gapPenalty, cels,
+					s1, s2,  sm, lastX, lastY, 
+							queue));
+		}
+		
+		for(RunAStrip rs : runs)
+			new Thread(rs).start();
+			
 		while( cels[s1.length()][s2.length()] == null )
 		{
 			Thread.yield();
 			synchronized(cels) {};  
 		}
+		
+		for(RunAStrip rs : runs)
+			rs.cancelled = true;
 		
 		synchronized(cels) {};  // make visible all our published changes to this thread
 			
@@ -303,6 +331,16 @@ public class NeedlemanWunschSubThreadSpawned
 		
 	}
 	
+	private static class Holder
+	{
+		private int startX;
+		private int endX;
+		private int startY;
+		private int endY;
+		private boolean runX;
+		
+	}
+	
 	private static class RunAStrip implements Runnable
 	{
 		private final int affinePenalty;
@@ -311,14 +349,14 @@ public class NeedlemanWunschSubThreadSpawned
 		private final String s1;
 		private final String s2;
 		private final SubstitutionMatrix sm;
-		private final boolean runX;
 		private final AtomicInteger lastX;
 		private final AtomicInteger lastY;
-		private final int rowOrColumn;
+		private final BlockingQueue<Holder> queue;
+		private volatile boolean cancelled = false;
 		
 		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
-				String s1, String s2,  SubstitutionMatrix sm, 
-				boolean runX,AtomicInteger lastX, AtomicInteger lastY, int rowOrColumn)
+				String s1, String s2,  SubstitutionMatrix sm, AtomicInteger lastX, AtomicInteger lastY, 
+						BlockingQueue<Holder> queue)
 		{
 			this.affinePenalty = affinePenalty;
 			this.gapPenalty = gapPenalty2;
@@ -326,64 +364,77 @@ public class NeedlemanWunschSubThreadSpawned
 			this.s1 = s1;
 			this.s2 = s2;
 			this.sm = sm;
-			this.runX = runX;
 			this.lastX = lastX;
 			this.lastY = lastY;
-			this.rowOrColumn = rowOrColumn;
-			
+			this.queue = queue;
 		}
 		
 		@Override
 		public void run()
 		{
-			try
+			while (!cancelled) 
+			{	try
 			{
-				if( runX)
+				Holder h = queue.take();
+				
+				if( h.runX)
 				{
-					int xVal = Math.max(lastX.get(), 1);
+					
+					int xVal = Math.max(lastX.get(), h.startX);
 					synchronized (cels) {}; //makes sure we have the latest snapshot
-					for( int x=xVal ; x <= s1.length(); x++)
+					for( int x=xVal ; x <= h.endX; x++)
 						{
 							AlignmentCell ac = 
 									getACel(
-									x, rowOrColumn, affinePenalty,cels,
+									x, h.startY, affinePenalty,cels,
 									gapPenalty, sm, s1, s2);
 							
-							cels[x][rowOrColumn] = ac;
+							cels[x][h.startY] = ac;
 						}
 
 						synchronized (cels) {}; //publish the latest snapshot
-						lastY.set(rowOrColumn);
+						lastY.set(h.startY);
 						
-						if( rowOrColumn +1  < s2.length() )
-						new Thread(new RunAStrip(
-								affinePenalty, gapPenalty, cels, s1, s2, sm, 
-								true, lastX, lastY,rowOrColumn+1)).start();
+						if( h.startY < s2.length() )
+						{
+							Holder h2 = new Holder();
+							h2.startX = 1;
+							h2.endX = s1.length();
+							h2.startY = h.startY + 1;
+							h2.endY = h.startY + 1;
+							h2.runX = true;
+							queue.put(h2);
+						}
 				}
 				else
 				{
-					for( int x=1; x <= s1.length(); x++)
+					int yVal = Math.max(lastY.get(), h.startY);
+					synchronized (cels) {}; //makes sure we have the latest snapshot
+						
+					for( int y=yVal ; y <= h.endY; y++)
 					{
-						if( x % 1000 ==0 )
-							System.out.println("starting x " + x);
-						
-						int yVal = Math.max(lastY.get(), 1);
-						synchronized (cels) {}; //makes sure we have the latest snapshot
-						
-						for( int y=yVal ; y <= s2.length(); y++)
-						{
 							//System.out.println("From y " + x  + " " + y);
 							AlignmentCell ac = 
 									getACel(
-									x, y, affinePenalty,cels,
+									h.startX, y, affinePenalty,cels,
 									gapPenalty, sm, s1, s2);
 							
 							// reference assignment is atomic to a final object (ac)
 							// so don't need the synchronized lock here!
-							cels[x][y] = ac;
-						}
+							cels[h.startX][y] = ac;
 						synchronized (cels) {}; //publish the latest snapshot
-						lastX.set(x);
+						lastX.set(h.startX);
+					}
+					
+					if( h.startX  < s1.length())
+					{
+						Holder h2 = new Holder();
+						h2.startX = h.startX+1;
+						h2.endX = h2.startX+1;
+						h2.startY = 1;
+						h2.endY = s2.length()+ 1;
+						h2.runX = false;
+						queue.put(h2);
 					}
 					
 				}
@@ -396,7 +447,7 @@ public class NeedlemanWunschSubThreadSpawned
 			finally
 			{
 				synchronized(cels){}; //publish all our changes 
-			}
+			} }
 			
 		}
 	}
