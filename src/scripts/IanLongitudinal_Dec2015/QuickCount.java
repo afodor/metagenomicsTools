@@ -61,7 +61,7 @@ public class QuickCount
 			if(splits.length != 3)
 				throw new Exception("No");
 			
-			if( map.containsKey(splits[2]))
+			if( map.containsKey(utils.Translate.reverseTranscribe(splits[2])))
 				throw new Exception("No");
 			
 			if( map.containsValue(splits[1]))
