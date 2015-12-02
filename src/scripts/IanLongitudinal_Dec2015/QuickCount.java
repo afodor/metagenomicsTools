@@ -25,7 +25,7 @@ public class QuickCount
 			boolean gotOne = false;
 			
 			for(String s : map.keySet())
-				if( fq.getSequence().indexOf(s) != -1)
+				if( s.indexOf(fq.getSequence()) != -1 || fq.getSequence().indexOf(s) != -1 )
 					gotOne = true;
 			
 			if( gotOne)
