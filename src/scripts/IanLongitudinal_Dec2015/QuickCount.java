@@ -67,7 +67,7 @@ public class QuickCount
 			if( map.containsValue(splits[1]))
 				throw new Exception("No");
 			
-			map.put(splits[2], splits[1]);
+			map.put( utils.Translate.reverseTranscribe(splits[2]), splits[1]);
 		}
 		
 		return map;
