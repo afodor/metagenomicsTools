@@ -11,7 +11,7 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	private static HashMap<String, String> getBroadCategoryMap() throws Exception
+	public static HashMap<String, String> getBroadCategoryMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
