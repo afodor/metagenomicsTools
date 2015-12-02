@@ -79,6 +79,7 @@ public class ConfigReader
 	public static final String KYLIE_DROPBOX_DIR = "KYLIE_DROPBOX_DIR";
 	public static final String KATIE_DIR = "KATIE_DIR";
 	public static final String JOBIN_CARDIO_DIR = "JOBIN_CARDIO_DIR";
+	public static final String IAN_LONGITUDINAL_DEC_2015_DIR= "IAN_LONGITUDINAL_DEC_2015_DIR";
 	
 	public static final String IAN_NOVEMBER_2015 = "IAN_NOVEMBER_2015";
 	
@@ -125,6 +126,11 @@ public class ConfigReader
 	public static String getJobinLabRNASeqDir() throws Exception
 	{
 		throw new Exception("From legacy code");
+	}
+	
+	public static String getIanLongitudnalDec2015Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_LONGITUDINAL_DEC_2015_DIR);
 	}
 	
 	public static String getMarkAug2015Batch1Dir() throws Exception
