@@ -1,10 +1,12 @@
 package dynamicProgramming;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsers.FastaSequence;
 
-public class NeedlemanWunsch
+public class NeedlemanWunschSubThreadSpawned
 {
 	private static final int UP = 1;
 	private static final int LEFT = 2;
@@ -13,21 +15,14 @@ public class NeedlemanWunsch
 	
 	private static class AlignmentCell
 	{
-		int direction;
-		float score;
-		
-		public AlignmentCell(float score)
-		{
-			this.score = score;
-		}
-		
+		final int direction;
+		final float score;
 		
 		public AlignmentCell(int direction, float score)
 		{
 			this.direction = direction;
 			this.score = score;
-		}
-		
+		}	
 	}
 	
 	/*
@@ -169,13 +164,13 @@ public class NeedlemanWunsch
 		}
 	}
 	
-	private static void fillArray( String s1, 
-									String s2, 
-									SubstitutionMatrix sm, 
-									float gapPenalty, 
-									int affinePenalty, 
-									boolean noPenaltyForBeginningOrEndingGaps,
-									AlignmentCell[][] cels )
+	private static void fillArray( final String s1, 
+									final String s2, 
+									final SubstitutionMatrix sm, 
+									final float gapPenalty, 
+									final int affinePenalty, 
+									final boolean noPenaltyForBeginningOrEndingGaps,
+									final AlignmentCell[][] cels )
 		throws Exception
 	{
 		cels[0][0] = new AlignmentCell(START, 0); 
@@ -190,11 +185,38 @@ public class NeedlemanWunsch
 		}
 		else if( affinePenalty > 0) // linear gap
 		{
-			for( int x=1; x <= s1.length(); x++)
-				cels[x][0] = new AlignmentCell(LEFT, x * gapPenalty );
+			final CountDownLatch cdl1 = new CountDownLatch(2);
 			
-			for( int x=1; x <= s2.length(); x++)
-				cels[0][x] = new AlignmentCell(UP, x * gapPenalty);
+			new Thread( new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					for( int x=1; x <= s1.length(); x++)
+						cels[x][0] = new AlignmentCell(LEFT, x * gapPenalty );
+					
+					cdl1.countDown();
+				}
+			}).start();;
+			
+		
+			new Thread(
+					
+				new Runnable()
+				{
+					
+					@Override
+					public void run()
+					{
+						for( int x=1; x <= s2.length(); x++)
+							cels[0][x] = new AlignmentCell(UP, x * gapPenalty);
+						
+						cdl1.countDown();
+					}
+				}).start();;
+				
+				cdl1.await();
 		}
 		else
 		{
@@ -210,50 +232,177 @@ public class NeedlemanWunsch
 		}
 		
 		
-		for( int y=1; y <= s2.length(); y++)
-			for( int x=1; x <= s1.length(); x++)
-			{
-				float top = Float.NEGATIVE_INFINITY;
-				float left = Float.NEGATIVE_INFINITY;
+		AtomicInteger lastX = new AtomicInteger(1);
+		AtomicInteger lastY = new AtomicInteger(1);
+		
+		AlignmentCell cel = getACel(1, 1, affinePenalty, cels, gapPenalty, sm, s1, s2);
+			
+		cels[1][1] = cel;
+			
+			
+		new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, sm, 
+					true, lastX, lastY)).start();
+			
+		new Thread(new RunAStrip(
+					affinePenalty, gapPenalty, cels, s1, s2, sm, 
+					false, lastX, lastY)).start();
+		
+		while( cels[s1.length()][s2.length()] == null )
+		{
+			Thread.yield();
+			synchronized(cels) {};  
+		}
+		
+		synchronized(cels) {};  // make visible all our published changes to this thread
+			
+	}
+	
+	private static AlignmentCell getACel(int x, int y, int affinePenalty,AlignmentCell[][] cels,
+				float gapPenalty, SubstitutionMatrix sm, String s1, String s2)
+					throws Exception
+	{
+		float top = Float.NEGATIVE_INFINITY;
+		float left = Float.NEGATIVE_INFINITY;
+		
+		
+		if( affinePenalty >0 )  // linear gap
+		{
+			top = cels[x][y-1].score + gapPenalty;
+			left = cels[x-1][y].score + gapPenalty;
+		}
+		else
+		{
+			if( cels[x][y-1].direction == UP )
+				top = cels[x][y-1].score + affinePenalty;
+			else
+				top = cels[x][y-1].score + gapPenalty;
 				
-				if( affinePenalty >0 )  // linear gap
+			if( cels[x-1][y].direction == LEFT )
+				left = cels[x-1][y].score + affinePenalty;
+			else
+				left =  cels[x-1][y].score + gapPenalty;
+		}
+		
+		float diag = cels[x-1][y-1].score + 
+				sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
+		
+		float max = Math.max(top, Math.max(left, diag));
+		
+		int direction= -9999;
+		
+		if( max == top)
+			direction = UP;
+		else if ( max == left)
+			direction = LEFT;
+		else if ( max == diag)
+			direction = DIAG;
+		else throw new Exception("Logic error");
+		
+		return new AlignmentCell(direction, max);
+		
+	}
+	
+	private static class RunAStrip implements Runnable
+	{
+		private final int affinePenalty;
+		private final float gapPenalty;
+		private final AlignmentCell[][] cels;
+		private final String s1;
+		private final String s2;
+		private final SubstitutionMatrix sm;
+		private final boolean runX;
+		private final AtomicInteger lastX;
+		private final AtomicInteger lastY;
+		
+		public RunAStrip(int affinePenalty, float gapPenalty2, AlignmentCell[][] cels,
+				String s1, String s2,  SubstitutionMatrix sm, 
+				boolean runX,AtomicInteger lastX, AtomicInteger lastY)
+		{
+			this.affinePenalty = affinePenalty;
+			this.gapPenalty = gapPenalty2;
+			this.cels = cels;
+			this.s1 = s1;
+			this.s2 = s2;
+			this.sm = sm;
+			this.runX = runX;
+			this.lastX = lastX;
+			this.lastY = lastY;
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				if( runX)
 				{
-					top = cels[x][y-1].score + gapPenalty;
-					left = cels[x-1][y].score + gapPenalty;
+					for (int y=1; y <= s2.length(); y++)
+					{
+						if( y % 1000 == 0 )
+							System.out.println("Starting y " + y);
+						int xVal = Math.max(lastX.get(), 1);
+						synchronized (cels) {}; //makes sure we have the latest snapshot
+						for( int x=xVal ; x <= s1.length(); x++)
+						{
+							AlignmentCell ac = 
+									getACel(
+									x, y, affinePenalty,cels,
+									gapPenalty, sm, s1, s2);
+							
+							cels[x][y] = ac;
+						}
+
+						synchronized (cels) {}; //publish the latest snapshot
+						lastY.set(y);
+					}
 				}
 				else
 				{
-					if( cels[x][y-1].direction == UP )
-						top = cels[x][y-1].score + affinePenalty;
-					else
-						top = cels[x][y-1].score + gapPenalty;
+					for( int x=1; x <= s1.length(); x++)
+					{
+						if( x % 1000 ==0 )
+							System.out.println("starting x " + x);
 						
-					if( cels[x-1][y].direction == LEFT )
-						left = cels[x-1][y].score + affinePenalty;
-					else
-						left =  cels[x-1][y].score + gapPenalty;
+						int yVal = Math.max(lastY.get(), 1);
+						synchronized (cels) {}; //makes sure we have the latest snapshot
+						
+						for( int y=yVal ; y <= s2.length(); y++)
+						{
+							//System.out.println("From y " + x  + " " + y);
+							AlignmentCell ac = 
+									getACel(
+									x, y, affinePenalty,cels,
+									gapPenalty, sm, s1, s2);
+							
+							// reference assignment is atomic to a final object (ac)
+							// so don't need the synchronized lock here!
+							cels[x][y] = ac;
+						}
+						synchronized (cels) {}; //publish the latest snapshot
+						lastX.set(x);
+					}
+					
 				}
-				
-				float diag = cels[x-1][y-1].score + 
-						sm.getScore(s1.charAt(x-1), s2.charAt(y-1));
-				
-				float max = Math.max(top, Math.max(left, diag));
-				
-				AlignmentCell ac = new AlignmentCell(max);
-				
-				if( max == top)
-					ac.direction = UP;
-				else if ( max == left)
-					ac.direction = LEFT;
-				else if ( max == diag)
-					ac.direction = DIAG;
-				else throw new Exception("Logic error");
-				
-				cels[x][y] = ac;
 			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+				System.exit(1);
+			}
+			finally
+			{
+				synchronized(cels){}; //publish all our changes 
+			}
+			
+		}
 	}
-	
 
+	/**
+	 *
+	 *This class is experimental and is not thread safe;
+	 *should not be used for real data...
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
@@ -284,6 +433,7 @@ public class NeedlemanWunsch
 		
 		
 	} 
+	
 	/*  DNA alignment
 	public static void main(String[] args) throws Exception
 	{
