@@ -258,11 +258,11 @@ public class NeedlemanWunschSubThreadSpawned
 		h2.startY = 1;
 		h2.endY = s2.length();
 		h2.runX = false;
-		//queue.put(h2);
+		queue.put(h2);
 		
 		List<RunAStrip> runs = new ArrayList<RunAStrip>();
 		
-		for(int x=0; x < 2; x++)
+		for(int x=0; x < 6; x++)
 		{
 			runs.add(new RunAStrip(
 					affinePenalty, gapPenalty, cels,
@@ -432,7 +432,7 @@ public class NeedlemanWunschSubThreadSpawned
 						h2.startX = h.startX+1;
 						h2.endX = h2.startX+1;
 						h2.startY = 1;
-						h2.endY = s2.length()+ 1;
+						h2.endY = s2.length();
 						h2.runX = false;
 						queue.put(h2);
 					}
