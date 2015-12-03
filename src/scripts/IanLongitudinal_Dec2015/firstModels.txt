@@ -6,7 +6,7 @@ library("Kendall")
 taxa <- c("phylum","class","order","family","genus")
 
 
-t <- "phylum"
+t <- "family"
 {
 	pdf(paste(t,"_plots.pdf", sep="") )
 	inFileName <- paste(t,"LogNormalwithMetadata.txt", sep="")
@@ -34,7 +34,7 @@ t <- "phylum"
 		
 	}
 	
-	for( i in 2:20)
+	for( i in 3:ncol(myT))
 	{
 		if( sum( myT[,i] >0 , na.rm=TRUE) > nrow(myT) /4 ) 
 		{
