@@ -1,0 +1,45 @@
+rm(list=ls())
+
+setwd("C:\\ianLongitudinal")
+library("Kendall")
+
+taxa <- c("phylum","class","order","family","genus")
+
+
+t <- "phylum"
+{
+	pdf(paste(t,"_plots.pdf", sep="") )
+	inFileName <- paste(t,"LogNormalwithMetadata.txt", sep="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2),"numeric", "character", rep("numeric", numCols-4))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	myT <- myT[ !is.na(myT[2]), ]
+	
+	colors <- vector()
+	cIndex <-1
+	for ( j in 1: nrow(myT))
+	{
+		if( substr(myT[j,]$Sample.ID,1,1) == "B")
+		{
+			colors[cIndex] <- "Blue"
+		} else if (substr(myT[j,]$Sample.ID,1,1) == "C" )
+		{
+			colors[cIndex] <- "Red"
+		} else
+		{
+			colors[cIndex] <- "Black"
+		}
+		cIndex = cIndex + 1
+		
+	}
+	
+	for( i in 2:20)
+	{
+		if( sum( myT[,i] >0 , na.rm=TRUE) > nrow(myT) /4 ) 
+		{
+			plot(myT[,i] ~ myT$Day, main = names(myT)[i], col=colors)
+		}
+	}
+	dev.off()	
+}
