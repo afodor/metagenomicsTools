@@ -16,6 +16,10 @@ t <- "family"
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	myT <- myT[ !is.na(myT[2]), ]
 	
+	patientPValues <- vector()
+	timePValues <- vector()
+	interactionPValues <- vector()
+	
 	colors <- vector()
 	cIndex <-1
 	for ( j in 1: nrow(myT))
@@ -34,11 +38,27 @@ t <- "family"
 		
 	}
 	
+	index <-1 
+	
 	for( i in 3:ncol(myT))
 	{
 		if( sum( myT[,i] >0 , na.rm=TRUE) > nrow(myT) /4 ) 
 		{
-			plot(myT[,i] ~ myT$Day, main = names(myT)[i], col=colors)
+			myLm <- lm( myT[,i] ~ colors *  myT$Day ) 
+				
+			myAnova <- anova(myLm)
+			
+			patientPValues[index] <- myAnova$"Pr(>F)"[1]
+			timePValues[index] <- myAnova$"Pr(>F)"[2]
+			interactionPValues[index] <- myAnova$"Pr(>F)"[3]
+		
+			myLabel <- paste(names(myT)[i] , "\n", "p patient = " ,patientPValues[index] ,
+					"\n p time = " , timePValues[index], "\n", "p interaction = " , 
+					interactionPValues[index])
+		
+			plot(myT[,i] ~ myT$Day, main = myLabel, col=colors)
+			index = index + 1
+		
 		}
 	}
 	dev.off()	
