@@ -25,7 +25,7 @@ public class QuickCount
 			boolean gotOne = false;
 			
 			for(String s : map.keySet())
-				if( fq.getSequence().indexOf(s) != -1)
+				if( s.indexOf(fq.getSequence()) != -1 || fq.getSequence().indexOf(s) != -1 )
 					gotOne = true;
 			
 			if( gotOne)
@@ -61,14 +61,19 @@ public class QuickCount
 			if(splits.length != 3)
 				throw new Exception("No");
 			
-			if( map.containsKey(splits[2]))
+			if( map.containsKey(utils.Translate.reverseTranscribe(splits[2])))
 				throw new Exception("No");
 			
 			if( map.containsValue(splits[1]))
 				throw new Exception("No");
 			
-			map.put(splits[2], splits[1]);
+			map.put( utils.Translate.reverseTranscribe(splits[2]), splits[1]);
 		}
+		
+		for(String s1 : map.keySet())
+			for(String s2 : map.keySet())
+				if( s1 != s2 && ( s1.indexOf(s2) != -1 || s2.indexOf(s1) != -1) )
+					throw new Exception("No " + s1 + " " + s2);
 		
 		return map;
 	}
