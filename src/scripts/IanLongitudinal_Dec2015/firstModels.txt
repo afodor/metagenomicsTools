@@ -19,6 +19,7 @@ t <- "family"
 	patientPValues <- vector()
 	timePValues <- vector()
 	interactionPValues <- vector()
+	names <-vector()
 	
 	colors <- vector()
 	cIndex <-1
@@ -51,10 +52,12 @@ t <- "family"
 			patientPValues[index] <- myAnova$"Pr(>F)"[1]
 			timePValues[index] <- myAnova$"Pr(>F)"[2]
 			interactionPValues[index] <- myAnova$"Pr(>F)"[3]
+			names[index] <- names(myT)[i]
 		
-			myLabel <- paste(names(myT)[i] , "\n", "p patient = " ,patientPValues[index] ,
-					"\n p time = " , timePValues[index], "\n", "p interaction = " , 
-					interactionPValues[index])
+			myLabel <- paste(names(myT)[i] , "\n", "p patient = " ,
+			format(patientPValues[index],digits=3) ,
+					"\n p time = " , format(timePValues[index],digits=3), "\n", "p interaction = " , 
+					format(interactionPValues[index],digits=3))
 		
 			plot(myT[,i] ~ myT$Day, main = myLabel, col=colors)
 			index = index + 1
@@ -62,4 +65,11 @@ t <- "family"
 		}
 	}
 	dev.off()	
+	
+	dFrame <- data.frame( names,patientPValues, timePValues ,interactionPValues )
+	dFrame <- dFrame [order(dFrame$timePValues),]
+	dFrame$adjTime<-  p.adjust( dFrame$timePValues , method = "BH" )
+	dFrame$adjPatent<-  p.adjust( dFrame$patientPValues, method = "BH" )
+	
+	write.table( file= paste( "pValuesLongitudinalModel_", t, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 }
