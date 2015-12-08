@@ -257,29 +257,22 @@ public class NeedlemanWunsch
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
-			"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
+			"C:\\Users\\afodor\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
 		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
-						//"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
 						"c:\\temp\\sequence.fasta");
 		
-		for( int x=0; x < 1; x++)
+	//	for( int x=0; x < 15; x++)
 		{
 			long startTime = System.currentTimeMillis();
-			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
+			globalAlignTwoSequences(fastaList.get(0).getSequence(), 
 								fastaList.get(1).getSequence(), bm, -8,99,  false);
 			
 			double time= (System.currentTimeMillis() - startTime) / 1000.0 ;
 			
-			//if( x > 10)
+		//	if( x > 4)
 				System.out.println(time);
-				
-				System.out.println(pa.getFirstSequence());
-				System.out.println(pa.getMiddleString());
-				System.out.println(pa.getSecondSequence());
-				System.out.println(pa.getAlignmentScore());
-
 		}
 		
 		

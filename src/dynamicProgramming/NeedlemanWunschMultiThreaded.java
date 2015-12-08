@@ -343,8 +343,8 @@ public class NeedlemanWunschMultiThreaded
 				{
 					for (int y=1; y <= s2.length(); y++)
 					{
-						if( y % 1000 == 0 )
-							System.out.println("Starting y " + y);
+						//if( y % 1000 == 0 )
+							//System.out.println("Starting y " + y);
 						int xVal = Math.max(lastX.get(), 1);
 						synchronized (cels) {}; //makes sure we have the latest snapshot
 						for( int x=xVal ; x <= s1.length(); x++)
@@ -365,8 +365,8 @@ public class NeedlemanWunschMultiThreaded
 				{
 					for( int x=1; x <= s1.length(); x++)
 					{
-						if( x % 1000 ==0 )
-							System.out.println("starting x " + x);
+						//if( x % 1000 ==0 )
+							//System.out.println("starting x " + x);
 						
 						int yVal = Math.max(lastY.get(), 1);
 						synchronized (cels) {}; //makes sure we have the latest snapshot
@@ -411,29 +411,22 @@ public class NeedlemanWunschMultiThreaded
 	public static void main(String[] args) throws Exception
 	{
 		SubstitutionMatrix bm = new BlossumMatrix(
-			"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
+			"C:\\Users\\afodor\\git\\afodor.github.io\\classes\\prog2015\\Blosum50.txt"	);
 		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(
-						//"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2015\\twoSeqs.txt");
 						"c:\\temp\\sequence.fasta");
 		
-		for( int x=0; x < 1; x++)
+		//for( int x=0; x < 15; x++)
 		{
 			long startTime = System.currentTimeMillis();
-			PairedAlignment pa = globalAlignTwoSequences(fastaList.get(0).getSequence(), 
+			globalAlignTwoSequences(fastaList.get(0).getSequence(), 
 								fastaList.get(1).getSequence(), bm, -8,99,  false);
 			
 			double time= (System.currentTimeMillis() - startTime) / 1000.0 ;
 			
-			//if( x > 10)
+			//if( x > 4)
 				System.out.println(time);
-				
-				System.out.println(pa.getFirstSequence());
-				System.out.println(pa.getMiddleString());
-				System.out.println(pa.getSecondSequence());
-				System.out.println(pa.getAlignmentScore());
-
 		}
 		
 		
