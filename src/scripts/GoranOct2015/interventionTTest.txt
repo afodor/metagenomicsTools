@@ -15,6 +15,8 @@ for ( taxa in taxas )
 	myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
 	myT <-read.table(fileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
+	myT <- myT[myT$meanCD >= 29,]
+	
 	rowNames <- row.names(myT)
 	
 	pValues <- vector()
@@ -28,7 +30,7 @@ for ( taxa in taxas )
 		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
 		{
 			names[index] <- names(myT)[i]
-			pValues[index] <- wilcox.test( myT[ myT$category == "Baseline",i], 
+			pValues[index] <- t.test( myT[ myT$category == "Baseline",i], 
 			myT[ myT$category == "Intervention",i])$p.value
 			sampleSizeBaseline  <- length(myT[ myT$category == "Baseline",i]) 
 			sampleSizeIntevention  <- length(myT[ myT$category == "Intervention",i]) 
@@ -39,6 +41,6 @@ for ( taxa in taxas )
 	dFrame <- data.frame( names,pValues,sampleSizeBaseline ,sampleSizeIntevention   )
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )
-	write.table(dFrame, file=paste(taxa,"_WilcoxonIntevention.txt",sep=""), sep="\t", row.names=FALSE)
+	write.table(dFrame, file=paste(taxa,"_tIntevention_highCD.txt",sep=""), sep="\t", row.names=FALSE)
 	hist(pValues, main=taxa,breaks=20)
 }
