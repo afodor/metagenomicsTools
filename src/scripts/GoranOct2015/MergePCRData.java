@@ -24,7 +24,7 @@ public class MergePCRData
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				outFile)));
 		
-		writer.write("fullKey\tpartialKey\tcategory\tmeanCD");
+		writer.write("fullKey\tsubject\ttimepoint\tcategory\tmeanCD");
 		
 		int startPos = fromR ? 0 : 1;
 		
@@ -42,7 +42,10 @@ public class MergePCRData
 			
 			StringTokenizer sToken = new StringTokenizer(firstToken,"_");
 			
-			String key = sToken.nextToken() + "_" + sToken.nextToken();
+			String subject = sToken.nextToken();
+			String timepoint = sToken.nextToken();
+			
+			String key = subject + "_" + timepoint;
 			String condition = sToken.nextToken();
 			
 			Double val = pcrMap.get(key);
@@ -50,7 +53,14 @@ public class MergePCRData
 			if( val == null)
 				throw new Exception("Could not find " + key);
 			
-			writer.write(firstToken + "\t" + key  + "\t" + condition + "\t" + 
+			String modTimepoint = timepoint;
+			
+			if( timepoint.equals("FBS-P1"))
+				modTimepoint = "FP1";
+			else if ( timepoint.equals("FBS-P3"))
+				modTimepoint = "FP3";
+			
+			writer.write(firstToken + "\t" + subject + "\t" + modTimepoint+ "\t" + condition + "\t" + 
 							pcrMap.get(key));
 			
 			for( int x=1; x < splits.length; x++)
