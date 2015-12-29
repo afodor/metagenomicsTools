@@ -4,6 +4,8 @@ setwd("C:\\GoranData_Oct_2015")
 
 taxas <- c("phylum", "class", "order", "family", "genus", "otu")
 
+par(mfrow=c(3,2))
+
 for ( taxa in taxas ) 
 {
 	fileName <- paste( taxa, "_asColumnsLogNorm.txt", sep="")
@@ -21,7 +23,7 @@ for ( taxa in taxas )
 		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
 		{
 			names[index] <- names(myT)[i]
-			pValues[index] <- wilcox.test( myT[ grepl( "Baseline", rowNames),i], 
+			pValues[index] <- t.test( myT[ grepl( "Baseline", rowNames),i], 
 			myT[ grepl( "Intervention", rowNames),i])$p.value
 			sampleSizeBaseline  <- length(myT[ grepl( "Baseline", rowNames),i]) 
 			sampleSizeIntevention  <- length(myT[ grepl( "Intervention", rowNames),i]) 
@@ -33,4 +35,5 @@ for ( taxa in taxas )
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )
 	write.table(dFrame, file=paste(taxa,"_WilcoxonIntevention.txt",sep=""), sep="\t", row.names=FALSE)
+	hist(pValues, main=taxa,breaks=20)
 }
