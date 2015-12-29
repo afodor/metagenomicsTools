@@ -23,6 +23,7 @@ for ( taxa in taxas )
 	
 	pValuesSubject <- vector()
 	pValuesIntervention <- vector()
+	pValuesMeanCD <- vector()
 	meanBug <- vector()
 	meanUrban <- vector()
 	meanRural <- vector()
@@ -32,7 +33,7 @@ for ( taxa in taxas )
 	iccs <- vector()
 	index <- 1
 	
-	for ( i in 5:ncol(myT))
+	for ( i in 6:ncol(myT))
 	{
 		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
 		{
@@ -40,21 +41,23 @@ for ( taxa in taxas )
 			bug <- myT[,i]
 			patientID <- factor(myT$subject )
 			intervention <- factor(myT$category)
+			meanCD <- myT$meanCD
 	
-			myFrame <- data.frame(bug, patientID, intervention)
+			myFrame <- data.frame(bug, patientID, intervention, meanCD)
 	
-			fullModel <- gls( bug~  intervention , 
+			fullModel <- gls( bug~  intervention + meanCD , 
 					method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
 				data = myFrame )
 				
-			reducedModel <- gls( bug~  intervention, method="REML",	data = myFrame )
+			reducedModel <- gls( bug~  intervention + meanCD, method="REML",	data = myFrame )
 				
-			fullModelLME <- lme(bug~  intervention, method="REML", random = ~1|factor(patientID), data = myFrame)		
+			fullModelLME <- lme(bug~  intervention + meanCD, method="REML", random = ~1|factor(patientID), data = myFrame)		
 	
 			sampleSizeBaseline[index]  <- length(myT[ myT$category == "Baseline",i]) 
 			sampleSizeIntevention[index]  <- length(myT[ myT$category == "Intervention",i]) 
 			
 			pValuesIntervention[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesMeanCD[index] <- anova(fullModelLME)$"p-value"[3]
 			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			iccs[index] <- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(myT)[i]
@@ -70,5 +73,5 @@ for ( taxa in taxas )
 	dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )
 	
 	write.table(dFrame, file=paste(taxa,"_MixedIntevention_all.txt",sep=""), sep="\t", row.names=FALSE)
-	hist(pValuesSubject, main=taxa,breaks=20)
+	hist(pValuesIntervention, main=taxa,breaks=20)
 }
