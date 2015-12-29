@@ -13,7 +13,7 @@ import utils.ConfigReader;
 public class MergePCRData
 {
 	private static void addALevel(String inFile, String outFile, boolean fromR,
-			HashMap<String, Double> pcrMap ) throws Exception
+			HashMap<String, Double> pcrMap, HashMap<Integer, Integer> sugarGroupMap ) throws Exception
 	{
 
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
@@ -24,7 +24,7 @@ public class MergePCRData
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				outFile)));
 		
-		writer.write("fullKey\tsubject\ttimepoint\tcategory\tmeanCD");
+		writer.write("fullKey\tsubject\ttimepoint\tcategory\tmeanCD\tsugarGroup");
 		
 		int startPos = fromR ? 0 : 1;
 		
@@ -53,6 +53,11 @@ public class MergePCRData
 			if( val == null)
 				throw new Exception("Could not find " + key);
 			
+			Integer sugarGroup = sugarGroupMap.get(Integer.parseInt(subject));
+			
+			if(sugarGroup == null)
+				throw new Exception("Could not find sugar for " + subject);
+			
 			String modTimepoint = timepoint;
 			
 			if( timepoint.equals("FBS-P1"))
@@ -61,7 +66,7 @@ public class MergePCRData
 				modTimepoint = "FP3";
 			
 			writer.write(firstToken + "\t" + subject + "\t" + modTimepoint+ "\t" + condition + "\t" + 
-							pcrMap.get(key));
+							pcrMap.get(key) + "\t" + sugarGroup);
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
@@ -79,6 +84,7 @@ public class MergePCRData
 		String[] levels = {"phylum","class","order","family","genus", "otu"};
 		
 		HashMap<String, Double> pcrMap = PcrFileLine.getCTMeanMap();
+		HashMap<Integer, Integer> sugarMap = SugarGroupDataLine.getMap();
 		
 		for(String s : levels)
 		{
@@ -88,7 +94,7 @@ public class MergePCRData
 			String outFile = ConfigReader.getGoranOct2015Dir() + File.separator + 
 					"mds_" + s + "withMedata.txt";
 			
-			addALevel(inFile, outFile, true, pcrMap);
+			addALevel(inFile, outFile, true, pcrMap, sugarMap);
 		}
 		
 		for(String s : levels)
@@ -99,7 +105,7 @@ public class MergePCRData
 			String outFile = ConfigReader.getGoranOct2015Dir() + File.separator + 
 					s+ "_asColumnsLogNormWithMetadata.txt";
 			
-			addALevel(inFile, outFile, false, pcrMap);
+			addALevel(inFile, outFile, false, pcrMap, sugarMap);
 		}
 	}
 }
