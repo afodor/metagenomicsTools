@@ -8,8 +8,13 @@ par(mfrow=c(3,2))
 
 for ( taxa in taxas ) 
 {
-	fileName <- paste( taxa, "_asColumnsLogNorm.txt", sep="")
-	myT <- read.table( fileName, sep="\t", header=TRUE, row.names=1 )
+	fileName <- paste( taxa, "_asColumnsLogNormWithMetadata.txt", sep="")
+	myT <- read.table( fileName, sep="\t", header=TRUE)
+	
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+	myT <-read.table(fileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
 	rowNames <- row.names(myT)
 	
 	pValues <- vector()
@@ -18,15 +23,15 @@ for ( taxa in taxas )
 	sampleSizeIntevention <- vector()
 	index <- 1
 	
-	for ( i in 1:ncol(myT))
+	for ( i in 4:ncol(myT))
 	{
 		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
 		{
 			names[index] <- names(myT)[i]
-			pValues[index] <- t.test( myT[ grepl( "Baseline", rowNames),i], 
-			myT[ grepl( "Intervention", rowNames),i])$p.value
-			sampleSizeBaseline  <- length(myT[ grepl( "Baseline", rowNames),i]) 
-			sampleSizeIntevention  <- length(myT[ grepl( "Intervention", rowNames),i]) 
+			pValues[index] <- wilcox.test( myT[ myT$category == "Baseline",i], 
+			myT[ myT$category == "Intervention",i])$p.value
+			sampleSizeBaseline  <- length(myT[ myT$category == "Baseline",i]) 
+			sampleSizeIntevention  <- length(myT[ myT$category == "Intervention",i]) 
 			index= index + 1
 		}
 	}
