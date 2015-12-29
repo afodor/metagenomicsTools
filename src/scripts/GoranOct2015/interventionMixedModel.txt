@@ -24,6 +24,7 @@ for ( taxa in taxas )
 	pValuesSubject <- vector()
 	pValuesIntervention <- vector()
 	pValuesMeanCD <- vector()
+	pValuesSugarGroup <- vector()
 	meanBug <- vector()
 	meanUrban <- vector()
 	meanRural <- vector()
@@ -33,7 +34,7 @@ for ( taxa in taxas )
 	iccs <- vector()
 	index <- 1
 	
-	for ( i in 6:ncol(myT))
+	for ( i in 7:ncol(myT))
 	{
 		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
 		{
@@ -42,22 +43,24 @@ for ( taxa in taxas )
 			patientID <- factor(myT$subject )
 			intervention <- factor(myT$category)
 			meanCD <- myT$meanCD
+			sugarGroup <- factor(myT$sugarGroup)
 	
-			myFrame <- data.frame(bug, patientID, intervention, meanCD)
+			myFrame <- data.frame(bug, patientID, intervention, meanCD,sugarGroup)
 	
-			fullModel <- gls( bug~  intervention + meanCD , 
+			fullModel <- gls( bug~  intervention + meanCD + sugarGroup, 
 					method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
 				data = myFrame )
 				
-			reducedModel <- gls( bug~  intervention + meanCD, method="REML",	data = myFrame )
+			reducedModel <- gls( bug~  intervention + meanCD + sugarGroup, method="REML",	data = myFrame )
 				
-			fullModelLME <- lme(bug~  intervention + meanCD, method="REML", random = ~1|factor(patientID), data = myFrame)		
+			fullModelLME <- lme(bug~  intervention + meanCD+ sugarGroup, method="REML", random = ~1|factor(patientID), data = myFrame)		
 	
 			sampleSizeBaseline[index]  <- length(myT[ myT$category == "Baseline",i]) 
 			sampleSizeIntevention[index]  <- length(myT[ myT$category == "Intervention",i]) 
 			
 			pValuesIntervention[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesMeanCD[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesSugarGroup[index] <- anova(fullModelLME)$"p-value"[4]
 			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			iccs[index] <- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(myT)[i]
@@ -66,12 +69,13 @@ for ( taxa in taxas )
 	}
 	
 	dFrame <- data.frame( names,sampleSizeBaseline ,sampleSizeIntevention ,
-		pValuesSubject, pValuesIntervention,iccs)
+		pValuesSubject, pValuesIntervention,pValuesSugarGroup,iccs)
 	
 	dFrame <- dFrame [order(pValuesIntervention),]
 	dFrame$adjustedPIntervention <- p.adjust( dFrame$pValuesIntervention, method = "BH" )
 	dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )
+	dFrame$adjustedPSugarGroup <- p.adjust( dFrame$pValuesSugarGroup, method = "BH" )
 	
 	write.table(dFrame, file=paste(taxa,"_MixedIntevention_all.txt",sep=""), sep="\t", row.names=FALSE)
-	hist(pValuesIntervention, main=taxa,breaks=20)
+	hist(pValuesSugarGroup, main=taxa,breaks=20)
 }
