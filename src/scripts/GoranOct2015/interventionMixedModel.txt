@@ -54,7 +54,7 @@ for ( taxa in taxas )
 			sampleSizeBaseline[index]  <- length(myT[ myT$category == "Baseline",i]) 
 			sampleSizeIntevention[index]  <- length(myT[ myT$category == "Intervention",i]) 
 			
-			pValuesIntervention[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesIntervention[index] <- anova(fullModelLME)$"p-value"[2]
 			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
 			iccs[index] <- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
 			names[index] = names(myT)[i]
