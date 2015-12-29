@@ -1,0 +1,74 @@
+rm(list=ls())
+
+setwd("C:\\GoranData_Oct_2015")
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+taxas <- c("phylum", "class", "order", "family", "genus", "otu")
+
+par(mfrow=c(3,2))
+
+for ( taxa in taxas ) 
+{
+	fileName <- paste( taxa, "_asColumnsLogNormWithMetadata.txt", sep="")
+	myT <- read.table( fileName, sep="\t", header=TRUE)
+	
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",4), rep("numeric", numCols-4))
+	myT <-read.table(fileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+	rowNames <- row.names(myT)
+	
+	pValuesSubject <- vector()
+	pValuesIntervention <- vector()
+	meanBug <- vector()
+	meanUrban <- vector()
+	meanRural <- vector()
+	names <- vector()
+	sampleSizeBaseline <- vector()
+	sampleSizeIntevention <- vector()
+	iccs <- vector()
+	index <- 1
+	
+	for ( i in 5:ncol(myT))
+	{
+		if( sum( myT[,i] != 0  ) > nrow(myT) / 10 ) 
+		{
+			names[index] <- names(myT)[i]
+			bug <- myT[,i]
+			patientID <- factor(myT$subject )
+			intervention <- factor(myT$category)
+	
+			myFrame <- data.frame(bug, patientID, intervention)
+	
+			fullModel <- gls( bug~  intervention , 
+					method="REML",correlation=corCompSymm(form=~1|factor(patientID)),
+				data = myFrame )
+				
+			reducedModel <- gls( bug~  intervention, method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  intervention, method="REML", random = ~1|factor(patientID), data = myFrame)		
+	
+			sampleSizeBaseline[index]  <- length(myT[ myT$category == "Baseline",i]) 
+			sampleSizeIntevention[index]  <- length(myT[ myT$category == "Intervention",i]) 
+			
+			pValuesIntervention[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			iccs[index] <- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			names[index] = names(myT)[i]
+			index= index + 1
+		}
+	}
+	
+	dFrame <- data.frame( names,sampleSizeBaseline ,sampleSizeIntevention ,
+		pValuesSubject, pValuesIntervention,iccs)
+	
+	dFrame <- dFrame [order(pValuesIntervention),]
+	dFrame$adjustedPIntervention <- p.adjust( dFrame$pValuesIntervention, method = "BH" )
+	dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )
+	
+	write.table(dFrame, file=paste(taxa,"_MixedIntevention_all.txt",sep=""), sep="\t", row.names=FALSE)
+	hist(pValuesSubject, main=taxa,breaks=20)
+}
