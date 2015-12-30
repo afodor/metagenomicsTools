@@ -25,11 +25,16 @@ effectSize = .4
 # Cesarian rate in 2014 according to http://www.childbirthconnection.org/article.asp?ck=10554
 fractionCesarian <- 0.329
 
+casesAreCesarian <- rnorm(numCases) <= fractionCesarian 
+controlsAreCesarian <- rnorm(numControls) <= fractionCesarian 
+
 for( i in 1:numSimulations)
 {
 	pValuesCaseControl <- vector()
 	pValuesCesarian <- vector()
 	pValuesInteraction <- vector()
+	isCaseControlPositive <- rnorm(numTaxa) <= fractionTruePositives
+	isCesarianPositive <- rnorm(numTaxa) <= fractionTruePositives
 	
 	for( j in 1:numTaxa)
 	{
@@ -40,7 +45,7 @@ for( i in 1:numSimulations)
 		
 		for ( k in 1:numControls ) 
 		{
-			if( rnorm(1) <= fractionCesarian ) 
+			if( !controlsAreCesarian[k] ) 
 			{
 				controlVals[k] = rnorm(1)
 			}
