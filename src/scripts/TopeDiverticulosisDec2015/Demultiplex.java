@@ -10,9 +10,9 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
-import javafx.scene.transform.Translate;
 import parsers.FastQ;
 import utils.ConfigReader;
+import utils.Translate;
 
 public class Demultiplex
 {
@@ -62,6 +62,18 @@ public class Demultiplex
 		for(String s : primerMap.keySet())
 			System.out.println(s + " "+ primerMap.get(s));
 		
+		HashSet<String> primer2Seqs = new HashSet<String>();
+		
+		for(String s : primerMap.keySet())
+		{
+			String[] splits = s.split("@");
+			
+			if( splits.length != 2)
+				throw new Exception("No");
+			
+			primer2Seqs.add(splits[1]);
+		}
+		
 		BufferedReader reader2 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
@@ -93,10 +105,17 @@ public class Demultiplex
 			if( ! fastq2.getFirstTokenOfHeader().equals(fastq3.getFirstTokenOfHeader()))
 					throw new Exception("No");
 			
-			for( String s : primer3Seqs)
-				if( fastq3.getSequence().startsWith( new StringTokenizer(s, "@").nextToken() ))
-					gotOne = true;
-			
+			for( String p3 : primer3Seqs)
+				if( fastq3.getSequence().startsWith( p3 ))
+				{
+					for(String p2 : primer2Seqs)
+					{
+						if( fastq2.getSequence().startsWith( Translate.reverseTranscribe( p2)))
+
+							gotOne = true;
+					}
+				}
+					
 			if( gotOne)
 				numMatched++;
 			
