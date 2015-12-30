@@ -176,14 +176,14 @@ public class Demultiplex
 								BufferedWriter forwardWriter = 
 										getFromMap(writerMap, id +"_1");
 								
-								forwardWriter.write(fastq1.getFirstTokenOfHeader() + "\n");
+								forwardWriter.write(">" + fastq1.getFirstTokenOfHeader() + "\n");
 								forwardWriter.write(fastq1.getSequence() + "\n");
 								forwardWriter.flush();
 								
 								BufferedWriter backwardsWriter = 
 										getFromMap(writerMap, id+ "_4");
 								
-								backwardsWriter.write(fastq4.getFirstTokenOfHeader() + "\n");
+								backwardsWriter.write(">" + fastq4.getFirstTokenOfHeader() + "\n");
 								backwardsWriter.write(fastq4.getSequence() + "\n");
 								backwardsWriter.flush();
 								
