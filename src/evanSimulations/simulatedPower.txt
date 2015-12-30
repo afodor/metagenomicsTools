@@ -34,6 +34,10 @@ controlsAreCesarian <- rnorm(numControls) <= fractionCesarian
 allAreCesarian <- c(casesAreCesarian ,controlsAreCesarian)
 allIsCase <- c( rep(TRUE, numCases), rep(FALSE, numControls) )
 
+powerCaseControl <- vector()
+powerCesarian <- vector()
+powerInteraction <- vector()
+
 for( i in 1:numSimulations)
 {
 	pValuesCaseControl <- vector()
@@ -97,4 +101,18 @@ for( i in 1:numSimulations)
 		pValuesCesarian[j] <- anova(myLm)$"Pr(>F)"[2]
 		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
 	}
+	
+	# adjust the p-values
+	caseControlAdjust <- p.adjust( pValuesCaseControl, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( caseControlAdjust[j] < 0.10 & taxaisCaseControlPositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerCaseControl[i] =  numTrueFound  / sum(taxaisCaseControlPositive)
+	
 }
