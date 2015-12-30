@@ -39,7 +39,7 @@ public class Demultiplex
 			if(map.containsValue(id))
 				throw new Exception("No");
 			
-			String primerKey = splits[11] + "@" + splits[12];
+			String primerKey = splits[11] + "@" + Translate.reverseTranscribe(splits[12]);
 			
 			if( map.containsKey(primerKey))
 				throw new Exception("No");
@@ -110,8 +110,7 @@ public class Demultiplex
 				{
 					for(String p2 : primer2Seqs)
 					{
-						if( fastq2.getSequence().startsWith( Translate.reverseTranscribe( p2)))
-
+						if( fastq2.getSequence().startsWith( p2))
 							gotOne = true;
 					}
 				}
@@ -123,7 +122,8 @@ public class Demultiplex
 			numDone++;
 			
 			if( numDone % 10000 == 0)
-				System.out.println( numMatched + " " +  numDone);
+				System.out.println( numMatched + " " +  numDone + " " + 
+						((double)numMatched / numDone));
 		}
 		
 		if(  FastQ.readOneOrNull(reader3) != null )
