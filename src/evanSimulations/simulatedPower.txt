@@ -1,5 +1,9 @@
 rm(list=ls())
 
+# a major limitation of this simulation is the assumption of normality
+# more complex (realistic) powers simulations would more closely 
+# match the actual distribution of count data from a real metagenomic dataset		
+
 numSimulations <- 1
 
 # there are typically around 70-75 families that are called by the RDP
@@ -20,7 +24,7 @@ fractionTruePositives <- 0.20
 # for simplicity we only have one effect size for all effects
 # obviously, this can be assigned individually if there was 
 # interested in expanding the complexity of the power simulation
-effectSize = .4
+globalEffectSize = .4
 
 # Cesarian rate in 2014 according to http://www.childbirthconnection.org/article.asp?ck=10554
 fractionCesarian <- 0.329
@@ -33,40 +37,49 @@ for( i in 1:numSimulations)
 	pValuesCaseControl <- vector()
 	pValuesCesarian <- vector()
 	pValuesInteraction <- vector()
-	isCaseControlPositive <- rnorm(numTaxa) <= fractionTruePositives
-	isCesarianPositive <- rnorm(numTaxa) <= fractionTruePositives
+	taxaisCaseControlPositive <- rnorm(numTaxa) <= fractionTruePositives
+	taxaisCesarianPositive <- rnorm(numTaxa) <= fractionTruePositives
 	
 	for( j in 1:numTaxa)
 	{
-		# a major limitation of this simulation is the assumption of normality
-		# more complex (realistic) powers simulations would more closely 
-		# match the actual distribution of count data from a real metagenomic dataset
 		controlVals <- vector()
 		
 		for ( k in 1:numControls ) 
 		{
-			if( !controlsAreCesarian[k] ) 
+			thisEffectSize = 0;
+			if( controlsAreCesarian[k] &  taxaisCesarianPositive[j] ) 
 			{
-				controlVals[k] = rnorm(1)
+				thisEffectSize = globalEffectSize;
 			}
-			else
-			{
-				controlVals[k] = rnorm( mean= effectSize )
-			}
+			
+			controlVals[k] = rnorm(1, mean= thisEffectSize )
 		}
 		
 		caseVals <- vector()
 		
 		for ( k in 1:numCases ) 
 		{
-			if( rnorm(1) <= fractionCesarian ) 
+			thisEffectSize = 0;
+			
+			if( taxaisCaseControlPositive[j] ) 
 			{
-				caseVals[k] = rnorm(1)
+				thisEffectSize = globalEffectSize;
 			}
-			else
+			
+			if( casesAreCesarian[k] &  taxaisCesarianPositive[j] ) 
 			{
-				controlVals[k] = rnorm( mean= effectSize )
+				thisEffectSize = thisEffectSize +  globalEffectSize;
 			}
+			
+			if( casesAreCesarian[k] &  taxaisCesarianPositive[j] ) 
+			{
+				# if the taxa is responsive to both case and control and cesarian
+				# there is an interaction doubling the impact of either one alone
+				thisEffectSize = thisEffectSize + 2 * globalEffectSize
+			}
+			
+			caseVals[k] = rnorm(1, mean= thisEffectSize )
 		}
+		
 	}
 }
