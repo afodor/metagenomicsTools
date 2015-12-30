@@ -1,0 +1,26 @@
+rm(list=ls())
+
+numSimulations <- 1000
+
+# there are typically around 70-75 families that are called by the RDP
+# classification scheme in diverse sample types (such as gut or oral 
+# microbiota) in large datasets (Fodor lab, unpublished data)
+numTaxa <- 75
+
+numCases <- 400
+numControls <- 800
+
+# here we assume that 20% of the bugs are different between
+# case and control and cesarian and have an interaction term
+# we don't know the true # that will be different in our large cohort
+# but this doesn't seem entirely out of line with our preliminary data
+# which showed several a number of signficiant taxa despite a very small sample size.
+fractionTruePositives <- 0.20
+
+# Cesarian rate in 2014 according to http://www.childbirthconnection.org/article.asp?ck=10554
+fractionCesarian <- 0.329
+
+for( i in 1:numSimulations)
+{
+	
+}
