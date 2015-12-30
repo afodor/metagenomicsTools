@@ -111,7 +111,19 @@ public class Demultiplex
 					for(String p2 : primer2Seqs)
 					{
 						if( fastq2.getSequence().startsWith( p2))
-							gotOne = true;
+						{
+							
+							String key = p3 + "@" + p2;
+							
+							String id = primerMap.get(key);
+							
+							if( id != null)
+							{
+								gotOne = true;
+							}
+								
+						}
+							
 					}
 				}
 					
