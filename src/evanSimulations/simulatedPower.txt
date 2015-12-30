@@ -31,6 +31,8 @@ fractionCesarian <- 0.329
 
 casesAreCesarian <- rnorm(numCases) <= fractionCesarian 
 controlsAreCesarian <- rnorm(numControls) <= fractionCesarian 
+allAreCesarian <- c(casesAreCesarian ,controlsAreCesarian)
+allIsCase <- c( rep(TRUE, numCases), rep(FALSE, numControls) )
 
 for( i in 1:numSimulations)
 {
@@ -71,7 +73,7 @@ for( i in 1:numSimulations)
 				thisEffectSize = thisEffectSize +  globalEffectSize;
 			}
 			
-			if( casesAreCesarian[k] &  taxaisCesarianPositive[j] ) 
+			if( casesAreCesarian[k] &  taxaisCesarianPositive[j] &  taxaisCaseControlPositive[j] ) 
 			{
 				# if the taxa is responsive to both case and control and cesarian
 				# there is an interaction doubling the impact of either one alone
@@ -80,6 +82,19 @@ for( i in 1:numSimulations)
 			
 			caseVals[k] = rnorm(1, mean= thisEffectSize )
 		}
+	
+		# horribly inefficient here, but seems to still be fast enough
+		data <- c( caseVals, controlVals ) 
 		
+		# build model with the interaction term
+		myLm <- lm( data ~ allIsCase * allAreCesarian ) 
+		
+		#record p-values with anova
+		myAnova <- anova(myLm)
+		
+		# use ANOVA to capture the p-values
+		pValuesCaseControl[j] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesCesarian[j] <- anova(myLm)$"Pr(>F)"[2]
+		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
 	}
 }
