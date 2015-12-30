@@ -6,8 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
+import javafx.scene.transform.Translate;
 import parsers.FastQ;
 import utils.ConfigReader;
 
@@ -51,6 +54,11 @@ public class Demultiplex
 	{
 		HashMap<String, String> primerMap = getBarcodeToSampleMap();
 		
+		HashSet<String> primer3Seqs = new HashSet<String>();
+		
+		for(String s : primerMap.keySet())
+			primer3Seqs.add(new StringTokenizer(s,"@").nextToken());
+		
 		for(String s : primerMap.keySet())
 			System.out.println(s + " "+ primerMap.get(s));
 		
@@ -71,9 +79,12 @@ public class Demultiplex
 									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R3.fastq.gz"))));
 		
 		long numDone = 0;
+		long numMatched = 0;
 		for( FastQ fastq2 = FastQ.readOneOrNull(reader2); fastq2 != null;
 				fastq2 = FastQ.readOneOrNull(reader2))
 		{
+			boolean gotOne = false;
+			
 			FastQ fastq3 =  FastQ.readOneOrNull(reader3);
 			
 			if( fastq3 == null)
@@ -82,10 +93,18 @@ public class Demultiplex
 			if( ! fastq2.getFirstTokenOfHeader().equals(fastq3.getFirstTokenOfHeader()))
 					throw new Exception("No");
 			
+			for( String s : primer3Seqs)
+				if( fastq3.getSequence().startsWith( new StringTokenizer(s, "@").nextToken() ))
+					gotOne = true;
+			
+			if( gotOne)
+				numMatched++;
+			
+			
 			numDone++;
 			
-			if( numDone % 1000 == 0)
-				System.out.println(numDone);
+			if( numDone % 10000 == 0)
+				System.out.println( numMatched + " " +  numDone);
 		}
 		
 		if(  FastQ.readOneOrNull(reader3) != null )
