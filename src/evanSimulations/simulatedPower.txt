@@ -4,7 +4,7 @@ rm(list=ls())
 # more complex (realistic) powers simulations would more closely 
 # match the actual distribution of count data from a real metagenomic dataset		
 
-numSimulations <- 1
+numSimulations <- 100
 
 # there are typically around 70-75 families that are called by the RDP
 # classification scheme in diverse sample types (such as gut or oral 
@@ -24,7 +24,7 @@ fractionTruePositives <- 0.20
 # for simplicity we only have one effect size for all effects
 # obviously, this can be assigned individually if there was 
 # interested in expanding the complexity of the power simulation
-globalEffectSize = .4
+globalEffectSize = .2
 
 # Cesarian rate in 2014 according to http://www.childbirthconnection.org/article.asp?ck=10554
 fractionCesarian <- 0.329
@@ -115,4 +115,34 @@ for( i in 1:numSimulations)
 	
 	powerCaseControl[i] =  numTrueFound  / sum(taxaisCaseControlPositive)
 	
+	cesarianAdjust <- p.adjust( pValuesCesarian, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( cesarianAdjust[j] < 0.10 & taxaisCesarianPositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerCesarian[i] =  numTrueFound  / sum(taxaisCesarianPositive)
+	
+	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( interactionAdjust[j] < 0.10 & taxaisCesarianPositive[j] &  taxaisCaseControlPositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerInteraction[i] =  numTrueFound  / sum(taxaisCesarianPositive &taxaisCaseControlPositive )
+	
+	
 }
+
+# print out mean power across all simulations
+mean(powerCaseControl)
+mean(powerCesarian)
+mean(powerInteraction)
