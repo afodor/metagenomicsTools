@@ -14,7 +14,7 @@ public class KeyFromFlatFile
 		HashMap<String, String> map = new HashMap<String,String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getGoranLabData() + File.separator + "keyAsLines.txt"
+			ConfigReader.getGoranLabRatData() + File.separator + "keyAsLines.txt"
 			)));
 		
 		for(String key = reader.readLine(); key != null; key= reader.readLine())

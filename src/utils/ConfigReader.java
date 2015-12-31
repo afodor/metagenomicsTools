@@ -118,7 +118,7 @@ public class ConfigReader
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
 	}
 	
-	public static String getGoranLabData() throws Exception
+	public static String getGoranLabRatData() throws Exception
 	{
 		return getConfigReader().getAProperty(GORAN_LAB_RAT_DATA );
 	}
