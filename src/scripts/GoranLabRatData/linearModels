@@ -41,16 +41,16 @@ for(taxa in taxaLevels )
 			
 			#par(mfrow=c(3,1))
 			
-			plot( bug ~ group, ylab = names[index],main = graphMain )	
+			plot( bug ~ group, ylab = names[index],main = graphMain,las=2 )	
 			
 			stripchart(bug~ group, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			index=index+1
-		
 		}
 		
 	dFrame <- data.frame( names, pValuesGroup ,meanBug)
 	dFrame <- dFrame [order(dFrame$pValuesGroup ),]
 	dFrame$adjustedPGroup <- p.adjust( dFrame$pValuesGroup , method = "BH" )	
 	write.table(dFrame, file=paste("pValuesForTaxaGroup", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-		dev.off()
+	hist(pValuesGroup,breaks=20)
+	dev.off()
 }
