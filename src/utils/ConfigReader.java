@@ -106,6 +106,8 @@ public class ConfigReader
 	
 	public static final String CRE_ORTHOLOGS_DIR = "CRE_ORTHOLOGS_DIR";
 	
+	public static final String GORAN_LAB_RAT_DATA = "GORAN_LAB_RAT_DATA";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -114,6 +116,11 @@ public class ConfigReader
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
+	}
+	
+	public static String getGoranLabData() throws Exception
+	{
+		return getConfigReader().getAProperty(GORAN_LAB_RAT_DATA );
 	}
 	
 	public static String getTanyaDir() throws Exception
