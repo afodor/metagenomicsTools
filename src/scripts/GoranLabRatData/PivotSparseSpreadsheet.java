@@ -67,7 +67,7 @@ public class PivotSparseSpreadsheet
 		while(nextLine != null)
 		{
 			StringTokenizer sToken = new StringTokenizer(nextLine, "\t");
-			String sample = sToken.nextToken();
+			String sample = sToken.nextToken().replace(".extendedFrags.fastatoRDP.txt.gz", "");
 			String taxa= sToken.nextToken();
 			int count = Integer.parseInt(sToken.nextToken());
 			
