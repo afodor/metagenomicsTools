@@ -1,0 +1,56 @@
+rm(list=ls())
+
+#library("pscl")
+#library("lmtest")
+#library("nlme")
+
+setwd("C:\\goranLab_RatData\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2), rep("numeric", numCols-2))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	names <- vector()
+	pValuesGroup <- vector()
+	meanBug <- vector()
+	index <- 1
+	pdf( paste(taxa, "boxplots.pdf", sep=""))
+	
+	for( i in 3:numCols)
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 10 )
+		{
+			bug <- myT[,i]
+			meanBug[index] <- mean(bug)
+			group <- factor(myT$group)
+		
+			myFrame <- data.frame(bug, group)
+	
+			myLm <- lm( bug ~ group ) 
+			pValuesGroup[index] <- anova(myLm)$"Pr(>F)"[1]
+			names[index] = names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pGroup=", format(pValuesGroup[index], digits=3)
+							, "\n",sep="")
+			
+			#par(mfrow=c(3,1))
+			
+			plot( bug ~ group, ylab = names[index],main = graphMain )	
+			
+			stripchart(bug~ group, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			index=index+1
+		
+		}
+		
+	dFrame <- data.frame( names, pValuesGroup ,meanBug)
+	dFrame <- dFrame [order(dFrame$pValuesGroup ),]
+	dFrame$adjustedPGroup <- p.adjust( dFrame$pValuesGroup , method = "BH" )	
+	write.table(dFrame, file=paste("pValuesForTaxaGroup", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+		dev.off()
+}

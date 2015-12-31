@@ -47,7 +47,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tshannonDiversity\tnumSequencesPerSample\tgroup");
+		writer.write("id\tgroup\tnumberSequencesPerSample\tshannonEntropy");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -67,8 +67,8 @@ public class AddMetadata
 			if( group == null)
 				throw new Exception("No");
 			
-			writer.write(key+ "\t" + wrapper.getShannonEntropy(splits[0]) 
-							+ "\t" + wrapper.getNumberSequences(splits[0]) + "\t" + group);
+			writer.write(key+ "\t" + group + "\t" +wrapper.getNumberSequences(splits[0]) 
+						+ "\t" + wrapper.getShannonEntropy(splits[0]) );
 				
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
