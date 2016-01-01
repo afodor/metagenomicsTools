@@ -52,14 +52,15 @@ public class TestDemultiplex
 			String key = new StringTokenizer(reader.readLine()).nextToken();
 			String sequence = reader.readLine();
 			
+			for( int x=0; x < 2; x++)
+				if( reader.readLine() == null)
+					throw new Exception("No");
+			
+			
 			Integer expectedFromBarcode = barcodeMap.get(sequence);
 			
 			if( expectedFromBarcode != null)
 			{
-				for( int x=0; x < 2; x++)
-					if( reader.readLine() == null)
-						throw new Exception("No");
-				
 				Integer expectedFromSeq = expectedMap.get(key);
 				
 				if(expectedFromSeq == null)
