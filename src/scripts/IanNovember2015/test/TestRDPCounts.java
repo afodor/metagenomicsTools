@@ -27,10 +27,38 @@ public class TestRDPCounts
 			{
 				String sampleName = wrapper.getSampleNames().get(y);
 				System.out.println(sampleName);
-			}
+				
+				File rdpFile = new File(ConfigReader.getIanNov2015Dir() + File.separator +
+							"rdpOut" + File.separator + sampleName);
+				HashMap<String, Integer> expected = 
+						getCountsForTaxaAtLevel(rdpFile.getAbsolutePath(), level);
+				
+				for( int z=0; z < wrapper.getOtuNames().size(); z++)
+				{
+					String otuName = wrapper.getOtuNames().get(z).replaceAll("\"", "");
 					
-		
+					double wrapperVal = wrapper.getDataPointsUnnormalized().get(y).get(z);
+					
+					if( wrapperVal == 0 && expected.containsKey(otuName))
+						throw new Exception("No");
+					
+					if( wrapperVal >0 )
+					{
+						Integer expectedVal = expected.get(otuName);
+						
+						if( expectedVal == null)
+							throw new Exception("No " + otuName);
+						
+						System.out.println(expectedVal + " " + wrapperVal);
+						
+						if( Math.abs(expectedVal - wrapperVal) > 0.000001)
+							throw new Exception("No");
+					}
+				}
+			}
 		}
+		
+		System.out.println("Gloabal pass");
 	}
 	
 	private static HashMap<String, Integer> getCountsForTaxaAtLevel(
@@ -43,12 +71,12 @@ public class TestRDPCounts
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			StringTokenizer sToken = new StringTokenizer(s);
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			
 			String next = null;
 			while( sToken.hasMoreTokens())
 			{
-				String last = next.replaceAll("\"", "");
+				String last = next;
 				
 				if( sToken.hasMoreTokens())
 				{
