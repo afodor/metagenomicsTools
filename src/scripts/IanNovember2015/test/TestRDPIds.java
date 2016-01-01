@@ -19,6 +19,7 @@ public class TestRDPIds
 		
 		for(String s : topDir.list())
 		{
+			System.out.println("Trying " + s);
 			int numPassed =0;
 			List<FastaSequence> list = 
 					FastaSequence.readFastaFile(topDir.getAbsolutePath() + File.separator + s);
