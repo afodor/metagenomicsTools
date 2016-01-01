@@ -47,15 +47,22 @@ public class TestDemultiplex
 		
 		int numPassed = 0;
 		int numNotFound =0;
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		for(String s= reader.readLine(); s != null && s.trim().length() >0; s= reader.readLine())
 		{
-			String key = new StringTokenizer(reader.readLine()).nextToken();
+			String key = new StringTokenizer(s).nextToken();
+			
+			if( ! key.startsWith("@"))
+				throw new Exception("Incorrect line " + key);
+			
 			String sequence = reader.readLine();
 			
 			for( int x=0; x < 2; x++)
-				if( reader.readLine() == null)
+			{
+				String nextLine = reader.readLine();
+				
+				if( nextLine == null)
 					throw new Exception("No");
-			
+			}
 			
 			Integer expectedFromBarcode = barcodeMap.get(sequence);
 			
@@ -77,7 +84,7 @@ public class TestDemultiplex
 				numNotFound++;
 			}
 			
-			if( numPassed + numNotFound % 1000== 0)
+			if( (numPassed + numNotFound) % 10000== 0)
 				System.out.println("passed " + numPassed + " skipped "+ numNotFound);
 		}
 				
