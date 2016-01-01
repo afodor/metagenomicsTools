@@ -55,6 +55,8 @@ public class TestRDPCounts
 							throw new Exception("No");
 					}
 				}
+				
+				System.out.println("Pass " + rdpFile.getAbsolutePath() + " " + level);
 			}
 		}
 		
