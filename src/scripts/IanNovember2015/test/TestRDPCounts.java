@@ -75,8 +75,9 @@ public class TestRDPCounts
 		{
 			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			
+			boolean gotIt = false;
 			String next = null;
-			while( sToken.hasMoreTokens())
+			while( ! gotIt && sToken.hasMoreTokens())
 			{
 				String last = next;
 				
@@ -94,6 +95,7 @@ public class TestRDPCounts
 						count++;
 						
 						map.put(last, count);
+						gotIt = true;
 					}
 				}
 				
