@@ -36,6 +36,7 @@ for ( t in taxa )
 		pValueLinear <- vector()
 		kendallP <- vector()
 		rVals <- vector()
+		sampleSize <- vector()
 		
 		index <- 1
 	
@@ -52,6 +53,7 @@ for ( t in taxa )
 			 	aLm <- lm(myT[,i] ~ myT[,j])
 			 	pValueLinear[index] <- anova(aLm)$"Pr(>F)"[1]
 			 	kendallP[index] <- Kendall(myT[,i], myT[,j])$sl[1]
+			 	sampleSize[index] <- length( ! is.na(myT[,j]))
 			 	
 			 	myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
 			 			format(	pValueLinear[index] , digits=3), "r=", 
@@ -67,11 +69,11 @@ for ( t in taxa )
 		
 		dev.off()
 				
-		dFrame <- data.frame( namesA, namesB,kendallP, pValueLinear,rVals)
+		dFrame <- data.frame( namesA, namesB,sampleSize,kendallP, pValueLinear,rVals)
 		dFrame <- dFrame [order(dFrame$kendallP),]
 		dFrame$adjKendall<-  p.adjust( dFrame$kendallP, method = "BH" )
 		dFrame$adjPLinear<-  p.adjust( dFrame$pValueLinear, method = "BH" )
-		write.table( file= paste( "pValuesTaxaVsMetadata_", t, names(myT)[j], ".txt", sep="_"), 
+		write.table( file= paste( "pValuesTaxaVsMetadata_Corr_", t, names(myT)[j], ".txt", sep="_"), 
 				dFrame, row.names=FALSE, sep="\t")	
 	}
 }
