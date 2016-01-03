@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("C:\\Caroll_Nov_2015\\spreadsheets")
+setwd("F:\\Caroll_Nov_2015\\spreadsheets")
 library("Kendall")
 
 taxa <- c("phylum","class","order","family","genus")
@@ -18,6 +18,13 @@ getTaxaColumnNum <- function(myT)
 	return (-1);
 }
 
+	namesA <- vector()
+	namesB <- vector()
+	kendallP <- vector()
+	rVals <- vector()
+	index <- 1
+	
+
 for ( t in taxa ) 
 {
 	inFileName <- paste( "pivoted_", t, "asColumnsLogNormalPlusMetadata.txt" , sep="") 
@@ -27,17 +34,10 @@ for ( t in taxa )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	myT <- myT[ myT$read== "r1" & ! is.na(myT$AGE) , ]
 	names <- vector()	
-	namesA <- vector()
-	namesB <- vector()
-	pValueLinear <- vector()
-	kendallP <- vector()
-	rVals <- vector()
-	
-	index <- 1
 	
 	pdf( paste(t , "correlationPlots.pdf",sep=""))
 	
-	taxCol <- getTaxaColumnNum(myT)	
+  	taxCol <- getTaxaColumnNum(myT)	
 
 	for( i in c(3, taxCol : ncol(myT) ))
 	{
@@ -50,13 +50,11 @@ for ( t in taxa )
 			 	
 			 	rVals[index] <- cor( myT[,i], myT[,j], method="spearman")
 			 	aLm <- lm(myT[,i] ~ myT[,j])
-			 	pValueLinear[index] <- anova(aLm)$"Pr(>F)"[1]
 			 	kendallP[index] <- Kendall(myT[,i], myT[,j])$sl[1]
 			 	
 			 	myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
-			 			format(	pValueLinear[index] , digits=3), "r=", 
-			 			 format( rVals[index], digits=3), "kendall p=" , 
-			 			 	 format( kendallP[index], digits=3)) 
+			 			format(	kendallP[index] , digits=3), "r=", 
+			 			 format( rVals[index], digits=3)) 
 			 		plot(myT[,j],myT[,i] , main=myText, ylab =namesA[index], xlab=namesB[index]  )
 			 		abline(aLm)
 			 	
@@ -66,12 +64,11 @@ for ( t in taxa )
 	}
 	
 dev.off()
-	
-dFrame <- data.frame( namesA, namesB,kendallP, pValueLinear,rVals)
+}
+
+dFrame <- data.frame( namesA, namesB,kendallP, rVals)
 dFrame <- dFrame [order(dFrame$kendallP),]
 dFrame$adjKendall<-  p.adjust( dFrame$kendallP, method = "BH" )
-dFrame$adjPLinear<-  p.adjust( dFrame$pValueLinear, method = "BH" )
 	
-write.table( file= paste( "pValuesTaxaVsMetadata_", t, ".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
-}
+write.table( file= paste( "pValuesTaxaVsMetadataAll.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
 	
