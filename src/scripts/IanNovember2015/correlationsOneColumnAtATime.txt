@@ -18,8 +18,12 @@ getTaxaColumnNum <- function(myT)
 	return (-1);
 }
 
+par(mfrow=c(3,2))
 for ( t in taxa ) 
 {
+	allIndex <- 1
+	pValuesIndex <- 1
+	allPValues <- vector()
 	inFileName <- paste( "pivoted_", t, "asColumnsLogNormalPlusMetadata.txt" , sep="") 
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -51,6 +55,8 @@ for ( t in taxa )
 			 	rVals[index] <- cor( myT[,i], myT[,j], method="spearman")
 			 	aLm <- lm(myT[,i] ~ myT[,j])
 			 	kendallP[index] <- Kendall(myT[,i], myT[,j])$sl[1]
+			 	allPValues [allIndex] <- kendallP[index]
+			 	allIndex <- allIndex + 1
 			 	sampleSize[index] <- length( ! is.na(myT[,j]))
 			 	
 			 	myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
@@ -72,5 +78,6 @@ for ( t in taxa )
 		write.table( file= paste( "pValuesTaxaVsMetadata_Corr_", t, names(myT)[j], ".txt", sep="_"), 
 				dFrame, row.names=FALSE, sep="\t")	
 	}
+	hist(allPValues , breaks=20,main=t)
 }
 	
