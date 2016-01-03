@@ -1,0 +1,78 @@
+rm(list=ls())
+
+setwd("F:\\Caroll_Nov_2015\\spreadsheets")
+library("Kendall")
+
+taxa <- c("phylum","class","order","family","genus")
+
+getTaxaColumnNum <- function(myT)
+{
+	colNames <- names(myT)
+	
+	for( i in 1:length(colNames))
+	{
+		if( grepl( "Imagination", colNames[i]))
+			return (i + 1);
+	}
+	
+	return (-1);
+}
+
+for ( t in taxa ) 
+{
+	inFileName <- paste( "pivoted_", t, "asColumnsLogNormalPlusMetadata.txt" , sep="") 
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2),"numeric", "character", rep("numeric", numCols-4))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	myT <- myT[ myT$read== "r1" & ! is.na(myT$AGE) , ]
+	taxCol <- getTaxaColumnNum(myT)	
+	
+	for( j in 5:(taxCol-1))
+	{
+		names <- vector()	
+		namesA <- vector()
+		namesB <- vector()
+		pValueLinear <- vector()
+		kendallP <- vector()
+		rVals <- vector()
+		
+		index <- 1
+	
+		pdf( paste(t , names(myT)[j], "correlationPlots.pdf",sep="_"))
+	
+		for( i in c(3, taxCol : ncol(myT) ))
+		{
+			if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+			{
+			 	namesA[index] <- names(myT)[i]
+			 	namesB[index] <- names(myT)[j]
+			 	
+			 	rVals[index] <- cor( myT[,i], myT[,j], method="spearman")
+			 	aLm <- lm(myT[,i] ~ myT[,j])
+			 	pValueLinear[index] <- anova(aLm)$"Pr(>F)"[1]
+			 	kendallP[index] <- Kendall(myT[,i], myT[,j])$sl[1]
+			 	
+			 	myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
+			 			format(	pValueLinear[index] , digits=3), "r=", 
+			 			 format( rVals[index], digits=3), "kendall p=" , 
+			 			 	 format( kendallP[index], digits=3)) 
+			 		plot(myT[,j],myT[,i] , main=myText, ylab =namesA[index], xlab=namesB[index]  )
+			 		abline(aLm)
+			 	
+			 	index <- index + 1
+			 }
+		}
+		
+		
+		dev.off()
+				
+		dFrame <- data.frame( namesA, namesB,kendallP, pValueLinear,rVals)
+		dFrame <- dFrame [order(dFrame$kendallP),]
+		dFrame$adjKendall<-  p.adjust( dFrame$kendallP, method = "BH" )
+		dFrame$adjPLinear<-  p.adjust( dFrame$pValueLinear, method = "BH" )
+		write.table( file= paste( "pValuesTaxaVsMetadata_", t, names(myT)[j], ".txt", sep="_"), 
+				dFrame, row.names=FALSE, sep="\t")	
+	}
+}
+	
