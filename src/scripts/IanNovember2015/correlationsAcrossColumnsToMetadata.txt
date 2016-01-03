@@ -41,7 +41,7 @@ for ( t in taxa )
 
 	for( i in c(3, taxCol : ncol(myT) ))
 	{
-		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		if( sum( myT[,i] >0 ) > nrow(myT) /10) 
 		{
 			 for ( j in 5:(taxCol-1))
 			 {

@@ -49,7 +49,7 @@ for ( t in taxa )
 			 	
 		for( i in c(3, taxCol : ncol(myT) ))
 		{
-			if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+			if( sum( myT[,i] >0 ) > nrow(myT) /10 ) 
 			{
 				namesA[index] <- names(myT)[i]
 			 	namesB[index] <- names(myT)[j]
@@ -81,6 +81,6 @@ for ( t in taxa )
 		write.table( file= paste( "pValuesTaxaVsMetadata_Corr_", t, names(myT)[j], ".txt", sep="_"), 
 				dFrame, row.names=FALSE, sep="\t")	
 	}
-	hist(allPValues , breaks=20,main=paste(t, numTaxa))
+	hist(allPValues , breaks=20, main=paste(t, ":", numTaxa, " taxa * 17 measurements",sep=""))
 }
 	
