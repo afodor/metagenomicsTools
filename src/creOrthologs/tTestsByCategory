@@ -7,23 +7,34 @@ myT <- myT[ substr(myT$genome,1,4) == "kleb" ,]
 
 names <- vector()
 pValuesResVsSuc <- vector()
+tValuesResVsSuc <- vector()
 
+wilcoxValuesResVsSuc <- vector()
+wilcoxPValuesResVsSuc <- vector()
+	
 index <- 1
 for( i in 3:ncol(myT))
 {
 	if( sum(myT[,i]) > 0 & var( myT[myT$broadCategory =="resistant" |myT$broadCategory =="susceptible" ,i]) > 0) 
 	{
 		names[index] <- names(myT)[i]
-		pValuesResVsSuc[index] <- t.test( myT[ myT$broadCategory =="resistant" ,i],
-												myT[ myT$broadCategory =="susceptible" ,i] )$p.value
+		myTTest <- t.test( myT[ myT$broadCategory =="resistant" ,i],
+								myT[ myT$broadCategory =="susceptible" ,i] )
+		pValuesResVsSuc[index] <- myTTest$p.value
+		tValuesResVsSuc[index] <- myTTest $statistic[1]
+		
+		myWilcox <- wilcox.test(  myT[ myT$broadCategory =="resistant" ,i],
+								myT[ myT$broadCategory =="susceptible" ,i])
+								
+		wilcoxValuesResVsSuc[index] <- myWilcox$statistic[1]
+		wilcoxPValuesResVsSuc[index] <- myWilcox$p.value
 												
 		index = index + 1
 	}
 
 }
 
-	
-dFrame <- data.frame( names, pValuesResVsSuc )
+dFrame <- data.frame( names, pValuesResVsSuc,tValuesResVsSuc,wilcoxValuesResVsSuc, wilcoxPValuesResVsSuc)
 dFrame <- dFrame [order(dFrame$pValuesResVsSuc ),]
 dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesResVsSuc, method = "BH" )
 	
