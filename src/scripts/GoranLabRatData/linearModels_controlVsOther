@@ -20,6 +20,10 @@ for(taxa in taxaLevels )
 	names <- vector()
 	pValuesGroup <- vector()
 	meanBug <- vector()
+	meanControl <- vector()
+	meanOther <- vector()
+	sampleSizeControl <- vector()
+	sampleSizeOther <- vector()
 	index <- 1
 	pdf( paste(taxa, "boxplots.pdf", sep=""))
 	
@@ -30,6 +34,12 @@ for(taxa in taxaLevels )
 			meanBug[index] <- mean(bug)
 			group <- factor(myT$group)
 			group <- group == "Group_3_(control)"
+			
+			meanControl[index] <- mean( myT[group,i])
+			meanOther[index] <- mean( myT[!group,i])
+			
+			sampleSizeControl[index] <- sum(group)
+			sampleSizeOther[index] <- sum(!group)
 		
 			myFrame <- data.frame(bug, group)
 	
@@ -48,7 +58,7 @@ for(taxa in taxaLevels )
 			index=index+1
 		}
 		
-	dFrame <- data.frame( names, pValuesGroup ,meanBug)
+	dFrame <- data.frame( names, pValuesGroup ,meanBug,meanControl,meanOther,sampleSizeControl,sampleSizeOther)
 	dFrame <- dFrame [order(dFrame$pValuesGroup ),]
 	dFrame$adjustedPGroup <- p.adjust( dFrame$pValuesGroup , method = "BH" )	
 	write.table(dFrame, file=paste("pValuesForTaxaControlVsOther", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
