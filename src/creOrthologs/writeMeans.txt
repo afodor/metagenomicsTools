@@ -1,0 +1,25 @@
+rm(list=ls())
+
+setwd("C:\\af_broad")
+
+myT <- read.table("bitScoreOrthologsAsColumnsPlustMedata.txt", sep="\t", header=TRUE)
+myT <- myT[ substr(myT$genome,1,4) == "kleb" ,]
+
+names <- vector()
+meansRes <- vector()
+meansSuc <- vector()
+meansCar <- vector()
+
+index <- 1
+for( i in 3:ncol(myT))
+{
+	names[index] <- names(myT)[i]
+	meansRes[index] <- mean( myT[ myT$broadCategory =="resistant" ,i])												
+	meansSuc[index] <- mean(myT[ myT$broadCategory =="susceptible" ,i] ) 
+	meansCar[index] <- mean(myT[ myT$broadCategory =="carolina" ,i] )
+	index = index + 1	
+}
+
+dFrame <- data.frame( names, meansRes ,meansSuc,meansCar )
+	
+write.table( file= paste( "means.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
