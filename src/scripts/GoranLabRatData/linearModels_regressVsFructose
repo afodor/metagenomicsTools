@@ -1,0 +1,76 @@
+rm(list=ls())
+
+#library("pscl")
+#library("lmtest")
+#library("nlme")
+
+setwd("C:\\goranLab_RatData\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2), rep("numeric", numCols-2))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	names <- vector()
+	pValuesRegression<- vector()
+	meanBug <- vector()
+	sampleSize35F <- vector()
+	sampleSize50F <- vector()
+	sampleSize65F <- vector()
+	index <- 1
+	pdf( paste(taxa, "boxplotsPlusRegression.pdf", sep=""))
+	
+	for( i in 3:numCols)
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 10 )
+		{
+			bug <- myT[,i]
+			meanBug[index] <- mean(bug)
+			group <- factor(myT$group)
+			
+			fructoseVals <- c( rep(35, sum(group=="Group_1_(35F:65G)")) ,
+							rep(50, sum(group=="Group_4_(50F:50G)")) ,
+								rep(65 ,sum(group=="Group_2_(65F:35G)")) )
+			
+			sampleSize35F[index] = sum(group=="Group_1_(35F:65G))")
+			sampleSize50F[index] = sum(group=="Group_4_(50F:50G)")
+			sampleSize65F[index] = sum(group=="Group_2_(65F:35G)")
+			
+			dataVals <- c( myT[myT$group =="Group_1_(35F:65G)"  ,i] ,  
+									myT[myT$group =="Group_4_(50F:50G)"  ,i],
+									myT[myT$group =="Group_2_(65F:35G)"  ,i]  )
+			
+			par(mfrow=c(2,1))
+			myFrame <- data.frame(bug, group)
+	
+			myLm <- lm( dataVals ~ fructoseVals) 
+			
+			pValuesRegression[index] <- anova(myLm)$"Pr(>F)"[1]
+			
+			names[index] = names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pGroup=", 
+						format(anova( lm( bug ~ group ) )$"Pr(>F)"[1], digits=3)
+							, "\n",sep="")
+			
+			plot( bug ~ group, ylab = names[index],main = graphMain,las=2 )	
+			
+			stripchart(bug~ group, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			index=index+1
+			
+			plot( fructoseVals, dataVals )
+			abline( dataVals ~ fructoseVals )	
+		}
+		
+	dFrame <- data.frame( names, pValuesRegression,meanBug,sampleSize35F ,sampleSize50F ,sampleSize65F )
+	dFrame <- dFrame [order(dFrame$pValuesRegression),]
+	dFrame$adjustedPGroup <- p.adjust( dFrame$pValuesRegression, method = "BH" )	
+	write.table(dFrame, file=paste("pValuesForRegression", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	hist(pValuesRegression,breaks=20)
+	dev.off()
+}
