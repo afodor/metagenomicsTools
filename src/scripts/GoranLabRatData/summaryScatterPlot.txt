@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("C:\\goranLab_RatData\\spreadsheets")
+
+myT <- read.table("pValuesForTaxaControlVsOthergenus.txt", sep="\t", header=TRUE)
+
+myT <- myT[ myT$names != "numberSequencesPerSample" & myT$names != "shannonEntropy" , ]
+
+plot(myT$meanControl, myT$meanOther, col = ifelse( myT$adjustedPGroup <= 0.05, "red", "black"),
+cex=1.5,pch=16)
+
+text(myT$meanControl[myT$adjustedPGroup <= 0.05], 
+		myT$meanOther[myT$adjustedPGroup <= 0.05], 
+			labels=myT$names[myT$adjustedPGroup <= 0.05], cex= 0.7,pos=3)
+			
+lines( c(0,3.5),c(0,3.5))
