@@ -54,6 +54,12 @@ for(taxa in taxaLevels )
 			
 			names[index] = names(myT)[i]
 			
+			r<- cor( fructoseVals, dataVals)
+			title <- paste( names(myT)[i], " p regression=", format( pValuesRegression[index],digits=3), 
+			" r-squared= ", format(r * r, digits=3) )
+			plot( fructoseVals, dataVals,main=title )
+			abline( myLm)	
+			
 			graphMain =  paste( names(myT)[i], " pGroup=", 
 						format(anova( lm( bug ~ group ) )$"Pr(>F)"[1], digits=3)
 							, "\n",sep="")
@@ -62,9 +68,6 @@ for(taxa in taxaLevels )
 			
 			stripchart(bug~ group, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			index=index+1
-			
-			plot( fructoseVals, dataVals )
-			abline( dataVals ~ fructoseVals )	
 		}
 		
 	dFrame <- data.frame( names, pValuesRegression,meanBug,sampleSize35F ,sampleSize50F ,sampleSize65F )
