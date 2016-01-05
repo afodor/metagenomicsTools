@@ -11,6 +11,8 @@ tValuesResVsSuc <- vector()
 
 wilcoxValuesResVsSuc <- vector()
 wilcoxPValuesResVsSuc <- vector()
+
+iValues <- vector()
 	
 index <- 1
 for( i in 3:ncol(myT))
@@ -21,24 +23,44 @@ for( i in 3:ncol(myT))
 		myTTest <- t.test( myT[ myT$broadCategory =="resistant" ,i],
 								myT[ myT$broadCategory =="susceptible" ,i] )
 		pValuesResVsSuc[index] <- myTTest$p.value
-		tValuesResVsSuc[index] <- myTTest $statistic[1]
+		tValuesResVsSuc[index] <- myTTest$statistic[1]
 		
 		myWilcox <- wilcox.test(  myT[ myT$broadCategory =="resistant" ,i],
 								myT[ myT$broadCategory =="susceptible" ,i])
 								
 		wilcoxValuesResVsSuc[index] <- myWilcox$statistic[1]
 		wilcoxPValuesResVsSuc[index] <- myWilcox$p.value
+		iValues[index] <- i
 												
 		index = index + 1
 	}
 
 }
 
-dFrame <- data.frame( names, pValuesResVsSuc,tValuesResVsSuc,wilcoxValuesResVsSuc, wilcoxPValuesResVsSuc)
+dFrame <- data.frame( names, pValuesResVsSuc,tValuesResVsSuc,wilcoxValuesResVsSuc, wilcoxPValuesResVsSuc,
+							iValues)
 dFrame <- dFrame [order(dFrame$pValuesResVsSuc ),]
 dFrame$adjPResVsSuc<-  p.adjust( dFrame$pValuesResVsSuc, method = "BH" )
 	
 write.table( file= paste( "pValuesResVsSuc.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+
+dFrame <- dFrame[ order(dFrame$tValuesResVsSuc),]
+
+pdf("sucVsResistant.pdf")
+
+for( j in 1:nrow(dFrame))
+{
+	if( abs( dFrame$tValuesResVsSuc[j] ) >= 5 ) 
+	{
+		i = dFrame$iValues[j] 
+		label <- paste( names[i], "p=" , format(dFrame$pValuesResVsSuc[j],digits=3) , "t=",  
+					format( dFrame$tValuesResVsSuc[j],digits=3) )
+		boxplot( myT[ myT$broadCategory =="resistant" ,i] , myT[ myT$broadCategory =="susceptible" ,i],
+						main = label)
+	}
+}
+
+dev.off()
 
 names <- vector()
 pValuesCarVsRes <- vector()
