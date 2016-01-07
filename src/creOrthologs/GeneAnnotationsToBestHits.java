@@ -70,10 +70,21 @@ public class GeneAnnotationsToBestHits
 					Holder h = holderMap.get("\"Line_" + keyInt + "\"");
 					
 					if( h != null)
-						writer.write(h.resVsSuc + "\t" + h.carVsSuc + "\t"+ h.carVsRes + "\t" );
-					else 
+					{
+						writer.write(
+								"" + log10AndFlip(h.resVsSuc , mfl.getMeanSuc(), mfl.getMeanRes()));
+						
+						writer.write("\t" + log10AndFlip(h.carVsSuc , mfl.getMeanSuc(), mfl.getMeanCar()));
+						
+						writer.write("\t"+ log10AndFlip(h.carVsRes , mfl.getMeanRes(), mfl.getMeanCar()) 
+													+ "\t" );
+					}
+					else
+					{
 						writer.write( "\t\t\t");
-					
+						
+					}
+						
 					writer.write( lineMap.get(keyInt) + "\n");
 				}
 				
@@ -81,5 +92,18 @@ public class GeneAnnotationsToBestHits
 				
 				reader.close();
 			}
+	}
+	
+	private static Double log10AndFlip( Double p, double meanSensitive, double meanResistant )
+	{
+		if( p == null)
+			return null;
+		
+		double log10 = Math.log10(p);
+		
+		if( meanResistant > meanSensitive)
+			log10 = -log10;
+		
+		return log10;
 	}
 }

@@ -37,11 +37,13 @@ public class AddCardToGenome
 		List<HitScores> list = HitScores.getAsList(ConfigReader.getCREOrthologsDir() + 
 			File.separator + "cardToChs11Blast.txt"	);
 		
+		double val = Math.log10(1e-65);
+		
 		for(HitScores hs : list ) 
 		{
 			writer.write("\t\t\t\t" + "contig_" +  hs.getTargetId() + "\t" + hs.getTargetStart() 
 			+ "\t" + hs.getTargetEnd()+ "\t" + 
-					hs.getBitScore()  + "\t1e-65\t1e-65\t1e-65\t" +
+					hs.getBitScore()  + "\t" + val +"\t" + val + "\t" + val +"\t" +
 			fastaMap.get(hs.getQueryId()) + "\t" + 
 			hs.getEScore() + "\tcardDatabase\n");
 			
