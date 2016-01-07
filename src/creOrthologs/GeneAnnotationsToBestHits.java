@@ -15,11 +15,16 @@ import utils.ConfigReader;
 
 public class GeneAnnotationsToBestHits
 {
+	
 	public static void main(String[] args) throws Exception
 	{
+
+		HashMap<String, MeanFileLine> meanMap = MeanFileLine.getMeans();
+		
 		HashMap<Integer, String> lineMap = AddGeneAnnotations.getLineDescriptions();
 		
 		HashMap<String, Holder> holderMap = MergeThree.getHolderMap();
+		
 		
 		File hitsDir = new File(ConfigReader.getCREOrthologsDir() + File.separator + 
 									"topHitsDir");
@@ -39,14 +44,23 @@ public class GeneAnnotationsToBestHits
 				BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 					annotatedHitsDir.getAbsoluteFile() + File.separator +  s.replace(".gz", ""))));
 				
-				writer.write("lineID\tqueryContig\tqueryStart\tqueryEnd\tbitScore\tpValueSucVsRes\tpValueCHSVsSuc\tpValueCHSVsRes\tdesciprtion\n");
+				writer.write("lineID\tmeanRes\tmeanCarolina\tmeanSuc\tqueryContig\tqueryStart\tqueryEnd\tbitScore\tpValueSucVsRes\tpValueCHSVsSuc\tpValueCHSVsRes\tdesciprtion\n");
 				
 				reader.readLine();
 				for(String s2 = reader.readLine(); s2 != null; s2 = reader.readLine())
 				{
 					String[] splits =s2.split("\t");
+					
+					
 					int keyInt = Integer.parseInt(new StringTokenizer(splits[0], "@").nextToken());
 					writer.write(keyInt + "\t");
+					
+					MeanFileLine mfl = meanMap.get("Line_" + keyInt);
+					
+					if( mfl == null)
+						throw new Exception("Could not find "  + "Line_" + keyInt);
+					
+					writer.write(mfl.getMeanRes() + "\t" + mfl.getMeanCar() + "\t" + mfl.getMeanSuc() + "\t");
 					
 					writer.write("contig_" + splits[1] + "\t");
 					writer.write(splits[2] + "\t");
