@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import utils.ConfigReader;
 
@@ -27,7 +26,6 @@ public class GetDistinctAlignedOrthologs
 	
 	public static List<Holder> getList() throws Exception
 	{
-		Random random = new Random();
 		List<Holder> list = new ArrayList<Holder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
@@ -65,16 +63,14 @@ public class GetDistinctAlignedOrthologs
 				{
 					Holder oldHolder = list.get(x);
 					
-					if( h.startPos > oldHolder.startPos && h.startPos < oldHolder.endPos)
+					if( h.startPos >= oldHolder.startPos && h.startPos <= oldHolder.endPos)
 						okToAdd = false;
 					
-					if( h.endPos > oldHolder.startPos && h.endPos < oldHolder.endPos)
+					if( h.endPos >= oldHolder.startPos && h.endPos <= oldHolder.endPos)
 						okToAdd = false;
 				}
 				
-				if( okToAdd && (Double.parseDouble(splits[5]) < 0.0001 ||
-									Double.parseDouble(splits[6]) < 0.0001 || 	
-											random.nextFloat() <= .25))
+				if( okToAdd )
 					list.add(h);
 				
 			}  // end if
