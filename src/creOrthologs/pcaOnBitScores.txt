@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("C:\\af_broad")
+
+myT <- read.table("bitScoreOrthologsAsColumnsReducedForPCA.txt", sep="\t", header=TRUE,row.names=1)
+
+myPCA <- prcomp( myT, center =TRUE, scale.=TRUE)
+
+write.table(file="notTransposedPCA.txt", myPCA$rotation,sep="\t")
+
+trans <- t(myT)
+
+myPCA2 <- prcomp( trans, center =TRUE, scale.=TRUE)
+
+write.table(file="transposedPCA.txt", myPCA2$rotation,sep="\t")
+
