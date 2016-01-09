@@ -30,12 +30,12 @@ public class AddResitantCategoriesToPCA
 		{
 			String[] splits = s.split("\t");
 			
-			writer.write(splits[0]);
+			writer.write(splits[0].replaceAll("\"", ""));
 			
-			String category = map.get(splits[0]);
+			String category = map.get(splits[0].replaceAll("\"", ""));
 			
 			if( category == null)
-				throw new Exception("No");
+				throw new Exception("No " + splits[0]);
 			
 			writer.write("\t" + category);
 			
