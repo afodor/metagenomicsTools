@@ -62,7 +62,7 @@ public class MergePcaToMappedOrthologs
 		writer.write(topSplits[0]);
 		
 		for( int x=0; x < NUM_COMPONENTS; x++)
-			writer.write("\tPCA" + x);
+			writer.write("\tPCA" + (x+1));
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
