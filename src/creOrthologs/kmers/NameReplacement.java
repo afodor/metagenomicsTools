@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import creOrthologs.AddMetadata;
 import utils.ConfigReader;
 
 public class NameReplacement
@@ -40,6 +41,10 @@ public class NameReplacement
 	private static HashMap<String, String> getNameMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
+		HashMap<String, String> catMap = AddMetadata.getBroadCategoryMap();
+		
+		for(String s : catMap.keySet())
+			System.out.println(s);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
@@ -59,7 +64,7 @@ public class NameReplacement
 			if( map.containsValue(splits[1]))
 					throw new Exception("No");
 			
-			map.put(splits[0], splits[1]);
+			map.put(splits[0], splits[1] +"_" + catMap.get(splits[1]));
 		}
 		
 		reader.close();
