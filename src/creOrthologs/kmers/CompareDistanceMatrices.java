@@ -19,6 +19,28 @@ public class CompareDistanceMatrices
 		double dist2;
 	}
 	
+	private static List<String> getNames() throws Exception
+	{
+		BufferedReader reader= new BufferedReader(new FileReader(new File(
+				ConfigReader.getCREOrthologsDir() + File.separator + 
+				"gatheredKmerMatrices" + File.separator +"allKey.txt")));
+		
+		
+		List<String> list = new ArrayList<String>();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			StringTokenizer sToken= new StringTokenizer(s);
+			sToken.nextToken();
+			
+			list.add(sToken.nextToken());
+		}
+		
+		reader.close(); 
+		
+		return list;
+	}
+	
 	private static void addToHolder(File file, List<Holder> list, boolean first ) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -78,12 +100,39 @@ public class CompareDistanceMatrices
 				new File(ConfigReader.getCREOrthologsDir() + File.separator + 
 				"gatheredKmerMatrices" + File.separator + "comparison.txt")));
 		
-		writer.write("allDist\tsubDist\n");
+		writer.write("name1\tname2\tallDist\tsubDist\n");
+		
+		int firstIndex=0;
+		int secondIndex =0;
+		
+		List<String> names = getNames();
 		
 		for( Holder h : list)
-			writer.write( h.dist1  + "\t" + h.dist2 + "\n");
+		{
+			
+			writer.write( names.get(firstIndex) + "\t" + names.get(secondIndex) + "\t");
+			
+			firstIndex++;
+			
+			if( firstIndex == names.size())
+			{
+				firstIndex = 0;
+				secondIndex++;
+				
+				System.out.println(secondIndex);
+			}
+			
+			writer.write( h.dist1  + "\t" + h.dist2 + "\n");		
+		}
 		
 		writer.flush();  writer.close();
+		
+		if( firstIndex != 0)
+			throw new Exception("no");
+		
+		if( secondIndex != names.size())
+			throw new Exception("No " + secondIndex);
+		
 		
 	}
 }
