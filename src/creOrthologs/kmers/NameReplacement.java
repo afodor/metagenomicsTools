@@ -23,7 +23,7 @@ public class NameReplacement
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredDistanceMatrices" + File.separator + "outreeDecodedKlebOnly.txt")));
+				"gatheredDistanceMatrices" + File.separator + "outreeDecoded.txt")));
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
@@ -49,7 +49,7 @@ public class NameReplacement
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
 			"gatheredDistanceMatrices" + File.separator + 
-				"allKeyKlebOnly.txt")));
+				"allKey.txt")));
 		
 		for(String s = reader.readLine(); s != null;s= reader.readLine())
 		{
