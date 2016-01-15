@@ -23,13 +23,14 @@ public class CompareDistanceMatrices
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
-		int num = Integer.parseInt(reader.readLine());
+		int num = Integer.parseInt(reader.readLine().trim().replaceAll("\"", ""));
 		
 		int index =0;
 		for( int x=0; x < num ; x++)
 		{
 			String s= reader.readLine();
 			StringTokenizer sToken = new StringTokenizer(s);
+			sToken.nextToken();
 			
 			for( int y=0; y < num ; y++)
 			{
@@ -75,7 +76,7 @@ public class CompareDistanceMatrices
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File(ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredKmerMatrices" + File.separator + "allDist.txt")));
+				"gatheredKmerMatrices" + File.separator + "comparison.txt")));
 		
 		writer.write("allDist\tsubDist\n");
 		
