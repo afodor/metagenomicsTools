@@ -110,7 +110,7 @@ public class CompareDistanceMatrices
 		for( Holder h : list)
 		{
 			
-			writer.write( names.get(firstIndex) + "\t" + names.get(secondIndex) + "\t");
+			writer.write( getThreeTokens(names.get(firstIndex)) + "\t" + getThreeTokens(names.get(secondIndex)) + "\t");
 			
 			firstIndex++;
 			
@@ -134,5 +134,11 @@ public class CompareDistanceMatrices
 			throw new Exception("No " + secondIndex);
 		
 		
+	}
+	
+	private static String getThreeTokens(String s)
+	{
+		String[] splits = s.split("_");
+		return splits[0] + "_" + splits[1] + "_" + splits[2];
 	}
 }
