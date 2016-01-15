@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import creOrthologs.AddMetadata;
 import utils.ConfigReader;
@@ -19,11 +20,11 @@ public class NameReplacement
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredDistanceMatrices" + File.separator + "outtree")));
+				"gatheredKmerMatrices" + File.separator + "outtree")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredDistanceMatrices" + File.separator + "outreeDecoded.txt")));
+				"gatheredKmerMatrices" + File.separator + "outreeDecoded.txt")));
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
@@ -44,27 +45,28 @@ public class NameReplacement
 		HashMap<String, String> catMap = AddMetadata.getBroadCategoryMap();
 		
 		for(String s : catMap.keySet())
-			System.out.println(s);
+			System.out.println(s + " " + catMap.get(s));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
-			"gatheredDistanceMatrices" + File.separator + 
-				"allKey.txt")));
+			"gatheredKmerMatrices" + File.separator + 
+				"subKey.txt")));
 		
+		reader.readLine();
 		for(String s = reader.readLine(); s != null;s= reader.readLine())
 		{
-			String[] splits = s.split(" ");
+			StringTokenizer sToken = new StringTokenizer(s);
 			
-			if( splits.length != 2)
+			String shortString = sToken.nextToken();
+			String longString = sToken.nextToken();
+			
+			if( map.containsKey(shortString))
 				throw new Exception("No");
 			
-			if( map.containsKey(splits[0]))
-				throw new Exception("No");
-			
-			if( map.containsValue(splits[1]))
+			if( map.containsValue(longString))
 					throw new Exception("No");
 			
-			map.put(splits[0], splits[1] +"_" + catMap.get(splits[1]));
+			map.put(shortString, longString+"_" + catMap.get(longString));
 		}
 		
 		reader.close();
