@@ -86,21 +86,12 @@ public class FastaSequence implements Comparable<FastaSequence>
 	
 	public static void main(String[] args) throws Exception
 	{
-		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(
-				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\hamp-fodor-090810.fna");
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				"D:\\classes\\Advanced_Stats_Spring2015\\seqs\\gcOut.txt")));
-		
-		writer.write("gccontent\n");
-		
-		for(FastaSequence fs= fsoat.getNextSequence(); fs != null;
-				fs = fsoat.getNextSequence() )
-		{
-			writer.write(fs.getGCRatioCheckingForValid() + "\n");
-		}
-		
-		writer.flush();  writer.close();
+		List<FastaSequence> fastaList = FastaSequence.readFastaFile(
+				"C:\\af_broad\\carolina\\klebsiella_pneumoniae_chs_11.0.scaffolds.fasta");
+		for( FastaSequence fs : fastaList)
+			{
+				System.out.println( fs.getSequence().length() + "\t" +  fs.getHeader() );
+			}
 	}
 
 	public static HashMap<String, FastaSequence> getFirstTokenSequenceMap(String filePath)
