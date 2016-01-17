@@ -109,17 +109,6 @@ public class CompareDistanceMatrices
 		
 		for( Holder h : list)
 		{
-			
-			firstIndex++;
-			
-			if( firstIndex == names.size())
-			{
-				firstIndex = 0;
-				secondIndex++;
-				
-				System.out.println(secondIndex);
-			}
-			
 			if( firstIndex < secondIndex)
 			{
 				writer.write( getThreeTokens(names.get(firstIndex)) + "\t" + getThreeTokens(names.get(secondIndex)) + "\t");
@@ -129,12 +118,21 @@ public class CompareDistanceMatrices
 				writer.write( (names.get(firstIndex).indexOf("pneu") != -1 &&  
 						names.get(secondIndex).indexOf("pneu") != -1)  + "\n");
 			}			
+			
+			firstIndex++;
+			
+			if( firstIndex == names.size())
+			{
+				firstIndex = 0;
+				secondIndex++;
+				System.out.println(secondIndex);
+			}
 		}
 		
 		writer.flush();  writer.close();
 		
 		if( firstIndex != 0)
-			throw new Exception("no");
+			throw new Exception("no " + firstIndex);
 		
 		if( secondIndex != names.size())
 			throw new Exception("No " + secondIndex);
