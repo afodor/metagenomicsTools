@@ -122,10 +122,13 @@ public class CompareDistanceMatrices
 				System.out.println(secondIndex);
 			}
 			
-			writer.write( h.dist1  + "\t" + h.dist2 + "\t");
-			
-			writer.write( (names.get(firstIndex).indexOf("pneu") != -1 &&  
-					names.get(secondIndex).indexOf("pneu") != -1)  + "\n");
+			if( firstIndex < secondIndex)
+			{
+				writer.write( h.dist1  + "\t" + h.dist2 + "\t");
+				
+				writer.write( (names.get(firstIndex).indexOf("pneu") != -1 &&  
+						names.get(secondIndex).indexOf("pneu") != -1)  + "\n");
+			}			
 		}
 		
 		writer.flush();  writer.close();
