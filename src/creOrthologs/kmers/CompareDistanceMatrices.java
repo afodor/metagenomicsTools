@@ -110,8 +110,6 @@ public class CompareDistanceMatrices
 		for( Holder h : list)
 		{
 			
-			writer.write( getThreeTokens(names.get(firstIndex)) + "\t" + getThreeTokens(names.get(secondIndex)) + "\t");
-			
 			firstIndex++;
 			
 			if( firstIndex == names.size())
@@ -124,6 +122,8 @@ public class CompareDistanceMatrices
 			
 			if( firstIndex < secondIndex)
 			{
+				writer.write( getThreeTokens(names.get(firstIndex)) + "\t" + getThreeTokens(names.get(secondIndex)) + "\t");
+				
 				writer.write( h.dist1  + "\t" + h.dist2 + "\t");
 				
 				writer.write( (names.get(firstIndex).indexOf("pneu") != -1 &&  
