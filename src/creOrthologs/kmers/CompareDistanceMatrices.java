@@ -84,7 +84,7 @@ public class CompareDistanceMatrices
 				"gatheredKmerMatrices" + File.separator + "allDist.txt");
 		
 		File file2 = new File(ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredKmerMatrices" + File.separator + "sub.txt");
+				"gatheredKmerMatrices" + File.separator + "klebsiella_pneumoniae_chs_11.0_7000000220927538_302000_307001_dist.txt");
 	
 		List<Holder> list = new ArrayList<CompareDistanceMatrices.Holder>();
 		
@@ -100,7 +100,7 @@ public class CompareDistanceMatrices
 				new File(ConfigReader.getCREOrthologsDir() + File.separator + 
 				"gatheredKmerMatrices" + File.separator + "comparison.txt")));
 		
-		writer.write("name1\tname2\tallDist\tsubDist\n");
+		writer.write("name1\tname2\tallDist\tsubDist\tbothPneu\n");
 		
 		int firstIndex=0;
 		int secondIndex =0;
@@ -122,7 +122,10 @@ public class CompareDistanceMatrices
 				System.out.println(secondIndex);
 			}
 			
-			writer.write( h.dist1  + "\t" + h.dist2 + "\n");		
+			writer.write( h.dist1  + "\t" + h.dist2 + "\t");
+			
+			writer.write( (names.get(firstIndex).indexOf("pneu") != -1 &&  
+					names.get(secondIndex).indexOf("pneu") != -1)  + "\n");
 		}
 		
 		writer.flush();  writer.close();
