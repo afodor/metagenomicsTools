@@ -84,7 +84,7 @@ public class CompareDistanceMatrices
 				"gatheredKmerMatrices" + File.separator + "allDist.txt");
 		
 		File file2 = new File(ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredKmerMatrices" + File.separator + "klebsiella_pneumoniae_chs_11.0_7000000220927538_302000_307001_dist.txt");
+				"gatheredKmerMatrices" + File.separator + "klebsiella_pneumoniae_chs_11.0_7000000220927538_700000_705000_dist.txt");
 	
 		List<Holder> list = new ArrayList<CompareDistanceMatrices.Holder>();
 		
@@ -98,7 +98,8 @@ public class CompareDistanceMatrices
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File(ConfigReader.getCREOrthologsDir() + File.separator + 
-				"gatheredKmerMatrices" + File.separator + "comparison.txt")));
+				"gatheredKmerMatrices" + File.separator + "comparison_700000"
+						+ ".txt")));
 		
 		writer.write("name1\tname2\tallDist\tsubDist\tbothPneu\n");
 		
