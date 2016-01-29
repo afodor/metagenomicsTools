@@ -71,7 +71,7 @@ public class Demultiplex
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> primerMap = getBarcodeToSampleMap();
+		HashMap<String, String> primerMap = MergeTwo.getMergedMap();
 		
 		HashSet<String> primer3Seqs = new HashSet<String>();
 		
