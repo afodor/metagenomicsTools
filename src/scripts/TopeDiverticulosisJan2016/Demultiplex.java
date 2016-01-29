@@ -96,24 +96,27 @@ public class Demultiplex
 		HashMap<String, BufferedWriter> writerMap = new HashMap<String, BufferedWriter>();
 
 		BufferedReader reader1 = 
-				new BufferedReader(new InputStreamReader( 
-						new GZIPInputStream( new FileInputStream(
-						ConfigReader.getTopJan2016Dir() +""))));
+				new BufferedReader(new FileReader(
+						ConfigReader.getTopJan2016Dir() + File.separator + 
+								"hyusc.dbcreadsr1"));
 		
 		BufferedReader reader2 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopJan2016Dir() +""))));
+								ConfigReader.getTopJan2016Dir() +
+								File.separator +  "ofiad.dbcreadsr2.gz"))));
 		
 		BufferedReader reader3 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopJan2016Dir() +""))));
+								ConfigReader.getTopJan2016Dir() +
+							File.separator + 	"nqxdy.dbcreadsr3.gz"))));
 		
-		BufferedReader reader4 = 
-				new BufferedReader(new InputStreamReader( 
-						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopJan2016Dir() +""))));
+		// this file got truncated!
+		//BufferedReader reader4 = 
+			//	new BufferedReader(new InputStreamReader( 
+				//		new GZIPInputStream( new FileInputStream(
+					//			ConfigReader.getTopJan2016Dir() +""))));
 		
 		long numDone = 0;
 		long numMatched = 0;
@@ -124,7 +127,7 @@ public class Demultiplex
 			
 			FastQ fastq1 = FastQ.readOneOrNull(reader1);
 			FastQ fastq3 =  FastQ.readOneOrNull(reader3);
-			FastQ fastq4 = FastQ.readOneOrNull(reader4);
+			//FastQ fastq4 = FastQ.readOneOrNull(reader4);
 			
 
 			if( fastq1 == null)
@@ -133,8 +136,8 @@ public class Demultiplex
 			if( fastq3 == null)
 				throw new Exception("No");
 			
-			if( fastq4 == null)
-				throw new Exception("No");
+			//if( fastq4 == null)
+				//throw new Exception("No");
 			
 			if( ! fastq2.getFirstTokenOfHeader().equals(fastq3.getFirstTokenOfHeader()))
 					throw new Exception("No");
@@ -142,8 +145,8 @@ public class Demultiplex
 			if( ! fastq2.getFirstTokenOfHeader().equals(fastq1.getFirstTokenOfHeader()))
 				throw new Exception("No");
 			
-			if( ! fastq2.getFirstTokenOfHeader().equals(fastq4.getFirstTokenOfHeader()))
-				throw new Exception("No");
+			//if( ! fastq2.getFirstTokenOfHeader().equals(fastq4.getFirstTokenOfHeader()))
+				//throw new Exception("No");
 			
 			for( String p3 : primer3Seqs)
 				if( fastq3.getSequence().startsWith( p3 ))
@@ -167,13 +170,15 @@ public class Demultiplex
 								forwardWriter.write(">" + fastq1.getFirstTokenOfHeader() + "\n");
 								forwardWriter.write(fastq1.getSequence() + "\n");
 								forwardWriter.flush();
-								
+					
+								/*
 								BufferedWriter backwardsWriter = 
 										getFromMap(writerMap, id+ "_4");
 								
 								backwardsWriter.write(">" + fastq4.getFirstTokenOfHeader() + "\n");
 								backwardsWriter.write(fastq4.getSequence() + "\n");
 								backwardsWriter.flush();
+								*/
 								
 							}
 								
@@ -203,8 +208,8 @@ public class Demultiplex
 		if(  FastQ.readOneOrNull(reader1) != null )
 			throw new Exception("No");
 
-		if(  FastQ.readOneOrNull(reader4) != null )
-			throw new Exception("No");
+		//if(  FastQ.readOneOrNull(reader4) != null )
+			//throw new Exception("No");
 		
 		for( BufferedWriter writer : writerMap.values())
 		{
@@ -214,7 +219,7 @@ public class Demultiplex
 		reader1.close();
 		reader2.close();
 		reader3.close();
-		reader4.close();
+		///reader4.close();
 		
 		System.out.println("Finished");
 	}
