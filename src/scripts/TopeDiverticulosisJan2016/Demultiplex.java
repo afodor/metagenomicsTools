@@ -36,7 +36,7 @@ public class Demultiplex
 	}
 	
 	// forward@reverse is the key
-	private static HashMap<String, String> getBarcodeToSampleMap() throws Exception
+	public static HashMap<String, String> getBarcodeToSampleMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
