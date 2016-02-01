@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -13,8 +12,8 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
+import scripts.TopeDiverticulosisJan2016.MergeTwo;
 import utils.ConfigReader;
-import utils.Translate;
 
 public class Demultiplex
 {
@@ -35,6 +34,7 @@ public class Demultiplex
 		return writer;
 	}
 	
+	/*
 	// forward@reverse is the key
 	private static HashMap<String, String> getBarcodeToSampleMap() throws Exception
 	{
@@ -68,10 +68,11 @@ public class Demultiplex
 		
 		return map;
 	}
+	*/
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> primerMap = getBarcodeToSampleMap();
+		HashMap<String, String> primerMap = MergeTwo.getMergedMap();
 		
 		HashSet<String> primer3Seqs = new HashSet<String>();
 		
@@ -174,14 +175,14 @@ public class Demultiplex
 								gotOne = true;
 								
 								BufferedWriter forwardWriter = 
-										getFromMap(writerMap, id +"_1");
+										getFromMap(writerMap, id +"_1_set1");
 								
 								forwardWriter.write(">" + fastq1.getFirstTokenOfHeader() + "\n");
 								forwardWriter.write(fastq1.getSequence() + "\n");
 								forwardWriter.flush();
 								
 								BufferedWriter backwardsWriter = 
-										getFromMap(writerMap, id+ "_4");
+										getFromMap(writerMap, id+ "_4_set1");
 								
 								backwardsWriter.write(">" + fastq4.getFirstTokenOfHeader() + "\n");
 								backwardsWriter.write(fastq4.getSequence() + "\n");

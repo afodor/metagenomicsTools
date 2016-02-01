@@ -165,7 +165,7 @@ public class Demultiplex
 								gotOne = true;
 								
 								BufferedWriter forwardWriter = 
-										getFromMap(writerMap, id +"_1");
+										getFromMap(writerMap, id +"_1" + "_set2");
 								
 								forwardWriter.write(">" + fastq1.getFirstTokenOfHeader() + "\n");
 								forwardWriter.write(fastq1.getSequence() + "\n");
