@@ -17,7 +17,7 @@ public class MergeTwo
 		System.out.println(map.size());
 	}
 	
-	public static HashMap<String, String> getMergedMap() throws Exception
+	private static HashMap<String, String> getMergedMap() throws Exception
 	{
 		 HashMap<String, String> map1 = Demultiplex.getBarcodeToSampleMap();
 		 HashMap<String, String> map2 = getAllMap();
@@ -67,7 +67,7 @@ public class MergeTwo
 		return merged;
 	}
 	
-	private static HashMap<String, String> getAllMap() throws Exception
+	public static HashMap<String, String> getAllMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
