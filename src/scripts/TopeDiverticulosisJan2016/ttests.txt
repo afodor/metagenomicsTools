@@ -1,0 +1,37 @@
+rm(list=ls())
+
+setwd("C:\\tope_Jan_2016\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",1),rep("numeric",2),rep("character",3), rep("numeric", numCols-6))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[ myT$read == "set1" & myT$set == "1" & myT$numberSequencesPerSample >= 1000
+					& !is.na(myT$caseContol), ]
+	
+	pValuesCaseControl<- vector()
+	names <- vector()
+	
+	index <- 1
+	for( i in c(2,3,7:ncol(myT))) 
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		{	
+			myLm <- lm( myT[,i] ~  factor( myT$caseContol) )
+			myAnova <- anova(myLm)
+			pValuesCaseControl[index] <- myAnova$"Pr(>F)"[1]
+			names[index] = names(myT)[i]
+			index <- index + 1	
+		}
+
+	dFrame <- data.frame( names,pValuesCaseControl  ) 
+	dFrame <- dFrame [order(dFrame$pValuesCaseControl  ),]
+	dFrame$pValuesCaseControlAdj <- p.adjust( dFrame$pValuesCaseControl , method = "BH")
+	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
+							
