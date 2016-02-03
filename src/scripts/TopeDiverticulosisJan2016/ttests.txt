@@ -38,7 +38,7 @@ for(taxa in taxaLevels )
 			
 			names[index] = names(myT)[i]
 			
-			boxplot( meanCase[index] ,meanControl, head=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
+			boxplot( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i], main=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
 			index <- index + 1	
 			
 		}
