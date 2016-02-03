@@ -141,7 +141,7 @@ public class ConfigReader
 		throw new Exception("From legacy code");
 	}
 	
-	public static String getTopJan2016Dir() throws Exception
+	public static String getTopeJan2016Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_DIVERTICULOSIS_JAN_2016_DIR);
 	}

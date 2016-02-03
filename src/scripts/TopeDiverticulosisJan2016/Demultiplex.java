@@ -25,7 +25,7 @@ public class Demultiplex
 		if( writer == null)
 		{
 			writer = new BufferedWriter(new FileWriter(new File( 
-					ConfigReader.getTopJan2016Dir() + File.separator + 
+					ConfigReader.getTopeJan2016Dir() + File.separator + 
 						"fastaOut" + File.separator + 
 					key + ".fasta")));
 			
@@ -97,19 +97,19 @@ public class Demultiplex
 
 		BufferedReader reader1 = 
 				new BufferedReader(new FileReader(
-						ConfigReader.getTopJan2016Dir() + File.separator + 
+						ConfigReader.getTopeJan2016Dir() + File.separator + 
 								"hyusc.dbcreadsr1"));
 		
 		BufferedReader reader2 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopJan2016Dir() +
+								ConfigReader.getTopeJan2016Dir() +
 								File.separator +  "ofiad.dbcreadsr2.gz"))));
 		
 		BufferedReader reader3 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopJan2016Dir() +
+								ConfigReader.getTopeJan2016Dir() +
 							File.separator + 	"nqxdy.dbcreadsr3.gz"))));
 		
 		// this file got truncated!
