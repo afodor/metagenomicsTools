@@ -4,8 +4,11 @@ setwd("C:\\tope_Jan_2016\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
+
 for(taxa in taxaLevels ) 
 {
+	pdf(paste("boxplots_", taxa, ".pdf", sep=""))
+
 	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -34,12 +37,16 @@ for(taxa in taxaLevels )
 			meanCase[index] <- mean(myT[myT$caseContol==1,i]) 
 			
 			names[index] = names(myT)[i]
+			
+			boxplot( meanCase[index] ,meanControl, head=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
 			index <- index + 1	
+			
 		}
 
 	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl ) 
 	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
 	dFrame$pValuesCaseControlWilcoxAdj <- p.adjust( dFrame$pValuesWilcoxon  , method = "BH")
 	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
 }
 							
