@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
@@ -76,7 +77,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tnumberSequencesPerSample\tshannonEntropy\tcaseContol");
+		writer.write("id\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tread\tset");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -94,12 +95,24 @@ public class AddMetadata
 			writer.write(key+ "\t" + wrapper.getNumberSequences(splits[0]) 
 						+ "\t" + wrapper.getShannonEntropy(splits[0]) + "\t" );
 			
-			Integer val = caseControlMap.get(key);
+			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
 			
 			if( val == null)
-				writer.write("NA");
+				writer.write("NA\t");
 			else
-				writer.write("" + val);
+				writer.write("" + val + "\t");
+			
+			String set = "";
+			
+			if( splits[0].indexOf("set1") != -1)
+				set = "set1";
+			else if( splits[0].indexOf("set2") != -1)
+				set = "set2";
+			else throw new Exception("No");
+			
+			writer.write(set + "\t");
+			
+			writer.write( Integer.parseInt(splits[0].split("_")[1]) + "");
 				
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
