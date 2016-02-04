@@ -77,7 +77,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tread\tset");
+		writer.write("id\tkey\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tread\tset");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -92,7 +92,7 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + wrapper.getNumberSequences(splits[0]) 
+			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  wrapper.getNumberSequences(splits[0]) 
 						+ "\t" + wrapper.getShannonEntropy(splits[0]) + "\t" );
 			
 			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
