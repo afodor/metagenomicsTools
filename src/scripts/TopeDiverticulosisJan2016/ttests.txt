@@ -12,11 +12,11 @@ for(taxa in taxaLevels )
 	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character",1),rep("numeric",2),rep("character",3), rep("numeric", numCols-6))
+	myColClasses <- c(rep("character",2),rep("numeric",2),rep("character",3), rep("numeric", numCols-7))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	
-	myT <- myT[ myT$set == "1" & myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	myT <- myT[ myT$set == "set2" & myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
 	
 	pValuesCaseControl<- vector()
 	pValuesWilcoxon <- vector()
@@ -25,7 +25,7 @@ for(taxa in taxaLevels )
 	meanControl <- vector()
 	
 	index <- 1
-	for( i in c(2,3,7:ncol(myT))) 
+	for( i in c(3,4,8:ncol(myT))) 
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
 			myLm <- lm( myT[,i] ~  factor( myT$caseContol) )
