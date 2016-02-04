@@ -126,7 +126,7 @@ public class Demultiplex
 						ConfigReader.getTopeDiverticulosisDec2015Dir() + File.separator + 
 						"local" + File.separator +  "scratch" + File.separator  + "mhumphrys" + 
 								File.separator + 
-									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R1.fastq.gz"))));
+									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R4.fastq.gz"))));
 		
 		long numDone = 0;
 		long numMatched = 0;
