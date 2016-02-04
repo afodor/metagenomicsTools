@@ -65,23 +65,38 @@ public class AddMetadata
 					File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
-			addMetadata(wrapper, logNormalizedFile, outFile);
+			addMetadata(wrapper, logNormalizedFile, outFile,false);
+			
+			logNormalizedFile = new File(ConfigReader.getTopeJan2016Dir() 
+					+ File.separator + "spreadsheets" +
+					File.separator + "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  ".txt" );
+			
+			outFile = new File( ConfigReader.getTopeJan2016Dir() 
+					+ File.separator + "spreadsheets" +
+					File.separator + "pivoted_" + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "mdsPlusMetadata.txt");
+			
+			addMetadata(wrapper, logNormalizedFile, outFile,true);
+			
 		}
 		
 	}
 	
-	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile) throws Exception
+	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
+				boolean fromR) throws Exception
 	{
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tkey\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tread\tset");
+		writer.write("id\tkey\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
-		for( int x=1; x < firstSplits.length; x++)
+		int startPos = fromR ? 0 : 1;
+		
+		for( int x=startPos; x < firstSplits.length; x++)
 			writer.write("\t" + firstSplits[x]);
 		
 		writer.write("\n");
@@ -92,8 +107,8 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  wrapper.getNumberSequences(splits[0]) 
-						+ "\t" + wrapper.getShannonEntropy(splits[0]) + "\t" );
+			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  wrapper.getNumberSequences(key) 
+						+ "\t" + wrapper.getShannonEntropy(key) + "\t" );
 			
 			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
 			
@@ -112,7 +127,7 @@ public class AddMetadata
 			
 			writer.write(set + "\t");
 			
-			writer.write( Integer.parseInt(splits[0].split("_")[1]) + "");
+			writer.write( Integer.parseInt(key.split("_")[1]) + "");
 				
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
