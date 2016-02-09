@@ -16,3 +16,16 @@ for( i in 1:ncol(myT))
 
 apply(myT,2,sum)
 apply(myTNorm,2,sum)
+
+
+medians <- apply(myT, 2, median)
+
+geoMeans <- prod(medians) ^ (1/length(medians))
+
+geoMeans
+
+medians
+
+sjs <- medians/geoMeans
+
+sjs
