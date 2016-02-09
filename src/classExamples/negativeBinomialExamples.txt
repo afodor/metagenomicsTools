@@ -1,7 +1,5 @@
 rm(list=ls())
 
-# contest; play until 3 losses with .6 chance of winning
-
 numLosses <- c( 10, 50, 100, 200) 
 
 par( mfrow= c(2,2))
