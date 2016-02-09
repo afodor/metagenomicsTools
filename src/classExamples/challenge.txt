@@ -1,0 +1,45 @@
+rm(list=ls())
+
+runAChallenge <- function(winRate)
+{
+	wins <- 0 ;
+
+	for( i in 1:10)
+	{
+		run <- rnbinom( 1, size=3, p=(1-winRate))
+		
+		if ( run > 12) 
+			run = 12
+			
+		wins = wins + run;
+	}
+	
+	if( wins >= 100 ) 
+		return (1)
+		
+	return (0);
+}
+
+numTrials <- 10000
+
+numSuccesful = vector()
+index = 1;
+winRates <- seq(.7,.8,.01)
+
+for( val in winRates)
+{
+	winRate <- val;
+	metChallenge =0;
+	for ( i in 1:numTrials)
+	{	
+		if( runAChallenge(winRate) == 1 )	
+			metChallenge = metChallenge+ 1;
+	}	
+	
+	numSuccesful[index] = metChallenge
+	index = index + 1;
+}
+
+plot( winRates, numSuccesful/numTrials)
+
+plot( winRates, log10(numSuccesful/numTrials))
