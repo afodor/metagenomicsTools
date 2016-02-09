@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\classes\\AdvancedStats_Spring2016\\Lab_5")
+
+myT <- read.table("nc101_scaff_dataCounts.txt", sep="\t", row.names=1, header=TRUE)
+
+apply(myT,2,sum)
+
+myTNorm <- myT
+
+for( i in 1:ncol(myT))
+{
+	colSum = sum(myT[,i]);
+	myTNorm[,i] = myT[,i]/colSum
+}
+
+apply(myT,2,sum)
+apply(myTNorm,2,sum)
