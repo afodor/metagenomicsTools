@@ -1,0 +1,14 @@
+rm(list=ls())
+
+# contest; play until 3 losses with .6 chance of winning
+
+numLosses <- c( 10, 50, 100, 200) 
+
+par( mfrow= c(2,2))
+
+for( i in 1:numLosses) 
+{
+	plot( 0:(2*numLosses[i]), dbinom( 0:(2*numLosses[i]),2*numLosses[i], p=0.5), 
+		main=paste("num losses",numLosses[i]), ylab=" ")
+	lines( 0:(2*numLosses[i]), dnbinom( 0:(2*numLosses[i]),numLosses[i], p=0.5), col="red", ylab="")
+}
