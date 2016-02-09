@@ -14,15 +14,27 @@ public class ConfirmNCBI
 	{
 		HashMap<String, String> expectedMap = getExpectedBestVal();
 		System.out.println("Got " + expectedMap.size());
-		HashMap<String, String> reparsedMap = getFullTopHit();
+		HashMap<String, Holder> reparsedMap = getFullTopHit();
 		System.out.println("Got " + reparsedMap.size());
 		
 		for(String s : expectedMap.keySet())
-			if( ! reparsedMap.get(s).equals(expectedMap.get(s)))
+			if( ! reparsedMap.get(s).target.equals(expectedMap.get(s)))
 				throw new Exception("Failed");
 		
 		System.out.println("Map comparison passed");
 		
+		HashMap<String, Double> percentIdentityMap = 
+				getPercentIdentityMap();
+		
+		for(String s : percentIdentityMap.keySet())
+		{
+			System.out.println( percentIdentityMap.get(s) + " " + reparsedMap.get(s).percentIdentity );
+			
+			if( Math.abs( percentIdentityMap.get(s) - reparsedMap.get(s).percentIdentity ) > 0.0001 )
+				throw new Exception("Fail");
+			
+		}
+			
 		checkColumns(8, 5);
 	}
 	
@@ -30,6 +42,37 @@ public class ConfirmNCBI
 	{
 		String target;
 		double bitScore;
+		double percentIdentity;
+	}
+	
+	// on the one hand, this is copy and past duplicated
+	// on the other hand, it is just test code
+	private static HashMap<String, Double> getPercentIdentityMap() throws Exception
+	{
+
+		HashMap<String, Double> outputVals = new HashMap<String, Double>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getChinaDir() + File.separator + 
+				"Kathryn_update_NCBI_MostWanted" + File.separator + 
+					"ncbiRuralVsUrban.txt"
+				)));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			if( splits.length != 8)
+				throw new Exception("No");
+						if(outputVals.containsKey(splits[0]))
+				throw new Exception("Fail");
+			
+			outputVals.put(splits[0],Double.parseDouble(splits[4]));
+		}
+		
+		return outputVals;
 	}
 	
 	private static void checkColumns(int kwColumns, int outputColumn) throws Exception
@@ -108,7 +151,7 @@ public class ConfirmNCBI
 		System.out.println("Pass column comparison");
 	}
 	
-	private static HashMap<String, String> getFullTopHit() throws Exception
+	private static HashMap<String, Holder> getFullTopHit() throws Exception
 	{
 		HashMap<String, Holder> holderMap = new HashMap<String,Holder>();
 		
@@ -131,19 +174,15 @@ public class ConfirmNCBI
 				h = new Holder();
 				h.target = splits[1];
 				h.bitScore = Double.parseDouble(splits[11].trim());
+				h.percentIdentity = Double.parseDouble(splits[2].trim());
 				holderMap.put( splits[0], h );
 			}
 		}
 		
 		reader.close();
-		
-		HashMap<String, String> map = new HashMap<String,String>();
-		
-		for(String s : holderMap.keySet())
-			map.put(s, holderMap.get(s).target);
 			
 		
-		return map;
+		return holderMap;
 	}
 	
 	private static HashMap<String, String> getExpectedBestVal() throws Exception
