@@ -36,6 +36,10 @@ public class ConfirmMostWanted
 		}
 			
 		checkColumns(8, 6);
+		
+		checkColumnForMostWanted();
+		
+		System.out.println("Global pass");
 	}
 	
 	private static class Holder
@@ -73,6 +77,62 @@ public class ConfirmMostWanted
 		}
 		
 		return outputVals;
+	}
+	
+	private static void checkColumnForMostWanted() throws Exception
+	{
+		HashMap<String, Double> outputVals = new HashMap<String, Double>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getChinaDir() + File.separator + 
+				"Kathryn_update_NCBI_MostWanted" + File.separator + 
+						"otusToMostWanted.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			outputVals.put(splits[1], Double.parseDouble(splits[4]));
+		}
+		
+		System.out.println("Got " + outputVals.size() + " prevelance ");
+		
+		reader.close();
+		
+		reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getChinaDir() + File.separator + 
+				"Kathryn_update_NCBI_MostWanted" + File.separator + 
+						"MW_all.txt")));
+		
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0 ; s = reader.readLine())
+		{
+			
+			String[] splits = s.split("\t");
+			
+			if(outputVals.containsKey(splits[0]))
+			{
+				Double val = outputVals.get(splits[0]) ;
+				
+				if( val == null)
+					throw new Exception("Logic error");
+				System.out.println(val +  " " + Double.parseDouble(splits[64]));
+				
+				if( Math.abs(val - Double.parseDouble(splits[65]))>0.001) 
+						throw new Exception("Fail");
+				
+				outputVals.remove(splits[0]);
+			}
+		}
+		
+		
+		reader.close();
+		
+		if(outputVals.size() != 0 )
+			throw new Exception("Fail");
+		
+		System.out.println("Pass prevalance check");
 	}
 	
 	private static void checkColumns(int kwColumns, int outputColumn) throws Exception
