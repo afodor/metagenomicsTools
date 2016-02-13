@@ -5,7 +5,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
@@ -22,6 +25,26 @@ public class PivotBySample
 		double numSeqs_set1_4=0;
 		double numSeqs_set3_1=0;
 		double numSeq_set3_4=0;
+		
+		double getNumSeqs() 
+		{
+			List<Double> list = new ArrayList<Double>();
+			list.add(numSeqs_set1_1);
+			list.add(numSeqs_set1_4);
+			
+			list.add(numSeqs_set3_1);
+			list.add(numSeq_set3_4);
+			
+			
+			Collections.sort(list);
+			
+			int index =0;
+			
+			while(list.get(index)==0)
+				index++;
+			
+			return list.get(index);
+		}
 	}
 	
 	private static HashMap<String, Holder> getHolderMap(int level) throws Exception
@@ -100,7 +123,7 @@ public class PivotBySample
 					File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "mds1PivotedBySample.txt")));
 			
-			writer.write("key\tset1_1\tnumSeqs1_1\tset1_4\tnumSeqs1_4\tset3_1\tnumSeqs3_1\tset3_4\tnumSeqs3_4\n");
+			writer.write("key\tset1_1\tnumSeqs1_1\tset1_4\tnumSeqs1_4\tset3_1\tnumSeqs3_1\tset3_4\tnumSeqs3_4\tminSeqs\n");
 			
 			for(String s : map.keySet())
 			{
@@ -109,7 +132,8 @@ public class PivotBySample
 				writer.write( getValOrNone(h.set1_1) + "\t" + h.numSeqs_set1_1 + "\t" );
 				writer.write( getValOrNone(h.set1_4) + "\t" + h.numSeqs_set1_4 + "\t" );
 				writer.write( getValOrNone(h.set3_1) + "\t" + h.numSeqs_set3_1 + "\t");
-				writer.write( getValOrNone(h.set3_4) + "\t" + h.numSeq_set3_4 + "\n");
+				writer.write( getValOrNone(h.set3_4) + "\t" + h.numSeq_set3_4 + "\t");
+				writer.write(h.getNumSeqs() + "\n");
 			}
 			
 			writer.flush();  writer.close();
