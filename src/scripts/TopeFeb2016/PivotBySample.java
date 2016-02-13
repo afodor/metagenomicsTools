@@ -18,6 +18,10 @@ public class PivotBySample
 		Double set1_4;
 		Double set3_1;
 		Double set3_4;
+		double numSeqs_set1_1=0;
+		double numSeqs_set1_4=0;
+		double numSeqs_set3_1=0;
+		double numSeq_set3_4=0;
 	}
 	
 	private static HashMap<String, Holder> getHolderMap(int level) throws Exception
@@ -32,7 +36,7 @@ public class PivotBySample
 		
 		reader.readLine();
 		
-		for(String s= reader.readLine() ; s != null; s = reader.readLine())
+		for(String s= reader.readLine() ; s != null ; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
@@ -47,22 +51,27 @@ public class PivotBySample
 			String set = splits[5];
 			int read = Integer.parseInt(splits[6]);
 			Double val = Double.parseDouble(splits[7]);
+			int numSeqs = (int) Double.parseDouble(splits[2]);
 			
 			if( set.equals("set1") && read == 1)
 			{
 				h.set1_1 = val;
+				h.numSeqs_set1_1 = numSeqs;
 			}
 			else if( set.equals("set1") && read == 4)
 			{
 				h.set1_4 = val;
+				h.numSeqs_set1_4 = numSeqs;
 			}
 			else if(set.equals("set3") && read == 1 )
 			{
 				h.set3_1 = val;
+				h.numSeqs_set3_1 = numSeqs;
 			}
 			else if(set.equals("set3") && read == 4 )
 			{
 				h.set3_4 = val;
+				h.numSeq_set3_4 = numSeqs;
 			}
 			else
 				throw new Exception("parsing error ");
@@ -91,16 +100,16 @@ public class PivotBySample
 					File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "mds1PivotedBySample.txt")));
 			
-			writer.write("key\tset1_1\tset1_4\tset3_1\tset3_4\n");
+			writer.write("key\tset1_1\tnumSeqs1_1\tset1_4\tnumSeqs1_4\tset3_1\tnumSeqs3_1\tset3_4\tnumSeqs3_4\n");
 			
 			for(String s : map.keySet())
 			{
 				Holder h = map.get(s);
 				writer.write(s + "\t");
-				writer.write( getValOrNone(h.set1_1) + "\t" );
-				writer.write( getValOrNone(h.set1_4) + "\t" );
-				writer.write( getValOrNone(h.set3_1) + "\t" );
-				writer.write( getValOrNone(h.set3_4) + "\n" );
+				writer.write( getValOrNone(h.set1_1) + "\t" + h.numSeqs_set1_1 + "\t" );
+				writer.write( getValOrNone(h.set1_4) + "\t" + h.numSeqs_set1_4 + "\t" );
+				writer.write( getValOrNone(h.set3_1) + "\t" + h.numSeqs_set3_1 + "\t");
+				writer.write( getValOrNone(h.set3_4) + "\t" + h.numSeq_set3_4 + "\n");
 			}
 			
 			writer.flush();  writer.close();
