@@ -1,0 +1,46 @@
+rm(list=ls())
+library("DESeq")
+
+setwd("C:\\classes\\AdvancedStats_Spring2016")
+
+myT <- read.table("nc101_scaff_dataCounts.txt",sep="\t",header=TRUE,row.names=1)
+conditions <- factor(c( "D2", "D2", "D2", "w12", "w12", "w12", "w20", "w20", "w20", "w20", "w20" ))
+
+cds <- newCountDataSet(myT, conditions)
+cds <- estimateSizeFactors(cds)
+cds <- estimateDispersions(cds,method="blind")
+
+means <- apply(counts(cds, normalized=TRUE),1,mean)
+variances <- apply(counts(cds, normalized=TRUE),1,var)
+ 
+xim <- mean( 1/sizeFactors(cds) )
+dispsAll <- ( variances - xim * means ) / means^2
+   
+plot( log10(fitInfo(cds)$perGeneDispEsts*means*means), log10(dispsAll*means*means))
+lines(0:10000,0:10000,col="RED")
+
+plot( log10(means), log10(fitInfo(cds)$perGeneDispEsts*means*means))   
+lines(0:10000,0:10000,col="RED")
+points(log10(means), log10(fData(cds)[,1] * means * means), col="YELLOW")
+points(log10(means), log10(fitInfo(cds)$fittedDispEsts * means * means), col="BLUE")
+   
+plot( log10(means), log10(fitInfo(cds)$perGeneDispEsts*means*means))   
+lines(0:10000,0:10000,col="RED")
+points(log10(means), log10(variances),col="BLUE")
+   
+   plot( log10(means), log10(fitInfo(cds)$perGeneDispEsts*means*means))   
+   lines(0:10000,0:10000,col="RED")
+   points(log10(means), log10(variances) ,col="BLUE")
+   
+   plot( log10(means), log10(variances))   
+   lines(0:10000,0:10000,col="RED")
+   points(log10(means), log10(fitInfo(cds)$perGeneDispEsts*means*means) ,col="BLUE")
+   
+   plot(log10(means), log10(variances))
+   points(log10(means), log10(fitInfo(cds)$fittedDispEsts * means * means), col="BLUE")
+   
+  medians <- apply(myT,2,median)
+  geoMean <- prod(medians ) ^ (1/length(medians))
+  geoMean 
+  
+  plot(medians/geoMean, sizeFactors(cds))
