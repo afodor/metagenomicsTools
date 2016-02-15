@@ -10,6 +10,8 @@ cds <- newCountDataSet(myT, conditions)
 cds <- estimateSizeFactors(cds)
 cds <- estimateDispersions(cds,method="blind")
 
+res <- nbinomTest( cds, "D1", "w12")
+
 means <- apply(counts(cds, normalized=TRUE),1,mean)
 variances <- apply(counts(cds, normalized=TRUE),1,var)
  
