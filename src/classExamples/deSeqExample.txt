@@ -4,13 +4,20 @@ library("DESeq")
 setwd("C:\\classes\\AdvancedStats_Spring2016")
 
 myT <- read.table("nc101_scaff_dataCounts.txt",sep="\t",header=TRUE,row.names=1)
+
+numCols <- ncol(myT)
+	myColClasses <- c("character", rep("numeric", numCols))
+	myTAsNum <-read.table("nc101_scaff_dataCounts.txt",sep="\t",header=TRUE,
+	colClasses=myColClasses)
+
 conditions <- factor(c( "D2", "D2", "D2", "w12", "w12", "w12", "w20", "w20", "w20", "w20", "w20" ))
 
 cds <- newCountDataSet(myT, conditions)
 cds <- estimateSizeFactors(cds)
-cds <- estimateDispersions(cds,method="blind")
+cds <- estimateDispersions(cds)
 
-res <- nbinomTest( cds, "D1", "w12")
+res <- nbinomTest( cds, "D2", "w20")
+hist(res$pval,breaks=30)
 
 means <- apply(counts(cds, normalized=TRUE),1,mean)
 variances <- apply(counts(cds, normalized=TRUE),1,var)
@@ -46,3 +53,23 @@ points(log10(means), log10(variances),col="BLUE")
   geoMean 
   
   plot(medians/geoMean, sizeFactors(cds))
+  
+  
+### compare with t-tests
+
+myTNorm <- myTAsNum
+
+for ( i in 2:ncol(myTAsNum))
+{
+	colSum = sum(myTNorm[,i])
+	myTNorm[,i] = myTNorm[,i]/colSum
+}
+
+pValuesFromTTest <- vector()
+
+for( i in 1:nrow(myT))
+{
+	pValuesFromTTest[i] = t.test( myTNorm[ i,2:4 ], myTNorm[ i, 8:12] )$p.value
+}
+
+plot(log10(pValuesFromTTest), log10(res$pval))
