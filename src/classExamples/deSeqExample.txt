@@ -14,7 +14,8 @@ conditions <- factor(c( "D2", "D2", "D2", "w12", "w12", "w12", "w20", "w20", "w2
 
 cds <- newCountDataSet(myT, conditions)
 cds <- estimateSizeFactors(cds)
-cds <- estimateDispersions(cds)
+cds <- estimateDispersions(cds,sharingMode ="gene-est-only" )
+#cds <- estimateDispersions(cds,method="blind", sharingMode ="gene-est-only" )
 
 res <- nbinomTest( cds, "D2", "w20")
 hist(res$pval,breaks=30)
