@@ -31,4 +31,5 @@ for( i in 1:numIterations )
 
 myHist <- hist(posteiorDist,breaks=200,plot=FALSE)
 plot( myHist$mids, myHist$counts/numIterations) 
-lines( myHist$mids, dbeta(myHist$mids, 10+14, 10+10)/200,col="red") 
+dbetasum = sum(dbeta(myHist$mids, 10+14, 10+10))
+lines( myHist$mids, dbeta(myHist$mids, 10+14, 10+10)/dbetasum,col="red") 
