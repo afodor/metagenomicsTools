@@ -40,11 +40,11 @@ public class AddMetadata
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
-			writeFile(level);
+			writeFile(level,false);
 		}
 	}
  	
-	private static void writeFile(String level) throws Exception
+	private static void writeFile(String level, boolean fromR) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getRachSachReanalysisDir() + File.separator + File.separator + 
@@ -57,9 +57,20 @@ public class AddMetadata
 				"cohousingRun_" + level + "_AsColumnsLogNormalized.txt")));
 		
 		writer.write("sample\tline\ttissue\tcage\ttime\tbatch\tline\t");
-		writer.write(reader.readLine() + "\n");
-		HashMap<String, String> cageMap = getCageMap();
 		
+		String[] topSplits = reader.readLine().split("\t");
+		
+		int startPos =1;
+		
+		if( fromR)
+			startPos =0;
+		
+		for( int x=startPos; x < topSplits.length; x++)
+			writer.write("\t" + topSplits);
+		
+		writer.write("\n");
+		
+		HashMap<String, String> cageMap = getCageMap();
 		HashMap<String, MappingFileLine> map = MappingFileLine.getMap();
 		HashMap<String, NewNancyCodesMetaline> newMap = NewNancyCodesMetaline.getMetaMap();
 	
