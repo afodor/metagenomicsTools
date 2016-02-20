@@ -56,7 +56,7 @@ public class AddMetadata
 					"NancyCoHouse" + File.separator + 
 				"cohousingRun_" + level + "_AsColumnsLogNormalized.txt")));
 		
-		writer.write("sample\tline\ttissue\tcage\ttime\tbatch\tline\t");
+		writer.write("sample\tline\ttissue\tcage\ttime\tbatch\tline");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -66,7 +66,7 @@ public class AddMetadata
 			startPos =0;
 		
 		for( int x=startPos; x < topSplits.length; x++)
-			writer.write("\t" + topSplits);
+			writer.write("\t" + topSplits[x]);
 		
 		writer.write("\n");
 		
