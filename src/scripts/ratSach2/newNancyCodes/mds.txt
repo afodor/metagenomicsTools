@@ -1,0 +1,21 @@
+
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\MarkLyteTasteManuscript\\NancyCoHouse")
+
+levels <- c("phylum","class","order","family","genus")
+	
+for ( t in levels )
+{
+	inFileName <- paste( "cohousingRun_",t,"_AsColumnsLogNormalized.txt", sep ="" )
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c("character", rep("numeric", numCols-1))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	myMDS<- capscale(myT~1,distance="bray")
+
+	write.table(myMDS$CA$u, sep="\t", file=paste("mds_", inFileName,sep=""))
+	write.table(myMDS$CA$eig,file=paste("eigenValues_", inFileName, ".txt", sep=""), sep="\t")
+}
+	
