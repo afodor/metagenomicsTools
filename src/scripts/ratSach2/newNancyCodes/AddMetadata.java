@@ -47,14 +47,14 @@ public class AddMetadata
 	private static void writeFile(String level, boolean fromR) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getRachSachReanalysisDir() + File.separator + File.separator + 
-			"rdpAnalysis" + File.separator + 
-			"sparseThreeColumn_" + level + "_AsColumnsLogNormalized.txt")));
+				ConfigReader.getRachSachReanalysisDir() + File.separator +
+				"NancyCoHouse" + File.separator + 
+			 "cohousingRun_" + level +  "_AsColumnsLogNormalized.txt")));
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getRachSachReanalysisDir() + File.separator +
 					"NancyCoHouse" + File.separator + 
-				"cohousingRun_" + level + "_AsColumnsLogNormalized.txt")));
+				"cohousingRun_" + level + "_AsColumnsLogNormalizedPlusMetadata.txt")));
 		
 		writer.write("sample\tline\ttissue\tcage\ttime\tbatch\tline");
 		
