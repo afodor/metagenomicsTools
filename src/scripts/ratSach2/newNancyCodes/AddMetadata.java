@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
-
+import parsers.OtuWrapper;
 import scripts.ratSach2.MappingFileLine;
 import utils.ConfigReader;
 
@@ -40,23 +40,46 @@ public class AddMetadata
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
-			writeFile(level,false);
+			System.out.println(level);
+			
+			File inFile = new File( ConfigReader.getRachSachReanalysisDir() + File.separator +
+					"NancyCoHouse" + File.separator + 
+					 "cohousingRun_" + level +  "_AsColumnsLogNormalized.txt");
+			
+			OtuWrapper wrapper = new OtuWrapper(			
+					ConfigReader.getRachSachReanalysisDir() + File.separator +
+			"rdpAnalysis" + File.separator + 
+			"sparseThreeColumn_" + level + "_AsColumns.txt");
+			
+			File outFile = new File(ConfigReader.getRachSachReanalysisDir() + File.separator +
+					"NancyCoHouse" + File.separator + 
+					 "cohousingRun_" + level +  "_AsColumnsLogNormalizedPlusMetadata.txt");
+			
+					 
+			writeFile(inFile, outFile, wrapper,false);
+			
+			inFile = new File( ConfigReader.getRachSachReanalysisDir() + File.separator +
+					"NancyCoHouse" + File.separator + 
+					"mds_cohousingRun_" + level + "_AsColumnsLogNormalized.txt");
+			
+
+			outFile = new File( ConfigReader.getRachSachReanalysisDir() + File.separator +
+					"NancyCoHouse" + File.separator + 
+					"mds_cohousingRun_" + level + "_AsColumnsLogNormalizedPlusMetadata.txt");
+			
+			writeFile(inFile, outFile, wrapper, true);
+			
+			
 		}
 	}
  	
-	private static void writeFile(String level, boolean fromR) throws Exception
+	private static void writeFile(File inFile, File outFile,  OtuWrapper wrapper,  boolean fromR) throws Exception
 	{
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getRachSachReanalysisDir() + File.separator +
-				"NancyCoHouse" + File.separator + 
-			 "cohousingRun_" + level +  "_AsColumnsLogNormalized.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
-		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getRachSachReanalysisDir() + File.separator +
-					"NancyCoHouse" + File.separator + 
-				"cohousingRun_" + level + "_AsColumnsLogNormalizedPlusMetadata.txt")));
+		BufferedWriter writer =new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("sample\tline\ttissue\tcage\ttime\tbatch\tline");
+		writer.write("sample\tnumSequencesPerSample\tshannonDiversity\tline\ttissue\tcage\ttime\tbatch\tline");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -84,8 +107,13 @@ public class AddMetadata
 			{
 				MappingFileLine mfl = map.get(splits[0].replaceAll("\"", ""));
 				String cage = cageMap.get(mfl.getRatID());
+			
 				
 				writer.write(splits[0].replaceAll("\"", "") + "\t");
+				
+				writer.write(wrapper.getCountsForSample(splits[0].replaceAll("\"", "")) + "\t");
+				writer.write(wrapper.getShannonEntropy(splits[0].replaceAll("\"", "")) + "\t");
+				
 				writer.write(mfl.getLine() + "\t");
 				writer.write(mfl.getTissue() + "\t");
 				writer.write(cage + "\t");
