@@ -79,7 +79,7 @@ public class AddMetadata
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("sample\tnumSequencesPerSample\tshannonDiversity\tline\ttissue\tcage\ttime\tbatch\tline");
+		writer.write("sample\tnumSequencesPerSample\tshannonDiversity\tcondition\tline\ttissue\tcage\ttime\tbatch\tline");
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -114,6 +114,7 @@ public class AddMetadata
 				writer.write(wrapper.getCountsForSample(splits[0].replaceAll("\"", "")) + "\t");
 				writer.write(wrapper.getShannonEntropy(splits[0].replaceAll("\"", "")) + "\t");
 				
+				writer.write(mfl.getCondition() + "\t");
 				writer.write(mfl.getLine() + "\t");
 				writer.write(mfl.getTissue() + "\t");
 				writer.write(cage + "\t");
