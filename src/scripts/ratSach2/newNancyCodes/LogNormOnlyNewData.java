@@ -44,7 +44,7 @@ public class LogNormOnlyNewData
 				
 				if( newMap.containsKey(splits[0].replaceAll("\"", "")))
 				{
-					writer.write( reader.readLine() + "\n" );
+					writer.write( s + "\n" );
 				}
 			}
 			
