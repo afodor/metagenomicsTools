@@ -16,6 +16,9 @@ for(taxa in taxaLevels )
 	pValuesTime <- vector()
 	pValuesCondition <- vector()
 	pValuesInteraction <- vector()
+	pValuesLine <- vector()
+	meanHigh <- vector()
+	meanLow <- vector()
 	index <- 1
 	
 	for( i in c(2:3,11:numCols))
@@ -25,21 +28,26 @@ for(taxa in taxaLevels )
 			bug <- myT[,i]
 			time <- factor(myT$time)
 			condition <- factor(myT$condition)
+			line <- factor(myT$line)
+			meanHigh[index] <- mean(bug[ myT$line=="High"])
+			meanLow[index] <- mean(bug[ myT$line=="Low"])
 		
-			aLm <- lm( bug ~ time * condition )
+			aLm <- lm( bug ~ line + time * condition )
 			
-			pValuesTime[index] <- anova(aLm)$"Pr(>F)"[1]
-			pValuesCondition[index] <- anova(aLm)$"Pr(>F)"[2]
-			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[3]
+			pValuesLine[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesTime[index] <- anova(aLm)$"Pr(>F)"[2]
+			pValuesCondition[index] <- anova(aLm)$"Pr(>F)"[3]
+			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[4]
 			
 			names[index] = names(myT)[i]
 			index=index+1
 		}
 		
-	dFrame <- data.frame( names, pValuesTime ,pValuesCondition,pValuesInteraction)
-	dFrame <- dFrame [order(dFrame$pValuesInteraction),]
+	dFrame <- data.frame( names, meanHigh, meanLow, pValuesTime , pValuesLine, pValuesCondition,pValuesInteraction)
+	dFrame <- dFrame [order(dFrame$pValuesLine),]
 	
-	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime , method = "BH" )	
+	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime , method = "BH" )
+	dFrame$adjustedPLine<- p.adjust( dFrame$pValuesLine, method = "BH" )		
 	dFrame$adjustedPCondition<- p.adjust( dFrame$pValuesCondition , method = "BH" )
 	dFrame$adjustedPInteraction<- p.adjust( dFrame$pValuesInteraction , method = "BH" )	
 	
