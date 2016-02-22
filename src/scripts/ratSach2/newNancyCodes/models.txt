@@ -1,0 +1,47 @@
+rm(list=ls())
+
+setwd("C:\\MarkLyteTasteManuscript\\NancyCoHouse")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{	
+	inFileName <- paste( "cohousingRun_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",1), rep("numeric", 2),rep("character",7), rep("numeric", numCols-10) )
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+	names <- vector()
+	pValuesTime <- vector()
+	pValuesCondition <- vector()
+	pValuesInteraction <- vector()
+	index <- 1
+	
+	for( i in c(2:3,11:numCols))
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+		{
+		
+			bug <- myT[,i]
+			time <- factor(myT$time)
+			condition <- factor(myT$condition)
+		
+			aLm <- lm( bug ~ time * condition )
+			
+			pValuesTime[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesCondition[index] <- anova(aLm)$"Pr(>F)"[2]
+			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[3]
+			
+			names[index] = names(myT)[i]
+			index=index+1
+		}
+		
+	dFrame <- data.frame( names, pValuesTime ,pValuesCondition,pValuesInteraction)
+	dFrame <- dFrame [order(dFrame$pValuesInteraction),]
+	
+	dFrame$adjustedPTime<- p.adjust( dFrame$pValuesTime , method = "BH" )	
+	dFrame$adjustedPCondition<- p.adjust( dFrame$pValuesCondition , method = "BH" )
+	dFrame$adjustedPInteraction<- p.adjust( dFrame$pValuesInteraction , method = "BH" )	
+	
+	write.table(dFrame, file=paste("pValuesForInteraction", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
