@@ -42,9 +42,10 @@ for(taxa in taxaLevels )
 			
 			names[index] = names(myT)[i]
 			
-			par(mfrow=c(3,1))
+			par(mfrow=c(4,1))
 			
-			myFrame <- data.frame( bug, time, condition, line )
+			timeByCross <- factor(paste("time", myT$time , "_",myT$condition,sep=""))
+			myFrame <- data.frame( bug, time, condition, line,timeByCross  )
 			
 			legend <- paste( names[index], format( pValuesLine[index],digits=3))
 			
@@ -56,13 +57,15 @@ for(taxa in taxaLevels )
 			
 			stripchart(bug ~ time, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			
-			legend <- paste( names[index], "condition : " , format(pValuesCondition[index],digits=3),
-									"interaction : " , format( pValuesInteraction[index],digits=3))
+			legend <- paste( names[index], "condition : p=" , format(pValuesCondition[index],digits=3))
 			
 			plot( bug ~ condition , main =legend)
 			
 			stripchart(bug ~ condition, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
 							
+			plot( bug ~ timeByCross, main = paste("interaction : " , format( pValuesInteraction[index],digits=3)) ) 
+			stripchart(bug ~  timeByCross, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+			
 			index=index+1
 		}
 		
