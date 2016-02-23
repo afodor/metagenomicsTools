@@ -12,7 +12,7 @@ homemadeT <- function( df  )
 		sum = sum+ val*val
 	}
 	
-	return (topPart/sqrt(df/sum))
+	return (topPart/sqrt(sum/df))
 }
 
 numTrials <- 1000000
