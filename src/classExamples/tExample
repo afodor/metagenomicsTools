@@ -4,25 +4,26 @@ homemadeT <- function( df  )
 {
 	topPart <- rnorm(1)
 	
-	bottomPart <- 0
+	sum <- 0
 	
 	for ( i in 1: df)
 	{
 		val = rnorm(1)
-		bottomPart = bottomPart + val*val
+		sum = sum+ val*val
 	}
 	
-	return (topPart/sqrt(bottomPart/df))
+	return (topPart/sqrt(df/sum))
 }
 
-numTrials <- 100000
-vals <- vector(length=100000)
-my_df <- 5
+numTrials <- 1000000
+vals <- vector(length=numTrials)
+my_df <- 25
 
 for (i in 1:numTrials)
 {
 	vals[i] = homemadeT(my_df )
 }
 
-myHist <- hist( vals, breaks=20)
-lines( myHist$mids, dt( myHist$mids, my_df ) * numTrials, col="red")
+myHist <- hist( vals, breaks=50, plot=FALSE)
+plot( myHist$mids, myHist$counts/numTrials)
+lines( myHist$mids, dt( myHist$mids, my_df ) / sum(dt( myHist$mids, my_df )), col="red")
