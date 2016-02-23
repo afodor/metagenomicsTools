@@ -6,6 +6,7 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {	
+	pdf( paste(taxa,".pdf",sep=""))
 	inFileName <- paste( "cohousingRun_", taxa, "_AsColumnsLogNormalizedPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -40,6 +41,15 @@ for(taxa in taxaLevels )
 			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[4]
 			
 			names[index] = names(myT)[i]
+			
+			
+			par(mfrow=c(3,1))
+			
+			plot( bug ~ line , main =paste( names[index], pValuesLine[index]))
+			plot( bug ~ time, main =paste( names[index], pValuesTime[index]))
+			plot( bug ~ condition , main =paste( names[index], "condition : " , pValuesCondition[index],
+									"interaction : " ,pValuesInteraction[index]))
+			
 			index=index+1
 		}
 		
@@ -52,4 +62,5 @@ for(taxa in taxaLevels )
 	dFrame$adjustedPInteraction<- p.adjust( dFrame$pValuesInteraction , method = "BH" )	
 	
 	write.table(dFrame, file=paste("pValuesForInteraction", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
 }
