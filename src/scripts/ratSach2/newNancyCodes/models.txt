@@ -42,14 +42,27 @@ for(taxa in taxaLevels )
 			
 			names[index] = names(myT)[i]
 			
-			
 			par(mfrow=c(3,1))
 			
-			plot( bug ~ line , main =paste( names[index], pValuesLine[index]))
-			plot( bug ~ time, main =paste( names[index], pValuesTime[index]))
-			plot( bug ~ condition , main =paste( names[index], "condition : " , pValuesCondition[index],
-									"interaction : " ,pValuesInteraction[index]))
+			myFrame <- data.frame( bug, time, condition, line )
 			
+			legend <- paste( names[index], format( pValuesLine[index],digits=3))
+			
+			plot( bug ~ line , main =legend)
+			
+			stripchart(bug ~ line, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			plot( bug ~ time, main =paste( names[index], format( pValuesTime[index],digits=3)))
+			
+			stripchart(bug ~ time, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			legend <- paste( names[index], "condition : " , format(pValuesCondition[index],digits=3),
+									"interaction : " , format( pValuesInteraction[index],digits=3))
+			
+			plot( bug ~ condition , main =legend)
+			
+			stripchart(bug ~ condition, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+							
 			index=index+1
 		}
 		
