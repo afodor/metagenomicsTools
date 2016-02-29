@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
-import scripts.TopeDiverticulosisJan2016.MergeTwo;
 import utils.ConfigReader;
 import utils.Translate;
 
@@ -55,7 +54,7 @@ public class DemultiplexFile4
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> primerMap = MergeTwo.getAllMap();
+		HashMap<String, String> primerMap = getFile4Map();
 		
 		HashSet<String> primer3Seqs = new HashSet<String>();
 		
