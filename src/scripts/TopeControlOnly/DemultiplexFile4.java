@@ -158,14 +158,14 @@ public class DemultiplexFile4
 								gotOne = true;
 								
 								BufferedWriter forwardWriter = 
-									DemultiplexFile3.getFromMap(writerMap, id +"_1_set1");
+									DemultiplexFile3.getFromMap(writerMap, id +"_1_file4");
 								
 								forwardWriter.write(">" + fastq1.getFirstTokenOfHeader() + "\n");
 								forwardWriter.write(fastq1.getSequence() + "\n");
 								forwardWriter.flush();
 								
 								BufferedWriter backwardsWriter = 
-										DemultiplexFile3.getFromMap(writerMap, id+ "_4_set1");
+										DemultiplexFile3.getFromMap(writerMap, id+ "_4_file4");
 								
 								backwardsWriter.write(">" + fastq4.getFirstTokenOfHeader() + "\n");
 								backwardsWriter.write(fastq4.getSequence() + "\n");
