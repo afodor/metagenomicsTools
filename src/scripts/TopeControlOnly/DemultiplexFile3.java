@@ -1,9 +1,10 @@
-package scripts.TopeFeb2016;
+package scripts.TopeControlOnly;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -12,10 +13,10 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
-import scripts.TopeDiverticulosisJan2016.MergeTwo;
 import utils.ConfigReader;
+import utils.Translate;
 
-public class Demultiplex
+public class DemultiplexFile3
 {
 	private static BufferedWriter getFromMap(HashMap<String, BufferedWriter> map, String key) throws Exception
 	{
@@ -24,7 +25,7 @@ public class Demultiplex
 		if( writer == null)
 		{
 			writer = new BufferedWriter(new FileWriter(new File( 
-					ConfigReader.getTopeFeb2016Dir() + File.separator + 
+					ConfigReader.getTopeControlDir() + File.separator + 
 						"fastaOut" + File.separator + 
 					key + ".fasta")));
 			
@@ -33,10 +34,45 @@ public class Demultiplex
 		
 		return writer;
 	}
+
+	public static HashMap<String, String> getFile3Map() throws Exception
+	{
+		HashMap<String, String> map = new HashMap<String,String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+			ConfigReader.getTopeControlDir() + File.separator + 
+			"library3.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( splits.length != 13)
+				throw new Exception("No");
+			
+			String id = splits[0];
+			
+			if(map.containsValue(id))
+				throw new Exception("No");
+			
+			String primerKey = splits[8] + "@" + Translate.reverseTranscribe(splits[3]);
+			
+			if( map.containsKey(primerKey))
+				throw new Exception("No");
+			
+			map.put(primerKey,id);
+		}
+		
+		reader.close();
+		
+		return map;
+	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> primerMap = MergeTwo.getAllMap();
+		HashMap<String, String> primerMap = getFile3Map();
 		
 		HashSet<String> primer3Seqs = new HashSet<String>();
 		
@@ -169,7 +205,6 @@ public class Demultiplex
 		if(  FastQ.readOneOrNull(reader1) != null )
 			throw new Exception("No");
 
-		// this was commented out in original run
 		if(  FastQ.readOneOrNull(reader4) != null )
 			throw new Exception("No");
 		
@@ -181,8 +216,6 @@ public class Demultiplex
 		reader1.close();
 		reader2.close();
 		reader3.close();
-		
-		// this was commented out in original run
 		reader4.close();
 		
 		System.out.println("Finished");

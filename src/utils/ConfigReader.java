@@ -80,6 +80,7 @@ public class ConfigReader
 	public static final String KATIE_DIR = "KATIE_DIR";
 	public static final String JOBIN_CARDIO_DIR = "JOBIN_CARDIO_DIR";
 	public static final String IAN_LONGITUDINAL_DEC_2015_DIR= "IAN_LONGITUDINAL_DEC_2015_DIR";
+	public static final String TOPE_CONTROL_DIR = "TOPE_CONTROL_DIR";
 	
 	public static final String TOPE_DIVERTICULOSIS_DEC_2015_DIR = 
 					"TOPE_DIVERTICULOSIS_DEC_2015_DIR";
@@ -152,6 +153,11 @@ public class ConfigReader
 	public static String getTopeFeb2016Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_DIVERTICULOSIS_FEB_2016_DIR);
+	}
+	
+	public static String getTopeControlDir() throws Exception
+	{
+		return getConfigReader().getAProperty(TOPE_CONTROL_DIR);
 	}
 	
 	public static String getIanLongitudnalDec2015Dir() throws Exception
