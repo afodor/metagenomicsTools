@@ -82,6 +82,30 @@ public class AddMetadata
 		
 	}
 	
+	private static int getReadNum(String key) throws Exception
+	{
+		//System.out.println(key);
+		String[] splits = key.split("_");
+		
+		int splitID = 2;
+		int val = -1;
+		
+		try
+		{
+			 val = Integer.parseInt(splits[splitID]);
+		}
+		catch(Exception ex)
+		{
+			splitID = 1;
+			val = Integer.parseInt(splits[splitID]);	
+		}
+		
+		if( val != 1 && val != 4)
+			throw new Exception("No ");
+		
+		return val;
+	}
+	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
 				boolean fromR) throws Exception
 	{
@@ -90,7 +114,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tkey\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
+		writer.write("id\tkey\treadNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -107,7 +131,8 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + key.split("_")[0] + "\t" + ( key.indexOf("DV-000-") != -1) + "\t" + 
+			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  getReadNum(key) + "\t" + 
+						( key.indexOf("DV-000-") != -1) + "\t" + 
 					wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" );
 			
