@@ -92,7 +92,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\treadNumber\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep\t"
+		writer.write("id\treadNumber\tnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep\t"
 				+"isNegativeContol");
 		
 		String[] firstSplits = reader.readLine().split("\t");
@@ -110,7 +110,9 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + getReadNum(key) + "\t" +  wrapper.getNumberSequences(key) 
+			writer.write(key.replaceAll("_file3.fastatoRDP.txt", "").replaceAll("_file4.fastatoRDP.txt", "")
+					+ "\t" + getReadNum(key) + "\t" +  wrapper.getNumberSequences(key) 
+			
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" + 
 					getFile(key) +  "\t" + (key.toLowerCase().indexOf("mouse") != -1) + "\t" + 
 									(key.toLowerCase().indexOf("bacteria") != -1) + "\t"+ 
