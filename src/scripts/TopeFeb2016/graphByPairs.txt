@@ -13,9 +13,9 @@ for(taxa in taxaLevels )
 	myColClasses <- c( rep("character",4), rep("numeric", 2),rep("character",2),rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
 	
-	pdf("pairs_", taxa, ".pdf",sep="")
+	pdf(paste("pairs_", taxa, ".pdf",sep=""))
 	
-	par(mfrow=c(10,2))
+	par(mfrow=c(2,10))
 	
 	keys <- unique( myT$key ) 
 	
