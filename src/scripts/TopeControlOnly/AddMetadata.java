@@ -61,6 +61,30 @@ public class AddMetadata
 		throw new Exception("No");
 	}
 	
+	private static int getReadNum(String key) throws Exception
+	{
+		//System.out.println(key);
+		String[] splits = key.split("_");
+		
+		int splitID = 2;
+		int val = -1;
+		
+		try
+		{
+			 val = Integer.parseInt(splits[splitID]);
+		}
+		catch(Exception ex)
+		{
+			splitID = 1;
+			val = Integer.parseInt(splits[splitID]);	
+		}
+		
+		if( val != 1 && val != 4)
+			throw new Exception("No ");
+		
+		return val;
+	}
+	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
 				boolean fromR) throws Exception
 	{
@@ -68,7 +92,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep\t"
+		writer.write("id\treadNumber\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep\t"
 				+"isNegativeContol");
 		
 		String[] firstSplits = reader.readLine().split("\t");
@@ -86,7 +110,7 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + wrapper.getNumberSequences(key) 
+			writer.write(key+ "\t" + getReadNum(key) + "\t" +  wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" + 
 					getFile(key) +  "\t" + (key.toLowerCase().indexOf("mouse") != -1) + "\t" + 
 									(key.toLowerCase().indexOf("bacteria") != -1) + "\t"+ 
