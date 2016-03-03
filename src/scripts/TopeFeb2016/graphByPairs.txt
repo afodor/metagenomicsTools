@@ -1,0 +1,40 @@
+
+rm(list=ls())
+
+setwd("C:\\tope_Feb_2016\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( "pivoted_",taxa, "mdsPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c( rep("character",4), rep("numeric", 2),rep("character",2),rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	
+	pdf("pairs_", taxa, ".pdf",sep="")
+	
+	par(mfrow=c(10,2))
+	
+	keys <- unique( myT$key ) 
+	
+	lowX <- min(myT$MDS1)
+	highX <- max(myT$MDS1)
+	lowY <- min(myT$MDS2)
+	highY <- max(myT$MDS2)
+	
+	for( key in keys ) 
+	{
+		rows <- myT[ myT$key == key & myT$readNum == "1" & myT$numberSequencesPerSample > 1000 ,]
+		
+		
+		if( length(rows) > 1 ) 
+		{
+			plot( rows$MDS1, rows$MDS2, xlim=c(lowX, highX), ylim = c(lowY, highY),
+						main = paste(key), cex=1.2, pch =19 )
+		}
+	}
+	
+	dev.off() 
+}
