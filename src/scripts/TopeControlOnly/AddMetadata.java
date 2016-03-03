@@ -68,7 +68,8 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep");
+		writer.write("id\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep\t"
+				+"isNegativeContol");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -89,7 +90,8 @@ public class AddMetadata
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" + 
 					getFile(key) +  "\t" + (key.toLowerCase().indexOf("mouse") != -1) + "\t" + 
 									(key.toLowerCase().indexOf("bacteria") != -1) + "\t"+ 
-									 (key.toLowerCase().indexOf("5BM-007") != -1));
+									 (key.toLowerCase().indexOf("5bm-007") != -1) + "\t" + 
+										(key.toLowerCase().indexOf("dv-000-") != -1) );
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
