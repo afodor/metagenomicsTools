@@ -12,8 +12,6 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-
-	
 	public static void main(String[] args) throws Exception
 	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -70,7 +68,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria");
+		writer.write("id\ttnumberSequencesPerSample\tshannonEntropy\tset\tisMouse\tisbacteria\tisStrep");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -90,7 +88,8 @@ public class AddMetadata
 			writer.write(key+ "\t" + wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" + 
 					getFile(key) +  "\t" + (key.toLowerCase().indexOf("mouse") != -1) + "\t" + 
-									(key.toLowerCase().indexOf("bacteria") != -1) );
+									(key.toLowerCase().indexOf("bacteria") != -1) + "\t"+ 
+									 (key.toLowerCase().indexOf("5BM-007") != -1));
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
