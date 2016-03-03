@@ -15,9 +15,11 @@ for(taxa in taxaLevels )
 	
 	pdf(paste("pairs_", taxa, ".pdf",sep=""))
 	
-	par(mfrow=c(2,10))
+	par(mfrow=c(2,2))
 	
 	keys <- unique( myT$key ) 
+	
+	myT <- myT[ myT$readNum == "1" & myT$numberSequencesPerSample > 1000,]
 	
 	lowX <- min(myT$MDS1)
 	highX <- max(myT$MDS1)
