@@ -90,7 +90,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tkey\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
+		writer.write("id\tkey\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -107,7 +107,8 @@ public class AddMetadata
 			
 			String key = splits[0].replaceAll("\"", "");
 			
-			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  wrapper.getNumberSequences(key) 
+			writer.write(key+ "\t" + key.split("_")[0] + "\t" + ( key.indexOf("DV-000-") != -1) + "\t" + 
+					wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" );
 			
 			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
