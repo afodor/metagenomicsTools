@@ -28,7 +28,7 @@ for(taxa in taxaLevels )
 		if( nrow(rows) > 1 ) 
 		{
 			plot( myT$MDS1, myT$MDS2, main =paste(key) )
-			points( rows$MDS1, rows$MDS2, col= "RED")
+			points( rows$MDS1, rows$MDS2, col= "RED",pch=19, cex=1.3)
 		}
 	}
 	
