@@ -1,0 +1,8 @@
+rm(list=ls())
+
+setwd("C:\\af_broad")
+
+myT <- read.table("randomSpearman.txt", sep="\t",head=TRUE)
+
+myHist <- hist(myT$distancePneuOnly,breaks=100)
+
