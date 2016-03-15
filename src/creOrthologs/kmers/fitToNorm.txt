@@ -6,3 +6,7 @@ myT <- read.table("randomSpearman.txt", sep="\t",head=TRUE)
 
 myHist <- hist(myT$distancePneuOnly,breaks=100)
 
+normVals <-  dnorm(myHist$mids, mean = mean(myT$distancePneuOnly), 
+					sd= sd(myT$distancePneuOnly))
+
+lines( myHist$mids, nrow(myT) * normVals/sum(normVals), col="RED" )
