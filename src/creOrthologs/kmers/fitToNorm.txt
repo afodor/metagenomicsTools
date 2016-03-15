@@ -10,3 +10,12 @@ normVals <-  dnorm(myHist$mids, mean = mean(myT$distancePneuOnly),
 					sd= sd(myT$distancePneuOnly))
 
 lines( myHist$mids, nrow(myT) * normVals/sum(normVals), col="RED" )
+
+windows()
+library("fGarch")
+
+myFit <- snormFit(myT$distancePneuOnly)
+
+myHist <- hist(myT$distancePneuOnly,breaks=200)
+snromVals <- dsnorm(  myHist$mids, myFit$par[1],myFit$par[2],myFit$par[3]) 
+lines( myHist$mids, nrow(myT) * snromVals/sum(snromVals), col="RED" )
