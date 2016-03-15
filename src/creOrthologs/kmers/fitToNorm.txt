@@ -19,3 +19,12 @@ myFit <- snormFit(myT$distancePneuOnly)
 myHist <- hist(myT$distancePneuOnly,breaks=200)
 snromVals <- dsnorm(  myHist$mids, myFit$par[1],myFit$par[2],myFit$par[3]) 
 lines( myHist$mids, nrow(myT) * snromVals/sum(snromVals), col="RED" )
+
+library(MASS)
+
+windows()
+myBetaFit <- fitdistr(myT$distancePneuOnly,"beta",list(shape1=1,shape2=1)) 
+myHist <- hist(myT$distancePneuOnly,breaks=200)
+betaVals <- dbeta(  myHist$mids, myBetaFit$estimate[1],myBetaFit$estimate[2] )
+lines( myHist$mids, nrow(myT) * betaVals/sum(betaVals), col="RED" )
+
