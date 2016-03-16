@@ -28,3 +28,10 @@ myHist <- hist(myT$distancePneuOnly,breaks=200)
 betaVals <- dbeta(  myHist$mids, myBetaFit$estimate[1],myBetaFit$estimate[2] )
 lines( myHist$mids, nrow(myT) * betaVals/sum(betaVals), col="RED" )
 
+windows()
+#failed attempt to model chi-square
+flipDist <- 1 - myT$distancePneuOnly
+myChisquare <- fitdistr( flipDist, "chi-squared", start=list(df=3))
+myHist <- hist( flipDist, breaks=200 )
+csVals <- dchisq( myHist$mids, myChisquare$estimate[1])
+lines( myHist$mids, nrow(myT) * csVals/sum(betaVals), col="RED" )
