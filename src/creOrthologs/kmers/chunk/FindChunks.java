@@ -11,6 +11,8 @@ import utils.ConfigReader;
 
 public class FindChunks
 {
+	//public static 
+	
 	public static void main(String[] args) throws Exception
 	{
 		List<Holder> list = getList();
@@ -44,6 +46,40 @@ public class FindChunks
 		
 		Collections.sort(list);
 		return list;
+	}
+	
+	private static class ChunkHolder
+	{
+		private int firstStart;
+		private int lastStart;
+		double pearsonSum =0;
+		int n=0;
+	}
+	
+	private static List<ChunkHolder> getChunks( List<Holder> list )
+	{
+		List<ChunkHolder> chunks = new ArrayList<ChunkHolder>();
+		
+		ChunkHolder currentChunk = null;
+		
+		int lastIndex = 0;
+		
+		while(lastIndex < list.size())
+		{
+			Holder thisHolder = list.get(lastIndex);
+			if( currentChunk == null)
+			{
+				
+			}
+			else
+			{
+				
+			}
+			
+			lastIndex++;
+		}
+		
+		return chunks;
 	}
 	
 	private static class Holder implements Comparable<Holder>
