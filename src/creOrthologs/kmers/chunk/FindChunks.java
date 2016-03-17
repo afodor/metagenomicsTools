@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,9 +35,12 @@ public class FindChunks
 	
 	private static void writeChunks( List<ChunkHolder> list ) throws Exception
 	{
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(2);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
-			"pneuOnlyChunks_" + INITIATION_THRESHOLD + "_" + EXTENSION_THRESHOLD + ".txt")));
+			"pneuOnlyChunks_" + nf.format(INITIATION_THRESHOLD) + "_" 
+					+  nf.format(EXTENSION_THRESHOLD) + ".txt")));
 		
 		writer.write("InitialStart\tEndStart\tlength\taverage\n");
 		
@@ -45,7 +49,7 @@ public class FindChunks
 			writer.write(ch.firstStart + "\t");
 			writer.write(ch.lastStart + "\t");
 			writer.write(ch.n + "\t");
-			writer.write( ch.spearmanSum / ch.n + "\t");
+			writer.write( ch.spearmanSum / ch.n + "\n");
 		}
 		
 		writer.flush();  writer.close();
