@@ -2,11 +2,11 @@ rm( list=ls())
 
 setwd("C:\\af_broad")
 
-myT <- read.table("symmetric1.txt", sep="\t", row.names=1)
+myT <- read.table("chunkedSpearmanSquare.txt", sep="\t", row.names=1)
 
 myT <- 1 - myT
 
-myCmdScale <- cmdscale( myT, k=20, eig = TRUE)
+myCmdScale <- cmdscale( myT, k=10, eig = TRUE)
 
 # eig / sum(eig)
 
