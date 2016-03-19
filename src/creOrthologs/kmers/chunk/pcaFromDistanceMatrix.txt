@@ -15,4 +15,4 @@ myCmdScale <- cmdscale( myT, k=10, eig = TRUE)
 
 names = attributes(myCmdScale$points)$dimnames[[1]]
 
-write.table( myCmdScale$points, file= "sym1_pcoa.txt", sep = "\t" )
+write.table( myCmdScale$points, file= "chunks_pcoa.txt", sep = "\t" )
