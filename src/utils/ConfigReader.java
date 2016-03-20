@@ -84,6 +84,8 @@ public class ConfigReader
 	
 	public static final String ROSHONDA_CASE_CONTROL_DIR = "ROSHONDA_CASE_CONTROL_DIR";
 	
+	public static final String SONJA_2016_DIR = "SONJA_2016_DIR";
+	
 	public static final String TOPE_DIVERTICULOSIS_DEC_2015_DIR = 
 					"TOPE_DIVERTICULOSIS_DEC_2015_DIR";
 	
@@ -165,6 +167,11 @@ public class ConfigReader
 	public static String getIanLongitudnalDec2015Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(IAN_LONGITUDINAL_DEC_2015_DIR);
+	}
+	
+	public static String getSonja2016Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(SONJA_2016_DIR);
 	}
 	
 	public static String getTopeDiverticulosisDec2015Dir() throws Exception
