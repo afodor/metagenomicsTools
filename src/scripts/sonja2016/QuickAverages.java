@@ -26,6 +26,20 @@ public class QuickAverages
 		writeResults(annotationMap, list);
 	}
 	
+	private static String getTitleIfDefined(String annotation)
+	{
+		int index = annotation.indexOf("UG_TITLE=");
+		
+		if( index == -1)
+			return "NA";
+		
+		int endIndex= annotation.indexOf("PROD")-1;
+		
+		if( endIndex < index)
+			endIndex = annotation.length() -1;
+		
+		return annotation.substring(index+5, endIndex);
+	}
 	
 	private static void writeResults(HashMap<String, String> annotationMap, 
 			List<Holder> averageList) throws Exception
@@ -33,7 +47,7 @@ public class QuickAverages
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getSonja2016Dir() + File.separator + "averagesWithAnnotations.txt")));
 		
-		writer.write("probesetIds\taverage\tannotation\n");
+		writer.write("probesetIds\taverage\ttitleIfDefined\tfullAnnotation\n");
 		
 		for(Holder h : averageList)
 		{
@@ -44,6 +58,8 @@ public class QuickAverages
 			
 			if( annotation == null)
 				throw new Exception("No " + h.probeID);
+			
+			writer.write(getTitleIfDefined(annotation)+ "\t");
 			
 			writer.write(annotation + "\n");
 		}
