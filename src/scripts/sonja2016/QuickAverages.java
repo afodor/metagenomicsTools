@@ -3,7 +3,10 @@ package scripts.sonja2016;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import utils.ConfigReader;
 
@@ -13,8 +16,67 @@ public class QuickAverages
 	{
 		HashMap<String, String> annotationMap = getAnnotationMap();
 		
-		for(String s : annotationMap.keySet())
-			System.out.println(s + " " + annotationMap.get(s));
+		List<Holder> list = getAverageMap();
+		
+		for(Holder h : list)
+			System.out.println(h.probeID + " " + h.average);
+	}
+	
+	
+	private static class Holder implements Comparable<Holder>
+	{
+		String probeID;
+		Double average;
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return Double.compare(o.average,this.average);
+		}
+	}
+	
+	private static List<Holder> getAverageMap() throws Exception
+	{
+		HashMap<String, Double> map = new HashMap<String,Double>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getSonja2016Dir() + File.separator + 
+					"ALDRICH_RMA_NORMALIZED.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if(map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			double sum =0;
+			int n=0;
+			for( int x=1; x < splits.length; x++)
+			{
+				sum += Double.parseDouble(splits[x]);
+				n++;
+			}
+			
+			map.put(splits[0], sum / n);
+		}
+		
+		List<Holder> list = new ArrayList<Holder>();
+		
+		for(String s : map.keySet())
+		{
+			Holder h = new Holder();
+			h.probeID = s;
+			h.average = map.get(s);
+			list.add(h);
+		}
+		
+		Collections.sort(list);
+		
+		return list;
+		
 	}
 	
 	private static HashMap<String, String> getAnnotationMap() throws Exception
