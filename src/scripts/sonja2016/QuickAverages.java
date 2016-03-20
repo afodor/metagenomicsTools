@@ -1,8 +1,10 @@
 package scripts.sonja2016;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,8 +22,34 @@ public class QuickAverages
 		
 		for(Holder h : list)
 			System.out.println(h.probeID + " " + h.average);
+		
+		writeResults(annotationMap, list);
 	}
 	
+	
+	private static void writeResults(HashMap<String, String> annotationMap, 
+			List<Holder> averageList) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getSonja2016Dir() + File.separator + "averagesWithAnnotations.txt")));
+		
+		writer.write("probesetIds\taverage\tannotation\n");
+		
+		for(Holder h : averageList)
+		{
+			writer.write(h.probeID + "\t");
+			writer.write(h.average + "\t");
+			
+			String annotation = annotationMap.get(h.probeID);
+			
+			if( annotation == null)
+				throw new Exception("No " + h.probeID);
+			
+			writer.write(annotation + "\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
 	
 	private static class Holder implements Comparable<Holder>
 	{
