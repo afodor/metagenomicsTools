@@ -44,7 +44,7 @@ public class AddMetadataToPCA
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getCREOrthologsDir()
 				+ File.separator + "pcoaPlusChunkMetadata.txt")));
 		
-		writer.write("name\tstart\tstop\tisBaseline\t" + reader.readLine() + "\n");
+		writer.write("name\tstart\tstop\tlength\tisBaseline\t" + reader.readLine() + "\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -56,8 +56,8 @@ public class AddMetadataToPCA
 			if( includeSet.contains(firstNum) != includeSet.contains(secondNum))
 				throw new Exception("No " + firstNum + " " + secondNum);
 			
-			writer.write(lineSplits[0] + "\t" + firstNum + "\t" + secondNum+"\t" 
-						+ !includeSet.contains(firstNum) );
+			writer.write(lineSplits[0] + "\t" + firstNum + "\t" + secondNum+"\t" + 
+			(secondNum - firstNum) + "\t"+ !includeSet.contains(firstNum) );
 			
 			for( int x=1; x < lineSplits.length; x++ )
 				writer.write("\t" + lineSplits[x]);
