@@ -41,6 +41,7 @@ public class QuickAverages2
 	
 	private static void writeResults(List<Holder> list)  throws Exception
 	{
+		System.out.println("Writing");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getSonja2016Dir() + File.separator + "cochleaSummary.txt")));
 		
@@ -96,6 +97,7 @@ public class QuickAverages2
 		for(String s = reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
+			System.out.println(splits[0]);
 			
 			double allSum =0;
 			double koSum =0;
