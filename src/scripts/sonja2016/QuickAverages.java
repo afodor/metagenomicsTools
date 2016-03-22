@@ -123,7 +123,7 @@ public class QuickAverages
 		
 	}
 	
-	private static HashMap<String, String> getAnnotationMap() throws Exception
+	static HashMap<String, String> getAnnotationMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
