@@ -75,7 +75,7 @@ public class QuickAverages2
 			writer.write("\t" + h.rankWtChannelsAndTransporters);
 			writer.write("\t" + h.rankKOChannelsAndTransporters);
 			
-			writer.write(h.annotation + "\n");
+			writer.write( "\t" + h.annotation + "\n");
 		}
 		
 		writer.flush();  writer.close();
