@@ -1,8 +1,10 @@
 package scripts.sonja2016;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,13 +17,8 @@ public class QuickAverages2
 {
 	public static void main(String[] args) throws Exception
 	{
-		
-		
 		List<Holder> list = getHolders();
-		
-		for(Holder h : list)
-			System.out.println(h.probeID + " " + h.allAverage);
-	
+		writeResults(list);
 	}
 	
 	
@@ -32,15 +29,58 @@ public class QuickAverages2
 		Double allAverage;
 		Double wtAverage;
 		Double koAverage;
-		int rankAll;
-		int rankWt;
-		int rankKO;
-		int rankAllChannelsAndTransporters;
-		int rankWtChannelsAndTransporters;
-		int rankKOChannelsAndTransporters;
+		int rankAll=0;
+		int rankWt=0;
+		int rankKO=0;
+		int rankAllChannelsAndTransporters=0;
+		int rankWtChannelsAndTransporters=0;
+		int rankKOChannelsAndTransporters=0;
 		String fileLine;
 		boolean isChannelOrTransporter;
 	}
+	
+	private static void writeResults(List<Holder> list)  throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getSonja2016Dir() + File.separator + "cochleaSummary.txt")));
+		
+		writer.write(			"probeID\tisChannelOrTransporter\tAndrea_KO-Coch_Mouse430_2.CEL\tAndrea_WT-Coch_Mouse430_2.CEL\t" + 
+						"Sonja_KO_COCH_A_Mouse430_2.CEL\tSonja_KO_COCH_B_Mouse430_2.CEL\t" + 
+						"Sonja_WT_COCH_A_Mouse430_2.CEL\tSonja_WT_COCH_B_Mouse430_2.CEL\t" + 
+						 "allAverage\twtAverage\tkoAverage\trankAll\trankWt\trankKo\trankAllChannelsOrTransporters\t"
+						 + "rankWTChannelsOrTransporters\trankKoChannelsOrTransporters\tannotation\n");
+		
+		for(Holder h : list )
+		{
+			writer.write(h.probeID);
+			
+			writer.write("\t" + h.isChannelOrTransporter );
+			
+			String[] splits = h.fileLine.split("\t");
+			
+			for( int x=1; x <=6; x++)
+				writer.write("\t" + Double.parseDouble(splits[x]));
+			
+			writer.write("\t" + h.allAverage);
+			writer.write("\t" + h.wtAverage);
+			writer.write("\t" + h.koAverage);
+			
+			writer.write("\t" + h.rankAll);
+			writer.write("\t" + h.rankWt);
+			writer.write("\t" + h.rankKO);
+			
+
+			writer.write("\t" + h.rankAllChannelsAndTransporters);
+			writer.write("\t" + h.rankWtChannelsAndTransporters);
+			writer.write("\t" + h.rankKOChannelsAndTransporters);
+			
+			writer.write(h.annotation + "\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	
 	
 	private static List<Holder> getHolders() throws Exception
 	{
@@ -103,6 +143,66 @@ public class QuickAverages2
 					return Double.compare(o2.allAverage ,o1.allAverage);
 				}
 			} );
+			
+			int rank=0;
+			int rankChannel =0;
+			
+			for( Holder h2 : list)
+			{
+				rank++;
+				
+				if( h2.isChannelOrTransporter)
+					rankChannel++;
+				
+				h.rankAll= rank;
+				h.rankAllChannelsAndTransporters = rankChannel;
+			}
+			
+			Collections.sort( list, new Comparator<Holder>()
+			{
+				@Override
+				public int compare(Holder o1, Holder o2)
+				{
+					return Double.compare(o2.wtAverage,o1.wtAverage);
+				}
+			} );
+			
+			rank=0;
+			rankChannel =0;
+			
+			for( Holder h2 : list)
+			{
+				rank++;
+				
+				if( h2.isChannelOrTransporter)
+					rankChannel++;
+				
+				h.rankWt= rank;
+				h.rankWtChannelsAndTransporters= rankChannel;
+			}
+			
+			Collections.sort( list, new Comparator<Holder>()
+			{
+				@Override
+				public int compare(Holder o1, Holder o2)
+				{
+					return Double.compare(o2.koAverage,o1.koAverage);
+				}
+			} );
+			
+			rank=0;
+			rankChannel =0;
+			
+			for( Holder h2 : list)
+			{
+				rank++;
+				
+				if( h2.isChannelOrTransporter)
+					rankChannel++;
+				
+				h.rankKO= rank;
+				h.rankKOChannelsAndTransporters= rankChannel;
+			}
 		}
 		
 		return list;
