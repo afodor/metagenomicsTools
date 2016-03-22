@@ -160,7 +160,9 @@ public class QuickAverages2
 				rankChannel++;
 			
 			h2.rankAll= rank;
-			h2.rankAllChannelsAndTransporters = rankChannel;
+			
+			if( h2.isChannelOrTransporter)
+				h2.rankAllChannelsAndTransporters = rankChannel;
 		}
 		
 		Collections.sort( list, new Comparator<Holder>()
@@ -183,7 +185,9 @@ public class QuickAverages2
 				rankChannel++;
 			
 			h2.rankWt= rank;
-			h2.rankWtChannelsAndTransporters= rankChannel;
+			
+			if( h2.isChannelOrTransporter)
+				h2.rankWtChannelsAndTransporters= rankChannel;
 		}
 		
 		Collections.sort( list, new Comparator<Holder>()
@@ -206,7 +210,9 @@ public class QuickAverages2
 				rankChannel++;
 			
 			h2.rankKO= rank;
-			h2.rankKOChannelsAndTransporters= rankChannel;
+			
+			if( h2.isChannelOrTransporter)
+				h2.rankKOChannelsAndTransporters= rankChannel;
 		}
 		
 		return list;
