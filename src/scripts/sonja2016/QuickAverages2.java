@@ -137,74 +137,76 @@ public class QuickAverages2
 						|| h.annotation.toLowerCase().indexOf("transporter") != -1;
 			list.add(h);
 			
-			Collections.sort( list, new Comparator<Holder>()
-			{
-				@Override
-				public int compare(Holder o1, Holder o2)
-				{
-					return Double.compare(o2.allAverage ,o1.allAverage);
-				}
-			} );
 			
-			int rank=0;
-			int rankChannel =0;
-			
-			for( Holder h2 : list)
+		}
+		
+		Collections.sort( list, new Comparator<Holder>()
+		{
+			@Override
+			public int compare(Holder o1, Holder o2)
 			{
-				rank++;
-				
-				if( h2.isChannelOrTransporter)
-					rankChannel++;
-				
-				h.rankAll= rank;
-				h.rankAllChannelsAndTransporters = rankChannel;
+				return Double.compare(o2.allAverage ,o1.allAverage);
 			}
+		} );
+		
+		int rank=0;
+		int rankChannel =0;
+		
+		for( Holder h2 : list)
+		{
+			rank++;
 			
-			Collections.sort( list, new Comparator<Holder>()
+			if( h2.isChannelOrTransporter)
+				rankChannel++;
+			
+			h2.rankAll= rank;
+			h2.rankAllChannelsAndTransporters = rankChannel;
+		}
+		
+		Collections.sort( list, new Comparator<Holder>()
+		{
+			@Override
+			public int compare(Holder o1, Holder o2)
 			{
-				@Override
-				public int compare(Holder o1, Holder o2)
-				{
-					return Double.compare(o2.wtAverage,o1.wtAverage);
-				}
-			} );
-			
-			rank=0;
-			rankChannel =0;
-			
-			for( Holder h2 : list)
-			{
-				rank++;
-				
-				if( h2.isChannelOrTransporter)
-					rankChannel++;
-				
-				h.rankWt= rank;
-				h.rankWtChannelsAndTransporters= rankChannel;
+				return Double.compare(o2.wtAverage,o1.wtAverage);
 			}
+		} );
+		
+		rank=0;
+		rankChannel =0;
+		
+		for( Holder h2 : list)
+		{
+			rank++;
 			
-			Collections.sort( list, new Comparator<Holder>()
+			if( h2.isChannelOrTransporter)
+				rankChannel++;
+			
+			h2.rankWt= rank;
+			h2.rankWtChannelsAndTransporters= rankChannel;
+		}
+		
+		Collections.sort( list, new Comparator<Holder>()
+		{
+			@Override
+			public int compare(Holder o1, Holder o2)
 			{
-				@Override
-				public int compare(Holder o1, Holder o2)
-				{
-					return Double.compare(o2.koAverage,o1.koAverage);
-				}
-			} );
-			
-			rank=0;
-			rankChannel =0;
-			
-			for( Holder h2 : list)
-			{
-				rank++;
-				
-				if( h2.isChannelOrTransporter)
-					rankChannel++;
-				
-				h.rankKO= rank;
-				h.rankKOChannelsAndTransporters= rankChannel;
+				return Double.compare(o2.koAverage,o1.koAverage);
 			}
+		} );
+		
+		rank=0;
+		rankChannel =0;
+		
+		for( Holder h2 : list)
+		{
+			rank++;
+			
+			if( h2.isChannelOrTransporter)
+				rankChannel++;
+			
+			h2.rankKO= rank;
+			h2.rankKOChannelsAndTransporters= rankChannel;
 		}
 		
 		return list;
