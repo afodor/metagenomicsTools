@@ -29,7 +29,7 @@ public class QuickTranslate
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"quickTranslation" + File.separator + "predictedGenes.txt")));
+				"quickTranslation" + File.separator + "predictedGenes.doc")));
 		
 		reader.readLine();
 		
@@ -46,7 +46,13 @@ public class QuickTranslate
 			{	
 				if( splits[6].equals("-"))
 				{
-					//String dna = Translate.reverseTranscribe(dna);
+					String dna =  fs.getSequence().substring(
+							Integer.parseInt(splits[3])-4, Integer.parseInt(splits[4])	);
+					
+					dna = Translate.safeReverseTranscribe(dna);
+					
+					writer.write( ">" + 
+							splits[8] + " " +  splits[6] + "\n" +  dna  + "\n");
 
 				}
 				else if ( splits[6].equals("+"))
