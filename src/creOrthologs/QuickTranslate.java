@@ -31,6 +31,10 @@ public class QuickTranslate
 				ConfigReader.getCREOrthologsDir() + File.separator + 
 				"quickTranslation" + File.separator + "predictedGenes.doc")));
 		
+		BufferedWriter protWriter = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getCREOrthologsDir() + File.separator + 
+				"quickTranslation" + File.separator + "predictedProteins.doc")));
+		
 		reader.readLine();
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
@@ -44,33 +48,36 @@ public class QuickTranslate
 			
 			if( splits[2].equals("CDS"))
 			{	
+				String dna=null;
+				
 				if( splits[6].equals("-"))
 				{
-					String dna =  fs.getSequence().substring(
+					dna =  fs.getSequence().substring(
 							Integer.parseInt(splits[3])-4, Integer.parseInt(splits[4])	);
 					
 					dna = Translate.safeReverseTranscribe(dna);
-					
-					writer.write( ">" + 
-							splits[8] + " " +  splits[6] + "\n" +  dna  + "\n");
-
+				
 				}
 				else if ( splits[6].equals("+"))
 				{
-					String dna = fs.getSequence().substring(
+					dna = fs.getSequence().substring(
 							Integer.parseInt(splits[3])-1, Integer.parseInt(splits[4])+3	);
 				
-					writer.write( ">" + 
-							splits[8] + " " +  splits[6] + "\n" +  dna  + "\n");
 				}else
 					throw new Exception("No " + splits[6]);
 				
+				writer.write( ">" + 
+						splits[8] + " " +  splits[6] + "\n" +  dna  + "\n");
 				
+				protWriter.write(">" + 
+						splits[8] + " " +  splits[6] + "\n" + 
+						Translate.getSafeProteinSequence(dna)  + "\n");
 			}
 		}
 		
 		reader.close();
 		
 		writer.flush();  writer.close();
+		protWriter.flush(); protWriter.close();
 	}
 }
