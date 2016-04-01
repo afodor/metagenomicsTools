@@ -38,7 +38,7 @@ public class FindChunksAcrossMultipleContigs
 		
 		for(Holder h : list)
 		{
-			writer.write(h.contig + "\t" + h.endPos + "\t" + h.endPos + "\t" + h.spearmanPneuOnly + "\n");
+			writer.write("\"Contig_" + h.contig + "\"" + "\t" + h.endPos + "\t" + h.endPos + "\t" + h.spearmanPneuOnly + "\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -117,7 +117,7 @@ public class FindChunksAcrossMultipleContigs
 		
 		for(ChunkHolder ch : list)
 		{
-			writer.write(ch.contig + "\t");
+			writer.write("\"Contig_" +ch.contig +"\"" + "\t");
 			writer.write(ch.firstStart + "\t");
 			writer.write(ch.lastStart + "\t");
 			writer.write(ch.n + "\t");
@@ -184,11 +184,10 @@ public class FindChunksAcrossMultipleContigs
 	}
 	
 
-	private static boolean positionIsInChunk(List<ChunkHolder> list, int position,
-				String contig)
+	private static boolean positionIsInChunk(List<ChunkHolder> list, int position)
 	{
 		for(ChunkHolder ch : list)
-			if( ch.contig.equals(contig) &&  ch.firstStart >= position && ch.lastStart <= position)
+			if( ch.firstStart >= position && ch.lastStart <= position)
 				return true;
 		
 		return false;
@@ -209,7 +208,7 @@ public class FindChunksAcrossMultipleContigs
 			{
 				if(thisHolder.spearmanPneuOnly<= INITIATION_THRESHOLD)
 				{
-					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.startPos );
+					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos);
 					chunks.add(currentChunk);
 					currentChunk.n = 1;
 					currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
@@ -221,8 +220,9 @@ public class FindChunksAcrossMultipleContigs
 					{
 						Holder previous = list.get(lookBack);
 						
-						if( previous.spearmanPneuOnly <= EXTENSION_THRESHOLD && 
-								! positionIsInChunk(chunks, previous.startPos, previous.contig))
+						if( previous.contig.equals(currentChunk.contig) && 
+										previous.spearmanPneuOnly <= EXTENSION_THRESHOLD && 
+								! positionIsInChunk(chunks, previous.startPos))
 						{
 							currentChunk.firstStart = previous.startPos;
 							currentChunk.n = currentChunk.n + 1;
