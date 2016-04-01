@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import parsers.FastaSequence;
 import utils.ConfigReader;
 
 public class FindChunksAcrossMultipleContigs
@@ -21,17 +22,54 @@ public class FindChunksAcrossMultipleContigs
 	{
 		List<Holder> list = getList();
 		
-		for( Holder h : list)
-		{
-			System.out.println(h.fullFileName + " " + h.contig 
-							+ " " + h.startPos + " " + h.spearmanPneuOnly);
-		}
+		List<FastaSequence> fastaList= 
+				FastaSequence.readFastaFile(ConfigReader.getCREOrthologsDir() + File.separator + 
+						"carolina" + File.separator + 
+							"klebsiella_pneumoniae_chs_11.0.scaffolds.fasta");
 		
+		int found =0;
+		int notFound = 0;
+		for(FastaSequence fs : fastaList)
+		{
+			int length = fs.getSequence().length();
+			
+			for( int x=0 ; x + 5000 < length; x+=1000)
+			{
+				int start = x;
+				int stop = Math.min(x + 5000, length);
+				
+				if( ! isInList(fs.getFirstTokenOfHeader(), start, stop, list))
+				{
+					System.out.println("Couldn't find " + fs.getFirstTokenOfHeader() + " " 
+							+ start + " " + stop);
+					
+					notFound++;
+		
+				}
+				else
+				{
+					found++;
+				}
+					
+			}
+		}
+		System.out.println( found + "  " + notFound);
 		//List<ChunkHolder> chunks = getChunks(list);
 		//writeChunks(chunks);
  	}
 	
-	private static boolean positionIsInChunk(List<ChunkHolder> list, int position)
+	private static boolean isInList(String contig, int start , int end,
+				List<Holder> list) throws Exception
+	{
+		for( Holder h : list)
+			if( h.contig.equals(contig) && h.startPos == start && h.endPos == end) 
+				return true;
+		
+		return false;
+	}
+	
+	private static boolean positionIsInChunk(List<ChunkHolder> list, 
+			String contig,	int position)
 	{
 		for(ChunkHolder ch : list)
 			if( ch.firstStart >= position && ch.lastStart <= position)
@@ -103,12 +141,14 @@ public class FindChunksAcrossMultipleContigs
 	
 	private static class ChunkHolder
 	{
+		private String contig;
 		private int firstStart;
 		private int lastStart;
 		double spearmanSum =0;
 		int n=0;
 	}
 	
+	/*
 	private static List<ChunkHolder> getChunks( List<Holder> list )
 	{
 		List<ChunkHolder> chunks = new ArrayList<ChunkHolder>();
@@ -172,6 +212,7 @@ public class FindChunksAcrossMultipleContigs
 		
 		return chunks;
 	}
+	*/
 	
 	private static class Holder implements Comparable<Holder>
 	{
