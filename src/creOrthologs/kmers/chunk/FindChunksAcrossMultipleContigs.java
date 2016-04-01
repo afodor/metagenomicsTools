@@ -38,7 +38,7 @@ public class FindChunksAcrossMultipleContigs
 		
 		for(Holder h : list)
 		{
-			writer.write("\"Contig_" + h.contig + "\"" + "\t" + h.endPos + "\t" + h.endPos + "\t" + h.spearmanPneuOnly + "\n");
+			writer.write("\"Contig_" + h.contig + "\"" + "\t" + h.startPos+ "\t" + h.endPos + "\t" + h.spearmanPneuOnly + "\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -208,12 +208,17 @@ public class FindChunksAcrossMultipleContigs
 			{
 				if(thisHolder.spearmanPneuOnly<= INITIATION_THRESHOLD)
 				{
+					System.out.println("Initating " + thisHolder.contig + " "+  thisHolder.startPos + " " + 
+							thisHolder.spearmanPneuOnly);
 					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos);
 					chunks.add(currentChunk);
 					currentChunk.n = 1;
 					currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
 					
 					int lookBack = lastIndex -1;
+					
+					if( chunks.size() ==20)
+						System.exit(1);
 					
 					boolean stop = false;
 					while(lookBack > 0 && ! stop)
