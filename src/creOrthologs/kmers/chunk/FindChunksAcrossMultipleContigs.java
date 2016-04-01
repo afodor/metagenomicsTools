@@ -22,10 +22,27 @@ public class FindChunksAcrossMultipleContigs
 	{
 		List<Holder> list = getList();
 		list = refineList(list);
+		writeAllHolders(list);
 		
-			//List<ChunkHolder> chunks = getChunks(list);
-		//writeChunks(chunks);
+		List<ChunkHolder> chunks = getChunks(list);
+		writeChunks(chunks);
  	}
+	
+	private static void writeAllHolders(List<Holder> list ) throws Exception
+	{
+		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getCREOrthologsDir()  +File.separator + 
+				"allHolders.txt")));
+		
+		writer.write("contig\tstart\tstop\tpearsonPneuOnly\n");
+		
+		for(Holder h : list)
+		{
+			writer.write(h.contig + "\t" + h.endPos + "\t" + h.endPos + "\t" + h.spearmanPneuOnly + "\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
 	
 	private static List<Holder> refineList(List<Holder> list ) throws Exception
 	{
@@ -42,11 +59,13 @@ public class FindChunksAcrossMultipleContigs
 		{
 			int length = fs.getSequence().length();
 			
-			for( int x=0 ; x + 5000 < length; x+=1000)
+			boolean keepGoing = true;
+			int start =0;
+			int stop = Math.min(start + 5000, length-1);
+			
+			while(keepGoing)		
 			{
-				int start = x;
-				int stop = Math.min(x + 5000, length);
-				
+		
 				Holder h = getOne(fs.getFirstTokenOfHeader(), start, stop, list);
 				
 				if( h == null )
@@ -62,7 +81,12 @@ public class FindChunksAcrossMultipleContigs
 					newList.add(h);
 					found++;
 				}
-					
+				
+				start += 1000;
+				stop = Math.min(start+5000, length-1);
+				
+				if( start > length)
+					keepGoing = false;
 			}
 		}
 		System.out.println( found + "  " + notFound);
@@ -80,29 +104,20 @@ public class FindChunksAcrossMultipleContigs
 		return null;
 	}
 	
-	private static boolean positionIsInChunk(List<ChunkHolder> list, 
-			String contig,	int position)
-	{
-		for(ChunkHolder ch : list)
-			if( ch.firstStart >= position && ch.lastStart <= position)
-				return true;
-		
-		return false;
-	}
-	
 	private static void writeChunks( List<ChunkHolder> list ) throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
-			"pneuOnlyChunks_" + nf.format(INITIATION_THRESHOLD) + "_" 
+			"pneuOnlyChunksWithContigs_" + nf.format(INITIATION_THRESHOLD) + "_" 
 					+  nf.format(EXTENSION_THRESHOLD) + ".txt")));
 		
-		writer.write("InitialStart\tEndStart\tlength\taverage\n");
+		writer.write("Contig\tInitialStart\tEndStart\tlength\taverage\n");
 		
 		for(ChunkHolder ch : list)
 		{
+			writer.write(ch.contig + "\t");
 			writer.write(ch.firstStart + "\t");
 			writer.write(ch.lastStart + "\t");
 			writer.write(ch.n + "\t");
@@ -140,7 +155,6 @@ public class FindChunksAcrossMultipleContigs
 			
 			Holder h = new Holder();
 			list.add(h);
-			h.fullFileName = splits[0];
 			h.contig = nameSplits[4];
 			h.startPos = Integer.parseInt(nameSplits[5]);
 			h.endPos = Integer.parseInt(nameSplits[6]);
@@ -153,14 +167,33 @@ public class FindChunksAcrossMultipleContigs
 	
 	private static class ChunkHolder
 	{
-		private String contig;
+		private final String contig;
 		private int firstStart;
 		private int lastStart;
 		double spearmanSum =0;
 		int n=0;
+		
+		public ChunkHolder(String contig, int firstStart, int lastStart)
+		{
+			this.contig = contig;
+			this.firstStart = firstStart;
+			this.lastStart = lastStart;
+		}
+		
+		
 	}
 	
-	/*
+
+	private static boolean positionIsInChunk(List<ChunkHolder> list, int position,
+				String contig)
+	{
+		for(ChunkHolder ch : list)
+			if( ch.contig.equals(contig) &&  ch.firstStart >= position && ch.lastStart <= position)
+				return true;
+		
+		return false;
+	}
+	
 	private static List<ChunkHolder> getChunks( List<Holder> list )
 	{
 		List<ChunkHolder> chunks = new ArrayList<ChunkHolder>();
@@ -176,10 +209,8 @@ public class FindChunksAcrossMultipleContigs
 			{
 				if(thisHolder.spearmanPneuOnly<= INITIATION_THRESHOLD)
 				{
-					currentChunk = new ChunkHolder();
+					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.startPos );
 					chunks.add(currentChunk);
-					currentChunk.firstStart = thisHolder.startPos;
-					currentChunk.lastStart = thisHolder.startPos;
 					currentChunk.n = 1;
 					currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
 					
@@ -191,7 +222,7 @@ public class FindChunksAcrossMultipleContigs
 						Holder previous = list.get(lookBack);
 						
 						if( previous.spearmanPneuOnly <= EXTENSION_THRESHOLD && 
-								! positionIsInChunk(chunks, previous.startPos))
+								! positionIsInChunk(chunks, previous.startPos, previous.contig))
 						{
 							currentChunk.firstStart = previous.startPos;
 							currentChunk.n = currentChunk.n + 1;
@@ -207,7 +238,8 @@ public class FindChunksAcrossMultipleContigs
 			}
 			else
 			{
-				if( thisHolder.spearmanPneuOnly <= EXTENSION_THRESHOLD)
+				if( thisHolder.spearmanPneuOnly <= EXTENSION_THRESHOLD 
+						&& thisHolder.contig.equals(currentChunk.contig))
 				{
 					currentChunk.lastStart = thisHolder.startPos;
 					currentChunk.n = currentChunk.n + 1;
@@ -224,11 +256,9 @@ public class FindChunksAcrossMultipleContigs
 		
 		return chunks;
 	}
-	*/
 	
 	private static class Holder implements Comparable<Holder>
 	{
-		String fullFileName;
 		String contig;
 		int startPos;
 		int endPos;
