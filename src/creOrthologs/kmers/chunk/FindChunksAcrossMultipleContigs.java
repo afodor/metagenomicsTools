@@ -21,6 +21,15 @@ public class FindChunksAcrossMultipleContigs
 	public static void main(String[] args) throws Exception
 	{
 		List<Holder> list = getList();
+		list = refineList(list);
+		
+			//List<ChunkHolder> chunks = getChunks(list);
+		//writeChunks(chunks);
+ 	}
+	
+	private static List<Holder> refineList(List<Holder> list ) throws Exception
+	{
+		List<Holder> newList =new ArrayList<Holder>();
 		
 		List<FastaSequence> fastaList= 
 				FastaSequence.readFastaFile(ConfigReader.getCREOrthologsDir() + File.separator + 
@@ -38,7 +47,9 @@ public class FindChunksAcrossMultipleContigs
 				int start = x;
 				int stop = Math.min(x + 5000, length);
 				
-				if( ! isInList(fs.getFirstTokenOfHeader(), start, stop, list))
+				Holder h = getOne(fs.getFirstTokenOfHeader(), start, stop, list);
+				
+				if( h == null )
 				{
 					System.out.println("Couldn't find " + fs.getFirstTokenOfHeader() + " " 
 							+ start + " " + stop);
@@ -48,24 +59,25 @@ public class FindChunksAcrossMultipleContigs
 				}
 				else
 				{
+					newList.add(h);
 					found++;
 				}
 					
 			}
 		}
 		System.out.println( found + "  " + notFound);
-		//List<ChunkHolder> chunks = getChunks(list);
-		//writeChunks(chunks);
- 	}
 	
-	private static boolean isInList(String contig, int start , int end,
+		return newList;
+	}
+	
+	private static Holder getOne(String contig, int start , int end,
 				List<Holder> list) throws Exception
 	{
 		for( Holder h : list)
 			if( h.contig.equals(contig) && h.startPos == start && h.endPos == end) 
-				return true;
+				return h;
 		
-		return false;
+		return null;
 	}
 	
 	private static boolean positionIsInChunk(List<ChunkHolder> list, 
