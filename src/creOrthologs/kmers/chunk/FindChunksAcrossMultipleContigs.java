@@ -248,7 +248,7 @@ public class FindChunksAcrossMultipleContigs
 					currentChunk.n = currentChunk.n + 1;
 					currentChunk.spearmanSum+= thisHolder.spearmanPneuOnly;
 				}
-				else if( thisHolder.spearmanPneuOnly <= EXTENSION_THRESHOLD )
+				else if( thisHolder.spearmanPneuOnly <= INITIATION_THRESHOLD)
 				{
 					// if we are here, new chunk on new contig
 					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos,
