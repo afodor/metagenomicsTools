@@ -171,13 +171,17 @@ public class FindChunksAcrossMultipleContigs
 		private int start;
 		private int end;
 		double spearmanSum =0;
-		int n=0;
+		int n;
 		
-		public ChunkHolder(String contig, int start, int end)
+		public ChunkHolder(String contig, int start, int end, double initialSpearman)
 		{
 			this.contig = contig;
 			this.start= start;
 			this.end = end;
+			
+			this.n = 1;
+			this.spearmanSum += initialSpearman;
+			
 		}
 		
 		
@@ -208,10 +212,9 @@ public class FindChunksAcrossMultipleContigs
 			{
 				if(thisHolder.spearmanPneuOnly<= INITIATION_THRESHOLD)
 				{
-					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos);
+					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos,
+							thisHolder.spearmanPneuOnly);
 					chunks.add(currentChunk);
-					currentChunk.n = 1;
-					currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
 					
 					int lookBack = lastIndex -1;
 					
@@ -244,6 +247,13 @@ public class FindChunksAcrossMultipleContigs
 					currentChunk.end= thisHolder.endPos;
 					currentChunk.n = currentChunk.n + 1;
 					currentChunk.spearmanSum+= thisHolder.spearmanPneuOnly;
+				}
+				else if( thisHolder.spearmanPneuOnly <= EXTENSION_THRESHOLD )
+				{
+					// if we are here, new chunk on new contig
+					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos,
+							thisHolder.spearmanPneuOnly);
+					chunks.add(currentChunk);
 				}
 				else
 				{
