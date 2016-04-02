@@ -113,13 +113,13 @@ public class FindChunksAcrossMultipleContigs
 			"pneuOnlyChunksWithContigs_" + nf.format(INITIATION_THRESHOLD) + "_" 
 					+  nf.format(EXTENSION_THRESHOLD) + ".txt")));
 		
-		writer.write("Contig\tInitialStart\tEndStart\tlength\taverage\n");
+		writer.write("Contig\tstart\tend\tlength\taverage\n");
 		
 		for(ChunkHolder ch : list)
 		{
 			writer.write("\"Contig_" +ch.contig +"\"" + "\t");
-			writer.write(ch.firstStart + "\t");
-			writer.write(ch.lastStart + "\t");
+			writer.write(ch.start+ "\t");
+			writer.write(ch.end+ "\t");
 			writer.write(ch.n + "\t");
 			writer.write( ch.spearmanSum / ch.n + "\n");
 		}
@@ -168,16 +168,16 @@ public class FindChunksAcrossMultipleContigs
 	private static class ChunkHolder
 	{
 		private final String contig;
-		private int firstStart;
-		private int lastStart;
+		private int start;
+		private int end;
 		double spearmanSum =0;
 		int n=0;
 		
-		public ChunkHolder(String contig, int firstStart, int lastStart)
+		public ChunkHolder(String contig, int start, int end)
 		{
 			this.contig = contig;
-			this.firstStart = firstStart;
-			this.lastStart = lastStart;
+			this.start= start;
+			this.end = end;
 		}
 		
 		
@@ -187,7 +187,7 @@ public class FindChunksAcrossMultipleContigs
 	private static boolean positionIsInChunk(List<ChunkHolder> list, int position)
 	{
 		for(ChunkHolder ch : list)
-			if( ch.firstStart >= position && ch.lastStart <= position)
+			if( ch.start>= position && ch.end<= position)
 				return true;
 		
 		return false;
@@ -208,17 +208,12 @@ public class FindChunksAcrossMultipleContigs
 			{
 				if(thisHolder.spearmanPneuOnly<= INITIATION_THRESHOLD)
 				{
-					System.out.println("Initating " + thisHolder.contig + " "+  thisHolder.startPos + " " + 
-							thisHolder.spearmanPneuOnly);
 					currentChunk = new ChunkHolder(thisHolder.contig,thisHolder.startPos,thisHolder.endPos);
 					chunks.add(currentChunk);
 					currentChunk.n = 1;
 					currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
 					
 					int lookBack = lastIndex -1;
-					
-					if( chunks.size() ==20)
-						System.exit(1);
 					
 					boolean stop = false;
 					while(lookBack > 0 && ! stop)
@@ -229,7 +224,7 @@ public class FindChunksAcrossMultipleContigs
 										previous.spearmanPneuOnly <= EXTENSION_THRESHOLD && 
 								! positionIsInChunk(chunks, previous.startPos))
 						{
-							currentChunk.firstStart = previous.startPos;
+							currentChunk.start= previous.startPos;
 							currentChunk.n = currentChunk.n + 1;
 							currentChunk.spearmanSum += thisHolder.spearmanPneuOnly;
 							lookBack--;
@@ -246,7 +241,7 @@ public class FindChunksAcrossMultipleContigs
 				if( thisHolder.spearmanPneuOnly <= EXTENSION_THRESHOLD 
 						&& thisHolder.contig.equals(currentChunk.contig))
 				{
-					currentChunk.lastStart = thisHolder.startPos;
+					currentChunk.end= thisHolder.endPos;
 					currentChunk.n = currentChunk.n + 1;
 					currentChunk.spearmanSum+= thisHolder.spearmanPneuOnly;
 				}
