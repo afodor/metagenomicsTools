@@ -21,6 +21,11 @@ public class pcaForChunk
 		List<Double> pcas = new ArrayList<Double>();
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		addNewAnnotations();
+	}
+	
 	private static void addNewAnnotations() throws Exception
 	{
 		List<Holder> holders= getList();
@@ -28,7 +33,6 @@ public class pcaForChunk
 		BufferedReader reader =new BufferedReader(new FileReader(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
 				"chs_11_plus_cards.txt")));
-		
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
