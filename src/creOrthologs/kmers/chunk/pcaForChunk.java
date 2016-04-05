@@ -30,6 +30,9 @@ public class pcaForChunk
 	{
 		List<Holder> holders= getList();
 		
+		for(Holder h : holders)
+			System.out.println(h.conting + " " + h.startPos+ " " + h.endPos+ " " + h.pcas.get(0));
+		
 		BufferedReader reader =new BufferedReader(new FileReader(new File(
 			ConfigReader.getCREOrthologsDir() + File.separator + 
 				"chs_11_plus_cards.txt")));
@@ -50,8 +53,17 @@ public class pcaForChunk
 		{
 			String[] splits = s.split("\t");
 			
-			Holder h = findInListOrNull(holders, splits[4], Integer.parseInt(splits[5]),
-							Integer.parseInt(splits[6]));
+			int startPos =Integer.parseInt(splits[5]);
+			int endPos = Integer.parseInt(splits[6]);
+			
+			if( startPos > endPos)
+			{
+				int temp = startPos;
+				startPos = endPos;
+				endPos = temp;
+			}
+				
+			Holder h = findInListOrNull(holders, splits[4], startPos, endPos);
 			
 			writer.write(s);
 			
@@ -75,7 +87,7 @@ public class pcaForChunk
 		
 		for(Holder h2 : list)
 		{
-			if( h2.conting.equals(contig) && h2.startPos >= startPos && h2.endPos <= endPos )
+			if( h2.conting.equals(contig) && startPos >= h2.startPos && endPos <= h2.endPos )
 			{
 				if( h != null )
 					throw new Exception("Duplicate");
@@ -83,6 +95,9 @@ public class pcaForChunk
 				h = h2;
 			}
 		}
+		
+		if( h == null)
+			System.out.println("Could not find " + contig + " " + startPos + " " + endPos);
 		
 		return h;
 	}
@@ -103,7 +118,7 @@ public class pcaForChunk
 			
 			Holder h = new Holder();
 			
-			h.conting =splits[4].replace("contig_", "");
+			h.conting =splits[4];
 			h.startPos=  Integer.parseInt(splits[1]);
 			h.endPos = Integer.parseInt(splits[2]);
 			
