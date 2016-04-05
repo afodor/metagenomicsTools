@@ -99,14 +99,21 @@ public class pcaForChunk
 				{
 					System.out.println("Duplicate");
 					numDuplicate++;
+					
+					if( endPos - startPos > overlap )
+					{
+						h = h2;
+						overlap = endPos - startPos;
+					}
 				}
 				else
 				{
 					System.out.println("Unique");
 					numUnique++;
+					overlap = endPos - startPos;
+					h = h2;
 				}
 					
-				h = h2;
 			}
 		}
 		
