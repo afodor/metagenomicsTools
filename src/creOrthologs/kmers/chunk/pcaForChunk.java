@@ -19,7 +19,31 @@ public class pcaForChunk
 		List<Double> pcas = new ArrayList<Double>();
 	}
 	
-	public static List<Holder> getList() throws Exception
+	private static void addNewAnnotations() throws Exception
+	{
+		
+	}
+	
+	private static Holder findInListOrNull(List<Holder> list, String contig, int startPos, int endPos) 
+				throws Exception
+	{
+		Holder h = null;
+		
+		for(Holder h2 : list)
+		{
+			if( h2.conting.equals(contig) && h2.startPos >= startPos && h2.endPos <= endPos )
+			{
+				if( h != null )
+					throw new Exception("Duplicate");
+				
+				h = h2;
+			}
+		}
+		
+		return h;
+	}
+	
+	private static List<Holder> getList() throws Exception
 	{
 		List<Holder> list = new ArrayList<Holder>();
 		
