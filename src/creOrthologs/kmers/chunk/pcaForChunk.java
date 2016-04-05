@@ -24,6 +24,8 @@ public class pcaForChunk
 	public static void main(String[] args) throws Exception
 	{
 		addNewAnnotations();
+		System.out.println("Uniqe = " + numUnique);
+		System.out.println("Duplicate = "  + numDuplicate);
 	}
 	
 	private static void addNewAnnotations() throws Exception
@@ -80,18 +82,30 @@ public class pcaForChunk
 		reader.close();
 	}
 	
+	private static int numDuplicate =0 ;
+	private static int numUnique =0;
+	
 	private static Holder findInListOrNull(List<Holder> list, String contig, int startPos, int endPos) 
 				throws Exception
 	{
 		Holder h = null;
+		int overlap =0;
 		
 		for(Holder h2 : list)
 		{
 			if( h2.conting.equals(contig) && startPos >= h2.startPos && endPos <= h2.endPos )
 			{
 				if( h != null )
-					throw new Exception("Duplicate");
-				
+				{
+					System.out.println("Duplicate");
+					numDuplicate++;
+				}
+				else
+				{
+					System.out.println("Unique");
+					numUnique++;
+				}
+					
 				h = h2;
 			}
 		}
