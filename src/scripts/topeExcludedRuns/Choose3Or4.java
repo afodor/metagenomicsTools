@@ -12,6 +12,11 @@ public class Choose3Or4
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Integer> map = getThreeOrFourMap();
+		
+		for(String s : map.keySet())
+			System.out.println(s + " " + map.get(s));
+		
+		
 	}
 	
 	private static HashMap<String, Integer> getThreeOrFourMap() throws Exception
@@ -32,13 +37,17 @@ public class Choose3Or4
 			
 			if( key == 3)
 			{
-				
+				if( ! splits[11].equals("4/29/2015"))
+					throw new Exception("No");
 			}
 			else if ( key == 4)
 			{
-				
+				if( ! splits[11].equals("9/24/2015"))
+					throw new Exception("No");
 			}
 			else throw new Exception("Unknow key");
+			
+			map.put(splits[0], key);
 		}
 		
 		return map;
