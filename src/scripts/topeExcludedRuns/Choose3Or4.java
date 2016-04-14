@@ -1,10 +1,13 @@
 package scripts.topeExcludedRuns;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class Choose3Or4
@@ -15,6 +18,53 @@ public class Choose3Or4
 		
 		for(String s : map.keySet())
 			System.out.println(s + " " + map.get(s));
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
+			
+			BufferedReader reader = new BufferedReader(new FileReader(
+					ConfigReader.getTopeFeb2016Dir() + File.separator + "spreadsheets" +
+							File.separator + "pivoted_" + taxa +  "asColumns.txt"));
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getTopeFeb2016Dir() + File.separator + "spreadsheets" +
+							File.separator + "pivoted_" + taxa +  "asColumnsThreeOrFour.txt")));
+			
+			writer.write(reader.readLine() + "\n");
+			
+			for(String s = reader.readLine(); s != null; s = reader.readLine())
+			{
+				String key = s.split("\t")[0];
+				key = key.substring(0, key.indexOf("_"));
+				
+				boolean include =true;
+				
+				Integer threeOrFourKey = map.get(key);
+				
+				if( threeOrFourKey == null)
+				{
+					System.out.println("adding " + key + " on null");
+				}
+				else if( threeOrFourKey == 3)
+				{
+					//if( 	 )
+				}
+				else if( threeOrFourKey == 4)
+				{
+					
+				}
+				else throw new Exception("Unknown key");
+				
+				if( include)
+					writer.write(s + "\n");
+					
+			}
+			
+			writer.flush();  writer.close();
+			
+			reader.close();
+		}
 		
 		
 	}
