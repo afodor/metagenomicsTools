@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.FilteredStepIterator;
+
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
@@ -28,15 +30,16 @@ public class Choose3Or4
 							File.separator + "pivoted_" + taxa +  "asColumns.txt"));
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					ConfigReader.getTopeFeb2016Dir() + File.separator + "spreadsheets" +
+					ConfigReader.getTopeFeb2016Dir() + File.separator + "spreadsheetsChooseOne" +
 							File.separator + "pivoted_" + taxa +  "asColumnsThreeOrFour.txt")));
 			
 			writer.write(reader.readLine() + "\n");
 			
 			for(String s = reader.readLine(); s != null; s = reader.readLine())
 			{
-				String key = s.split("\t")[0];
-				key = key.substring(0, key.indexOf("_"));
+				//System.out.println(s);
+				String firstSplit = s.split("\t")[0];
+				String key = firstSplit.substring(0, firstSplit.indexOf("_"));
 				
 				boolean include =true;
 				
@@ -48,11 +51,35 @@ public class Choose3Or4
 				}
 				else if( threeOrFourKey == 3)
 				{
-					//if( 	 )
+					if( firstSplit.indexOf("set1") != -1 )
+					{
+						include = true;
+					}
+					else if ( firstSplit.indexOf("set3") != -1)
+					{
+						include = false;
+					}
+					else
+					{
+						System.out.println("Adding " + firstSplit ) ;
+						include  = true;
+					}
 				}
 				else if( threeOrFourKey == 4)
 				{
-					
+					if( firstSplit.indexOf("set1") != -1 )
+					{
+						include = false;
+					}
+					else if ( firstSplit.indexOf("set3") != -1)
+					{
+						include = true;
+					}
+					else
+					{
+						System.out.println("Adding " + firstSplit ) ;
+						include  = true;
+					}
 				}
 				else throw new Exception("Unknown key");
 				
