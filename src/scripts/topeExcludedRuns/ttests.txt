@@ -17,7 +17,7 @@ for(taxa in taxaLevels )
 				 rep("numeric", numCols-8))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	myT <- myT[myT$read == 1 &  myT$numberSequencesPerSample >= 100 & !is.na(myT$caseContol), ]
 	
 	pValuesCaseControl<- vector()
 	pValuesWilcoxon <- vector()
