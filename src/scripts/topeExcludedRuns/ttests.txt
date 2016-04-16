@@ -1,0 +1,53 @@
+rm(list=ls())
+
+setwd("C:\\tope_Feb_2016\\spreadsheetsChooseOne")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+
+for(taxa in taxaLevels ) 
+{
+	pdf(paste("boxplots_", taxa, ".pdf", sep=""))
+
+	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadataThreeOrFour.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2),rep("numeric",1),rep("character",1),
+				rep("numeric",2), rep("character",2),
+				 rep("numeric", numCols-8))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	
+	pValuesCaseControl<- vector()
+	pValuesWilcoxon <- vector()
+	names <- vector()
+	meanCase <- vector()
+	meanControl <- vector()
+	
+	index <- 1
+	for( i in c(5,6,10:ncol(myT))) 
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		{	
+			myLm <- lm( myT[,i] ~  factor( myT$caseContol) )
+			myAnova <- anova(myLm)
+			pValuesCaseControl[index] <- myAnova$"Pr(>F)"[1]
+			pValuesWilcoxon[index] <- wilcox.test( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i] )$p.value
+			
+			meanControl[index] <- mean(myT[myT$caseContol==0,i]) 
+			meanCase[index] <- mean(myT[myT$caseContol==1,i]) 
+			
+			names[index] = names(myT)[i]
+			
+			boxplot( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i], main=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
+			index <- index + 1	
+			
+		}
+
+	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl ) 
+	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
+	dFrame$pValuesCaseControlWilcoxAdj <- p.adjust( dFrame$pValuesWilcoxon  , method = "BH")
+	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
+}
+							

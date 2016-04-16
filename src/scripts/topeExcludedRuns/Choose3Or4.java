@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.FilteredStepIterator;
-
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
@@ -53,32 +51,30 @@ public class Choose3Or4
 				{
 					if( firstSplit.indexOf("set1") != -1 )
 					{
-						include = true;
+						include = false;
 					}
 					else if ( firstSplit.indexOf("set3") != -1)
 					{
-						include = false;
+						include = true;
 					}
 					else
 					{
-						System.out.println("Adding " + firstSplit ) ;
-						include  = true;
+						throw new Exception("First split");
 					}
 				}
 				else if( threeOrFourKey == 4)
 				{
 					if( firstSplit.indexOf("set1") != -1 )
 					{
-						include = false;
+						include = true;
 					}
 					else if ( firstSplit.indexOf("set3") != -1)
 					{
-						include = true;
+						include = false;
 					}
 					else
 					{
-						System.out.println("Adding " + firstSplit ) ;
-						include  = true;
+						throw new Exception("First split");
 					}
 				}
 				else throw new Exception("Unknown key");
