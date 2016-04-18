@@ -26,9 +26,9 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myIDs <- unique(myT$ratID)
-	#pValues <- vector()
-	#taxaNames <- vector()
-	#taxaIndex <- 1
+	pValues <- vector()
+	taxaNames <- vector()
+	taxaIndex <- 1
 	
 	for( j in c(3,4,12:ncol(myT)))
 	{
@@ -48,10 +48,16 @@ for(taxa in taxaLevels )
 			}
 		}
 		
-		#myLm <- lm( differences ~ conditions ) 
-		#pValues[taxaIndex] <- anova(myLm)$"Pr(>F)"[1]
-		#taxaNames[taxaIndex] <- names(myT)[j]
-		#taxaIndex <- taxaIndex + 1
+		myLm <- lm( differences ~ conditions ) 
+		pValues[taxaIndex] <- anova(myLm)$"Pr(>F)"[1]
+		taxaNames[taxaIndex] <- names(myT)[j]
+		taxaIndex <- taxaIndex + 1
 	}
+	
+	
+	dFrame <- data.frame( taxaNames,pValues) 
+	dFrame <- dFrame [order(dFrame$pValues  ),]
+	dFrame$pValuesadjust<- p.adjust( dFrame$pValues  , method = "BH")
+	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
 
