@@ -20,6 +20,7 @@ getCondition <- function(id, myT)
 for(taxa in taxaLevels ) 
 {
 	inFileName <- paste("cohousingRun_", taxa, "_AsColumnsLogNormalizedPlusMetadata_AddRatID.txt", sep ="")
+	pdf(paste(taxa, ".pdf"))
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c(rep("character",2),rep("numeric",2),rep("character",7), rep("numeric", numCols-11))
@@ -52,13 +53,20 @@ for(taxa in taxaLevels )
 		myLm <- lm( differences ~ conditions ) 
 		pValues[taxaIndex] <- anova(myLm)$"Pr(>F)"[1]
 		taxaNames[taxaIndex] <- names(myT)[j]
+		
+		myFrame <- data.frame( differences, conditions )
+	
+		myTitle <- paste( taxaNames[taxaIndex] , "p=",pValues[taxaIndex] )
+		boxplot( differences[ conditions == "control" ], differences[conditions=="cross"],
+				  ylab = taxaNames[taxaIndex],	main = myTitle)	
+					
 		taxaIndex <- taxaIndex + 1
 	}
-	
 	
 	dFrame <- data.frame( taxaNames,pValues) 
 	dFrame <- dFrame [order(dFrame$pValues  ),]
 	dFrame$pValuesadjust<- p.adjust( dFrame$pValues  , method = "BH")
 	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
 }
 
