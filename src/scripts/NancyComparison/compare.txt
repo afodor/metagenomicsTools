@@ -58,7 +58,10 @@ for(taxa in taxaLevels )
 	
 		myTitle <- paste( taxaNames[taxaIndex] , "p=",pValues[taxaIndex] )
 		boxplot( differences[ conditions == "control" ], differences[conditions=="cross"],
-				  ylab = taxaNames[taxaIndex],	main = myTitle)	
+				  ylab = taxaNames[taxaIndex],	main = myTitle, names=c("cross", "case"))	
+				  
+		stripchart(differences ~ conditions, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
 					
 		taxaIndex <- taxaIndex + 1
 	}
