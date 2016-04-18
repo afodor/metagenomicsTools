@@ -31,6 +31,7 @@ for(taxa in taxaLevels )
 	taxaIndex <- 1
 	
 	for( j in c(3,4,12:ncol(myT)))
+		if( sum( myT[,j] !=0 ) > nrow(myT) /4 ) 
 	{
 		differences <- vector()
 		conditions <- vector()
