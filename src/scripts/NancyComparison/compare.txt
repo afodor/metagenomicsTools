@@ -4,7 +4,6 @@ setwd("C:\\NancySpreadsheets");
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
-
 getCondition <- function(id, myT)
 {
 	for( i in 1:nrow(myT) ) 
@@ -27,9 +26,11 @@ for(taxa in taxaLevels )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	myIDs <- unique(myT$ratID)
+	#pValues <- vector()
+	#taxaNames <- vector()
+	#taxaIndex <- 1
 	
-	
-	for( j in 3,4, 12:ncol(myT))
+	for( j in c(3,4,12:ncol(myT)))
 	{
 		differences <- vector()
 		conditions <- vector()
@@ -46,8 +47,11 @@ for(taxa in taxaLevels )
 				index1 = index1 + 1
 			}
 		}
+		
+		#myLm <- lm( differences ~ conditions ) 
+		#pValues[taxaIndex] <- anova(myLm)$"Pr(>F)"[1]
+		#taxaNames[taxaIndex] <- names(myT)[j]
+		#taxaIndex <- taxaIndex + 1
 	}
-	
-
-
 }
+
