@@ -1,0 +1,53 @@
+rm(list=ls())
+
+setwd("C:\\NancySpreadsheets");
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+
+getCondition <- function(id, myT)
+{
+	for( i in 1:nrow(myT) ) 
+	{
+		if (myT[i,]$ratID == id) 
+		{
+			return (myT[i,]$condition)
+		}
+	}
+	
+	return ("NO")
+}
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste("cohousingRun_", taxa, "_AsColumnsLogNormalizedPlusMetadata_AddRatID.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2),rep("numeric",2),rep("character",7), rep("numeric", numCols-11))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myIDs <- unique(myT$ratID)
+	
+	
+	for( j in 3,4, 12:ncol(myT))
+	{
+		differences <- vector()
+		conditions <- vector()
+		index1 <- 1
+		for( id in myIDs) 
+		{
+			val1 = myT[ myT$ratID == id & myT$time=="1", j]
+			val2 = myT[ myT$ratID == id & myT$time=="2", j] 
+			
+			if( length(val1) == 1 & length(val2) == 1 ) 
+			{
+				differences[index1] = val2 - val1;
+				conditions[index1] = getCondition(id,myT)
+				index1 = index1 + 1
+			}
+		}
+	}
+	
+
+
+}
