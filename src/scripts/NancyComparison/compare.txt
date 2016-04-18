@@ -70,6 +70,7 @@ for(taxa in taxaLevels )
 	dFrame <- dFrame [order(dFrame$pValues  ),]
 	dFrame$pValuesadjust<- p.adjust( dFrame$pValues  , method = "BH")
 	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	hist(pValues, breaks=15)
 	dev.off()
 }
 
