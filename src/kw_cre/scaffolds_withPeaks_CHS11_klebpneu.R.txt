@@ -1,0 +1,213 @@
+##kleb pneu only
+##p values across scaffolds with
+##CARD results and Anthony's chunk results
+##and peak calling from p-values
+##4/19/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\Klebsiella pneumo only")
+
+##cards
+carHom = read.table("chs11genes_v_cardHomolog_summary.txt", sep="\t", header=T, colClasses="character")
+carVar = read.table("chs11genes_v_cardVariant_summary.txt", sep="\t", header=T, colClasses="character")
+
+##p-value comparisons
+pVal = read.table("chs11_klebpneu_rbh_pvalues_log_withGenePos_sorted.txt", sep="\t", header=T, colClasses=c("character", rep("numeric", 6)))
+
+####p-values against scaffolds; separate comparisons with all cutoffs used
+#read scaffold as character
+##scaffold and gene info
+scaff = read.table("carolina_klebsiella_pneumoniae_chs_11.0_scaffoldSizes.txt", 
+                   header=T, sep="\t", colClasses=c("character", "numeric"))
+##Anthony's chunks
+chunks = read.table("chunks_pcoaAllContigsPlusMetadata.txt", sep="\t", header=T,
+                    colClasses=c("character", "numeric", "numeric", "character", "character", rep("numeric",10)))
+chunks$contig = sub("contig_", "", chunks$contig)
+
+minP = min(pVal[,5:7], na.rm = T)
+maxP = max(pVal[,5:7], na.rm=T) + 15
+
+##for the given column containing p-values and list of chunk tables,
+##plot p-values and lines for peaks for the given scaffold row srow
+##points are the given color col, lines are the color colLines
+plotOneComparison <- function(pcol, chunkList, srow, col, colLines) {
+  tab = pVal[pVal$scaffold==scaff$scaffold[srow],]
+  plot(0, type="n", xlim=c(0, scaff$length[srow]), ylim=c(minP, maxP),
+       xlab="gene start on scaffold", ylab="log10 p-value",
+       main=paste("Scaffold", scaff$scaffold[srow]))
+  points(x=tab$geneStart, y=tab[,pcol], pch=20, col=col)
+  
+  ##add chunks
+  y = maxP
+  for(c in seq(1, length(chunkList))) {
+    ch = chunkList[c]
+    chunks = read.table(paste(ch, ".txt", sep=""), sep="\t", header=T, colClasses = c("character", rep("numeric", 4)))
+    sub = chunks[chunks$Contig == scaff$scaffold[srow],]
+    if(nrow(sub) > 0) {
+      for(r in seq(1, nrow(sub))) {
+        lines(x=c(sub$start[r], sub$end[r]), y=c(y-c*4, y-c*4), col=colLines, lwd=4)
+      }
+    }
+    sp = strsplit(ch, "_")[[1]]
+    text(x=scaff$length[srow]+100/scaff$length[srow], y=y-c*4, labels=paste(sp[5],sp[6],sep=""), cex=.7, pos=4, xpd=T) #tell the initiation and extension
+  }
+}
+
+##carolina v resistant
+cvr = c("pneuOnlyPvalChunksWithContigs_car_v_res_I15_E10", "pneuOnlyPvalChunksWithContigs_car_v_res_I10_E5")
+jpeg("chs11_klebpneu_pValChunks_scaffolds_pvalues_car_v_res.jpg", height=1200, width=1800, res=150)
+par(mfrow=c(3, 3)) #9 scaffolds
+for(i in 1:nrow(scaff)) {
+  print(plotOneComparison(5, cvr, i, "blue", "turquoise"))
+}
+dev.off()
+##plot individual scaffolds for the bigger scaffolds
+for(i in 1:nrow(scaff)) {
+  if(scaff$length[i] > 100000) {
+    jpeg(paste("chs11_klebpneu_pValChunk_scaffolds_pvalues_car_v_res", scaff$scaffold[i], ".jpg", sep=""), 
+         height=700, width=1800, res=150)
+    print(plotOneComparison(5, cvr, i, "blue", "turquoise"))
+    dev.off()
+  }
+}
+
+##carolina v sus
+cvs = c("pneuOnlyPvalChunksWithContigs_car_v_sus_I35_E15", "pneuOnlyPvalChunksWithContigs_car_v_sus_I30_E15", 
+        "pneuOnlyPvalChunksWithContigs_car_v_sus_I30_E10", "pneuOnlyPvalChunksWithContigs_car_v_sus_I20_E10", 
+        "pneuOnlyPvalChunksWithContigs_car_v_sus_I15_E10")
+jpeg("chs11_klebpneu_pValChunks_scaffolds_pvalues_car_v_sus.jpg", height=1200, width=1800, res=150)
+par(mfrow=c(3, 3)) #9 scaffolds
+for(i in 1:nrow(scaff)) {
+  print(plotOneComparison(6, cvs, i, "red", "pink"))
+}
+dev.off()
+##plot individual scaffolds for the bigger scaffolds
+for(i in 1:nrow(scaff)) {
+  if(scaff$length[i] > 100000) {
+    jpeg(paste("chs11_klebpneu_pValChunk_scaffolds_pvalues_car_v_sus", scaff$scaffold[i], ".jpg", sep=""), 
+         height=700, width=1800, res=150)
+    print(plotOneComparison(6, cvs, i, "red", "pink"))
+    dev.off()
+  }
+}
+
+##resistant v susceptible
+rvs = c("pneuOnlyPvalChunksWithContigs_res_v_sus_I20_E10", "pneuOnlyPvalChunksWithContigs_res_v_sus_I15_E10", 
+        "pneuOnlyPvalChunksWithContigs_res_v_sus_I10_E5")
+jpeg("chs11_klebpneu_pValChunks_scaffolds_pvalues_res_v_sus.jpg", height=1200, width=1800, res=150)
+par(mfrow=c(3, 3)) #9 scaffolds
+for(i in 1:nrow(scaff)) {
+  print(plotOneComparison(7, rvs, i, "gold", "orange"))
+}
+dev.off()
+##plot individual scaffolds for the bigger scaffolds
+for(i in 1:nrow(scaff)) {
+  if(scaff$length[i] > 100000) {
+    jpeg(paste("chs11_klebpneu_pValChunk_scaffolds_pvalues_res_v_sus_", scaff$scaffold[i], ".jpg", sep=""), 
+         height=700, width=1800, res=150)
+    print(plotOneComparison(7, rvs, i, "gold", "orange"))
+    dev.off()
+  }
+}
+
+####p-values against scaffolds; overlay of everything
+##selected chunks/peaks to plot; their tables and the cutoffs for the legend
+peakCVR = "pneuOnlyPvalChunksWithContigs_car_v_res_I10_E5"
+peakCVS = "pneuOnlyPvalChunksWithContigs_car_v_sus_I20_E10"
+peakRVS = "pneuOnlyPvalChunksWithContigs_res_v_sus_I15_E10"
+tabCVR = read.table(paste(peakCVR, ".txt", sep=""), sep="\t", header=T, colClasses = c("character", rep("numeric", 4)))
+tabCVS = read.table(paste(peakCVS, ".txt", sep=""), sep="\t", header=T, colClasses = c("character", rep("numeric", 4)))
+tabRVS = read.table(paste(peakRVS, ".txt", sep=""), sep="\t", header=T, colClasses = c("character", rep("numeric", 4)))
+sp = strsplit(peakCVR, "_")[[1]]
+cutCVR = paste(sp[5],sp[6],sep="")#initiation and extension
+sp = strsplit(peakCVS, "_")[[1]]
+cutCVS = paste(sp[5],sp[6],sep="")
+sp = strsplit(peakRVS, "_")[[1]]
+cutRVS = paste(sp[5],sp[6],sep="")
+##draw lines corresponding to peaks in the given table chunks and scaffold (srow)
+##with given color col and y coordinate y
+drawLines <- function(chunks, srow, col, y) {
+  sub = chunks[chunks$Contig == scaff$scaffold[srow],]
+  if(nrow(sub) > 0) {
+    for(r in seq(1, nrow(sub))) {
+      lines(x=c(sub$start[r], sub$end[r]), y=c(y, y), col=col, lwd=4)
+    }
+  }
+}
+##function to generate plot of p-values for the given row in scaffold
+plotPvals <- function(i) {
+  tab = pVal[pVal$scaffold==scaff$scaffold[i],]
+  plot(0, type="n", xlim=c(0, scaff$length[i]), ylim=c(minP, maxP),
+       xlab="gene start on scaffold", ylab="log10 p-value",
+       main=paste("Scaffold", scaff$scaffold[i]))
+  points(x=tab$geneStart, y=tab$res_v_sus, pch=20, col="gold")
+  points(x=tab$geneStart, y=tab$car_v_sus, pch=20, col="red")
+  points(x=tab$geneStart, y=tab$car_v_res, pch=20, col="blue")
+  
+  ##add chunks
+  y = maxP
+  ch = chunks[chunks$contig==scaff$scaffold[i],]
+  for(c in 1:nrow(ch)) {
+    col = "black"
+    if(ch$type[c] == "peak") { #peaks are green everything else (singleton, baseline) black
+      col = "green"
+    }
+    lines(x=c(ch$start[c]+1, ch$stop[c]+1), y=c(y, y), col=col, lwd=2)
+  }
+  
+  ##add card
+  hom = tab$geneStart[tab$geneID %in% carHom$CHS11.gene]
+  var = tab$geneStart[tab$geneID %in% carVar$CHS11.gene]
+  points(x=hom, y=rep(y, length(hom)), pch=15, col="purple")
+  points(x=var, y=rep(y, length(var)), pch=17, col="purple")
+  
+  ##add p-value peaks
+  drawLines(tabCVR, i, "turquoise", maxP-4)
+  drawLines(tabCVS, i, "pink", maxP-8)
+  drawLines(tabRVS, i, "orange", maxP-12)
+}
+##function to generate legend for p-value plots; if oneRow, print one row, otherwise do multiple
+legendPvals <- function(oneRow=T) {
+  par(fig=c(0,1,0,1), oma=c(0,0,0,0), mar=c(0,0,0,0), new=T)
+  plot(0, type="n", bty="n", xaxt="n", yaxt="n", xlab="", ylab="")
+  # if(oneRow) {
+    legend("bottom", xpd=T, ncol=5,
+           c("carolina vs. resistant", "carolina vs. susceptible", "resistant vs. susceptible",
+             "AF peak", "AF baseline", "CARD homolog", "CARD variant", 
+             paste("car v res peak", cutCVR), paste("car v sus peak", cutCVS), paste("res v sus peak", cutRVS)),
+           col = c("blue", "red", "gold", "green", "black", "purple", "purple",
+                   "turquoise", "pink", "orange"),
+           lty = c(rep(0, 3), rep(1, 2), rep(0, 2), rep(1,3)),
+           pch=c(rep(20, 3), rep(NA, 2), 15, 17, rep(NA, 3)),
+           lwd = 2)
+#   } else {
+#     legend("bottom", xpd=T, ncol=5, 
+#            c("carolina vs. resistant", "carolina vs. susceptible", "resistant vs. susceptible",
+#              "AF peak", "AF baseline", "CARD homolog", "CARD variant", 
+#              paste("car v res peak", cutCVR), paste("car v sus peak", cutCVS), paste("res v sus peak", cutRVS)),
+#            col = c("blue", "red", "gold", "green", "black", "purple", "purple",
+#                    "turquoise", "pink", "orange"),
+#            lty = c(rep(0, 3), rep(1, 2), rep(0, 3), rep(1, 3)),
+#            pch=c(rep(20, 3), rep(NA, 2), 15, 17, rep(NA, 3)),
+#            lwd = 2)
+#   }
+}
+##plot everything together
+jpeg("chs11_klebpneu_pValChunk_scaffolds_pvalues_all.jpg", height=1400, width=1800, res=150)
+par(mfrow=c(3, 3), oma=c(2, .1, .1, .1)) #9 scaffolds
+for(i in 1:nrow(scaff)) {
+  print(plotPvals(i))
+}
+print(legendPvals())
+dev.off()
+##plot individual scaffolds for the bigger scaffolds
+for(i in 1:nrow(scaff)) {
+  if(scaff$length[i] > 100000) {
+    jpeg(paste("chs11_klebpneu_pValChunk_scaffolds_pvalues_all_", scaff$scaffold[i], ".jpg", sep=""), 
+         height=750, width=1800, res=150)
+    par(oma=c(2, .1, .1, .1))
+    print(plotPvals(i))
+    print(legendPvals(F))
+    dev.off()
+  }
+}
