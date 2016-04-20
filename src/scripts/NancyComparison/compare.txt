@@ -1,0 +1,76 @@
+rm(list=ls())
+
+setwd("C:\\NancySpreadsheets");
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+getCondition <- function(id, myT)
+{
+	for( i in 1:nrow(myT) ) 
+	{
+		if (myT[i,]$ratID == id) 
+		{
+			return (myT[i,]$condition)
+		}
+	}
+	
+	return ("NO")
+}
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste("cohousingRun_", taxa, "_AsColumnsLogNormalizedPlusMetadata_AddRatID.txt", sep ="")
+	pdf(paste(taxa, ".pdf"))
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2),rep("numeric",2),rep("character",7), rep("numeric", numCols-11))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myIDs <- unique(myT$ratID)
+	pValues <- vector()
+	taxaNames <- vector()
+	taxaIndex <- 1
+	
+	for( j in c(3,4,12:ncol(myT)))
+		if( sum( myT[,j] !=0 ) > nrow(myT) /4 ) 
+	{
+		differences <- vector()
+		conditions <- vector()
+		index1 <- 1
+		for( id in myIDs) 
+		{
+			val1 = myT[ myT$ratID == id & myT$time=="1", j]
+			val2 = myT[ myT$ratID == id & myT$time=="2", j] 
+			
+			if( length(val1) == 1 & length(val2) == 1 ) 
+			{
+				differences[index1] = val2 - val1;
+				conditions[index1] = getCondition(id,myT)
+				index1 = index1 + 1
+			}
+		}
+		
+		myLm <- lm( differences ~ conditions ) 
+		pValues[taxaIndex] <- anova(myLm)$"Pr(>F)"[1]
+		taxaNames[taxaIndex] <- names(myT)[j]
+		
+		myFrame <- data.frame( differences, conditions )
+	
+		myTitle <- paste( taxaNames[taxaIndex] , "p=",pValues[taxaIndex] )
+		boxplot( differences[ conditions == "control" ], differences[conditions=="cross"],
+				  ylab = taxaNames[taxaIndex],	main = myTitle, names=c("cross", "case"))	
+				  
+		stripchart(differences ~ conditions, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
+					
+		taxaIndex <- taxaIndex + 1
+	}
+	
+	dFrame <- data.frame( taxaNames,pValues) 
+	dFrame <- dFrame [order(dFrame$pValues  ),]
+	dFrame$pValuesadjust<- p.adjust( dFrame$pValues  , method = "BH")
+	write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	hist(pValues, breaks=15)
+	dev.off()
+}
+
