@@ -119,9 +119,16 @@ public class ConfigReader
 	
 	public static final String GORAN_LAB_RAT_DATA = "GORAN_LAB_RAT_DATA";
 	
+	public static final String TOPE_ONE_AT_A_TIME_DIR = "TOPE_ONE_AT_A_TIME_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
+	}
+	
+	public static String getTopeOneAtATimeDir() throws Exception
+	{
+		return getConfigReader().getAProperty(TOPE_ONE_AT_A_TIME_DIR);
 	}
 	
 	public static boolean isVerboseConsole() throws Exception
