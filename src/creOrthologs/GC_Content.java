@@ -53,7 +53,7 @@ public class GC_Content
 		
 		for(FastaSequence fs : list)
 		{
-			String seq = fs.getSequence();
+			String seq = fs.getSequence().toUpperCase();
 			
 			for( int x=0; x < seq.length(); x= x+ 1000)
 			{
