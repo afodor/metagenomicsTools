@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("C:\\topeOneAtATime\\file3\\spreadsheets")
+setwd("C:\\topeOneAtATime\\file4\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
@@ -16,7 +16,7 @@ for(taxa in taxaLevels )
 							rep("numeric", numCols-9))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
-	myT <- myT[ myT$read == 4 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	myT <- myT[ myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
 	
 	pValuesCaseControl<- vector()
 	pValuesWilcoxon <- vector()
@@ -48,7 +48,7 @@ for(taxa in taxaLevels )
 	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl ) 
 	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
 	dFrame$pValuesCaseControlAdjust <- p.adjust( dFrame$pValuesCaseControl  , method = "BH")
-	write.table(dFrame, file=paste("pValuesFor_", taxa, "_read4_.txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 }
 							
