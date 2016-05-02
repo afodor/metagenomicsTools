@@ -39,6 +39,13 @@ for(taxa in taxaLevels )
 			names[index] = names(myT)[i]
 			
 			boxplot( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i], main=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
+			
+			bug <- myT[,i]
+			caseControl <- factor( myT$caseContol)
+			myFrame <- data.frame(bug, caseControl)
+			
+			stripchart(bug ~ caseControl, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
 			index <- index + 1	
 			
 		}
