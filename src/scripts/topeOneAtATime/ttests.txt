@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("C:\\topeOneAtATime\\file4\\spreadsheets")
+setwd("C:\\topeOneAtATime\\merged")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
