@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.StringTokenizer;
 
-import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -15,11 +14,20 @@ public class AddMetadata
 {
 	private static int getreadNumber(String s)
 	{
+		if( s.indexOf("_") == -1 ) 
+			return 1;
+		
 		return Integer.parseInt(s.split("_")[1].replaceAll("\"", ""));
 	}
 	
 	private static int getPatientId(String s) 
 	{
+		// for abundantOTU
+		if( s.indexOf("_") == -1)
+		{
+			return Integer.parseInt(new StringTokenizer(s).nextToken().replace("A", "").replace("B", "").replace("\"", ""));
+		}
+		
 		String first = new StringTokenizer(s, "_").nextToken().replace("A", "").replace("B", "").replace("\"", "");
 		return Integer.parseInt(first);
 	}
@@ -39,7 +47,7 @@ public class AddMetadata
 		int rareficationNumber = originalWrapper.getCountsForSample(originalWrapper.getSampleIdWithMinCounts())-1;
 		
 		writer.write("sampleID\treadNumber\tnumSequencesPerSample\tshannonDiversity\tshannonEvenness\t" + 
-						"rarifiedRichness\t" +  
+						"rarifiedRichness_" + rareficationNumber + "\t" +  
 						"patientID\truralUrban\ttimepoint");
 		
 		if( !skipFirst)
@@ -109,6 +117,7 @@ public class AddMetadata
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++ )
 		{
 			OtuWrapper wrapper = new OtuWrapper(
@@ -141,6 +150,22 @@ public class AddMetadata
 					"_taxaAsColumnsLogNorm" + "_WithMetadata.txt")));
 			
 			addSomeMetadata(reader, writer,true,wrapper);
-		}
+		}*/
+		
+			OtuWrapper wrapper = new OtuWrapper(
+					ConfigReader.getChinaDir() + File.separator +
+				"abundantOTU" + File.separator + 
+					"abundantOTUForwardTaxaAsColumns.txt");
+			BufferedReader reader = new BufferedReader(new FileReader(new File( 
+					ConfigReader.getChinaDir() + File.separator +
+					"abundantOTU" + File.separator +
+						"abundantOTUForwardTaxaAsColumnsLogNormal.txt")));
+			
+			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getChinaDir() 
+					+ File.separator 
+					+ "abundantOTU" + File.separator + 
+					"abundantOTUForwardTaxaAsColumnsLogNormal" + "_WithMetadata.txt")));
+			
+			addSomeMetadata(reader, writer,true,wrapper);
 	}
 }
