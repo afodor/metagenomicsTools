@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
@@ -65,22 +66,17 @@ public class AddMetadataMerged
 					File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
-			addMetadata(wrapper, logNormalizedFile, outFile,false, "file4");
+			addMetadata(wrapper, logNormalizedFile, outFile,false);
 			
-			/*
 			logNormalizedFile = new File(ConfigReader.getTopeOneAtATimeDir()
-					+ File.separator + "file3" + File.separator + "spreadsheets" + 
-					File.separator + "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  ".txt" );
+					+ File.separator + "merged" +
+					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  ".txt" );
 			
 			outFile = new File( ConfigReader.getTopeOneAtATimeDir()
-					+ File.separator + "file3" + File.separator + "spreadsheets" + 
-					File.separator + "pivoted_" + 
-					NewRDPParserFileLine.TAXA_ARRAY[x] + "mdsPlusMetadata.txt");
-					*
+					+ File.separator + "merged" +
+					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  "PlusMetadata.txt" );
 			
-			addMetadata(wrapper, logNormalizedFile, outFile,true);
-			*/
-			
+			addMetadata(wrapper, logNormalizedFile, outFile, true );
 		}
 		
 	}
@@ -109,8 +105,23 @@ public class AddMetadataMerged
 		return val;
 	}
 	
+	private static HashSet<String> getFile3Set() throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		File file3Dir =new File(ConfigReader.getTopeOneAtATimeDir() + File.separator + 
+				"File3" + File.separator + "fastaOut");
+		
+		for( String s : file3Dir.list())
+		{
+			set.add(new StringTokenizer(s, "_").nextToken());
+		}
+		
+		return set;
+	}
+	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
-				boolean fromR, String fileSet) throws Exception
+				boolean fromR) throws Exception
 	{
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
