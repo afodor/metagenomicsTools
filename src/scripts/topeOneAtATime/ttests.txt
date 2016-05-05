@@ -60,7 +60,7 @@ for(taxa in taxaLevels )
 
 	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl, rSquared, numCase,numControl ) 
 	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
-	dFrame$pValuesCaseControlAdjust <- p.adjust( dFrame$pValuesCaseControl  , method = "BH")
+	dFrame$pValuesCaseControlAdjust <- p.adjust( dFrame$pValuesWilcoxon  , method = "BH")
 	write.table(dFrame, file=paste("pValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 }
