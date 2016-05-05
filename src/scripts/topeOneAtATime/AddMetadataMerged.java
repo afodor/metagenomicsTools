@@ -47,6 +47,9 @@ public class AddMetadataMerged
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashSet<String> fileSet3=  getFileSet(3);
+		HashSet<String> fileSet4 = getFileSet(4);
+		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
@@ -66,7 +69,7 @@ public class AddMetadataMerged
 					File.separator + "pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
-			addMetadata(wrapper, logNormalizedFile, outFile,false);
+			addMetadata(wrapper, logNormalizedFile, outFile,false, fileSet3, fileSet4);
 			
 			logNormalizedFile = new File(ConfigReader.getTopeOneAtATimeDir()
 					+ File.separator + "merged" +
@@ -76,7 +79,7 @@ public class AddMetadataMerged
 					+ File.separator + "merged" +
 					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  "PlusMetadata.txt" );
 			
-			addMetadata(wrapper, logNormalizedFile, outFile, true );
+			addMetadata(wrapper, logNormalizedFile, outFile, true , fileSet3, fileSet4);
 		}
 		
 	}
@@ -105,12 +108,12 @@ public class AddMetadataMerged
 		return val;
 	}
 	
-	private static HashSet<String> getFile3Set() throws Exception
+	private static HashSet<String> getFileSet(int fileNum) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
 		File file3Dir =new File(ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-				"File3" + File.separator + "fastaOut");
+				"File" + fileNum + File.separator + "fastaOut");
 		
 		for( String s : file3Dir.list())
 		{
@@ -120,8 +123,23 @@ public class AddMetadataMerged
 		return set;
 	}
 	
+	private static String getIdOrThrow(String sampleID, HashSet<String> file3Set, HashSet<String> file4Set)
+		throws Exception
+	{
+		if( file3Set.contains(sampleID)  && file4Set.contains(sampleID))
+			throw new Exception("Sample id in both " + sampleID);
+		
+		if( file3Set.contains(sampleID) )
+			return "File3";
+		
+		if( file4Set.contains(sampleID))
+			return "File4";
+		
+		throw new Exception("File id in neither " + sampleID);
+	}
+	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
-				boolean fromR) throws Exception
+				boolean fromR, HashSet<String> file3Set, HashSet<String> file4Set) throws Exception
 	{
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
@@ -144,6 +162,7 @@ public class AddMetadataMerged
 			String[] splits = s.split("\t");
 			
 			String key = splits[0].replaceAll("\"", "");
+			String sampleId = new StringTokenizer(key, "_").nextToken();
 			
 			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  getReadNum(key) + "\t" + 
 						( key.indexOf("DV-000-") != -1) + "\t" + 
@@ -157,7 +176,7 @@ public class AddMetadataMerged
 			else
 				writer.write("" + val + "\t");
 			
-			writer.write(fileSet+ "\t");
+			writer.write(getIdOrThrow(sampleId, file3Set, file4Set)+ "\t");
 			
 			writer.write( Integer.parseInt(key.split("_")[1]) + "");
 				
