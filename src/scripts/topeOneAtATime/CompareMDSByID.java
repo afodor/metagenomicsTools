@@ -13,6 +13,7 @@ public class CompareMDSByID
 {
 	private static class Holder
 	{
+		Integer numReads1;
 		Double read1;
 		Double read4;
 	}
@@ -42,6 +43,7 @@ public class CompareMDSByID
 			if( Integer.parseInt(splits[2]) == 1 )
 			{
 				h.read1 = Double.parseDouble(splits[9]);
+				h.numReads1 = (int) Double.parseDouble(splits[4].replaceAll("\"", ""));
 			}
 			else if( Integer.parseInt(splits[2]) == 4 )
 			{
@@ -60,11 +62,12 @@ public class CompareMDSByID
 			ConfigReader.getTopeOneAtATimeDir() + File.separator + "merged" + File.separator + 
 			"pariedGenusMDS1.txt")));
 		
-		writer.write("key\tread1\tread4\n");
+		writer.write("key\tread1\tread4\tnumReads1\n");
 		
 		for(String s : map.keySet())
 		{
-			writer.write( s + "\t" + map.get(s).read1 + "\t"  + map.get(s).read4 + "\n");
+			writer.write( s + "\t" + map.get(s).read1 + "\t"  + map.get(s).read4 + "\t" + 
+							map.get(s).numReads1 + "\n");
 		} 
 		
 		writer.flush();  writer.close();
