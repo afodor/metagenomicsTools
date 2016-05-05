@@ -24,6 +24,8 @@ for(taxa in taxaLevels )
 	meanCase <- vector()
 	meanControl <- vector()
 	rSquared <- vector()
+	numCase <- vector()
+	numControl <- vector()
 	
 	index <- 1
 	for( i in c(5,6,10:ncol(myT))) 
@@ -39,6 +41,8 @@ for(taxa in taxaLevels )
 			
 			names[index] = names(myT)[i]
 			rSquared[index] = summary(myLm)$r.squared
+			numCase[index] <- length(myT[myT$caseContol==1,i]) 
+			numControl[index] <-  length(myT[myT$caseContol==0,i]) 
 			
 			boxplot( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i], main=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
 			
@@ -54,7 +58,7 @@ for(taxa in taxaLevels )
 		
 	hist(pValuesCaseControl, breaks=20)
 
-	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl, rSquared ) 
+	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl, rSquared, numCase,numControl ) 
 	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
 	dFrame$pValuesCaseControlAdjust <- p.adjust( dFrame$pValuesCaseControl  , method = "BH")
 	write.table(dFrame, file=paste("pValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
