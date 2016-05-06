@@ -30,7 +30,7 @@ for(taxa in taxaLevels )
 			names[index] = names(myT)[i]
 			rSquared[index] = summary(myLm)$r.squared
 			
-			aTitle <- paste( names[i] , ";", "p=", format( pValuesCategory[index],digits=5) , "r-squared =" ,
+			aTitle <- paste( names[index] , ";", "p=", format( pValuesCategory[index],digits=5) , "r-squared =" ,
 			format(  rSquared[index], digits=5) )
 			
 			boxplot( myT[,i] ~ myT$category, main=aTitle)
