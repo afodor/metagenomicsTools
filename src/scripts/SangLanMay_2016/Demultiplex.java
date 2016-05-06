@@ -52,7 +52,7 @@ public class Demultiplex
 			for(String s : barcodeMap.keySet())
 				if( fq.getSequence().startsWith(s))
 				{
-					BufferedWriter writer =getFromMap(writerMap, s);
+					BufferedWriter writer =getFromMap(writerMap, barcodeMap.get( s) );
 					
 					writer.write(">" + fq.getHeader() + "\n");
 					writer.write(fq.getSequence() + "\n");
