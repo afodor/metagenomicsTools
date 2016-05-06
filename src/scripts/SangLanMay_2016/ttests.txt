@@ -1,0 +1,57 @@
+rm(list=ls())
+
+setwd("C:\\sangLab\\forwardSpreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+
+for(taxa in taxaLevels ) 
+{
+	pdf(paste("boxplots_", taxa, ".pdf", sep=""))
+
+	inFileName <- paste(taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",2), rep("numeric", numCols-2))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	pValuesCategory<- vector()
+	names <- vector()
+	rSquared <- vector()
+	
+	index <- 1
+	for( i in c(3:ncol(myT))) 
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		{	
+			myLm <- lm( myT[,i] ~  factor( myT$category) )
+			myAnova <- anova(myLm)
+			pValuesCategory[index] <- myAnova$"Pr(>F)"[1]
+			
+			names[index] = names(myT)[i]
+			rSquared[index] = summary(myLm)$r.squared
+			
+			aTitle <- paste("p=", format( pValuesCategory[index],digits=5) , "r-squared =" ,
+			format(  rSquared[index], digits=5) )
+			
+			boxplot( myT[,i] ~ myT$category, main=aTitle)
+			
+			bug <- myT[,i]
+			category <- factor(myT$category)
+			
+			myFrame <- data.frame( bug, category ) 
+			
+			stripchart(bug ~ category, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
+			index <- index + 1	
+			
+		}
+		
+		hist(pValuesCategory, breaks=20)
+
+		dFrame <- data.frame( names,rSquared, pValuesCategory ) 
+		dFrame <- dFrame [order(dFrame$pValuesCategory ),]
+		dFrame$pValuesCategoryAdjust <- p.adjust( dFrame$pValuesCategory , method = "BH")
+		write.table(dFrame, file=paste("pValuesFor_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+		dev.off()
+}
+							
