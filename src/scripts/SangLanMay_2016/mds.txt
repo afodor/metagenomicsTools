@@ -2,7 +2,7 @@
 rm(list=ls())
 library("vegan")
 
-setwd("C:\\sangLab\\forwardSpreadsheets")
+setwd("C:\\sangLab\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 

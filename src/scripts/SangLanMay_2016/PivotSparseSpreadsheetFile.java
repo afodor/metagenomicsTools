@@ -23,19 +23,19 @@ public class PivotSparseSpreadsheetFile
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			HashMap<String, HashMap<String, Integer>> map = 
 			getMap(ConfigReader.getSangLabMay2016Dir() 
-					+ File.separator + "forwardSpreadsheets" + File.separator +  NewRDPParserFileLine.TAXA_ARRAY[x] +
+					+ File.separator + "spreadsheets" + File.separator +  NewRDPParserFileLine.TAXA_ARRAY[x] +
 					"_SparseThreeCol.txt");
 			
 			File pivotedFile = 
 					new File(
 							ConfigReader.getSangLabMay2016Dir() 
-							+ File.separator + "forwardSpreadsheets" + File.separator + 
+							+ File.separator + "spreadsheets" + File.separator + 
 							NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
 			
 			PivotOTUs.writeResults(map, pivotedFile.getAbsolutePath());
 			OtuWrapper wrapper = new OtuWrapper(pivotedFile);
 			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getSangLabMay2016Dir() 
-					+ File.separator + "forwardSpreadsheets" + File.separator +
+					+ File.separator + "spreadsheets" + File.separator +
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnslogNorm.txt");
 		}
 	}

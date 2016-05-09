@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
@@ -21,26 +22,26 @@ public class AddMetadata
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			
 			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getSangLabMay2016Dir()
-					+ File.separator + "forwardSpreadsheets" + File.separator + 
+					+ File.separator + "spreadsheets" + File.separator + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
 			
 			File logNormalizedFile = new File(	ConfigReader.getSangLabMay2016Dir()
-					+ File.separator + "forwardSpreadsheets" + File.separator + 
+					+ File.separator + "spreadsheets" + File.separator + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNorm.txt");
 			
 			File outFile = new File( 
 					ConfigReader.getSangLabMay2016Dir()
-					+ File.separator + "forwardSpreadsheets" + File.separator + 
+					+ File.separator + "spreadsheets" + File.separator + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
 			addMetadata(wrapper, logNormalizedFile, outFile,false);
 			
 			logNormalizedFile = new File(ConfigReader.getSangLabMay2016Dir()
-					+ File.separator + "forwardSpreadsheets" +
+					+ File.separator + "spreadsheets" +
 					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  ".txt" );
 			
 			outFile = new File( ConfigReader.getSangLabMay2016Dir()
-					+ File.separator + "forwardSpreadsheets" +
+					+ File.separator + "spreadsheets" +
 					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  "PlusMetadata.txt" );
 			
 			addMetadata(wrapper, logNormalizedFile, outFile, true );
@@ -48,6 +49,13 @@ public class AddMetadata
 		
 	}
 	
+	private static int getReadNumber(String s)
+	{
+		StringTokenizer sToken = new StringTokenizer(s.replaceAll("\"", ""),"_");
+		sToken.nextToken();
+		
+		return Integer.parseInt(sToken.nextToken().replace("read", ""));
+	}
 	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile, boolean fromR) throws Exception
 	{
@@ -56,7 +64,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tcategory\tnumberSequencesPerSample\tshannonEntropy");
+		writer.write("id\tkey\tcategory\treadNum\tnumberSequencesPerSample\tshannonEntropy");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -72,8 +80,10 @@ public class AddMetadata
 			String[] splits = s.split("\t");
 			
 			String key = splits[0].replaceAll("\"", "");
+			String id = new StringTokenizer(key, "_").nextToken();
 			
-			writer.write(key+ "\t" + categoryMap.get(key.replaceAll(".fastatoRDP.txt", "")) + "\t" + 
+			writer.write(key+ "\t" + id+ "\t" +  categoryMap.get(id) + "\t" + 
+			getReadNumber(splits[0]) + "\t" +
 					wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) );
 				
