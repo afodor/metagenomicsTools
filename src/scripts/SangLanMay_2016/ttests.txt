@@ -17,7 +17,7 @@ for(taxa in taxaLevels )
 	
 	myT <- myT[myT$readNum==1,]
 	
-	binary <- myT$category == "non"
+	binary <- ifelse ( myT$category == "non", "non", "responder")
 	
 	pValuesCategory<- vector()
 	names <- vector()
