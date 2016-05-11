@@ -17,6 +17,8 @@ for(taxa in taxaLevels )
 	
 	myT <- myT[myT$readNum==1,]
 	
+	binary <- myT$category == "non"
+	
 	pValuesCategory<- vector()
 	names <- vector()
 	rSquared <- vector()
@@ -25,7 +27,7 @@ for(taxa in taxaLevels )
 	for( i in c(5:ncol(myT))) 
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
-			myLm <- lm( myT[,i] ~  factor( myT$category) )
+			myLm <- lm( myT[,i] ~  factor( binary) )
 			myAnova <- anova(myLm)
 			pValuesCategory[index] <- myAnova$"Pr(>F)"[1]
 			
@@ -35,10 +37,10 @@ for(taxa in taxaLevels )
 			aTitle <- paste( names[index] , ";", "p=", format( pValuesCategory[index],digits=5) , "r-squared =" ,
 			format(  rSquared[index], digits=5) )
 			
-			boxplot( myT[,i] ~ myT$category, main=aTitle)
+			boxplot( myT[,i] ~ binary, main=aTitle)
 			
 			bug <- myT[,i]
-			category <- factor(myT$category)
+			category <- factor(binary)
 			
 			myFrame <- data.frame( bug, category ) 
 			
