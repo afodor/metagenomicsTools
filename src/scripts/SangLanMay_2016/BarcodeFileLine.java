@@ -14,7 +14,7 @@ public class BarcodeFileLine
 		HashMap<String, String> map = new HashMap<String,String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getSangLabMay2016Dir() + File.separator + "022516AY27F-mapping_discr.txt")));
+			ConfigReader.getSangLabMay2016Dir() + File.separator + "022516AY27F-mapping_discr_corrected.txt")));
 		
 		reader.readLine(); 
 		
