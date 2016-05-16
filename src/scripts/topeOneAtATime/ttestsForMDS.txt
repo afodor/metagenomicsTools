@@ -1,0 +1,65 @@
+rm(list=ls())
+
+setwd("C:\\topeOneAtATime\\merged")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+
+for(taxa in taxaLevels ) 
+{
+	pdf(paste("mdsBoxplots_", taxa, ".pdf", sep=""))
+
+	inFileName <- paste( "mds_", taxa, "PlusMetadata.txt", sep ="")
+	#inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",4), rep("numeric", 2),  rep("character",3),
+							rep("numeric", numCols-9))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+	myT <- myT[ myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	
+	pValuesCaseControl<- vector()
+	pValuesWilcoxon <- vector()
+	names <- vector()
+	meanCase <- vector()
+	meanControl <- vector()
+	rSquared <- vector()
+	
+	index <- 1
+	for( i in c(5,6,10:20)) 
+	#for( i in c(5,6,10:ncol(myT))) 
+		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		{	
+			myLm <- lm( myT[,i] ~  factor( myT$caseContol) )
+			myAnova <- anova(myLm)
+			pValuesCaseControl[index] <- myAnova$"Pr(>F)"[1]
+			pValuesWilcoxon[index] <- wilcox.test( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i] )$p.value
+			
+			meanControl[index] <- mean(myT[myT$caseContol==0,i]) 
+			meanCase[index] <- mean(myT[myT$caseContol==1,i]) 
+			
+			names[index] = names(myT)[i]
+			rSquared[index] = summary(myLm)$r.squared
+			
+			boxplot( myT[myT$caseContol==0,i] ,myT[myT$caseContol==1,i], main=paste(names[index], " p=" ,  pValuesWilcoxon[index]))
+			
+			bug <- myT[,i]
+			caseControl <- factor( myT$caseContol)
+			myFrame <- data.frame(bug, caseControl)
+			
+			stripchart(bug ~ caseControl, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
+			index <- index + 1	
+			
+		}
+		
+	hist(pValuesCaseControl, breaks=20)
+
+	dFrame <- data.frame( names,pValuesCaseControl, pValuesWilcoxon , meanCase, meanControl, rSquared ) 
+	dFrame <- dFrame [order(dFrame$pValuesWilcoxon  ),]
+	dFrame$pValuesWilcoxCaseControlAdjust <- p.adjust( dFrame$pValuesWilcoxon  , method = "BH")
+	write.table(dFrame, file=paste("pValuesForMDS_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
+}
+							

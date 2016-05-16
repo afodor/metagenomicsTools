@@ -1,0 +1,20 @@
+
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\sangLab\\spreadsheets")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	inFileName <- paste( taxa, "asColumnsLogNorm.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c("character", rep("numeric", numCols-1))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	myPCOA <- capscale(myT~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("mds_", taxa, ".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+}
