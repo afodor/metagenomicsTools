@@ -246,7 +246,7 @@ drawEncounterFig <- function() {
   ##draw times in hospital
   drawBase()
   ##draw cultures
-  points(x=cDates, y=y, cex=5, pch="X", col=col)
+  points(x=cDates, y=y, cex=4, pch="X", col=col)
 }
 
 # ##legend
@@ -368,6 +368,8 @@ for(d in distmats) {
   ##get graphNEL coordinates
   xy = getCoord(sub.graph)
   mat = cbind(xy$x, xy$y)
+  # mat = cbind(xy$x, -cultureDates)
+  # mat = cbind(xy$x, -log10(cult))
   
   ##draw seqtrack tree with edges removed
   jpeg(paste("TxTree_SeqTrack_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
