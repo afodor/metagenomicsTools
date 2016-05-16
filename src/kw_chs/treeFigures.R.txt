@@ -140,7 +140,7 @@ getEpiEdgeCol <- function(tree, dist, a) {
 
 #####patient hopsital figure
 ##merge times together so can space things out better
-within = 5 #number of days to merge
+within = 1 #number of days to merge
 hospital = read.table(paste(datadir, "encountersMergedWithin2.txt", sep=""), 
                       header=T, sep="\t", colClasses=c(rep("numeric", 3), "character"))
 mergeEnc = data.frame(hospital[1,])
@@ -156,13 +156,42 @@ for(i in 2:nrow(hospital)) {
 }
 names(mergeEnc) = names(hospital)
 
-##hospital symbols
+
+##25 color palette
+c25 <- c("dodgerblue2","#E31A1C", # red
+         "green4",
+         "#6A3D9A", # purple
+         "#FF7F00", # orange
+         "black","gold1",
+         "skyblue2","#FB9A99", # lt pink
+         "palegreen2",
+         "#CAB2D6", # lt purple
+         "#FDBF6F", # lt orange
+         "gray70", "khaki2",
+         "maroon","orchid1","deeppink1","blue1","steelblue4",
+         "darkturquoise","green1","yellow4","yellow3",
+         "darkorange4","brown") #from http://stackoverflow.com/questions/9563711/r-color-palettes-for-many-data-classes
+# plot(x=rep(1, 25), y=25:1, col=c25, pch=16)
+##return unique color for each facility
 all.fac = sort(unique(hospital$facility))
-fac.symb = c("1", "&", "!", "$", "2", "3", "4", "5", "6", "7", "9", "O", "R")
-names(fac.symb) = all.fac
-facilitySymbol <- function(fac) {
-  return(fac.symb[all.fac==fac])
+##get facilities sorted properly (currently is hospital 1, 10, 11, want 1-12)
+temp = sort(as.numeric(sub("Hospital ", "", all.fac[1:11])))
+all.fac = c(paste("Hospital", temp), all.fac[12:13])
+# colors = c25[1:length(all.fac)] 
+colors = c(c25[c(1:5, 8, 10, 16:18, 21)], "gold", "gray")
+# plot(x=rep(1, 13), y=13:1, col=colors, pch=16)
+facilityColor <- function(fac) {
+  return(colors[all.fac==fac])
 }
+
+# ##hospital symbols
+# all.fac = sort(unique(hospital$facility))
+# fac.symb = c("1", "&", "!", "$", "2", "3", "4", "5", "6", "7", "9", "O", "R")
+# names(fac.symb) = all.fac
+# facilitySymbol <- function(fac) {
+#   # return(fac.symb[all.fac==fac])
+#   return("|")
+# }
 
 idx = 1:length(strains) #index for strains
 
@@ -172,9 +201,11 @@ drawBase<-function(name) {
     id = mergeEnc[r,1] #sample id
     if(id %in% strains) {
       y = idx[strains==id]
-      symb = facilitySymbol(mergeEnc$facility[r])
+      # symb = facilitySymbol(mergeEnc$facility[r])
+      col = facilityColor(mergeEnc$facility[r])
       time = seq(from=mergeEnc$encounterDateStart[r], to=mergeEnc$encounterEndDate[r], by=20)
-      points(x=time, y=rep(y, length(time)), cex=1.5, type="p", pch=symb, col="gray")
+      # points(x=time, y=rep(y, length(time)), cex=1.5, type="p", pch=symb, col="gray")
+      points(x=time, y=rep(y, length(time)), cex=2, type="p", pch="|", col=col)
     }
   }
 }
@@ -191,9 +222,14 @@ drawEncounterFig <- function() {
   y = seq(1, length(strains))
   
   ##symbols
-  symb = rep(0, length(strains))
+#   symb = rep(0, length(strains))
+#   for(i in 1:length(strains)) {
+#     symb[i] = facilitySymbol(meta$Abstracted_StudyFacility[meta$SpecNumber==strains[i]])
+#   }
+  ##colors
+  col = rep(NA, length(strains))
   for(i in 1:length(strains)) {
-    symb[i] = facilitySymbol(meta$Abstracted_StudyFacility[meta$SpecNumber==strains[i]])
+    col[i] = facilityColor(meta$Abstracted_StudyFacility[meta$SpecNumber==strains[i]])
   }
   
   ##draw plot outline
@@ -210,16 +246,17 @@ drawEncounterFig <- function() {
   ##draw times in hospital
   drawBase()
   ##draw cultures
-  points(x=cDates, y=y, cex=2.5, pch=symb, col=col)
+  points(x=cDates, y=y, cex=5, pch="X", col=col)
 }
 
-##legend
-tiff("patientFig_Legend.tiff", height=1300, width=600, res=300)
-par(mar=c(.1, .1, .1, .1))
-plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
-legend("topleft", c("Hospital 1", "Hospital 2", "Hospital 3", "Hospital 4", "Hospital 5",  "Hospital 6", "Hospital 7", "Hospital 9", "Hospital 10", "Hospital 11", "Hospital 12", "Outpatient", "Rehab"),
-       pch=c("1", "2", "3", "4", "5", "6", "7", "9", "&", "!", "$", "O", "R"), col="darkgrey", bty='n', cex=1.5)
-dev.off()
+# ##legend
+# jpeg("patientFig_Legend.jpg", height=1300, width=600, res=300)
+# # tiff("patientFig_Legend.tiff", height=1300, width=600, res=300)
+# par(mar=c(.1, .1, .1, .1))
+# plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
+# legend("topleft", c("Hospital 1", "Hospital 2", "Hospital 3", "Hospital 4", "Hospital 5",  "Hospital 6", "Hospital 7", "Hospital 9", "Hospital 10", "Hospital 11", "Hospital 12", "Outpatient", "Rehab"),
+#        pch=c("1", "2", "3", "4", "5", "6", "7", "9", "&", "!", "$", "O", "R"), col="darkgrey", bty='n', cex=1.5)
+# dev.off()
 
 
 ####needed functions for drawing seqtrack graphs
@@ -263,32 +300,31 @@ getEdgeCol <- function(graph, fixName=T) {
   return(edge.col)
 }
 
-##returns the node colors for the given list of groups, based on hospital
-colors = c("seagreen1", "cornflowerblue", "pink", "khaki", "darkgreen",
-           "orange", "purple", "red", "darkgrey", rep("blue",4))
-melHosp = c("Hospital 1", "Hospital 2", "Hospital 3", "Hospital 4", "Hospital 5", "Hospital 7",
-            "Hospital 9", "Rehab", "Outpatient", "Hospital 6", "Hospital 10", "Hospital 11", "Hospital 12")
+# ##returns the node colors for the given list of groups, based on hospital
+# colors = c("seagreen1", "cornflowerblue", "pink", "khaki", "darkgreen",
+#            "orange", "purple", "red", "darkgrey", rep("blue",4))
+# melHosp = c("Hospital 1", "Hospital 2", "Hospital 3", "Hospital 4", "Hospital 5", "Hospital 7",
+#             "Hospital 9", "Rehab", "Outpatient", "Hospital 6", "Hospital 10", "Hospital 11", "Hospital 12")
 col = rep(NA, length(strains))
-subMeta = meta[meta$SpecNumber %in% strains,]
-hosp = subMeta$Abstracted_StudyFacility[order(subMeta$SpecNumber)]
-for(h in 1:length(melHosp)) {
-  col[hosp == melHosp[h]] = colors[h]
+for(i in 1:length(strains)) {
+  col[i] = facilityColor(meta$Abstracted_StudyFacility[meta$SpecNumber==strains[i]])
 }
 getNodeCol <- function() {
-  # vert = as.numeric(as_ids(V(sub.ig))) #just numerical order
   return(col)
 }
 
+
 ##make tree legend
-tiff("TxTree_Legend.tiff", height=1300, width=1400, res=300)
+# tiff("TxTree_Legend.tiff", height=1300, width=1400, res=300)
+jpeg("TxTree_Legend.jpg", height=1500, width=1400, res=300)
 par(mar=c(.1, .1, .1, .1))
 plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
 legend("topleft", 
-       legend = c(melHosp[1:9], "Hospitals 6, 10, 11, 12",
+       legend = c(all.fac,
          "encounter between culture dates", "encounter before later culture date", "no encounter"),
-       col = c(colors[1:10], "orange", "pink", "black"),
-       pch=c(rep(16, 10), rep(NA, 3)), 
-       lty = c(rep(0, 10), rep(1, 3)),
+       col = c(colors, "orange", "pink", "black"),
+       pch=c(rep(16, 13), rep(NA, 3)), 
+       lty = c(rep(0, 13), rep(1, 3)),
        bty='n', cex=1.5, lwd=2)
 dev.off()
 
@@ -334,7 +370,8 @@ for(d in distmats) {
   mat = cbind(xy$x, xy$y)
   
   ##draw seqtrack tree with edges removed
-  tiff(paste("TxTree_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+  jpeg(paste("TxTree_SeqTrack_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
+  # tiff(paste("TxTree_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
   par(mar=c(.01, .1, 2.5, .1), cex.main=4)
   plot(sub.ig, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
        edge.label.cex=3, edge.color=edge.col, edge.width=4, edge.label.color="dodgerblue3", edge.arrow.size=1.5,
@@ -353,7 +390,8 @@ for(d in distmats) {
     xval = seq(from=10, length=71, by=200)
     mat = cbind(newy, xval) 
     
-    tiff(paste("TxTreeRotate_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+    jpeg(paste("TxTreeRotate_SeqTrack_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
+    # tiff(paste("TxTreeRotate_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
     par(mar=c(.1, .001, .1, 1))
     plot(sub.ig, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=2, vertex.size=3, vertex.frame.color=node.font.col,
          edge.label.cex=2, edge.color=edge.col, edge.label.color="dodgerblue3",  edge.arrow.size=1.5, edge.width=4)
@@ -372,7 +410,8 @@ for(d in distmats) {
     ##draw epidemiology tree for between culture dates
     node.font.col = rep("white", length(col))
     node.font.col[strains %in% st258] = "black"
-    tiff(paste("EpiTreeBetweenCulture_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+    # tiff(paste("EpiTreeBetweenCulture_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+    jpeg(paste("EpiTreeBetweenCulture_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
     epi.edge.col = getEpiEdgeCol(bt.ig, d, a)
     par(mar=c(.1, .1, 2, .1), cex.main=3)
     plot(bt.ig, layout=bt.layout, vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
@@ -381,7 +420,8 @@ for(d in distmats) {
     
     ##draw epidemiology tree for before last culture date
     epi.edge.col = getEpiEdgeCol(bf.ig, d, a)
-    tiff(paste("EpiTreeBeforeLastCulture_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+    # tiff(paste("EpiTreeBeforeLastCulture_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+    jpeg(paste("EpiTreeBeforeLastCulture_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
     par(mar=c(.1, .1, 2, .1), cex.main=3)
     plot(bf.ig, layout=bf.layout, vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
          edge.width=4, edge.color=epi.edge.col, edge.arrow.size=1.5, main="Encounters Before Later Culture Date")
@@ -395,7 +435,8 @@ for(d in distmats) {
   mat = cbind(xy$x, xy$y)
   edge.col = getEdgeCol(graph)
   edge.label.color = ifelse(rem, "red", "dodgerblue3")#red if above cutoff
-  tiff(paste("TxTreeAllEdges_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+  # tiff(paste("TxTreeAllEdges_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
+  jpeg(paste("TxTreeAllEdges_SeqTrack_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
   par(mar=c(.001, .1, 2.75, .1), cex.main=4.5)
   plot(graph, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
        edge.label.cex=2, edge.color=edge.col, edge.width=4, edge.label.color=edge.label.color, edge.arrow.size=1.5, main=names[a])
@@ -408,6 +449,7 @@ for(d in distmats) {
 }
 
 ##draw patient encounter figure
-tiff("patientFig.tiff", height=8000, width=6000, res=300)
+# tiff("patientFig.tiff", height=8000, width=6000, res=300)
+jpeg("patientFig.jpg", height=8000, width=6000, res=300)
 drawEncounterFig()
 dev.off()
