@@ -1,0 +1,169 @@
+##method comparisons, Kleb pneu only
+##5/17/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures")
+datadir = "C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\"
+
+#####
+metadata = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
+                      header = T, sep="\t", colClasses=c("numeric", "numeric", rep("character", 7)))
+
+##kleb pneu only
+metadata = metadata[metadata$Genus == "Kleb" & metadata$Species == "pneumo",]
+kpneu = metadata$SpecNumber
+
+##get culture date and facility
+culture.data = data.frame(xID=numeric(), yID=numeric(), xCultureDate=numeric(), yCultureDate=numeric(), xCultureFacility=character(), yCultureFacility=character())
+for(i in 1:(nrow(metadata)-1)) {
+  for(j in (i+1):nrow(metadata)) {
+    df = data.frame(xID = metadata$SpecNumber[i], yID = metadata$SpecNumber[j],
+                    xCultureDate = metadata$DeID_StudyCultureDate[i], yCultureDate = metadata$DeID_StudyCultureDate[j],
+                    xCultureFacility = metadata$Abstracted_StudyFacility[i], yCultureFacility = metadata$Abstracted_StudyFacility[j])
+    culture.data = rbind(culture.data, df)
+  }
+}
+
+###setup
+cultureDiff=abs(culture.data$xCultureDate-culture.data$yCultureDate)#differ in culture times
+##make column where 0 = likely transmission, 1 is not (defined as <=14 days difference in culture dates)
+trans = rep(1, length(cultureDiff))
+trans[cultureDiff<=14]=0 #10
+meta = cbind(culture.data, cultureDiff, transmissionCultureDiff=trans)
+##transmission from encounter data: overlap in hospital > 0 days between culture dates
+enc = read.table(paste(datadir, "encounterDaysOverlap.txt", sep=""), sep="\t", header=T, colClasses="numeric")
+meta = merge(meta, enc, by=c("xID", "yID"))
+trans = rep(1, nrow(meta))
+trans[meta$daysOverlapBetweenCultures>0]=0
+meta = cbind(meta, transmissionOverlapBetweenCultures=trans)
+##transmission from encounter data: overlap in hospital > 0 days before last culture date
+trans = rep(1, nrow(meta))
+trans[meta$daysOverlapBeforeLastCulture>0]=0
+meta = cbind(meta, transmissionOverlapBeforeLastCulture=trans)
+
+###get data, subset to kleb pneu only
+##broad
+broad = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\BroadTrees\\distancesUpperTriangle.txt", header=T, sep="\t", colClasses="numeric")
+names(broad) = c("xID", "yID", "distance")
+broad = broad[broad$xID %in% kpneu & broad$yID %in% kpneu,]
+
+##alignment analyses - snps
+snpCP = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\PilonSNPDistanceNoIndel_CP006923.txt", sep="\t", header=T, colClasses="numeric")
+names(snpCP) = c("xID", "yID", "distance")
+snpCP = snpCP[snpCP$xID %in% kpneu & snpCP$yID %in% kpneu,]
+
+##co-phylog
+phy = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CoPhylogSNPDistances.txt", sep="\t", header=T, colClasses="numeric")
+names(phy) = c("xID", "yID", "distance")
+x = phy$xID
+y = phy$yID
+x[phy$xID > phy$yID] = y[phy$xID > phy$yID]
+y[phy$xID > phy$yID] = phy$xID[phy$xID > phy$yID]
+phy$xID = x
+phy$yID = y
+phy = phy[phy$xID %in% kpneu & phy$yID %in% kpneu,]
+
+##########histograms, log scale
+phy2 = phy[phy$xID!=phy$yID,] #cophylog analysis is the only one comparing to self; remove this from histogram
+
+##log
+lim = ceiling(max(log10(broad$distance + 1), log10(snpCP$distance + 1), log10(phy2$distance + 1)))
+jpeg(filename="DistanceFigHistogramsLog.jpg", width=2000, height=3400, res=300)
+par(mfrow=c(3,1), mar=c(6.2, 5, 2.5, 0.9))
+hist(x=log10(broad$distance + 1), main="", xlab="log10(Assembly Core Genome Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
+mtext(" A", side=3, line=0.3, adj=0, cex=2)
+hist(x=log10(phy2$distance + 1), main="", xlab="log10(Co-phylog + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+mtext(" B", side=3, line=0.3, adj=0, cex=2)
+hist(x=log10(snpCP$distance + 1), main="", xlab="log10(Aligned to CP006923 Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+mtext(" C", side=3, line=0.3, adj=0, cex=2)
+dev.off()
+
+##########method comparisons
+##set up data set
+names(broad)[3] = "broadCoreGenomeDistance"
+any(broad$xID > broad$yID)
+names(snpCP)[3] = "cpSNPDistance"
+any(snpCP$xID > snpCP$yID)
+names(phy)[3] = "cophylogDistance"
+any(phy$xID > phy$yID) 
+
+
+dist = merge(broad, snpCP, by=c("xID", "yID"))
+dist = merge(dist, phy, by=c("xID", "yID"))
+
+##make graphs
+##x = x values, y = y values, xlab = x axis label, ylab = y label
+##leg = show line legend if true
+graph<-function(x, y, xlab, ylab, leg) {
+  plot(x=x, y=y, xlab=xlab, ylab="", cex.lab=2.5, cex.axis=2.5, pch=16)
+  mtext(side=2, ylab, cex=2, line=3.5)
+  abline(a=0, b=1, col="green", lwd=2.5)#identity line
+  mod1 = lm(y~x)
+  abline(mod1, col="blue", lwd=2.5)#linear model
+  lab=paste("R^2=", round(summary(mod1)$r.squared,2), sep="")
+  legend("bottomright", lab, text.col="blue", cex=3, bty="n")
+  if(leg) {
+    legend("topleft", c("Linear Regression Line", "Identity Line"),
+           lty=1, col=c("blue", "green"), bty='n', cex=2.5, lwd=2.5)
+  }
+}
+
+###main figure
+##graph all comparisons on log scale
+jpeg(filename="DistanceFigMethodComparisonsLog.jpg", width=6000, height=2000, res=300)
+par(mfrow=c(1,3), mar=c(9, 9, .7, .7), mgp=c(5.5, 1, 0), oma=c(5,0,0,0)) #mgp=c(axis.title.position, axis.label.position, axis.line.position), oma=outer margin
+graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$cophylogDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Co-phylog Distance + 1)", F)
+graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$cpSNPDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Aligned to CP006923\n Distance + 1)", F)
+graph(log10(dist$cophylogDistance + 1), log10(dist$cpSNPDistance + 1), "log10(Co-Phylog Distance + 1)", "log10(Aligned to CP006923\n Distance + 1)", F)
+##add legend (as bottom of larger graph overlapping everything)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", c("                  Legend:", "Linear Regression Line      ", "Identity Line"), xpd = TRUE, horiz = TRUE, inset = c(0,0), 
+       lty=1, col=c("white", "blue", "green"), cex=3, lwd=2.5)
+dev.off()
+
+############graph against time
+any(meta$xID > meta$yID)
+dist = merge(meta, dist, by=c("xID", "yID"))
+
+##function to draw distance vs. time for the given distance, name file with given name
+dVsT <- function(distance, name) {
+  jpeg(filename=paste("DistanceFigDistanceVsTimeLog_", name, ".jpg", sep=""), width=6000, height=2000, res=300)
+  par(mfrow=c(1, 3), mar=c(9, 9.5, 4, .7), mgp=c(7, 2, 0))
+  plot(x=log10(dist$broadCoreGenomeDistance + 1), y=log10(distance + 1), xlab="log10(Assembly Core Genome\n Distance + 1)", ylab="log10(time between cultures + 1)", cex.lab=3, cex.axis=3, pch=16)
+  mtext("A", side=3, line=0.3, adj=0, cex=3)
+  plot(x=log10(dist$cophylogDistance + 1), y=log10(distance + 1), xlab="log10(Co-Phylog Distance + 1)", ylab="log10(time between cultures + 1)", cex.lab=3, cex.axis=3, pch=16)
+  mtext("B", side=3, line=0.3, adj=0, cex=3)
+  plot(x=log10(dist$cpSNPDistance + 1), y=log10(distance + 1), xlab="log10(Aligned to CP006923\n Distance + 1)", ylab="log10(time between cultures + 1)", cex.lab=3, cex.axis=3, pch=16)
+  mtext("C", side=3, line=0.3, adj=0, cex=3)
+  dev.off()
+}
+
+##culture diff
+dVsT(dist$cultureDiff, "cultureDiff")
+##encounters - between culture dates
+dVsT(dist$daysOverlapBetweenCultures, "encounterBetweenCultureDates")
+##encounters - before last culture date
+dVsT(dist$daysOverlapBeforeLastCulture, "encounterBeforeLastCultureDate")
+
+############Co-phylog analysis
+con = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CoPhylogContextSummaryTable.txt", header=T, sep="\t", colClasses="numeric")
+names(con)[1] = "xID"
+names(con)[2] = "yID"
+any(con$xID > con$yID)
+x = con$xID
+y = con$yID
+x[con$xID > con$yID] = y[con$xID > con$yID]
+y[con$xID > con$yID] = con$xID[con$xID > con$yID]
+con$xID = x
+con$yID = y
+cop = merge(phy, con, by=c("xID", "yID"))
+
+jpeg(filename="DistanceFigSuppCophylogLog.jpg", width=2000, height=1600, res=300)
+par(mar=c(5.1, 4.1, 1.1, 1.1))
+plot(x=log10(cop$cophylogDistance + 1), y=cop$ProportionShared, xlab="log10(Co-Phylog SNP Distance + 1)", ylab="Proportion Shared Contexts", pch=16)
+dev.off()
+
+############Make distance table
+dist = merge(dist, data.frame(xID=con$xID, yID=con$yID, proportionSharedContexts=con$ProportionShared), by=c("xID", "yID"))
+write.table(dist, "AllDistances.txt", sep="\t", row.names=F, col.names=T, quote=F)
