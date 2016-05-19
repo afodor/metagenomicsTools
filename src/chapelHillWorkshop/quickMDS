@@ -1,0 +1,6 @@
+
+rm(list=ls())
+
+setwd("C:\\ChapelHillWorkshop")
+
+myT <- read.table("humann2_genefamilies-2AtLeastThreeNonZero.tsv", header=TRUE, sep="\t");
