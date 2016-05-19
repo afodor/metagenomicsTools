@@ -14,7 +14,7 @@ public class StripRare
 	{
 		BufferedReader reader =new BufferedReader(new FileReader(new File(
 			ConfigReader.getChapelHillWorkshopDir() + File.separator + 
-			"humann2_genefamilies-2.tsv")));
+			"humann2_genefamilies.LABELS2.tsv")));
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getChapelHillWorkshopDir() + File.separator + 
