@@ -18,7 +18,7 @@ public class PreprocessGeneFamilies
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getChapelHillWorkshopDir() + File.separator + 
-				"humann2_genefamilies-RemovedQuotes.tsv")));
+				"humann2_genefamilies-IdsAsPrimaryKey.tsv")));
 		
 		writer.write(reader.readLine() + "\n");
 		
@@ -31,12 +31,7 @@ public class PreprocessGeneFamilies
 			if( splits.length != 21)
 				throw new Exception("unexpected tokens");
 			
-			String firstToken = splits[0].replaceAll("\"", "").
-					replaceAll("\"", "").replaceAll(".", "")
-					.replaceAll(":", "_").replaceAll(" ", "_").replaceAll("|", "_");
-			
-			
-			writer.write(firstToken + "_" + x );
+			writer.write("ID_" + x);
 				
 			for(int y=1; y < splits.length; y++)
 				writer.write("\t" + splits[y]);

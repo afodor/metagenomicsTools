@@ -4,7 +4,7 @@ rm(list=ls())
 setwd("C:\\ChapelHillWorkshop")
 library("vegan")
 
-inFileName <- "humann2_genefamilies-RemovedQuotes.tsv"
+inFileName <- "humann2_genefamilies-IdsAsPrimaryKey.tsv"
 myT <- read.table(inFileName, header=TRUE, sep="\t");
 
 numCols <- ncol(myT)
