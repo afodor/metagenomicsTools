@@ -84,6 +84,8 @@ public class ConfigReader
 	
 	public static final String ROSHONDA_CASE_CONTROL_DIR = "ROSHONDA_CASE_CONTROL_DIR";
 	
+	public static final String CHAPEL_HILL_WORKSHOP_DIR = "CHAPEL_HILL_WORKSHOP_DIR";
+	
 	public static final String SONJA_2016_DIR = "SONJA_2016_DIR";
 	
 	public static final String TOPE_DIVERTICULOSIS_DEC_2015_DIR = 
@@ -232,6 +234,11 @@ public class ConfigReader
 	public static String getKatieDir() throws Exception
 	{
 		return getConfigReader().getAProperty(KATIE_DIR);
+	}
+	
+	public static String getChapelHillWorkshopDir() throws Exception
+	{
+		return getConfigReader().getAProperty(CHAPEL_HILL_WORKSHOP_DIR);
 	}
 	
 	public static String getNinaWithDuplicatesDir() throws Exception

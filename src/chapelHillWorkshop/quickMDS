@@ -1,0 +1,17 @@
+
+rm(list=ls())
+
+setwd("C:\\ChapelHillWorkshop")
+library("vegan")
+
+inFileName <- "humann2_genefamilies-RemovedQuotes.tsv"
+myT <- read.table(inFileName, header=TRUE, sep="\t");
+
+numCols <- ncol(myT)
+myColClasses <- c("character", rep("numeric", numCols-1))
+myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+myT <- t(myT)
+myPCOA <- capscale(myT~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("mds_.txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_.txt", sep=""), sep="\t", col.names=NA)
