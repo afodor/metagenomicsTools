@@ -118,6 +118,7 @@ public class ConfigReader
 	public static final String FRAGMENT_RECRUITER_SUPPORT_DIR = "FRAGMENT_RECRUITER_SUPPORT_DIR";
 	
 	public static final String CRE_ORTHOLOGS_DIR = "CRE_ORTHOLOGS_DIR";
+	public static final String CHS_DIR = "CHS_DIR";
 	
 	public static final String GORAN_LAB_RAT_DATA = "GORAN_LAB_RAT_DATA";
 	
@@ -203,6 +204,11 @@ public class ConfigReader
 	public static String getCREOrthologsDir() throws Exception
 	{
 		return getConfigReader().getAProperty(CRE_ORTHOLOGS_DIR);
+	}
+	
+	public static String getCHSDir() throws Exception
+	{
+		return getConfigReader().getAProperty(CHS_DIR);
 	}
 	
 	public static String getTopeSep2015Dir() throws Exception
