@@ -19,3 +19,24 @@ myFrame$category <- substr( row.names(myT), 1,2)
 
 write.table(myPCOA$CA$u, sep="\t", file="mds.txt",col.names=NA)
 write.table(myPCOA$CA$eig,file="eigenValues_.txt",sep="\t", col.names=NA)
+
+
+# a short version to minimize typing, but requiring we know ahead of time how 
+# many columns we have
+
+rm(list=ls())
+
+setwd("C:\\ChapelHillWorkshop")
+library("vegan")
+
+inFileName <- "humann2_genefamilies-IdsAsPrimaryKey.tsv"
+myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,
+			colClasses=c("character", rep("numeric", 20)))
+
+myT <- t(myT)
+myMDS <- capscale(myT~1,distance="bray")
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) )
+
+
+
