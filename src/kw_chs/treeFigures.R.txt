@@ -179,6 +179,8 @@ temp = sort(as.numeric(sub("Hospital ", "", all.fac[1:11])))
 all.fac = c(paste("Hospital", temp), all.fac[12:13])
 # colors = c25[1:length(all.fac)] 
 colors = c(c25[c(1:5, 8, 10, 16:18, 21)], "gold", "gray")
+hospcol = cbind(facility=all.fac, color=colors)
+write.table(hospcol, "HospitalColors.txt", row.names = F, col.names=T, quote=F, sep="\t")
 # plot(x=rep(1, 13), y=13:1, col=colors, pch=16)
 facilityColor <- function(fac) {
   return(colors[all.fac==fac])
@@ -355,12 +357,20 @@ for(d in distmats) {
   sub.ig = plot(sub.st)
   sub.graph = as_graphnel(sub.ig)
   
+  ##print tree with parents and degrees
+  deg=degree(sub.graph)
+  df = data.frame(isolate = strains[st$id], ances=strains[st$ances], edgeAboveCutoff=rem,
+                  removeEdgeInDegree = deg$inDegree, removeEdgeOutDegree = deg$outDegree)
+  write.table(df, paste("TxTree_SeqTrack_", fnames[a], ".txt", sep=""), sep="\t", row.names = F,
+              col.names = T, quote=F)
+  
   ##get node colors
   col = getNodeCol()
   
-  ##font color and node outline are black if st258 else white
-  node.font.col = rep("white", length(col))
-  node.font.col[strains %in% st258] = "black"
+#   ##font color and node outline are black if st258 else white
+#   node.font.col = rep("white", length(col))
+#   node.font.col[strains %in% st258] = "black"
+  node.font.col="black"
   
   ##get edge colors; black if no evidence, orange if overlap between culture dates, pink if not between dates but before last culture date 
   edge.col = getEdgeCol(sub.ig)
@@ -410,8 +420,9 @@ for(d in distmats) {
     dev.off()
     
     ##draw epidemiology tree for between culture dates
-    node.font.col = rep("white", length(col))
-    node.font.col[strains %in% st258] = "black"
+#     node.font.col = rep("white", length(col))
+#     node.font.col[strains %in% st258] = "black"
+    node.font.col = "black"
     # tiff(paste("EpiTreeBetweenCulture_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
     jpeg(paste("EpiTreeBetweenCulture_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
     epi.edge.col = getEpiEdgeCol(bt.ig, d, a)
