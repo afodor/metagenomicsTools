@@ -38,5 +38,11 @@ myMDS <- capscale(myT~1,distance="bray")
 
 plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) )
 
+# a prettier version
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , 
+col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) , cex = 2.0,
+ pch=ifelse ( substr( row.names(myT), 1,2) == "BM" , 15, 19),
+xlab = "MDS 1", ylab = "MDS 2")
 
 
