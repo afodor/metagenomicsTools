@@ -4,14 +4,45 @@ rm(list=ls())
 setwd("C:\\ChapelHillWorkshop")
 library("vegan")
 
-inFileName <- "humann2_genefamilies-RemovedQuotes.tsv"
+inFileName <- "humann2_genefamilies-IdsAsPrimaryKey.tsv"
 myT <- read.table(inFileName, header=TRUE, sep="\t");
 
 numCols <- ncol(myT)
 myColClasses <- c("character", rep("numeric", numCols-1))
 myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+
 myT <- t(myT)
 myPCOA <- capscale(myT~1,distance="bray")
-	
-write.table(myPCOA$CA$u, sep="\t", file=paste("mds_.txt",sep=""))
-write.table(myPCOA$CA$eig,file=paste("eigenValues_.txt", sep=""), sep="\t", col.names=NA)
+
+myFrame <- data.frame(  myPCOA$CA$u )
+myFrame$category <- substr( row.names(myT), 1,2)
+
+write.table(myPCOA$CA$u, sep="\t", file="mds.txt",col.names=NA)
+write.table(myPCOA$CA$eig,file="eigenValues_.txt",sep="\t", col.names=NA)
+
+
+# a short version to minimize typing, but requiring we know ahead of time how 
+# many columns we have
+
+rm(list=ls())
+
+setwd("C:\\ChapelHillWorkshop")
+library("vegan")
+
+inFileName <- "humann2_genefamilies-IdsAsPrimaryKey.tsv"
+myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,
+			colClasses=c("character", rep("numeric", 20)))
+
+myT <- t(myT)
+myMDS <- capscale(myT~1,distance="bray")
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) )
+
+# a prettier version
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , 
+col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) , cex = 2.0,
+ pch=ifelse ( substr( row.names(myT), 1,2) == "BM" , 15, 19),
+xlab = "MDS 1", ylab = "MDS 2")
+
+
