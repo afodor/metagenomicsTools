@@ -64,7 +64,7 @@ bhUnder <- 0;
 
 for( i in 1:nrow(myFrame))
 {
-	if( myFrame$truePositives[i] & myFrame$pValues[i] < 0.10  )
+	if( myFrame$truePositives[i] & myFrame$pAdjust[i] < 0.10  )
 		bhUnder <- bhUnder + 1;
 }
 

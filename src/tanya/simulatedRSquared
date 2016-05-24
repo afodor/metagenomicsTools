@@ -25,13 +25,38 @@ plot(df)
 abline(a=0, b=1, col="red", lty=2)
 
 numComparisons = 632
+fractionPositive <- 0.1
+
 pValues <- vector()
+isPositive <- vector()
 	
 for( i in 1:numComparisons)
 {
+	isPositive[i] <- (rnorm(1) <= fractionPositive)
 	aSim <- simulate( R.sq=0.04)
+	
+	if(! isPositive[i] ) 
+	{
+		aSim <- simulate( R.sq=0.00)	
+	}
+	
 	pValues[i]  = Kendall(aSim$x, aSim$y)$sl[1];	 
 }
 
-correctedPValues <- p.adjust( pValues , method = "BH" )
-sum( correctedPValues < 0.10 )/ length( correctedPValues) 
+myFrame <- data.frame(pValues,isPositive  )
+myFrame<- myFrame [order(myFrame$pValues),]
+myFrame$pAdjust <- p.adjust(myFrame$pValues, method="BH")
+
+bhUnder <- 0;
+numTruePositives <- 0;
+
+for( i in 1:nrow(myFrame))
+{
+	if( myFrame$isPositive[i] & myFrame$pAdjust[i] < 0.10  )
+		bhUnder <- bhUnder + 1;
+		
+	if( myFrame$isPositive[i] )
+		numTruePositives  = numTruePositives  +1
+}	
+
+bhUnder / numTruePositives
