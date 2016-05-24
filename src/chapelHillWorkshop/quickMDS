@@ -34,7 +34,7 @@ myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,
 			colClasses=c("character", rep("numeric", 20)))
 
 myT <- t(myT)
-myMDS <- capscale(myT~1,distance="bray")
+myMDS <- capscale(myT~1)
 
 plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) )
 
