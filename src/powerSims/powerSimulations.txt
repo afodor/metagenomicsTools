@@ -1,3 +1,8 @@
+# this power simulation assumes perfectly a normal distribution 
+# and then applies a t-test.
+# Real data, of course, are likely to have a different distribution
+# so these results should be considered a rough approximation
+
 rm(list=ls())
 sampleSizeForEachGroup <- 15
 numHypotheses <- 1000
