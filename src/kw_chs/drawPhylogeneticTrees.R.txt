@@ -1,0 +1,115 @@
+##draw phylogenetic trees
+##5/23/16
+
+rm(list=ls())
+
+library(ape)
+
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\Phylogenetic Trees")
+
+#####Kleb pneu
+kpneu = read.tree("RAxML_bipartitions.kpneu71raxml.tre")
+kpneu$tip.label = gsub("_V1", "", kpneu$tip.label)
+
+##basic tree
+jpeg("PhyloTree_kpneu_phylogram.jpg", res=200, height=4400, width=1000)
+par(mar=c(.1, .1, .1, .1))
+plot(kpneu, show.node.label=T, tip.color="red") #plot.phylo
+add.scale.bar()
+dev.off()
+jpeg("PhyloTree_kpneu_radial.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(kpneu, type="radial", show.node.label=T, tip.color="red")
+add.scale.bar()
+dev.off()
+
+##color by hospital (use tree figure color scheme)
+hospCol = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures\\HospitalColors.txt",
+                     sep="\t", header=T, colClasses="character", comment.char = "")
+meta = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\UNCCMetaData_Final_8-5-15.txt", 
+                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+getHospCol <- function(strain) {
+  hosp = meta$Abstracted_StudyFacility[meta$SpecNumber==as.numeric(strain)]
+  return(hospCol$color[hospCol$facility==hosp])
+}
+
+col = sapply(kpneu$tip.label, getHospCol)
+
+jpeg("PhyloTree_kpneu_byHospital.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(kpneu, type="radial", show.node.label=T, tip.color=col)
+add.scale.bar()
+dev.off()
+
+##color by seqtrack
+broadSeqTrack = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures\\TxTree_SeqTrack_Assembly Core Genome.txt",
+                     sep="\t", header=T, colClasses=c(rep("numeric", 2), "logical", rep("numeric", 2)))
+getSeqTrackColor <- function(strain) {
+  strain = as.numeric(strain)
+  if(strain == 48 | strain == 43) {
+    return("green")
+  } else if (strain == 47 | strain == 51) {
+    return("turquoise")
+  } else if(broadSeqTrack$removeEdgeInDegree[broadSeqTrack$isolate==strain] > 0 |
+            broadSeqTrack$removeEdgeOutDegree[broadSeqTrack$isolate==strain] > 0) {
+    return("red")
+  } else {
+    return("blue")
+  }
+}
+col = sapply(kpneu$tip.label, getSeqTrackColor)
+jpeg("PhyloTree_kpneu_bySeqTrack.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(kpneu, type="radial", show.node.label=T, tip.color=col)
+add.scale.bar()
+dev.off()
+
+#####all samples
+all = read.tree("RAxML_bipartitions.all76raxml.tre")
+all$tip.label = gsub("_V1", "", all$tip.label)
+
+##basic tree
+jpeg("PhyloTree_all76_phylogram.jpg", res=200, height=4400, width=1000)
+par(mar=c(.1, .1, .1, .1))
+plot(all, show.node.label=T, tip.color="red") #plot.phylo
+dev.off()
+jpeg("PhyloTree_all76_radial.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(all, type="radial", show.node.label=T, tip.color="red")
+add.scale.bar()
+dev.off()
+
+##color by hospital (use tree figure color scheme)
+col = sapply(all$tip.label, getHospCol)
+
+jpeg("PhyloTree_all76_byHospital.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(all, type="radial", show.node.label=T, tip.color=col)
+add.scale.bar()
+dev.off()
+
+##color by species
+##species are Kleb pneumo, Esc coli, Ent aminigen, Ent cloacae
+getSpeciesColor <- function(strain) {
+  strain = as.numeric(strain)
+  row = meta$SpecNumber == strain
+  if(meta$Genus[row] == "Kleb" & meta$Species[row] == "pneumo") {
+    return("red")
+  } else if(meta$Genus[row] == "Esc" & meta$Species[row] == "coli") {
+    return("gold")
+  } else if(meta$Genus[row] == "Ent" & meta$Species[row] == "aminigen") {
+    return("blue")
+  } else if(meta$Genus[row] == "Ent" & meta$Species[row] == "cloacae") {
+    return("turquoise")
+  } else {
+    print(paste("missing species for strain ", strain))
+    return("black")
+  }
+}
+
+col = sapply(all$tip.label, getSpeciesColor)
+jpeg("PhyloTree_all76_bySpecies.jpg", res=200, height=2000, width=2000)
+par(mar=c(.1, .1, .1, .1))
+plot(all, type="radial", show.node.label=T, tip.color=col)
+add.scale.bar()
+dev.off()
