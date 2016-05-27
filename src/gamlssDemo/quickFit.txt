@@ -13,6 +13,7 @@ names <- vector()
 sigmaPValues <- vector()
 nuPValues <- vector()
 lmPalues <- vector()
+pValuesLRTest <- vector()
 
 for( i in 2:ncol(myT))
 {
@@ -20,24 +21,28 @@ for( i in 2:ncol(myT))
 	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
 	mySummary <- summary(fit)
 	
+	interceptFit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
+	
 	myLm <- lm( myFrame$bug ~ myFrame$isCase )
 	index <- i -1
 	
-	
+	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
 	lmPalues[index] <- anova(myLm)$"Pr(>F)"[1]
 	muPValues[index] <-  mySummary[2,4]
 	sigmaPValues[index] <-  mySummary[4,4]
 	nuPValues[index] <- mySummary[6,4]
-	names[index] <- myT[i]
+	names[index] <- names( myT)[i]
 }
 
 
 #fit$mu.coefficients
 #fit$sigma.coefficients
 #fit$nu.coefficients
+#myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
+#normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
+#lines( myHist$mids, normVals, col="RED")
 
-myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
+myFrame <- data.frame(muPValues,names,sigmaPValues,nuPValues,lmPalues,pValuesLRTest)
+write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
 
-normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
-lines( myHist$mids, normVals, col="RED")
 
