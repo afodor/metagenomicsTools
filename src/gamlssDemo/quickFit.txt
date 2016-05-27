@@ -15,7 +15,7 @@ nuPValues <- vector()
 
 for( i in 2:ncol(myT))
 {
-	myFrame <- data.frame( bug = myT[,4], isCase = grepl("case",row.names(myT))	)
+	myFrame <- data.frame( bug = myT[,i], isCase = grepl("case",row.names(myT))	)
 	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
 	mySummary <- summary(fit)
 	index <- i -1
