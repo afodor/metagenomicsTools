@@ -21,3 +21,4 @@ myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
 
 normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
 lines( myHist$mids, normVals, col="RED")
+
