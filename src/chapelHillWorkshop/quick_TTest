@@ -26,8 +26,8 @@ for( i in 1:nrow(myT))
 	
 	if( pValues[i] < 1e-07 ) 
 	{
-		graphMain <- paste( names[i] , format(pValues[i],digits=3) )	
-		plot( bug ~ isTD, ylab = names[index],main = graphMain )	
+		graphMain <- paste( "p=" , format(pValues[i],digits=3) )	
+		boxplot( bug ~ isTD, ylab = names[i],main = graphMain , xlab="is TD")	
 		myFrame <- data.frame( bug, isTD)		
 		stripchart(bug ~ isTD, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 	}
@@ -38,3 +38,4 @@ myFrame <- myFrame [order(myFrame$pValues),]
 myFrame$adjustedP <- p.adjust( myFrame$pValues, method = "BH" )	
 
 write.table(myFrame, file="pValuesFromTTest.txt", sep="\t",row.names=FALSE)
+dev.off()
