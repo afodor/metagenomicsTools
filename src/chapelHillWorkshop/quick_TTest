@@ -7,18 +7,20 @@ inFileName <- "humann2_genefamilies.LABELS2OnlyAbundant.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t",quote="",row.names=1,
 			colClasses=c("character", rep("numeric", 20)))
 
-pValues <- vector()
-names <- vector()
-meanTD <- vector()
-meanBM <- vector()
+pValues <- vector(length=nrow(myT))
+names <- vector(length=nrow(myT))
+meanTD <- vector(length=nrow(myT))
+meanBM <- vector(length=nrow(myT))
 
 isTD <- grepl("TD", names(myT))
 
 for( i in 1:nrow(myT))
 {
-	bug <- myT[i,]
+	bug <- as.numeric(myT[i,])
 	pValues[i] <- t.test( bug[ isTD ] ,bug[ ! isTD ]  )$p.value
-	meanTD <- mean(bug[ isTD ]) 
-	meanBM <- mean(bug[ ! isTD ])
-	names <- row.names(myT)[i]
+	meanTD[i] <- mean(bug[ isTD ]) 
+	meanBM[i] <- mean(bug[ ! isTD ])
+	names[i] <- row.names(myT)[i]
 }
+
+myFrame <- data.frame(pValues,names,meanTD ,meanBM )
