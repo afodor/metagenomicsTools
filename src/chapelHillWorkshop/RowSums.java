@@ -36,7 +36,7 @@ public class RowSums
 				sum += Double.parseDouble(splits[x]);
 			
 			if( sum >= 1e-04)
-				writer.write(s + "\n");
+				writer.write(s.replace("UniRef50_", "") + "\n");
 		}
 		
 		writer.flush(); writer.close();
