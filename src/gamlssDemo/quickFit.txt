@@ -23,7 +23,7 @@ for( i in 2:ncol(myT))
 	
 	interceptFit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
 	
-	myLm <- lm( myFrame$bug ~ myFrame$isCase )
+	myLm <- lm( log10( myFrame$bug + 0.00001) ~ myFrame$isCase )
 	index <- i -1
 	
 	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
