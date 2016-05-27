@@ -1,0 +1,13 @@
+rm(ls=ls())
+
+library(gamlss) 
+library(gamlss.dist) # gamlss.dist package, contains inflated
+
+setwd("C:\\Users\\corei7\\git\\metagenomicsTools\\src\\gamlssDemo")
+
+myT <- read.table("genusPivotedTaxaAsColumnsNorm.txt", row.names=1,
+		header=TRUE)
+
+myFrame <- data.frame( bug = myT[,3])
+
+fit <- gamlss( formula = bug ~ 1, family = BEZI, data = myFrame)
