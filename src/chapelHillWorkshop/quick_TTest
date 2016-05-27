@@ -14,6 +14,8 @@ meanBM <- vector(length=nrow(myT))
 
 isTD <- grepl("TD", names(myT))
 
+pdf("topHits.pdf")
+
 for( i in 1:nrow(myT))
 {
 	bug <- as.numeric(myT[i,])
@@ -21,6 +23,14 @@ for( i in 1:nrow(myT))
 	meanTD[i] <- mean(bug[ isTD ]) 
 	meanBM[i] <- mean(bug[ ! isTD ])
 	names[i] <- row.names(myT)[i]
+	
+	if( pValues[i] < 1e-07 ) 
+	{
+		graphMain <- paste( names[i] , format(pValues[i],digits=3) )	
+		plot( bug ~ isTD, ylab = names[index],main = graphMain )	
+		myFrame <- data.frame( bug, isTD)		
+		stripchart(bug ~ isTD, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
 }
 
 myFrame <- data.frame(names,meanTD ,meanBM , pValues)
