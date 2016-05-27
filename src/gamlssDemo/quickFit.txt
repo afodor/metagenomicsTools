@@ -42,7 +42,7 @@ for( i in 2:ncol(myT))
 #normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
 #lines( myHist$mids, normVals, col="RED")
 
-myFrame <- data.frame(muPValues,names,sigmaPValues,nuPValues,lmPalues,pValuesLRTest)
+myFrame <- data.frame(names,muPValues,sigmaPValues,nuPValues,lmPalues,pValuesLRTest)
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
 
 
