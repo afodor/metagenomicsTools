@@ -1,4 +1,4 @@
-rm(ls=ls())
+rm(list=ls())
 
 library(gamlss) 
 library(gamlss.dist) # gamlss.dist package, contains inflated
@@ -10,4 +10,9 @@ myT <- read.table("genusPivotedTaxaAsColumnsNorm.txt", row.names=1,
 
 myFrame <- data.frame( bug = myT[,3])
 
-fit <- gamlss( formula = bug ~ 1, family = BEZI, data = myFrame)
+fit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
+
+fit$mu.coefficients
+fit$sigma.coefficients
+fit$nu.coefficients
+
