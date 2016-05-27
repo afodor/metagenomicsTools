@@ -8,14 +8,27 @@ setwd("C:\\Users\\corei7\\git\\metagenomicsTools\\src\\gamlssDemo")
 myT <- read.table("genusPivotedTaxaAsColumnsNormCaseContol.txt", row.names=1,
 		header=TRUE)
 
-myFrame <- data.frame( bug = myT[,4], isCase = grepl("case",row.names(myT))	)
+muPValues <- vector()
+names <- vector()
+sigmaPValues <- vector()
+nuPValues <- vector()
 
-fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
+for( i in 2:ncol(myT))
+{
+	myFrame <- data.frame( bug = myT[,4], isCase = grepl("case",row.names(myT))	)
+	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
+	mySummary <- summary(fit)
+	index <- i -1
+	muPValues[index] <-  mySummary[2,4]
+	sigmaPValues[index] <-  mySummary[4,4]
+	nuPValues[index] <- mySummary[6,4]
+	names[index] <- myT[i]
+}
 
-fit$mu.coefficients
-fit$sigma.coefficients
-fit$nu.coefficients
-summary(fit)
+
+#fit$mu.coefficients
+#fit$sigma.coefficients
+#fit$nu.coefficients
 
 myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
 
