@@ -23,4 +23,8 @@ for( i in 1:nrow(myT))
 	names[i] <- row.names(myT)[i]
 }
 
-myFrame <- data.frame(pValues,names,meanTD ,meanBM )
+myFrame <- data.frame(names,meanTD ,meanBM , pValues)
+myFrame <- myFrame [order(myFrame$pValues),]
+myFrame$adjustedP <- p.adjust( myFrame$pValues, method = "BH" )	
+
+write.table(myFrame, file="pValuesFromTTest.txt", sep="\t",row.names=FALSE)
