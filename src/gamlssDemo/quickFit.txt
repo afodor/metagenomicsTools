@@ -12,13 +12,19 @@ muPValues <- vector()
 names <- vector()
 sigmaPValues <- vector()
 nuPValues <- vector()
+lmPalues <- vector()
 
 for( i in 2:ncol(myT))
 {
 	myFrame <- data.frame( bug = myT[,i], isCase = grepl("case",row.names(myT))	)
 	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
 	mySummary <- summary(fit)
+	
+	myLm <- lm( myFrame$bug ~ myFrame$isCase )
 	index <- i -1
+	
+	
+	lmPalues[index] <- anova(myLm)$"Pr(>F)"[1]
 	muPValues[index] <-  mySummary[2,4]
 	sigmaPValues[index] <-  mySummary[4,4]
 	nuPValues[index] <- mySummary[6,4]
