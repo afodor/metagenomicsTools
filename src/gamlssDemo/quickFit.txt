@@ -5,17 +5,17 @@ library(gamlss.dist) # gamlss.dist package, contains inflated
 
 setwd("C:\\Users\\corei7\\git\\metagenomicsTools\\src\\gamlssDemo")
 
-myT <- read.table("genusPivotedTaxaAsColumnsNorm.txt", row.names=1,
+myT <- read.table("genusPivotedTaxaAsColumnsNormCaseContol.txt", row.names=1,
 		header=TRUE)
 
-myFrame <- data.frame( bug = myT[,4])
+myFrame <- data.frame( bug = myT[,4], isCase = grepl("case",row.names(myT))	)
 
-#fit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
-fit <- gamlss( bug~1,family = BEZI, data = myFrame)
+fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
 
 fit$mu.coefficients
 fit$sigma.coefficients
 fit$nu.coefficients
+summary(fit)
 
 myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
 
