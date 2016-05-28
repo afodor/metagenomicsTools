@@ -21,7 +21,7 @@ averageLogControl <- vector()
 averageLogAll <- vector()
 
 pdf("genus.pdf")
-par(mfrow=c(3,2))
+par(mfrow=c(2,2))
 
 for( i in 2:ncol(myT))
 {
@@ -54,6 +54,9 @@ for( i in 2:ncol(myT))
 		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
 				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
 		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE)
+		normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
+		lines( myHist$mids, normVals, col="RED")
 	}
 }
 
@@ -61,9 +64,6 @@ dev.off()
 #fit$mu.coefficients
 #fit$sigma.coefficients
 #fit$nu.coefficients
-#myHist <- hist(myFrame$bug,breaks=20,prob=TRUE)
-#normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
-#lines( myHist$mids, normVals, col="RED")
 
 myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
 myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
