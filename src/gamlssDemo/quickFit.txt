@@ -19,6 +19,7 @@ pValuesWilcoxon <- vector()
 averageLogCase <- vector()
 averageLogControl <- vector()
 averageLogAll <- vector()
+normalityTestPValues <- vector()
 
 pdf("genus.pdf")
 par(mfrow=c(2,2))
@@ -47,6 +48,8 @@ for( i in 2:ncol(myT))
 	sigmaPValues[index] <-  mySummary[4,4]
 	nuPValues[index] <- mySummary[6,4]
 	names[index] <- names( myT)[i]
+	normalityTestPValues[index] <- ks.test( myFrame$logBug, "pnorm", mean = mean(myFrame$logBug),
+						sd =sd(myFrame$logBug) )$p.value
 	
 	if( lmPValues[index] < 0.05) 
 	{
