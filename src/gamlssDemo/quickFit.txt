@@ -15,6 +15,7 @@ sigmaPValues <- vector()
 nuPValues <- vector()
 lmPValues <- vector()
 pValuesLRTest <- vector()
+pValuesWilcoxon <- vector()
 averageLogCase <- vector()
 averageLogControl <- vector()
 averageLogAll <- vector()
@@ -39,6 +40,8 @@ for( i in 2:ncol(myT))
 	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
 	averageLogAll[index] <- mean( myFrame$logBug) 
 	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
+	pValuesWilcoxon[index] <- 
+		wilcox.test( myFrame$logBug[myFrame$isCase], myFrame$logBug[!myFrame$isCase] )$p.value
 	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
 	muPValues[index] <-  mySummary[2,4]
 	sigmaPValues[index] <-  mySummary[4,4]
@@ -62,7 +65,7 @@ dev.off()
 #normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
 #lines( myHist$mids, normVals, col="RED")
 
-myFrame <- data.frame(names,averageLogCase,averageLogControl,averageLogAll,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
+myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
 myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
 myFrame <- myFrame [order(myFrame$lmPValues),]
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
