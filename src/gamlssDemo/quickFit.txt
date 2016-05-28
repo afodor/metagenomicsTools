@@ -17,6 +17,7 @@ lmPValues <- vector()
 pValuesLRTest <- vector()
 averageLogCase <- vector()
 averageLogControl <- vector()
+averageLogAll <- vector()
 
 pdf("genus.pdf")
 par(mfrow=c(3,2))
@@ -36,6 +37,7 @@ for( i in 2:ncol(myT))
 	
 	averageLogCase[index] <- mean( myFrame$logBug[myFrame$isCase] )
 	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
+	averageLogAll[index] <- mean( myFrame$logBug) 
 	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
 	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
 	muPValues[index] <-  mySummary[2,4]
@@ -60,7 +62,7 @@ dev.off()
 #normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
 #lines( myHist$mids, normVals, col="RED")
 
-myFrame <- data.frame(names,averageLogCase,averageLogControl,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
+myFrame <- data.frame(names,averageLogCase,averageLogControl,averageLogAll,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
 myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
 myFrame <- myFrame [order(myFrame$lmPValues),]
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
