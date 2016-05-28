@@ -15,20 +15,27 @@ sigmaPValues <- vector()
 nuPValues <- vector()
 lmPValues <- vector()
 pValuesLRTest <- vector()
+averageLogCase <- vector()
+averageLogControl <- vector()
 
 pdf("genus.pdf")
+par(mfrow=c(3,2))
 
 for( i in 2:ncol(myT))
 {
-	myFrame <- data.frame( bug = myT[,i], isCase = grepl("case",row.names(myT))	)
+	myFrame <- data.frame( bug = myT[,i], logBug = log10(myT[,i] + + 0.00001),
+							 isCase = grepl("case",row.names(myT))	)
+	
 	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
 	mySummary <- summary(fit)
 	
 	interceptFit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
 	
-	myLm <- lm( log10( myFrame$bug + 0.00001) ~ myFrame$isCase )
+	myLm <- lm( myFrame$logBug ~ myFrame$isCase )
 	index <- i -1
 	
+	averageLogCase[index] <- mean( myFrame$logBug[myFrame$isCase] )
+	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
 	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
 	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
 	muPValues[index] <-  mySummary[2,4]
@@ -39,8 +46,9 @@ for( i in 2:ncol(myT))
 	if( lmPValues[index] < 0.05) 
 	{
 		graphMain <- paste( "p=" , format(lmPValues[index],digits=3))
-		boxplot( as.numeric(myFrame$bug) ~ myFrame$isCase, ylab = names[i],main = graphMain , xlab="is Case")
-		stripchart(bug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
+				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
+		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
 	}
 }
 
@@ -52,7 +60,7 @@ dev.off()
 #normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
 #lines( myHist$mids, normVals, col="RED")
 
-myFrame <- data.frame(names,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
+myFrame <- data.frame(names,averageLogCase,averageLogControl,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
 myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
 myFrame <- myFrame [order(myFrame$lmPValues),]
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
