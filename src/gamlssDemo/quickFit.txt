@@ -57,7 +57,8 @@ for( i in 2:ncol(myT))
 		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
 				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
 		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
-		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE)
+		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE, 
+					main = paste( "p=", format(normalityTestPValues[index],digits=3) ))
 		normVals <- dnorm( myHist$mids, mean=mean(myFrame$logBug), sd= sd(myFrame$logBug)  )
 		lines( myHist$mids, normVals, col="RED")
 	}
