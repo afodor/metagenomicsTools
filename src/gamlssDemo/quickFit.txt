@@ -58,7 +58,7 @@ for( i in 2:ncol(myT))
 				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
 		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
 		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE)
-		normVals <- dnorm( myHist$mids, mean=mean(myFrame$bug), sd= sd(myFrame$bug)  )
+		normVals <- dnorm( myHist$mids, mean=mean(myFrame$logBug), sd= sd(myFrame$logBug)  )
 		lines( myHist$mids, normVals, col="RED")
 	}
 }
