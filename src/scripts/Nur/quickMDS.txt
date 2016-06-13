@@ -1,0 +1,21 @@
+rm(list=ls())
+
+setwd("C:\\Temp")
+library("vegan")
+
+inFileName <- "simpler.txt"
+
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+
+numCols <- ncol(myT)
+myColClasses <- c(rep("numeric", numCols))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+myT <- t(myT)
+
+myMDS <- capscale(myT~1,distance="bray")
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] )
+
+write.table(myMDS$CA$u, sep="\t", file="mds.txt",col.names=NA)
+write.table(myMDS$CA$eig,file="eigenValues_.txt",sep="\t", col.names=NA)
+
