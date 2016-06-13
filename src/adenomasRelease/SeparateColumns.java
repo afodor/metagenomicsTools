@@ -14,7 +14,7 @@ public class SeparateColumns
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getAdenomasReleaseDir() + File.separator + 
-				"caseContol.txt")));
+				"caseControl.txt")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getAdenomasReleaseDir() + File.separator + 
