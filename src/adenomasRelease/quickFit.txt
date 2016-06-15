@@ -19,6 +19,7 @@ pValuesWilcoxon <- vector()
 averageLogCase <- vector()
 averageLogControl <- vector()
 averageLogAll <- vector()
+sdAll <- vector()
 normalityTestPValues <- vector()
 
 pdf("genus.pdf")
@@ -34,6 +35,7 @@ if( sum( myT[,i] >0 ) > nrow(myT) /4 )
 	averageLogCase[index] <- mean( myFrame$logBug[myFrame$isCase] )
 	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
 	averageLogAll[index] <- mean( myFrame$logBug) 
+	sdAll <- mean(myFrame$logBug)
 
 	pValuesWilcoxon[index] <- 
 		wilcox.test( myFrame$logBug[myFrame$isCase], myFrame$logBug[!myFrame$isCase] )$p.value
@@ -56,8 +58,10 @@ if( sum( myT[,i] >0 ) > nrow(myT) /4 )
 
 dev.off()
 
-myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,lmPValues)
+myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,lmPValues,
+					sdAll)
 myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
+myFrame$effectSize <- abs(averageLogCase - averageLogControl) /  myFrame$sdAll 
 myFrame <- myFrame [order(myFrame$lmPValues),]
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
 
