@@ -8,4 +8,13 @@ myT <- read.table("sampledBitScore_3000_bitScoreOrthologsKPneuOnly.txt",
 myT <- t(myT)
 myPCA <- prcomp( myT)
 
+myT <- t(myT)
+
+for( i in 1:ncol(myT)) 
+{
+	myLm <-  lm (myT[,i]  ~ myPCA$rotation[,1] + myPCA$rotation[,2] + myPCA$rotation[,3] + 
+									myPCA$rotation[,4] + myPCA$rotation[,5] )
+}
+
+
 write.table(file="transposedPCA.txt", myPCA$rotation,sep="\t")
