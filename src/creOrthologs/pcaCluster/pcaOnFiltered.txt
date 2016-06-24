@@ -5,16 +5,27 @@ setwd("C:\\af_broad\\pcaCluster")
 myT <- read.table("sampledBitScore_3000_bitScoreOrthologsKPneuOnly.txt", 
 			sep="\t", header=TRUE,row.names=1)
 
-myT <- t(myT)
-myPCA <- prcomp( myT)
+myPCA <- prcomp( t(myT))
 
-myT <- t(myT)
+pValues <- vector()
+rSquared <- vector()
+names <- vector()
 
 for( i in 1:ncol(myT)) 
 {
 	myLm <-  lm (myT[,i]  ~ myPCA$rotation[,1] + myPCA$rotation[,2] + myPCA$rotation[,3] + 
 									myPCA$rotation[,4] + myPCA$rotation[,5] )
+									
+	rSquared[i] <- summary(myLm)$r.squared
+									
+	f <- summary(myLm)$fstatistic
+	pValues[i] <- pf(f[1],f[2],f[3],lower.tail=F)		
+	names[i] <- names(myT)[i]			
 }
 
 
 write.table(file="transposedPCA.txt", myPCA$rotation,sep="\t")
+
+myFrame <- data.frame( names,pValues,rSquared)
+
+write.table(myFrame, file=  "linearModelFromFirst5Axes.txt", sep="\t", row.names=FALSE)
