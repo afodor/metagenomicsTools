@@ -1,0 +1,11 @@
+rm(list=ls())
+
+setwd("C:\\af_broad\\pcaCluster")
+
+myT <- read.table("sampledBitScore_3000_bitScoreOrthologsKPneuOnly.txt", 
+			sep="\t", header=TRUE,row.names=1)
+
+myT <- t(myT)
+myPCA <- prcomp( myT)
+
+write.table(file="transposedPCA.txt", myPCA$rotation,sep="\t")
