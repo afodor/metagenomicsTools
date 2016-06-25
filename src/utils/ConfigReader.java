@@ -128,9 +128,16 @@ public class ConfigReader
 	
 	public static final String SANG_LAB_MAY_2016_DIR = "SANG_LAB_MAY_2016_DIR";
 	
+	public static final String BIOLOCK_J_DIR = "BIOLOCK_J_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
+	}
+	
+	public static String getBioLockJDir() throws Exception
+	{
+		return getConfigReader().getAProperty(BIOLOCK_J_DIR);
 	}
 	
 	public static String getSangLabMay2016Dir() throws Exception
