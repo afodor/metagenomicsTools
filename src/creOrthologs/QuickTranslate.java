@@ -28,11 +28,11 @@ public class QuickTranslate
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"quickTranslation" + File.separator + "predictedGenes.doc")));
+				"quickTranslation" + File.separator + "predictedGenes.txt")));
 		
 		BufferedWriter protWriter = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getCREOrthologsDir() + File.separator + 
-				"quickTranslation" + File.separator + "predictedProteins.doc")));
+				"quickTranslation" + File.separator + "predictedProteins.txt")));
 		
 		reader.readLine();
 		
