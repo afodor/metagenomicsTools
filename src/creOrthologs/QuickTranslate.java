@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
 import utils.ConfigReader;
@@ -65,10 +66,16 @@ public class QuickTranslate
 				}else
 					throw new Exception("No " + splits[6]);
 				
-				writer.write( ">" + 
+				StringTokenizer sToken = new StringTokenizer(splits[8]);
+				sToken.nextToken();
+				String shortKey = 
+						sToken.nextToken().replaceAll("\"", "").replace(";", "").replace("gene_id", "")+ " ";
+				
+				writer.write( ">" +shortKey + 
 						splits[8] + " " +  splits[6] + "\n" +  dna  + "\n");
 				
-				protWriter.write(">" + 
+				System.out.println(splits[8]);
+				protWriter.write(">"+ shortKey+   
 						splits[8] + " " +  splits[6] + "\n" + 
 						Translate.getSafeProteinSequence(dna)  + "\n");
 			}
