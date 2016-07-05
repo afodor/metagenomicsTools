@@ -13,12 +13,19 @@ import utils.ConfigReader;
 
 public class CoinFlipTest
 {
-	private static class Holder 
+	private static class GeneHolder
+	{
+		List<RangeHolder> rangeList=new ArrayList<RangeHolder>();
+		int numOver;
+		int numUnder;
+	}
+	
+	private static class RangeHolder 
 	{
 		private int stop;
 		private int start;
 		
-		Holder(int start, int stop)
+		RangeHolder(int start, int stop)
 		{
 			this.stop = stop;
 			this.start = start;
@@ -34,9 +41,16 @@ public class CoinFlipTest
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, List<Holder>> map = parseGTFFile();
+		HashMap<String, GeneHolder> map = parseGTFFile();
 		List<BinHolder> list = parseBinFile();
 		
+		for(String s : map.keySet())
+		{
+			GeneHolder gh = map.get(s);
+			
+			for(RangeHolder rh : gh.rangeList)
+				System.out.println(s + " " + rh.start + " " + rh.stop);
+		}
 			
 	}
 	
@@ -72,9 +86,9 @@ public class CoinFlipTest
 		return list;
 	}
 	
-	private static HashMap<String, List<Holder>> parseGTFFile() throws Exception
+	private static HashMap<String, GeneHolder> parseGTFFile() throws Exception
 	{
-		HashMap<String, List<Holder>> map = new LinkedHashMap<String, List<Holder>>();
+		HashMap<String, GeneHolder> map = new LinkedHashMap<String, GeneHolder>();
 		
 		BufferedReader reader =new BufferedReader(new FileReader(
 			ConfigReader.getBioLockJDir() + File.separator + 
@@ -87,16 +101,16 @@ public class CoinFlipTest
 			String key = new StringTokenizer(splits[8], ";").nextToken();
 			key = key.replace("gene_id", "").replaceAll("\"", "");
 			
-			List<Holder> list = map.get(key);
+			GeneHolder gh = map.get(key);
 			
-			if( list == null)
+			if( gh == null)
 			{
-				list = new ArrayList<Holder>();
-				map.put(key,list);
+				gh = new GeneHolder();
+				map.put(key,gh);
 			}
 			
-			Holder h = new Holder(Integer.parseInt(splits[3]), Integer.parseInt(splits[4]));
-			list.add(h);
+			RangeHolder h = new RangeHolder(Integer.parseInt(splits[3]), Integer.parseInt(splits[4]));
+			gh.rangeList.add(h);
 		}
 		
 		reader.close();
