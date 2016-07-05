@@ -3,6 +3,7 @@ package creOrthologs.coinFlip;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +17,19 @@ public class CoinFlipTest
 	{
 		private int stop;
 		private int start;
+		
+		Holder(int start, int stop)
+		{
+			this.stop = stop;
+			this.start = start;
+			
+			if( this.stop < this.start)
+			{
+				int temp = this.stop;
+				this.stop = this.start;
+				this.start = temp;
+			}
+		}
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -23,7 +37,14 @@ public class CoinFlipTest
 		HashMap<String, List<Holder>> map = parseGTFFile();
 		
 		for(String s : map.keySet())
-			System.out.println(s);
+		{
+			for( Holder h : map.get(s))
+			{
+				System.out.println( s + " " + h.start + " " + h.stop);
+				
+			}
+		}
+			
 	}
 	
 	private static HashMap<String, List<Holder>> parseGTFFile() throws Exception
@@ -40,7 +61,17 @@ public class CoinFlipTest
 			String[] splits = s.split("\t");
 			String key = new StringTokenizer(splits[8], ";").nextToken();
 			key = key.replace("gene_id", "").replaceAll("\"", "");
-			map.put(key, null);
+			
+			List<Holder> list = map.get(key);
+			
+			if( list == null)
+			{
+				list = new ArrayList<Holder>();
+				map.put(key,list);
+			}
+			
+			Holder h = new Holder(Integer.parseInt(splits[3]), Integer.parseInt(splits[4]));
+			list.add(h);
 		}
 		
 		reader.close();
