@@ -35,16 +35,41 @@ public class CoinFlipTest
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, List<Holder>> map = parseGTFFile();
+		List<BinHolder> list = parseBinFile();
 		
-		for(String s : map.keySet())
+			
+	}
+	
+	private static class BinHolder
+	{
+		private double low;
+		private double high;
+		
+		private double average;
+	}
+	
+	private static List<BinHolder> parseBinFile() throws Exception
+	{
+		List<BinHolder> list = new ArrayList<BinHolder>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getBioLockJDir() + 
+		File.separator + "resistantAnnotation" + File.separator + "resistantVsSucSummary.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			for( Holder h : map.get(s))
-			{
-				System.out.println( s + " " + h.start + " " + h.stop);
-				
-			}
+			String[] splits = s.split("\t");
+			BinHolder h = new BinHolder();
+			h.low = Double.parseDouble(splits[0]);
+			h.high = Double.parseDouble(splits[1]);
+			h.average = Double.parseDouble(splits[3]);
+			list.add(h);
 		}
 			
+		
+		return list;
 	}
 	
 	private static HashMap<String, List<Holder>> parseGTFFile() throws Exception
