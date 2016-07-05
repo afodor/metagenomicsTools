@@ -10,11 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import bitManipulations.Encode;
 import parsers.FastaSequence;
 import utils.ConfigReader;
+import utils.Translate;
 
 public class CoinFlipTest
 {
+	public static final int KMER_SIZE = 31;
+	
 	private static class GeneHolder
 	{
 		List<RangeHolder> rangeList=new ArrayList<RangeHolder>();
@@ -48,8 +52,10 @@ public class CoinFlipTest
 	{
 		HashMap<String, GeneHolder> map = parseGTFFile();
 		List<BinHolder> list = parseBinFile();
+		addKmersToGenes( new ArrayList<GeneHolder>(map.values()));
 		
-		
+		for(GeneHolder gh : map.values())
+			System.out.println(gh.includedKmers.size());
 			
 	}
 	
@@ -57,14 +63,37 @@ public class CoinFlipTest
 	{
 		HashMap<String, FastaSequence> fastaMap = FastaSequence.getFirstTokenSequenceMap(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
-						File.separator +"refGenome");
+						File.separator +"refGenome" + File.separator 
+						+ "klebsiella_pneumoniae_chs_11.0.scaffolds.fasta");
 		
+		int index=0;
 		for(GeneHolder gh: geneHolderList)
 		{
+			System.out.println(index++ + " " + geneHolderList.size());
+			FastaSequence fs = fastaMap.get(gh.chr);
+			String seq = fs.getSequence();
 			
+			for( RangeHolder rh : gh.rangeList )
+			{
+				for( int x=rh.start - 1; x + KMER_SIZE <= rh.stop ; x++)
+				{
+					String nucl = seq.substring(x, x + KMER_SIZE);
+					
+					Long encode = Encode.makeLong(nucl);
+					
+					if( encode != null)
+						gh.includedKmers.add(encode);
+					
+					nucl = Translate.safeReverseTranscribe(nucl);
+					encode = Encode.makeLong(nucl);
+					
+					if( encode != null)
+						gh.includedKmers.add(encode);					
+			}
+			}
 		}
 	}
-	
+ 	
 	private static void populateHolders() throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(
