@@ -28,6 +28,7 @@ public class CoinFlipTest
 		int numOver;
 		int numUnder;
 		double conservationSum =0;
+		double pValueSum =0;
 		
 		HashSet<Long> includedKmers = new HashSet<Long>();
 	}
@@ -68,7 +69,7 @@ public class CoinFlipTest
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 						File.separator + "coinFlipsSucVsRes.txt"	)));
 		
-		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\n" );
+		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\tpValueAvg\n" );
 		
 		for(String s : map.keySet())
 		{
@@ -81,7 +82,8 @@ public class CoinFlipTest
 			float fraction = ((float)h.numOver) /totalNum;
 			
 			writer.write(fraction + "\t");
-			writer.write( (h.conservationSum / totalNum) + "\n");
+			writer.write( (h.conservationSum / totalNum) + "\t");
+			writer.write( (h.pValueSum/totalNum) + "\n");
 			
 		}
 		
@@ -193,6 +195,7 @@ public class CoinFlipTest
 						gh.numUnder++;
 					
 					gh.conservationSum += conservation;
+					gh.pValueSum += val;
 				}
 				
 			}
