@@ -29,6 +29,8 @@ public class CoinFlipTest
 		int numUnder;
 		double conservationSum =0;
 		double pValueSum =0;
+		double ratio1Sum =0;
+		double ratio2Sum =0;
 		
 		HashSet<Long> includedKmers = new HashSet<Long>();
 	}
@@ -69,7 +71,8 @@ public class CoinFlipTest
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 						File.separator + "coinFlipsSucVsRes.txt"	)));
 		
-		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\tpValueAvg\n" );
+		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\tpValueAvg\t" );
+		writer.write("ratio1Sum\tratio2Sum\n");
 		
 		for(String s : map.keySet())
 		{
@@ -83,8 +86,9 @@ public class CoinFlipTest
 			
 			writer.write(fraction + "\t");
 			writer.write( (h.conservationSum / totalNum) + "\t");
-			writer.write( (h.pValueSum/totalNum) + "\n");
-			
+			writer.write( (h.pValueSum/totalNum) + "\t");
+			writer.write( (h.ratio1Sum / totalNum) + "\t");
+			writer.write( (h.ratio2Sum / totalNum) + "\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -187,6 +191,16 @@ public class CoinFlipTest
 				double val = - Math.log10(Double.parseDouble(splits[5]));
 				boolean isOver =  val >= bh.average;
 				
+				int cond1Withkmer = Integer.parseInt(splits[1]);
+				float totalcond1 = Float.parseFloat(splits[1]) + Float.parseFloat(splits[2]);
+				float ratio1Sum = cond1Withkmer /totalcond1;
+				
+
+				int cond2Withkmer = Integer.parseInt(splits[3]);
+				float totalcond2 = Float.parseFloat(splits[3]) + Float.parseFloat(splits[4]);
+				float ratio2Sum = cond2Withkmer /totalcond2;
+				
+				
 				for(GeneHolder gh : set)
 				{
 					if(isOver)
@@ -196,6 +210,8 @@ public class CoinFlipTest
 					
 					gh.conservationSum += conservation;
 					gh.pValueSum += val;
+					gh.ratio1Sum += ratio1Sum;
+					gh.ratio2Sum += ratio2Sum;
 				}
 				
 			}
