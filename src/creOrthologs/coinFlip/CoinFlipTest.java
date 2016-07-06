@@ -27,6 +27,7 @@ public class CoinFlipTest
 		String chr;
 		int numOver;
 		int numUnder;
+		double conservationSum =0;
 		
 		HashSet<Long> includedKmers = new HashSet<Long>();
 	}
@@ -67,7 +68,7 @@ public class CoinFlipTest
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 						File.separator + "coinFlipsSucVsRes.txt"	)));
 		
-		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\n" );
+		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\n" );
 		
 		for(String s : map.keySet())
 		{
@@ -76,9 +77,12 @@ public class CoinFlipTest
 			writer.write(s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
 							h.numOver + "\t" + h.numUnder + "\t");
 			
-			float fraction = ((float)h.numOver) /(h.numOver + h.numUnder);
+			int totalNum = h.numOver + h.numUnder;
+			float fraction = ((float)h.numOver) /totalNum;
 			
-			writer.write(fraction + "\n");
+			writer.write(fraction + "\t");
+			writer.write( (h.conservationSum / totalNum) + "\n");
+			
 		}
 		
 		writer.flush();  writer.close();
@@ -175,7 +179,8 @@ public class CoinFlipTest
 			
 			if( set != null)
 			{
-				BinHolder bh = getABin(Double.parseDouble(splits[6]), binList);
+				double conservation = Double.parseDouble(splits[6]);
+				BinHolder bh = getABin(conservation, binList);
 				
 				double val = - Math.log10(Double.parseDouble(splits[5]));
 				boolean isOver =  val >= bh.average;
@@ -186,6 +191,8 @@ public class CoinFlipTest
 						gh.numOver++;
 					else
 						gh.numUnder++;
+					
+					gh.conservationSum += conservation;
 				}
 				
 			}
