@@ -1,8 +1,10 @@
 package creOrthologs.coinFlip;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,9 +56,32 @@ public class CoinFlipTest
 		List<BinHolder> list = parseBinFile();
 		addKmersToGenes( new ArrayList<GeneHolder>(map.values()));
 		
-		for(GeneHolder gh : map.values())
-			System.out.println(gh.includedKmers.size());
+		addCoinFlips(map, list);
+		writeResults(map);
 			
+	}
+	
+	private static void writeResults(HashMap<String, GeneHolder> map) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
+						File.separator + "coinFlipsSucVsRes.txt"	)));
+		
+		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\n" );
+		
+		for(String s : map.keySet())
+		{
+			GeneHolder h = map.get(s);
+			
+			writer.write(s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
+							h.numOver + "\t" + h.numUnder + "\t");
+			
+			float fraction = ((float)h.numOver) /(h.numOver + h.numUnder);
+			
+			writer.write(fraction + "\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static void addKmersToGenes(List<GeneHolder> geneHolderList) throws Exception
@@ -93,17 +118,88 @@ public class CoinFlipTest
 			}
 		}
 	}
+	
+	private static HashMap<Long, HashSet<GeneHolder>> getAsLongMap(  HashMap<String, GeneHolder> map)
+		throws Exception
+	{
+		HashMap<Long, HashSet<GeneHolder>> longMap = new HashMap<Long, HashSet<GeneHolder>>();
+				
+		for(GeneHolder gh : map.values())
+			for( Long l : gh.includedKmers )
+			{
+				HashSet<GeneHolder> set =longMap.get(l);
+				
+				if( set==null)
+				{
+					set = new HashSet<GeneHolder>();
+					longMap.put(l, set);
+				}
+				
+				set.add(gh);
+			}
+		
+		return longMap;
+				
+	}
  	
-	private static void populateHolders() throws Exception
+	//todo: this is inefficient
+	private static BinHolder getABin(double val, List<BinHolder> binList) throws Exception
+	{
+		for( BinHolder bh : binList)
+			if( val >= bh.low && val <= bh.high )
+				return bh;
+		
+		throw new Exception("Could not find " + val);
+	}
+	
+	private static void addCoinFlips(HashMap<String, GeneHolder> geneMap,
+					List<BinHolder> binList) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(
 			ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" 
 						+ File.separator + 
 					"resistantVsSuc_kneu.txt"));
+	
 		
+		reader.readLine();
+	
+		System.out.println("Building Map");
+		HashMap<Long, HashSet<GeneHolder>> longMap = getAsLongMap(geneMap);
+		System.out.println("Done");
+		
+		int index=0;
+		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			HashSet<GeneHolder> set = longMap.get( Long.parseLong(splits[0]));
+			
+			if( set != null)
+			{
+				BinHolder bh = getABin(Double.parseDouble(splits[6]), binList);
+				
+				double val = - Math.log10(Double.parseDouble(splits[5]));
+				boolean isOver =  val >= bh.average;
+				
+				for(GeneHolder gh : set)
+				{
+					if(isOver)
+						gh.numOver++;
+					else
+						gh.numUnder++;
+				}
+				
+			}
+			
+			index++;
+			
+			if( index % 1000 ==0)
+				System.out.println(index);
+			
+		}
 		
 		reader.close();
 	}
+	
 	
 	private static class BinHolder
 	{
