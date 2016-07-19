@@ -53,6 +53,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 	
 	private static void writeResults(HashMap<String, GeneHolder> map) throws Exception
 	{
+		System.out.println("Writing results");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 						File.separator + "nonRedundantPValsVsCons_ResVsSuc.txt"	)));
@@ -83,6 +84,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 		}
 		
 		writer.flush();  writer.close();
+		System.out.println("Done");
 	}
 	
 	private static void addKmersToGenes(List<GeneHolder> geneHolderList) throws Exception
@@ -208,6 +210,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 		}
 		
 		reader.close();
+		System.out.println("Finished reading");
 	}
 	
 	
