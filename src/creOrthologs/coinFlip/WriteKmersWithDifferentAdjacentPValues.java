@@ -69,13 +69,14 @@ public class WriteKmersWithDifferentAdjacentPValues
 			{
 				Double thisP = h.pValues.get(x);
 				
-				if( last == null || ! thisP.equals(last))
-				{
-					writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
-									h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
-											h.ratioConserved + "\n");
-					last = thisP;
-				}
+				if( thisP != null)
+					if( last == null || ! thisP.equals(last))
+					{
+						writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
+										h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
+												h.ratioConserved + "\n");
+						last = thisP;
+					}
 			}
 			
 			
