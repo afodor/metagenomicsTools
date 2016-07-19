@@ -27,7 +27,7 @@ public class BinNonAdjacentKmers
 	
 	private static void writeRanges(List<Holder> list ) throws Exception
 	{
-		int numToInclude = list.size()/20;
+		int numToInclude = list.size()/10;
 		int numToDo= -1;
 		int index =1;
 		BufferedWriter writer = null;
