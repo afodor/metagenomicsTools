@@ -75,7 +75,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 					{
 						writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
 										h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
-												h.ratioConserved + "\n");
+												h.ratioConserved.get(x) + "\n");
 						last = thisP;
 					}
 			}
