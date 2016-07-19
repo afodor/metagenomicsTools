@@ -189,7 +189,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 			{
 				long encodedLong = Long.parseLong(splits[0]);
 				float conservation = Float.parseFloat(splits[6]);
-				BinHolder bh = getABin(conservation, binList);
+				//BinHolder bh = getABin(conservation, binList);
 				
 				Float val = (float) (- Math.log10(Double.parseDouble(splits[5])));
 								
