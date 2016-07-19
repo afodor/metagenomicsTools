@@ -25,7 +25,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 		List<RangeHolder> rangeList=new ArrayList<RangeHolder>();
 		String chr;
 		List<Long> includedKmers = new ArrayList<Long>();
-		List<Double> pValues = new ArrayList<Double>();
+		List<Float> pValues = new ArrayList<Float>();
 		List<Float> ratioConserved = new ArrayList<Float>(); 
 		
 		int getIndex(long aLong) throws Exception
@@ -63,11 +63,11 @@ public class WriteKmersWithDifferentAdjacentPValues
 		{
 			GeneHolder h = map.get(s);
 			
-			Double last = null;
+			Float last = null;
 			
 			for( int x=0; x < h.pValues.size(); x++ )
 			{
-				Double thisP = h.pValues.get(x);
+				Float thisP = h.pValues.get(x);
 				
 				if( thisP != null)
 					if( last == null || ! thisP.equals(last))
@@ -189,7 +189,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 				float conservation = Float.parseFloat(splits[6]);
 				BinHolder bh = getABin(conservation, binList);
 				
-				double val = - Math.log10(Double.parseDouble(splits[5]));
+				Float val = (float) (- Math.log10(Double.parseDouble(splits[5])));
 								
 				for(GeneHolder gh : set)
 				{
