@@ -13,46 +13,32 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import bitManipulations.Encode;
+import creOrthologs.coinFlip.CoinFlipTest.RangeHolder;
 import parsers.FastaSequence;
 import utils.ConfigReader;
 import utils.Translate;
 
-public class CoinFlipTest
+public class WriteKmersWithDifferentAdjacentPValues
 {
-	public static final int KMER_SIZE = 31;
-	
 	private static class GeneHolder
 	{
 		List<RangeHolder> rangeList=new ArrayList<RangeHolder>();
 		String chr;
-		int numOver;
-		int numUnder;
-		double conservationSum =0;
-		double pValueSum =0;
-		double ratio1Sum =0;
-		double ratio2Sum =0;
+		List<Long> includedKmers = new ArrayList<Long>();
+		List<Double> pValues = new ArrayList<Double>();
+		List<Float> ratioConserved = new ArrayList<Float>(); 
 		
-		HashSet<Long> includedKmers = new HashSet<Long>();
-	}
-	
-	static class RangeHolder 
-	{
-		int stop;
-		int start;
-		
-		RangeHolder(int start, int stop)
+		int getIndex(long aLong) throws Exception
 		{
-			this.stop = stop;
-			this.start = start;
+			for( int x=0; x < includedKmers.size(); x++)
+				if( includedKmers.get(x).equals(aLong))
+					return x;
 			
-			if( this.stop < this.start)
-			{
-				int temp = this.stop;
-				this.stop = this.start;
-				this.start = temp;
-			}
+			throw new Exception("Could not find " + aLong);
 		}
 	}
+	
+	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -60,7 +46,7 @@ public class CoinFlipTest
 		List<BinHolder> list = parseBinFile();
 		addKmersToGenes( new ArrayList<GeneHolder>(map.values()));
 		
-		addCoinFlips(map, list);
+		addPValues(map, list);
 		writeResults(map);
 			
 	}
@@ -69,26 +55,30 @@ public class CoinFlipTest
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
-						File.separator + "coinFlipsSucVsRes.txt"	)));
+						File.separator + "nonRedundantPValsVsCons_ResVsSuc.txt"	)));
 		
-		writer.write( "geneID\tchromosonme\tnumberOfKmers\tnumUp\tnumDown\tfractionUp\tconservationAvg\tpValueAvg\t" );
-		writer.write("ratio1Sum\tratio2Sum\n");
+		writer.write( "geneID\tchromosome\tnumberOfKmers\tencodedKmer\tpValue\tconservation\n" );
 		
 		for(String s : map.keySet())
 		{
 			GeneHolder h = map.get(s);
 			
-			writer.write(s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
-							h.numOver + "\t" + h.numUnder + "\t");
+			Double last = null;
 			
-			int totalNum = h.numOver + h.numUnder;
-			float fraction = ((float)h.numOver) /totalNum;
+			for( int x=0; x < h.pValues.size(); x++ )
+			{
+				Double thisP = h.pValues.get(x);
+				
+				if( last == null || ! thisP.equals(last))
+				{
+					writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
+									h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
+											h.ratioConserved + "\n");
+					last = thisP;
+				}
+			}
 			
-			writer.write(fraction + "\t");
-			writer.write( (h.conservationSum / totalNum) + "\t");
-			writer.write( (h.pValueSum/totalNum) + "\t");
-			writer.write( (h.ratio1Sum / totalNum) + "\t");
-			writer.write( (h.ratio2Sum / totalNum) + "\n");
+			
 		}
 		
 		writer.flush();  writer.close();
@@ -107,12 +97,13 @@ public class CoinFlipTest
 			System.out.println(index++ + " " + geneHolderList.size());
 			FastaSequence fs = fastaMap.get(gh.chr);
 			String seq = fs.getSequence();
+			List<Long> backEncodes = new ArrayList<Long>();
 			
 			for( RangeHolder rh : gh.rangeList )
 			{
-				for( int x=rh.start - 1; x + KMER_SIZE <= rh.stop ; x++)
+				for( int x=rh.start - 1; x +  CoinFlipTest.KMER_SIZE <= rh.stop ; x++)
 				{
-					String nucl = seq.substring(x, x + KMER_SIZE);
+					String nucl = seq.substring(x, x + CoinFlipTest.KMER_SIZE);
 					
 					Long encode = Encode.makeLong(nucl);
 					
@@ -123,8 +114,16 @@ public class CoinFlipTest
 					encode = Encode.makeLong(nucl);
 					
 					if( encode != null)
-						gh.includedKmers.add(encode);					
+						backEncodes.add(encode);					
+				}
 			}
+			
+			gh.includedKmers.addAll(backEncodes);
+			
+			for( int x=0; x < gh.includedKmers.size(); x++)
+			{
+				gh.pValues.add(null);
+				gh.ratioConserved.add(null);
 			}
 		}
 	}
@@ -162,7 +161,7 @@ public class CoinFlipTest
 		throw new Exception("Could not find " + val);
 	}
 	
-	private static void addCoinFlips(HashMap<String, GeneHolder> geneMap,
+	private static void addPValues(HashMap<String, GeneHolder> geneMap,
 					List<BinHolder> binList) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(
@@ -185,33 +184,17 @@ public class CoinFlipTest
 			
 			if( set != null)
 			{
-				double conservation = Double.parseDouble(splits[6]);
+				long encodedLong = Long.parseLong(splits[0]);
+				float conservation = Float.parseFloat(splits[6]);
 				BinHolder bh = getABin(conservation, binList);
 				
 				double val = - Math.log10(Double.parseDouble(splits[5]));
-				boolean isOver =  val >= bh.average;
-				
-				int cond1Withkmer = Integer.parseInt(splits[1]);
-				float totalcond1 = Float.parseFloat(splits[1]) + Float.parseFloat(splits[2]);
-				float ratio1Sum = cond1Withkmer /totalcond1;
-				
-
-				int cond2Withkmer = Integer.parseInt(splits[3]);
-				float totalcond2 = Float.parseFloat(splits[3]) + Float.parseFloat(splits[4]);
-				float ratio2Sum = cond2Withkmer /totalcond2;
-				
-				
+								
 				for(GeneHolder gh : set)
 				{
-					if(isOver)
-						gh.numOver++;
-					else
-						gh.numUnder++;
-					
-					gh.conservationSum += conservation;
-					gh.pValueSum += val;
-					gh.ratio1Sum += ratio1Sum;
-					gh.ratio2Sum += ratio2Sum;
+					int listIndex = gh.getIndex(encodedLong);
+					gh.ratioConserved.set(listIndex, conservation);
+					gh.pValues.set(listIndex, val);
 				}
 				
 			}
@@ -259,7 +242,7 @@ public class CoinFlipTest
 		return list;
 	}
 	
-	static HashMap<String, GeneHolder> parseGTFFile() throws Exception
+	private static HashMap<String, GeneHolder> parseGTFFile() throws Exception
 	{
 		HashMap<String, GeneHolder> map = new LinkedHashMap<String, GeneHolder>();
 		
