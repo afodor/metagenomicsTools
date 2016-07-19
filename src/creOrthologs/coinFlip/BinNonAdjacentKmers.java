@@ -1,8 +1,10 @@
 package creOrthologs.coinFlip;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,10 +25,46 @@ public class BinNonAdjacentKmers
 		}
 	}
 	
+	private static void writeRanges(List<Holder> list ) throws Exception
+	{
+		int numToInclude = list.size()/20;
+		int numToDo= -1;
+		int index =1;
+		BufferedWriter writer = null;
+		
+		for( Holder h  : list)
+		{
+			if( numToDo <= 0 )
+			{
+				numToDo = numToInclude;
+				
+				if( writer != null)
+				{
+					writer.flush();  writer.close();
+				}
+				
+				writer = new BufferedWriter(new FileWriter(new File(
+						ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
+									File.separator + "ranges" + File.separator + "splits_"+ index + ".txt")));
+				writer.write("logPValues\tconservation\n");
+				
+				index++;
+					
+			}
+			
+			writer.write(h.pVal + "\t" + h.conservationVal + "\n");
+			numToDo--;
+			
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		List<Holder> list = getHolders();
 		System.out.println(list.size());
+		writeRanges(list);
 	}
 	
 	private static List<Holder> getHolders() throws Exception
