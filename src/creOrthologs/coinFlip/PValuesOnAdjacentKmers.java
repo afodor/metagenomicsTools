@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import utils.Avevar;
 import utils.ConfigReader;
@@ -32,6 +33,58 @@ public class PValuesOnAdjacentKmers
 		}
 	}
 	
+	private static void addStartStop(HashMap<String, GeneHolder> map) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" +
+					File.separator + "klebsiella_pneumoniae_chs_11.0.genes.gtf")));
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			String val = splits[8];
+			
+			StringTokenizer sToken = new StringTokenizer(val, ";");
+			String key =" "+  sToken.nextToken().replaceAll("\"", "").replace("gene_id ", "").trim();
+			
+			GeneHolder gh = map.get(key);
+			
+			if( gh != null)
+			{
+				int val1 = Integer.parseInt(splits[3]);
+				int val2 = Integer.parseInt(splits[4]);
+				int start = Math.min(val1, val2);
+				int stop = Math.max(val1, val2);
+				
+				if( gh.start == null)
+				{
+					gh.start = start;
+					gh.stop = stop;
+				}
+				
+				if( start < gh.start)
+					gh.start = start;
+				
+				if( stop > gh.stop)
+					gh.stop = stop;
+				
+				if( !gh.chr.equals(splits[0]))
+					throw new Exception("Parsing error");
+			
+			}
+			else
+			{
+				System.out.println("Could not find " + key);
+			}
+			
+		}
+		
+		
+		for(String s : map.keySet())
+			System.out.println(s);
+		reader.close();
+	}
+	
 	private static class GeneHolder implements Comparable<GeneHolder>
 	{
 		String geneName;
@@ -39,6 +92,8 @@ public class PValuesOnAdjacentKmers
 		List<Float> ranks = new ArrayList<Float>();
 		double average;
 		int n;
+		Integer start;
+		Integer stop;
 		
 		@Override
 		public int compareTo(GeneHolder o)
@@ -52,12 +107,12 @@ public class PValuesOnAdjacentKmers
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 		ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 				File.separator + "genesWithRanks.txt")));
-		writer.write("geneName\tchr\taverage\tn\tranks\n");
+		writer.write("geneName\tchr\tstart\tstop\taverage\tn\tranks\n");
 		
 		for(GeneHolder gh : list)
 		{
-			writer.write(gh.geneName + "\t" + gh.chr + "\t" + gh.average + "\t" + gh.n + "\t"+
-							gh.ranks + "\n");		
+			writer.write(gh.geneName + "\t" + gh.chr + "\t" + gh.start + "\t" + gh.stop + "\t" + 
+					gh.average + "\t" + gh.n + "\t"+gh.ranks + "\n");		
 		}
 		
 		writer.flush();  writer.close();
@@ -121,7 +176,7 @@ public class PValuesOnAdjacentKmers
 			gh.average = av.getAve();
 			gh.n = gh.ranks.size();
 		}
-		
+		addStartStop(map);
 		geneList.addAll(map.values());
 		Collections.sort(geneList);
 		
