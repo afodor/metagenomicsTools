@@ -15,6 +15,7 @@ public class BinNonAdjacentKmers
 {
 	private static class Holder implements Comparable<Holder>
 	{
+		String geneName;
 		float conservationVal;
 		float pVal;
 		
@@ -46,13 +47,13 @@ public class BinNonAdjacentKmers
 				writer = new BufferedWriter(new FileWriter(new File(
 						ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 									File.separator + "ranges" + File.separator + "splits_"+ index + ".txt")));
-				writer.write("logPValues\tconservation\n");
+				writer.write("geneName\tlogPValues\tconservation\n");
 				
-				index++;
+				index++;	
 					
 			}
 			
-			writer.write(h.pVal + "\t" + h.conservationVal + "\n");
+			writer.write( h.geneName + "\t" +  h.pVal + "\t" + h.conservationVal + "\n");
 			numToDo--;
 			
 		}
@@ -83,6 +84,7 @@ public class BinNonAdjacentKmers
 			list.add(h);
 			
 			String[] splits = s.split("\t");
+			h.geneName = splits[0];
 			h.pVal = Float.parseFloat(splits[4]);
 			h.conservationVal = Float.parseFloat(splits[5]);
 		}
