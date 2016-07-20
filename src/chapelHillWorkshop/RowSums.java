@@ -18,12 +18,10 @@ public class RowSums
 			
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getChapelHillWorkshopDir() + File.separator + 
-					"rowSums.txt")));
+					"humann2_genefamilies.LABELS2OnlyAbundant.txt")));
 			
-		writer.write("header\tsum\n");
+		writer.write(reader.readLine() + "\n");
 		
-		reader.readLine();
-		reader.readLine();
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -37,7 +35,8 @@ public class RowSums
 			for( int x=1; x < splits.length; x++)
 				sum += Double.parseDouble(splits[x]);
 			
-			writer.write(splits[0].replaceAll("\"", "").replaceAll(".", "") + "\t" + sum + "\n");
+			if( sum >= 1e-04)
+				writer.write(s.replace("UniRef50_", "") + "\n");
 		}
 		
 		writer.flush(); writer.close();

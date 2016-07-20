@@ -1,0 +1,77 @@
+rm(list=ls())
+
+library(gamlss) 
+library(gamlss.dist) # gamlss.dist package, contains inflated
+library(lmtest)
+
+setwd("C:\\Users\\corei7\\git\\metagenomicsTools\\src\\gamlssDemo")
+
+myT <- read.table("genusPivotedTaxaAsColumnsNormCaseContol.txt", row.names=1,
+		header=TRUE)
+
+muPValues <- vector()
+names <- vector()
+sigmaPValues <- vector()
+nuPValues <- vector()
+lmPValues <- vector()
+pValuesLRTest <- vector()
+pValuesWilcoxon <- vector()
+averageLogCase <- vector()
+averageLogControl <- vector()
+averageLogAll <- vector()
+normalityTestPValues <- vector()
+
+pdf("genus.pdf")
+par(mfrow=c(2,2))
+
+for( i in 2:ncol(myT))
+{
+	myFrame <- data.frame( bug = myT[,i], logBug = log10(myT[,i] + + 0.00001),
+							 isCase = grepl("case",row.names(myT))	)
+	
+	fit <- gamlss( bug~isCase,sigma.formula=~isCase, nu.formula=~isCase, family = BEZI, data = myFrame)
+	mySummary <- summary(fit)
+	
+	interceptFit <- gamlss( bug~1,sigma.formula=~1, nu.formula=~1, family = BEZI, data = myFrame)
+	
+	myLm <- lm( myFrame$logBug ~ myFrame$isCase )
+	index <- i -1
+	
+	averageLogCase[index] <- mean( myFrame$logBug[myFrame$isCase] )
+	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
+	averageLogAll[index] <- mean( myFrame$logBug) 
+	pValuesLRTest[index] <- lrtest(interceptFit,fit)$"Pr(>Chisq)"[2]
+	pValuesWilcoxon[index] <- 
+		wilcox.test( myFrame$logBug[myFrame$isCase], myFrame$logBug[!myFrame$isCase] )$p.value
+	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
+	muPValues[index] <-  mySummary[2,4]
+	sigmaPValues[index] <-  mySummary[4,4]
+	nuPValues[index] <- mySummary[6,4]
+	names[index] <- names( myT)[i]
+	normalityTestPValues[index] <- ks.test( myFrame$logBug, "pnorm", mean = mean(myFrame$logBug),
+						sd =sd(myFrame$logBug) )$p.value
+	
+	if( lmPValues[index] < 0.05) 
+	{
+		graphMain <- paste( "p=" , format(lmPValues[index],digits=3))
+		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
+				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
+		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE, 
+					main = paste( "p=", format(normalityTestPValues[index],digits=3) ))
+		normVals <- dnorm( myHist$mids, mean=mean(myFrame$logBug), sd= sd(myFrame$logBug)  )
+		lines( myHist$mids, normVals, col="RED")
+	}
+}
+
+dev.off()
+#fit$mu.coefficients
+#fit$sigma.coefficients
+#fit$nu.coefficients
+
+myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,muPValues,sigmaPValues,nuPValues,lmPValues,pValuesLRTest)
+myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
+myFrame <- myFrame [order(myFrame$lmPValues),]
+write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
+
+

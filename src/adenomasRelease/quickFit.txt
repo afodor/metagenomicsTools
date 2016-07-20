@@ -1,0 +1,68 @@
+rm(list=ls())
+
+library(gamlss) 
+library(gamlss.dist) # gamlss.dist package, contains inflated
+library(lmtest)
+
+setwd("C:\\AdenomasForRoshonda\\spreadsheets")
+
+fileName = "pivoted_genusasColumnsLogNormalPlusCaseControl.txt"
+myT <- read.table(fileName, header=TRUE, sep ="\t")
+		
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",2),rep("numeric", numCols-2))
+myT <- read.table(fileName, header=TRUE, sep ="\t",colClasses=myColClasses)
+	
+names <- vector()
+lmPValues <- vector()
+pValuesWilcoxon <- vector()
+averageLogCase <- vector()
+averageLogControl <- vector()
+averageLogAll <- vector()
+sdAll <- vector()
+normalityTestPValues <- vector()
+
+pdf("genus.pdf")
+par(mfrow=c(2,2))
+
+for( i in 3:ncol(myT))
+if( sum( myT[,i] >0 ) > nrow(myT) /4 )
+{
+	myFrame <- data.frame( logBug = myT[,i],isCase = (myT$caseControl == "case")	)
+	myLm <- lm( myFrame$logBug ~ myFrame$isCase )
+	index <- i -1
+	
+	averageLogCase[index] <- mean( myFrame$logBug[myFrame$isCase] )
+	averageLogControl[index] <- mean( myFrame$logBug[!myFrame$isCase] )
+	averageLogAll[index] <- mean( myFrame$logBug) 
+	sdAll <- mean(myFrame$logBug)
+
+	pValuesWilcoxon[index] <- 
+		wilcox.test( myFrame$logBug[myFrame$isCase], myFrame$logBug[!myFrame$isCase] )$p.value
+
+	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
+	names[index] <- names( myT)[i]
+
+	normalityTestPValues[index] <- ks.test( myFrame$logBug, "pnorm", mean = mean(myFrame$logBug),
+						sd =sd(myFrame$logBug) )$p.value
+	
+	graphMain <- paste( "p=" , format(lmPValues[index],digits=3))
+		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
+				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
+		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE, 
+					main = paste( "p=", format(normalityTestPValues[index],digits=3) ))
+		normVals <- dnorm( myHist$mids, mean=mean(myFrame$logBug), sd= sd(myFrame$logBug)  )
+		lines( myHist$mids, normVals, col="RED")
+}
+
+dev.off()
+
+myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,lmPValues,
+					sdAll)
+myFrame$lmPAdjust <- p.adjust(myFrame$lmPValues, method="BH")
+myFrame$effectSize <- abs(averageLogCase - averageLogControl) /  myFrame$sdAll 
+myFrame <- myFrame [order(myFrame$lmPValues),]
+write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
+
+

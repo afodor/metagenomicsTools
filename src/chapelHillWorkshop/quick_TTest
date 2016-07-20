@@ -1,0 +1,44 @@
+rm(list=ls())
+
+setwd("C:\\ChapelHillWorkshop")
+library("vegan")
+
+inFileName <- "humann2_genefamilies.LABELS2OnlyAbundant.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t",quote="",row.names=1,
+			colClasses=c("character", rep("numeric", 20)))
+
+pValues <- vector(length=nrow(myT))
+pValuesWilcoxon <- vector(length=nrow(myT))
+names <- vector(length=nrow(myT))
+meanTD <- vector(length=nrow(myT))
+meanBM <- vector(length=nrow(myT))
+
+isTD <- grepl("TD", names(myT))
+
+pdf("topHits.pdf")
+
+for( i in 1:nrow(myT))
+{
+	bug <- as.numeric(myT[i,])
+	pValues[i] <- t.test( bug[ isTD ] ,bug[ ! isTD ]  )$p.value
+	pValuesWilcoxon[i] <- wilcox.test( bug[ isTD ] ,bug[ ! isTD ]  )$p.value
+	meanTD[i] <- mean(bug[ isTD ]) 
+	meanBM[i] <- mean(bug[ ! isTD ])
+	names[i] <- row.names(myT)[i]
+	
+	if( pValues[i] < 1e-07 ) 
+	{
+		graphMain <- paste( "p=" , format(pValues[i],digits=3), "wilcoxon_p=" ,
+						 format(pValuesWilcoxon[i],digits=3))	
+		boxplot( bug ~ isTD, ylab = names[i],main = graphMain , xlab="is TD")	
+		myFrame <- data.frame( bug, isTD)		
+		stripchart(bug ~ isTD, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
+}
+
+myFrame <- data.frame(names,meanTD ,meanBM ,pValuesWilcoxon, pValues)
+myFrame <- myFrame [order(myFrame$pValues),]
+myFrame$adjustedP <- p.adjust( myFrame$pValues, method = "BH" )	
+
+write.table(myFrame, file="pValuesFromTTest.txt", sep="\t",row.names=FALSE)
+dev.off()

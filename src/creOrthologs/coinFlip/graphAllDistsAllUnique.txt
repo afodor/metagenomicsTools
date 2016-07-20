@@ -1,0 +1,34 @@
+rm(list=ls())
+
+setwd("C:\\biolockJProjects\\resistantAnnotation\\")
+
+par(mfrow=c(3,3))
+
+myT <- read.table("nonRedundantPValsVsCons_ResVsSucNoDupes.txt", sep="\t", header=TRUE)
+uniqueVals <- sort(unique( myT$conservation ) )
+
+
+for( i in 1:length(uniqueVals) ) 
+{	
+	consVal <- uniqueVals[i]
+	booleans <- myT$conservation == consVal
+	myFrame <- myT[booleans,]
+	pVals <- myFrame$pValue
+	
+	if( length(pVals) > 0) 
+	{
+		aTitle <- paste (format(consVal , digits=4), length(pVals), sep=" ")
+	
+		myHist <- hist(pVals, main=aTitle,breaks=20,prob=TRUE)
+		normVals <- dnorm( myHist$mids, mean=mean(pVals), sd = sd(pVals))
+		lines( myHist$mids, normVals, col="RED")
+		
+		if( i %% 9 == 0 ) 
+		{
+			windows()
+			par(mfrow=c(3,3))
+		}
+		
+	}	
+}
+

@@ -67,6 +67,8 @@ public class ConfigReader
 	public static final String KLEB_DIR="KLEB_DIR";
 	public static final String BIG_DATA_SCALING_FACTORS = "BIG_DATA_SCALING_FACTORS";
 	
+	public static final String ADENONMAS_RELEASE_DIR = "ADENONMAS_RELEASE_DIR";
+	
 	public static final String TOPE_CHECK_DIR = "TOPE_CHECK_DIR";
 	public static final String SCOTT_PILOT_DIR = "SCOTT_PILOT_DIR";
 	public static final String CHINA_DIR = "CHINA_DIR";
@@ -126,9 +128,16 @@ public class ConfigReader
 	
 	public static final String SANG_LAB_MAY_2016_DIR = "SANG_LAB_MAY_2016_DIR";
 	
+	public static final String BIOLOCK_J_DIR = "BIOLOCK_J_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
+	}
+	
+	public static String getBioLockJDir() throws Exception
+	{
+		return getConfigReader().getAProperty(BIOLOCK_J_DIR);
 	}
 	
 	public static String getSangLabMay2016Dir() throws Exception
@@ -311,6 +320,11 @@ public class ConfigReader
 	public static String getChinaDir() throws Exception
 	{
 		return getConfigReader().getAProperty(CHINA_DIR);
+	}
+	
+	public static String getAdenomasReleaseDir() throws Exception
+	{
+		return getConfigReader().getAProperty(ADENONMAS_RELEASE_DIR);
 	}
 	
 	public static String getKlebDir() throws Exception

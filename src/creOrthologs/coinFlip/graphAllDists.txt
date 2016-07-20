@@ -1,0 +1,26 @@
+rm(list=ls())
+
+setwd("C:\\biolockJProjects\\resistantAnnotation\\ranges")
+
+par(mfrow=c(3,3))
+
+for( i in 1:50 ) 
+{
+	fileName <- paste("splits_", i ,".txt", sep ="")
+	
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+	aTitle <- paste (format(range(myT$conservation)[1], digits=3), "-", format(range(myT$conservation)[2], digits=3),
+							" " , nrow(myT), sep="")
+	
+	myHist <- hist(myT$logPValues, main=aTitle,breaks=40,prob=TRUE)
+	normVals <- dnorm( myHist$mids, mean=mean(myT$logPValues), sd = sd(myT$logPValues))
+	lines( myHist$mids, normVals, col="RED")
+	
+	if( i %% 9 == 0 ) 
+	{
+		windows()
+		par(mfrow=c(3,3))
+	}
+	
+}
+

@@ -34,7 +34,7 @@ myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,
 			colClasses=c("character", rep("numeric", 20)))
 
 myT <- t(myT)
-myMDS <- capscale(myT~1,distance="bray")
+myMDS <- capscale(myT~1)
 
 plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) )
 
@@ -46,3 +46,11 @@ col = ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" ) , cex = 2
 xlab = "MDS 1", ylab = "MDS 2")
 
 
+# a version with MDS percentages
+xAxis <-  paste("MDS 1 (", format( 100 * myMDS$CA$eig[1] / sum(myMDS$CA$eig),digits=3), "%)", sep="")
+yAxis <- paste("MDS 2 (", format( 100 * myMDS$CA$eig[2] / sum(myMDS$CA$eig),digits=3), "%)", sep="")
+myColors <-  ifelse ( substr( row.names(myT), 1,2) == "BM" , "RED" , "BLUE" )
+mySymbols <- ifelse ( substr( row.names(myT), 1,2) == "BM" , 15, 19)
+
+plot( myMDS$CA$u[,1], myMDS$CA$u[,2] , col = myColors , cex = 2.0, pch=mySymbols,xlab = xAxis,
+ylab = yAxis )

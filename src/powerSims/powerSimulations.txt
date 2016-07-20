@@ -1,12 +1,19 @@
+# this power simulation assumes perfectly a normal distribution 
+# and then applies a t-test.
+# Real data, of course, are likely to have a different distribution
+# so these results should be considered a rough approximation
+
 rm(list=ls())
-treatmentSampleSize <- 15
-numHypotheses <- 10000
+sampleSizeForEachGroup <- 15
+numHypotheses <- 1000
 numUnder <- 0
 numBonferroniUnder <-0
 fractionTruePositives <- 0.1
 numTruePositves <-0;
+effectSize <- 1.1
 
 pValues <- vector();
+truePositives <- vector()
 
 for( j in 1 : numHypotheses ) 
 {
@@ -18,27 +25,27 @@ for( j in 1 : numHypotheses )
 	data<-vector()
 	data2<-vector()
 
-	for( i in 1 : treatmentSampleSize)
+	for( i in 1 : sampleSizeForEachGroup)
 	{
-		data[i] = rnorm(1, mean=3.12,sd=0.354)
+		data[i] = rnorm(1)
 	
 		if( isATruePositive  ) 
 		{
-			data2[i] = rnorm(1, mean=3.12*0.85,sd=0.354)
+			data2[i] = rnorm(1, mean=effectSize)
 		}
 		else
 		{
-			data2[i] = rnorm(1, mean=3.12,sd=0.354)
+			data2[i] = rnorm(1)
 		}
-			
 	}
 	
 	pValues[j] <- t.test(data,data2)$p.value 
+	truePositives[j] <- isATruePositive
 	
-	if( isATruePositive  && pValues[j] < 0.05 )
+	if( isATruePositive  & pValues[j] < 0.05 )
 		numUnder = numUnder + 1
 	
-	if( isATruePositive  && pValues[j] < 0.05 / numHypotheses )
+	if( isATruePositive  & pValues[j] < 0.05 / numHypotheses )
 		numBonferroniUnder = numBonferroniUnder + 1	
 	
 	
@@ -48,15 +55,17 @@ numTruePositves
 numUnder/numTruePositves
 numBonferroniUnder /numTruePositves
 
-sortedPValues <- sort(pValues)
+myFrame <- data.frame(pValues,truePositives  )
+myFrame<- myFrame [order(myFrame$pValues),]
+myFrame$pAdjust <- p.adjust(myFrame$pValues, method="BH")
+myFrame$Bonf <- p.adjust(myFrame$pValues, method="bonferroni")
 
 bhUnder <- 0;
-index <- 1;
 
-while( index <= numHypotheses &&  (numHypotheses * sortedPValues[index] / index) < 0.10 ) 
+for( i in 1:nrow(myFrame))
 {
-	bhUnder = bhUnder + 1;
-	index = index + 1;
+	if( myFrame$truePositives[i] & myFrame$pAdjust[i] < 0.10  )
+		bhUnder <- bhUnder + 1;
 }
 
 bhUnder / numTruePositves
