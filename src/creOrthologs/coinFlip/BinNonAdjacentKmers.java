@@ -74,7 +74,7 @@ public class BinNonAdjacentKmers
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
-						File.separator + "nonRedundantPValsVsCons_ResVsSuc.txt"	)));
+						File.separator + "nonRedundantPValsVsCons_ResVsSucNoDupes.txt"	)));
 		
 		reader.readLine();
 		
