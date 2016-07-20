@@ -43,10 +43,9 @@ public class WriteKmersWithDifferentAdjacentPValues
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, GeneHolder> map = parseGTFFile();
-		List<BinHolder> list = parseBinFile();
 		addKmersToGenes( new ArrayList<GeneHolder>(map.values()));
 		
-		addPValues(map, list);
+		addPValues(map);
 		writeResults(map);
 			
 	}
@@ -154,18 +153,8 @@ public class WriteKmersWithDifferentAdjacentPValues
 				
 	}
  	
-	//todo: this is inefficient
-	private static BinHolder getABin(double val, List<BinHolder> binList) throws Exception
-	{
-		for( BinHolder bh : binList)
-			if( val >= bh.low && val <= bh.high )
-				return bh;
-		
-		throw new Exception("Could not find " + val);
-	}
 	
-	private static void addPValues(HashMap<String, GeneHolder> geneMap,
-					List<BinHolder> binList) throws Exception
+	private static void addPValues(HashMap<String, GeneHolder> geneMap) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(
 			ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" 
@@ -214,37 +203,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 	}
 	
 	
-	private static class BinHolder
-	{
-		private double low;
-		private double high;
-		
-		private double average;
-	}
 	
-	private static List<BinHolder> parseBinFile() throws Exception
-	{
-		List<BinHolder> list = new ArrayList<BinHolder>();
-		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getBioLockJDir() + 
-		File.separator + "resistantAnnotation" + File.separator + "resistantVsSucSummary.txt")));
-		
-		reader.readLine();
-		
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
-		{
-			String[] splits = s.split("\t");
-			BinHolder h = new BinHolder();
-			h.low = Double.parseDouble(splits[0]);
-			h.high = Double.parseDouble(splits[1]);
-			h.average = Double.parseDouble(splits[3]);
-			list.add(h);
-		}
-			
-		
-		return list;
-	}
 	
 	private static HashMap<String, GeneHolder> parseGTFFile() throws Exception
 	{

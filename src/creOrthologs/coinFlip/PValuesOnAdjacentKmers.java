@@ -1,14 +1,14 @@
 package creOrthologs.coinFlip;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
 
 import utils.Avevar;
 import utils.ConfigReader;
@@ -47,7 +47,23 @@ public class PValuesOnAdjacentKmers
 		}
 	}
 	
-	private float getRankProportion( float conservation, float pValue, List<RangeHolder> list ) throws Exception
+	private static void writeResults(List<GeneHolder> list) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+		ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
+				File.separator + "genesWithRanks.txt")));
+		writer.write("geneName\tchr\taverage\tn\tranks\n");
+		
+		for(GeneHolder gh : list)
+		{
+			writer.write(gh.geneName + "\t" + gh.chr + "\t" + gh.average + "\t" + gh.n + "\t"+
+							gh.ranks + "\n");		
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	private static float getRankProportion( float conservation, float pValue, List<RangeHolder> list ) throws Exception
 	{
 		for(RangeHolder rh : list)
 		{
@@ -81,6 +97,7 @@ public class PValuesOnAdjacentKmers
 			
 			if( conservation < 0.85)
 			{
+				float pValue = Float.parseFloat(splits[4]);
 				GeneHolder gh = map.get(geneId);
 				
 				if( gh == null)
@@ -94,11 +111,8 @@ public class PValuesOnAdjacentKmers
 				if( ! gh.chr.equals(splits[1]))
 					throw new Exception("Parsing error");
 				
-				float pValue = Float.parseFloat(splits[4]);
-				gh.ranks.add(pValue);
+				gh.ranks.add(getRankProportion(conservation, pValue,rangeList));
 			}
-			
-			
 		}
 		
 		for( GeneHolder gh : map.values())
@@ -131,10 +145,10 @@ public class PValuesOnAdjacentKmers
 			BufferedReader reader = new BufferedReader(new FileReader(aFile));
 			
 			RangeHolder rh = new RangeHolder();
+			list.add(rh);
 			
 			reader.readLine();
 
-			
 			for(String s2 = reader.readLine();s2 != null; s2 = reader.readLine())
 			{
 				
@@ -156,6 +170,7 @@ public class PValuesOnAdjacentKmers
 				
 				rh.pValues.add(pValue);
 				
+				
 			}
 			
 			Collections.sort(rh.pValues);
@@ -170,6 +185,11 @@ public class PValuesOnAdjacentKmers
 	public static void main(String[] args) throws Exception
 	{
 		List<RangeHolder> rangeList =getRanges();
+		
+		//for( RangeHolder h :rangeList)
+			//System.out.println(h.lowConservation + " " + h.highConservation);
+		
 		List<GeneHolder> geneList = getGenes(rangeList);
+		writeResults(geneList);
 	}
 }
