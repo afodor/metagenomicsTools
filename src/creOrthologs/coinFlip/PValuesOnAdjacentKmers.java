@@ -90,7 +90,11 @@ public class PValuesOnAdjacentKmers
 		String geneName;
 		String chr;
 		List<Float> ranks = new ArrayList<Float>();
-		double average;
+		List<Float> pValues = new ArrayList<Float>();
+		List<Float> conservation = new ArrayList<>();
+		double averageRank;
+		double averagePValue;
+		double averageConservation;
 		int n;
 		Integer start;
 		Integer stop;
@@ -98,21 +102,26 @@ public class PValuesOnAdjacentKmers
 		@Override
 		public int compareTo(GeneHolder o)
 		{
-			return Double.compare(this.average, o.average);
+			return Double.compare(this.averageRank, o.averageRank);
 		}
 	}
 	
 	private static void writeResults(List<GeneHolder> list) throws Exception
 	{
+		HashMap<String, String> annoationMap = AddAnnotationstToCoinFlip.getAnnotationMap();
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 		ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 				File.separator + "genesWithRanks.txt")));
-		writer.write("geneName\tchr\tstart\tstop\taverage\tn\tranks\n");
+		writer.write("geneName\tchr\tstart\tstop\taverageRank\tn\taveragePValue\taverageConservation\tranks\tconservation\tpValues\tannotation\n");
 		
 		for(GeneHolder gh : list)
 		{
 			writer.write(gh.geneName + "\t" + gh.chr + "\t" + gh.start + "\t" + gh.stop + "\t" + 
-					gh.average + "\t" + gh.n + "\t"+gh.ranks + "\n");		
+					gh.averageRank + "\t" + gh.n + "\t" + gh.averagePValue + "\t" + 
+					gh.averageConservation + 
+					"\t"+gh.ranks + "\t" + gh.conservation + "\t" + 
+					gh.pValues + "\t" 
+							+ annoationMap.get(gh.geneName.trim()) + "\n");		
 		}
 		
 		writer.flush();  writer.close();
@@ -167,14 +176,19 @@ public class PValuesOnAdjacentKmers
 					throw new Exception("Parsing error");
 				
 				gh.ranks.add(getRankProportion(conservation, pValue,rangeList));
+				gh.pValues.add(pValue);
+				gh.conservation.add(conservation);
 			}
 		}
 		
 		for( GeneHolder gh : map.values())
 		{
 			Avevar av = new Avevar(gh.ranks);
-			gh.average = av.getAve();
+			gh.averageRank = av.getAve();
 			gh.n = gh.ranks.size();
+			
+			gh.averagePValue = new Avevar(gh.pValues).getAve();
+			gh.averageConservation= new Avevar(gh.conservation).getAve();
 		}
 		addStartStop(map);
 		geneList.addAll(map.values());
