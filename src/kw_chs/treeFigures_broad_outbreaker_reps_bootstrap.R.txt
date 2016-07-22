@@ -1,0 +1,216 @@
+##bootstrap outbreaker tree, using the repetitions
+##draw result
+##tree was K. pneu strains only
+##7/21/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\broad outbreaker repetitions")
+datadir = "C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\"
+
+library(igraph)
+library(graph)
+library(Rgraphviz)
+
+MAXDIST=11 #maximum SNP distance to consider as possibly part of same outbreak in broad
+
+ref = read.table("broad_outbreaker_rep1.txt", sep = "\t", header=T, colClasses = "numeric")
+bootstraps = rep(1, nrow(ref)) #start at 1 because has been seen once in this tree
+
+######get number of bootstraps
+for(rep in 2:100) {
+  tree = read.table(paste("broad_outbreaker_rep", rep, ".txt", sep=""), sep = "\t", header=T, colClasses = "numeric")
+  if(any(ref$tree.idx != tree$tree.idx) || any(ref$isolate != tree$isolate)) {
+    stop(paste("different order of isolates in", rep))
+  }
+  if(which(is.na(ref$tree.ances)) != which(is.na(tree$tree.ances))) { #different root
+    stop(paste("different root/NA in", rep))
+  }
+  same = (ref$tree.ances == tree$tree.ances | is.na(ref$tree.ances))
+  bootstraps[same] = bootstraps[same] + 1
+}
+
+####get distances
+##change id to chs names
+idToStrain <- function(id) {
+  return(ref$isolate[ref$tree.idx==as.numeric(id)])
+}
+ances = as.character(sapply(as.vector(ref$tree.ances), idToStrain, USE.NAMES = F))
+ances[is.na(ref$tree.ances)] = NA
+broad = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\BroadTrees\\distancesUpperTriangle.txt",
+                  header=T, sep="\t", colClasses="numeric")
+dist = rep(NA, nrow(ref))
+for(r in 1:length(dist)) {
+  if(!is.na(ances[r])) {
+    dist[r] = broad$distance[(broad$xGenome==ances[r] & broad$yGenome==ref$isolate[r]) | 
+                               (broad$yGenome==ances[r] & broad$xGenome==ref$isolate[r])]
+  }
+}
+ref = cbind(ref, ancestor.chsID=ances, bootstraps, broadDistance=dist)
+write.table(ref, "broad_outbreaker_rep1_bootstraps.txt", 
+            row.names = F, col.names = T, quote = F, sep="\t")
+
+#####draw tree
+###use hospital coloring in other tree figures
+meta = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
+                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+##for given strain, return hospital
+getHospital <- function(strain) {
+  return(meta$Abstracted_StudyFacility[meta$SpecNumber==as.numeric(strain)])
+}
+hosp = sapply(ref$isolate, getHospital, USE.NAMES = F)
+
+hospCol = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures\\HospitalColors.txt",
+                     header=T, sep="\t", comment.char = "", colClasses="character")
+##for given facility, return the color
+facilityColor <- function(fac) {
+  return(hospCol$color[hospCol$facility==fac])
+}
+vert.col = sapply(hosp, facilityColor, USE.NAMES = F)
+
+###color edges by encounter data
+##get encounter overlap
+enc = read.table(paste(datadir, "encounterDaysOverlap.txt", sep=""), header=T, sep="\t", colClasses="numeric")
+##returns edge colors  for the given graph
+##black if no evidence, orange if overlap between culture dates, pink if not between dates but before last culture date 
+##if fixName is true, then the edges are the position in the list of strains, otherwise the edges are the strain names
+getEdgeCol <- function(graph, fixName=T) {
+  edges = as_ids(E(graph))
+  edge.col = rep("black", length(edges))
+  for(i in 1:length(edges)) {
+    sp = strsplit(edges[i], "|", fixed=T)[[1]]
+    x = sp[1]
+    y = sp[2]
+    if(fixName) {
+      p = which((enc$xID==ref$isolate[ref$tree.idx==x] & enc$yID==ref$isolate[ref$tree.idx==y]) | 
+                  (enc$xID==ref$isolate[ref$tree.idx==y] & enc$yID==ref$isolate[ref$tree.idx==x])) ##position in encounter data
+    } else {
+      p = which((enc$xID==x & enc$yID==y) | 
+                  (enc$xID==y & enc$yID==x)) ##position in encounter data
+    }
+    if(enc$daysOverlapBetweenCultures[p] > 0) {
+      edge.col[i] = "orange"
+    } else if(enc$daysOverlapBeforeLastCulture[p] > 0) {
+      edge.col[i] = "pink"
+    }
+  }
+  return(edge.col)
+}
+
+##returns edge labels for the given graph in the form of distance/bootstrap
+##if fixName is true, then the edges are the position in the list of strains, otherwise the edges are the strain names
+getEdgeLabel <- function(graph, fixName=T) {
+  edges = as_ids(E(graph))
+  edge.lab = rep(NA, length(edges))
+  for(i in 1:length(edges)) {
+    sp = strsplit(edges[i], "|", fixed=T)[[1]]
+    x = as.numeric(sp[1])
+    y = as.numeric(sp[2])
+    if(fixName) {
+      edge.lab[i] = paste(ref$broadDistance[ref$tree.ances==x & ref$tree.idx==y], E(ig)$weight[i], sep="/")
+    } else {
+      edge.lab[i] = paste(ref$broadDistance[ref$ancestor.chsID==x & ref$isolate==y], E(ig)$weight[i], sep="/")
+    }
+  }
+  return(edge.lab)
+}
+
+
+###make graph
+df = data.frame(parent = ref$tree.ances, child=ref$tree.idx, bootstraps, dist)
+# graph = graph_from_data_frame(df, directed = F)
+# plot(graph)
+
+# df = data.frame(parent = as.character(sapply(as.vector(ref$tree.ances), idToStrain, USE.NAMES = F)),
+#                 child = as.character(tree$isolate),#as.character(sapply(as.vector(ref$tree.idx), idToStrain, USE.NAMES = F)))
+#                 bootstraps)
+
+g = new("graphNEL", nodes=as.character(df$child), edgemode="directed")
+df = df[!is.na(df$parent),]
+g = addEdge(as.character(df$parent), as.character(df$child), g, df$bootstraps)
+# plot(g)
+ig = igraph.from.graphNEL(g)
+# E(ig)$weight
+# plot(ig)
+
+##function that given graphNEL returns the xy coordinates
+getCoord<-function(graph) {
+  ag = agopen(graph, name="outbreaker")
+  nod = AgNode(ag) #most likely equivalent to attributes(plot)$AgNode
+  n1 = nod[[1]]
+  cent = getNodeXY(n1) #xy coordinates of the center
+  xy = data.frame(x=cent$x, y=cent$y)
+  for(i in 2:length(nod)) {
+    cent = getNodeXY(nod[[i]])
+    xy = rbind(xy, c(cent$x, cent$y))
+  }
+  return(xy)
+}
+
+
+###color edge labels by bootstrap
+edge.lab.col = rep("gray", length(E(ig)$weight))
+edge.lab.col[E(ig)$weight > 90] = "black"
+edge.lab.col[E(ig)$weight < 90 & E(ig)$weight > 80] = "dimgray"
+
+#####all edges
+xy = getCoord(g)
+mat = cbind(xy$x, xy$y)
+
+node.font.col = "black"
+edge.col = getEdgeCol(ig)
+edge.lab = getEdgeLabel(ig)
+
+jpeg("TxTreeAllEdges_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+par(mar=c(.01, .1, 2.5, .1), cex.main=4)
+plot(ig, layout=mat, vertex.label=as.character(sapply(V(ig)$name, idToStrain, USE.NAMES = F)), 
+     vertex.color=vert.col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, 
+     vertex.frame.color=node.font.col,
+     edge.label = edge.lab,
+     edge.label.cex=2.5, edge.color=edge.col, edge.width=4, edge.label.color=edge.lab.col, edge.arrow.size=1.5,
+     main="Outbreaker")
+dev.off()
+
+#####draw seqtrack tree with edges removed
+# edges = as_ids(E(ig))
+# dist = rep(NA, length(edges))
+# for(i in 1:length(dist)) {
+#   dist[i] = as.numeric(strsplit(edge.lab[i], "/", fixed=T)[[1]][1])
+# }
+# rem = dist < MAXDIST
+# sub.ig = delete.edges(ig, edges[rem])
+# 
+# rem.from = numeric()
+# rem.to = numeric()
+# for(i in 1:length(edges)) {
+#   if(rem[i]) {
+#     sp = strsplit(edges[i], "|", fixed=T)[[1]]
+#     rem.from = c(rem.from, sp[1])
+#     rem.to = c(rem.to, sp[2])
+#   }
+# }
+# sub.g = removeEdge(rem.from, rem.to, g)
+# xy = getCoord(sub.g)
+# mat = cbind(xy$x, xy$y)
+df = data.frame(parent = ref$tree.ances, child=ref$tree.idx, bootstraps=ref$bootstraps, dist=ref$broadDistance)
+df = df[(df$dist < MAXDIST) & !is.na(df$dist),]
+
+g = new("graphNEL", nodes=as.character(ref$tree.idx), edgemode="directed")
+g = addEdge(as.character(df$parent), as.character(df$child), g, df$bootstraps)
+ig = igraph.from.graphNEL(g)
+
+xy = getCoord(g)
+mat = cbind(xy$x, xy$y)
+
+node.font.col = "black"
+edge.col = getEdgeCol(ig)
+edge.lab = getEdgeLabel(ig)
+
+jpeg("TxTree_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+par(mar=c(.01, .1, 2.5, .1), cex.main=4)
+plot(ig, layout=mat, vertex.label=as.character(sapply(V(ig)$name, idToStrain, USE.NAMES = F)), 
+     vertex.color=vert.col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, 
+     vertex.frame.color=node.font.col,
+     edge.label = edge.lab,
+     edge.label.cex=2.5, edge.color=edge.col, edge.width=4, edge.label.color=edge.lab.col, edge.arrow.size=1.5,
+     main=paste("Outbreaker, Removed edges greater than ", MAXDIST, " mutations", sep=""))
+dev.off()
