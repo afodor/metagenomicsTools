@@ -26,22 +26,12 @@ for(i in 1:(nrow(metadata)-1)) {
 
 ###setup
 cultureDiff=abs(culture.data$xCultureDate-culture.data$yCultureDate)#differ in culture times
-##make column where 0 = likely transmission, 1 is not (defined as <=14 days difference in culture dates)
-trans = rep(1, length(cultureDiff))
-trans[cultureDiff<=14]=0 #10
-meta = cbind(culture.data, cultureDiff, transmissionCultureDiff=trans)
+meta = cbind(culture.data, cultureDiff)
 ##transmission from encounter data: overlap in hospital > 0 days between culture dates
 enc = read.table(paste(datadir, "encounterDaysOverlap.txt", sep=""), sep="\t", header=T, colClasses="numeric")
 meta = merge(meta, enc, by=c("xID", "yID"))
-trans = rep(1, nrow(meta))
-trans[meta$daysOverlapBetweenCultures>0]=0
-meta = cbind(meta, transmissionOverlapBetweenCultures=trans)
-##transmission from encounter data: overlap in hospital > 0 days before last culture date
-trans = rep(1, nrow(meta))
-trans[meta$daysOverlapBeforeLastCulture>0]=0
-meta = cbind(meta, transmissionOverlapBeforeLastCulture=trans)
 
-###get data, subset to kleb pneu only
+###get data, subset to kleb pneu strains used in assembly only
 ##broad
 broad = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\BroadTrees\\distancesUpperTriangle.txt", header=T, sep="\t", colClasses="numeric")
 names(broad) = c("xID", "yID", "distance")
@@ -177,8 +167,8 @@ dev.off()
 # dev.off()
 
 # ############graph against time
-# any(meta$xID > meta$yID)
-# dist = merge(meta, dist, by=c("xID", "yID"))
+any(meta$xID > meta$yID)
+dist = merge(meta, dist, by=c("xID", "yID"))
 # 
 # ##function to draw distance vs. time for the given distance, name file with given name
 # dVsT <- function(distance, name) {

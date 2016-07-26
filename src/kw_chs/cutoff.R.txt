@@ -13,7 +13,7 @@ library(Rgraphviz)
 
 ##get data
 all.data = read.table("AllDistances.txt", 
-                      sep="\t", header=T, colClasses="numeric")
+                      sep="\t", header=T, colClasses=c(rep("numeric", 4), "character", "character", rep("numeric", 8)))
 meta = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
                   sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
 strains = unique(c(all.data$xID, all.data$yID))

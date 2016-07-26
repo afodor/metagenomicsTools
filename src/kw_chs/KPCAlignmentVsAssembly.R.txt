@@ -1,0 +1,68 @@
+##plot KPC numbers (both reference sets) from aligning reads to betalactamases with bwa vs
+##blasting assembly against cards database
+##Kleb pneu only
+##7/26/16
+
+rm(list=ls())
+
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures")
+datadir="C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\"
+
+assembly = read.table(paste(datadir, "numberOfBetaLactamaseGenes.txt", sep=""), header=T, sep="\t", 
+                      colClasses=c("character", rep("numeric", 78)))
+names(assembly) = sub("X", "", names(assembly))
+align1 = read.table(paste(datadir, "betaLactamaseAlignmentStatsByCHS.txt", sep=""), header=T, sep="\t",
+                   colClasses = c("character", "numeric", "character", rep("numeric", 4)))
+align2 = read.table(paste(datadir, "betaLactamaseAlignmentStatsByCHS_ref2.txt", sep=""), header=T, sep="\t",
+                    colClasses = c("character", "numeric", "character", rep("numeric", 4)))
+
+##normalize
+align1$aveDepthPerBPperMilReads = align1$aveDepth / (align1$totReads / 1000000) #average depth (depth per base pair) divided by (total reads divided by 1 million)
+align2$aveDepthPerBPperMilReads = align2$aveDepth / (align2$totReads / 1000000) #average depth (depth per base pair) divided by (total reads divided by 1 million)
+
+meta = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\UNCCMetaData_Final_8-5-15.txt", 
+                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+kpneu = meta$SpecNumber[meta$Genus=="Kleb" & meta$Species=="pneumo"]
+
+##combine results for the given beta lactamase from the given alignment table
+combine <- function(align, bl) {
+  dfass = data.frame(chs = names(assembly)[-(1:3)],
+                     numGenes = as.numeric(assembly[assembly$cardsGene==bl,-(1:3)]),
+                     stringsAsFactors = F)
+  al = align[grepl(bl, align$reference),]
+  dfal = data.frame(chs = al$chs,
+                    aveDepthPerBPperMilReads = al$aveDepthPerBPperMilReads,
+                    stringsAsFactors = F)
+  mrg = merge(dfass, dfal, by="chs")
+  mrg$betaLactamase = bl
+  mrg = mrg[mrg$chs %in% kpneu,]
+  return(mrg)
+}
+kpc1 = combine(align1, "KPC")
+kpc2 = combine(align2, "KPC")
+
+unique(align1$reference[grepl("KPC", align1$reference)])
+# [1] "gb|NC_022346.1|17139-18021|ARO:3002312|KPC-2"
+unique(align2$reference[grepl("KPC", align2$reference)])
+# [1] "gb|KM379100|0-882|ARO:3003180|KPC-22"
+
+####boxplot and stats
+##function that draws boxplot for given table, with given main title
+drawBoxPlot <- function(table, main) {
+  bl = "KPC"
+  x = factor(table$numGenes)
+  y = table$aveDepthPerBPperMilReads
+  boxplot(y~x, 
+          main=main, 
+          xlab = "number of genes identified in assembly",
+          ylab = "alignment depth per base pair per million reads",
+          outline=F) #turn off outliers
+  jit = table$numGenes + 1
+  points(y~jitter(jit, amount=.06), pch=17, col="blue", cex=.8)
+}
+
+jpeg("KPCAlignmentVsAssembly_boxplots.jpg", height=1000, width=2000, res=200)
+par(mfrow = c(1,2))
+drawBoxPlot(kpc1, "KPC-2")
+drawBoxPlot(kpc2, "KPC-22")
+dev.off()
