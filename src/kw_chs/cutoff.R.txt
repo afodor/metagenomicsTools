@@ -1,0 +1,82 @@
+##Look at number of unconnected nodes at different cutoffs 
+##for assembly seqtrack tree
+##plot to justify chosen cutoff
+##7/26/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures")
+datadir = "C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\"
+
+library(adegenet)
+library(igraph)
+library(Rgraphviz)
+
+##get data
+all.data = read.table("AllDistances.txt", 
+                      sep="\t", header=T, colClasses="numeric")
+meta = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
+                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+strains = unique(c(all.data$xID, all.data$yID))
+strains = strains[order(strains)] 
+
+##convert to distance matrices, given the data column distance
+convertToDist <- function(file) {
+  table = read.table(file, header=T, sep="\t", colClasses="numeric")
+  colnames(table) = c("xGen", "yGen", "distance")
+  dist = matrix(nrow=length(strains), ncol=length(strains))
+  for(i in 1:length(strains)) {
+    for(j in 1:length(strains)) {
+      s1 = strains[i]
+      s2 = strains[j]
+      val = table$distance[(table$xGen==s1 & table$yGen==s2) | (table$yGen==s1 & table$xGen==s2)]
+      if(length(val) == 0 & s1==s2) {
+        val = 0
+      } else if(length(val) == 0) {
+        print(i)
+        print(j)
+        print("")
+        val = NA
+      }
+      dist[i,j] = val
+    }
+  }
+  return(dist)
+}
+
+broad = convertToDist("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\BroadTrees\\distancesUpperTriangle.txt")
+
+##culture dates need to be rearranged to same order as strains (also removing strains not in analysis)
+cult = rep(NA, length(strains))
+for(i in 1:length(strains)) {
+  for(j in 1:length(meta$SpecNumber)) {
+    if(as.numeric(strains[i]) == meta$SpecNumber[j]) {
+      cult[i] = meta$DeID_StudyCultureDate[j]
+    }
+  }
+}
+cultureDates = as.POSIXct("2008-01-01") + cult*24*60*60
+
+##get full tree
+st = seqTrack(broad, x.names=strains, x.dates=cultureDates, best="min")
+
+cutoffs = 5:20
+res = data.frame(cutoff=cutoffs, numUnconnected=rep(NA, length(cutoffs)))
+for(i in 1:length(cutoffs)) {
+  cut = res$cutoff[i]
+  rem = st$weight > cut
+  rem[is.na(rem)] = TRUE
+  sub.st = st
+  sub.st$ances[rem] = NA
+  sub.ig = plot(sub.st)
+  sub.graph = as_graphnel(sub.ig)
+  deg=degree(sub.graph)
+  res$numUnconnected[i] = sum(deg$inDegree==0 & deg$outDegree==0)
+}
+
+write.table(res, "cutoff_unconnectedNodes.txt", row.names = F, col.names = T, quote=F, sep="\t")
+
+colors = ifelse(res$cutoff==11, "red", "black")
+jpeg("cutoff.jpg", res=300, height=1000, width=1100)
+par(mar=c(4, 4, 1, 1))
+plot(x=res$cutoff, y=res$numUnconnected, xlab="cutoff", ylab="number of unconnected nodes", pch=16, col=colors)
+dev.off()
