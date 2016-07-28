@@ -89,7 +89,7 @@ for(i in 1:numTips) {
   lines(x=c(-1, 1), y=c(y[i], y[i]), col=colors[i], lty=1, lwd=.5)
 }
 
-text(x=-off, y=(numTips+.6), labels="hospital", offset=0, adj=c(0,0), cex=1)
+text(x=-off, y=(numTips+.6), labels="facility", offset=0, adj=c(0,0), cex=1)
 
 ##sample name in rectangle
 text(x=rep(0, numTips), y=y, treetips)
@@ -189,7 +189,7 @@ for(r in 1:nrow(blcount)) {
 }
 mtext("C", side=3, cex=1, adj=0, line=linelabel)
 
-write.table(blcount, "..\\numberOfBetaLactamaseGenes.txt", row.names = F, col.names = T, quote=F, sep="\t")
+write.table(blcount, "..\\betaLactamases\\numberOfBetaLactamaseGenes.txt", row.names = F, col.names = T, quote=F, sep="\t")
 
 ####legend
 par(mar=c(0,0,0,0))

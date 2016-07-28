@@ -1,0 +1,57 @@
+##make metadata supplemental table
+##7/28/16
+
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures")
+basedir = "C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\"
+
+####metadata
+meta = read.table(paste(basedir, "paper1_analysisMethods\\figures\\UNCCMetaData_Final_8-5-15.txt", sep=""), 
+                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+##clean up genus
+meta$Genus[meta$Genus=="Kleb"] = "Klebsiella"
+meta$Genus[meta$Genus=="Esc"] = "Escherichia"
+meta$Genus[meta$Genus=="Ent"] = "Enterobacter"
+##clean up species
+meta$Species[meta$Species=="pneumo"] = "pneumoniae"
+meta$Genus[meta$Species=="aminigen"] = "Lelliottia"
+meta$Species[meta$Species=="aminigen"] = "amnigena"
+
+##subset and fix naming
+meta = meta[,1:6]
+names(meta) = c("Isolate", "Culture Date", "Cutlure Facility", "Genus", "Species", "Specimen Type")
+
+####accession numbers
+# acc = read.table(paste(basedir, "genomes_kleb_pneu.csv", sep=""), comment.char="", 
+#                  header=T, colClasses="character", sep=",")
+# strains = ifelse(meta$isolate < 10, paste("0", meta$isolate, sep=""), meta$isolate)
+# strains = paste("CHS", strains)
+# sub = acc[acc$Strain %in% strains,]
+# strains[!(strains %in% sub$Strain)]
+
+acc = read.table(paste(basedir, "PRJNA202876_subprojects.txt", sep=""),
+                 header=T, colClasses="character", sep="\t", fill=T)
+sub = acc[grepl("CHS", acc$Organism),-5]
+
+##for the given organism, return isolate number
+getIsolate <- function(org) {
+  sp = strsplit(org, "CHS ")[[1]]
+  return(as.numeric(sp[2]))
+}
+isolate = sapply(sub$Organism, getIsolate, USE.NAMES = F)
+sub = data.frame(isolate, sub)
+
+##check that have all the strains used
+all.data = read.table("AllDistances.txt", 
+                      sep="\t", header=T, colClasses=c(rep("numeric", 4), "character", "character", rep("numeric", 8)))
+used = sort(unique(c(all.data$xID, all.data$yID)))
+# used.chs = ifelse(used < 10, paste("CHS 0", used, sep=""), paste("CHS", used))
+# used.chs[!(used.chs %in% sub$Strain)]
+used[!(used %in% sub$isolate)]
+
+##subset and fix naming
+sub = sub[,-(4:5)]
+names(sub) = c("Isolate", "BioProject Accession Number", "Assembly Level")
+
+####merge and write
+mrg = merge(meta, sub, by="Isolate")
+write.table(mrg, "metadataTable.txt", sep="\t", quote=F, col.names = T, row.names = F)

@@ -59,7 +59,7 @@ rr.66 = root(kpneu, outgroup = "66")
 bootcut = 50
 bootstraps = as.numeric(rr.66$node.label)
 rem = bootstraps <= bootcut
-rr.66$node.label[rem] = ""
+# rr.66$node.label[rem] = ""
 collapse = drop.tip(rr.66, tip=long)
 lad = ladderize(collapse)
 col = sapply(lad$tip.label, getHospCol)
@@ -78,7 +78,7 @@ jpeg("PhyloTree_kpneu_byHosp_ladRemoveLong_alignLabels.jpg", res=300, height=300
 
 plot(lad, type="phylogram", show.node.label=F, no.margin=T, cex=1, edge.width = 2, show.tip.label = F, 
      tip.color=col)
-nodelabels(lad$node.label, adj=c(1, 0), frame="none", col="darkgray", cex=.8)
+nodelabels(lad$node.label, adj=c(1, 0), frame="none", col="dodgerblue", cex=.8)
 add.scale.bar(x=0.000065, y=-.1)
 
 ##get tips
