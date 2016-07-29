@@ -97,7 +97,10 @@ getEdgeCol <- function(graph, fixName=T) {
 }
 
 ##returns edge labels for the given graph in the form of distance/bootstrap
+##with asterisk if was present in seqtrack assembly tree
 ##if fixName is true, then the edges are the position in the list of strains, otherwise the edges are the strain names
+assembly.tree = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures\\TxTree_SeqTrack_Assembly.txt",
+                           header=T, sep="\t", colClasses = c(rep("numeric", 2), "logical", rep("numeric", 2)))
 getEdgeLabel <- function(graph, fixName=T) {
   edges = as_ids(E(graph))
   edge.lab = rep(NA, length(edges))
@@ -107,8 +110,13 @@ getEdgeLabel <- function(graph, fixName=T) {
     y = as.numeric(sp[2])
     if(fixName) {
       edge.lab[i] = paste(ref$broadDistance[ref$tree.ances==x & ref$tree.idx==y], E(ig)$weight[i], sep="/")
+      x = ref$isolate[ref$tree.idx == x]
+      y = ref$isolate[ref$tree.idx == y]
     } else {
       edge.lab[i] = paste(ref$broadDistance[ref$ancestor.chsID==x & ref$isolate==y], E(ig)$weight[i], sep="/")
+    }
+    if(assembly.tree$ances[assembly.tree$isolate==y]==x) {
+      edge.lab[i] = paste(edge.lab[i], "*", sep="")
     }
   }
   return(edge.lab)
@@ -143,7 +151,8 @@ getCoord<-function(graph) {
     cent = getNodeXY(nod[[i]])
     xy = rbind(xy, c(cent$x, cent$y))
   }
-  return(xy)
+  id = as.numeric(getNodeLabels(ag))
+  return(cbind(id, xy))
 }
 
 
@@ -160,13 +169,14 @@ node.font.col = "black"
 edge.col = getEdgeCol(ig)
 edge.lab = getEdgeLabel(ig)
 
-jpeg("TxTreeAllEdges_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+# jpeg("TxTreeAllEdges_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+tiff("TxTreeAllEdges_broadOutbreakerWithBootstraps.tiff", height=8000, width=8000, res=300)
 par(mar=c(.01, .1, 2.5, .1), cex.main=4)
 plot(ig, layout=mat, vertex.label=as.character(sapply(V(ig)$name, idToStrain, USE.NAMES = F)), 
      vertex.color=vert.col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, 
      vertex.frame.color=node.font.col,
      edge.label = edge.lab,
-     edge.label.cex=2.5, edge.color=edge.col, edge.width=4, edge.label.color=edge.lab.col, edge.arrow.size=1.5,
+     edge.label.cex=2, edge.color=edge.col, edge.width=4, edge.label.color=edge.lab.col, edge.arrow.size=1.5,
      main="Outbreaker")
 dev.off()
 
@@ -199,13 +209,85 @@ g = addEdge(as.character(df$parent), as.character(df$child), g, df$bootstraps)
 ig = igraph.from.graphNEL(g)
 
 xy = getCoord(g)
-mat = cbind(xy$x, xy$y)
+
+###space out y coordinates
+shiftx=75
+##recursive function that takes a given id and determines whether there is a child; if so, move the node down
+##returning the updated coordinates, and then recalling the function with the child as a parent
+##parent is the id number (1:71), not the isolate id
+##coord is a dataframe with the xy coordinates
+##xadj indicates the amount the parent node x has already been adjusted
+moveNodeXY <- function(parent, coord, xadj=0) {
+  children = ref$tree.idx[!is.na(ref$tree.ances) & ref$tree.ances==parent & ref$broadDistance<MAXDIST]
+  if(length(children) > 0) {
+    for(i in 1:length(children)) {
+      c = children[i]
+      ##update this node y
+      coord$y[coord$id==c] = coord$y[coord$id==c] - 100
+      ##if more than one child, space out x
+      if(i > 1) {
+        xadj = xadj + shiftx*(i-1)
+      }
+      coord$x[coord$id==c] = coord$x[coord$id==c] + xadj
+      ##run for c
+      coord = moveNodeXY(c, coord, xadj)
+    }
+  }
+  return(coord)
+}
+
+##same as moveNodeXY, but only adjusts the X
+moveNodeX <- function(parent, coord, xadj=0) {
+  children = ref$tree.idx[!is.na(ref$tree.ances) & ref$tree.ances==parent & ref$broadDistance<MAXDIST]
+  if(length(children) > 0) {
+    for(i in 1:length(children)) {
+      c = children[i]
+      ##if more than one child, space out x
+      if(i > 1) {
+        xadj = xadj + shiftx*(i-1)
+      }
+      coord$x[coord$id==c] = coord$x[coord$id==c] + xadj
+      ##run for c
+      coord = moveNodeX(c, coord, xadj)
+    }
+  }
+  return(coord)
+}
+
+ys = sort(unique(xy$y))
+xysort = xy[order(xy$y, xy$x, decreasing=T),]
+count = 0
+shifty=50
+for(i in 1:nrow(xysort)) {
+  if(xysort$y[i] == max(ys)) {
+    if(count %% 2 == 1) { #move every other node on top row down
+      xysort$y[i] = max(ys) - 100
+      xysort = moveNodeXY(xysort$id[i], xysort)
+    } else {
+      xysort = moveNodeX(xysort$id[i], xysort)
+    }
+    count = count + 1
+  } else {
+    xysort = moveNodeX(xysort$id[i], xysort)
+  }
+  if(ref$isolate[xysort$id[i]]==38) { #these children need to move over more
+    xysort = moveNodeX(xysort$id[i], xysort, shiftx)
+  }
+  if(ref$isolate[xysort$id[i]]==18 || ref$isolate[xysort$id[i]]==37) { #needs to move down to space out labels
+    xysort$y[i] = xysort$y[i]-shifty
+  }
+}
+xysort = xysort[order(xysort$id),]
+mat = cbind(xysort$x, xysort$y)
+
+# deg=degree(g)
 
 node.font.col = "black"
 edge.col = getEdgeCol(ig)
 edge.lab = getEdgeLabel(ig)
 
-jpeg("TxTree_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+# jpeg("TxTree_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
+tiff("TxTree_broadOutbreakerWithBootstraps.tiff", height=8000, width=8000, res=300)
 par(mar=c(.01, .1, 2.5, .1), cex.main=4)
 plot(ig, layout=mat, vertex.label=as.character(sapply(V(ig)$name, idToStrain, USE.NAMES = F)), 
      vertex.color=vert.col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, 
