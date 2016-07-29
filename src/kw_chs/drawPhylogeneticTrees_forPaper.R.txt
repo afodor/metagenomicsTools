@@ -54,22 +54,31 @@ plot(collapse, type="fan", show.node.label=F, tip.color=col, no.margin=T, cex=2)
 add.scale.bar()
 dev.off()
 
-##ladderized zoom in on same tree as tree with antibiotics
+####ladderized zoom in on same tree as tree with antibiotics
 rr.66 = root(kpneu, outgroup = "66")
 bootcut = 50
 bootstraps = as.numeric(rr.66$node.label)
 rem = bootstraps <= bootcut
 # rr.66$node.label[rem] = ""
-collapse = drop.tip(rr.66, tip=long)
-lad = ladderize(collapse)
-col = sapply(lad$tip.label, getHospCol)
-# jpeg("PhyloTree_kpneu_byHosp_ladRemoveLong.jpg", res=300, height=3000, width=2000)
-tiff("PhyloTree_kpneu_byHosp_ladRemoveLong.tiff", res=300, height=3000, width=2000)
+##ladderized full tree
+lad = ladderize(rr.66)
+jpeg("PhyloTree_kpneu_byHosp_lad.jpg", res=300, height=3000, width=2000)
 plot(lad, type="phylogram", show.node.label=F, no.margin=T, cex=1, edge.width = 2, show.tip.label = T, 
      tip.color=col)
 nodelabels(lad$node.label, adj=c(1, 0), frame="none", col="darkgray", cex=.8)
 # tiplabels(lad$tip.label)
 add.scale.bar(x=0.000067, y=-.1)
+dev.off()
+collapse = drop.tip(rr.66, tip=long)
+lad = ladderize(collapse)
+col = sapply(lad$tip.label, getHospCol)
+# jpeg("PhyloTree_kpneu_byHosp_ladRemoveLong.jpg", res=300, height=3000, width=2000)
+tiff("PhyloTree_kpneu_byHosp_ladRemoveLong.tiff", res=400, height=6500, width=4000)
+plot(lad, type="phylogram", show.node.label=F, no.margin=T, cex=1.8, edge.width = 2.5, show.tip.label = T, 
+     tip.color=col)
+nodelabels(lad$node.label, adj=c(1.2, 1.2), frame="none", col="darkgrey", cex=1)
+# tiplabels(lad$tip.label)
+add.scale.bar(x=0.000067, y=-.1, lwd=2.5)
 dev.off()
 
 ####ladderized zoom in on same tree as tree with antibiotics, with strain names aligned
@@ -101,5 +110,58 @@ for(i in 1:length(tip)) {
   lines(x=c(XX[i], (xlim[2]-1e-06)), y=c(YY[i], YY[i]), col=colors[i], lty=3, lwd=.5)
 }
 text(x=xlim[2], y=YY, labels=lad$tip.label, col=colors)
+
+dev.off()
+
+
+####ladderized zoom in on same tree as tree with antibiotics, with strain names aligned in boxes
+jpeg("PhyloTree_kpneu_byHosp_ladRemoveLong_boxes.jpg", res=300, height=3000, width=2000)
+# tiff("PhyloTree_kpneu_byHosp_ladRemoveLong_boxes.tif", res=300, height=3000, width=2000)
+layout(matrix(1:2, 1, 2, byrow=F), widths=c(2, .2))
+
+plot(lad, type="phylogram", show.node.label=F, no.margin=T, cex=1, edge.width = 2, show.tip.label = F, 
+     tip.color=col)
+nodelabels(lad$node.label, adj=c(1, 0), frame="none", col="dodgerblue", cex=.8)
+add.scale.bar(x=0.000065, y=-.1)
+
+##get tips
+#http://stackoverflow.com/questions/34364660/how-to-get-correct-order-of-tip-labels-in-ape-after-calling-ladderize-function
+is_tip = lad$edge[,2] <= length(lad$tip.label)
+ordered_tips = lad$edge[is_tip, 2]
+treetips = rev(lad$tip.label[ordered_tips])
+
+##http://grokbase.com/t/r/r-sig-phylo/137syf0c3c/coordinates-for-phylo-tips
+lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+tip <- 1:lastPP$Ntip
+XX <- lastPP$xx[tip]
+YY <- lastPP$yy[tip]
+xlim = lastPP$x.lim
+
+colors = sapply(lad$tip.label, getHospCol, USE.NAMES = F)
+
+##draw lines connecting to the edge
+for(i in 1:length(tip)) {
+  lines(x=c(XX[i], (xlim[2]+1)), y=c(YY[i], YY[i]), col=colors[i], lty=3, lwd=.5)
+}
+
+##hospital plot
+colors = sapply(treetips, getHospCol, USE.NAMES = F) #ladderized tree is in a different order than the tip names
+par(mar=c(0,0,0,0))
+numTips = length(treetips)
+y = numTips:1
+off=0.5 #offset from middle
+plot(0, xaxt='n', yaxt='n', bty='n', ylab='', xlab='', ylim=c(1,numTips), xlim=c(-off,off))
+#rectangle for each sample
+for(i in 1:numTips) {
+  rect(-off, y[i]-off, off, y[i] + off, col = colors[i], border=NA)
+}
+
+##draw lines connecting to the edge
+for(i in 1:numTips) {
+  lines(x=c(-2, 0), y=c(y[i], y[i]), col=colors[i], lty=1, lwd=.5)
+}
+
+##sample name in rectangle
+text(x=rep(0, numTips), y=y, treetips)
 
 dev.off()
