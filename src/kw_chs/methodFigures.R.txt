@@ -61,19 +61,56 @@ phy = phy[phy$xID %in% strains & phy$yID %in% strains,]
 ##########histograms, log scale
 phy2 = phy[phy$xID!=phy$yID,] #cophylog analysis is the only one comparing to self; remove this from histogram
 
-##log
-lim = ceiling(max(log10(broad$distance + 1), log10(snpCP$distance + 1), log10(snpNC$distance + 1), log10(phy2$distance + 1)))
-jpeg(filename="DistanceFigHistogramsLog.jpg", width=2000, height=4400, res=300)
-par(mfrow=c(4,1), mar=c(6.2, 5, 2.5, 0.9))
-hist(x=log10(broad$distance + 1), main="", xlab="log10(Assembly Core Genome Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
+# ##log
+# lim = ceiling(max(log10(broad$distance + 1), log10(snpCP$distance + 1), log10(snpNC$distance + 1), log10(phy2$distance + 1)))
+# jpeg(filename="DistanceFigHistogramsLog.jpg", width=2000, height=4400, res=300)
+# par(mfrow=c(4,1), mar=c(6.2, 5, 2.5, 0.9))
+# hist(x=log10(broad$distance + 1), main="", xlab="log10(Assembly Core Genome Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
+# mtext(" A", side=3, line=0.3, adj=0, cex=2)
+# hist(x=log10(snpCP$distance + 1), main="", xlab="log10(Aligned to CP006923 Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+# mtext(" B", side=3, line=0.3, adj=0, cex=2)
+# hist(x=log10(snpNC$distance + 1), main="", xlab="log10(Aligned to NC009648 Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+# mtext(" C", side=3, line=0.3, adj=0, cex=2)
+# hist(x=log10(phy2$distance + 1), main="", xlab="log10(Co-phylog + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+# mtext(" D", side=3, line=0.3, adj=0, cex=2)
+# dev.off()
+# 
+# ##unlog
+# lim = max(broad$distance, snpCP$distance, snpNC$distance, phy2$distance)
+# breaks=5000
+# lim = lim + (breaks-lim %% breaks)
+# jpeg(filename="DistanceFigHistogramsUnlog.jpg", width=2000, height=4400, res=300)
+# par(mfrow=c(4,1), mar=c(6.2, 5, 2.5, 0.9))
+# hist(x=broad$distance, main="", xlab="Assembly Core Genome Distance", cex.lab=2, xlim=c(0, lim), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim, by=breaks)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
+# mtext(" A", side=3, line=0.3, adj=0, cex=2)
+# hist(x=snpCP$distance, main="", xlab="Aligned to CP006923 Distance", cex.lab=2, xlim=c(0, lim), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim, by=breaks))
+# mtext(" B", side=3, line=0.3, adj=0, cex=2)
+# hist(x=snpNC$distance, main="", xlab="Aligned to NC009648 Distance", cex.lab=2, xlim=c(0, lim), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim, by=breaks))
+# mtext(" C", side=3, line=0.3, adj=0, cex=2)
+# hist(x=phy2$distance, main="", xlab="Co-phylog", cex.lab=2, xlim=c(0, lim), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim, by=breaks))
+# mtext(" D", side=3, line=0.3, adj=0, cex=2)
+# dev.off()
+
+##Both
+lim1 = ceiling(max(log10(broad$distance + 1), log10(snpCP$distance + 1), log10(snpNC$distance + 1), log10(phy2$distance + 1)))
+lim = max(broad$distance, snpCP$distance, snpNC$distance, phy2$distance)
+breaks=5000
+lim2 = lim + (breaks-lim %% breaks)
+jpeg(filename="DistanceFigHistograms.jpg", width=6000, height=2000, res=300)
+par(mfrow=c(2,4), mar=c(6.2, 5, 2.5, 2))
+hist(x=broad$distance, main="", xlab="Assembly Core Genome Distance", cex.lab=2, xlim=c(0, lim2), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim2, by=breaks)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
 mtext(" A", side=3, line=0.3, adj=0, cex=2)
-hist(x=log10(phy2$distance + 1), main="", xlab="log10(Co-phylog + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
+hist(x=snpCP$distance, main="", xlab="Aligned to CP006923 Distance", cex.lab=2, xlim=c(0, lim2), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim2, by=breaks))
+hist(x=snpNC$distance, main="", xlab="Aligned to NC009648 Distance", cex.lab=2, xlim=c(0, lim2), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim2, by=breaks))
+hist(x=phy2$distance, main="", xlab="Co-phylog", cex.lab=2, xlim=c(0, lim2), ylim=c(0,2500), cex.axis=2, breaks=seq(0, lim2, by=breaks))
+
+hist(x=log10(broad$distance + 1), main="", xlab="log10(Assembly Core Genome Distance + 1)", cex.lab=2, xlim=c(0, lim1), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim1, by=.25)) #ylim determined by plotting without maximizing it and looking at graph with highest peak (CP)
 mtext(" B", side=3, line=0.3, adj=0, cex=2)
-hist(x=log10(snpCP$distance + 1), main="", xlab="log10(Aligned to CP006923 Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
-mtext(" C", side=3, line=0.3, adj=0, cex=2)
-hist(x=log10(snpNC$distance + 1), main="", xlab="log10(Aligned to NC009648 Distance + 1)", cex.lab=2, xlim=c(0, lim), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim, by=.25))
-mtext(" D", side=3, line=0.3, adj=0, cex=2)
+hist(x=log10(snpCP$distance + 1), main="", xlab="log10(Aligned to CP006923 Distance + 1)", cex.lab=2, xlim=c(0, lim1), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim1, by=.25))
+hist(x=log10(snpNC$distance + 1), main="", xlab="log10(Aligned to NC009648 Distance + 1)", cex.lab=2, xlim=c(0, lim1), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim1, by=.25))
+hist(x=log10(phy2$distance + 1), main="", xlab="log10(Co-phylog + 1)", cex.lab=2, xlim=c(0, lim1), ylim=c(0,1200), cex.axis=2, breaks=seq(0, lim1, by=.25))
 dev.off()
+
 
 ##########method comparisons
 ##set up data set
@@ -112,20 +149,20 @@ graph<-function(x, y, xlab, ylab, leg, loc="bottomright") {
 sub = dist[dist$broadCoreGenomeDistance<20,]
 jpeg(filename="DistanceFigMethodComparisons.jpg", width=12000, height=4000, res=300)
 par(mfrow=c(2,6), mar=c(9.1, 9, .7, .7), mgp=c(5.5, 1, 0), oma=c(5,0,0,0)) 
-graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$cophylogDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Co-phylog Distance + 1)", F)
-mtext("A", side=2, line=5.5, cex=4, las=1, at=max(log10(dist$cophylogDistance + 1)))
 graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$cpSNPDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Aligned to CP006923\n Distance + 1)", F)
+mtext("A", side=2, line=5.5, cex=4, las=1, at=max(log10(dist$cpSNPDistance + 1)))
 graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$ncSNPDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Aligned to NC009648\n Distance + 1)", F)
-graph(log10(dist$cophylogDistance + 1), log10(dist$cpSNPDistance + 1), "log10(Co-Phylog Distance + 1)", "log10(Aligned to CP006923\n Distance + 1)", F)
-graph(log10(dist$cophylogDistance + 1), log10(dist$ncSNPDistance + 1), "log10(Co-Phylog Distance + 1)", "log10(Aligned to NC009648\n Distance + 1)", F)
+graph(log10(dist$broadCoreGenomeDistance + 1), log10(dist$cophylogDistance + 1), "log10(Assembly Core Genome\n Distance + 1)", "log10(Co-phylog Distance + 1)", F)
 graph(log10(dist$cpSNPDistance + 1), log10(dist$ncSNPDistance + 1), "log10(Aligned to CP006923\n Distance + 1)", "log10(Aligned to NC009648\n Distance + 1)", F)
-graph(sub$broadCoreGenomeDistance, sub$cophylogDistance, "Assembly Core Genome Distance", "Co-phylog Distance", F, "topleft")
-mtext("B", side=2, line=5.5, cex=4, las=1, at=max(sub$cophylogDistance))
+graph(log10(dist$cpSNPDistance + 1), log10(dist$cophylogDistance + 1), "log10(Aligned to CP006923\n Distance + 1)", "log10(Co-Phylog Distance + 1)", F)
+graph(log10(dist$ncSNPDistance + 1), log10(dist$cophylogDistance + 1), "log10(Aligned to NC009648\n Distance + 1)", "log10(Co-Phylog Distance + 1)", F)
 graph(sub$broadCoreGenomeDistance, sub$cpSNPDistance, "Assembly Core Genome Distance", "Aligned to CP006923 Distance", F, "topleft")
+mtext("B", side=2, line=5.5, cex=4, las=1, at=max(sub$cpSNPDistance))
 graph(sub$broadCoreGenomeDistance, sub$ncSNPDistance, "Assembly Core Genome Distance", "Aligned to NC009648 Distance", F, "topleft")
-graph(sub$cophylogDistance, sub$cpSNPDistance, "Co-Phylog Distance", "Aligned to CP006923 Distance", F, "topleft")
-graph(sub$cophylogDistance, sub$ncSNPDistance, "Co-Phylog Distance", "Aligned to NC009648 Distance", F, "topleft")
+graph(sub$broadCoreGenomeDistance, sub$cophylogDistance, "Assembly Core Genome Distance", "Co-phylog Distance", F, "topleft")
 graph(sub$cpSNPDistance, sub$ncSNPDistance, "Aligned to CP006923 Distance", "Aligned to NC009648 Distance", F, "topleft")
+graph(sub$cpSNPDistance, sub$cophylogDistance, "Aligned to CP006923 Distance", "Co-Phylog Distance", F, "topleft")
+graph(sub$ncSNPDistance, sub$cophylogDistance, "Aligned to NC009648 Distance", "Co-Phylog Distance", F, "topleft")
 ##add legend (as bottom of larger graph overlapping everything)
 par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
 plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
