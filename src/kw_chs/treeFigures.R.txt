@@ -359,6 +359,15 @@ getEdgeLabels <- function(graph) {
   return(edge.lab)
 }
 
+###returns the color of the labels to be used on the edges of a plot;
+###red if the edge weight is greater than the cutoff and blue otherwise
+###graph is class igraph
+getEdgeLabelColor <- function(graph, cutoff) {
+  weights = E(graph)$weight
+  edge.label.color = ifelse(weights > cutoff, "red", "dodgerblue3")
+  return(edge.label.color)
+}
+
 #####
 ##seqtrack
 a=1 #analysis number
@@ -476,7 +485,7 @@ for(d in distmats) {
   xy = getCoord(all.graph)
   mat = cbind(xy$x, xy$y)
   edge.col = getEdgeCol(graph)
-  edge.label.color = ifelse(rem, "red", "dodgerblue3")#red if above cutoff
+  edge.label.color = getEdgeLabelColor(graph, max.dist[a])
   tiff(paste("TxTreeAllEdges_SeqTrack_", fnames[a], ".tiff", sep=""), height=8000, width=8000, res=300)
   # jpeg(paste("TxTreeAllEdges_SeqTrack_", fnames[a], ".jpg", sep=""), height=8000, width=8000, res=300)
   par(mar=c(.001, .1, 2.75, .1), cex.main=4.5)

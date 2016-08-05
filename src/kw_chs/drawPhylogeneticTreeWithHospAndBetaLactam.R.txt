@@ -50,6 +50,7 @@ plot(lad, type="phylogram", show.node.label=T, no.margin=T, cex=.7, edge.width =
 is_tip = lad$edge[,2] <= length(lad$tip.label)
 ordered_tips = lad$edge[is_tip, 2]
 treetips = rev(lad$tip.label[ordered_tips])
+write.table(treetips, "phylogeneticTreeTipOrder.txt", quote=F, row.names = F, col.names = F, sep="\t")
 
 ##http://grokbase.com/t/r/r-sig-phylo/137syf0c3c/coordinates-for-phylo-tips
 lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)

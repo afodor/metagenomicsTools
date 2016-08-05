@@ -1,0 +1,190 @@
+##make figure showing alignment
+##8/4/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\betaLactamases")
+
+tips = read.table("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\Phylogenetic Trees\\phylogeneticTreeTipOrder.txt",
+                  colClasses = "character", header=F)
+
+##for the given table, check that all the sequences are the same length and a multiple of 3
+checkSequences <- function(table) {
+  len = nchar(table$sequence[1])
+#   if(len %% 3 != 0) { ##not true with the dashes in OXA
+#     stop(paste("length not multiple of 3", len))
+#   }
+  for(r in 1:nrow(table)) {
+    if(len != nchar(table$sequence[r])) {
+      stop(paste("different length in row", r, ":", len, nchar(table$sequence[r])))
+    }
+  }
+}
+
+##takes the given beta lactamase and gets the fasta file of the alignment of that gene
+##and returns a table/data frame in the format [isolate:gene, sequence]
+fastaToTable <- function(bl) {
+  fasta = read.table(paste(bl, ".mafftAlign.fasta", sep=""), colClasses="character")
+  ##convert to table
+  table = data.frame(gene=character(), sequence=character(), stringsAsFactors = F)
+  gene = ""
+  sequence = ""
+  for(r in 1:nrow(fasta)) {
+    row = fasta[r,]
+    if(grepl(">", row)) {
+      if(nchar(gene) > 1) {
+        table = rbind(table, data.frame(gene, sequence, stringsAsFactors = F))
+      }
+      sp = strsplit(row, ".0_", fixed=T)[[1]]
+      gene = paste(sub(">carolina_klebsiella_pneumoniae_chs_", "", sp[1], fixed=T),
+                   sp[2], sep=":")
+      sequence = ""
+    } else {
+      sequence = paste(sequence, toupper(row), sep="")
+    }
+  }
+  table = rbind(table, data.frame(gene, sequence, stringsAsFactors = F))
+  checkSequences(table)
+  ##get in same order as tips; add NAs if an isolate is missing
+  reorder = data.frame(gene=character(), sequence=character(), stringsAsFactors = F)
+  for(t in tips$V1) {
+    sub = grepl(paste(t, ":", sep=""), table$gene)
+    if(sum(sub) == 0) {
+      reorder = rbind(reorder, data.frame(gene=paste(t, ":none", sep=""), sequence=NA, stringsAsFactors = F))
+    } else {
+      reorder = rbind(reorder, table[sub,])
+    }
+  }
+  return(reorder)
+}
+
+##for the given base, return the color of the box to be used
+getBaseColor <- function(base) {
+  if(base=="A") {
+    return("hotpink")
+  } else if(base == "T") {
+    return("gold")
+  } else if(base == "G") {
+    return("mediumpurple1")
+  } else if(base == "C") {
+    return("turquoise")
+  } else if(base == "-") {
+    return("gray")
+  } else {
+    stop(paste("bad base:", base))
+  }
+}
+
+##for the given table, plots each base with its corresponding colored box
+##returns the list of positions with SNPs
+half = .5 #half the size of the rectangle
+plotAlignment <- function(table) {
+  len = max(nchar(table$sequence), na.rm=T) #max because some rows are NA
+  snp = NA
+  prev = NA
+  par(xpd=T)
+  plot(-1, type="n", ylim = c(0, nrow(table) + 1), xlim = c(0, len+1), bty="n",
+       yaxt="n", xaxt="n", ylab="", xlab = "position")
+  # axis(2, at=nrow(table):1, labels=table$gene, las=2, pos=-4, tck=0, col="white")
+  # axis(2, at=nrow(table):1, labels=table$gene, las=2, pos=0)
+  axis(2, at=nrow(table):1, labels=NA, las=2, pos=0)
+  text(x=rep(-8, nrow(table)), y=nrow(table):1, table$gene, adj=0, offset=0)
+  xlab = seq(0, len, by=50)
+  xlab[1] = 1
+  if(len%%50 != 0) {
+    xlab = c(xlab, len)
+  }
+  axis(1, at=xlab, las=1, pos=0)
+  for(r in 1:nrow(table)) {
+    if(!is.na(table$sequence[r])) {
+      y = nrow(table) - r + 1
+      seq = strsplit(table$sequence[r], "")[[1]]
+      for(x in 1:length(seq)) {
+        rect(x-half, y-half, x+half, y+half, border=NA, col=getBaseColor(seq[x]))
+        text(x,y,seq[x],offset=0,cex=1)
+        if(!any(is.na(prev))) {
+          if(seq[x] != prev[x] && seq[x] != "-" && prev[x] != "-") { #snp
+            if(is.na(snp[1])) {
+              snp = x
+            } else {
+              snp = c(snp, x)
+            }
+          }
+        }
+      }
+      prev = seq
+    }
+  }
+  snp = sort(unique(snp))
+  return(snp)
+}
+
+##draw a box around the given x position (ymax = top of the plot)
+drawBox <- function(xpos, ymax) {
+  rect(xpos-half, 0, xpos+half, ymax+2*half, col=NA, border="black", lwd=3)
+}
+
+##OXA has two genes that are clearly different (66:AF22_05100 and 24:AE80_05041)
+##these are already next to each other
+##so detect SNPs between these two and between the other genomes and draw boxes accordingly
+oxaSnps <- function(table) {
+  ##the two different genomes
+  seq66 = strsplit(table$sequence[table$gene=="66:AF22_05100"], "")[[1]]
+  seq24 = strsplit(table$sequence[table$gene=="24:AE80_05041"], "")[[1]]
+  snp = NA
+  for(i in 1:length(seq66)) {
+    if(seq66[i] != seq24[i]) {
+      if(is.na(snp)) {
+        snp = x
+      } else {
+        snp = c(snp, x)
+      }
+    }
+  }
+  print("OXA 66 and 24 SNPs")
+  print(snp) #empty so no need for boxes
+  
+  ##other genomes
+  rem = table$gene == "66:AF22_05100" | table$gene == "24:AE80_05041" | is.na(table$sequence)  | table$gene == "24:AE80_05248"
+  prev = strsplit(table$sequence[table$gene=="24:AE80_05248"], "")[[1]]
+  for(r in 1:nrow(table)) {
+    if(!rem[r]) {
+      seq = strsplit(table$sequence[r], "")[[1]]
+      for(i in 1:length(seq)) {
+        if(seq[i] != prev[i] && seq[i] != "-" && prev[i] != "-") {#snp
+          if(is.na(snp)) {
+            snp = x
+          } else {
+            snp = c(snp, x)
+          }
+        }
+        prev = seq
+      }
+    }
+  }
+  print("OXA other")
+  print(snp) #empty so no need for boxes
+}
+
+betalactamases = c("KPC", "LEN", "OKP", "OXA", "SHV", "TEM")
+labels = c("A", "B", "C", "D", "E", "F")
+for(i in 1:length(betalactamases)) {
+  bl = betalactamases[i]
+  print(bl)
+  table = fastaToTable(bl)
+  len = max(nchar(table$sequence))
+  pdf(paste("AlignmentFigure_", bl, ".pdf", sep=""), width=(len*.2+.1), height = (nrow(table)*.2+.1))
+  par(mar=c(2.5, 1.5, 4, .1))
+  snp = plotAlignment(table)
+  title(bl, cex.main=7, line=-1)
+  mtext(labels[i], cex=8, side=3, adj=0, line=-1.2)
+  if(!any(is.na(snp)) && bl != "OXA") {
+    print(snp)
+    for(x in snp) {
+      drawBox(x, nrow(table))
+    }
+  }
+#   if(bl=="KPC") { #draw box at position 814 to indicate SNP
+#     drawBox(814, nrow(table))
+#   }
+  dev.off()
+}

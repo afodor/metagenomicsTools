@@ -157,9 +157,10 @@ getCoord<-function(graph) {
 
 
 ###color edge labels by bootstrap
+bootcut = 90
 edge.lab.col = rep("gray", length(E(ig)$weight))
-edge.lab.col[E(ig)$weight > 90] = "black"
-edge.lab.col[E(ig)$weight < 90 & E(ig)$weight > 80] = "dimgray"
+edge.lab.col[E(ig)$weight > bootcut] = "black"
+# edge.lab.col[E(ig)$weight < 90 & E(ig)$weight > 80] = "dimgray"
 
 #####all edges
 xy = getCoord(g)
@@ -285,6 +286,10 @@ mat = cbind(xysort$x, xysort$y)
 node.font.col = "black"
 edge.col = getEdgeCol(ig)
 edge.lab = getEdgeLabel(ig)
+
+###color edge labels by bootstrap
+edge.lab.col = rep("gray", length(E(ig)$weight))
+edge.lab.col[E(ig)$weight > bootcut] = "black"
 
 # jpeg("TxTree_broadOutbreakerWithBootstraps.jpg", height=8000, width=8000, res=300)
 tiff("TxTree_broadOutbreakerWithBootstraps.tiff", height=8000, width=8000, res=300)
