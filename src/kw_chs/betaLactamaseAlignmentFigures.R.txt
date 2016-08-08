@@ -44,6 +44,14 @@ fastaToTable <- function(bl) {
   }
   table = rbind(table, data.frame(gene, sequence, stringsAsFactors = F))
   checkSequences(table)
+  ##if KPC, add asterisks to the different KPC; for OXA add pluses
+  if(bl=="KPC") {
+    table$gene[grepl("AE87_05528", table$gene)] = paste(table$gene[grepl("AE87_05528", table$gene)], "*", sep="")
+    table$gene[grepl("AE80_05146", table$gene)] = paste(table$gene[grepl("AE80_05146", table$gene)], "*", sep="")
+  } else if(bl=="OXA") {
+    table$gene[grepl("AE80_05041", table$gene)] = paste(table$gene[grepl("AE80_05041", table$gene)], "+", sep="")
+    table$gene[grepl("AF22_05100", table$gene)] = paste(table$gene[grepl("AF22_05100", table$gene)], "+", sep="")
+  }
   ##get in same order as tips; add NAs if an isolate is missing
   reorder = data.frame(gene=character(), sequence=character(), stringsAsFactors = F)
   for(t in tips$V1) {
@@ -86,6 +94,7 @@ plotAlignment <- function(table) {
        yaxt="n", xaxt="n", ylab="", xlab = "position")
   # axis(2, at=nrow(table):1, labels=table$gene, las=2, pos=-4, tck=0, col="white")
   # axis(2, at=nrow(table):1, labels=table$gene, las=2, pos=0)
+  ##add gene names
   axis(2, at=nrow(table):1, labels=NA, las=2, pos=0)
   text(x=rep(-8, nrow(table)), y=nrow(table):1, table$gene, adj=0, offset=0)
   xlab = seq(0, len, by=50)
@@ -128,8 +137,8 @@ drawBox <- function(xpos, ymax) {
 ##so detect SNPs between these two and between the other genomes and draw boxes accordingly
 oxaSnps <- function(table) {
   ##the two different genomes
-  seq66 = strsplit(table$sequence[table$gene=="66:AF22_05100"], "")[[1]]
-  seq24 = strsplit(table$sequence[table$gene=="24:AE80_05041"], "")[[1]]
+  seq66 = strsplit(table$sequence[table$gene=="66:AF22_05100+"], "")[[1]]
+  seq24 = strsplit(table$sequence[table$gene=="24:AE80_05041+"], "")[[1]]
   snp = NA
   for(i in 1:length(seq66)) {
     if(seq66[i] != seq24[i]) {
@@ -144,7 +153,7 @@ oxaSnps <- function(table) {
   print(snp) #empty so no need for boxes
   
   ##other genomes
-  rem = table$gene == "66:AF22_05100" | table$gene == "24:AE80_05041" | is.na(table$sequence)  | table$gene == "24:AE80_05248"
+  rem = table$gene == "66:AF22_05100+" | table$gene == "24:AE80_05041+" | is.na(table$sequence)  | table$gene == "24:AE80_05248"
   prev = strsplit(table$sequence[table$gene=="24:AE80_05248"], "")[[1]]
   for(r in 1:nrow(table)) {
     if(!rem[r]) {
@@ -165,8 +174,13 @@ oxaSnps <- function(table) {
   print(snp) #empty so no need for boxes
 }
 
-betalactamases = c("KPC", "LEN", "OKP", "OXA", "SHV", "TEM")
-labels = c("A", "B", "C", "D", "E", "F")
+# betalactamases = c("KPC", "LEN", "OKP", "OXA", "SHV", "TEM")
+# labels = c("A", "B", "C", "D", "E", "F")
+# betalactamases = c("KPC", "OXA", "SHV_groupAllPlusLen", "SHV_groupPos4A", "SHV_groupPos4C", 
+#                    "SHV_groupPos4other", "SHV_groupPos4otherPlusLen")
+# labels = c("A", "B", "C", "D", "E", "F", "F")
+betalactamases = c("KPC", "OXA", "SHV_groupNoTem", "TEM")
+labels = c("A", "B", "C", "D")
 for(i in 1:length(betalactamases)) {
   bl = betalactamases[i]
   print(bl)
@@ -175,14 +189,30 @@ for(i in 1:length(betalactamases)) {
   pdf(paste("AlignmentFigure_", bl, ".pdf", sep=""), width=(len*.2+.1), height = (nrow(table)*.2+.1))
   par(mar=c(2.5, 1.5, 4, .1))
   snp = plotAlignment(table)
-  title(bl, cex.main=7, line=-1)
-  mtext(labels[i], cex=8, side=3, adj=0, line=-1.2)
+  main = bl
+#   if(main=="SHV_groupAllPlusLen") {
+#     main = "all SHV genes"
+#   } else if(main == "SHV_groupPos4A") {
+#     main = "SHV group 1"
+#   } else if(main == "SHV_groupPos4C") {
+#     main = "TEM"
+#   } else if(main == "SHV_groupPos4other" || main == "SHV_groupPos4otherPlusLen") {
+#     main = "SHV group 3"
+#   }
+  if(main=="SHV_groupNoTem") {
+    main = "SHV"
+  }
+  title(main, cex.main=7, line=-1)
+  mtext(labels[i], cex=8, side=3, adj=0, line=-1.2, font=4)
   if(!any(is.na(snp)) && bl != "OXA") {
     print(snp)
     for(x in snp) {
       drawBox(x, nrow(table))
     }
   }
+#   } else if(bl=="OXA") { ##empty so no need for boxes
+#     oxaSnps(table)
+#   }
 #   if(bl=="KPC") { #draw box at position 814 to indicate SNP
 #     drawBox(814, nrow(table))
 #   }

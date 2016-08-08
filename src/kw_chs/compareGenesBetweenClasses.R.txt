@@ -21,7 +21,7 @@ all(okp$gene %in% shv$gene) #true -> remove OKP
 all(len$gene %in% shv$gene) #false
 diffLen = !(len$gen %in% shv$gene)
 len$gene[diffLen] #"carolina_klebsiella_pneumoniae_chs_74.0_AF30_05581" "carolina_klebsiella_pneumoniae_chs_54.0_AF10_05605"
-len$bestCardsHit[diffLen]
+uniqlen = len[diffLen,]
 
 all(tem$gene %in% shv$gene) #true -> remove tem
 
@@ -111,9 +111,14 @@ any(duplicated(c(cardsc, cardsoth))) #false -> no overlap
 ##write files
 write.table(shva, "bestBlastHit_SHV_groupPos4A.txt", sep="\t", row.names=F, col.names=T, quote=F)
 write.table(shvc, "bestBlastHit_SHV_groupPos4C.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(rbind(shvoth, uniqlen), "bestBlastHit_SHV_groupPos4otherPlusLen.txt", sep="\t", row.names=F, col.names=T, quote=F)
 write.table(shvoth, "bestBlastHit_SHV_groupPos4other.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(rbind(shv, uniqlen), "bestBlastHit_SHV_groupAllPlusLen.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(rbind(shva, shvoth, uniqlen), "bestBlastHit_SHV_groupNoTemPlusLen.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(rbind(shva, shvoth), "bestBlastHit_SHV_groupNoTem.txt", sep="\t", row.names=F, col.names=T, quote=F)
 all(tem$gene %in% shvc$gene) #true -> this group is TEM
 all(okp$gene %in% shva$gene) #true -> this group is OKP
 sum(grepl("TEM", shvc$bestCardsHit)) #65 -> all rows have TEM
+sum(grepl("SHV", shvc$bestCardsHit))#0 -> call this TEM
 sum(grepl("OKP", shva$bestCardsHit)) #0
 sum(grepl("TEM", shva$bestCardsHit)) #0 -> shva has no okp but also no tem
