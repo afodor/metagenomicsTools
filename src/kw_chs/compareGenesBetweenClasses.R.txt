@@ -1,0 +1,119 @@
+##look at overlap in the beta lactamase groups (LEN, OKP, SHV, TEM)
+##8/5/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\betaLactamases")
+
+##returns the table for the given beta lactamase
+getTable <- function(bl) {
+  return(read.table(paste("bestBlastHit_", bl, ".txt", sep=""), header=T, sep="\t", 
+                    colClasses=c(rep("character", 2), rep("numeric", 3))))
+}
+
+shv = getTable("SHV")
+tem = getTable("TEM")
+okp = getTable("OKP")
+len = getTable("LEN")
+
+##look at overlaps with SHV
+all(okp$gene %in% shv$gene) #true -> remove OKP
+
+all(len$gene %in% shv$gene) #false
+diffLen = !(len$gen %in% shv$gene)
+len$gene[diffLen] #"carolina_klebsiella_pneumoniae_chs_74.0_AF30_05581" "carolina_klebsiella_pneumoniae_chs_54.0_AF10_05605"
+len$bestCardsHit[diffLen]
+
+all(tem$gene %in% shv$gene) #true -> remove tem
+
+##SHV appeared to have two groups in alignment -> see which those groups are
+class = unique(shv$bestCardsHit) #11 different groups
+lengths = unique(shv$length) #5 different
+shv[grepl("chs_66", shv$gene),]
+
+sp = strsplit(class, ",")
+for(i in 1:length(sp)) {
+  h1 = sp[[i]]
+  for(j in 1:length(sp)) {
+    h2 = sp[[j]]
+    if(any(h1 %in% h2) & i!=j) {
+      print(paste(i, j, any(h1 %in% h2)))
+    }
+  }
+} ##two overlapping groups are 2,7,9 and 8,10
+g1 = class[c(2,7,9)]
+g2 = class[c(8, 10)]
+other = c(1, 3:6, 11)
+length(shv$gene[shv$bestCardsHit %in% g1]) #75
+length(shv$gene[shv$bestCardsHit %in% g2]) #2
+for(i in other) {
+  print(paste(i,sum(shv$bestCardsHit == class[i])))
+}
+# [1] "1 60"
+# [1] "3 3"
+# [1] "4 5"
+# [1] "5 2"
+# [1] "6 14"
+# [1] "11 1"
+##the three big groupsings are g1, class[1], with a smaller group that is class[6]
+##check:
+group1 = shv[shv$bestCardsHit%in%g1,]
+group2 = shv[shv$bestCardsHit==class[1],]
+group3 = shv[shv$bestCardsHit==class[6],]
+##doesn't seem to be explaining the sequences so go to the sequences:
+fasta = read.table("SHV.mafftAlign.fasta", colClasses="character")
+##convert to table
+table = data.frame(gene=character(), sequence=character(), stringsAsFactors = F)
+gene = ""
+sequence = ""
+for(r in 1:nrow(fasta)) {
+  row = fasta[r,]
+  if(grepl(">", row)) {
+    if(nchar(gene) > 1) {
+      table = rbind(table, data.frame(gene, sequence, stringsAsFactors = F))
+    }
+    sp = strsplit(row, ".0_", fixed=T)[[1]]
+    gene = paste(sub(">carolina_klebsiella_pneumoniae_chs_", "", sp[1], fixed=T),
+                 sp[2], sep=":")
+    sequence = ""
+  } else {
+    sequence = paste(sequence, toupper(row), sep="")
+  }
+}
+table = rbind(table, data.frame(gene, sequence, stringsAsFactors = F))
+seq = strsplit(table$sequence, "")
+group1 = ""
+group2 = ""
+group3 = ""
+for(s in 1:length(seq)) {
+  sp = seq[[s]]
+  if(sp[4] == "C") {
+    group1 = c(group1, shv$gene[s])
+  } else if(sp[4]=="A") {
+    group2 = c(group2, shv$gene[s])
+  } else {
+    group3 = c(group3, shv$gene[s])
+  }
+}
+group1=group1[-1]
+group2=group2[-1]
+group3=group3[-1]
+##group1 has 94, group2 has 65, group3 has 3
+##compare cards hits
+shva = shv[shv$gene %in% group1,]
+shvc = shv[shv$gene %in% group2,]
+shvoth = shv[shv$gene %in% group3,]
+cardsa = unique(shva$bestCardsHit) #7
+cardsc = unique(shvc$bestCardsHit) #2
+cardsoth = unique(shvoth$bestCardsHit) #2
+any(duplicated(c(cardsa, cardsc))) #false
+any(duplicated(c(cardsa, cardsoth))) #false
+any(duplicated(c(cardsc, cardsoth))) #false -> no overlap
+##write files
+write.table(shva, "bestBlastHit_SHV_groupPos4A.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(shvc, "bestBlastHit_SHV_groupPos4C.txt", sep="\t", row.names=F, col.names=T, quote=F)
+write.table(shvoth, "bestBlastHit_SHV_groupPos4other.txt", sep="\t", row.names=F, col.names=T, quote=F)
+all(tem$gene %in% shvc$gene) #true -> this group is TEM
+all(okp$gene %in% shva$gene) #true -> this group is OKP
+sum(grepl("TEM", shvc$bestCardsHit)) #65 -> all rows have TEM
+sum(grepl("OKP", shva$bestCardsHit)) #0
+sum(grepl("TEM", shva$bestCardsHit)) #0 -> shva has no okp but also no tem
