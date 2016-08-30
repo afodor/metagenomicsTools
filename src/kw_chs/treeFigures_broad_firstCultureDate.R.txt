@@ -1,0 +1,256 @@
+##draw transmission and epidemiology trees, patient figure, make table of subtree membership
+##use date of earliest culture rather than sequencing date
+##8/30/16
+
+rm(list=ls())
+setwd("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\CHS paper\\CHS figures")
+datadir = "C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\paper1_analysisMethods\\figures\\"
+
+library(ape)
+library(adegenet)
+library(igraph)
+library(RBGL)
+library(Rgraphviz)
+
+MAXDIST=11 #maximum SNP distance to consider as possibly part of same outbreak in broad
+max.dist = MAXDIST
+
+##get data
+all.data = read.table("AllDistances.txt", 
+                      sep="\t", header=T, colClasses=c(rep("numeric", 4), "character", "character", rep("numeric", 8)))
+meta = read.table("Table_PatientChar_8-17-16_UNCC.txt", header=T, sep="\t", comment.char = "",
+                  colClasses = c("numeric", rep("character", 4), "numeric", "character", rep("numeric", 6)))
+meta = data.frame(SpecNumber = meta$Isolate.ID,
+                  Abstracted_StudyFacility = meta$Specimen.Collection.Location, 
+                  Earliest.CRE.Culture.Date=meta$Earliest.CRE.Culture.Date,
+                  stringsAsFactors = F)
+strains = unique(c(all.data$xID, all.data$yID))
+strains = strains[order(strains)] #here are only looking at those strains we have comparisons for all samples
+
+##convert to distance matrices, given the data column distance
+convertToDist <- function(file) {
+  table = read.table(file, header=T, sep="\t", colClasses="numeric")
+  colnames(table) = c("xGen", "yGen", "distance")
+  dist = matrix(nrow=length(strains), ncol=length(strains))
+  for(i in 1:length(strains)) {
+    for(j in 1:length(strains)) {
+      s1 = strains[i]
+      s2 = strains[j]
+      val = table$distance[(table$xGen==s1 & table$yGen==s2) | (table$yGen==s1 & table$xGen==s2)]
+      if(length(val) == 0 & s1==s2) {
+        val = 0
+      } else if(length(val) == 0) {
+        print(i)
+        print(j)
+        print("")
+        val = NA
+      }
+      dist[i,j] = val
+    }
+  }
+  return(dist)
+}
+
+##need to use original files because not all comparisons made it into AllDistances, but this weeds out missing strains
+broad = convertToDist("C:\\Users\\kwinglee.cb3614tscr32wlt\\Documents\\Fodor\\CRE\\BroadTrees\\distancesUpperTriangle.txt")
+
+##culture dates need to be rearranged to same order as strains (also removing strains not in analysis)
+##get first culture date
+cult = rep(NA, length(strains))
+for(i in 1:length(strains)) {
+  cult[i] = meta$Earliest.CRE.Culture.Date[meta$SpecNumber==strains[i]]
+}
+cultureDates = as.POSIXct("2008-01-01") + cult*24*60*60
+
+##get encounter overlap
+enc = read.table(paste(datadir, "encounterDaysOverlap.txt", sep=""), header=T, sep="\t", colClasses="numeric")
+
+##function that returns the edge colors for the given epidemiology tree (tree)
+##edges are blue if the genetic dist (from dist) is less than the max distance for that group (a) and gray otherwise
+getEpiEdgeCol <- function(tree, dist, a) {
+  idx = 1:length(strains) #epi tree already has correct names, need to convert to index
+  edges = as_ids(E(tree))
+  ecol = rep("gray", length(edges))
+  for(i in 1:length(edges)) {
+    sp = strsplit(edges[i], "|", fixed=T)[[1]]
+    x = idx[strains==as.numeric(sp[1])]
+    y = idx[strains==as.numeric(sp[2])]
+    if(dist[x,y] < max.dist[a]) {
+      ecol[i] = "dodgerblue3"
+    }
+  }
+  return(ecol)
+}
+
+##color by hospital
+hospCol = read.table("HospitalColors.txt",
+                     sep="\t", header=T, colClasses="character", comment.char = "")
+all.fac = hospCol$facility
+colors = hospCol$color
+facilityColor <- function(fac) {
+  return(hospCol$color[hospCol$facility==fac])
+}
+
+####needed functions for drawing seqtrack graphs
+##function that given graphNEL returns the xy coordinates
+getCoord<-function(graph) {
+  ag = agopen(graph, name=names[a])
+  nod = AgNode(ag) #most likely equivalent to attributes(plot)$AgNode
+  n1 = nod[[1]]
+  cent = getNodeXY(n1) #xy coordinates of the center
+  xy = data.frame(x=cent$x, y=cent$y)
+  for(i in 2:length(nod)) {
+    cent = getNodeXY(nod[[i]])
+    xy = rbind(xy, c(cent$x, cent$y))
+  }
+  return(xy)
+}
+
+##returns edge colors  for the given graph
+##black if no evidence, orange if overlap between culture dates, pink if not between dates but before last culture date 
+##if fixName is true, then the edges are the position in the list of strains, otherwise the edges are the strain names
+getEdgeCol <- function(graph, fixName=T) {
+  edges = as_ids(E(graph))
+  edge.col = rep("black", length(edges))
+  for(i in 1:length(edges)) {
+    sp = strsplit(edges[i], "|", fixed=T)[[1]]
+    x = as.numeric(sp[1])
+    y = as.numeric(sp[2])
+    if(fixName) {
+      p = which((enc$xID==strains[x] & enc$yID==strains[y]) | 
+                  (enc$xID==strains[y] & enc$yID==strains[x])) ##position in encounter data
+    } else {
+      p = which((enc$xID==x & enc$yID==y) | 
+                  (enc$xID==y & enc$yID==x)) ##position in encounter data
+    }
+    if(enc$daysOverlapBetweenCultures[p] > 0) {
+      edge.col[i] = "orange"
+    } else if(enc$daysOverlapBeforeLastCulture[p] > 0) {
+      edge.col[i] = "pink"
+    }
+  }
+  return(edge.col)
+}
+
+##returns the node colors for the given list of groups, based on hospital
+col = rep(NA, length(strains))
+for(i in 1:length(strains)) {
+  col[i] = facilityColor(meta$Abstracted_StudyFacility[meta$SpecNumber==strains[i]])
+}
+getNodeCol <- function() {
+  return(col)
+}
+
+###returns labels to be used on the edges of a plot;
+###if the edge is present in the assembly tree, add a star
+###graph is class igraph
+getEdgeLabels <- function(graph) {
+  assembly.tree = read.table(paste("TxTree_SeqTrack_", fnames[1], ".txt", sep=""),
+                             header=T, sep="\t", colClasses = c(rep("numeric", 2), "logical", rep("numeric", 2)))
+  graph.edges = as_ids(E(graph))
+  edge.lab = E(graph)$weight
+  for(i in 1:length(graph.edges)) {
+    sp = strsplit(graph.edges[i], "|", fixed=T)[[1]]
+    x = strains[as.numeric(sp[1])]
+    y = strains[as.numeric(sp[2])]
+    if(assembly.tree$ances[assembly.tree$isolate==y]==x) {
+      edge.lab[i] = paste(edge.lab[i], "*", sep="\n")
+    }
+  }
+  return(edge.lab)
+}
+
+###returns the color of the labels to be used on the edges of a plot;
+###red if the edge weight is greater than the cutoff and blue otherwise
+###graph is class igraph
+getEdgeLabelColor <- function(graph, cutoff) {
+  weights = E(graph)$weight
+  edge.label.color = ifelse(weights > cutoff, "red", "dodgerblue3")
+  return(edge.label.color)
+}
+
+#####
+##seqtrack
+a=1
+d = broad
+names = "Assembly Core Genome"
+##get seqtrack figure
+st = seqTrack(d, x.names=strains, x.dates=cultureDates, best="min")
+graph = plot(st)
+all.graph = as_graphnel(graph)
+
+##remove the edges with distance over max.dist
+rem = st$weight > max.dist[a]
+rem[is.na(rem)] = TRUE
+sub.st = st
+sub.st$ances[rem] = NA
+sub.ig = plot(sub.st)
+sub.graph = as_graphnel(sub.ig)
+
+##print tree with parents and degrees
+deg=degree(sub.graph)
+df = data.frame(isolate = strains[st$id], ances=strains[st$ances], edgeAboveCutoff=rem,
+                removeEdgeInDegree = deg$inDegree, removeEdgeOutDegree = deg$outDegree)
+write.table(df, "TxTree_SeqTrack_Assembly_firstCREposCulture.txt", sep="\t", row.names = F,
+            col.names = T, quote=F)
+
+##get node colors
+col = getNodeCol()
+
+node.font.col="black"
+
+##get edge colors; black if no evidence, orange if overlap between culture dates, pink if not between dates but before last culture date 
+edge.col = getEdgeCol(sub.ig)
+
+##for non-assembly trees, add asterisk to indicate if edge present in assembly tree
+edge.lab = E(graph)$weight
+sub.edge.lab = E(sub.ig)$weight
+
+##get graphNEL coordinates
+xy = getCoord(sub.graph)
+mat = cbind(xy$x, xy$y)
+
+##draw seqtrack tree with edges removed
+tiff("TxTree_SeqTrack_paper1_Assembly_firstCREposCulture.tiff", height=8000, width=11000, res=300)
+layout(matrix(c(1,2), 1, 2), widths=c(8,3))
+par(mar=c(.1, .1, .1, .1), cex.main=4)
+plot(sub.ig, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=3.5, vertex.size=5.5, vertex.frame.color=node.font.col,
+     edge.label.cex=3, edge.color=edge.col, edge.width=4, edge.label.color="dodgerblue3", 
+     edge.arrow.size=1.5, edge.label = sub.edge.lab)
+
+par(mar=c(.1, .1, 5, .1))
+plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
+legend("topleft", 
+       title = expression(underline("Key")), title.adj=.05,
+       legend = c(all.fac,
+                  "encounter between culture dates", "encounter before later culture date", "no encounter"),
+       col = c(colors, "orange", "pink", "black"),
+       pch=c(rep(16, 13), rep(NA, 3)), 
+       lty = c(rep(0, 13), rep(1, 3)),
+       bty='n', cex=3, lwd=2)
+dev.off()
+
+##draw full tree
+xy = getCoord(all.graph)
+mat = cbind(xy$x, xy$y)
+edge.col = getEdgeCol(graph)
+edge.label.color = getEdgeLabelColor(graph, max.dist[a])
+
+tiff("TxTreeAllEdges_SeqTrack_paper1_Assembly_firstCREposCulture.tiff", height=8000, width=11000, res=300)
+layout(matrix(c(1,2), 1, 2), widths=c(8,3))
+par(mar=c(.1, .1, .1, .1), cex.main=4)
+plot(graph, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
+     edge.label.cex=2, edge.color=edge.col, edge.width=4, edge.label.color=edge.label.color,
+     edge.arrow.size=1.5, edge.label = edge.lab)
+
+par(mar=c(.1, .1, 5, .1))
+plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
+legend("topleft", 
+       title = expression(underline("Key")), title.adj=.05,
+       legend = c(all.fac,
+                  "encounter between culture dates", "encounter before later culture date", "no encounter"),
+       col = c(colors, "orange", "pink", "black"),
+       pch=c(rep(16, 13), rep(NA, 3)), 
+       lty = c(rep(0, 13), rep(1, 3)),
+       bty='n', cex=3, lwd=2)
+dev.off()
