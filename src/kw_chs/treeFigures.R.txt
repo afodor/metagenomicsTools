@@ -19,8 +19,12 @@ MAXDIST=11 #maximum SNP distance to consider as possibly part of same outbreak i
 ##get data
 all.data = read.table("AllDistances.txt", 
                       sep="\t", header=T, colClasses=c(rep("numeric", 4), "character", "character", rep("numeric", 8)))
-meta = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
-                  sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+# meta = read.table(paste(datadir, "UNCCMetaData_Final_8-5-15.txt", sep=""), 
+#                   sep="\t", header=T, colClasses = c("numeric", "numeric", rep("character", 7)))
+meta = read.table("Table_PatientChar_8-17-16_UNCC.txt", header=T, sep="\t", comment.char = "",
+                  colClasses = c("numeric", rep("character", 4), "numeric", "character", rep("numeric", 6)))
+meta = data.frame(SpecNumber = meta$Isolate.ID, DeID_StudyCultureDate = meta$Specimen.Collection.Day,
+                  Abstracted_StudyFacility = meta$Specimen.Collection.Location, stringsAsFactors = F)
 strains = unique(c(all.data$xID, all.data$yID))
 # unique(meta$Species[meta$SpecNumber %in% strains]) #only kleb pneu
 strains = strains[order(strains)] #here are only looking at those strains we have comparisons for all samples
@@ -211,7 +215,7 @@ drawBase<-function(name) {
       y = idx[bytime==id]
       # symb = facilitySymbol(mergeEnc$facility[r])
       col = facilityColor(mergeEnc$facility[r])
-      time = seq(from=mergeEnc$encounterDateStart[r], to=mergeEnc$encounterEndDate[r], by=20)
+      time = seq(from=mergeEnc$encounterDateStart[r], to=mergeEnc$encounterEndDate[r], by=1)
       # points(x=time, y=rep(y, length(time)), cex=1.5, type="p", pch=symb, col="gray")
       points(x=time, y=rep(y, length(time)), cex=2, type="p", pch="|", col=col)
     }
@@ -432,6 +436,27 @@ for(d in distmats) {
        main=paste(names[a], ", Removed edges greater than ", round(max.dist[a], digits=1), " mutations", sep=""))
   dev.off()
   
+  if(a==1) { #for first paper, no title and legend included
+    tiff(paste("TxTree_SeqTrack_paper1_", fnames[a], ".tiff", sep=""), height=8000, width=11000, res=300)
+    layout(matrix(c(1,2), 1, 2), widths=c(8,3))
+    par(mar=c(.1, .1, .1, .1), cex.main=4)
+    plot(sub.ig, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
+         edge.label.cex=3, edge.color=edge.col, edge.width=4, edge.label.color="dodgerblue3", 
+         edge.arrow.size=1.5, edge.label = sub.edge.lab)
+    
+    par(mar=c(.1, .1, 5, .1))
+    plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
+    legend("topleft", 
+           title = expression(underline("Key")), title.adj=.05,
+           legend = c(all.fac,
+                      "encounter between culture dates", "encounter before later culture date", "no encounter"),
+           col = c(colors, "orange", "pink", "black"),
+           pch=c(rep(16, 13), rep(NA, 3)), 
+           lty = c(rep(0, 13), rep(1, 3)),
+           bty='n', cex=3, lwd=2)
+    dev.off()
+  }
+  
   #   ##make figures for combining with patient data
   #   if(a == 1) { #just do broad
   #     ##rotate tree for patient figure
@@ -500,6 +525,27 @@ for(d in distmats) {
   plot(1, type="n", axes=0, xlab="", ylab="")
   legend("topleft", fig.labels[a], cex=8, bty="n", inset=c(-.08, -.035))
   dev.off()
+  
+  if(a==1) { #for first paper, no title and legend included
+    tiff(paste("TxTreeAllEdges_SeqTrack_paper1_", fnames[a], ".tiff", sep=""), height=8000, width=11000, res=300)
+    layout(matrix(c(1,2), 1, 2), widths=c(8,3))
+    par(mar=c(.1, .1, .1, .1), cex.main=4)
+    plot(graph, layout=mat, vertex.label=row.names(st), vertex.color=col, vertex.label.color=node.font.col, vertex.label.cex=4, vertex.size=6, vertex.frame.color=node.font.col,
+         edge.label.cex=2, edge.color=edge.col, edge.width=4, edge.label.color=edge.label.color,
+         edge.arrow.size=1.5, edge.label = edge.lab)
+    
+    par(mar=c(.1, .1, 5, .1))
+    plot(1, type="n", yaxt="n", xaxt="n", xlim=c(0,50), ylim=c(0,100), xlab="", ylab="", main="", bty="n")
+    legend("topleft", 
+           title = expression(underline("Key")), title.adj=.05,
+           legend = c(all.fac,
+                      "encounter between culture dates", "encounter before later culture date", "no encounter"),
+           col = c(colors, "orange", "pink", "black"),
+           pch=c(rep(16, 13), rep(NA, 3)), 
+           lty = c(rep(0, 13), rep(1, 3)),
+           bty='n', cex=3, lwd=2)
+    dev.off()
+  }
   
   a = a + 1
 }
