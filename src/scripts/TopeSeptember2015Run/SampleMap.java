@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import utils.ConfigReader;
 import utils.Translate;
@@ -33,11 +34,22 @@ public class SampleMap
 			if( map.containsKey(key))
 				throw new Exception("Duplicate key");
 			
-			map.put(key, new String( splits[0]));
+			map.put(key, new String( splits[0]) + "_" + key);
 			
 		}
 		
 		reader.close();
+		
+		HashSet<String> set = new HashSet<String>();
+		
+		for(String s : map.values())
+		{
+			if( set.contains(s))
+				throw new Exception("Duplicate value " + s);
+			
+			set.add(s);
+		}
+		
 		return map;
 	}
 	
