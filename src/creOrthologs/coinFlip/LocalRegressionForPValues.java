@@ -12,6 +12,8 @@ import utils.ConfigReader;
 
 public class LocalRegressionForPValues
 {
+	public static final int REGRESSION_WIDTH = 11;
+	
 	public static void main(String[] args) throws Exception
 	{
 		 HashMap<String, List<Holder>> map = getContigMap();
@@ -19,11 +21,6 @@ public class LocalRegressionForPValues
 		 for(String s : map.keySet())
 		 {
 			 System.out.println( s + " " + map.get(s).size());
-			 
-			 for(Holder h : map.get(s))
-			 {
-				 System.out.println("\t" + h.start + "\t" + h.averagePValue + "\t" + h.annotation );
-			 }
 		 }
 			 
 	}
@@ -37,10 +34,29 @@ public class LocalRegressionForPValues
 		double averagePValue;
 		private String annotation;
 		
+		Double regressionR;
+		Double regressionSlope;
+		
 		@Override
 		public int compareTo(Holder arg0)
 		{
 			return this.start -arg0.start;
+		}
+	}
+	
+	private static void addRegressions(HashMap<String, List<Holder>> map) throws Exception
+	{
+		for(String contig : map.keySet())
+		{
+			List<Holder> list = map.get(contig);
+			
+			if( list.size() > REGRESSION_WIDTH)
+			{
+				for( int x=0; x < list.size(); x++)
+				{
+					
+				}
+			}
 		}
 	}
 	
