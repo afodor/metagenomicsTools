@@ -17,7 +17,15 @@ public class LocalRegressionForPValues
 		 HashMap<String, List<Holder>> map = getContigMap();
 		 
 		 for(String s : map.keySet())
+		 {
 			 System.out.println( s + " " + map.get(s).size());
+			 
+			 for(Holder h : map.get(s))
+			 {
+				 System.out.println("\t" + h.start + "\t" + h.averagePValue + "\t" + h.annotation );
+			 }
+		 }
+			 
 	}
 	
 	private static class Holder implements Comparable<Holder>
