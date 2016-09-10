@@ -15,7 +15,10 @@ import utils.Regression;
 
 public class LocalRegressionForPValues
 {
+	public static enum Phase{ NON_PEAK, UP_PEAK, PEAK_TOP, DOWN_PEAK , NONE};
+	
 	public static final int REGRESSION_WIDTH = 11;
+	public static final double SLOPE_THRESHOLD = 0.0005;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -27,7 +30,44 @@ public class LocalRegressionForPValues
 		 }
 		 
 		 addRegressions(map);
+		 addPeakCalls(map);
 		 writeResults(map);
+	}
+	
+	private static void addPeakCalls(HashMap<String, List<Holder>> map ) throws Exception
+	{
+		for(String contig : map.keySet())
+		{
+			List<Holder> list = map.get(contig);
+			for(int x=0 ; x < list.size(); x++)
+			{
+				Holder h = list.get(x);
+				Holder lastH = x >0 ? list.get(x-1) : null;
+				if( h.regressionSlope == null )
+				{
+					h.phase = Phase.NONE;
+				}
+				else
+				{
+					if( Math.abs(h.regressionSlope) <= SLOPE_THRESHOLD)
+					{
+						if( lastH == null)
+							h.phase = Phase.NON_PEAK;
+						else if( lastH.phase == Phase.UP_PEAK)
+							h.phase = Phase.PEAK_TOP;
+						else
+							h.phase = Phase.NON_PEAK;
+					}
+					else
+					{
+						if( h.regressionSlope >0)
+							h.phase = Phase.UP_PEAK;
+						else 
+							h.phase = Phase.DOWN_PEAK;
+					}
+				}
+			}
+		}
 	}
 	
 	private static void writeResults( HashMap<String, List<Holder>> map  ) 
@@ -37,7 +77,7 @@ public class LocalRegressionForPValues
 				new File(ConfigReader.getBioLockJDir() + File.separator + 
 							"resistantAnnotation" + File.separator + 
 								"genesWithRanksPlusSlopes.txt")));
-		writer.write("geneName\tcontig\tstart\tstop\taveragePValue\tslope\tannotation\n");
+		writer.write("geneName\tcontig\tstart\tstop\taveragePValue\tslope\tpeakCall\tannotation\n");
 		for(String contig : map.keySet())
 			
 		{
@@ -52,6 +92,7 @@ public class LocalRegressionForPValues
 				writer.write(h.stop + "\t");
 				writer.write(h.averagePValue + "\t");
 				writer.write(h.regressionSlope + "\t");
+				writer.write(h.phase + "\t");
 				writer.write(h.annotation + "\n");
 			}
 		}
@@ -67,6 +108,7 @@ public class LocalRegressionForPValues
 		int stop;
 		double averagePValue;
 		private String annotation;
+		private Phase phase;
 		
 		Double regressionSlope;
 		
