@@ -1,14 +1,17 @@
 package creOrthologs.coinFlip;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import utils.ConfigReader;
+import utils.Regression;
 
 public class LocalRegressionForPValues
 {
@@ -22,7 +25,38 @@ public class LocalRegressionForPValues
 		 {
 			 System.out.println( s + " " + map.get(s).size());
 		 }
-			 
+		 
+		 addRegressions(map);
+		 writeResults(map);
+	}
+	
+	private static void writeResults( HashMap<String, List<Holder>> map  ) 
+		throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(
+				new File(ConfigReader.getBioLockJDir() + File.separator + 
+							"resistantAnnotation" + File.separator + 
+								"genesWithRanksPlusSlopes.txt")));
+		writer.write("geneName\tcontig\tstart\tstop\taveragePValue\tslope\tannotation\n");
+		for(String contig : map.keySet())
+			
+		{
+			for(Holder h : map.get(contig))
+			{
+				if( ! h.contig.equals(contig))
+					throw new Exception("No");
+				
+				writer.write(h.geneName  + "\t");
+				writer.write(h.contig + "\t");
+				writer.write(h.start+ "\t");
+				writer.write(h.stop + "\t");
+				writer.write(h.averagePValue + "\t");
+				writer.write(h.regressionSlope + "\t");
+				writer.write(h.annotation + "\n");
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static class Holder implements Comparable<Holder>
@@ -34,7 +68,6 @@ public class LocalRegressionForPValues
 		double averagePValue;
 		private String annotation;
 		
-		Double regressionR;
 		Double regressionSlope;
 		
 		@Override
@@ -42,6 +75,25 @@ public class LocalRegressionForPValues
 		{
 			return this.start -arg0.start;
 		}
+	}
+	
+	private static Regression getLocalRegression( List<Holder> list, int index )
+		throws Exception
+	{
+		Regression r = new Regression();
+		
+		List<Double> xList = new ArrayList<Double>();
+		List<Double> yList = new ArrayList<Double>();
+		
+		for( int x=index; x<=index + REGRESSION_WIDTH; x++)
+		{
+			Holder h = list.get(x);
+			xList.add( new Double( h.start));
+			yList.add(new Double(h.averagePValue));
+		}
+		
+		r.fitFromList(xList, yList);
+		return r;
 	}
 	
 	private static void addRegressions(HashMap<String, List<Holder>> map) throws Exception
@@ -52,9 +104,11 @@ public class LocalRegressionForPValues
 			
 			if( list.size() > REGRESSION_WIDTH)
 			{
-				for( int x=0; x < list.size(); x++)
+				for( int x=0; x < list.size() - REGRESSION_WIDTH - 1; x++)
 				{
-					
+					Regression r = getLocalRegression(list, x);
+					Holder h = list.get(x);
+					h.regressionSlope = r.getB();
 				}
 			}
 		}
