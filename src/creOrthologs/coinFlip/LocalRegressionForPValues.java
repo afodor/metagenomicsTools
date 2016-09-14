@@ -53,7 +53,7 @@ public class LocalRegressionForPValues
 					{
 						if( lastH == null)
 							h.phase = Phase.NON_PEAK;
-						else if( lastH.phase == Phase.UP_PEAK)
+						else if( lastH.phase == Phase.UP_PEAK || lastH.phase == Phase.PEAK_TOP)
 							h.phase = Phase.PEAK_TOP;
 						else
 							h.phase = Phase.NON_PEAK;
