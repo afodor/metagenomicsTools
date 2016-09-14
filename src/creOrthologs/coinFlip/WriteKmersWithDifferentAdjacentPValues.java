@@ -27,6 +27,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 		List<Long> includedKmers = new ArrayList<Long>();
 		List<Float> pValues = new ArrayList<Float>();
 		List<Float> ratioConserved = new ArrayList<Float>(); 
+		List<Integer> positions = new ArrayList<Integer>();
 		
 		int getIndex(long aLong) throws Exception
 		{
@@ -37,8 +38,6 @@ public class WriteKmersWithDifferentAdjacentPValues
 			throw new Exception("Could not find " + aLong);
 		}
 	}
-	
-	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -57,10 +56,10 @@ public class WriteKmersWithDifferentAdjacentPValues
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
 						File.separator + "pValsVsCons_ResVsSuc" 
-						+ (removeDupes ? "withDupes" : "noDupes") + 
+						+ (removeDupes ? "noDupes" : "withDupes") + 
 						".txt"	)));
 		
-		writer.write( "geneID\tchromosome\tnumberOfKmers\tencodedKmer\tpValue\tconservation\n" );
+		writer.write( "geneID\tchromosome\tposition\tnumberOfKmers\tencodedKmer\tpValue\tconservation\n" );
 		
 		for(String s : map.keySet())
 		{
@@ -75,14 +74,13 @@ public class WriteKmersWithDifferentAdjacentPValues
 				if( thisP != null)
 					if( ! removeDupes ||  last == null || ! thisP.equals(last))
 					{
-						writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
-										h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
+						writer.write( s + "\t" + h.chr + "\t" + h.positions.get(x) + "\t" + 
+										h.includedKmers.size() + "\t" + h.includedKmers.get(x) 
+										+ "\t" + h.pValues.get(x) + "\t" + 
 												h.ratioConserved.get(x) + "\n");
 						last = thisP;
 					}
 			}
-			
-			
 		}
 		
 		writer.flush();  writer.close();
@@ -113,8 +111,11 @@ public class WriteKmersWithDifferentAdjacentPValues
 					Long encode = Encode.makeLong(nucl);
 					
 					if( encode != null)
+					{
 						gh.includedKmers.add(encode);
-					
+						gh.positions.add(x);
+					}
+						
 					nucl = Translate.safeReverseTranscribe(nucl);
 					encode = Encode.makeLong(nucl);
 					
@@ -129,6 +130,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 			{
 				gh.pValues.add(null);
 				gh.ratioConserved.add(null);
+				gh.positions.add(null);
 			}
 		}
 	}
