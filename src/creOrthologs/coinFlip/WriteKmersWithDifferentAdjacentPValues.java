@@ -46,16 +46,19 @@ public class WriteKmersWithDifferentAdjacentPValues
 		addKmersToGenes( new ArrayList<GeneHolder>(map.values()));
 		
 		addPValues(map);
-		writeResults(map);
-			
+		writeResults(map, true);
+		writeResults(map, false);
 	}
 	
-	private static void writeResults(HashMap<String, GeneHolder> map) throws Exception
+	private static void writeResults(HashMap<String, GeneHolder> map, 
+			boolean removeDupes) throws Exception
 	{
 		System.out.println("Writing results");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getBioLockJDir() + File.separator + "resistantAnnotation" + 
-						File.separator + "nonRedundantPValsVsCons_ResVsSuc.txt"	)));
+						File.separator + "pValsVsCons_ResVsSuc" 
+						+ (removeDupes ? "withDupes" : "noDupes") + 
+						".txt"	)));
 		
 		writer.write( "geneID\tchromosome\tnumberOfKmers\tencodedKmer\tpValue\tconservation\n" );
 		
@@ -70,7 +73,7 @@ public class WriteKmersWithDifferentAdjacentPValues
 				Float thisP = h.pValues.get(x);
 				
 				if( thisP != null)
-					if( last == null || ! thisP.equals(last))
+					if( ! removeDupes ||  last == null || ! thisP.equals(last))
 					{
 						writer.write( s + "\t" + h.chr + "\t" + h.includedKmers.size() + "\t" + 
 										h.includedKmers.get(x) + "\t" + h.pValues.get(x) + "\t" + 
