@@ -20,7 +20,7 @@ public class ThreadExampleFactorizerWithSemaphore
 		for( int x=0; x < numIterations; x++)
 		{
 			s.acquire();
-			BigNumberFactorizerWorker bf =new BigNumberFactorizerWorker(
+			FactorizerWorker bf =new FactorizerWorker(
 					 Math.abs(r.nextInt()), s);
 			new Thread( bf).start();
 			System.out.println( "count: " + x + " " +
@@ -34,12 +34,12 @@ public class ThreadExampleFactorizerWithSemaphore
 					+ (System.currentTimeMillis() - startTime) / 1000f );
 	}
 	
-	private static class BigNumberFactorizerWorker implements Runnable
+	private static class FactorizerWorker implements Runnable
 	{
 		private final int someBigNum;
 		private final Semaphore semaphore;
 
-		public BigNumberFactorizerWorker(int someBigNum, Semaphore semaphore)
+		public FactorizerWorker(int someBigNum, Semaphore semaphore)
 		{
 			this.someBigNum = someBigNum;
 			this.semaphore = semaphore;

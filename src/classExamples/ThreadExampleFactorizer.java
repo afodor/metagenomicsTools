@@ -11,12 +11,14 @@ public class ThreadExampleFactorizer
 		Random r = new Random();
 		long startTime = System.currentTimeMillis();
 		
-		int numIterations = 10;
+		int numIterations = 25;
 		
 		for( int x=0; x < numIterations; x++)
 		{
-			BigNumberFactorizerWorker bf =new BigNumberFactorizerWorker(
+			FactorizerWorker bf =new FactorizerWorker(
 					 Math.abs(r.nextInt()));
+			
+			// how NOT to kick off a thread; this will not be multi-threaded
 			bf.run();
 			System.out.println( (System.currentTimeMillis() - startTime) / 1000f );
 		}
@@ -27,13 +29,13 @@ public class ThreadExampleFactorizer
 	
 	
 	
-	private static class BigNumberFactorizerWorker implements Runnable
+	private static class FactorizerWorker implements Runnable
 	{
-		private final int someBigNum;
+		private final int numberToFactor;
 
-		public BigNumberFactorizerWorker(int someBigNum)
+		public FactorizerWorker(int someBigNum)
 		{
-			this.someBigNum = someBigNum;
+			this.numberToFactor = someBigNum;
 		}
 		
 		@Override	
@@ -41,13 +43,13 @@ public class ThreadExampleFactorizer
 		{
 			List<Long> factors =new ArrayList<Long>();
 			
-			int half = someBigNum /2 + 1;
+			int half = numberToFactor /2 + 1;
 			
 			for( long x=2 ; x < half; x++)
-				if( someBigNum % x == 0 )
+				if( numberToFactor % x == 0 )
 					factors.add(x);
 			
-			System.out.print(someBigNum + " ");
+			System.out.print(numberToFactor + " ");
 			
 			if( factors.size() == 0 )
 				System.out.println(" prime ");
