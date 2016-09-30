@@ -64,17 +64,9 @@ for( i in 5:ncol(myT))
 			
 			plot( bug~ cage, ylab=names[index])	
 			
-			#stripchart(bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], 
-			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
+			stripchart(bug ~ cage, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
 			
-			#plot(bug ~ patientID , las=3 , ylab = names[index]) 		
-			
-			#stripchart(bug[myT$ruralUrban=="rural"] ~ patientID[myT$ruralUrban=="rural"], 
-			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "blue")
-			
-			#stripchart(bug[myT$ruralUrban=="urban"] ~ patientID[myT$ruralUrban=="urban"], 
-			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
-				
 			index=index+1
 		
 		}
