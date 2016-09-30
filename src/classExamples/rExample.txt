@@ -1,0 +1,82 @@
+
+rm(list=ls())
+
+setwd("c:\\blah")
+
+myT <- read.table("prePostPhylum.txt", sep="\t", header=TRUE)
+
+anova(lm( myT$Proteobacteria ~ myT$genotype )) 
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+names <- vector()
+pValuesGenotype <- vector()
+pValuesCage<- vector()
+meanIL10 <- vector()
+meanWT <- vector()
+meanBug <- vector()
+index <- 1
+pdf( paste("boxplots.pdf", sep=""))
+	
+for( i in 5:ncol(myT))
+		#if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+		{
+			bug <- myT[,i]
+			meanBug[index] <- mean(bug)
+			meanWT[index] <- mean(bug[myT$genotype=="WT"])
+			meanIL10[index] <- mean(bug[myT$genotype=="10-/-"])
+			genotype <- factor(myT$genotype)
+			cage <- factor(myT$cage )
+			
+			myFrame <- data.frame(bug, genotype, cage)
+	
+			fullModel <- gls( bug~  genotype, 
+				method="REML",correlation=corCompSymm(form=~1|factor(cage)),
+				data = myFrame )
+				
+			reducedModel <- gls( bug~  genotype, method="REML",	data = myFrame )
+				
+			fullModelLME <- lme(bug~  genotype, method="REML", random = ~1|factor(cage),
+				 data = myFrame)		
+	
+			pValuesGenotype[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesCage[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
+			intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
+			names[index] = names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pGenotype=", format(pValuesGenotype[index], digits=3), "\n",
+									" pCage= " , format(	pValuesCage[index], digits=3), "\n",
+										" icc= " , format( intraclassCoefficient, digits=3 ), sep="")
+			
+			par(mfrow=c(3,1))
+			
+			plot( bug~ genotype, ylab = names[index],
+					main = graphMain )	
+			
+			#stripchart(bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], 
+			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			#plot( bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], ylab=names[index])	
+			
+			#stripchart(bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], 
+			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
+			
+			#plot(bug ~ patientID , las=3 , ylab = names[index]) 		
+			
+			#stripchart(bug[myT$ruralUrban=="rural"] ~ patientID[myT$ruralUrban=="rural"], 
+			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "blue")
+			
+			#stripchart(bug[myT$ruralUrban=="urban"] ~ patientID[myT$ruralUrban=="urban"], 
+			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE,	col = "red")
+				
+			index=index+1
+		
+		}
+		
+	dFrame <- data.frame( names, pValuesGenotype,pValuesCage,meanBug,meanWT,meanIL10)
+	dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+	dFrame$adjustedPGenotype <- p.adjust( dFrame$pValuesGenotype, method = "BH" )	
+	write.table(dFrame, file=paste("pValuesPhyla.txt"), sep="\t",row.names=FALSE)
+	dev.off()
