@@ -50,13 +50,17 @@ for( i in 5:ncol(myT))
 									" pCage= " , format(	pValuesCage[index], digits=3), "\n",
 										" icc= " , format( intraclassCoefficient, digits=3 ), sep="")
 			
-			par(mfrow=c(3,1))
+			par(mfrow=c(2,1))
 			
 			plot( bug~ genotype, ylab = names[index],
 					main = graphMain )	
 			
-			#stripchart(bug[myT$timepoint=="first_A"] ~ urbanRural[myT$timepoint=="first_A"], 
-			#data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			stripchart(bug[myT$genotype=="WT"] ~ genotype[myT$genotype=="WT"], 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+			
+			stripchart(bug[myT$genotype=="10-/-"] ~ genotype[myT$genotype=="10-/-"], 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+				
 			
 			#plot( bug[myT$timepoint=="second_B"] ~ urbanRural[myT$timepoint=="second_B"], ylab=names[index])	
 			
