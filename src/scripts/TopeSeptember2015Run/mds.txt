@@ -2,13 +2,13 @@
 rm(list=ls())
 library("vegan")
 
-setwd("C:\\tope_diviticulosis_Sep_2015\\spreadsheets")
+setwd("C:\\tope_Sep_2015\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
-	inFileName <- paste( taxa,  "_AsColumnsLogNormal.txt", sep ="")
+	inFileName <- paste( "pivoted_", taxa,  "AsColumnsLogNormal.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c("character", rep("numeric", numCols-1))

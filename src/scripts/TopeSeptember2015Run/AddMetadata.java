@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
@@ -22,16 +23,16 @@ public class AddMetadata
 
 			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getTopeSep2015Dir() + File.separator +
 					"spreadsheets" + File.separator 
-					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumns.txt");
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_taxaasColumns.txt");
 			
 			File logNormal = new File(
 			ConfigReader.getTopeSep2015Dir() + File.separator +
-			"spreadsheets" + File.separator 
-			+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumnsLogNormal.txt");
+			"spreadsheets" + File.separator + "pivoted_"
+			+NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt");
 			
 			File logNormalMetadata = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
-					"spreadsheets" + File.separator 
-					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_asColumnsLogNormalPlusMetadata.txt");
+					"spreadsheets" + File.separator + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
 			addMetadata(wrapper, logNormal, logNormalMetadata, false);
 			
@@ -60,7 +61,7 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("key\tsample\treadNumber\tcaseControl\tnumSequences\tshannonDiversity");
+		writer.write("key\tprimers\tsample\treadNumber\tcaseControl\tnumSequences\tshannonDiversity");
 		
 		String[] splits = reader.readLine().split("\t");
 		
@@ -73,13 +74,19 @@ public class AddMetadata
 		{
 			splits = s.split("\t");
 			
+			StringTokenizer pToken = new StringTokenizer(splits[0].replaceAll("\"", ""),"_");
+			
 			String key = splits[0].replaceAll("\"", "");
-			String sample = key.substring(0, key.lastIndexOf("_"));
-		
-			writer.write(key + "\t" + sample + "\t" 
+			String sample = pToken.nextToken().replaceAll("\"", "");
+			
+			writer.write(key + "\t" + pToken.nextToken( ) + "\t" +  sample + "\t" 
 			+   key.substring(key.lastIndexOf("_")+1, key.lastIndexOf("_")+2) + "\t");
-			//System.out.println(key);
-			writer.write(metaMap.get(sample).getCaseControl() + "\t" + 
+			System.out.println( key + " " +  sample);
+			
+			MetadataParser mdp = metaMap.get(sample);
+			Integer val = mdp == null ? null : mdp.getCaseControl() ;
+			
+			writer.write( ( val == null ? "NA" : val ) + "\t" + 
 						originalWrapper.getNumberSequences(key) + "\t" + 
 							originalWrapper.getShannonEntropy(key));
 			
