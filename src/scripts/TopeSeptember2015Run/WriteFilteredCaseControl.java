@@ -1,11 +1,14 @@
 package scripts.TopeSeptember2015Run;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class WriteFilteredCaseControl
@@ -14,8 +17,34 @@ public class WriteFilteredCaseControl
 	{
 		HashSet<String> set = getIncludeSet();
 		
-		for(String s : set)
-			System.out.println(s);
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			File logNormalMetadata = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
+			
+			BufferedReader reader = new BufferedReader(new FileReader(logNormalMetadata));
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataFilteredCaseControl.txt")));
+			
+			writer.write(reader.readLine() + "\n");
+			
+			for(String s = reader.readLine(); s != null; s= reader.readLine())
+			{
+				s = s.replaceAll("\"", "");
+				if( set.contains(s.split("\t")[0]))
+					writer.write(s + "\n");
+			}
+			
+			
+			writer.flush(); writer.close();
+			reader.close();
+		}
+			
 	}
 	
 	private static HashSet<String> getIncludeSet() throws Exception
