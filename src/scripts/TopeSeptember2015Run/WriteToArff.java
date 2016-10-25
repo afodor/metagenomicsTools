@@ -73,8 +73,7 @@ public class WriteToArff
 				
 				for( int y=6; y < splits.length; y++)
 				{
-					boolean atEnd = y == splits.length - 1;
-					writer.write( splits[y] + (atEnd  ? "\n" : "" ));
+					writer.write( splits[y] + ",");
 				}
 				
 				int caseInt = Integer.parseInt(splits[4]);
