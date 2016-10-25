@@ -1,19 +1,21 @@
 
 rm(list=ls())
 
-setwd("C:\\tope_diviticulosis_Sep_2015\\spreadsheets")
+setwd("C:\\tope_Sep_2015\\spreadsheets")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
 for( taxa in taxaLevels)
 {
-	pdf( paste(taxa,"boxplotsRead4.pdf", sep=""))
-	inFileName= paste(taxa, "_asColumnsLogNormalPlusMetadata.txt", sep="");
+	pdf( paste(taxa,"boxplots.pdf", sep=""))
+	inFileName= paste(taxa, "asColumnsLogNormalPlusMetadataFilteredCaseControl.txt", sep="");
 	myT <- read.table(inFileName, header=TRUE, sep="\t")
 	numCols <- ncol(myT)
-	myColClasses <- c(c("character","character"), rep("numeric", numCols-2))
+	myColClasses <- c(c("character","character","character"), rep("numeric", numCols-3))
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-	myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000 & (myT$caseControl==0 | myT$caseControl==1 ),]
+	
+	# already filtered
+	#myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000 & (myT$caseControl==0 | myT$caseControl==1 ),]
 		
 	pValuesCaseControl<- vector()
 	mean1<- vector()
@@ -23,7 +25,7 @@ for( taxa in taxaLevels)
 	names <- vector()
 	index <- 1
 	
-	for( i in 5:ncol(myT))
+	for( i in 6:ncol(myT))
 	{
 		bug <- myT[,i] 
 		
