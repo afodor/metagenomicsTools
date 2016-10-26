@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
@@ -60,7 +61,7 @@ public class AddMetadata
 			splits = s.split("\t");
 			String key = splits[0].replaceAll("\"", "");
 			System.out.println(key);
-			writer.write(key + "\t" + metaMap.get(key) + "\t" + 
+			writer.write(key+ "\t" + metaMap.get(key.replace("toRDP.txt", "")) + "\t" + 
 						originalWrapper.getNumberSequences(key) + "\t" + 
 							originalWrapper.getShannonEntropy(key));
 			
