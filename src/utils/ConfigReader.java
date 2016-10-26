@@ -145,6 +145,7 @@ public class ConfigReader
 		return getConfigReader().getAProperty(SANG_LAB_MAY_2016_DIR);
 	}
 	
+	
 	public static String getTopeOneAtATimeDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_ONE_AT_A_TIME_DIR);
