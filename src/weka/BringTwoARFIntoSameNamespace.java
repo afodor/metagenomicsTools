@@ -135,6 +135,9 @@ public class BringTwoARFIntoSameNamespace
 		
 		for( int x=0; x < mergedList.size(); x++)
 			writer.write("@attribute " + mergedList.get(x) + " numeric\n");
+		
+		writer.write("@attribute isCase { true, false }\n");
+		
 		writer.write("\n\n");
 		
 		
@@ -157,6 +160,14 @@ public class BringTwoARFIntoSameNamespace
 		writer.flush(); writer.close();
 	}
 	
+	/*
+	 * Should produce files that do something like:
+	 * 
+	 * C:\Program Files\Weka-3-8>java -classpath weka.jar weka.classifiers.trees.RandomForest  
+	 * -t C:\adenomasRelease\spreadsheets\pivoted_genusLogNormalWithMetadataBigSpace.arff
+	 * -T c:\tope_Sep_2015\spreadsheets\genusasColumnsLogNormalPlusMetadataBigSpace.arff
+	 *  -I 1000
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -181,12 +192,18 @@ public class BringTwoARFIntoSameNamespace
 						NewRDPParserFileLine.TAXA_ARRAY[x]
 								+ "asColumnsLogNormalPlusMetadataFilteredCaseControl.arff");
 				
+				File newFile2 = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+						"spreadsheets" + File.separator + 
+						NewRDPParserFileLine.TAXA_ARRAY[x]
+								+ "asColumnsLogNormalPlusMetadataBigSpace.arff");
+				
 				HashMap<String, Integer> map2 = 
 						getNumericAttributes(logNormalMetadata2);
 				
 				List<String> list = getMergedList(map1, map2);
 				
 				writeMerged(logNormalMetadata1, newFile1, list, map1);
+				writeMerged(logNormalMetadata2, newFile2, list, map2);
 		}
 	}
 }
