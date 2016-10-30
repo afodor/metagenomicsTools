@@ -163,7 +163,7 @@ public class BringTwoARFIntoSameNamespace
 	/*
 	 * Should produce files that do something like:
 	 * 
-	 * C:\Program Files\Weka-3-8>java -classpath weka.jar weka.classifiers.trees.RandomForest  
+	 * java -classpath weka.jar weka.classifiers.trees.RandomForest  
 	 * -t C:\adenomasRelease\spreadsheets\pivoted_genusLogNormalWithMetadataBigSpace.arff
 	 * -T c:\tope_Sep_2015\spreadsheets\genusasColumnsLogNormalPlusMetadataBigSpace.arff
 	 *  -I 1000
