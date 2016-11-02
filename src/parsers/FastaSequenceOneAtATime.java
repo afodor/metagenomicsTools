@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
+import com.sun.xml.internal.bind.v2.runtime.output.FastInfosetStreamWriterOutput;
+
 
 public class FastaSequenceOneAtATime
 {
@@ -76,5 +78,46 @@ public class FastaSequenceOneAtATime
 			nextLine= reader.readLine();
 		
 		return fs;
+	}
+	
+	public static class SequenceWorker implements Runnable
+	{
+		private final FastaSequence fs;
+		
+		public SequenceWorker(FastaSequence fs)
+		{
+			this.fs = fs;
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				//simulate some work on the FastaSequence
+				Thread.sleep(1000);
+				System.out.println("Finished " + fs.getHeader());
+			}
+			catch(InterruptedException ex)
+			{
+				
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		File myFile = new File("c:\\someFile");
+		
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(myFile);
+		
+		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; 
+						fs = fsoat.getNextSequence())
+		{
+			// do something to the sequence on a new thread
+			new Thread(new SequenceWorker(fs)).start();
+		}
+		
+		fsoat.close();
 	}
 }
