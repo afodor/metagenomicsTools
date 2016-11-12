@@ -32,16 +32,6 @@ public class PrimeNumGen extends JFrame
 		
 	}
 	
-	private class CancelOption implements ActionListener
-	{
-		public void actionPerformed(ActionEvent arg0)
-		{
-			cancel = true;
-			primeButton.setEnabled(true);
-			cancelButton.setEnabled(false);
-		}
-	}
-	
 	private PrimeNumGen(String title)
 	{
 		super(title);
@@ -55,44 +45,52 @@ public class PrimeNumGen extends JFrame
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(primeButton,  BorderLayout.SOUTH);
 		getContentPane().add(cancelButton,  BorderLayout.EAST);
-		cancelButton.addActionListener(new CancelOption());
 		getContentPane().add( new JScrollPane(aTextField),  BorderLayout.CENTER);
+	}
+	
+	private class CancelOption implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0)
+		{
+			cancel = true;
+			primeButton.setEnabled(true);
+			cancelButton.setEnabled(false);
+		}
 	}
 	
 	private void addActionListeners()
 	{
+		cancelButton.addActionListener(new CancelOption());
 	
-		primeButton.addActionListener(new ActionListener()
+		primeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e)
 				{
-					public void actionPerformed(ActionEvent e)
+					
+					String num = JOptionPane.showInputDialog("Enter First Number");
+					Integer max =null;
+					
+					try
 					{
-						
-						String num = JOptionPane.showInputDialog("Enter First Number");
-						Integer max =null;
-						
-						try
-						{
-							max = Integer.parseInt(num);
-						}
-						catch(Exception ex)
-						{
-							JOptionPane.showMessageDialog(
-									thisFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-							ex.printStackTrace();
-						}
-						
-						if( max != null)
-						{
-							aTextField.setText("");
-							primeButton.setEnabled(false);
-							cancelButton.setEnabled(true);
-							cancel = false;
-							new Thread(new UserInput(max)).start();
-
-						}
+						max = Integer.parseInt(num);
 					}
-				});
-	}
+					catch(Exception ex)
+					{
+						JOptionPane.showMessageDialog(
+								thisFrame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						ex.printStackTrace();
+					}
+					
+					if( max != null)
+					{
+						aTextField.setText("");
+						primeButton.setEnabled(false);
+						cancelButton.setEnabled(true);
+						cancel = false;
+						new Thread(new UserInput(max)).start();
+
+					}
+				}});
+		}
 	
 	private boolean isPrime( int i)
 	{
