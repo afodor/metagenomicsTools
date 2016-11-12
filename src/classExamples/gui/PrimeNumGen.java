@@ -53,8 +53,6 @@ public class PrimeNumGen extends JFrame
 		public void actionPerformed(ActionEvent arg0)
 		{
 			cancel = true;
-			primeButton.setEnabled(true);
-			cancelButton.setEnabled(false);
 		}
 	}
 	
