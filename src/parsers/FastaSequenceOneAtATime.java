@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
-import com.sun.xml.internal.bind.v2.runtime.output.FastInfosetStreamWriterOutput;
-
 
 public class FastaSequenceOneAtATime
 {
