@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -25,7 +24,11 @@ public class PrimeNumGen extends JFrame
 	
 	public static void main(String[] args)
 	{
-		new PrimeNumGen("Primer Number Generator");
+		PrimeNumGen png = new PrimeNumGen("Primer Number Generator");
+		
+		// don't add the action listener from the constructor
+		png.addActionListeners();
+		png.setVisible(true);
 		
 	}
 	
@@ -39,7 +42,7 @@ public class PrimeNumGen extends JFrame
 		}
 	}
 	
-	public PrimeNumGen(String title)
+	private PrimeNumGen(String title)
 	{
 		super(title);
 		this.thisFrame = this;
@@ -54,14 +57,11 @@ public class PrimeNumGen extends JFrame
 		getContentPane().add(cancelButton,  BorderLayout.EAST);
 		cancelButton.addActionListener(new CancelOption());
 		getContentPane().add( new JScrollPane(aTextField),  BorderLayout.CENTER);
-		setJMenuBar(getMyMenuBar());
-		setVisible(true);
 	}
 	
-	private JMenuBar getMyMenuBar()
+	private void addActionListeners()
 	{
-		JMenuBar jmenuBar = new JMenuBar();
-		
+	
 		primeButton.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e)
@@ -92,8 +92,6 @@ public class PrimeNumGen extends JFrame
 						}
 					}
 				});
-		
-		return jmenuBar;
 	}
 	
 	private boolean isPrime( int i)
