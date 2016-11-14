@@ -23,4 +23,6 @@ for( f in F )
 	{
 		points( numProcs, resource, ylim = c(0,1), xlim=c(0,100))
 	}
+	
+	text( 85, resource[100]-.02, f , col="RED")
 }
