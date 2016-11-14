@@ -1,0 +1,26 @@
+
+rm(list=ls())
+
+F <- c( .0025, .005, .01, .05, .10, .30)
+
+myA <- function( F, N ) { return  (1 / (F + (1-F) / N))  } 
+
+for( f in F )
+{
+	numProcs <- 1:100
+	amdahl <-  myA(f, numProcs)
+	
+	resource <- vector()
+	
+	for( i in numProcs) 
+		resource[i] <- amdahl[i] / i
+		
+	if( f == .0025 ) 
+	{
+		plot( numProcs, resource, ylim = c(0,1), xlim=c(0,100))
+	}
+	else
+	{
+		points( numProcs, resource, ylim = c(0,1), xlim=c(0,100))
+	}
+}
