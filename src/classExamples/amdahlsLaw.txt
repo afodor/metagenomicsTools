@@ -7,7 +7,7 @@ myA <- function( F, N ) { return  (1 / (F + (1-F) / N))  }
 
 for( f in F )
 {
-	numProcs <- 1:100
+	numProcs <- 1:1000
 	amdahl <-  myA(f, numProcs)
 	
 	resource <- vector()
@@ -17,12 +17,12 @@ for( f in F )
 		
 	if( f == .0025 ) 
 	{
-		plot( numProcs, resource, ylim = c(0,1), xlim=c(0,100))
+		plot( numProcs, resource, ylim = c(0,1), xlim=c(1,length(numProcs)))
 	}
 	else
 	{
-		points( numProcs, resource, ylim = c(0,1), xlim=c(0,100))
+		points( numProcs, resource, ylim = c(0,1), xlim=c(1,length(numProcs)))
 	}
 	
-	text( 85, resource[100]-.02, f , col="RED")
+	text( length(numProcs)-15, resource[length(numProcs)]-.02, f , col="RED")
 }
