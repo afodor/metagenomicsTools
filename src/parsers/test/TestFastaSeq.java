@@ -18,5 +18,16 @@ public class TestFastaSeq extends TestCase
 		assertEquals(fs.getHeader(), ">" +  aHeader);
 		assertEquals(fs.getSequence(), aSeq);
 	}
+	
+	public void testGCContent() throws Exception
+	{
+		String aHeader = "Seq1";
+		String aSeq = "ACGTACGTACGT";
+		
+		FastaSequence fs = new FastaSequence(aHeader, aSeq);
+		
+		assertEquals(0.5f, fs.getGCRatio(),0.0000001);
+		
+	}
 
 }
