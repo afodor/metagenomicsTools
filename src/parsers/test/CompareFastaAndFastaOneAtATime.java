@@ -10,7 +10,10 @@ public class CompareFastaAndFastaOneAtATime
 {
 	public static void main(String[] args) throws Exception
 	{
+		// this file is at 
+		// https://github.com/afodor/metagenomicsTools/blob/master/src/parsers/test/someFasta.txt
 		File aFile = new File("C:\\Temp\\someFasta.txt");	
+		
 		List<FastaSequence> list = FastaSequence.readFastaFile(aFile);
 		
 		if( list.size() != 3)
