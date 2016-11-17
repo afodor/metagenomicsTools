@@ -15,7 +15,7 @@ public class TestFastaSeq extends TestCase
 		
 		FastaSequence fs = new FastaSequence(aHeader, aSeq);
 		
-		assertEquals(fs.getHeader(), aHeader);
+		assertEquals(fs.getHeader(), ">" +  aHeader);
 		assertEquals(fs.getSequence(), aSeq);
 	}
 
