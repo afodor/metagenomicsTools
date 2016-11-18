@@ -23,12 +23,10 @@ import junit.framework.TestCase;
     {
         PutTakeTest ptt= new PutTakeTest(10, 10, 100000);// sample parameters
         ptt.runThisTest();
-        ptt.pool.shutdown();
     }
     
     private class PutTakeTest{
 
-    protected final ExecutorService pool = Executors.newCachedThreadPool();
     protected CyclicBarrier barrier;
     protected final SemaphoreBoundedBuffer<Integer> bb;
     protected final int nTrials, nPairs;
@@ -53,8 +51,8 @@ import junit.framework.TestCase;
     public void runThisTest() {
         try {
             for (int i = 0; i < nPairs; i++) {
-                pool.execute(new Producer());
-                pool.execute(new Consumer());
+                new Thread(new Producer()).start();
+                new Thread( new Consumer()).start();
             }
             barrier.await(); // wait for all threads to be ready
             barrier.await(); // wait for all threads to finish
