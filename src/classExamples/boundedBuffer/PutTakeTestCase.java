@@ -48,19 +48,19 @@ import junit.framework.TestCase;
         this.barrier = new CyclicBarrier(npairs * 2 + 1);
     }
 
-    public void runThisTest() {
-        try {
-            for (int i = 0; i < nPairs; i++) {
+    public void runThisTest() throws Exception 
+    {
+    	for (int i = 0; i < nPairs; i++) 
+    	{
                 new Thread(new Producer()).start();
                 new Thread( new Consumer()).start();
-            }
-            barrier.await(); // wait for all threads to be ready
-            barrier.await(); // wait for all threads to finish
-            assertEquals(putSum.get(), takeSum.get());
-            System.out.println(putSum.get());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+        
+    	barrier.await(); // wait for all threads to be ready
+        barrier.await(); // wait for all threads to finish
+        
+        assertEquals(putSum.get(), takeSum.get());
+        System.out.println(putSum.get());
     }
 
 
