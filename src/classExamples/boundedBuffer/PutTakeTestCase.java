@@ -59,6 +59,7 @@ import junit.framework.TestCase;
             barrier.await(); // wait for all threads to be ready
             barrier.await(); // wait for all threads to finish
             assertEquals(putSum.get(), takeSum.get());
+            System.out.println(putSum.get());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
