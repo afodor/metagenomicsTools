@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
@@ -38,6 +39,7 @@ public class AddMetadata
 	private static void addMetadata(File unloggedFile, File inFile, File outFile, boolean fromR)
 		throws Exception
 	{
+		HashMap<String, MetadataParserFileLine> metaMap = MetadataParserFileLine.getMetaMap();
 		System.out.println(outFile.getAbsolutePath());
 		OtuWrapper wrapper = new OtuWrapper(unloggedFile);
 		
@@ -49,7 +51,8 @@ public class AddMetadata
 		
 		int startPos = fromR ? 0 : 1;
 		
-		writer.write("sample\tsampleID\treadNum\tnumSequences\tshannonDiveristy");
+		writer.write("sample\tsampleID\treadNum\tnumSequences\tshannonDiveristy\t");
+		writer.write("source\tanimal\texpControl\tdate\tsex\tcage");
 		
 		for( int x=startPos; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -65,7 +68,14 @@ public class AddMetadata
 			StringTokenizer sToken = new StringTokenizer(splits[0], "_");
 			writer.write("\t" + sToken.nextToken() + "\t" + sToken.nextToken() );
 			writer.write("\t" + wrapper.getNumberSequences(splits[0]) + "\t" + 
-								wrapper.getShannonEntropy(splits[0]));
+								wrapper.getShannonEntropy(splits[0]) + "\t");
+			
+			MetadataParserFileLine mpfl = metaMap.get(splits[0].split("_")[0]);
+			
+			
+			writer.write(mpfl.getSource() + "\t" + mpfl.getAnimal() + "\t" + 
+							mpfl.getExpControl() + "\t" + mpfl.getDate() + "\t" + 
+								mpfl.getSex() + "\t" + mpfl.getCage());
 			
 			for(int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
