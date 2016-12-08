@@ -130,6 +130,8 @@ public class ConfigReader
 	
 	public static final String BIOLOCK_J_DIR = "BIOLOCK_J_DIR";
 	
+	public static final String LYTE_NOV_2016_DIR = "LYTE_NOV_2016_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -143,6 +145,11 @@ public class ConfigReader
 	public static String getSangLabMay2016Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(SANG_LAB_MAY_2016_DIR);
+	}
+	
+	public static String getLyteNov2016Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(LYTE_NOV_2016_DIR);
 	}
 	
 	
