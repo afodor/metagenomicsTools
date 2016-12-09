@@ -42,7 +42,7 @@ public class AddMetadata
 				File.separator + "mattFiles" + File.separator + 
 				taxa +  "logNormplusMetadaa.txt");
 	 
-			addMetadata(unloggedFile, loggedIn, loggedOut, true);
+			addMetadata(unloggedFile, loggedIn, loggedOut, false);
 		}
 	}
 	
