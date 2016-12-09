@@ -26,9 +26,12 @@ for( taxa in taxaLevels)
 		
 				myFrame <- data.frame(bug, sex, cage, expControl)
 				
+				simpleSex <- lm( bug[myT$source==tissue]~ sex[myT$source==tissue] )
 			
 				plot( bug[myT$source==tissue]~ sex[myT$source==tissue], 
-						ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "sex"))	
+						ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "sex",
+						"simple p =" , 
+						format( anova(simpleSex)$"Pr(>F)"[1]),digits=3))	
 				
 				stripchart(bug[myT$source==tissue]~ sex[myT$source==tissue], data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 				
