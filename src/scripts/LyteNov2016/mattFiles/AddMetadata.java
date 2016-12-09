@@ -40,7 +40,7 @@ public class AddMetadata
 		
 			File loggedOut =new File(ConfigReader.getLyteNov2016Dir() + 
 				File.separator + "mattFiles" + File.separator + 
-				"pcoa_" + taxa +  "logNormplusMetadaa.txt");
+				taxa +  "logNormplusMetadaa.txt");
 	 
 			addMetadata(unloggedFile, loggedIn, loggedOut, true);
 		}
