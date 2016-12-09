@@ -7,34 +7,40 @@ myT <- read.table("pivoted_phylumasColumnsLogNormalPlusMetadata.txt", header=TRU
 taxaLevels <- c("phylum","class","order","family","genus")
 tissues <- sort(unique(myT$source))
 
-for( taxa in taxaLevels) 
-{
+for( taxa in taxaLevels)
+{ 
 	pdf(paste(taxa, ".pdf"))
 	par(mfrow=c(3,1))
-	
-	for( i in c(4,5,12:ncol(myT)))
-	{
-		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
-		{
-			bug <- myT[,i]
-			sex <- factor(myT$sex)
-			cage <- factor(myT$cage)
-			expControl <- factor(myT$expControl)
-	
-			myFrame <- data.frame(bug, sex, cage, expControl)
 		
-			plot( bug~ sex, ylab = names(myT)[i],main = paste( names(myT)[i], "sex"))	
+	for( tissue in tissues) 
+	{
+		
+		for( i in c(4,5,12:ncol(myT)))
+		{
+			if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+			{
+				bug <- myT[,i]
+				sex <- factor(myT$sex)
+				cage <- factor(myT$cage)
+				expControl <- factor(myT$expControl)
+		
+				myFrame <- data.frame(bug, sex, cage, expControl)
+				
 			
-			stripchart(bug~ sex, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
-			
-			plot( bug~ expControl, ylab = names(myT)[i],main = paste( names(myT)[i], "expControl"))	
-			
-			stripchart(bug~ expControl, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
-			
-			
-			plot( bug~ cage, ylab = names(myT)[i],main = paste( names(myT)[i], "expControl"))	
-			
-			stripchart(bug~ cage, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+				plot( bug[myT$source==tissue]~ sex[myT$source==tissue], 
+						ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "sex"))	
+				
+				stripchart(bug[myT$source==tissue]~ sex[myT$source==tissue], data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+				
+				plot( bug[myT$source==tissue]~ expControl[myT$source==tissue], ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "expControl"))	
+				
+				stripchart(bug[myT$source==tissue]~ expControl[myT$source==tissue], data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+				
+				
+				plot( bug[myT$source==tissue]~ cage[myT$source==tissue], ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "expControl"))	
+				
+				stripchart(bug[myT$source==tissue]~ cage[myT$source==tissue], data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+			}
 		}
 	}		
 	
