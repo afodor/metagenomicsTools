@@ -33,6 +33,16 @@ public class AddMetadata
 					"pcoa_" + taxa +  "plusMetadaa.txt");
 		 
 			addMetadata(unloggedFile, mdsIn, mdsOut, true);
+			
+			File loggedIn= new File(ConfigReader.getLyteNov2016Dir() + 
+					File.separator + "mattFiles" + File.separator + 
+					taxa + "logNorm.txt");
+		
+			File loggedOut =new File(ConfigReader.getLyteNov2016Dir() + 
+				File.separator + "mattFiles" + File.separator + 
+				"pcoa_" + taxa +  "logNormplusMetadaa.txt");
+	 
+			addMetadata(unloggedFile, loggedIn, loggedOut, true);
 		}
 	}
 	
