@@ -1,0 +1,33 @@
+rm(list=ls())
+
+setwd("C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\spreadsheets")
+
+myT <- read.table("pivoted_phylumasColumnsLogNormalPlusMetadata.txt", header=TRUE, sep="\t")
+
+taxaLevels <- c("phylum","class","order","family","genus")
+tissues <- sort(unique(myT$source))
+
+for( taxa in taxaLevels) 
+{
+	pdf(paste(taxa, ".pdf"))
+	par(mfrow=c(3,1))
+	
+	for( i in c(4,5,12:ncol(myT)))
+	{
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
+		{
+			bug <- myT[,i]
+			sex <- factor(myT$sex)
+			cage <- factor(myT$cage)
+			expControl <- factor(myT$expControl)
+	
+			myFrame <- data.frame(bug, sex, cage, expControl)
+		
+			plot( bug~ sex, ylab = names(myT)[i],main = paste( names(myT)[i], "sex"))	
+			
+			stripchart(bug~ sex, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		}
+	}		
+	
+	dev.off()
+}
