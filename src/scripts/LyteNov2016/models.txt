@@ -40,12 +40,12 @@ for( taxa in taxaLevels)
 				myFrame <- data.frame(bug, sex, cage, expControl)
 				
 				fullModel <- gls( bug~  
-						expControl+ sex, method="REML",
+						expControl* sex, method="REML",
 						correlation=corCompSymm(form=~1|factor(cage)),
 								data = myFrame )
 				
 				reducedModel <- gls( bug~  
-						expControl+ sex, method="REML",data = myFrame )
+						expControl* sex, method="REML",data = myFrame )
 				
 				pValuesExp[index] <- anova(fullModel)$"p-value"[2]
 				pValuesSex[index] <- anova(fullModel)$"p-value"[3]
@@ -68,8 +68,12 @@ for( taxa in taxaLevels)
 				stripchart(bug~ cage, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
 				index <- index + 1
 			}
-		}
+		}	
 	}		
+	
+	hist(pValuesExp, breaks=25,main="ExperimentPValues")
+	hist(pValuesSex, breaks=25,main="sexPValues")
+	hist(pValuesCage, breaks=25,main="CagePValues")
 	
 	dev.off()
 		
