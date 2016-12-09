@@ -1,0 +1,7 @@
+rm(list=ls())
+
+setwd("C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\spreadsheets")
+
+myT <- read.table("pivoted_phylumasColumnsLogNormalPlusMetadata.txt", header=TRUE, sep="\t")
+
+boxplot(myT$Firmicutes[myT$source=="jej" & myT$sex=="Female"],myT$Firmicutes[myT$source=="jej" & myT$sex=="Male"] )
