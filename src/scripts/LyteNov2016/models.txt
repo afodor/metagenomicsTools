@@ -26,6 +26,15 @@ for( taxa in taxaLevels)
 			plot( bug~ sex, ylab = names(myT)[i],main = paste( names(myT)[i], "sex"))	
 			
 			stripchart(bug~ sex, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			plot( bug~ expControl, ylab = names(myT)[i],main = paste( names(myT)[i], "expControl"))	
+			
+			stripchart(bug~ expControl, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+			
+			
+			plot( bug~ cage, ylab = names(myT)[i],main = paste( names(myT)[i], "expControl"))	
+			
+			stripchart(bug~ cage, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
 		}
 	}		
 	
