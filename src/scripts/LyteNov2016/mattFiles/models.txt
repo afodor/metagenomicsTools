@@ -4,13 +4,13 @@ library("pscl")
 library("lmtest")
 library("nlme")
 
-setwd("C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\spreadsheets")
+setwd("C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\mattFiles")
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
 for( taxa in taxaLevels)
 {
-	fileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt",sep="")
+	fileName <- paste(taxa,"logNormplusMetadaa.txt",sep="")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
 	tissues <- sort(unique(myT$source))
 	
@@ -26,7 +26,7 @@ for( taxa in taxaLevels)
 	for( tissue in tissues) 
 	{
 		myT <- read.table(fileName, sep="\t", header=TRUE)
-		myT <- myT[ myT$source==tissue ,]
+		myT <- myT[ myT$source==tissue & myT$readNum == "R1" & myT$numSequences >=1000,]
 	
 		for( i in c(4,5,12:ncol(myT)))
 		{
