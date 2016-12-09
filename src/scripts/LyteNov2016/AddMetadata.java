@@ -33,8 +33,20 @@ public class AddMetadata
 					"pcoa_" + taxa +  "plusMetadaa.txt");
 		 
 			addMetadata(unloggedFile, mdsIn, mdsOut, true);
+			
+			File loggedIn =new File(ConfigReader.getLyteNov2016Dir() + 
+					File.separator + "spreadsheets" + File.separator + 
+					"pivoted_" + taxa + "asColumnsLogNormal.txt");
+			
+			File loggedOut = new File(ConfigReader.getLyteNov2016Dir() + 
+					File.separator + "spreadsheets" + File.separator + 
+					"pivoted_" + taxa + "asColumnsLogNormalPlusMetadata.txt");
+			
+			addMetadata(unloggedFile, loggedIn, loggedOut, false);
+			
 		}
 	}
+	
 	
 	private static void addMetadata(File unloggedFile, File inFile, File outFile, boolean fromR)
 		throws Exception
