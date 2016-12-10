@@ -5,6 +5,16 @@ myT <- read.table("mergedClass.txt",sep="\t", header=TRUE)
 
 par(mfrow=c(3,2))
 
+for ( i in 1:nrow(myT))
+{
+	rowSum = sum(myT[i,6:ncol(myT)])
+	
+	for( j in 6:ncol(myT))
+		myT[i,j] = myT[i,j]/rowSum
+}
+
+
+
 boxplot(
 log10(myT$Bacteroidia[myT$readNumber=="R1" 
 	& myT$expControl == "Ctrl" & myT$tissue=="Cecal Content"]),
