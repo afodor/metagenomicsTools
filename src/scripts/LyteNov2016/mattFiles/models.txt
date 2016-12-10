@@ -17,8 +17,9 @@ for( taxa in taxaLevels)
 	pValuesSex <- vector()
 	pValuesCage <- vector()
 	pValuesExp <- vector() 
+	pValuesSexExpInteraction <- vector()
 	pdf(paste(taxa, ".pdf"))
-	par(mfrow=c(3,1))
+	par(mfrow=c(2,2))
 	names <- vector()
 	tissueNames <- vector()
 	index <- 1
@@ -26,7 +27,7 @@ for( taxa in taxaLevels)
 	for( tissue in tissues) 
 	{
 		myT <- read.table(fileName, sep="\t", header=TRUE)
-		myT <- myT[ myT$source==tissue & myT$readNum == "R1" & myT$numSequences >=1000,]
+		myT <- myT[ myT$source==tissue & myT$readNum == "R1" ,]
 	
 		for( i in c(4,5,12:ncol(myT)))
 		{
@@ -39,37 +40,59 @@ for( taxa in taxaLevels)
 		
 				myFrame <- data.frame(bug, sex, cage, expControl)
 				
-				#fullModel <- gls( bug~  
-				#		expControl+ sex, method="REML",
-				#		correlation=corCompSymm(form=~1|factor(cage)),
-				#				data = myFrame )
+				fullModel <- gls( bug~  
+						expControl* sex, method="REML",
+						correlation=corCompSymm(form=~1|factor(cage)),
+								data = myFrame )
 				
-				#reducedModel <- gls( bug~  
-				#		expControl[myT$source==tissue]+ sex[myT$source==tissue] , method="REML",
-				#			data = myFrame )
+				reducedModel <- gls( bug~  
+						expControl* sex, method="REML",data = myFrame )
 				
-				#pValuesTime[index] <- anova(fullModelLME)$"p-value"[2]
-			#pValuesUrbanRural[index] <- anova(fullModelLME)$"p-value"[3]
-			#pValuesSubject[index] <-  anova(fullModelLME, reducedModel)$"p-value"[2]
-			#intraclassCoefficient<- coef(fullModel$modelStruct[1]$corStruct,unconstrained=FALSE)[[1]]
-				#names[index] = names(myT)[i]
+				pValuesExp[index] <- anova(fullModel)$"p-value"[2]
+				pValuesSex[index] <- anova(fullModel)$"p-value"[3]
+				pValuesSexExpInteraction[index] <- anova(fullModel)$"p-value"[4]
+				pValuesCage[index] <-  anova(fullModel, reducedModel)$"p-value"[2]
+				names[index] = names(myT)[i]
+				tissueNames[index] = tissue
 			
 				plot( bug~ sex, 
-						ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "sex"))	
+						ylab = names(myT)[i],main = paste( tissue, "sex"))	
 				
 				stripchart(bug~ sex, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 				
-				plot( bug~ expControl, ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "expControl"))	
+				plot( bug~ expControl, ylab = names(myT)[i],main = paste( tissue, "expControl"))	
 				
 				stripchart(bug~ expControl, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
 				
+				boxplot(
+				bug[myT$expControl=="Ctrl" & myT$sex=="Male"],
+				bug[myT$expControl=="Exp" & myT$sex=="Male"],
+				bug[myT$expControl=="Ctrl" & myT$sex=="Female"],				
+				bug[myT$expControl=="Exp" & myT$sex=="Female"],		
+				 ylab = names(myT)[i],main = paste( tissue,  "interaction"),
+				 names=c("CtrlMale","ExpMale", "CtrlFemale", "ExpFemale"),las=2)	
 				
-				plot( bug~ cage, ylab = names(myT)[i],main = paste( tissue, names(myT)[i], "expControl"))	
+				
+				plot( bug~ cage, ylab = names(myT)[i],main = paste( tissue, "cage"))	
 				
 				stripchart(bug~ cage, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+				index <- index + 1
 			}
-		}
+		}	
 	}		
 	
+	hist(pValuesExp, breaks=25,main="ExperimentPValues")
+	hist(pValuesSex, breaks=25,main="sexPValues")
+	hist(pValuesCage, breaks=25,main="CagePValues")
+	
 	dev.off()
+		
+	
+	dFrame <- data.frame( names, tissueNames, pValuesExp, pValuesCage, pValuesSex,pValuesSexExpInteraction)
+	dFrame <- dFrame [order(dFrame$pValuesExp),]
+	dFrame$adjustedPExp <- p.adjust( dFrame$pValuesExp, method = "BH" )
+	dFrame$adjustedCage <- p.adjust( dFrame$pValuesCage, method = "BH" )
+	dFrame$adjustedSex <- p.adjust( dFrame$pValuesSex, method = "BH" )	
+	dFrame$adjustedSexExpInteraction <- p.adjust( dFrame$pValuesSexExpInteraction, method = "BH" )
+	write.table(dFrame, file=paste("mattParse_pValuesFor", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
