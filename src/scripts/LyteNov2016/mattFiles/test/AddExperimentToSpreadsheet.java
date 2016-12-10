@@ -19,11 +19,11 @@ public class AddExperimentToSpreadsheet
 			System.out.println(s + " " + map.get(s));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\mattFiles\\phylumFile.txt")));
+				"C:\\lyte_Nov10_2016\\Lyte_seqs_11102016\\mattFiles\\classFile.txt")));
 		
 		String[] splits = reader.readLine().split("\t");
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter("c:\\temp\\mergedPhyla.txt"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("c:\\temp\\mergedClass.txt"));
 		
 		writer.write(splits[0] + "\tsampleID\treadNumber\texpControl\ttissue");
 		

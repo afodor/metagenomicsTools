@@ -1,0 +1,49 @@
+
+setwd("c:\\temp")
+
+myT <- read.table("mergedClass.txt",sep="\t", header=TRUE)
+
+par(mfrow=c(3,2))
+
+boxplot(
+log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Ctrl" & myT$tissue=="Cecal Content"]),
+	log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Exp" & myT$tissue=="Cecal Content"])
+	)
+	
+
+boxplot(
+log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Ctrl" & myT$tissue=="duo"]),
+	log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Exp" & myT$tissue=="duo"])
+	)
+
+
+boxplot(
+log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Ctrl" & myT$tissue=="feces"]),
+	log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Exp" & myT$tissue=="feces"])
+	)
+
+
+boxplot(
+log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Ctrl" & myT$tissue=="ileum"]),
+	log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Exp" & myT$tissue=="ileum"])
+	)
+
+
+boxplot(
+log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Ctrl" & myT$tissue=="jej"]),
+	log10(myT$Bacteroidia[myT$readNumber=="R1" 
+	& myT$expControl == "Exp" & myT$tissue=="jej"])
+	)
+
+
+	
+	

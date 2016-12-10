@@ -44,6 +44,14 @@ public class AddMetadata
 			
 			addMetadata(unloggedFile, loggedIn, loggedOut, false);
 			
+
+			File unLoggedOut = new File(ConfigReader.getLyteNov2016Dir() + 
+					File.separator + "spreadsheets" + File.separator + 
+					"pivoted_" + taxa + "asColumnsUnloggedPlusMetadata.txt");
+			
+			addMetadata(unloggedFile, unloggedFile, unLoggedOut, false);
+			
+			
 		}
 	}
 	
