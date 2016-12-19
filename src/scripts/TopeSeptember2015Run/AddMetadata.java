@@ -49,6 +49,18 @@ public class AddMetadata
 			
 			addMetadata(wrapper, pcaFile, pcaFileMeta, true);
 			
+			File unLoggedIn = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator 
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_taxaasColumns.txt");
+			
+			File unLoggedOut = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"spreadsheets" + File.separator 
+					+NewRDPParserFileLine.TAXA_ARRAY[x] + "_taxaasColumnsPlusMetadata.txt");
+			
+			addMetadata(wrapper, unLoggedIn, unLoggedOut, false);
+			
+			 
+			
 		}
 	}
 	
