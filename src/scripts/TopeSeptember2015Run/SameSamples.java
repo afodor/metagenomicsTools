@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashSet;
 
-import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class SameSamples

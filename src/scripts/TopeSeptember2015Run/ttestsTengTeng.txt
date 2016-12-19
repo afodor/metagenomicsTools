@@ -1,0 +1,57 @@
+
+setwd("C:\\tope_Sep_2015\\tengteng_December_2019")
+
+rm(list=ls())
+
+pdf("genus_boxplots.pdf")
+inFileName= paste("GenusLogNormCaseControl.txt", sep="");
+myT <- read.table(inFileName, header=TRUE, sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(c("character"), rep("numeric", numCols-1))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+myT <- myT[myT$caseControl==0 | myT$caseControl==1 ,]
+	
+pValuesCaseControl<- vector()
+mean1<- vector()
+mean0 <- vector()
+sampleSize0 <- vector()
+sampleSize1 <- vector()
+names <- vector()
+index <- 1
+
+for( i in 3:ncol(myT))
+{
+	bug <- myT[,i] 
+	
+	if( sum( bug != 0 ) > nrow(myT) / 4 )
+	{
+		pValuesCaseControl[index] = wilcox.test( bug[myT$caseControl==0],
+									bug[myT$caseControl==1] )$p.value
+		mean0[index] = mean(bug[myT$caseControl==0]  ) 
+		mean1[index] = mean(bug[myT$caseControl==1]  ) 
+		sampleSize0[index] = length(bug[myT$caseControl==0]  ) 
+		sampleSize1[index] = length(bug[myT$caseControl==1]  ) 
+		
+		names[index] = names(myT)[i]
+		
+		
+		case <- myT$caseControl;
+		myFrame <- data.frame(bug, case)
+		graphMain = paste( names[index], " p= " , pValuesCaseControl[index])
+		
+		boxplot( bug~  factor(case), ylab = names[index],	maina = graphMain )	
+		
+		stripchart(bug ~ case , data = myFrame,vertical = TRUE, pch = 21, add=TRUE)		
+		
+		index = index + 1	
+	}
+}
+
+
+dFrame <- data.frame(names,pValuesCaseControl, mean0, mean1,sampleSize0,sampleSize1)
+dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
+dFrame$adjustedPCaseControl <- p.adjust( dFrame$pValuesCaseControl, method = "BH" )
+write.table(dFrame, file=paste("pValuesForTaxaTimeTreatment_genus", ".txt",sep=""), sep="\t",row.names=FALSE)
+dev.off()
+	

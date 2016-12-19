@@ -15,7 +15,7 @@ for( taxa in taxaLevels)
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	
 	# already filtered
-	myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000 & (myT$caseControl==0 | myT$caseControl==1 ),]
+	#myT <- myT[myT$readNumber==1 & myT$numSequences>= 1000 & (myT$caseControl==0 | myT$caseControl==1 ),]
 		
 	pValuesCaseControl<- vector()
 	mean1<- vector()
