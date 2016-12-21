@@ -70,11 +70,11 @@ public class SplitSequences
 				BufferedWriter writer4 = getOrCreate(map.get(key) + "_4", writerMap);
 				
 				writer1.write(">" + read1FastQ.getFirstTokenOfHeader() + "\n");
-				writer1.write(">" + read1FastQ.getSequence() + "\n");
+				writer1.write(read1FastQ.getSequence() + "\n");
 				writer1.flush();
 
 				writer4.write(">" + read4FastQ.getFirstTokenOfHeader() + "\n");
-				writer4.write(">" + read4FastQ.getSequence() + "\n");
+				writer4.write(read4FastQ.getSequence() + "\n");
 				writer4.flush();
 			}
 			

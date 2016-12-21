@@ -132,6 +132,8 @@ public class ConfigReader
 	
 	public static final String LYTE_NOV_2016_DIR = "LYTE_NOV_2016_DIR";
 	
+	public static final String MERGED_ARFF_DIR = "MERGED_ARFF_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -156,6 +158,12 @@ public class ConfigReader
 	public static String getTopeOneAtATimeDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_ONE_AT_A_TIME_DIR);
+	}
+	
+	
+	public static String getMergedArffDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MERGED_ARFF_DIR);
 	}
 	
 	public static boolean isVerboseConsole() throws Exception
