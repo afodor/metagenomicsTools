@@ -35,35 +35,19 @@ public class AddMetadataForKraken
 		return Integer.parseInt("" + s.charAt(0));
 	}
 	
-	private static int getPatientId(String s) 
-	{
-		String first = new StringTokenizer(s, "_").nextToken().replace("A", "").replace("B", "").replace("\"", "");
-		return Integer.parseInt(first);
-	}
-	
 	private static String getTimepoint(String s)
 	{
-		int skipNum = 0;
-		
-		if( s.startsWith("FCA5PCT"))
-			skipNum =3;
-		
-		if( s.startsWith("FCA5PCT"))
-			skipNum =3;
-		
-		if ( s.startsWith("FCAB0GM"))
-			skipNum = 2;
-		
-		for (int x=0; x < skipNum; x++)
-		{
-			s= s.substring(s.indexOf("_")+1, s.length());
-		}
-		
 		s = s.substring(s.lastIndexOf("_") + 1, s.length());
 		
 		if( s.startsWith("B"))
 			return 	"second_B";
 		else return "first_A";
+	}
+	
+	private static int getPatientID(String s)
+	{
+		s = s.substring(s.lastIndexOf("_") + 1, s.length());
+		return Integer.parseInt(s.replaceAll("A", "").replaceAll("B", "").replace(".fasta", ""));	
 	}
 	
 	private static void addSomeMetadata(File outFile, File logNormalFile, String timepoint) throws Exception
@@ -86,11 +70,13 @@ public class AddMetadataForKraken
 			
 			
 			int readNumber = getreadNumber(splits[0]);
-			String aTimepoint = getTimepoint(s);
+			String aTimepoint = getTimepoint(splits[0]);
+			int patientID = getPatientID(splits[0]);
 			
 			if( readNumber == 1 || readNumber == 2)
 			{
-				System.out.println(splits[0] + " " + readNumber + " " + aTimepoint);
+				System.out.println(splits[0] + " " + readNumber + " " + aTimepoint + " " + 
+								patientID);
 			}
 			else
 				throw new Exception("Parsing error");
