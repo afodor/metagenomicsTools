@@ -6,10 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
-import parsers.NewRDPParserFileLine;
-import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadataTengTeng
