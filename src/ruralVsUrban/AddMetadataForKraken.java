@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.StringTokenizer;
 
 import parsers.OtuWrapper;
 import utils.ConfigReader;
@@ -73,10 +72,24 @@ public class AddMetadataForKraken
 			String aTimepoint = getTimepoint(splits[0]);
 			int patientID = getPatientID(splits[0]);
 			
-			if( readNumber == 1 || readNumber == 2)
+			
+			if( readNumber == 1 || readNumber == 2 )
 			{
-				System.out.println(splits[0] + " " + readNumber + " " + aTimepoint + " " + 
-								patientID);
+				if( aTimepoint.equals(timepoint))
+				{
+					writer.write(splits[0] + "\t" );
+					
+					if( patientID >=1 && patientID <=39)
+						writer.write("rural");
+					else if (patientID >=81 && patientID <= 120)
+						writer.write("urban");
+					else throw new Exception("No");
+					
+					for( int x=1; x < splits.length; x++)
+						writer.write("\t" + splits[x]);
+					
+					writer.write("\n");
+				}
 			}
 			else
 				throw new Exception("Parsing error");
