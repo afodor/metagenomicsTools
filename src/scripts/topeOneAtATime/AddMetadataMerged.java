@@ -141,12 +141,17 @@ public class AddMetadataMerged
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
 				boolean fromR, HashSet<String> file3Set, HashSet<String> file4Set) throws Exception
 	{
+		HashMap<String, Nov2016MetadataParser> novMetaMap = Nov2016MetadataParser.getMetaMap();
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tkey\treadNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
+		writer.write("id\tkey\t");
+		
+		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\t");
+		
+		writer.write("readNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
@@ -164,7 +169,29 @@ public class AddMetadataMerged
 			String key = splits[0].replaceAll("\"", "");
 			String sampleId = new StringTokenizer(key, "_").nextToken();
 			
-			writer.write(key+ "\t" + key.split("_")[0] + "\t" +  getReadNum(key) + "\t" + 
+			Nov2016MetadataParser novMeta = novMetaMap.get(key.split("_")[0] );
+				
+			writer.write(key+ "\t" + key.split("_")[0] + "\t");
+			
+			if( novMeta == null)
+			{
+				writer.write("\t\t\t\t\t\t\t\t");
+			}
+			else
+			{
+				//writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\t");
+				
+				writer.write( getStringOrNothing(novMeta.getWaist()) + "\t");
+				writer.write( getStringOrNothing(novMeta.getTicsCount()) + "\t");
+				writer.write( getStringOrNothing(novMeta.getAge()) + "\t");
+				writer.write( getStringOrNothing(novMeta.getSex()) + "\t");
+				writer.write( getStringOrNothing(novMeta.getBmi()) + "\t");
+				writer.write(  getStringOrNothing(novMeta.getWhr()) + "\t");
+				writer.write(  getStringOrNothing(novMeta.getWbo()) + "\t");
+				writer.write(  getStringOrNothing(novMeta.getBmi_CAT()) + "\t");	
+			}
+			
+			writer.write( getReadNum(key) + "\t" + 
 						( key.indexOf("DV-000-") != -1) + "\t" + 
 					wrapper.getNumberSequences(key) 
 						+ "\t" + wrapper.getShannonEntropy(key) + "\t" );
@@ -188,6 +215,14 @@ public class AddMetadataMerged
 		
 		writer.flush();  writer.close();
 		reader.close();
+	}
+	
+	private static String getStringOrNothing(Object o)
+	{
+		if( o == null)
+			return "";
+		
+		return o.toString();
 	}
 	
 }
