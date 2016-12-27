@@ -1,4 +1,5 @@
 rm(list=ls())
+library("Kendall")
 
 setwd("C:\\topeOneAtATime\\merged")
 
@@ -19,9 +20,12 @@ for(taxa in taxaLevels )
 	for( i in c(18:ncol(myT))) 
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
-			myLm <- lm( myT[,i] ~  myT$waist )
-			myAnova <- anova(myLm)
-			pValuesWaste[index] <- myAnova$"Pr(>F)"[1]
+			#myLm <- lm( myT[,i] ~  myT$waist )
+			#myAnova <- anova(myLm)
+			#
+			#pValuesWaste[index] <- myAnova$"Pr(>F)"[1]
+			
+			pValuesWaste[index] <- Kendall(myT[,i] ,  myT$waist )$sl[1]
 			names[index] <- names(myT)[i]
 			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
 			index <- index + 1
