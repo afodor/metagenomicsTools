@@ -112,7 +112,7 @@ public class MergePairedEnds
 					
 					s.acquire();
 					MergerWorker m= new MergerWorker(forwardQ, backQ, writer, s,
-							"F" + forwardInt + "@"  + "R" + reverseInt
+							"F" + forwardInt + "@"  + "R" + reverseInt,70
 							);
 					new Thread(m).start();
 				}

@@ -23,7 +23,6 @@ import utils.Translate;
 
 public class MergerWorker implements Runnable
 {
-	public static final int MIN_OVERLAP = 70;
 	
 	private static final long startTime = System.currentTimeMillis();
 	
@@ -32,6 +31,7 @@ public class MergerWorker implements Runnable
 	private final BufferedWriter writer;
 	private final Semaphore semaphore;
 	private final String sampleKey;
+	private final int minOverlap;
 	
 	public static AtomicLong numberMerged = new AtomicLong(0);
 	public static AtomicLong numberMatched = new AtomicLong(0);
@@ -40,13 +40,15 @@ public class MergerWorker implements Runnable
 							FastQ s2, 
 								BufferedWriter writer, 
 									Semaphore semaphore, 
-										String sampleKey)
+										String sampleKey, 
+											int minOverlap)
 	{
 		this.s1=s1;
 		this.s2=s2;
 		this.writer = writer;
 		this.semaphore = semaphore;
 		this.sampleKey = sampleKey;
+		this.minOverlap = minOverlap;
 	}
 	
 	private static class Holder
@@ -90,7 +92,7 @@ public class MergerWorker implements Runnable
 				}
 			}
 		
-			if( h.numOverlap >= MIN_OVERLAP)
+			if( h.numOverlap >= minOverlap)
 			{
 				StringBuffer consensus = new StringBuffer();
 				String qualScoreReverse = new StringBuffer(s2.getQualScore()).reverse().toString();
