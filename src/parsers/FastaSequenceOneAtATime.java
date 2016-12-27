@@ -1,10 +1,16 @@
 package parsers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 
@@ -20,7 +26,7 @@ public class FastaSequenceOneAtATime
 	
 	public FastaSequenceOneAtATime(File file) throws Exception
 	{
-		this(file,false);
+		this(file.getAbsolutePath());
 	}
 	
 	public FastaSequenceOneAtATime(String filePath, boolean gzipped) throws Exception
@@ -78,6 +84,64 @@ public class FastaSequenceOneAtATime
 		return fs;
 	}
 	
+	private static class Holder implements Comparable<Holder>
+	{
+		String sequence;
+		int count;
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return o.count - this.count;
+		}
+	}
+	
+	public static List<FastaSequence> collapseIdenticalSequences(File file) throws Exception
+	{
+		HashMap<String, Integer> map = new HashMap<String,Integer>();
+		
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(file);
+		
+		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs =  fsoat.getNextSequence())
+		{
+			Integer count = map.get(fs.getSequence());
+			
+			if( count == null)
+				count =0;
+			
+			count++;
+			
+			map.put(fs.getSequence(), count);
+		}
+		
+		fsoat.close();
+		
+		List<Holder> list = new ArrayList<Holder>();
+		
+		for(String s : map.keySet())
+		{
+			Holder h = new Holder();
+			h.sequence = s;
+			h.count = map.get(s);
+			list.add(h);
+		}
+		
+		Collections.sort(list);
+		
+		List<FastaSequence> fastaList = new ArrayList<FastaSequence>();
+		
+		int index=0;
+		for(Holder h : list)
+		{
+			index++;
+			FastaSequence fSeq = new FastaSequence(">seq" + index + "_" + h.count, h.sequence);
+			fastaList.add(fSeq);
+		}
+		
+		return fastaList;
+		
+	}
+	
 	public static class SequenceWorker implements Runnable
 	{
 		private final FastaSequence fs;
@@ -105,17 +169,19 @@ public class FastaSequenceOneAtATime
 	
 	public static void main(String[] args) throws Exception
 	{
-		File myFile = new File("c:\\someFile");
+		File myFile = new File("C:\\topeOneAtATime\\file3\\fastaOut\\DV-000-001_1_set3.fasta.gz");
 		
-		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(myFile);
+		List<FastaSequence> list = 
+				FastaSequenceOneAtATime.collapseIdenticalSequences(myFile);
 		
-		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; 
-						fs = fsoat.getNextSequence())
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"c:\\temp\\testFile.fasta")));
+		
+		for( FastaSequence fs : list)
 		{
-			// do something to the sequence on a new thread
-			new Thread(new SequenceWorker(fs)).start();
+			writer.write(fs.getHeader() + "\n" + fs.getSequence() + "\n");
 		}
 		
-		fsoat.close();
+		writer.flush(); writer.close();
 	}
 }
