@@ -14,6 +14,7 @@ for(taxa in taxaLevels )
 	myT <- myT[ myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
 	
 	pValuesWaste<- vector()
+	rSquaredValuesWaste <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -26,6 +27,10 @@ for(taxa in taxaLevels )
 			#pValuesWaste[index] <- myAnova$"Pr(>F)"[1]
 			
 			pValuesWaste[index] <- Kendall(myT[,i] ,  myT$waist )$sl[1]
+			rSquaredValuesWaste[index] = 
+				cor( myT[,i], myT$waist, use="na.or.complete",method="kendall")
+			
+			rSquaredValuesWaste[index] = rSquaredValuesWaste[index] * rSquaredValuesWaste[index]	
 			names[index] <- names(myT)[i]
 			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
 			index <- index + 1
@@ -33,7 +38,7 @@ for(taxa in taxaLevels )
 		
 	hist(pValuesWaste, breaks=20)
 
-	dFrame <- data.frame( names,pValuesWaste ) 
+	dFrame <- data.frame( names,pValuesWaste , rSquaredValuesWaste) 
 	dFrame <- dFrame [order(dFrame$pValuesWaste ),]
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
 	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
