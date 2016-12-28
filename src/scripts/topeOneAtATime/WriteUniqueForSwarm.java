@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import parsers.FastaSequence;
+import parsers.FastaSequenceOneAtATime;
 import utils.ConfigReader;
 
 public class WriteUniqueForSwarm
@@ -27,6 +28,7 @@ public class WriteUniqueForSwarm
 			Holder h = new Holder();
 			h.sequence = s;
 			h.count = map.get(s);
+			list.add(h);
 		}
 		
 		Collections.sort(list);
@@ -70,10 +72,11 @@ public class WriteUniqueForSwarm
 		for(String s : files)
 		{
 			System.out.println(s);
-			List<FastaSequence> list = FastaSequence.readFastaFile(
+			
+			FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(
 				topDir.getAbsolutePath() + File.separator + s	);	
 			
-			for(FastaSequence fs : list)
+			for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 			{
 				Integer count = map.get(fs.getSequence());
 				
