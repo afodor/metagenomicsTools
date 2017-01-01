@@ -99,7 +99,7 @@ public class AddMetadataMergedKraken
 		return val;
 	}
 	
-	private static HashSet<String> getFileSet(int fileNum) throws Exception
+	static HashSet<String> getFileSet(int fileNum) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
