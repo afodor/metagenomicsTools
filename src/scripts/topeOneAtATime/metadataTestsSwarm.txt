@@ -1,0 +1,60 @@
+rm(list=ls())
+library("Kendall")
+
+setwd("C:\\topeOneAtATime")
+
+taxa <- "swarm"
+pdf(paste("boxplots_", taxa, ".pdf", sep=""))
+par(mfrow=c(3,1))
+
+inFileName <- paste("swarmOTUsAsColumnsLogNormPlusMetadata.txt", sep ="")
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+myT <- myT[ myT$numberSequencesPerSample >= 500 & !is.na(myT$caseContol), ]
+	
+pValuesWaste<- vector()
+rSquaredValuesWaste <- vector()
+pValuesTicsCount <- vector()
+rSquaredTicsCount <- vector()
+pValuesWBO <- vector()
+pValuesCaseControl <- vector()
+names <- vector()
+	
+index <- 1
+for( i in c(12,13,16:ncol(myT))) 
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		{	
+			myLm <- lm( myT[,i] ~  myT$wbo , na.action=na.exclude)
+			myAnova <- anova(myLm)
+			pValuesWBO[index] <- myAnova$"Pr(>F)"[1]
+			
+			pValuesWaste[index] <- Kendall(myT[,i] ,  myT$waist )$sl[1]
+			rSquaredValuesWaste[index] = 
+				cor( myT[,i], myT$waist, use="na.or.complete",method="kendall")
+			
+			rSquaredValuesWaste[index] = rSquaredValuesWaste[index] * rSquaredValuesWaste[index]
+			
+			pValuesTicsCount[index] <- Kendall(myT[,i] ,  myT$ticsCount )$sl[1] 
+			rSquaredTicsCount[index] <- cor( myT[,i], myT$ticsCount, use="na.or.complete",method="kendall")
+			rSquaredTicsCount[index] = rSquaredTicsCount[index] * rSquaredTicsCount[index]
+				
+			names[index] <- names(myT)[i]
+			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
+			plot( myT[,i],myT$ticsCount, main=paste(names[index], " p=" , pValuesTicsCount[index] ))
+			plot( myT[,i] ~ myT$wbo, na.action=na.exclude,main=paste(names[index], " p=" , pValuesWBO[index] ))
+			
+			index <- index + 1
+		}
+		
+	hist(pValuesWaste, breaks=20)
+	hist(pValuesTicsCount, breaks=20)
+	hist(pValuesWBO, breaks=20)
+	
+
+	dFrame <- data.frame( names,pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO) 
+	dFrame <- dFrame [order(dFrame$pValuesWaste ),]
+	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
+	dFrame$pValuesTicAdjust <- p.adjust( dFrame$pValuesTicsCount, method = "BH")
+	dFrame$pValuesWBOAdjust <- p.adjust( dFrame$pValuesWBO, method = "BH")
+	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()
+							
