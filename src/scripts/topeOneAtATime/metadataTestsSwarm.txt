@@ -45,6 +45,7 @@ for( i in c(12,13,16:ncol(myT)))
 			pValuesCaseControl[index] <- myAnova2$"Pr(>F)"[1]
 			rSquaredCaseControl[index] <- summary(myLm2)$r.squared
 			
+			plot( myT[,i] ~ myT$caseContol, na.action=na.exclude,main=paste(names[index], " p=" ,pValuesCaseControl[index] ))
 			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
 			plot( myT[,i],myT$ticsCount, main=paste(names[index], " p=" , pValuesTicsCount[index] ))
 			plot( myT[,i] ~ myT$wbo, na.action=na.exclude,main=paste(names[index], " p=" , pValuesWBO[index] ))
