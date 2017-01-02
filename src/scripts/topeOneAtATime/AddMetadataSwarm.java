@@ -36,7 +36,7 @@ public class AddMetadataSwarm
 	}
 	
 	
-	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
+	static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
 				boolean fromR, HashSet<String> file3Set, HashSet<String> file4Set) throws Exception
 	{
 		HashMap<String, Nov2016MetadataParser> novMetaMap = Nov2016MetadataParser.getMetaMap();
