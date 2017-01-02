@@ -8,11 +8,11 @@ taxaLevels <- c("phylum","class","order","family","genus")
 for(taxa in taxaLevels ) 
 {
 	pdf(paste("boxplots_", taxa, ".pdf", sep=""))
-	par(mfrow=c(3,1))
+	par(mfrow=c(4,1))
 
 	inFileName <- paste("pivoted_", taxa, "asColumnsLogNormalPlusMetadata.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
-	myT <- myT[ myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
+	myT <- myT[ myT$read == 4 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseContol), ]
 	
 	
 	pValuesWaste<- vector()
@@ -20,6 +20,8 @@ for(taxa in taxaLevels )
 	pValuesTicsCount <- vector()
 	rSquaredTicsCount <- vector()
 	pValuesWBO <- vector()
+	pValuesCaseControl <- vector()
+	rSquaredCaseControl <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -39,26 +41,36 @@ for(taxa in taxaLevels )
 			pValuesTicsCount[index] <- Kendall(myT[,i] ,  myT$ticsCount )$sl[1] 
 			rSquaredTicsCount[index] <- cor( myT[,i], myT$ticsCount, use="na.or.complete",method="kendall")
 			rSquaredTicsCount[index] = rSquaredTicsCount[index] * rSquaredTicsCount[index]
+			
+			myLm2 <- lm( myT[,i] ~  factor(myT$caseContol) , na.action=na.exclude)
+			myAnova2 <- anova(myLm)
+			pValuesCaseControl[index] <- myAnova2$"Pr(>F)"[1]
+			rSquaredCaseControl[index] <- summary(myLm2)$r.squared
+			
 				
 			names[index] <- names(myT)[i]
+			plot( myT[,i] ~ myT$caseContol, main=paste(names[index], " p=" ,pValuesCaseControl[index] ))
 			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
 			plot( myT[,i],myT$ticsCount, main=paste(names[index], " p=" , pValuesTicsCount[index] ))
-			plot( myT[,i] ~ myT$wbo, na.action=na.exclude,main=paste(names[index], " p=" , pValuesWBO[index] ))
+			plot( myT[,i] ~ myT$wbo, main=paste(names[index], " p=" , pValuesWBO[index] ))
 			
 			index <- index + 1
 		}
 		
+	hist(pValuesCaseControl, breaks=20)
 	hist(pValuesWaste, breaks=20)
 	hist(pValuesTicsCount, breaks=20)
 	hist(pValuesWBO, breaks=20)
 	
 
-	dFrame <- data.frame( names,pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO) 
-	dFrame <- dFrame [order(dFrame$pValuesWaste ),]
+	dFrame <- data.frame( names,pValuesCaseControl, rSquaredCaseControl, pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO) 
+	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
+	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
 	dFrame$pValuesTicAdjust <- p.adjust( dFrame$pValuesTicsCount, method = "BH")
 	dFrame$pValuesWBOAdjust <- p.adjust( dFrame$pValuesWBO, method = "BH")
-	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read4_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
+		
 }
 							
