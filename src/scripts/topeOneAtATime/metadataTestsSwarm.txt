@@ -11,7 +11,7 @@ inFileName <- paste("swarmOTUsAsColumnsLogNormPlusMetadata.txt", sep ="")
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 myT <- myT[ myT$numberSequencesPerSample >= 500 & !is.na(myT$caseContol), ]
 	
-pValuesWaste<- vector()
+pValuesWaste<- vector()	
 rSquaredValuesWaste <- vector()
 pValuesTicsCount <- vector()
 rSquaredTicsCount <- vector()

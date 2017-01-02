@@ -20,13 +20,13 @@ public class AddMetadataSwarm
 		HashSet<String> fileSet4 = AddMetadataMergedKraken.getFileSet(4);
 		
 		OtuWrapper wrapper = new OtuWrapper( ConfigReader.getTopeOneAtATimeDir()
-					+ File.separator + "swarmOTUsAsColumns.txt");
+					+ File.separator + "swarmOTUsAsColumnsWithSingles.txt");
 			
 		File logNormalizedFile = 
 				new File( ConfigReader.getTopeOneAtATimeDir()
 						+ File.separator + "swarmOTUsAsColumnsLogNorm.txt");
 								
-		//wrapper.writeNormalizedLoggedDataToFile(logNormalizedFile);
+		wrapper.writeNormalizedLoggedDataToFile(logNormalizedFile);
 		
 		File outFile = new File( ConfigReader.getTopeOneAtATimeDir()
 				+ File.separator + "swarmOTUsAsColumnsLogNormPlusMetadata.txt");
