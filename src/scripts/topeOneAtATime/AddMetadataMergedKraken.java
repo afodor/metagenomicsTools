@@ -75,7 +75,7 @@ public class AddMetadataMergedKraken
 		
 	}
 	
-	private static int getReadNum(String key) throws Exception
+	static int getReadNum(String key) throws Exception
 	{
 		//System.out.println(key);
 		String[] splits = key.split("_");
