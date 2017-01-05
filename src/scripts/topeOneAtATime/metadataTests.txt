@@ -46,10 +46,9 @@ for(taxa in taxaLevels )
 			rSquaredTicsCount[index] = rSquaredTicsCount[index] * rSquaredTicsCount[index]
 			
 			myLm2 <- lm( myT[,i] ~  factor(myT$caseContol) , na.action=na.exclude)
-			myAnova2 <- anova(myLm)
+			myAnova2 <- anova(myLm2)
 			pValuesCaseControl[index] <- myAnova2$"Pr(>F)"[1]
 			rSquaredCaseControl[index] <- summary(myLm2)$r.squared
-			
 				
 			names[index] <- names(myT)[i]
 			plot( myT[,i] ~ myT$caseContol, main=paste(names[index], " p=" ,pValuesCaseControl[index] ))
