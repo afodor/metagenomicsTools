@@ -21,6 +21,7 @@ for(taxa in taxaLevels )
 	pValuesTicsCount <- vector()
 	rSquaredTicsCount <- vector()
 	pValuesWBO <- vector()
+	rSquaredValuesWBO <- vector()
 	pValuesCaseControl <- vector()
 	rSquaredCaseControl <- vector()
 	names <- vector()
@@ -34,6 +35,7 @@ for(taxa in taxaLevels )
 			myLm <- lm( myT[,i] ~  myT$wbo , na.action=na.exclude)
 			myAnova <- anova(myLm)
 			pValuesWBO[index] <- myAnova$"Pr(>F)"[1]
+			rSquaredValuesWBO[index] <- summary(myLm)$r.squared
 			
 			pValuesWaste[index] <- Kendall(myT[,i] ,  myT$waist )$sl[1]
 			rSquaredValuesWaste[index] = 
@@ -65,7 +67,7 @@ for(taxa in taxaLevels )
 	hist(pValuesWBO, breaks=20)
 	
 
-	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO) 
+	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
