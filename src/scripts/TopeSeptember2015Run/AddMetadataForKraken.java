@@ -21,24 +21,17 @@ public class AddMetadataForKraken
 		for( int x=0; x < TAXA_ARRAY.length; x++)
 		{
 			System.out.println(TAXA_ARRAY[x]) ;
-			File inFile = new File(ConfigReader.getMergedArffDir() + File.separator +
-					"Adenomas2015" + File.separator + "kraken" + File.separator + 
+			File inFile = new File(ConfigReader.getTopeSep2015Dir() + File.separator +
+					"kraken" + File.separator +
 					"kraken_" + TAXA_ARRAY[x] + ".txt");
 			OtuWrapper wrapper = new OtuWrapper(inFile);
 			
-			File logNormal = new File(
-					ConfigReader.getMergedArffDir() + File.separator +
-					"Adenomas2015" + File.separator + "kraken" + File.separator + 
-					"kraken_" + TAXA_ARRAY[x] + "logNormal.txt");
+			File metadataFile = new File(ConfigReader.getTopeSep2015Dir() 
+					+ File.separator +
+					"kraken" + File.separator +
+					"kraken_" + TAXA_ARRAY[x] + "PlusMetadata.txt");
 			
-			File logNormalMetadata = new File(
-					ConfigReader.getMergedArffDir() + File.separator +
-					"Adenomas2015" + File.separator + "kraken" + File.separator + 
-					"kraken_" + TAXA_ARRAY[x] + "logNormalPlusMetadata.txt");
-			
-			wrapper.writeNormalizedLoggedDataToFile(logNormal);
-			
-			addMetadata(wrapper, logNormal, logNormalMetadata, false);
+			addMetadata(wrapper, inFile, metadataFile, false);
 		}
 	}
 	
