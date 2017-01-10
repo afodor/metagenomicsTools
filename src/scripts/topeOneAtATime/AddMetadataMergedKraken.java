@@ -55,10 +55,12 @@ public class AddMetadataMergedKraken
 			String taxa=  AddMetadataForKraken.TAXA_ARRAY[x];
 			System.out.println(taxa);
 			
-			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getTopeOneAtATimeDir()
+			File unlogged = new File(ConfigReader.getTopeOneAtATimeDir()
 					+ File.separator + "krakenMerged" + 
 					File.separator + "pivoted_" + 
 					"diverticulosis_merged_kraken_" + taxa + ".txt");
+			
+			OtuWrapper wrapper = new OtuWrapper( unlogged );
 			
 			File logNormalizedFile = new File(	ConfigReader.getTopeOneAtATimeDir()
 					+ File.separator + "krakenMerged" + 
@@ -71,6 +73,14 @@ public class AddMetadataMergedKraken
 					"diverticulosis_merged_kraken_" + taxa + "LogNormalPlusMetadata.txt");
 			
 			addMetadata(wrapper, logNormalizedFile, outFile,false, fileSet3, fileSet4);
+			
+			outFile = new File(ConfigReader.getTopeOneAtATimeDir()
+					+ File.separator + "krakenMerged" + 
+					File.separator + "pivoted_" + 
+					"diverticulosis_merged_kraken_" + taxa + "PlusMetadata.txt");
+			
+			addMetadata(wrapper, unlogged, outFile,false, fileSet3, fileSet4);
+			
 		}
 		
 	}
