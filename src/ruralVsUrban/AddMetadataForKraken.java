@@ -140,6 +140,13 @@ public class AddMetadataForKraken
 			
 				
 				addSomeMetadata(loggedFileWithMetadata, loggedFile, time);
+				
+				File unloggedFileWithMetada = new File(
+						ConfigReader.getChinaDir() + 
+						File.separator + "krakenSummary" + File.separator + 
+						"China_2015_kraken_" + taxa +"CountsWithMetadata_" + time +".txt");
+				
+				addSomeMetadata(unloggedFileWithMetada, unloggedFile, time);
 			
 			}
 		}	
