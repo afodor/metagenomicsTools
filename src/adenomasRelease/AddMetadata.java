@@ -13,7 +13,7 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	private static HashMap<String, String> getCaseControlMap() throws Exception
+	static HashMap<String, String> getCaseControlMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
