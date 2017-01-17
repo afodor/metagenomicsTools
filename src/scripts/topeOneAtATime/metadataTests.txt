@@ -56,6 +56,14 @@ for(taxa in taxaLevels )
 			names[index] <- names(myT)[i]
 			boxplot( myT[myT$caseControl==0,i] ,myT[myT$caseControl==1,i], 
 			main=paste(names[index], " p=" ,pValuesCaseControl[index] ))
+			
+			bug <- myT[,i]
+			caseControl <- factor( myT$caseControl)
+			myFrame <- data.frame(bug, caseControl)
+			
+			stripchart(bug ~ caseControl, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
+			
 			plot( myT[,i],myT$waist , main=paste(names[index], " p=" , pValuesWaste[index] ))
 			plot( myT[,i],myT$ticsCount, main=paste(names[index], " p=" , pValuesTicsCount[index] ))
 			plot( myT[,i] ~ myT$wbo, main=paste(names[index], " p=" , pValuesWBO[index] ))
