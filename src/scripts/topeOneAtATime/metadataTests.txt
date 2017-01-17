@@ -55,7 +55,7 @@ for(taxa in taxaLevels )
 				
 			names[index] <- names(myT)[i]
 			boxplot( myT[myT$caseControl==0,i] ,myT[myT$caseControl==1,i], 
-			main=paste(names[index], " p=" ,pValuesCaseControl[index] ))
+			main=paste(names[index], " p=" ,format(pValuesCaseControl[index],digits=3) ))
 			
 			bug <- myT[,i]
 			caseControl <- factor( myT$caseControl)

@@ -47,7 +47,8 @@ public class CountForwardReads
 				
 				int readNum = Integer.parseInt(splits[10]);
 				
-				if( readNum == 1 && splits[11].toLowerCase().equals("false") && splits[14].length() > 0)
+				if( readNum == 1 && splits[11].toLowerCase().equals("false") && splits[14].length() > 0
+							&& Integer.parseInt(splits[14]) != -1)
 						if( Integer.parseInt(splits[14]) == 0 || Integer.parseInt(splits[14]) == 1)
 					{
 						List<Double> list = new ArrayList<Double>();

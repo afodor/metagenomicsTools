@@ -207,7 +207,7 @@ public class AddMetadataMerged
 			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
 			
 			if( val == null)
-				writer.write("\t");
+				writer.write("-1\t");
 			else
 				writer.write("" + val + "\t");
 			
