@@ -1,0 +1,8 @@
+rm(list=ls())
+
+setwd("C:\\topeOneAtATime\\WriteUp_Jan6_2017")
+
+myT <- read.table("allTTestsPivoted_genus.txt", header=TRUE, sep="\t")
+
+plot(myT$Divitriculosis2015.RDP, myT$Divitriculosis2015.QIIME_CLOSED)
+
