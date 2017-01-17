@@ -159,7 +159,7 @@ public class AddMetadataMerged
 		
 		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\t");
 		
-		writer.write("readNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseContol\tset\tread");
+		writer.write("readNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseControl\tset\tread");
 		
 		String[] firstSplits = reader.readLine().split("\t");
 		
