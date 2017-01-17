@@ -91,6 +91,8 @@ for(taxa in taxaLevels )
 	hist(pValuesWaste, breaks=20)
 	hist(pValuesTicsCount, breaks=20)
 	hist(pValuesWBO, breaks=20)
+	hist(pValuesAge, breaks=20)
+	hist(pValuesSex, breaks=20)
 	
 
 	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, 
