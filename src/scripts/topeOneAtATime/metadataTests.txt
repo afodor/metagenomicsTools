@@ -4,6 +4,7 @@ library("Kendall")
 setwd("C:\\topeOneAtATime\\merged")
 
 taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum")
 
 for(taxa in taxaLevels ) 
 {
@@ -24,10 +25,12 @@ for(taxa in taxaLevels )
 	rSquaredValuesWBO <- vector()
 	pValuesCaseControl <- vector()
 	rSquaredCaseControl <- vector()
+	pValuesAge <- vector()
+	rSquaredAge <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in c(18:ncol(myT))) 
+	for( i in c(18:ncol(myT))) 	
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
 			sampleSizeCase[index] <- length( myT[myT$caseControl==1,i])
@@ -40,6 +43,11 @@ for(taxa in taxaLevels )
 			pValuesWaste[index] <- Kendall(myT[,i] ,  myT$waist )$sl[1]
 			rSquaredValuesWaste[index] = 
 				cor( myT[,i], myT$waist, use="na.or.complete",method="kendall")
+				
+			pValuesAge[index] <- Kendall(myT[,i] ,  myT$age)$sl[1]
+			rSquaredAge[index] = 
+				cor( myT[,i], myT$age, use="na.or.complete",method="kendall")
+			rSquaredAge[index] = rSquaredAge[index] * rSquaredAge[index]
 			
 			rSquaredValuesWaste[index] = rSquaredValuesWaste[index] * rSquaredValuesWaste[index]
 			
@@ -77,12 +85,14 @@ for(taxa in taxaLevels )
 	hist(pValuesWBO, breaks=20)
 	
 
-	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, pValuesWaste , rSquaredValuesWaste,pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
+	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, 
+	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
 	dFrame$pValuesTicAdjust <- p.adjust( dFrame$pValuesTicsCount, method = "BH")
 	dFrame$pValuesWBOAdjust <- p.adjust( dFrame$pValuesWBO, method = "BH")
+	dFrame$pValuesAgeAdjust <- p.adjust( dFrame$pValuesAge, method = "BH")
 	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 		
