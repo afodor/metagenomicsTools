@@ -54,10 +54,12 @@ public class AddMetadataMerged
 		{
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			
-			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getTopeOneAtATimeDir()
+			File rawCounts = new File(ConfigReader.getTopeOneAtATimeDir()
 					+ File.separator + "merged" +
 					File.separator + "pivoted_" + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumns.txt");
+			
+			OtuWrapper wrapper = new OtuWrapper( rawCounts );
 			
 			File logNormalizedFile = new File(	ConfigReader.getTopeOneAtATimeDir()
 					+ File.separator + "merged" + 
@@ -80,8 +82,14 @@ public class AddMetadataMerged
 					File.separator +  "mds_"+ NewRDPParserFileLine.TAXA_ARRAY[x] +  "PlusMetadata.txt" );
 			
 			addMetadata(wrapper, logNormalizedFile, outFile, true , fileSet3, fileSet4);
+			
+			File linearMetadataFile = new File(ConfigReader.getTopeOneAtATimeDir()
+					+ File.separator + "merged" +
+					File.separator + "pivoted_" + 
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsPlusMetadata.txt");
+			
+			addMetadata(wrapper, rawCounts, linearMetadataFile, false, fileSet3, fileSet4);	
 		}
-		
 	}
 	
 	private static int getReadNum(String key) throws Exception
