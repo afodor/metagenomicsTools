@@ -27,6 +27,8 @@ for(taxa in taxaLevels )
 	rSquaredCaseControl <- vector()
 	pValuesAge <- vector()
 	rSquaredAge <- vector()
+	pValuesSex <- vector()
+	rSquaredSex <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -60,6 +62,12 @@ for(taxa in taxaLevels )
 			
 			myLm2 <- lm( myT[,i] ~  factor(myT$caseControl) , na.action=na.exclude)
 			rSquaredCaseControl[index] <- summary(myLm2)$r.squared
+			
+			pValuesSex[index] <- 
+			wilcox.test( myT[myT$sex==1,i] , myT[myT$sex==2,i])$p.value
+			
+			myLm3 <- lm( myT[,i] ~  factor(myT$sex) , na.action=na.exclude)
+			rSquaredSex[index] <- summary(myLm3)$r.squared
 				
 			names[index] <- names(myT)[i]
 			boxplot( myT[myT$caseControl==0,i] ,myT[myT$caseControl==1,i], 
@@ -86,13 +94,14 @@ for(taxa in taxaLevels )
 	
 
 	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, 
-	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
+	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge,pValuesSex,rSquaredSex, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
 	dFrame$pValuesTicAdjust <- p.adjust( dFrame$pValuesTicsCount, method = "BH")
 	dFrame$pValuesWBOAdjust <- p.adjust( dFrame$pValuesWBO, method = "BH")
 	dFrame$pValuesAgeAdjust <- p.adjust( dFrame$pValuesAge, method = "BH")
+	dFrame$pValuesSexeAdjust <- p.adjust( dFrame$pValuesSex, method = "BH")
 	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 		
