@@ -3,7 +3,7 @@ rm(list=ls())
 piOld <- 0.5
 
 numIterations <- 500000
-posteiorDist <- vector(length=numIterations )
+posteiorDist <- vector()
 
 for( i in 1:numIterations )
 {
@@ -27,9 +27,13 @@ for( i in 1:numIterations )
 		piOld = piNew;
 		
 	posteiorDist[i] = piOld;	
+	
+	if( i %% 100 == 0 )
+	{	
+		myHist <- hist(posteiorDist,breaks=200,plot=FALSE)
+		plot( myHist$mids, myHist$counts/i, main = paste("iteration", i)) 
+		dbetasum = sum(dbeta(myHist$mids, 10+14, 10+10))
+		lines( myHist$mids, dbeta(myHist$mids, 10+14, 10+10)/dbetasum,col="red") 	
+		Sys.sleep(.1)
+	}
 }
-
-myHist <- hist(posteiorDist,breaks=200,plot=FALSE)
-plot( myHist$mids, myHist$counts/numIterations) 
-dbetasum = sum(dbeta(myHist$mids, 10+14, 10+10))
-lines( myHist$mids, dbeta(myHist$mids, 10+14, 10+10)/dbetasum,col="red") 
