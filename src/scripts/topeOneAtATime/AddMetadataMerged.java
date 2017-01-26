@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import utils.ConfigReader;
-import utils.TabReader;
 
 public class AddMetadataMerged
 {
@@ -160,7 +159,8 @@ public class AddMetadataMerged
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			System.out.println(splits[0] + " " + splits[9]);
+			//System.out.println(splits[0] + " " + splits[9]);
+			map.put(splits[0],splits[9]);
 		}
 		
 		reader.close();
@@ -180,7 +180,7 @@ public class AddMetadataMerged
 		
 		writer.write("id\tkey\t");
 		
-		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\t");
+		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\tticLocation\t");
 		
 		writer.write("readNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseControl\tset\tread");
 		
@@ -221,6 +221,13 @@ public class AddMetadataMerged
 				writer.write(  getStringOrNothing(novMeta.getWbo()) + "\t");
 				writer.write(  getStringOrNothing(novMeta.getBmi_CAT()) + "\t");	
 			}
+			
+			String location = ticLocaitonMap.get(key.split("_")[0] );
+			
+			if( location == null || location.length() == 0)
+				writer.write("\t");
+			else
+				writer.write(location + "\t");
 			
 			writer.write( getReadNum(key) + "\t" + 
 						( key.indexOf("DV-000-") != -1) + "\t" + 
