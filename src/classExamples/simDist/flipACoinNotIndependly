@@ -9,19 +9,32 @@ varianceResults <- vector(length=numGenes)
 
 for( i in 1:numGenes)
 {
-	probSuccess <- runif(1)/500
+	probSuccess <- runif(1)/100
 	
-	flips <- vector(length=numFlips)
+	flips <- vector()
+	index <- 1
 	
 	for( j in 1:numFlips)
 	{
-		if( runif(1) <= probSuccess ) 
+		aVal = runif(1);
+		if(  aVal<= probSuccess ) 
 		{
-				flips[j] = 1
+			flips[index] <- 1
+			index <- index + 1;
+			
+			if( aVal <= probSuccess /10)
+			{
+				for( k in 1: 10)
+				{
+					flips[index] <- 1
+					index <- index + 1;
+				}
+			}
 		}
 		else
 		{
-			flips[j] = 0
+			flips[index] <- 0
+			index <- index +1
 		}
 	}
 	
