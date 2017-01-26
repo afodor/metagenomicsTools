@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-numGenes <- 10000
+numGenes <- 1000
 numFlips <- 5000
 
 meanResults <- vector(length=numGenes)
@@ -9,13 +9,13 @@ varianceResults <- vector(length=numGenes)
 
 for( i in 1:numGenes)
 {
-	probSuccess <- runif(1)
+	probSuccess <- runif(1)/100
 	
 	flips <- vector(length=numFlips)
 	
 	for( j in 1:numFlips)
 	{
-		if( runif(1) >= probSuccess ) 
+		if( runif(1) <= probSuccess ) 
 		{
 				flips[j] = 1
 		}
@@ -30,3 +30,5 @@ for( i in 1:numGenes)
 }
 
 plot(meanResults, varianceResults)
+seqs <- seq( 0, max(meanResults), 0.001)
+lines(seqs,seqs, col="red")
