@@ -1,5 +1,7 @@
 rm(list=ls())
 
+library("gap")
+
 numSimulations <- 10000
 numReadsPerSimulation <- 100000
 oneToNumSims <- 1:numReadsPerSimulation 
