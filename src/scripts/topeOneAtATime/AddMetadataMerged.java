@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import utils.ConfigReader;
+import utils.TabReader;
 
 public class AddMetadataMerged
 {
@@ -146,11 +147,33 @@ public class AddMetadataMerged
 		throw new Exception("File id in neither " + sampleID);
 	}
 	
+	private static HashMap<String, String> getTicLocationMap() throws Exception
+	{
+		HashMap<String, String> map = new HashMap<String,String>();
+		
+		BufferedReader reader = new BufferedReader( new FileReader(
+				ConfigReader.getTopeOneAtATimeDir()+
+				File.separator + "tk_out_24Jan2017.txt" ));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			System.out.println(splits[0] + " " + splits[9]);
+		}
+		
+		reader.close();
+		
+		return map;
+	}
+	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
 				boolean fromR, HashSet<String> file3Set, HashSet<String> file4Set) throws Exception
 	{
 		HashMap<String, Nov2016MetadataParser> novMetaMap = Nov2016MetadataParser.getMetaMap();
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
+		HashMap<String, String> ticLocaitonMap = getTicLocationMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
