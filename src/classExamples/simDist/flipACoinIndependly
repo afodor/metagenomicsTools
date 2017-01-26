@@ -1,0 +1,32 @@
+
+rm(list=ls())
+
+numGenes <- 10000
+numFlips <- 5000
+
+meanResults <- vector(length=numGenes)
+varianceResults <- vector(length=numGenes)
+
+for( i in 1:numGenes)
+{
+	probSuccess <- runif(1)
+	
+	flips <- vector(length=numFlips)
+	
+	for( j in 1:numFlips)
+	{
+		if( runif(1) >= probSuccess ) 
+		{
+				flips[j] = 1
+		}
+		else
+		{
+			flips[j] = 0
+		}
+	}
+	
+	meanResults[i] <- mean(flips)
+	varianceResults[i] <- var(flips)
+}
+
+plot(meanResults, varianceResults)
