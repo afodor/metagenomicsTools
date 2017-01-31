@@ -1,8 +1,10 @@
 package scripts.topeOneAtATime;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +25,44 @@ public class RemoveRareTaxa
 		
 		List<Boolean> inList = getIncludeList(inCounts);
 		
-		for(Boolean b : inList)
-			System.out.println(b);
+		writeNewFile(inCounts, outCounts, inList);
 	
+	}
+	
+	private static void writeNewFile(File inFile, File outFile, List<Boolean> keepList)
+		throws Exception
+	{
+		BufferedReader reader =new BufferedReader(new FileReader(inFile));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		String[] topLine = reader.readLine().split("\t");
+		
+		writer.write(topLine[0]);
+		
+		for(int x=1; x < topLine.length; x++)
+			if( keepList.get(x-1))
+				writer.write("\t" + topLine[x]);
+		
+		writer.write("\n");
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			writer.write(splits[0]);
+			
+			for(int x=1; x < splits.length; x++)
+				if( keepList.get(x-1))
+					writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
+			
+		}
+		
+		writer.flush();  writer.close();
+		
+		reader.close();
 	}
 	
 	private static List<Boolean> getIncludeList(File inFile) throws Exception
