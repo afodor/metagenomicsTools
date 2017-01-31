@@ -29,10 +29,12 @@ for(taxa in taxaLevels )
 	rSquaredAge <- vector()
 	pValuesSex <- vector()
 	rSquaredSex <- vector()
+	ticLocationPValue <- vector()
+	ticLocationRSquared <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in c(18:ncol(myT))) 	
+	for( i in c(19:ncol(myT))) 	
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
 			sampleSizeCase[index] <- length( myT[myT$caseControl==1,i])
@@ -69,6 +71,10 @@ for(taxa in taxaLevels )
 			myLm3 <- lm( myT[,i] ~  factor(myT$sex) , na.action=na.exclude)
 			rSquaredSex[index] <- summary(myLm3)$r.squared
 				
+			myLm4 <- lm( myT[,i] ~  factor(myT$ticLocation) , na.action=na.exclude)
+			ticLocationRSquared[index] <- summary(myLm4)$r.squared
+			ticLocationPValue[index] <- anova(myLm4)$"Pr(>F)"[1]
+				
 			names[index] <- names(myT)[i]
 			boxplot( myT[myT$caseControl==0,i] ,myT[myT$caseControl==1,i], 
 			main=paste(names[index], " p=" ,format(pValuesCaseControl[index],digits=3) ))
@@ -93,10 +99,12 @@ for(taxa in taxaLevels )
 	hist(pValuesWBO, breaks=20)
 	hist(pValuesAge, breaks=20)
 	hist(pValuesSex, breaks=20)
+	hist(ticLocationPValue,breaks=20)
 	
 
 	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, 
-	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge,pValuesSex,rSquaredSex, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO) 
+	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge,pValuesSex,rSquaredSex, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO,
+	ticLocationPValue,ticLocationRSquared) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
@@ -104,6 +112,7 @@ for(taxa in taxaLevels )
 	dFrame$pValuesWBOAdjust <- p.adjust( dFrame$pValuesWBO, method = "BH")
 	dFrame$pValuesAgeAdjust <- p.adjust( dFrame$pValuesAge, method = "BH")
 	dFrame$pValuesSexeAdjust <- p.adjust( dFrame$pValuesSex, method = "BH")
+	dFrame$ticLocationPValueAdjust <- p.adjust( dFrame$ticLocationPValue, method = "BH")
 	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 		
