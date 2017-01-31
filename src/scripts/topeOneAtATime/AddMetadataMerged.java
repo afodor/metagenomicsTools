@@ -116,7 +116,7 @@ public class AddMetadataMerged
 		return val;
 	}
 	
-	private static HashSet<String> getFileSet(int fileNum) throws Exception
+	static HashSet<String> getFileSet(int fileNum) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
@@ -131,7 +131,7 @@ public class AddMetadataMerged
 		return set;
 	}
 	
-	private static String getIdOrThrow(String sampleID, HashSet<String> file3Set, HashSet<String> file4Set)
+	static String getIdOrThrow(String sampleID, HashSet<String> file3Set, HashSet<String> file4Set)
 		throws Exception
 	{
 		if( file3Set.contains(sampleID)  && file4Set.contains(sampleID))
@@ -146,7 +146,7 @@ public class AddMetadataMerged
 		throw new Exception("File id in neither " + sampleID);
 	}
 	
-	private static HashMap<String, String> getTicLocationMap() throws Exception
+	static HashMap<String, String> getTicLocationMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
@@ -255,7 +255,7 @@ public class AddMetadataMerged
 		reader.close();
 	}
 	
-	private static String getStringOrNothing(Object o)
+	static String getStringOrNothing(Object o)
 	{
 		if( o == null)
 			return "";
