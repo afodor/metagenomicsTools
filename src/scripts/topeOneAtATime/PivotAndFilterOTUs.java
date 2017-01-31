@@ -15,6 +15,9 @@ import utils.ConfigReader;
 
 public class PivotAndFilterOTUs
 {
+	/*
+	 * This class was for Roshonda's pivots, but that was not the correct dataset!!
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		File originalFile = new File( ConfigReader.getTopeOneAtATimeDir() + File.separator +

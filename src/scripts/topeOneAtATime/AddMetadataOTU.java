@@ -21,11 +21,13 @@ public class AddMetadataOTU
 		HashSet<String> fileSet4 = AddMetadataMerged.getFileSet(4);
 		
 		File rawCounts = new File( ConfigReader.getTopeOneAtATimeDir() + File.separator +
-				"diverticulosisOTUs" + File.separator +  "otus" + File.separator + 
-				"tope_otu_asColumns.txt");
+				"qiimeSummary" + File.separator +  
+				"diverticulosis_closed_otu_AsColumns.txt");
 			
 		OtuWrapper wrapper = new OtuWrapper( rawCounts );
 		
+		
+		/*
 		File logNormalFile= new File(  ConfigReader.getTopeOneAtATimeDir()
 				+ File.separator + "merged" + 
 				File.separator + "pivoted_" + 
@@ -39,7 +41,7 @@ public class AddMetadataOTU
 		"otu" + "asColumnsLogNormalPlusMetadata.txt");
 		
 		addMetadata(wrapper, logNormalFile, outFile, false, fileSet3, fileSet4);	
-		
+		*/
 	}
 	
 	
@@ -73,7 +75,7 @@ public class AddMetadataOTU
 		{
 			String[] splits = s.split("\t");
 			
-			String key = splits[0].replaceAll("\"", "").replaceAll("\\.", "-").replace("D5", "DV");
+			String key = splits[0].replaceAll("\"", "");
 			String sampleId = key;
 			
 			Nov2016MetadataParser novMeta = novMetaMap.get(key);
@@ -109,8 +111,8 @@ public class AddMetadataOTU
 			// todo: Check with Roshonda if these are in fact forward reads
 			writer.write( "1" + "\t" + 
 						( key.indexOf("DV-000-") != -1) + "\t" + 
-					wrapper.getNumberSequences(key.replaceAll("-", ".").replace("DV", "D5") ) 
-						+ "\t" + wrapper.getShannonEntropy(key.replaceAll("-", ".").replace("DV", "D5")) 
+					wrapper.getNumberSequences(key) 
+						+ "\t" + wrapper.getShannonEntropy(key) 
 						+ "\t" );
 			
 			Integer val = caseControlMap.get( new StringTokenizer(key, "_").nextToken());
