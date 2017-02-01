@@ -111,7 +111,26 @@ public class AddMetadataMerged
 					File.separator + "pivoted_" + 
 		"otu" + "asColumnsLogNormalPlusMetadata.txt");
 		
+		addMetadata(wrapper, logNormalFile, outFile, false, fileSet3, fileSet4);
+		
+		System.out.println("otu_qiime_cr");
+		rawCounts = new File( ConfigReader.getTopeOneAtATimeDir() + File.separator +
+				"qiimeSummary" + File.separator +  
+				"diverticulosis_closed_g_AsColumns.txt");
+			
+		wrapper = new OtuWrapper( rawCounts );
+		
+		logNormalFile= new File(  ConfigReader.getTopeOneAtATimeDir() + File.separator +
+				"qiimeSummary" + File.separator +  
+		"diverticulosis_closed_genus_AsColumnsLogNormal.txt" );
+			
+		outFile = new File( ConfigReader.getTopeOneAtATimeDir()
+					+ File.separator + "merged" +
+					File.separator + "pivoted_" + 
+		"otu_qiime_cr" + "asColumnsLogNormalPlusMetadata.txt");
+		
 		addMetadata(wrapper, logNormalFile, outFile, false, fileSet3, fileSet4);	
+		
 		System.out.println("finished");
 	}
 	
