@@ -90,6 +90,29 @@ public class AddMetadataMerged
 			
 			addMetadata(wrapper, rawCounts, linearMetadataFile, false, fileSet3, fileSet4);	
 		}
+		
+		System.out.println("otu");
+		File rawCounts = new File( ConfigReader.getTopeOneAtATimeDir() + File.separator +
+				"qiimeSummary" + File.separator +  
+				"diverticulosis_closed_otu_AsColumnsRareTaxaRemoved.txt");
+			
+		OtuWrapper wrapper = new OtuWrapper( rawCounts );
+		
+		
+		File logNormalFile= new File(  ConfigReader.getTopeOneAtATimeDir()
+				+ File.separator + "merged" + 
+				File.separator + "pivoted_" + 
+		"otu" + "asColumnsLogNormal.txt" );
+			
+		wrapper.writeNormalizedLoggedDataToFile(logNormalFile.getAbsolutePath());
+		
+		File outFile = new File( ConfigReader.getTopeOneAtATimeDir()
+					+ File.separator + "merged" +
+					File.separator + "pivoted_" + 
+		"otu" + "asColumnsLogNormalPlusMetadata.txt");
+		
+		addMetadata(wrapper, logNormalFile, outFile, false, fileSet3, fileSet4);	
+		System.out.println("finished");
 	}
 	
 	private static int getReadNum(String key) throws Exception
