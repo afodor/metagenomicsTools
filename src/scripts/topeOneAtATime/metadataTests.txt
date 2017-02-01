@@ -3,8 +3,8 @@ library("Kendall")
 
 setwd("C:\\topeOneAtATime\\merged")
 
-#taxaLevels <- c("otu_qiime_cr","otu","phylum","class","order","family","genus")
-taxaLevels <- c("otu_qiime_cr")
+taxaLevels <- c("otu_qiime_cr","otu","phylum","class","order","family","genus")
+#taxaLevels <- c("otu_qiime_cr")
 
 for(taxa in taxaLevels ) 
 {
@@ -31,6 +31,8 @@ for(taxa in taxaLevels )
 	rSquaredSex <- vector()
 	ticLocationPValue <- vector()
 	ticLocationRSquared <- vector()
+	meanCase <- vector()
+	meanControl <- vector()
 	names <- vector()
 	
 	index <- 1
@@ -61,6 +63,9 @@ for(taxa in taxaLevels )
 			
 			pValuesCaseControl[index] <- 
 			wilcox.test( myT[myT$caseControl==0,i] , myT[myT$caseControl==1,i])$p.value
+			
+			meanCase[index] <- mean( myT[myT$caseControl==1,i])
+			meanControl[index] <- mean(myT[myT$caseControl==0,i])  
 			
 			myLm2 <- lm( myT[,i] ~  factor(myT$caseControl) , na.action=na.exclude)
 			rSquaredCaseControl[index] <- summary(myLm2)$r.squared
@@ -102,7 +107,7 @@ for(taxa in taxaLevels )
 	hist(ticLocationPValue,breaks=20)
 	
 
-	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,pValuesCaseControl, rSquaredCaseControl, 
+	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,meanCase, meanControl, pValuesCaseControl, rSquaredCaseControl, 
 	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge,pValuesSex,rSquaredSex, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO,
 	ticLocationPValue,ticLocationRSquared) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
