@@ -3,7 +3,7 @@ library("Kendall")
 
 setwd("C:\\topeOneAtATime\\merged")
 
-taxaLevels <- c("phylum","class","order","family","genus")
+taxaLevels <- c("otu","phylum","class","order","family","genus")
 #taxaLevels <- c("phylum")
 
 for(taxa in taxaLevels ) 
