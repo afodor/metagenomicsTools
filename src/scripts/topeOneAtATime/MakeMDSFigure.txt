@@ -1,0 +1,12 @@
+rm(list=ls())
+
+setwd("C:\\topeOneAtATime\\merged")
+
+myT <- read.table("mds_genusPlusMetadata.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$read == 1 &  myT$numberSequencesPerSample >= 1000 & !is.na(myT$caseControl)
+						& (myT$caseControl == 0 | myT$caseControl == 1 )  , ]ontro
+						
+
+myColors = ifelse( myT$caseControl == 1 , "red" , "black")
+
+plot( myT$MDS1, myT$MDS2, col= myColors,pch=16, cex=1.2)
