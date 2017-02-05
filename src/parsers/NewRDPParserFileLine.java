@@ -58,6 +58,13 @@ public class NewRDPParserFileLine
 		DOMAIN, PHYLUM, CLASS, ORDER, FAMILY, GENUS
 	};
 	
+	public static final String[] TAXA_ARRAY_PLUS_OTU = 
+	{
+			DOMAIN, PHYLUM, CLASS, ORDER, FAMILY, GENUS, "otu"
+	};
+		
+		
+	
 	public NewRDPNode getLowestNodeAtThreshold(int threshold)
 	{
 		NewRDPNode returnNode = null;
