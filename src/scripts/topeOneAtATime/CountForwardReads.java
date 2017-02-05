@@ -24,16 +24,17 @@ public class CountForwardReads
 		
 		writer.write("level\ttotalSequences\taverage\tsd\tnumCase\tnumControl\tfractionAbove1000\n");
 		
-		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY_PLUS_OTU.length; x++)
 		{
 			List<Double> sampleCounts = new ArrayList<Double>();
-			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
+			String taxa = NewRDPParserFileLine.TAXA_ARRAY_PLUS_OTU[x];
 			
-			BufferedReader reader = new BufferedReader(new FileReader(new File(
-					ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-					"merged" + File.separator + 
-						"pivoted_" + taxa + "asColumnsPlusMetadata.txt")));
+			File inFile = new File(
+						ConfigReader.getTopeOneAtATimeDir() + File.separator + 
+						"merged" + File.separator + 
+							"pivoted_" + taxa + "asColumnsPlusMetadata.txt");
 			
+			BufferedReader reader = new BufferedReader(new FileReader(inFile));
 			
 			reader.readLine();
 			
@@ -45,22 +46,22 @@ public class CountForwardReads
 				
 				String[] splits = s.split("\t");
 				
-				int readNum = Integer.parseInt(splits[10]);
+				int readNum = Integer.parseInt(splits[11]);
 				
-				if( readNum == 1 && splits[11].toLowerCase().equals("false") && splits[14].length() > 0
-							&& Integer.parseInt(splits[14]) != -1)
-						if( Integer.parseInt(splits[14]) == 0 || Integer.parseInt(splits[14]) == 1)
+				if( readNum == 1 && splits[12].toLowerCase().equals("false") && splits[15].length() > 0
+							&& Integer.parseInt(splits[15]) != -1)
+						if( Integer.parseInt(splits[15]) == 0 || Integer.parseInt(splits[15]) == 1)
 					{
 						List<Double> list = new ArrayList<Double>();
 						
-						for( int y=17; y < splits.length; y++)
+						for( int y=18; y < splits.length; y++)
 							list.add(Double.parseDouble(splits[y]));
 						
 						sampleCounts.add(sum(list));
 						
-						if( Integer.parseInt(splits[14]) == 0)
+						if( Integer.parseInt(splits[15]) == 0)
 							numControl++;
-						else if (Integer.parseInt(splits[14]) == 1)
+						else if (Integer.parseInt(splits[15]) == 1)
 							numCase++;
 						else throw new Exception("Parsing error");
 					}

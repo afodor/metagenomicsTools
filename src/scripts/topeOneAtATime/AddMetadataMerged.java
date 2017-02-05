@@ -98,6 +98,11 @@ public class AddMetadataMerged
 			
 		OtuWrapper wrapper = new OtuWrapper( rawCounts );
 		
+		File unnormalizedOtu = new File(ConfigReader.getTopeOneAtATimeDir() + File.separator + 
+				"merged" + File.separator + 
+				"pivoted_" + "otu"+ "asColumnsPlusMetadata.txt");
+		
+		addMetadata(wrapper, rawCounts, unnormalizedOtu, false, fileSet3, fileSet4);
 		
 		File logNormalFile= new File(  ConfigReader.getTopeOneAtATimeDir()
 				+ File.separator + "merged" + 
