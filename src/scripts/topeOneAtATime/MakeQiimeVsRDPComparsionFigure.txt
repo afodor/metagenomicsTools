@@ -1,0 +1,7 @@
+rm(list=ls())
+
+setwd("C:\\topeOneAtATime")
+
+myT <- read.table("qiimeVsRDPPValues.txt", header=TRUE, sep="\t")
+
+plot(myT$rdp, myT$qiime,pch=16, cex=1.2)
