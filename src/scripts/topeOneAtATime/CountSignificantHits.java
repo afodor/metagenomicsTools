@@ -26,7 +26,7 @@ public class CountSignificantHits
 		throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMinimumFractionDigits(3);
+		nf.setMinimumFractionDigits(4);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getTopeOneAtATimeDir() 
 				+ File.separator + text + "sigHits.txt")));
@@ -35,10 +35,18 @@ public class CountSignificantHits
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY_PLUS_OTU.length; x++)
 		{
+			String fileName = "metapValuesFor_otu_read1_WithTaxa.txt";
+						
 			String taxa = NewRDPParserFileLine.TAXA_ARRAY_PLUS_OTU[x];
+			
+			if( ! taxa.equals("otu"))
+			{
+				fileName = "metapValuesFor_" + taxa + "_read1_.txt";
+			}
+			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-						"merged" + File.separator + "metapValuesFor_" + taxa + "_read1_.txt")));
+						"merged" + File.separator + fileName)));
 			
 			reader.readLine();
 			
@@ -53,9 +61,10 @@ public class CountSignificantHits
 					System.out.println( text + " " + taxa + " "+  splits[0] +  " " + pValue + " " + Double.parseDouble(splits[rSquaredColumn]) );
 					
 					
-					writer.write(taxa + "\t" + nf.format(Double.parseDouble(splits[pValueUncorrected]))  + "\t" + 
+					writer.write(taxa + "\t" + splits[0] + "\t" + 
+					nf.format(Double.parseDouble(splits[pValueUncorrected]))  + "\t" + 
 										nf.format(Double.parseDouble(splits[rSquaredColumn]))
-									+ "\t" + Double.parseDouble(nf.format(sigColumn)));
+									+ "\t" + nf.format(Double.parseDouble(splits[sigColumn])));
 					
 					if( taxa.equals("otu") )
 						writer.write("\t" + splits[splits.length -1]);
