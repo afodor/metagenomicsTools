@@ -19,14 +19,17 @@ public class CountSignificantHits
 		//addSignifiant("caseControl", 19, 6);
 		//addSignifiant("tic", 21, 14);
 		addSignifiant("sex", 24, 12,11);
-		
+		addSignifiant("wbo", 22, 16, 15);
 	}
 	
 	private static void addSignifiant(String text, int sigColumn, int rSquaredColumn, int pValueUncorrected)
 		throws Exception
 	{
 		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMinimumFractionDigits(4);
+		nf.setMinimumFractionDigits(2);
+		
+		NumberFormat longNF = NumberFormat.getInstance();
+		longNF.setMinimumFractionDigits(6);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getTopeOneAtATimeDir() 
 				+ File.separator + text + "sigHits.txt")));
@@ -62,7 +65,7 @@ public class CountSignificantHits
 					
 					
 					writer.write(taxa + "\t" + splits[0] + "\t" + 
-					nf.format(Double.parseDouble(splits[pValueUncorrected]))  + "\t" + 
+					longNF.format(Double.parseDouble(splits[pValueUncorrected]))  + "\t" + 
 										nf.format(Double.parseDouble(splits[rSquaredColumn]))
 									+ "\t" + nf.format(Double.parseDouble(splits[sigColumn])));
 					
