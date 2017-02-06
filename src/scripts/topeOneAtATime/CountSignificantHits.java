@@ -13,7 +13,8 @@ public class CountSignificantHits
 	
 	public static void main(String[] args) throws Exception
 	{
-		addSignifiant("caseControl", 19, 6);
+		//addSignifiant("caseControl", 19, 6);
+		addSignifiant("tic", 21, 14);
 		
 	}
 	
