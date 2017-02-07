@@ -76,9 +76,13 @@ for(taxa in taxaLevels )
 			myLm3 <- lm( myT[,i] ~  factor(myT$sex) , na.action=na.exclude)
 			rSquaredSex[index] <- summary(myLm3)$r.squared
 				
-			myLm4 <- lm( myT[,i] ~  factor(myT$ticLocation) , na.action=na.exclude)
+			myLm4 <- lm( 
+			myT[myT$ticLocation=="C__Distal_Only" | myT$ticLocation=="B__Proximal_Only",i] 
+					~  factor(myT[myT$ticLocation=="C__Distal_Only" | myT$ticLocation=="B__Proximal_Only",11]) , 
+					na.action=na.exclude)
 			ticLocationRSquared[index] <- summary(myLm4)$r.squared
-			ticLocationPValue[index] <- anova(myLm4)$"Pr(>F)"[1]
+			ticLocationPValue[index] <- t.test(myT[myT$ticLocation=="C__Distal_Only",i],
+									myT[myT$ticLocation=="B__Proximal_Only",i])$p.value
 				
 			names[index] <- names(myT)[i]
 			boxplot( myT[myT$caseControl==0,i] ,myT[myT$caseControl==1,i], 
