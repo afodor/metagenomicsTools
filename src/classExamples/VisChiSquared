@@ -1,0 +1,14 @@
+rm(list=ls())
+
+s <- seq(1,100000)
+V <- vector(length=length(s))
+for( i in s )
+{
+   sampleSize <-10
+   myVector <- rnorm(sampleSize,mean=100,sd=12)
+   V[i] = (sampleSize -1 ) * var(myVector) / (12*12)
+}
+
+myHist <- hist(V, breaks=100, plot=FALSE)
+plot(myHist$mids, myHist$counts/sum(myHist$counts))
+lines( myHist$mids, dchisq(myHist$mids,df=9)/sum(dchisq(myHist$mids,df=9)),col="RED")

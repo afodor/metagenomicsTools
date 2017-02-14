@@ -3,8 +3,8 @@ library("Kendall")
 
 setwd("C:\\topeOneAtATime\\merged")
 
-taxaLevels <- c("otu_qiime_cr","otu","phylum","class","order","family","genus")
-#taxaLevels <- c("otu_qiime_cr")
+#taxaLevels <- c("otu_qiime_cr","otu","phylum","class","order","family","genus")
+taxaLevels <- c("genus")
 
 for(taxa in taxaLevels ) 
 {

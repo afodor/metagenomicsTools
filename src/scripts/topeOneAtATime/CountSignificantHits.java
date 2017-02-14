@@ -22,6 +22,7 @@ public class CountSignificantHits
 		addSignifiant("wbo", 22, 16, 15);
 		addSignifiant("waste", 20, 8,7);
 		addSignifiant("age", 23,10,9);
+		addSignifiant("location", 25, 18, 17);
 	}
 	
 	private static void addSignifiant(String text, int sigColumn, int rSquaredColumn, int pValueUncorrected)
