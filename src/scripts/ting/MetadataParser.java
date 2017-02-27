@@ -32,7 +32,7 @@ public class MetadataParser
 		String[] lowestBodySplits = reader.readLine().split("\t");
 		String[] bodyWeightDay8Splits = reader.readLine().split("\t");
 		
-		String[] maxWeightLossPercent = reader.readLine().split("\t");
+		String[] maxWeightLossPercentSplits = reader.readLine().split("\t");
 		
 		for( int x=1;x  < mouseSplits.length; x++)
 		{
@@ -44,6 +44,14 @@ public class MetadataParser
 			
 			map.put(mouseId, mp);
 			
+			mp.genotype = genotypeSplits[x];
+			mp.time = Integer.parseInt(timeSplits[x]);
+			mp.initialBodyWeight = Float.parseFloat(initialBodySplits[x]);
+			mp.lowestBodyWeight = Float.parseFloat(lowestBodySplits[x]);
+			mp.bodyWeightAtDay8 = Float.parseFloat(bodyWeightDay8Splits[x]);
+			mp.maxWeightLossPercent = Float.parseFloat(maxWeightLossPercentSplits[x].replace("%", ""));
+			
+			
 		}
 		
 		return map;
@@ -52,5 +60,7 @@ public class MetadataParser
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<Integer, MetadataParser> map =getMetaMap();
+		
+		
 	}
 }
