@@ -24,6 +24,14 @@ public class AddMetadata
 				"pcoaPlustMetadata.txt");
 		
 		addMetadata(wrapper, pcoaFile, pcoaMetadataFile, true);
+		
+		File inFile = new File(ConfigReader.getTingDir() + File.separator + 
+				"otuAsColumnsLogNorm.txt");
+		
+		File logNormMetaFile =  new File(ConfigReader.getTingDir() + File.separator + 
+				"otuAsColumnsLogNormPlusMetadata.txt");
+		
+		addMetadata(wrapper, inFile, logNormMetaFile, false);
 	}
 	
 	private static void addMetadata( OtuWrapper wrapper, File inFile, File outFile,
