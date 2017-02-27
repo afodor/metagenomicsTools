@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class PivotToOtuTable
@@ -19,8 +20,10 @@ public class PivotToOtuTable
 		List<String> taxaList = new ArrayList<String>(map.keySet());
 		Collections.sort(taxaList);
 		
-		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getTingDir() + 
-				File.separator + "otuAsColumns.txt")));
+		File outFile = new File(ConfigReader.getTingDir() + 
+				File.separator + "otuAsColumns.txt");
+		
+		BufferedWriter writer =new BufferedWriter(new FileWriter(outFile));
 		
 		writer.write("sample");
 		
@@ -41,6 +44,10 @@ public class PivotToOtuTable
 			writer.write("\n");
 			writer.flush();
 		}
+		
+		OtuWrapper wrapper = new OtuWrapper(outFile);
+		wrapper.writeNormalizedLoggedDataToFile(new File(ConfigReader.getTingDir() + File.separator + 
+				"otuAsColumnsLogNorm.txt"));
 	}
 	
 	public static void main(String[] args) throws Exception

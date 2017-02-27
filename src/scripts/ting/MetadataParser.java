@@ -11,12 +11,53 @@ public class MetadataParser
 {
 	private int animalID;
 	private String genotype;
+	private String cage;
 	private int time;
 	private float initialBodyWeight;
 	private float lowestBodyWeight;
 	private float bodyWeightAtDay8;
 	private float maxWeightLossPercent;
 	
+	public String getCage()
+	{
+		return cage;
+	}
+	
+	public int getAnimalID()
+	{
+		return animalID;
+	}
+
+	public String getGenotype()
+	{
+		return genotype;
+	}
+
+	public int getTime()
+	{
+		return time;
+	}
+
+	public float getInitialBodyWeight()
+	{
+		return initialBodyWeight;
+	}
+
+	public float getLowestBodyWeight()
+	{
+		return lowestBodyWeight;
+	}
+
+	public float getBodyWeightAtDay8()
+	{
+		return bodyWeightAtDay8;
+	}
+
+	public float getMaxWeightLossPercent()
+	{
+		return maxWeightLossPercent;
+	}
+
 	public static HashMap<Integer, MetadataParser> getMetaMap() throws Exception
 	{
 		
@@ -49,8 +90,8 @@ public class MetadataParser
 			mp.initialBodyWeight = Float.parseFloat(initialBodySplits[x]);
 			mp.lowestBodyWeight = Float.parseFloat(lowestBodySplits[x]);
 			mp.bodyWeightAtDay8 = Float.parseFloat(bodyWeightDay8Splits[x]);
-			mp.maxWeightLossPercent = Float.parseFloat(maxWeightLossPercentSplits[x].replace("%", ""));
-			
+			mp.maxWeightLossPercent= Float.parseFloat(maxWeightLossPercentSplits[x].replace("%", ""));
+			mp.cage = cageSplits[x];
 			
 		}
 		
@@ -59,8 +100,6 @@ public class MetadataParser
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<Integer, MetadataParser> map =getMetaMap();
-		
-		
+		getMetaMap();
 	}
 }
