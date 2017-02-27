@@ -15,13 +15,14 @@ myT <- myT[ myT$numberSequencesPerSample >= 1000 , ]
 names <- vector()
 pValuesGenotype <- vector()
 pValuesTime <-vector()
+pValuesMaxWeightLossPercent <- vector()
 	
 index <- 1
 
-for( i in c(8:ncol(myT))) 
+for( i in c(9:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
-		par(mfrow=c(2,1))
+		par(mfrow=c(2,2))
 		myLm <- lm( myT[,i] ~  factor( myT$genotype) )
 		myAnova <- anova(myLm)
 		pValuesGenotype[index] <- myAnova$"Pr(>F)"[1]
@@ -45,17 +46,28 @@ for( i in c(8:ncol(myT)))
 		myAnovaTime <- anova(lmTime)
 		pValuesTime[index] <- myAnovaTime$"Pr(>F)"[1]
 
+	
+		lmWeightLossPercent <- lm(myT[,i] ~  myT$maxWeightLossPercent)
+		myAnovaLoss <- anova(lmWeightLossPercent )
+		pValuesMaxWeightLossPercent[index] <- myAnovaLoss$"Pr(>F)"[1]
+
+				
 		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ))
+		plot( myT[,i],  myT$maxWeightLossPercent, main = format( pValuesMaxWeightLossPercent[index], digits=3 ))
+	
 		index <- index + 1	
 				
 	}
 		
 hist(pValuesGenotype, breaks=20)
+hist(pValuesTime,breaks=20)
+hist(pValuesMaxWeightLossPercent, breaks=20)
 
-dFrame <- data.frame( names,pValuesGenotype,pValuesTime) 
-dFrame <- dFrame [order(dFrame$pValuesTime),]
+dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent) 
+dFrame <- dFrame [order(dFrame$pValuesMaxWeightLossPercent),]
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
+dFrame$pValuesMaxWeightLossPercentAdjust <- p.adjust( dFrame$pValuesMaxWeightLossPercent, method = "BH")
 write.table(dFrame, file=paste("pValuesOtu.txt",sep=""), sep="\t",row.names=FALSE)
 dev.off()
 						

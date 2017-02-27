@@ -42,7 +42,7 @@ public class AddMetadata
 	
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 	
-		writer.write("mouseId\tgenotype\tcage\ttime\tinitialBodyWeight\tlowestBodyWeight\tbodyWeightAtDay8");
+		writer.write("mouseId\tgenotype\tcage\ttime\tinitialBodyWeight\tlowestBodyWeight\tbodyWeightAtDay8\tmaxWeightLossPercent");
 		writer.write("\tnumberSequencesPerSample\tshannonEntropy");
 	
 		String[] firstSplits = reader.readLine().split("\t");
@@ -65,6 +65,7 @@ public class AddMetadata
 			writer.write(key+ "\t" + mp.getGenotype() + "\t" + mp.getCage() + "\t" + 
 							mp.getTime() + "\t" + mp.getInitialBodyWeight() + "\t" + 
 								mp.getLowestBodyWeight() + "\t" + mp.getBodyWeightAtDay8() + "\t"+ 
+							mp.getMaxWeightLossPercent() + "\t" + 
 				wrapper.getNumberSequences(key.toString()) 
 					+ "\t" + wrapper.getShannonEntropy(key.toString())  );
 		
