@@ -1,9 +1,12 @@
 package scripts.ting;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +14,35 @@ import utils.ConfigReader;
 
 public class PivotToOtuTable
 {
+	private static void writePivotTable(  HashMap<String, List<Integer>> map, String[] sampleNames) throws Exception
+	{
+		List<String> taxaList = new ArrayList<String>(map.keySet());
+		Collections.sort(taxaList);
+		
+		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(ConfigReader.getTingDir() + 
+				File.separator + "otuAsColumns.txt")));
+		
+		writer.write("sample");
+		
+		for(String s : taxaList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(int x=1; x < sampleNames.length; x++)
+		{
+			writer.write(sampleNames[x]);
+			
+			for(String s : taxaList)
+			{
+				writer.write( "\t" +  map.get(s).get(x));
+			}
+			
+			writer.write("\n");
+			writer.flush();
+		}
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getTingDir() 
@@ -54,5 +86,6 @@ public class PivotToOtuTable
 		}
 		
 		reader.close();
+		writePivotTable(map, topSplits);
 	}
 }
