@@ -14,16 +14,19 @@ myT <- myT[ myT$numberSequencesPerSample >= 1000 , ]
 
 names <- vector()
 pValuesGenotype <- vector()
+pValuesTime <-vector()
 	
 index <- 1
 
 for( i in c(8:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
+		par(mfrow=c(2,1))
 		myLm <- lm( myT[,i] ~  factor( myT$genotype) )
 		myAnova <- anova(myLm)
 		pValuesGenotype[index] <- myAnova$"Pr(>F)"[1]
 		names[index] <- names(myT)[i]
+			
 			
 		boxplot( myT[myT$genotype=="KO",i] ,
 				myT[myT$genotype=="WT",i], main=paste(names[index], " p=" , format( pValuesGenotype[index],
@@ -36,15 +39,23 @@ for( i in c(8:ncol(myT)))
 			
 		stripchart(bug ~ genotypes, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
-			index <- index + 1	
 			
+			
+		lmTime <- lm(myT[,i] ~  myT$time)
+		myAnovaTime <- anova(lmTime)
+		pValuesTime[index] <- myAnova$"Pr(>F)"[1]
+
+		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ))
+		index <- index + 1	
+				
 	}
 		
 hist(pValuesGenotype, breaks=20)
 
-dFrame <- data.frame( names,pValuesGenotype) 
-dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+dFrame <- data.frame( names,pValuesGenotype,pValuesTime) 
+dFrame <- dFrame [order(dFrame$pValuesTime),]
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 write.table(dFrame, file=paste("pValuesOtu.txt",sep=""), sep="\t",row.names=FALSE)
 dev.off()
 						
