@@ -134,6 +134,8 @@ public class ConfigReader
 	
 	public static final String MERGED_ARFF_DIR = "MERGED_ARFF_DIR";
 	
+	public static final String TING_DIR = "TING_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -169,6 +171,11 @@ public class ConfigReader
 	public static boolean isVerboseConsole() throws Exception
 	{
 		return getConfigReader().isSetToTrue(VERBOSE_CONSOLE);
+	}
+	
+	public static String getTingDir() throws Exception
+	{
+		return getConfigReader().getAProperty(TING_DIR);
 	}
 	
 	public static String getGoranLabRatData() throws Exception
