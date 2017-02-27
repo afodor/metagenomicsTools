@@ -43,7 +43,7 @@ for( i in c(8:ncol(myT)))
 			
 		lmTime <- lm(myT[,i] ~  myT$time)
 		myAnovaTime <- anova(lmTime)
-		pValuesTime[index] <- myAnova$"Pr(>F)"[1]
+		pValuesTime[index] <- myAnovaTime$"Pr(>F)"[1]
 
 		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ))
 		index <- index + 1	
