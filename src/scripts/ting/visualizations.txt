@@ -1,0 +1,50 @@
+rm(list=ls())
+
+setwd("C:\\tingData")
+
+pdf(paste("boxplots", ".pdf", sep=""))
+
+inFileName <- paste("otuAsColumnsLogNormPlusMetadata.txt", sep ="")
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+	
+myT <- myT[ myT$numberSequencesPerSample >= 1000 , ]
+
+names <- vector()
+pValuesGenotype <- vector()
+	
+index <- 1
+
+for( i in c(8:ncol(myT))) 
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{	
+		myLm <- lm( myT[,i] ~  factor( myT$genotype) )
+		myAnova <- anova(myLm)
+		pValuesGenotype[index] <- myAnova$"Pr(>F)"[1]
+		names[index] <- names(myT)[i]
+			
+		boxplot( myT[myT$genotype=="KO",i] ,
+				myT[myT$genotype=="WT",i], main=paste(names[index], " p=" , format( pValuesGenotype[index],
+				digits=3)))
+			
+		bug <- myT[,i]
+		
+		genotypes<- factor( myT$genotype)
+		myFrame <- data.frame(bug, genotypes)
+			
+		stripchart(bug ~ genotypes, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])		
+			index <- index + 1	
+			
+	}
+		
+hist(pValuesGenotype, breaks=20)
+
+dFrame <- data.frame( names,pValuesGenotype) 
+dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+write.table(dFrame, file=paste("pValuesOtu.txt",sep=""), sep="\t",row.names=FALSE)
+dev.off()
+						
