@@ -5,7 +5,7 @@ library("lmtest")
 library("nlme")
 
 
-inFileName <- paste("otuAsColumnsLogNormPlusMetadata.txt", sep ="")
+inFileName <- paste("pcoaPlustMetadata.txt", sep ="")
 myT <-read.table(inFileName,header=TRUE,sep="\t")
 numCols <- ncol(myT)
 myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
@@ -17,9 +17,18 @@ lossPercent <- myT$maxWeightLossPercent
 time <- myT$time 
 genotype <- myT$genotype
 cage <- myT$cage
+mds1 <- myT$MDS1
 
 myFrame <- data.frame(lossPercent, time, genotype, cage)
 fullModel <- gls( lossPercent~  time * genotype, method="REML",correlation=corCompSymm(form=~1|factor(cage)),data = myFrame )
+anova(fullModel)
 
 lmNoCage <- lm( lossPercent ~ time * genotype )
 anova(lmNoCage )
+
+fullModelMDS1 <- gls( mds1~  time * genotype, method="REML",correlation=corCompSymm(form=~1|factor(cage)),data = myFrame )
+anova(fullModelMDS1)
+
+
+
+
