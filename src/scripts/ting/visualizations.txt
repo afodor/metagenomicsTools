@@ -62,17 +62,19 @@ for( i in c(9:ncol(myT)))
 		pValuesMaxWeightLossPercent[index] <- myAnovaLoss$"Pr(>F)"[1]
 
 				
-		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ),
+		plot( myT[,i],  myT$time, main = paste( "time p=", format( pValuesTime[index], digits=3 )),
 			xlab = "logNorm(bug)", ylab = "time",	 
 		col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
 		
 		
 		plot( myT[,i],  myT$maxWeightLossPercent,
-		 main = format( pValuesMaxWeightLossPercent[index], digits=3 ),
+		 main =paste("weight % p =", format( pValuesMaxWeightLossPercent[index], digits=3 )),
 		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"), xlab="logNorm(bug)",
 		 	 ylab="max loss weight percent")
 		 	 
 		plot(1, type="n", axes=F, xlab="", ylab="", cex.main=.95)
+		
+		
 	
 		index <- index + 1	
 				
