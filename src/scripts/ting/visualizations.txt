@@ -89,6 +89,7 @@ for( i in c(9:ncol(myT)))
 hist(pValuesGenotype, breaks=20)
 hist(pValuesTime,breaks=20)
 hist(pValuesMaxWeightLossPercent, breaks=20)
+hist(pValuesCages, breaks=20)
 
 dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent,pValuesCages) 
 dFrame <- dFrame [order(dFrame$pValuesMaxWeightLossPercent),]

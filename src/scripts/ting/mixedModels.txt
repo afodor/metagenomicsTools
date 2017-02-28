@@ -1,0 +1,24 @@
+rm(list=ls())
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+
+inFileName <- paste("otuAsColumnsLogNormPlusMetadata.txt", sep ="")
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+plot( myT$time , myT$maxWeightLossPercent ,col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
+
+lossPercent <- myT$maxWeightLossPercent 
+time <- myT$time 
+genotype <- myT$genotype
+cage <- myT$cage
+
+myFrame <- data.frame(lossPercent, time, genotype, cage)
+fullModel <- gls( lossPercent~  time * genotype, method="REML",correlation=corCompSymm(form=~1|factor(cage)),data = myFrame )
+
+
