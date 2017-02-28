@@ -16,6 +16,7 @@ names <- vector()
 pValuesGenotype <- vector()
 pValuesTime <-vector()
 pValuesMaxWeightLossPercent <- vector()
+pValuesCages <- vector()
 	
 index <- 1
 
@@ -74,6 +75,12 @@ for( i in c(9:ncol(myT)))
 		 	 xlab="max loss weight percent",cex.main=.9)
 		abline(lmTime)
 		
+		boxLm <- lm( myT[,i] ~ myT$cage )
+		pValuesCages[index] =  anova(boxLm)$"Pr(>F)"[1]
+		
+		boxplot(  myT[,i] ~ myT$cage, las =2, 
+			main = paste("cage p=",format(pValuesCages[index],digits=3) ) )
+	
 	
 		index <- index + 1	
 				
@@ -83,11 +90,13 @@ hist(pValuesGenotype, breaks=20)
 hist(pValuesTime,breaks=20)
 hist(pValuesMaxWeightLossPercent, breaks=20)
 
-dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent) 
+dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent,pValuesCages) 
 dFrame <- dFrame [order(dFrame$pValuesMaxWeightLossPercent),]
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 dFrame$pValuesMaxWeightLossPercentAdjust <- p.adjust( dFrame$pValuesMaxWeightLossPercent, method = "BH")
+dFrame$pValuesCageAdjust<- p.adjust( dFrame$pValuesCages, method = "BH")
+
 write.table(dFrame, file=paste("pValuesOtu.txt",sep=""), sep="\t",row.names=FALSE)
 dev.off()
 						
