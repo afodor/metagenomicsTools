@@ -21,4 +21,5 @@ cage <- myT$cage
 myFrame <- data.frame(lossPercent, time, genotype, cage)
 fullModel <- gls( lossPercent~  time * genotype, method="REML",correlation=corCompSymm(form=~1|factor(cage)),data = myFrame )
 
-
+lmNoCage <- lm( lossPercent ~ time * genotype )
+anova(lmNoCage )
