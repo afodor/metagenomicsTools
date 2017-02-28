@@ -22,7 +22,8 @@ index <- 1
 for( i in c(9:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
-		par(mfcol=c(2,2), mar=c(4,4,0.5,0.5), oma=c(1.5,2,1,1))
+		par(mfcol=c(2,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
+		
 		
 		#bottom, left, top and right margins 
 		#par(mar=c(1,1,1,1))
@@ -36,6 +37,11 @@ for( i in c(9:ncol(myT)))
 		boxplot( myT[myT$genotype=="KO",i] ,
 				myT[myT$genotype=="WT",i], main=paste("genotype", " p=" , format( pValuesGenotype[index],
 				digits=3)), names =c("KO", "WT"), col=c("RED","BLUE"))
+				
+		 mtext(names[index] ,
+        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+		
+		
 			
 		bug <- myT[,i]
 		
@@ -59,9 +65,12 @@ for( i in c(9:ncol(myT)))
 		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ),
 			xlab = "logNorm(bug)", ylab = "time",	 
 		col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
+		
+		
 		plot( myT[,i],  myT$maxWeightLossPercent,
 		 main = format( pValuesMaxWeightLossPercent[index], digits=3 ),
-		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
+		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"), xlab="logNorm(bug)",
+		 	 ylab="max loss weight percent")
 		 	 
 		plot(1, type="n", axes=F, xlab="", ylab="", cex.main=.95)
 	
