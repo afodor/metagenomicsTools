@@ -62,15 +62,16 @@ for( i in c(9:ncol(myT)))
 
 				
 		plot(  myT$time, myT[,i], main = paste( "time p=", format( pValuesTime[index], digits=3 ),
-		"r-squared", format(summary(lmTime)$r.squared,digits=3)),
+		"r-squared","=", format(summary(lmTime)$r.squared,digits=3)),
 			ylab = "logNorm(bug)", xlab = "time",	 
-		col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
+		col= ifelse(myT$genotype == "KO", "RED", "BLUE"),cex.main=.9)
 		abline(lmWeightLossPercent)
 		
 		plot( myT$maxWeightLossPercent,myT[,i],
-		 main =paste("weight % p =", format( pValuesMaxWeightLossPercent[index], digits=3 )),
+		 main =paste("weight % p =", format( pValuesMaxWeightLossPercent[index], digits=3 ),
+		 "r-squared","=", format(summary(lmWeightLossPercent)$r.squared,digits=3) ),
 		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"), ylab="logNorm(bug)",
-		 	 xlab="max loss weight percent")
+		 	 xlab="max loss weight percent",cex.main=.9)
 		abline(lmTime)
 		
 	
