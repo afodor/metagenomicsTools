@@ -22,15 +22,20 @@ index <- 1
 for( i in c(9:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
-		par(mfrow=c(2,2))
+	
+		layout(matrix(c(1,1,2,3,4,5), 3, 2, byrow = TRUE), heights=c(1,10,10))
+		
+		#bottom, left, top and right margins 
+		par(mar=c(1,2,1,1))
 		myLm <- lm( myT[,i] ~  factor( myT$genotype) )
 		myAnova <- anova(myLm)
 		pValuesGenotype[index] <- myAnova$"Pr(>F)"[1]
 		names[index] <- names(myT)[i]
-			
+		
+		plot(1, type="n", axes=F, xlab="", ylab="", main=names[index], cex.main=.95)
 			
 		boxplot( myT[myT$genotype=="KO",i] ,
-				myT[myT$genotype=="WT",i], main=paste(names[index], " p=" , format( pValuesGenotype[index],
+				myT[myT$genotype=="WT",i], main=paste("genotype", " p=" , format( pValuesGenotype[index],
 				digits=3)))
 			
 		bug <- myT[,i]
@@ -52,8 +57,11 @@ for( i in c(9:ncol(myT)))
 		pValuesMaxWeightLossPercent[index] <- myAnovaLoss$"Pr(>F)"[1]
 
 				
-		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ))
-		plot( myT[,i],  myT$maxWeightLossPercent, main = format( pValuesMaxWeightLossPercent[index], digits=3 ))
+		plot( myT[,i],  myT$time, main = format( pValuesTime[index], digits=3 ),	 
+		col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
+		plot( myT[,i],  myT$maxWeightLossPercent,
+		 main = format( pValuesMaxWeightLossPercent[index], digits=3 ),
+		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
 	
 		index <- index + 1	
 				
