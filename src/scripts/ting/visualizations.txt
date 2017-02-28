@@ -24,7 +24,6 @@ for( i in c(9:ncol(myT)))
 	{	
 		par(mfcol=c(2,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 		
-		
 		#bottom, left, top and right margins 
 		#par(mar=c(1,1,1,1))
 		myLm <- lm( myT[,i] ~  factor( myT$genotype) )
@@ -62,7 +61,8 @@ for( i in c(9:ncol(myT)))
 		pValuesMaxWeightLossPercent[index] <- myAnovaLoss$"Pr(>F)"[1]
 
 				
-		plot(  myT$time, myT[,i], main = paste( "time p=", format( pValuesTime[index], digits=3 )),
+		plot(  myT$time, myT[,i], main = paste( "time p=", format( pValuesTime[index], digits=3 ),
+		"r-squared", format(summary(lmTime)$r.squared,digits=3)),
 			ylab = "logNorm(bug)", xlab = "time",	 
 		col= ifelse(myT$genotype == "KO", "RED", "BLUE"))
 		abline(lmWeightLossPercent)
