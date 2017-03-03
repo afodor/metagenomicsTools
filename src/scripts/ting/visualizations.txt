@@ -16,15 +16,18 @@ names <- vector()
 pValuesGenotype <- vector()
 pValuesTime <-vector()
 pValuesMaxWeightLossPercent <- vector()
-pValuesMaxWeightLossPercentWTOnly <- vector()
 pValuesCages <- vector()
+
+pValueIModelWeight <- vector()
+pValueIModelGenotype <- vector()
+pValueIModelInteraction <- vector()
 	
 index <- 1
 
 for( i in c(9:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
-		par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
+		par(mfcol=c(2,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 		
 		#bottom, left, top and right margins 
 		#par(mar=c(1,1,1,1))
@@ -77,10 +80,11 @@ for( i in c(9:ncol(myT)))
 		 	 xlab="max loss weight percent",cex.main=.9)
 		abline(lmWeightLossPercent)
 		
-		lmWeightLossPercentWTOnly <- lm(myT[myT$genotype=="WT",i] ~  myT$maxWeightLossPercent[myT$genotype=="WT"])
-		myAnovaLossWTOnly <- anova(lmWeightLossPercentWTOnly )
-		pValuesMaxWeightLossPercentWTOnly[index] <- myAnovaLossWTOnly $"Pr(>F)"[1]
-		
+		lmWeightAndGenotype<- lm(myT[,i] ~  myT$maxWeightLossPercent * myT$genotype)
+		anvoaI <- anova(lmWeightAndGenotype)
+		pValueIModelWeight[index] <- anvoaI$"Pr(>F)"[1]
+		pValueIModelGenotype[index] <- anvoaI$"Pr(>F)"[2]
+		pValueIModelInteraction[index] <- anvoaI$"Pr(>F)"[3]
 		
 		boxLm <- lm( myT[,i] ~ myT$cage )
 		pValuesCages[index] =  anova(boxLm)$"Pr(>F)"[1]
@@ -98,12 +102,17 @@ hist(pValuesTime,breaks=20)
 hist(pValuesMaxWeightLossPercent, breaks=20)
 hist(pValuesCages, breaks=20)
 
-dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent,pValuesCages) 
+dFrame <- data.frame( names,pValuesGenotype,pValuesTime,pValuesMaxWeightLossPercent,pValuesCages,
+pValueIModelWeight,pValueIModelGenotype,pValueIModelInteraction) 
 dFrame <- dFrame [order(dFrame$pValuesMaxWeightLossPercent),]
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 dFrame$pValuesMaxWeightLossPercentAdjust <- p.adjust( dFrame$pValuesMaxWeightLossPercent, method = "BH")
 dFrame$pValuesCageAdjust<- p.adjust( dFrame$pValuesCages, method = "BH")
+
+dFrame$pValueIModelWeightAdjust<- p.adjust( dFrame$pValueIModelWeight, method = "BH")
+dFrame$pValueIModelGenotypeAdjust<- p.adjust( dFrame$pValueIModelGenotype, method = "BH")
+dFrame$pValueIModelInteractionAdjust<- p.adjust( dFrame$pValueIModelInteraction, method = "BH")
 
 write.table(dFrame, file=paste("pValuesOtu.txt",sep=""), sep="\t",row.names=FALSE)
 dev.off()
