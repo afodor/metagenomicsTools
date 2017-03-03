@@ -16,6 +16,7 @@ names <- vector()
 pValuesGenotype <- vector()
 pValuesTime <-vector()
 pValuesMaxWeightLossPercent <- vector()
+pValuesMaxWeightLossPercentWTOnly <- vector()
 pValuesCages <- vector()
 	
 index <- 1
@@ -23,7 +24,7 @@ index <- 1
 for( i in c(9:ncol(myT))) 
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
-		par(mfcol=c(2,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
+		par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 		
 		#bottom, left, top and right margins 
 		#par(mar=c(1,1,1,1))
@@ -66,14 +67,20 @@ for( i in c(9:ncol(myT)))
 		"r-squared","=", format(summary(lmTime)$r.squared,digits=3)),
 			ylab = "logNorm(bug)", xlab = "time",	 
 		col= ifelse(myT$genotype == "KO", "RED", "BLUE"),cex.main=.9)
-		abline(lmWeightLossPercent)
+		abline(lmTime)
+		
 		
 		plot( myT$maxWeightLossPercent,myT[,i],
 		 main =paste("weight % p =", format( pValuesMaxWeightLossPercent[index], digits=3 ),
 		 "r-squared","=", format(summary(lmWeightLossPercent)$r.squared,digits=3) ),
 		 	 col= ifelse(myT$genotype == "KO", "RED", "BLUE"), ylab="logNorm(bug)",
 		 	 xlab="max loss weight percent",cex.main=.9)
-		abline(lmTime)
+		abline(lmWeightLossPercent)
+		
+		lmWeightLossPercentWTOnly <- lm(myT[myT$genotype=="WT",i] ~  myT$maxWeightLossPercent[myT$genotype=="WT"])
+		myAnovaLossWTOnly <- anova(lmWeightLossPercentWTOnly )
+		pValuesMaxWeightLossPercentWTOnly[index] <- myAnovaLossWTOnly $"Pr(>F)"[1]
+		
 		
 		boxLm <- lm( myT[,i] ~ myT$cage )
 		pValuesCages[index] =  anova(boxLm)$"Pr(>F)"[1]
