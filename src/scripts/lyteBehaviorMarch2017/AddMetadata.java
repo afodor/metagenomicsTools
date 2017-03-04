@@ -8,15 +8,26 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.OtuWrapper;
+import utils.ConfigReader;
 
 public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
+		File inFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+					"rg_results" + File.separator + "LyteSharon_r01_pcoa.txt");
 		
+		OtuWrapper wrapper =new OtuWrapper(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+				"rg_results" + File.separator + 
+				"LyteSharon_r01_crDataOnlyTaxaAsColumns.txt");
+		
+		File outFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+					"rg_results" + File.separator + "LyteSharon_r01_pcoaPlusMetadata.txt");
+		
+		addMetadata(inFile, outFile, wrapper, true);
 	}
 	
-	private void writeResults(File inFile, File outFile, OtuWrapper wrapper, boolean fromR )
+	private static void addMetadata(File inFile, File outFile, OtuWrapper wrapper, boolean fromR )
 		throws Exception
 	{
 		HashMap<String, String> metaLines = MetadataParser.getLinesAsMap();
