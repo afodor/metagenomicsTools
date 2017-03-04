@@ -32,14 +32,23 @@ tissues <- unique(myT$Source)
 
 for( t in tissues ) 
 {
+	names <- vector()
+	numSignificant <- vector()
+	index <- 1
 	subT <- myT[ myT$Source == t, ]
 	pdf( paste(t,".pdf", sep=""))
 	
 	for ( i in c(2,3,22:60))
 	{
 		pValues <- getAllPValues( subT, i )
-		hist(pValues, breaks=20, main= names(myT)[i])
+		numSignificant[index] <- sum (p.adjust(pValues, method="BH") < 0.05 ) 
+		names[index] <- names(myT)[i]
+		hist(pValues, breaks=20, main=paste(names[index],numSignificant[index] ))
+		
+		index <- index + 1;
 	}
 	
+	myFrame <- data.frame(names,numSignificant)
+	write.table(myFrame, file=paste("numSigFor", t, ".txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()	
 }
