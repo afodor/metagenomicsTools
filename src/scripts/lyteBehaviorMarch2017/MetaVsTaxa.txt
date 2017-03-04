@@ -3,5 +3,29 @@ rm(list=ls())
 
 setwd("C:\\LyteBehaviorMarch2017\\rg_results\\")
 
+getAllPValues <- function( myT, i ) 
+{
+	metaVal <- myT[,i]
+	index <- 1
+	pValues <- vector()
+
+	for ( j in 	61:3560)
+	{
+		bug <- myT[,j]
+		
+		if( sum(bug != 0 ) > nrow(myT) / 4 )
+		{
+			myLm <- lm( bug ~ metaVal ) 
+			
+			pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			
+			index <- index + 1	
+		}		
+	}
+	
+	return ( pValues ) 
+}
+
 myT <- read.table("LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt", sep="\t", header=TRUE)
+
 
