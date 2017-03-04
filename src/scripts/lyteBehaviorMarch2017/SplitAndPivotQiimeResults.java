@@ -41,7 +41,7 @@ public class SplitAndPivotQiimeResults
 		
 		File logNormFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
 				"rg_results" + File.separator + 
-				"LyteSharon_r01_crDataOnlyTaxaAsColumnsWithMetadta.txt");
+				"LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNorm.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(pivotFile);
 		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
