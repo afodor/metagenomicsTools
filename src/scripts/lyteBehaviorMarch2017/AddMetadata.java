@@ -45,7 +45,7 @@ public class AddMetadata
 		String[] topSplitsMeta = MetadataParser.getTopLine().split("\t");
 		
 		for( int x=1; x < topSplitsMeta.length; x++)
-			writer.write("\t" + topSplitsMeta);
+			writer.write("\t" + topSplitsMeta[x]);
 		
 		for( int x=startPos; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
