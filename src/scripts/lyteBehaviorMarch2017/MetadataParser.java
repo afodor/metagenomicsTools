@@ -9,7 +9,7 @@ import utils.ConfigReader;
 
 public class MetadataParser
 {	
-	private static final String getTopLine() throws Exception
+	public static final String getTopLine() throws Exception
 	{
 		File metadataFile = new File(
 				ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
@@ -24,7 +24,7 @@ public class MetadataParser
 				
 	}
 	
-	private static HashMap<String, String> getLinesAsMap() throws Exception
+	public static HashMap<String, String> getLinesAsMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
