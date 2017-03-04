@@ -31,11 +31,20 @@ public class SplitAndPivotQiimeResults
 		
 		writer.flush(); writer.close();
 		
-		OtuWrapper.transpose(dataOnlyFile.getAbsolutePath(), 
-				ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+		File pivotFile =  new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
 				"rg_results" + File.separator + 
-				"LyteSharon_r01_crDataOnlyTaxaAsColumns.txt"
+				"LyteSharon_r01_crDataOnlyTaxaAsColumns.txt");
+		
+		OtuWrapper.transpose(dataOnlyFile.getAbsolutePath(), 
+				pivotFile.getAbsolutePath()
 				, false);
+		
+		File logNormFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+				"rg_results" + File.separator + 
+				"LyteSharon_r01_crDataOnlyTaxaAsColumnsWithMetadta.txt");
+		
+		OtuWrapper wrapper = new OtuWrapper(pivotFile);
+		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
 	}
 	
 	private static void writeAllButOne(String s, BufferedWriter writer) throws Exception
