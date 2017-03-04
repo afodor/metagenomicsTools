@@ -25,6 +25,14 @@ public class AddMetadata
 					"rg_results" + File.separator + "LyteSharon_r01_pcoaPlusMetadata.txt");
 		
 		addMetadata(inFile, outFile, wrapper, true);
+		
+		inFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+				"rg_results" + File.separator + "LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNorm.txt");
+		
+		outFile = new File(ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+				"rg_results" + File.separator + "LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt");
+		
+		addMetadata(inFile, outFile, wrapper, false);
 	}
 	
 	private static void addMetadata(File inFile, File outFile, OtuWrapper wrapper, boolean fromR )
