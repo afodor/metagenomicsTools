@@ -136,6 +136,8 @@ public class ConfigReader
 	
 	public static final String TING_DIR = "TING_DIR";
 	
+	public static final String LYTE_BEHAVIOR_MARCH_2017_DIR = "LYTE_BEHAVIOR_MARCH_2017_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -166,6 +168,11 @@ public class ConfigReader
 	public static String getMergedArffDir() throws Exception
 	{
 		return getConfigReader().getAProperty(MERGED_ARFF_DIR);
+	}
+	
+	public static String getLyteBehaviorMarch2017Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(LYTE_BEHAVIOR_MARCH_2017_DIR);
 	}
 	
 	public static boolean isVerboseConsole() throws Exception
