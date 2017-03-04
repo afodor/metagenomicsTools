@@ -1,0 +1,7 @@
+
+rm(list=ls())
+
+setwd("C:\\LyteBehaviorMarch2017\\rg_results\\")
+
+myT <- read.table("LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt", sep="\t", header=TRUE)
+
