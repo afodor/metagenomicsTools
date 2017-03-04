@@ -60,7 +60,7 @@ public class AddMetadata
 			String key = splits[0];
 			writer.write(key);
 			writer.write("\t" + wrapper.getNumberSequences(splits[0]) + "\t" + 
-								wrapper.getShannonEntropy(splits[0]) + "\t");
+								wrapper.getShannonEntropy(splits[0]));
 			
 			System.out.println(key);
 			
