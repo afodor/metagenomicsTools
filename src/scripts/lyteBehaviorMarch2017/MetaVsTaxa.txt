@@ -28,4 +28,18 @@ getAllPValues <- function( myT, i )
 
 myT <- read.table("LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt", sep="\t", header=TRUE)
 
+tissues <- unique(myT$Source)
 
+for( t in tissues ) 
+{
+	subT <- myT[ myT$Source == t, ]
+	pdf( paste(t,".pdf", sep=""))
+	
+	for ( i in c(2,3,22:60))
+	{
+		pValues <- getAllPValues( subT, i )
+		hist(pValues, breaks=20, main= names(myT)[i])
+	}
+	
+	dev.off()	
+}
