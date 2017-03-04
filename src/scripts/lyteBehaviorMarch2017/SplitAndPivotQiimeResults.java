@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class SplitAndPivotQiimeResults
@@ -29,6 +30,12 @@ public class SplitAndPivotQiimeResults
 			writeAllButOne(s, writer);
 		
 		writer.flush(); writer.close();
+		
+		OtuWrapper.transpose(dataOnlyFile.getAbsolutePath(), 
+				ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + 
+				"rg_results" + File.separator + 
+				"LyteSharon_r01_crDataOnlyTaxaAsColumns.txt"
+				, false);
 	}
 	
 	private static void writeAllButOne(String s, BufferedWriter writer) throws Exception
