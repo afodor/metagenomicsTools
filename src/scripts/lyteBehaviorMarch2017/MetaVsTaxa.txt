@@ -29,7 +29,7 @@ dumpOne <- function(myT, i, filePrefix )
 	}	
 	
 	dev.off()
-	myFrame <- data.frame(names,pValues)
+	myFrame <- data.frame(bugNames ,pValues)
 	myFrame <- myFrame [order(myFrame$pValues ),]
 	myFrame$adjustedP <- p.adjust( myFrame$pValues, method = "BH" )	
 	
