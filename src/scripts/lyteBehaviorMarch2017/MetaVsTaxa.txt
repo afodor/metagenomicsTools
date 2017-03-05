@@ -3,6 +3,40 @@ rm(list=ls())
 
 setwd("C:\\LyteBehaviorMarch2017\\rg_results\\")
 
+dumpOne <- function(myT, i, filePrefix ) 
+{
+	pdf( paste(filePrefix,".pdf", sep=""))
+	metaVal <- myT[,i]
+	index <- 1
+	pValues <- vector()
+	bugNames <- vector()
+
+	for ( j in 	61:3560)
+	{
+		bug <- myT[,j]
+		
+		if( sum(bug != 0 ) > nrow(myT) / 4 )
+		{
+			myLm <- lm( bug ~ metaVal ) 
+			
+			pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			bugNames[index] <- names(myT)[j]
+			
+			plot( bug ~ metaVal, main=paste(bugNames[index],format(pValues[index],digits=3)))
+			
+			index <- index + 1	
+		}		
+	}	
+	
+	dev.off()
+	myFrame <- data.frame(names,pValues)
+	myFrame <- myFrame [order(myFrame$pValues ),]
+	myFrame$adjustedP <- p.adjust( myFrame$pValues, method = "BH" )	
+	
+	write.table(myFrame, file=paste(filePrefix, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+}
+
 getAllPValues <- function( myT, i ) 
 {
 	metaVal <- myT[,i]
@@ -44,6 +78,11 @@ for( t in tissues )
 		numSignificant[index] <- sum (p.adjust(pValues, method="BH") < 0.05 ) 
 		names[index] <- names(myT)[i]
 		hist(pValues, breaks=20, main=paste(names[index],numSignificant[index] ))
+		
+		if( numSignificant[index]  >= 5)
+		{
+			dumpOne(subT, i, paste( names[index] , "_", t, sep="" ))			
+		}
 		
 		index <- index + 1;
 	}
