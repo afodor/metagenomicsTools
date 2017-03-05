@@ -2,6 +2,7 @@
 rm(list=ls())
 
 setwd("C:\\LyteBehaviorMarch2017\\rg_results\\")
+library("Kendall")
 
 dumpOne <- function(myT, i, filePrefix ) 
 {
@@ -19,7 +20,8 @@ dumpOne <- function(myT, i, filePrefix )
 		{
 			myLm <- lm( bug ~ metaVal ) 
 			
-			pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			pValues[index] <- Kendall(bug, metaVal)$sl[1]
+			
 			bugNames[index] <- names(myT)[j]
 			
 			plot( bug ~ metaVal, main=paste(bugNames[index],format(pValues[index],digits=3)))
@@ -28,6 +30,7 @@ dumpOne <- function(myT, i, filePrefix )
 		}		
 	}	
 	
+	hist(pValues, breaks=20)
 	dev.off()
 	myFrame <- data.frame(bugNames ,pValues)
 	myFrame <- myFrame [order(myFrame$pValues ),]
