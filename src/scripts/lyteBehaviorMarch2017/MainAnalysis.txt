@@ -55,11 +55,14 @@ for( t in tissues )
 			index <- index + 1
 		}
 		
+		hist(pValuesGroup,breaks=20)
+		hist(pValuesSex,breaks=20)
 	}
 	
-	myFrame <- data.frame(names,pValuesGroup)
+	myFrame <- data.frame(names,pValuesGroup,pValuesSex)
 	myFrame <- myFrame [order(myFrame$pValuesGroup),]
 	myFrame$adjustedPValuesGroup <- p.adjust( myFrame$pValuesGroup, method = "BH" )	
+	myFrame$adjustedPValuesSex<- p.adjust( myFrame$pValuesSex, method = "BH" )
 	write.table(myFrame, file=paste("mainEffects", t, ".txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()	
 }
