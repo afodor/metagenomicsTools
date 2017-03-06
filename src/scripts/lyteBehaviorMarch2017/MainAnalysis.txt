@@ -28,7 +28,7 @@ for( t in tissues )
 	
 	for ( j in c(2,3,61:3560))
 	{
-		par(mfrow=c(2,1))
+		par(mfrow=c(2,2))
 		bug <- subT[,j]
 		
 		if( sum(bug != 0 ) > nrow(subT) / 4 )
@@ -58,7 +58,7 @@ for( t in tissues )
 			cage <-  factor( paste( subT$Housing, subT$Sex, sep=""))
 
 			
-			myFrame <- data.frame(bug, sex,group)
+			myFrame <- data.frame(bug, sex,group,cage)
 			
 			stripchart(bug ~ sex, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
@@ -70,6 +70,12 @@ for( t in tissues )
 			pValuesGroupFromMixed[index] <- mixedAnova$"p-value"[2]
 			pValuesSexFromMixed[index] <- mixedAnova$"p-value"[3]
 			pValuesSexGroupFromMixedInteraction[index] <- mixedAnova$"p-value"[4]
+				
+			boxplot( bug ~ cage ) 
+			stripchart(bug ~ cage, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
+			
+			
 				
 			index <- index + 1
 		}
