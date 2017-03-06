@@ -74,10 +74,10 @@ for( t in tissues )
 			
 			pValuesCage[index] <- anova(lm( bug ~ cage ))$"Pr(>F)"[1]
 				
-			boxplot( bug ~ cage ) 
+			boxplot( bug ~ cage ,las=2,
+				main=format(pValuesCage[index],digits=3)) 
 			stripchart(bug ~ cage, 
-				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index], las=2,
-				main=format(pValuesCage[index],digits=3))	
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index] )	
 			
 			plot(1, type="n", axes=F, xlab="", ylab="")		
 				
