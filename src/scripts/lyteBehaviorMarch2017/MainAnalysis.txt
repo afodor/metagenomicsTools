@@ -1,0 +1,43 @@
+
+rm(list=ls())
+
+setwd("C:\\LyteBehaviorMarch2017\\rg_results\\")
+library("Kendall")
+
+myT <- read.table("LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt", sep="\t", header=TRUE)
+
+tissues <- unique(myT$Source)
+
+
+
+for( t in tissues ) 
+{
+	subT <- myT[ myT$Source == t, ]
+	index <- 1
+	names <- vector()
+	pValuesGroup <- vector()
+	pdf( paste("main_", t,".pdf", sep=""))
+	
+	for ( j in c(2,3,61:3560))
+	{
+		bug <- myT[,j]
+		
+		if( sum(bug != 0 ) > nrow(myT) / 4 )
+		{
+			pValuesGroup[index] <- wilcox.test( subT[myT$Group=="Experimental", j],  
+										subT[myT$Group=="Control", j])$p.value
+			names[index] <- names(myT)[j]
+			
+			boxplot( subT[myT$Group=="Experimental", j], subT[myT$Group=="Control", j],
+			main = paste( names[index], format(pValuesGroup[index],digits=3) ) )		
+		}
+		
+		index <- index + 1
+	}
+	
+	myFrame <- data.frame(names,pValuesGroup)
+	myFrame <- myFrame [order(myFrame$pValuesGroup),]
+	myFrame$adjustedPValuesGroup <- p.adjust( myFrame$pValuesGroup, method = "BH" )	
+	write.table(myFrame, file=paste("mainEffects", t, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dev.off()	
+}
