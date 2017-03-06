@@ -22,7 +22,7 @@ for( t in tissues )
 	
 	pValuesGroupFromMixed <- vector()
 	pValuesSexFromMixed <- vector()
-	pValuesSexGroupFromMixed <- vector()
+	pValuesSexGroupFromMixedInteraction <- vector()
 	
 	pdf( paste("main_", t,".pdf", sep=""))
 	
@@ -69,7 +69,7 @@ for( t in tissues )
 			mixedAnova <- anova(fullModel)		
 			pValuesGroupFromMixed[index] <- mixedAnova$"p-value"[2]
 			pValuesSexFromMixed[index] <- mixedAnova$"p-value"[3]
-			pValuesSexGroupFromMixed[index] <- mixedAnova$"p-value"[4]
+			pValuesSexGroupFromMixedInteraction[index] <- mixedAnova$"p-value"[4]
 				
 			index <- index + 1
 		}
@@ -79,10 +79,15 @@ for( t in tissues )
 	}
 	
 	myFrame <- data.frame(names,pValuesGroup,pValuesSex,pValuesGroupFromMixed,pValuesGroupFromMixed,
-	pValuesSexFromMixed,pValuesSexGroupFromMixed)
+	pValuesSexFromMixed,pValuesSexGroupFromMixedInteraction)
 	myFrame <- myFrame [order(myFrame$pValuesGroup),]
 	myFrame$adjustedPValuesGroup <- p.adjust( myFrame$pValuesGroup, method = "BH" )	
 	myFrame$adjustedPValuesSex<- p.adjust( myFrame$pValuesSex, method = "BH" )
+	
+	myFrame$adjustedpValuesGroupFromMixed<- p.adjust( myFrame$pValuesGroupFromMixed, method = "BH" )
+	myFrame$adjustedpValuesSexFromMixed<- p.adjust( myFrame$pValuesSexFromMixed, method = "BH" )
+	myFrame$pValuesSexGroupFromMixedInteraction<- p.adjust( myFrame$pValuesSexGroupFromMixedInteraction, method = "BH" )
+	
 	write.table(myFrame, file=paste("mainEffects", t, ".txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()	
 }
