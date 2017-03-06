@@ -89,6 +89,12 @@ for( t in tissues )
 	
 	hist(pValuesGroup,breaks=20)
 	hist(pValuesSex,breaks=20)
+	hist(pValuesGroupFromMixed,breaks=20)
+	hist(pValuesSexFromMixed,breaks=20)
+	hist(pValuesSexGroupFromMixedInteraction,breaks=20)
+	hist(pValuesCage,breaks=20)
+	
+	
 	myFrame <- data.frame(names,pValuesGroup,pValuesSex,pValuesGroupFromMixed,
 	pValuesSexFromMixed,pValuesSexGroupFromMixedInteraction, pValuesCage)
 	myFrame <- myFrame [order(myFrame$pValuesGroup),]
