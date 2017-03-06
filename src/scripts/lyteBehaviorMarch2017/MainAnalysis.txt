@@ -89,7 +89,7 @@ for( t in tissues )
 	
 	hist(pValuesGroup,breaks=20)
 	hist(pValuesSex,breaks=20)
-	myFrame <- data.frame(names,pValuesGroup,pValuesSex,pValuesGroupFromMixed,pValuesGroupFromMixed,
+	myFrame <- data.frame(names,pValuesGroup,pValuesSex,pValuesGroupFromMixed,
 	pValuesSexFromMixed,pValuesSexGroupFromMixedInteraction, pValuesCage)
 	myFrame <- myFrame [order(myFrame$pValuesGroup),]
 	myFrame$adjustedPValuesGroup <- p.adjust( myFrame$pValuesGroup, method = "BH" )	
