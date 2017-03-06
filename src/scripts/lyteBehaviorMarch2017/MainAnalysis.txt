@@ -8,18 +8,18 @@ myT <- read.table("LyteSharon_r01_crDataOnlyTaxaAsColumnsLogNormPlusMetadata.txt
 
 tissues <- unique(myT$Source)
 
-
-
 for( t in tissues ) 
 {
 	subT <- myT[ myT$Source == t, ]
 	index <- 1
 	names <- vector()
 	pValuesGroup <- vector()
+	pValuesSex <- vector()
 	pdf( paste("main_", t,".pdf", sep=""))
 	
 	for ( j in c(2,3,61:3560))
 	{
+		par(mfrow=c(2,1))
 		bug <- subT[,j]
 		
 		if( sum(bug != 0 ) > nrow(subT) / 4 )
@@ -36,6 +36,19 @@ for( t in tissues )
 			myFrame <- data.frame(bug, group)
 			
 			stripchart(bug ~ group , 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
+			
+			sex <- factor(subT$Sex);
+			
+			pValuesSex[index] <- wilcox.test( subT[subT$Sex=="male", j],  
+										subT[subT$Sex=="female", j])$p.value
+		
+			boxplot( bug ~ sex,
+			main = paste( names[index], format(pValuesSex[index],digits=3) ) )	
+			
+			myFrame <- data.frame(bug, sex)
+			
+			stripchart(bug ~ sex, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
 			
 				
