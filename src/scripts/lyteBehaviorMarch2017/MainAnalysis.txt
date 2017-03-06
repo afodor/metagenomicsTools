@@ -20,16 +20,25 @@ for( t in tissues )
 	
 	for ( j in c(2,3,61:3560))
 	{
-		bug <- myT[,j]
+		bug <- subT[,j]
 		
-		if( sum(bug != 0 ) > nrow(myT) / 4 )
+		if( sum(bug != 0 ) > nrow(subT) / 4 )
 		{
-			pValuesGroup[index] <- wilcox.test( subT[myT$Group=="Experimental", j],  
-										subT[myT$Group=="Control", j])$p.value
-			names[index] <- names(myT)[j]
+			pValuesGroup[index] <- wilcox.test( subT[subT$Group=="Experimental", j],  
+										subT[subT$Group=="Control", j])$p.value
+			names[index] <- names(subT)[j]
 			
-			boxplot( subT[myT$Group=="Experimental", j], subT[myT$Group=="Control", j],
-			main = paste( names[index], format(pValuesGroup[index],digits=3) ) )		
+			
+			group <- factor(subT$Group)
+			boxplot( bug ~ group ,
+			main = paste( names[index], format(pValuesGroup[index],digits=3) ) )	
+			
+			myFrame <- data.frame(bug, group)
+			
+			stripchart(bug ~ group , 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
+			
+				
 			index <- index + 1
 		}
 		
