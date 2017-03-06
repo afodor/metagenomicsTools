@@ -12,7 +12,7 @@ dumpOne <- function(myT, i, filePrefix )
 	pValues <- vector()
 	bugNames <- vector()
 
-	for ( j in 	61:3560)
+	for ( j in 	c(2,3,61:3560))
 	{
 		bug <- myT[,j]
 		
@@ -46,7 +46,7 @@ getAllPValues <- function( myT, i )
 	index <- 1
 	pValues <- vector()
 
-	for ( j in 	61:3560)
+	for ( j in 	c(2,3,61:3560))
 	{
 		bug <- myT[,j]
 		
@@ -75,7 +75,7 @@ for( t in tissues )
 	subT <- myT[ myT$Source == t, ]
 	pdf( paste(t,".pdf", sep=""))
 	
-	for ( i in c(2,3,22:60))
+	for ( i in c(22:60))
 	{
 		pValues <- getAllPValues( subT, i )
 		numSignificant[index] <- sum (p.adjust(pValues, method="BH") < 0.05 ) 
