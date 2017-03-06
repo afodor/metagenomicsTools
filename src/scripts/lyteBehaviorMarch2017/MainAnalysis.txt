@@ -75,15 +75,16 @@ for( t in tissues )
 			stripchart(bug ~ cage, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
 			
-			
+			plot(1, type="n", axes=F, xlab="", ylab="")		
 				
 			index <- index + 1
 		}
 		
-		hist(pValuesGroup,breaks=20)
-		hist(pValuesSex,breaks=20)
 	}
 	
+	
+	hist(pValuesGroup,breaks=20)
+	hist(pValuesSex,breaks=20)
 	myFrame <- data.frame(names,pValuesGroup,pValuesSex,pValuesGroupFromMixed,pValuesGroupFromMixed,
 	pValuesSexFromMixed,pValuesSexGroupFromMixedInteraction)
 	myFrame <- myFrame [order(myFrame$pValuesGroup),]
