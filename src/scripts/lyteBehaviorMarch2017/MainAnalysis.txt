@@ -30,9 +30,9 @@ for( t in tissues )
 			
 			boxplot( subT[myT$Group=="Experimental", j], subT[myT$Group=="Control", j],
 			main = paste( names[index], format(pValuesGroup[index],digits=3) ) )		
+			index <- index + 1
 		}
 		
-		index <- index + 1
 	}
 	
 	myFrame <- data.frame(names,pValuesGroup)
