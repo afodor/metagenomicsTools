@@ -5,7 +5,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import utils.ConfigReader;
 
@@ -13,38 +16,78 @@ public class CompareTissues
 {
 	public static void main(String[] args) throws Exception
 	{
-		String s1 ="Cecal_Content";
-		String s2 = "feces";
+		String[] sources = {"Cecal_Content", "feces", "jej", "ileum","duo" };
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getLyteBehaviorMarch2017Dir() + File.separator + "rg_results" 
-						+ File.separator + s1 + "vs" + s2 + ".txt")));
+						+ File.separator + "tissueComparison.txt")));
 		
 		writer.write("taxaID");
-		writeAllButFirstTokenFromHeader(writer, s1);
-		writeAllButFirstTokenFromHeader(writer, s2);
+		
+		for(String s : sources)
+		{
+			writeAllButFirstTokenFromHeader(writer, s);	
+		}
 		writer.write("\n");
 		
-		HashMap<String, String> map1 = getLineMapForTissue(s1);
-		HashMap<String, String> map2 = getLineMapForTissue(s2);
+		List<HashMap<String, String>> lineMaps = new ArrayList<HashMap<String, String>>();
 		
-		for(String key1 : map1.keySet())
+		for(String s : sources)
 		{
-			if( map2.containsKey(key1))
+			lineMaps.add(getLineMapForTissue(s));
+		}
+		
+		HashSet<String> includeSet = new HashSet<String>();
+		
+		Integer numColumns = null;
+		
+		for(HashMap<String, String> map : lineMaps)
+		{
+			includeSet.addAll(map.keySet());
+			
+			for(String s : map.keySet())
 			{
-				writer.write(key1);
-				writeAllButFirstTokenFromString(writer, map1.get(key1));
-				writeAllButFirstTokenFromString(writer, map2.get(key1));
-				writer.write("\n");
+				String[] splits = map.get(s).split("\t");
+				
+				int length = splits.length - 1;
+				
+				if( numColumns == null)
+					numColumns = length;
+				
+				if( numColumns != length ) 
+					throw new Exception("No");
 			}
+		}
+		
+		for(String s : includeSet)
+		{
+			writer.write(s);
+			
+			
+			for(HashMap<String, String> map : lineMaps)
+			{
+				writeAllButFirstTokenFromString(writer, map.get(s), numColumns);
+			}
+			
+			writer.write("\n");
+				
 		}
 		
 		writer.flush();  writer.close();
 	}
 	
 
-	private static void writeAllButFirstTokenFromString( BufferedWriter writer, String s) throws Exception
+	private static void writeAllButFirstTokenFromString( BufferedWriter writer, String s, int numColumns) 
+				throws Exception
 	{
+		if( s == null)
+		{
+			for(int x=0; x < numColumns; x++)
+				writer.write("\t");
+			
+			return;
+		}
+		
 		String[] splits = s.split("\t");
 		
 		for( int x=1; x < splits.length; x++)
