@@ -52,9 +52,9 @@ getAllPValues <- function( myT, i )
 		
 		if( sum(bug != 0 ) > nrow(myT) / 4 )
 		{
-			myLm <- lm( bug ~ metaVal ) 
-			
-			pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			#myLm <- lm( bug ~ metaVal ) 
+			#pValues[index] <- anova(myLm)$"Pr(>F)"[1]
+			pValues[index] =Kendall(bug, metaVal)$sl[1]
 			
 			index <- index + 1	
 		}		
