@@ -82,7 +82,7 @@ for( t in tissues )
 		names[index] <- names(myT)[i]
 		hist(pValues, breaks=20, main=paste(names[index],numSignificant[index] ))
 		
-		if( numSignificant[index]  >= 5)
+		if( numSignificant[index]  >= 1)
 		{
 			dumpOne(subT, i, paste( names[index] , "_", t, sep="" ))			
 		}
