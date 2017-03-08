@@ -82,6 +82,12 @@ for( i in 2:7 )
 	pValuesUpDownLocationInteraction)
 	myFrame <- myFrame [order(myFrame$pValuesLocation),]
 	myFrame$adjustedPValuesLocation <- p.adjust( myFrame$pValuesLocation, method = "BH" )	
+	
+	myFrame$adjustedpValueLocationsFromFull <- p.adjust( myFrame$pValueLocationsFromFull, method = "BH" )	
+	myFrame$adjustedpValueUpDownFromFull <- p.adjust( myFrame$pValueUpDownFromFull, method = "BH" )	
+	myFrame$adjustedpValuesTimepointFromFull <- p.adjust( myFrame$pValuesTimepointFromFull, method = "BH" )	
+	myFrame$adjustedpValuesUpDownLocationInteraction <- p.adjust( myFrame$pValuesUpDownLocationInteractio, method = "BH" )	
+	
 	write.table(myFrame, file=paste("L", i, "_pValues.txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
