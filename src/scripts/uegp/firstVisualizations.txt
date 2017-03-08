@@ -34,6 +34,12 @@ for( i in 2:7 )
 			pValuesLocation[index] <- anova(myLm)$"Pr(>F)"[1]
 			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
 			boxplot( bug ~ locations, main = mainText)	
+			
+				
+			myFrame <- data.frame(bug,locations)
+			
+			stripchart(bug ~ locations, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
 			index = index + 1		
 		} 
 	}
