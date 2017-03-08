@@ -28,17 +28,20 @@ for( i in 2:7 )
 		bug <- myT[,j]
 		if( sum(bug != 0) > nrow(myT) / 4) 
 		{
-			locations <- factor(myT$Location)
-			myLm <- lm( bug ~ locations) 
-			names[index] <- names(myT)[j]
-			pValuesLocation[index] <- anova(myLm)$"Pr(>F)"[1]
+			justStreams <- myT[myT$Location == "Mallard Creek" |myT$Location ==  "Sugar Creek" ,]
+			locations <- factor(justStreams$Location)
+			streamBugs <- justStreams[,j] 
+			#myLm <- lm( streamBugs ~ locations) 
+			names[index] <- names(justStreams)[j]
+			pValuesLocation[index] <- wilcox.test( streamBugs[myT$Location == "Mallard Creek"] ,
+							 streamBugs[myT$Location == "Sugar Creek"])$p.value
 			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
-			boxplot( bug ~ locations, main = mainText)	
+			boxplot( streamBugs ~ locations, main = mainText)	
 			
 				
-			myFrame <- data.frame(bug,locations)
+			myFrame <- data.frame(streamBugs ,locations)
 			
-			stripchart(bug ~ locations, 
+			stripchart(streamBugs ~ locations, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
 			index = index + 1		
 		} 
