@@ -1,0 +1,8 @@
+
+setwd("C:\\uegp")
+
+for( i in 2:7 ) 
+{
+	fileName <- paste("LogNormwithMetadata_L_", i, ".txt", sep = "")
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+}
