@@ -11,8 +11,8 @@ getColumnIndex <- function(myT, s)
 }
 
 
-i <- 2 
-#for( i in 2:7 ) 
+#i <- 2 
+for( i in 2:7 ) 
 {
 	fileName <- paste("LogNormwithMetadata_L_", i, ".txt", sep = "")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
@@ -33,10 +33,17 @@ i <- 2
 			names[index] <- names(myT)[j]
 			pValuesLocation[index] <- anova(myLm)$"Pr(>F)"[1]
 			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
-			boxplot( bug ~ locations, main = mainText)			
+			boxplot( bug ~ locations, main = mainText)	
+			index = index + 1		
 		} 
 	}
 	
+	hist(pValuesLocation,breaks=20)
 	dev.off()
+	myFrame <- data.frame(names,pValuesLocation)
+	myFrame <- myFrame [order(myFrame$pValuesLocation),]
+	myFrame$adjustedPValuesLocation <- p.adjust( myFrame$pValuesLocation, method = "BH" )	
+	write.table(myFrame, file=paste("L", i, "_pValues.txt",sep=""), sep="\t",row.names=FALSE)
+	
 }
 
