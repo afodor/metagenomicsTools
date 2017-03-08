@@ -19,13 +19,24 @@ i <- 2
 	
 	metadataStart <- getColumnIndex(myT,"sequenceCount")
 
+	pValuesLocation <- vector()
+	names <- vector()
+	index <-1
+	pdf( paste("L", i, ".pdf"))
 	for( j in 2: (metadataStart -1) ) 
 	{
 		bug <- myT[,j]
 		if( sum(bug != 0) > nrow(myT) / 4) 
 		{
-			hist(bug)
+			locations <- factor(myT$Location)
+			myLm <- lm( bug ~ locations) 
+			names[index] <- names(myT)[j]
+			pValuesLocation[index] <- anova(myLm)$"Pr(>F)"[1]
+			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
+			boxplot( bug ~ locations, main = mainText)			
 		} 
 	}
+	
+	dev.off()
 }
 
