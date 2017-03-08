@@ -17,6 +17,12 @@ for( i in 2:7 )
 	fileName <- paste("LogNormwithMetadata_L_", i, ".txt", sep = "")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
 	
+	pValueLocationsFromFull <- vector()
+	pValueUpDownFromFull<- vector()
+	pValuesTimepointFromFull <- vector()
+	pValuesUpDownLocationInteraction <- vector()
+	
+	
 	metadataStart <- getColumnIndex(myT,"sequenceCount")
 
 	pValuesLocation <- vector()
@@ -25,10 +31,13 @@ for( i in 2:7 )
 	pdf( paste("L", i, ".pdf"))
 	for( j in 2: (metadataStart -1) ) 
 	{
+		par(mfrow=c(1,1))
 		bug <- myT[,j]
 		if( sum(bug != 0) > nrow(myT) / 4) 
 		{
-			justStreams <- myT[myT$Location == "Mallard Creek" |myT$Location ==  "Sugar Creek" ,]
+			justStreams <- myT[(myT$Location == "Mallard Creek" |myT$Location ==  "Sugar Creek") &  
+						 (myT$Sample == "UP A" |myT$Sample == "UP B" | 
+						 		 myT$Sample == "DS A" | myT$Sample == "DS B") & myT$Rep == 1, ]
 			locations <- factor(justStreams$Location)
 			streamBugs <- justStreams[,j] 
 			#myLm <- lm( streamBugs ~ locations) 
@@ -36,20 +45,38 @@ for( i in 2:7 )
 			pValuesLocation[index] <- wilcox.test( streamBugs[myT$Location == "Mallard Creek"] ,
 							 streamBugs[myT$Location == "Sugar Creek"])$p.value
 			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
-			boxplot( streamBugs ~ locations, main = mainText)	
+			boxplot( streamBugs ~ locations, main = mainText)		
 			
-				
 			myFrame <- data.frame(streamBugs ,locations)
 			
 			stripchart(streamBugs ~ locations, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
+			
+			fullModel <- lm( streamBugs ~ locations * justStreams$Sample + justStreams$Timepoint ) 	
+			anAnova <- anova(fullModel)
+			
+			pValueLocationsFromFull[index] <- anAnova$"Pr(>F)"[1]
+			pValueUpDownFromFull[index] <- anAnova$"Pr(>F)"[2]
+			pValuesTimepointFromFull[index] <- anAnova$"Pr(>F)"[3]
+			pValuesUpDownLocationInteraction[index] <- anAnova$"Pr(>F)"[4]
+			
+				
 			index = index + 1		
 		} 
 	}
 	
 	hist(pValuesLocation,breaks=20)
+	
+	hist(pValueLocationsFromFull,breaks=20)
+	hist(pValueUpDownFromFull,breaks=20)
+	hist(pValuesTimepointFromFull,breaks=20)
+	hist(pValuesUpDownLocationInteraction,breaks=20)
+	
+	
+	
 	dev.off()
-	myFrame <- data.frame(names,pValuesLocation)
+	myFrame <- data.frame(names,pValuesLocation,pValueLocationsFromFull,pValueUpDownFromFull,pValuesTimepointFromFull,
+	pValuesUpDownLocationInteraction)
 	myFrame <- myFrame [order(myFrame$pValuesLocation),]
 	myFrame$adjustedPValuesLocation <- p.adjust( myFrame$pValuesLocation, method = "BH" )	
 	write.table(myFrame, file=paste("L", i, "_pValues.txt",sep=""), sep="\t",row.names=FALSE)
