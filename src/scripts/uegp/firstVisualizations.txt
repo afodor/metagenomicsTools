@@ -1,8 +1,31 @@
 
 setwd("C:\\uegp")
 
-for( i in 2:7 ) 
+getColumnIndex <- function(myT, s)
+{
+	myNames <- names(myT)
+	
+	for( i in 1: length(myNames))
+		if ( myNames[i] == s) 
+			return (i)
+}
+
+
+i <- 2 
+#for( i in 2:7 ) 
 {
 	fileName <- paste("LogNormwithMetadata_L_", i, ".txt", sep = "")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
+	
+	metadataStart <- getColumnIndex(myT,"sequenceCount")
+
+	for( j in 2: (metadataStart -1) ) 
+	{
+		bug <- myT[,j]
+		if( sum(bug != 0) > nrow(myT) / 4) 
+		{
+			hist(bug)
+		} 
+	}
 }
+
