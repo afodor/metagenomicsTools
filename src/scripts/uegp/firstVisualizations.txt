@@ -47,12 +47,15 @@ for( i in 2:7 )
 			mainText = paste(names[index], format(pValuesLocation[index], digits=3))
 			boxplot( streamBugs ~ locations, main = mainText)		
 			
+			updownBinary <- ifelse( justStreams$Sample == "DS A" | justStreams$Sample == "DS B" ,
+			"down", "up"  )
+			
 			myFrame <- data.frame(streamBugs ,locations)
 			
 			stripchart(streamBugs ~ locations, 
 				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])	
 			
-			fullModel <- lm( streamBugs ~ locations * justStreams$Sample + justStreams$Timepoint ) 	
+			fullModel <- lm( streamBugs ~ locations * updownBinary + justStreams$Timepoint ) 	
 			anAnova <- anova(fullModel)
 			
 			pValueLocationsFromFull[index] <- anAnova$"Pr(>F)"[1]
