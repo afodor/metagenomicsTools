@@ -17,8 +17,6 @@ par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 for( i in 4:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
-		
-		
 		for( j in 1:length(times) ) 
 		{
 			val <- myT[myT$time==times[j],i]
