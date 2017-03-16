@@ -22,6 +22,11 @@ for( i in 4:ncol(myT))
 			val <- myT[myT$time==times[j],i]
 			genotypes <- myT$genotype[myT$time==times[j]]
 			boxplot( val ~ genotypes, main = paste("time ",times[j]))
+			
+			myFrame <- data.frame(val, genotypes)
+			
+			stripchart(val ~ genotypes, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names(myT)[i] )		
 		}
 		
 		plot(1, type="n", axes=F, xlab="", ylab="")		
