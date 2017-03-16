@@ -10,6 +10,21 @@ myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 
 times <- sort(unique( factor(myT$time)))
 
-for( i in 1:length(times) ) 
-{
-}
+pdf("FiveGroupsOneAtATime.pdf")
+
+par(mfrow=c(3,2))
+
+for( i in 4:ncol(myT))
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{
+		for( j in 1:length(times) ) 
+		{
+			val <- myT[myT$time==times[j],i]
+			genotypes <- myT$genotype[myT$time==times[j]]
+			boxplot( val ~ genotypes, main = names(myT)[i])
+		}
+		
+		plot(1, type="n", axes=F, xlab="", ylab="")		
+	}
+
+dev.off()
