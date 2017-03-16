@@ -52,3 +52,15 @@ for( i in 1:5)
 }
 
 dev.off()
+
+names(pValueList) <- c( "time0", "time3", "time4", "time12", "time18" )
+
+dFrame <- data.frame( names,pValueList$time0,pValueList$time3,pValueList$time4,pValueList$time12,pValueList$time18) 
+dFrame <- dFrame [order(dFrame$pValueList.time0),]
+dFrame$pValuesTime0Adjusted <- p.adjust( dFrame$pValueList.time0, method = "BH")
+dFrame$pValuesTime3Adjusted <- p.adjust( dFrame$pValueList.time3, method = "BH")
+dFrame$pValuesTime4Adjusted <- p.adjust( dFrame$pValueList.time4, method = "BH")
+dFrame$pValuesTime12Adjusted <- p.adjust( dFrame$pValueList.time12, method = "BH")
+dFrame$pValuesTime18Adjusted <- p.adjust( dFrame$pValueList.time18, method = "BH")
+
+write.table(dFrame, file=paste("pValuesFiveSeparate.txt",sep=""), sep="\t",row.names=FALSE)
