@@ -14,24 +14,33 @@ pdf("FiveGroupsOneAtATime.pdf")
 
 par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 
-for( i in 4:ncol(myT))
+pValueList <- list(c(),c(),c(),c(),c())
+names <- vector()
+index <-1 
+
+for( i in 5:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
 		for( j in 1:length(times) ) 
 		{
 			val <- myT[myT$time==times[j],i]
 			genotypes <- myT$genotype[myT$time==times[j]]
-			boxplot( val ~ genotypes, main = paste("time ",times[j]))
+			
+			pVal <- t.test( val[ genotypes=="WT" ] ,val[ genotypes=="KO" ] )$p.value
+			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ))
 			
 			myFrame <- data.frame(val, genotypes)
 			
 			stripchart(val ~ genotypes, 
-				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names(myT)[i] )		
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names(myT)[i] )	
+					
 		}
 		
 		plot(1, type="n", axes=F, xlab="", ylab="")		
 		 mtext( names(myT)[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+        
+        index <- index + 1
 	}
 
 dev.off()
