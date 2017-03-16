@@ -29,6 +29,9 @@ for( i in 5:ncol(myT))
 			pVal <- t.test( val[ genotypes=="WT" ] ,val[ genotypes=="KO" ] )$p.value
 			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ))
 			
+			pValueList[[j]][index] <- pVal
+			names[index] <- pVal
+			
 			myFrame <- data.frame(val, genotypes)
 			
 			stripchart(val ~ genotypes, 
@@ -42,5 +45,10 @@ for( i in 5:ncol(myT))
         
         index <- index + 1
 	}
+	
+for( i in 1:5)
+{
+	hist(pValueList[[i]], breaks=20, main=paste("time=", times[i]), xlab="")
+}
 
 dev.off()
