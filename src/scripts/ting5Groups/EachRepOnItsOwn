@@ -58,7 +58,7 @@ for( i in 5:ncol(myT))
 					logPMean0[index] = - logPMean0[index] 
 			}
 			
-			if( j == 3 ) 
+			if( j == 2 ) 
 			{
 				mean3WT[index] = mean(val[ genotypes=="WT" ])
 				mean3KO[index] = mean(val[ genotypes=="KO" ])
@@ -97,3 +97,6 @@ dFrame$pValuesTime12Adjusted <- p.adjust( dFrame$pValueList.time12, method = "BH
 dFrame$pValuesTime18Adjusted <- p.adjust( dFrame$pValueList.time18, method = "BH")
 
 write.table(dFrame, file=paste("pValuesFiveSeparate.txt",sep=""), sep="\t",row.names=FALSE)
+plot( logPMean0, logPMean3,pch=16,cex=2)
+summary( lm(logPMean3 ~ logPMean0))
+abline(lm(logPMean3 ~ logPMean0))
