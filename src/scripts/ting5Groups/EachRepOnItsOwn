@@ -40,7 +40,7 @@ for( i in 5:ncol(myT))
 			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ))
 			
 			pValueList[[j]][index] <- pVal
-			names[index] <- pVal
+			names[index] <- names(myT)[i]
 			
 			myFrame <- data.frame(val, genotypes)
 			
