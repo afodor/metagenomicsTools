@@ -1,0 +1,64 @@
+
+rm(list=ls())
+
+
+setwd("C:\\temp")
+
+#setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+level <- "genus"
+
+myT <- read.table(paste("mergedKrakenRDP_", level,"_WithMetadata.txt",sep=""), header=TRUE, sep="\t")
+# remove outlier samples
+myT <- myT[ myT$sample != "ST00046_all2" & myT$sample != "ST00045_all1", ]
+pdf(paste(level,"_wgsVs16AllSamples.pdf"))
+
+getColors <- function(data) 
+{	
+	colors <- vector();
+	
+	for( i in 1:length(data) )
+	{
+		if( data[i]== "stool" )
+			colors[i] <- "red"
+		else
+			colors[i] <- "blue"
+	}
+	
+	return (colors)
+}
+
+getIncludedTaxa <- function(myT)
+{
+	taxa <- vector();
+	data <- myT$maxKrakenFraction
+	index <-1
+	
+	for ( i in 1:nrow(myT))
+	{
+		if(data[i] > 0.01) 
+		{
+			taxa[index] <- paste( myT[i,]$taxa, "", sep="")
+			index <- index + 1;
+		}
+	}
+	
+	taxa <- unique( taxa )
+	taxa <- sort(taxa)
+	return ( taxa )
+	
+}
+
+taxa <- getIncludedTaxa(myT)
+minVal <- 1
+
+for( i in 1 : length(taxa)) 
+{
+	aTitle <- paste( taxa[i])
+	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal),
+				,col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) , main=aTitle, xlab="1og10(krakenWholeGenome)",
+				ylab="log10(kraken16S)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3)
+
+}
+
+write.table(myT, file=paste(level,"_wgsVs16AllSamples.txt", sep =""), row.names=FALSE)
+dev.off()
