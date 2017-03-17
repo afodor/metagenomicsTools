@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
+import scripts.vanderbilt.kraken.PivotKrakenReportToTaxaAsColumns;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -156,7 +157,6 @@ public class AddMetadata
 	
 	public static void main(String[] args) throws Exception
 	{
-		/*
 		for(int x=0; x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length; x++)
 		{
 			OtuWrapper wrapper = new OtuWrapper( ConfigReader.getVanderbiltDir() + File.separator + 
@@ -179,7 +179,7 @@ public class AddMetadata
 								outFile.getAbsolutePath(), false);
 		
 			// couldn't do strains
-			if( x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length - 1 )
+			if( x < PivotKrakenReportToTaxaAsColumns.RDP_LEVELS.length - 2 )
 			{
 
 				File pcoaFile = new File(ConfigReader.getVanderbiltDir() + File.separator +
@@ -193,7 +193,7 @@ public class AddMetadata
 				addSomeMetadata(wrapper, pcoaFile.getAbsolutePath(), pcoaOutFile.getAbsolutePath(), true);
 			}
 			
-		}*/
+		}
 		
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -227,7 +227,6 @@ public class AddMetadata
 			
 			addSomeMetadata(wrapper, taxaPath, outPath, false);
 			
-			/*
 			String mergedPath = ConfigReader.getVanderbiltDir()
 					 + File.separator + "spreadsheets" + 
 					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt";
@@ -237,7 +236,6 @@ public class AddMetadata
 					 File.separator + "mergedKrakenRDP_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "_WithMetadata.txt";
 			
 			addSomeMetadata(wrapper, mergedPath, outMergedPath, false);
-			*/
 		}
 	}
 }

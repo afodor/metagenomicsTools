@@ -92,7 +92,7 @@ public class MergeRDPKraken
 		writer.write("sample\tisStoolOrSwab\ttaxa\tkrakenLevel\trdpLevel\tkraken16SLevel\tmaxKrakenFraction\n");
 		
 		OtuWrapper rdpWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
-							File.separator + "pivoted_"+ level  + "asColumns.txt");
+							File.separator + "pivoted_"+ level  + "asColumns_Corrected.txt");
 		
 		OtuWrapper krakenWrapper = new OtuWrapper(ConfigReader.getVanderbiltDir() + File.separator + "spreadsheets" + 	
 				File.separator + "kraken_" + level + "_taxaAsColumns.txt");
