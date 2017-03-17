@@ -2,7 +2,7 @@
 rm(list=ls())
 
 setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
-level <- "phylum"
+level <- "genus"
 
 myT <- read.table(paste("mergedKrakenRDP_", level,"_WithMetadata.txt",sep=""), header=TRUE, sep="\t")
 # remove outlier samples
@@ -89,23 +89,23 @@ for( i in 1 : length(taxa))
 	myLm <- lm( log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal) ~ log10(myT$krakenLevel[myT$taxa==taxa[i]]+minVal) )	
 	
 	kraken16STPre = 
-		t.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
+		wilcox.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
 							& myT$time=="pre"]+minVal) 
 							,myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'
 							& myT$time=="pre"]+minVal)$p.value
 	
 	krakenWGPre= 
-		t.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="pre"]+minVal) 
+		wilcox.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="pre"]+minVal) 
 			,myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'& myT$time=="pre"]+minVal)$p.value
 			
 	kraken16STPost= 
-		t.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
+		wilcox.test( log10(myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'
 							& myT$time=="post"]+minVal) 
 							,myT$kraken16SLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'
 							& myT$time=="post"]+minVal)$p.value
 						
 	krakenWGPost= 
-		t.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="post"]+minVal) 
+		wilcox.test( log10(myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='swab'& myT$time=="post"]+minVal) 
 			,myT$krakenLevel[myT$taxa==taxa[i] & myT$isStoolOrSwab=='stool'& myT$time=="post"]+minVal)$p.value
 	
 			
