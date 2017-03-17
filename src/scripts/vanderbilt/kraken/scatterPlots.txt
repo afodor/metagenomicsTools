@@ -2,10 +2,12 @@
 rm(list=ls())
 
 setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+level <- "phylum"
 
-myT <- read.table("mergedKrakenRDP_phylum_WithMetadata.txt", header=TRUE, sep="\t")
+myT <- read.table(paste("mergedKrakenRDP_", level,"_WithMetadata.txt",sep=""), header=TRUE, sep="\t")
 # remove outlier samples
 myT <- myT[ myT$sample != "ST00046_all2" & myT$sample != "ST00045_all1", ]
+pdf(paste(level,"_wgsVs16.pdf",sep=""))
 
 getColors <- function(data) 
 {	
@@ -82,7 +84,6 @@ myT <- removeDuplicateStool(myT)
 taxa <- getIncludedTaxa(myT)
 minVal <- 1
 
-par(mfrow=c(3,3))
 for( i in 1 : length(taxa)) 
 {
 	myLm <- lm( log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal) ~ log10(myT$krakenLevel[myT$taxa==taxa[i]]+minVal) )	
@@ -119,3 +120,4 @@ for( i in 1 : length(taxa))
 }
 
 write.table(myT, file="quickCheck.txt", sep ="\t", row.names=FALSE)
+dev.off()
