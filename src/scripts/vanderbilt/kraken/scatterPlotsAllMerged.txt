@@ -2,9 +2,7 @@
 rm(list=ls())
 
 
-setwd("C:\\temp")
-
-#setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
+setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 level <- "genus"
 
 myT <- read.table(paste("mergedKrakenRDP_", level,"_WithMetadata.txt",sep=""), header=TRUE, sep="\t")
@@ -55,13 +53,16 @@ for( i in 1 : length(taxa))
 {
 	aTitle <- paste( taxa[i])
 	
-	myLm <- lm(log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) 
-		~ log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal) * myT$isStoolOrSwab[myT$taxa==taxa[i]])
+	krakenWGS <- log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) 
+	kraken16S <- log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal)  
+	tissueSource <- myT$isStoolOrSwab[myT$taxa==taxa[i]]
+	
+	myLm <- lm(kraken16S ~krakenWGS *tissueSource )
 	anova(myLm)
 	
-	plot( log10( myT$krakenLevel[myT$taxa==taxa[i]]+minVal) , log10(myT$kraken16SLevel[myT$taxa==taxa[i]]+minVal),
-				,col =  getColors(myT$isStoolOrSwab[myT$taxa==taxa[i]]) , main=aTitle, xlab="1og10(krakenWholeGenome)",
-				ylab="log10(kraken16S)",pch=15,cex=1.3,cex.lab=1.3,cex.main=1.3)
+	plot( krakenWGS , kraken16S ,col =  tissueSource , main=aTitle, 
+		xlab="1og10(krakenWholeGenome)",ylab="log10(kraken16S)",pch=15,cex=1.3,
+			cex.lab=1.3,cex.main=1.3)
 
 }
 
