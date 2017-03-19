@@ -33,7 +33,7 @@ getIncludedTaxa <- function(myT)
 	
 	for ( i in 1:nrow(myT))
 	{
-		if(data[i] > 0.01) 
+		if(data[i] > 0.001) 
 		{
 			taxa[index] <- paste( myT[i,]$taxa, "", sep="")
 			index <- index + 1;
@@ -48,7 +48,12 @@ getIncludedTaxa <- function(myT)
 
 taxa <- getIncludedTaxa(myT)
 minVal <- 1
+names <- vector()
+pValueskragenWGS <- vector()
+pValuesTissueSourceWGS <- vector()
+pValuesInteraction<- vector()
 
+index <- 1
 for( i in 1 : length(taxa)) 
 {
 	aTitle <- paste( taxa[i])
@@ -58,13 +63,29 @@ for( i in 1 : length(taxa))
 	tissueSource <- myT$isStoolOrSwab[myT$taxa==taxa[i]]
 	
 	myLm <- lm(kraken16S ~krakenWGS *tissueSource )
-	anova(myLm)
+	myAnova <- anova(myLm)
+	
+	pValueskragenWGS[index] <- myAnova$"Pr(>F)"[1]
+	pValuesTissueSourceWGS[index] <- myAnova$"Pr(>F)"[2]
+	pValuesInteraction[index]<- myAnova$"Pr(>F)"[3]
+	names[index] <- taxa[i]
+	
 	
 	plot( krakenWGS , kraken16S ,col =  tissueSource , main=aTitle, 
 		xlab="1og10(krakenWholeGenome)",ylab="log10(kraken16S)",pch=15,cex=1.3,
 			cex.lab=1.3,cex.main=1.3)
+			
+	index <- index + 1
 
 }
 
-write.table(myT, file=paste(level,"_wgsVs16AllSamples.txt", sep =""), row.names=FALSE)
+par(mfrow=c(2,2))
+hist(pValueskragenWGS,breaks=20)
+hist(pValuesTissueSourceWGS,breaks=20)
+hist(pValuesInteraction,breaks=20)
+
+
+myFrame <- data.frame(names,pValueskragenWGS,pValuesTissueSourceWGS,pValuesInteraction)
+myFrame <- myFrame [order(myFrame$pValuesInteraction),]
+write.table(myFrame, file=paste(level,"_pvalues_wgsVs16AllSamples.txt",sep=""), row.names=FALSE,sep="\t")
 dev.off()
