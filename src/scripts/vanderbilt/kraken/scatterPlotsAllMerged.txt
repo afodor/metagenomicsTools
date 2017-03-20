@@ -4,6 +4,8 @@ rm(list=ls())
 
 setwd("C:\\VanderbiltSequences_Dec52014\\spreadsheets")
 level <- "genus"
+#level <- "phylum"
+
 
 myT <- read.table(paste("mergedKrakenRDP_", level,"_WithMetadata.txt",sep=""), header=TRUE, sep="\t")
 # remove outlier samples
@@ -52,6 +54,7 @@ names <- vector()
 pValueskragenWGS <- vector()
 pValuesTissueSourceWGS <- vector()
 pValuesInteraction<- vector()
+maxKrakenFraction <- vector()
 
 index <- 1
 for( i in 1 : length(taxa)) 
@@ -69,7 +72,7 @@ for( i in 1 : length(taxa))
 	pValuesTissueSourceWGS[index] <- myAnova$"Pr(>F)"[2]
 	pValuesInteraction[index]<- myAnova$"Pr(>F)"[3]
 	names[index] <- taxa[i]
-	
+	maxKrakenFraction[index] <- unique(myT$maxKrakenFraction[myT$taxa==taxa[i]])[1]
 	
 	plot( krakenWGS , kraken16S ,col =  tissueSource , main=aTitle, 
 		xlab="1og10(krakenWholeGenome)",ylab="log10(kraken16S)",pch=15,cex=1.3,
@@ -85,7 +88,7 @@ hist(pValuesTissueSourceWGS,breaks=20)
 hist(pValuesInteraction,breaks=20)
 
 
-myFrame <- data.frame(names,pValueskragenWGS,pValuesTissueSourceWGS,pValuesInteraction)
+myFrame <- data.frame(names,pValueskragenWGS,pValuesTissueSourceWGS,pValuesInteraction,maxKrakenFraction)
 myFrame <- myFrame [order(myFrame$pValuesInteraction),]
 write.table(myFrame, file=paste(level,"_pvalues_wgsVs16AllSamples.txt",sep=""), row.names=FALSE,sep="\t")
 dev.off()
