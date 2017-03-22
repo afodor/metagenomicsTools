@@ -20,16 +20,22 @@ i = 2
 	myT <- read.table(paste("denovoLogNormwithMetadata_L_",i,".txt", sep=""),sep="\t",header=TRUE)
 	
 	anOrder <- 
-	c("FCE", "PCI", "HOSP",  "ATE",  "PCE",  "DS B", "DS A",  "UP B" ,"UP A",  
-	"UV",    "RES",   "INF",   "MNT A", "MNT B", "UW A", "UW B")
-	
-	sampleFactors <- factor(myT$sample, anOrder)
+	c("HOSP","RES" , "UP A",  "UP B","INF","PCI","PCE","ATE","FCE" , "UV", "DS A",  "DS B",   
+				"MNT A", "MNT B","UW A", "UW B" )
 	
 	endIndex <- getColumnIndex(myT,"sequenceCount")-1
+	names <-vector()
+	index <-1
 	
 	for( j in 2:endIndex)
 	{
-		boxplot(myT[,j] ~ myT$Sample,las=2)
+		names[index] <- names(myT)[j]
+		bug <- myT[,j] 
+		sites <- factor( myT$Sample, anOrder)
+		myFrame <- data.frame(bug, sites)
+	
+		boxplot(myFrame$bug ~ myFrame$sites,las=2,main=names[index])
+		index <- index + 1
 	}
 	
 	
