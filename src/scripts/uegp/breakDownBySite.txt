@@ -2,7 +2,36 @@ rm(list=ls)
 
 setwd("C:\\uegp\\denov")
 
-for ( i in 2:7)
+
+getColumnIndex <- function(myT, s)
 {
-	myT <- read.table(paste("denovoLogNormwithMetadata_L_",i,".txt", sep=""),sep="\t")
+	myNames <- names(myT)
+	
+	for( i in 1: length(myNames))
+		if ( myNames[i] == s) 
+			return (i)
+}
+
+
+i = 2
+#for ( i in 2:7)
+{
+	pdf(paste("location",i,".pdf", sep =""))
+	myT <- read.table(paste("denovoLogNormwithMetadata_L_",i,".txt", sep=""),sep="\t",header=TRUE)
+	
+	anOrder <- 
+	c("FCE", "PCI", "HOSP",  "ATE",  "PCE",  "DS B", "DS A",  "UP B" ,"UP A",  
+	"UV",    "RES",   "INF",   "MNT A", "MNT B", "UW A", "UW B")
+	
+	sampleFactors <- factor(myT$sample, anOrder)
+	
+	endIndex <- getColumnIndex(myT,"sequenceCount")-1
+	
+	for( j in 2:endIndex)
+	{
+		boxplot(myT[,j] ~ myT$Sample,las=2)
+	}
+	
+	
+	dev.off()
 }
