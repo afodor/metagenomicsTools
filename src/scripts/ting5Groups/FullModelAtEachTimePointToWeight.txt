@@ -1,0 +1,45 @@
+rm(list=ls())
+
+setwd("C:\\tingData\\5Groups")
+
+
+
+inFileName <- "otuAsColumnsLogNorm_5GroupsPlusMetadata.txt"
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+
+times <- sort(unique( factor(myT$time)))
+
+pdf("ModelsForEachTimePoint.pdf")
+
+par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
+
+pValueList <- list(c(),c(),c(),c(),c())
+
+names <- vector()
+index <-1 
+
+for( i in 12:ncol(myT))
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{
+		for( j in 1:length(times) ) 
+		{
+			names[index] <- names(myT)[i]
+
+			subT <- myT[myT$time==times[j],]
+			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
+			plot( subT$bodyWeightAtDay8, subT[,i], col = colors )			
+		}
+		
+		plot(1, type="n", axes=F, xlab="", ylab="")		
+		 mtext( names(myT)[i] ,
+        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+        
+        index <- index + 1
+	}
+	
+
+dev.off()
+
