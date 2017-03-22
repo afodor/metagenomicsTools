@@ -13,8 +13,7 @@ getColumnIndex <- function(myT, s)
 }
 
 
-i = 2
-#for ( i in 2:7)
+for ( i in 2:7)
 {
 	pdf(paste("location",i,".pdf", sep =""))
 	myT <- read.table(paste("denovoLogNormwithMetadata_L_",i,".txt", sep=""),sep="\t",header=TRUE)
@@ -28,15 +27,16 @@ i = 2
 	index <-1
 	
 	for( j in 2:endIndex)
-	{
-		names[index] <- names(myT)[j]
-		bug <- myT[,j] 
-		sites <- factor( myT$Sample, anOrder)
-		myFrame <- data.frame(bug, sites)
-	
-		boxplot(myFrame$bug ~ myFrame$sites,las=2,main=names[index])
-		index <- index + 1
-	}
+		if( sum( myT[,j] != 0) > nrow(myT) / 4)  
+		{
+			names[index] <- names(myT)[j]
+			bug <- myT[,j] 
+			sites <- factor( myT$Sample, anOrder)
+			myFrame <- data.frame(bug, sites)
+		
+			boxplot(myFrame$bug ~ myFrame$sites,las=2,main=names[index])
+			index <- index + 1
+		}
 	
 	
 	dev.off()
