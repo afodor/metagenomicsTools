@@ -1,0 +1,8 @@
+rm(list=ls)
+
+setwd("C:\\uegp\\denov")
+
+for ( i in 2:7)
+{
+	myT <- read.table(paste("denovoLogNormwithMetadata_L_",i,".txt", sep=""),sep="\t")
+}
