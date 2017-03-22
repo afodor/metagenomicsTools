@@ -27,8 +27,9 @@ for( i in 12:ncol(myT))
 		for( j in 1:length(times) ) 
 		{
 			names[index] <- names(myT)[i]
-
+			
 			subT <- myT[myT$time==times[j],]
+			myLm <- lm(  subT[,i] ~  subT$bodyWeightAtDay8 * subT$genotype)
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
 			plot( subT$bodyWeightAtDay8, subT[,i], col = colors )			
 		}
