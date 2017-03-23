@@ -1,8 +1,8 @@
 rm(list=ls())
 
+library("nlme")
+
 setwd("C:\\tingData\\5Groups")
-
-
 
 inFileName <- "otuAsColumnsLogNorm_5GroupsPlusMetadata.txt"
 myT <-read.table(inFileName,header=TRUE,sep="\t")
@@ -108,23 +108,23 @@ for( i in 12:ncol(myT))
 	}
 	
 
-for( i in 1:5)
+for( j in 1:5)
 {
-	hist(pValueBodyWeight[[i]], breaks=20, main=paste("weight time=", times[i]), xlab="")
+	hist(pValueBodyWeight[[j]], breaks=20, main=paste("weight time=", times[j]), xlab="")
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")		
 
-for( i in 1:5)
+for( j in 1:5)
 {
-	hist(pValueGenotype[[i]], breaks=20, main=paste("genotype time=", times[i]), xlab="")
+	hist(pValueGenotype[[j]], breaks=20, main=paste("genotype time=", times[j]), xlab="")
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")		
 
-for( i in 1:5)
+for( j in 1:5)
 {
-	hist(pValueInteraction[[i]], breaks=20, main=paste("interaction time=", times[i]), xlab="")
+	hist(pValueInteraction[[j]], breaks=20, main=paste("interaction time=", times[j]), xlab="")
 }
 
 plot(1, type="n", axes=F, xlab="", ylab="")		
