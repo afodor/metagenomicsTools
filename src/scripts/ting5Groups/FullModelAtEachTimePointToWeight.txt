@@ -16,14 +16,16 @@ pdf("ModelsForEachTimePoint.pdf")
 
 par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 
-pValueList <- list(c(),c(),c(),c(),c())
-
 names <- vector()
 index <-1 
 
 pValueBodyWeight <- list(c(),c(),c(),c(),c())
 pValueGenotype<- list(c(),c(),c(),c(),c())
 pValueInteraction <- list(c(),c(),c(),c(),c())
+
+names(pValueBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
 
 for( i in 12:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
@@ -55,4 +57,35 @@ for( i in 12:ncol(myT))
 	
 
 dev.off()
+
+dFrame <- data.frame( names,pValueBodyWeight$time0,pValueBodyWeight$time3,
+pValueBodyWeight$time4,pValueBodyWeight$time12,pValueBodyWeight$time18,
+pValueGenotype$time0,pValueGenotype$time3,
+pValueGenotype$time4,pValueGenotype$time12,pValueGenotype$time18,
+pValueInteraction$time0,pValueInteraction$time3,
+pValueInteraction$time4,pValueInteraction$time12,pValueInteraction$time18) 
+
+dFrame <- dFrame [order(dFrame$pValueBodyWeight.time0),]
+
+dFrame$pValueBodyWeight0Adjusted <- p.adjust( dFrame$pValueBodyWeight.time0, method = "BH")
+dFrame$pValueBodyWeight3Adjusted <- p.adjust( dFrame$pValueBodyWeight.time3, method = "BH")
+dFrame$pValueBodyWeight4Adjusted <- p.adjust( dFrame$pValueBodyWeight.time4, method = "BH")
+dFrame$pValueBodyWeight12Adjusted <- p.adjust( dFrame$pValueBodyWeight.time12, method = "BH")
+dFrame$pValueBodyWeight18Adjusted <- p.adjust( dFrame$pValueBodyWeight.time18, method = "BH")
+
+dFrame$pValueGenotype0Adjusted <- p.adjust( dFrame$pValueGenotype.time0, method = "BH")
+dFrame$pValueGenotype3Adjusted <- p.adjust( dFrame$pValueGenotype.time3, method = "BH")
+dFrame$pValueGenotype4Adjusted <- p.adjust( dFrame$pValueGenotype.time4, method = "BH")
+dFrame$pValueGenotype12Adjusted <- p.adjust( dFrame$pValueGenotype.time12, method = "BH")
+dFrame$pValueGenotype18Adjusted <- p.adjust( dFrame$pValueGenotype.time18, method = "BH")
+
+
+dFrame$pValueInteraction0Adjusted <- p.adjust( dFrame$pValueInteraction.time0, method = "BH")
+dFrame$pValueInteraction3Adjusted <- p.adjust( dFrame$pValueInteraction.time3, method = "BH")
+dFrame$pValueInteraction4Adjusted <- p.adjust( dFrame$pValueInteraction.time4, method = "BH")
+dFrame$pValueInteraction12Adjusted <- p.adjust( dFrame$pValueInteraction.time12, method = "BH")
+dFrame$pValueInteraction18Adjusted <- p.adjust( dFrame$pValueInteraction.time18, method = "BH")
+
+write.table(dFrame, file=paste("pValuesFiveSeparateOneForEachGroup.txt",sep=""), sep="\t",row.names=FALSE)
+
 
