@@ -141,6 +141,13 @@ for( j in 1:5)
 	hist(pValueInteraction[[j]], breaks=20, main=paste("interaction time=", times[j]), xlab="")
 }
 
+plot(1, type="n", axes=F, xlab="", ylab="")	
+
+for( j in 1:5)
+{
+	hist(pValueCage[[j]], breaks=20, main=paste("cage from one way ANOVA=", times[j]), xlab="")
+}
+
 plot(1, type="n", axes=F, xlab="", ylab="")		
 
 
