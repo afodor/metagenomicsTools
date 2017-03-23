@@ -14,7 +14,7 @@ times <- sort(unique( factor(myT$time)))
 
 pdf("ModelsForEachTimePoint.pdf")
 
-par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(3,3,1,1))
+par(mfcol=c(3,2), mar=c(5,5,2,2), oma=c(3,3,1,1))
 
 names <- vector()
 index <-1 
@@ -52,12 +52,12 @@ for( i in 12:ncol(myT))
 			pValueInteraction[[j]][index] <- myAnova$"Pr(>F)"[3]
 			
 			title <- paste( "time", times[j])
-			xlabel = paste("p weight=",format( myAnova$"Pr(>F)"[1],digits=3),
+			xlabel = paste("p weight=",format( myAnova$"Pr(>F)"[1],digits=3),"\n",
 			"p genotype=",format(myAnova$"Pr(>F)"[2],digits=3),"p interaction",
 			format(myAnova$"Pr(>F)"[3],digits=3))
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
-			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,"\n",xlabel),xlab="",
-			cex.main=.85)
+			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,xlabel),xlab="",
+			cex.main=1)
 			
 			val <- myT[myT$time==times[j],i]
 			genotypes <- myT$genotype[myT$time==times[j]]
