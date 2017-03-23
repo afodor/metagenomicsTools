@@ -21,6 +21,10 @@ pValueList <- list(c(),c(),c(),c(),c())
 names <- vector()
 index <-1 
 
+pValueBodyWeight <- list(c(),c(),c(),c(),c())
+pValueGenotype<- list(c(),c(),c(),c(),c())
+pValueInteraction <- list(c(),c(),c(),c(),c())
+
 for( i in 12:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
@@ -30,8 +34,16 @@ for( i in 12:ncol(myT))
 			
 			subT <- myT[myT$time==times[j],]
 			myLm <- lm(  subT[,i] ~  subT$bodyWeightAtDay8 * subT$genotype)
+			myAnova <- anova(myLm)
+			pValueBodyWeight[[j]][index] <- myAnova$"Pr(>F)"[1]
+			pValueGenotype[[j]][index] <- myAnova$"Pr(>F)"[2]
+			pValueInteraction[[j]][index] <- myAnova$"Pr(>F)"[3]
+			
+			title <- paste( times[j],format( myAnova$"Pr(>F)"[1],digits=3),
+			format(myAnova$"Pr(>F)"[2],digits=3),format(myAnova$"Pr(>F)"[3],digits=3))
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
-			plot( subT$bodyWeightAtDay8, subT[,i], col = colors )			
+			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = title)
+						
 		}
 		
 		plot(1, type="n", axes=F, xlab="", ylab="")		
