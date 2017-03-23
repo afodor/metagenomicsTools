@@ -179,7 +179,9 @@ pValueBodyWeightFromMixed$time4,pValueBodyWeightFromMixed$time12,pValueBodyWeigh
 pValueGenotypeFromMixed$time0,pValueGenotypeFromMixed$time3,
 pValueGenotypeFromMixed$time4,pValueGenotypeFromMixed$time12,pValueGenotypeFromMixed$time18,
 pValueInteractionFromMixed$time0,pValueInteractionFromMixed$time3,
-pValueInteractionFromMixed$time4,pValueInteractionFromMixed$time12,pValueInteractionFromMixed$time18
+pValueInteractionFromMixed$time4,pValueInteractionFromMixed$time12,pValueInteractionFromMixed$time18,
+pValueCage$time0,pValueCage$time3,
+pValueCage$time4,pValueCage$time12,pValueCage$time18
 ) 
 
 dFrame <- dFrame [order(dFrame$pValueBodyWeight.time0),]
