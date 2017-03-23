@@ -27,6 +27,16 @@ names(pValueBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
 
+
+mean0WT <- vector()
+mean0KO <- vector()
+logPMean0 <- vector()
+
+mean3WT <- vector()
+mean3KO <- vector()
+logPMean3 <- vector()
+
+
 for( i in 12:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
@@ -45,6 +55,33 @@ for( i in 12:ncol(myT))
 			format(myAnova$"Pr(>F)"[2],digits=3),format(myAnova$"Pr(>F)"[3],digits=3))
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
 			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = title)
+			
+			val <- myT[myT$time==times[j],i]
+			genotypes <- myT$genotype[myT$time==times[j]]
+			myFrame <- data.frame(val, genotypes)
+			pVal <- pValueGenotype[[j]][index]
+			
+			if( j == 1 ) 
+			{
+				mean0WT[index] = mean(val[ genotypes=="WT" ])
+				mean0KO[index] = mean(val[ genotypes=="KO" ])
+				
+				logPMean0[index] = log10(pVal)
+				
+				if( mean0WT[index] > mean0KO[index] )
+					logPMean0[index] = - logPMean0[index] 
+			}
+			
+			if( j == 2 ) 
+			{
+				mean3WT[index] = mean(val[ genotypes=="WT" ])
+				mean3KO[index] = mean(val[ genotypes=="KO" ])
+				
+				logPMean3[index] = log10(pVal)
+				
+				if( mean3WT[index] > mean3KO[index] )
+					logPMean3[index] = - logPMean3[index] 
+			}
 						
 		}
 		
@@ -84,7 +121,8 @@ pValueBodyWeight$time4,pValueBodyWeight$time12,pValueBodyWeight$time18,
 pValueGenotype$time0,pValueGenotype$time3,
 pValueGenotype$time4,pValueGenotype$time12,pValueGenotype$time18,
 pValueInteraction$time0,pValueInteraction$time3,
-pValueInteraction$time4,pValueInteraction$time12,pValueInteraction$time18) 
+pValueInteraction$time4,pValueInteraction$time12,pValueInteraction$time18,
+mean0WT,mean0KO,logPMean0,mean3WT,mean3KO,logPMean3) 
 
 dFrame <- dFrame [order(dFrame$pValueBodyWeight.time0),]
 
@@ -108,5 +146,8 @@ dFrame$pValueInteraction12Adjusted <- p.adjust( dFrame$pValueInteraction.time12,
 dFrame$pValueInteraction18Adjusted <- p.adjust( dFrame$pValueInteraction.time18, method = "BH")
 
 write.table(dFrame, file=paste("pValuesFiveSeparateOneForEachGroup.txt",sep=""), sep="\t",row.names=FALSE)
+plot( logPMean0, logPMean3,pch=16,cex=2)
+summary( lm(logPMean3 ~ logPMean0))
+abline(lm(logPMean3 ~ logPMean0))
 
 
