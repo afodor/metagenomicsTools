@@ -22,11 +22,12 @@ index <-1
 pValueBodyWeight <- list(c(),c(),c(),c(),c())
 pValueGenotype<- list(c(),c(),c(),c(),c())
 pValueInteraction <- list(c(),c(),c(),c(),c())
+pValueCage <- list(c(),c(),c(),c(),c())
 
 names(pValueBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
-
+names(pValueCage) <- c( "time0", "time3", "time4", "time12", "time18" )
 
 mean0WT <- vector()
 mean0KO <- vector()
@@ -52,11 +53,15 @@ for( i in 12:ncol(myT))
 			pValueBodyWeight[[j]][index] <- myAnova$"Pr(>F)"[1]
 			pValueGenotype[[j]][index] <- myAnova$"Pr(>F)"[2]
 			pValueInteraction[[j]][index] <- myAnova$"Pr(>F)"[3]
+			cageLm <- lm( subT[,i] ~  factor(subT$cage) )
+			
+			pValueCage[[j]][index] <- anova(cageLm)$"Pr(>F)"[1]
+			
 			
 			title <- paste( "time", times[j])
-			xlabel = paste("p weight=",format( myAnova$"Pr(>F)"[1],digits=3),"\n",
-			"p genotype=",format(myAnova$"Pr(>F)"[2],digits=3),"p interaction",
-			format(myAnova$"Pr(>F)"[3],digits=3))
+			xlabel = paste("p weight=",format( myAnova$"Pr(>F)"[1],digits=3),
+			"p genotype=",format(myAnova$"Pr(>F)"[2],digits=3),"\n","p interaction",
+			format(myAnova$"Pr(>F)"[3],digits=3), "p cage= ",format( anova(cageLm)$"Pr(>F)"[1],digits=3) )
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
 			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,xlabel),xlab="max weight loss percent",
 			cex.main=1)
