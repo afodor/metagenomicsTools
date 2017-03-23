@@ -45,7 +45,7 @@ for( i in 12:ncol(myT))
 			names[index] <- names(myT)[i]
 			
 			subT <- myT[myT$time==times[j],]
-			myLm <- lm(  subT[,i] ~  subT$bodyWeightAtDay8 * subT$genotype)
+			myLm <- lm(  subT[,i] ~  subT$maxWeightLossPercent* subT$genotype)
 			myAnova <- anova(myLm)
 			pValueBodyWeight[[j]][index] <- myAnova$"Pr(>F)"[1]
 			pValueGenotype[[j]][index] <- myAnova$"Pr(>F)"[2]
@@ -56,7 +56,7 @@ for( i in 12:ncol(myT))
 			"p genotype=",format(myAnova$"Pr(>F)"[2],digits=3),"p interaction",
 			format(myAnova$"Pr(>F)"[3],digits=3))
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
-			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,xlabel),xlab="",
+			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,xlabel),xlab="max weight loss percent",
 			cex.main=1)
 			
 			val <- myT[myT$time==times[j],i]
