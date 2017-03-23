@@ -166,5 +166,8 @@ plot( rTime0, rTime3, main = "r values weight time 0 vs time 3")
 summary( lm(rTime3 ~ rTime0))
 abline(lm(rTime3 ~ rTime0))
 
+sum( dFrame$pValueGenotype0Adjusted[!is.na(dFrame$pValueGenotype0Adjusted)] < .10 ) 
+sum( dFrame$pValueGenotype3Adjusted[!is.na(dFrame$pValueGenotype3Adjusted)] < .10 ) 
+
 
 dev.off()
