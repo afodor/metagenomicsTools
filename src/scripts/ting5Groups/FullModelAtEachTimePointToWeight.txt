@@ -57,6 +57,20 @@ for( i in 12:ncol(myT))
 			
 			pValueCage[[j]][index] <- anova(cageLm)$"Pr(>F)"[1]
 			
+			bug <- subT[,i]
+			weight <- subT$maxWeightLossPercent
+			genotype <- subT$genotype
+			cage <- subT$cage
+			
+			aFrame <- data.frame(bug,weight,genotype,cage)
+			
+			if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
+						& i != 123) 
+			{
+				M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
+							data = aFrame) 
+			
+			}
 			
 			title <- paste( "time", times[j])
 			xlabel = paste("p weight=",format( myAnova$"Pr(>F)"[1],digits=3),
