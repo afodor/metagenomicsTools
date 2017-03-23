@@ -124,7 +124,6 @@ for( i in 1:5)
 
 plot(1, type="n", axes=F, xlab="", ylab="")		
 
-dev.off()
 
 dFrame <- data.frame( names,pValueBodyWeight$time0,pValueBodyWeight$time3,
 pValueBodyWeight$time4,pValueBodyWeight$time12,pValueBodyWeight$time18,
@@ -159,10 +158,13 @@ write.table(dFrame, file=paste("pValuesFiveSeparateOneForEachGroup.txt",sep=""),
 
 par(mfrow=c(2,1))
 
-plot( logPMean0, logPMean3,pch=16,cex=2)
+plot( logPMean0, logPMean3,pch=16,cex=2,main="p values genotype time0 vs time3")
 summary( lm(logPMean3 ~ logPMean0))
 abline(lm(logPMean3 ~ logPMean0))
 
-plot( rTime0, rTime3)
+plot( rTime0, rTime3, main = "r values weight time 0 vs time 3")
 summary( lm(rTime3 ~ rTime0))
 abline(lm(rTime3 ~ rTime0))
+
+
+dev.off()
