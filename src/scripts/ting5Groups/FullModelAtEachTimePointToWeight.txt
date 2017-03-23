@@ -56,6 +56,27 @@ for( i in 12:ncol(myT))
 	}
 	
 
+for( i in 1:5)
+{
+	hist(pValueBodyWeight[[i]], breaks=20, main=paste("weight time=", times[i]), xlab="")
+}
+
+plot(1, type="n", axes=F, xlab="", ylab="")		
+
+for( i in 1:5)
+{
+	hist(pValueGenotype[[i]], breaks=20, main=paste("genotype time=", times[i]), xlab="")
+}
+
+plot(1, type="n", axes=F, xlab="", ylab="")		
+
+for( i in 1:5)
+{
+	hist(pValueInteraction[[i]], breaks=20, main=paste("interaction time=", times[i]), xlab="")
+}
+
+plot(1, type="n", axes=F, xlab="", ylab="")		
+
 dev.off()
 
 dFrame <- data.frame( names,pValueBodyWeight$time0,pValueBodyWeight$time3,
