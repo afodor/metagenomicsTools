@@ -94,7 +94,7 @@ for( i in 12:ncol(myT))
 			format(myAnova$"Pr(>F)"[3],digits=3), "p cage= ",format( anova(cageLm)$"Pr(>F)"[1],digits=3) )
 			colors <- ifelse( subT$genotype=="KO", "RED", "BLACK")
 			plot( subT$bodyWeightAtDay8 , subT[,i], col = colors , main = paste(title,xlabel),xlab="max weight loss percent",
-			cex.main=1)
+			cex.main=1, pch=as.numeric(factor(subT$cage)))
 			
 			val <- myT[myT$time==times[j],i]
 			genotypes <- myT$genotype[myT$time==times[j]]
