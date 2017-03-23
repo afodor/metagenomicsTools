@@ -29,6 +29,15 @@ names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueCage) <- c( "time0", "time3", "time4", "time12", "time18" )
 
+
+pValueBodyWeightFromMixed <- list(c(),c(),c(),c(),c())
+pValueGenotypeFromMixed<- list(c(),c(),c(),c(),c())
+pValueInteractionFromMixed <- list(c(),c(),c(),c(),c())
+
+names(pValueBodyWeightFromMixed) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(pValueGenotypeFromMixed) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(pValueInteractionFromMixed) <- c( "time0", "time3", "time4", "time12", "time18" )
+
 mean0WT <- vector()
 mean0KO <- vector()
 logPMean0 <- vector()
@@ -57,18 +66,25 @@ for( i in 12:ncol(myT))
 			
 			pValueCage[[j]][index] <- anova(cageLm)$"Pr(>F)"[1]
 			
-			bug <- subT[,i]
-			weight <- subT$maxWeightLossPercent
-			genotype <- subT$genotype
-			cage <- subT$cage
 			
-			aFrame <- data.frame(bug,weight,genotype,cage)
 			
 			if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
 						& i != 123) 
 			{
+				bug <- subT[,i]
+				weight <- subT$maxWeightLossPercent
+				genotype <- subT$genotype
+				cage <- subT$cage
+				
+				aFrame <- data.frame(bug,weight,genotype,cage)
+				
 				M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
 							data = aFrame) 
+				
+				mixedAnova <- anova(M.mixed)
+				pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"p-value"[2]
+				pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"p-value"[3]
+				pValueInteractionFromMixed[[j]][index] <- mixedAnova$"p-value"[4]
 			
 			}
 			
