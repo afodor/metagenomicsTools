@@ -36,6 +36,8 @@ mean3WT <- vector()
 mean3KO <- vector()
 logPMean3 <- vector()
 
+rTime0 <- vector()
+rTime3 <- vector()
 
 for( i in 12:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
@@ -63,6 +65,7 @@ for( i in 12:ncol(myT))
 			genotypes <- myT$genotype[myT$time==times[j]]
 			myFrame <- data.frame(val, genotypes)
 			pVal <- pValueGenotype[[j]][index]
+			rVal <- cor(subT[,i],subT$maxWeightLossPercent)
 			
 			if( j == 1 ) 
 			{
@@ -73,6 +76,8 @@ for( i in 12:ncol(myT))
 				
 				if( mean0WT[index] > mean0KO[index] )
 					logPMean0[index] = - logPMean0[index] 
+					
+				rTime0[index] <- rVal
 			}
 			
 			if( j == 2 ) 
@@ -84,6 +89,8 @@ for( i in 12:ncol(myT))
 				
 				if( mean3WT[index] > mean3KO[index] )
 					logPMean3[index] = - logPMean3[index] 
+					
+				rTime3[index] <- rVal
 			}
 						
 		}
@@ -125,7 +132,7 @@ pValueGenotype$time0,pValueGenotype$time3,
 pValueGenotype$time4,pValueGenotype$time12,pValueGenotype$time18,
 pValueInteraction$time0,pValueInteraction$time3,
 pValueInteraction$time4,pValueInteraction$time12,pValueInteraction$time18,
-mean0WT,mean0KO,logPMean0,mean3WT,mean3KO,logPMean3) 
+mean0WT,mean0KO,logPMean0,mean3WT,mean3KO,logPMean3,rTime0, rTime3) 
 
 dFrame <- dFrame [order(dFrame$pValueBodyWeight.time0),]
 
@@ -149,8 +156,13 @@ dFrame$pValueInteraction12Adjusted <- p.adjust( dFrame$pValueInteraction.time12,
 dFrame$pValueInteraction18Adjusted <- p.adjust( dFrame$pValueInteraction.time18, method = "BH")
 
 write.table(dFrame, file=paste("pValuesFiveSeparateOneForEachGroup.txt",sep=""), sep="\t",row.names=FALSE)
+
+par(mfrow=c(2,1))
+
 plot( logPMean0, logPMean3,pch=16,cex=2)
 summary( lm(logPMean3 ~ logPMean0))
 abline(lm(logPMean3 ~ logPMean0))
 
-
+plot( rTime0, rTime3)
+summary( lm(rTime3 ~ rTime0))
+abline(lm(rTime3 ~ rTime0))
