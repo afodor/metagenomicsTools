@@ -26,6 +26,7 @@ pValueCage <- list(c(),c(),c(),c(),c())
 
 rSquaredValuesCage <- list(c(),c(),c(),c(),c())
 rSquaredBodyWeight <- list(c(),c(),c(),c(),c())
+rSquaredGenotype <- list(c(),c(),c(),c(),c())
 
 names(pValueBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
@@ -33,6 +34,8 @@ names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueCage) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(rSquaredValuesCage) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(rSquaredBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(rSquaredGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
+
 
 pValueBodyWeightFromMixed <- list(c(),c(),c(),c(),c())
 pValueGenotypeFromMixed<- list(c(),c(),c(),c(),c())
@@ -72,6 +75,8 @@ for( i in 12:ncol(myT))
 			rSquaredValuesCage[[j]][index] <- summary(cageLm)$"r.squared"
 			
 			rSquaredBodyWeight[[j]][index] <- summary(lm(subT[,i] ~ subT$maxWeightLossPercent))$"r.squared"
+			
+			rSquaredGenotype[[j]][index] <- summary(lm(subT[,i] ~ subT$genotype))$"r.squared"
 			
 			
 			if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
@@ -226,6 +231,8 @@ abline(lm(rTime3 ~ rTime0))
 sum( dFrame$pValueGenotype0Adjusted[!is.na(dFrame$pValueGenotype0Adjusted)] < .10 ) 
 sum( dFrame$pValueGenotype3Adjusted[!is.na(dFrame$pValueGenotype3Adjusted)] < .10 ) 
 
+par(mfrow=c(2,2))
+
 boxplot( rSquaredValuesCage[[1]], rSquaredValuesCage[[2]],rSquaredValuesCage[[3]],
 rSquaredValuesCage[[4]],rSquaredValuesCage[[5]],main =  "r-squared-cage", 
 names=c("time0", "time3", "time4", "time12", "time18")) 
@@ -233,6 +240,12 @@ names=c("time0", "time3", "time4", "time12", "time18"))
 boxplot( rSquaredBodyWeight[[1]], rSquaredBodyWeight[[2]],rSquaredBodyWeight[[3]],
 rSquaredBodyWeight[[4]],rSquaredBodyWeight[[5]],main =  "r-squared-body weight", 
 names=c("time0", "time3", "time4", "time12", "time18")) 
+
+boxplot( rSquaredGenotype[[1]], rSquaredGenotype[[2]],rSquaredGenotype[[3]],
+rSquaredGenotype[[4]],rSquaredGenotype[[5]],main =  "r-squared genotype", 
+names=c("time0", "time3", "time4", "time12", "time18")) 
+
+
 
 
 dev.off()
