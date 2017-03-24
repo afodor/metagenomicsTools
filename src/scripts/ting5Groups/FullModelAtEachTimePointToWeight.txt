@@ -24,10 +24,14 @@ pValueGenotype<- list(c(),c(),c(),c(),c())
 pValueInteraction <- list(c(),c(),c(),c(),c())
 pValueCage <- list(c(),c(),c(),c(),c())
 
+rSquaredValuesCage <- list(c(),c(),c(),c(),c())
+
+
 names(pValueBodyWeight) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueGenotype) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueInteraction) <- c( "time0", "time3", "time4", "time12", "time18" )
 names(pValueCage) <- c( "time0", "time3", "time4", "time12", "time18" )
+names(rSquaredValuesCage) <- c( "time0", "time3", "time4", "time12", "time18" )
 
 
 pValueBodyWeightFromMixed <- list(c(),c(),c(),c(),c())
@@ -65,7 +69,7 @@ for( i in 12:ncol(myT))
 			cageLm <- lm( subT[,i] ~  factor(subT$cage) )
 			
 			pValueCage[[j]][index] <- anova(cageLm)$"Pr(>F)"[1]
-			
+			rSquaredValuesCage[[j]][index] <- summary(cageLm)$"r.squared"
 			
 			
 			if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
@@ -219,6 +223,10 @@ abline(lm(rTime3 ~ rTime0))
 
 sum( dFrame$pValueGenotype0Adjusted[!is.na(dFrame$pValueGenotype0Adjusted)] < .10 ) 
 sum( dFrame$pValueGenotype3Adjusted[!is.na(dFrame$pValueGenotype3Adjusted)] < .10 ) 
+
+boxplot( rSquaredValuesCage[[1]], rSquaredValuesCage[[2]],rSquaredValuesCage[[3]],
+rSquaredValuesCage[[4]],rSquaredValuesCage[[5]],main =  "r-squared-cage", 
+names=c("time0", "time3", "time4", "time12", "time18")) 
 
 
 dev.off()
