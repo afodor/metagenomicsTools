@@ -10,11 +10,12 @@ pdf("pcoaByCageForMDS.pdf")
 pValuesGenotype <- vector()
 pValuesTime <- vector()
 pValuesTimeGenotypeInteraction <- vector()
+pValuesWeightLoss <- vector()
 names <- vector()
 
 index <- 1
 
-for( i in 8:37)
+for( i in 10:37)
 {	
 	mds <- myT[,i]
 	cage <- factor(myT$cage)
@@ -28,6 +29,12 @@ for( i in 8:37)
 				data = myFrame) 
 	
 	mixedAnova <- anova(M.mixed)
+	
+	M.everything <- lme ( mds ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
+				data = myFrame) 
+				
+	pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
+	
 	
 	par(mfrow=c(2,1))
 	
@@ -58,7 +65,7 @@ hist(pValuesTimeGenotypeInteraction)
 
 dev.off()
 
-dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction)
+dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss)
 
 dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 
