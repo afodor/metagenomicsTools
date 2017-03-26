@@ -88,14 +88,21 @@ for( i in 12:32)
 				cage <- subT$cage
 				
 				aFrame <- data.frame(bug,weight,genotype,cage)
+			
+			myLm <- lm( bug ~ weight * genotype ) 
+			mixedAnova <- anova(myLm)
+			pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[1]
+			pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[2]
+			pValueInteractionFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[3]
+			
 				
-				M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
-							data = aFrame) 
+			#	M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
+			#				data = aFrame) 
 				
-				mixedAnova <- anova(M.mixed)
-				pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"p-value"[2]
-				pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"p-value"[3]
-				pValueInteractionFromMixed[[j]][index] <- mixedAnova$"p-value"[4]
+			#	mixedAnova <- anova(M.mixed)
+			#	pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"p-value"[2]
+			#	pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"p-value"[3]
+			#	pValueInteractionFromMixed[[j]][index] <- mixedAnova$"p-value"[4]
 			
 			}
 			
@@ -149,9 +156,9 @@ for( i in 12:32)
 			
 		graphTimes <- c(0,3,4,12,18)
 		
-		graphMin <- min(log10(graphValsGenotype),log10(graphValsGenotype) )  -1
+		graphMin <- min(log10(graphValsGenotype),log10(graphValsWeight) )  -1
 				
-		plot( graphTimes, log10(graphValsGenotype),col="black",ylim=c(0,graphMin) )
+		plot( graphTimes, log10(graphValsGenotype),col="black",ylim=c(graphMin,0) )
 		lines(graphTimes, log10(graphValsGenotype) , col = "black" )
 		
 		points( graphTimes, log10(graphValsWeight),col="red" )
