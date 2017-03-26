@@ -1,34 +1,38 @@
 rm(list=ls())
 
 setwd("C:\\tingData\\5Groups")
+library("nlme")
 
 myT <- read.table("pcoa_5GroupsPlusMetadata.txt", header=TRUE, sep="\t")
 
-mds1 <- myT$MDS1 
-cage <- factor(myT$cage)
-genotype <- factor(myT$genotype )
-maxWeightLossPercent <- myT$maxWeightLossPercent
+pdf("pcoaByCage.pdf")
 
-myFrame <- data.frame(mds1,cage,genotype,maxWeightLossPercent )
-
-par(mfrow=c(2,1))
-
-plot( myT$MDS1 ~ myT$cage,las=2)
-
-for( i in 1:length(cage))
-{
-	stripchart(mds1[i]~ cage[i], pch = 16, 
-				data = myFrame,vertical = TRUE, add=TRUE,
-				col = ifelse(genotype[i] == "KO", "RED", "BLUE"))	
+for( i in 11:12)
+{	
+	mds <- myT[,i]
+	cage <- factor(myT$cage)
+	genotype <- factor(myT$genotype )
+	maxWeightLossPercent <- myT$maxWeightLossPercent
+	time <- myT$time
+	
+	myFrame <- data.frame(mds,cage,genotype,maxWeightLossPercent ,time)
+	
+	M.mixed <- lme ( mds ~ genotype * time, method="REML", random = ~1 | cage,
+				data = myFrame) 
+	
+	mixedAnova <- anova(M.mixed)
+	
+	par(mfrow=c(2,1))
+	
+	plot( mds ~ myT$cage,las=2, ylab=names(myT)[i],xlab="")
+	
+	for( i in 1:length(cage))
+	{
+		stripchart(mds[i]~ cage[i], pch = 16, 
+					data = myFrame,vertical = TRUE, add=TRUE,
+					col = ifelse(genotype[i] == "KO", "RED", "BLUE"))	
+	}
+	
 }
 
-plot( myT$maxWeightLossPercent ~ myT$cage,las=2)
-
-for( i in 1:length(cage))
-{
-	stripchart(maxWeightLossPercent[i]~cage[i] , pch = 16, 
-				data = myFrame,vertical = TRUE, add=TRUE,
-				col = ifelse(genotype[i] == "KO", "RED", "BLUE"))	
-}
-
-
+dev.off()
