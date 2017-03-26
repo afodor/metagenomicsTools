@@ -5,9 +5,16 @@ library("nlme")
 
 myT <- read.table("pcoa_5GroupsPlusMetadata.txt", header=TRUE, sep="\t")
 
-pdf("pcoaByCage.pdf")
+pdf("pcoaByCageForMDS.pdf")
 
-for( i in 11:12)
+pValuesGenotype <- vector()
+pValuesTime <- vector()
+pValuesTimeGenotypeInteraction <- vector()
+names <- vector()
+
+index <- 1
+
+for( i in 11:37)
 {	
 	mds <- myT[,i]
 	cage <- factor(myT$cage)
@@ -26,13 +33,38 @@ for( i in 11:12)
 	
 	plot( mds ~ myT$cage,las=2, ylab=names(myT)[i],xlab="")
 	
-	for( i in 1:length(cage))
+	for( j in 1:length(cage))
 	{
-		stripchart(mds[i]~ cage[i], pch = 16, 
+		stripchart(mds[j]~ cage[j], pch = 16, 
 					data = myFrame,vertical = TRUE, add=TRUE,
-					col = ifelse(genotype[i] == "KO", "RED", "BLUE"))	
+					col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
 	}
+	
+	myAnova <- anova(M.mixed)
+	names[index] <- names(myT)[i]
+	pValuesGenotype[index] <-myAnova$"p-value"[2] 
+	pValuesTime[index] <-myAnova$"p-value"[3] 
+	pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
+	
+	index <- index + 1
 	
 }
 
+par(mfrow=c(2,2))
+
+hist(pValuesGenotype)
+hist(pValuesTime)
+hist(pValuesTimeGenotypeInteraction)
+
 dev.off()
+
+dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction)
+
+dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+
+dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
+dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
+
+write.table(dFrame, file=paste("bigModelPValuesForMDS.txt",sep=""), sep="\t",row.names=FALSE)
+
