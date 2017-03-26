@@ -10,6 +10,7 @@ pdf("pcoaByCageForTaxa.pdf")
 pValuesGenotype <- vector()
 pValuesTime <- vector()
 pValuesTimeGenotypeInteraction <- vector()
+pValuesWeightLoss <- vector()
 names <- vector()
 
 index <- 1
@@ -29,7 +30,12 @@ for( i in 12:ncol(myT))
 	M.mixed <- lme ( mds ~ genotype * time, method="REML", random = ~1 | cage,
 				data = myFrame) 
 	
+	M.everything <- lme ( mds ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
+				data = myFrame) 
+	
 	mixedAnova <- anova(M.mixed)
+	
+	pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
 	
 	par(mfrow=c(2,1))
 	
@@ -60,13 +66,15 @@ hist(pValuesTimeGenotypeInteraction,breaks=20)
 
 dev.off()
 
-dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction)
+dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss)
 
 dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
+dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
+
 
 write.table(dFrame, file=paste("bigModelPValuesForTaxa.txt",sep=""), sep="\t",row.names=FALSE)
 
