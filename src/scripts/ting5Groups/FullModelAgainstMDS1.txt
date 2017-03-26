@@ -144,10 +144,21 @@ for( i in 12:32)
 		graphValsGenotype <- c(pValueGenotype[[1]][index],pValueGenotype[[2]][index],
 					pValueGenotype[[3]][index],pValueGenotype[[4]][index],pValueGenotype[[5]][index])
 			
-		graphTimes <- c(0,3,4,12,18)		
-		plot( graphTimes, log10(graphValsGenotype) )
+		graphValsWeight<- c(pValueBodyWeight[[1]][index],pValueBodyWeight[[2]][index],
+					pValueBodyWeight[[3]][index],pValueBodyWeight[[4]][index],pValueBodyWeight[[5]][index])
+			
+		graphTimes <- c(0,3,4,12,18)
 		
-		 mtext( names(myT)[i] ,
+		graphMin <- min(log10(graphValsGenotype),log10(graphValsGenotype) )  -1
+				
+		plot( graphTimes, log10(graphValsGenotype),col="black",ylim=c(0,graphMin) )
+		lines(graphTimes, log10(graphValsGenotype) , col = "black" )
+		
+		points( graphTimes, log10(graphValsWeight),col="red" )
+		lines(graphTimes, log10(graphValsWeight) , col = "red" )
+	
+		
+		mtext( names(myT)[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
         
         index <- index + 1
