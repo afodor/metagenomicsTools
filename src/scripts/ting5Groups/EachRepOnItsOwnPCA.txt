@@ -37,7 +37,8 @@ for( i in 5:35)
 			genotypes <- myT$genotype[myT$time==times[j]]
 			
 			pVal <- t.test( val[ genotypes=="WT" ] ,val[ genotypes=="KO" ] )$p.value
-			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ))
+			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ),
+			ylab =  names(myT)[i])
 			
 			pValueList[[j]][index] <- pVal
 			names[index] <- names(myT)[i]

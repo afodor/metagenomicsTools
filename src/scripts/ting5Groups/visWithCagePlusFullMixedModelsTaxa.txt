@@ -14,7 +14,9 @@ names <- vector()
 
 index <- 1
 
-for( i in 10:ncol(myT))
+# set to 8:ncol(myT) to pick up metadata and shannon entropy
+for( i in 12:ncol(myT))
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 {	
 	mds <- myT[,i]
 	cage <- factor(myT$cage)
@@ -52,9 +54,9 @@ for( i in 10:ncol(myT))
 
 par(mfrow=c(2,2))
 
-hist(pValuesGenotype)
-hist(pValuesTime)
-hist(pValuesTimeGenotypeInteraction)
+hist(pValuesGenotype,breaks=20)
+hist(pValuesTime,breaks=20)
+hist(pValuesTimeGenotypeInteraction,breaks=20)
 
 dev.off()
 

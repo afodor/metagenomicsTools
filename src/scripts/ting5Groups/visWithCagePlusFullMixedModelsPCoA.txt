@@ -14,7 +14,7 @@ names <- vector()
 
 index <- 1
 
-for( i in 11:37)
+for( i in 8:37)
 {	
 	mds <- myT[,i]
 	cage <- factor(myT$cage)
