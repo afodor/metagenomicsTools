@@ -79,8 +79,8 @@ for( i in 12:32)
 			rSquaredGenotype[[j]][index] <- summary(lm(subT[,i] ~ subT$genotype))$"r.squared"
 			
 			
-			if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
-						& i != 123) 
+			#if( i != 19  & i != 20 & i != 57 & i != 78 & i != 99 & i != 101 & i != 104
+			#			& i != 123) 
 			{
 				bug <- subT[,i]
 				weight <- subT$maxWeightLossPercent
