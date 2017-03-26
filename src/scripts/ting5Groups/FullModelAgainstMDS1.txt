@@ -141,7 +141,12 @@ for( i in 12:32)
 						
 		}
 		
-		plot(1, type="n", axes=F, xlab="", ylab="")		
+		graphValsGenotype <- c(pValueGenotype[[1]][index],pValueGenotype[[2]][index],
+					pValueGenotype[[3]][index],pValueGenotype[[4]][index],pValueGenotype[[5]][index])
+			
+		graphTimes <- c(0,3,4,12,18)		
+		plot( graphTimes, log10(graphValsGenotype) )
+		
 		 mtext( names(myT)[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
         
