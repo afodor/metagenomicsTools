@@ -89,20 +89,20 @@ for( i in 12:32)
 				
 				aFrame <- data.frame(bug,weight,genotype,cage)
 			
-			myLm <- lm( bug ~ weight * genotype ) 
-			mixedAnova <- anova(myLm)
-			pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[1]
-			pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[2]
-			pValueInteractionFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[3]
+			#myLm <- lm( bug ~ weight * genotype ) 
+			#mixedAnova <- anova(myLm)
+			#pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[1]
+			#pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[2]
+			#pValueInteractionFromMixed[[j]][index] <- mixedAnova$"Pr(>F)"[3]
 			
 				
-			#	M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
-			#				data = aFrame) 
+				M.mixed <- lme ( bug ~ weight * genotype, method="REML", random = ~1 | cage,
+							data = aFrame) 
 				
-			#	mixedAnova <- anova(M.mixed)
-			#	pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"p-value"[2]
-			#	pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"p-value"[3]
-			#	pValueInteractionFromMixed[[j]][index] <- mixedAnova$"p-value"[4]
+				mixedAnova <- anova(M.mixed)
+				pValueBodyWeightFromMixed[[j]][index] <- mixedAnova$"p-value"[2]
+				pValueGenotypeFromMixed[[j]][index] <- mixedAnova$"p-value"[3]
+				pValueInteractionFromMixed[[j]][index] <- mixedAnova$"p-value"[4]
 			
 			}
 			
