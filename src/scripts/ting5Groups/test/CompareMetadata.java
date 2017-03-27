@@ -61,7 +61,7 @@ public class CompareMetadata
 		double sequenceDepth = getAverageSequenceDepth(map);
 		System.out.println(sequenceDepth);
 		
-		checkLogs(map, sequenceDepth, 21);
+		checkLogs(map, sequenceDepth, 11);
 		for(int x=11; x < 184; x++)
 		{
 			
@@ -72,6 +72,8 @@ public class CompareMetadata
 		for(int x=0; x < list.size(); x++)
 			System.out.println(x + " " + list.get(x));
 			*/
+		
+		System.out.println("Passed");
 	}
 	
 	
@@ -92,13 +94,27 @@ public class CompareMetadata
 		{
 			List<String> innerList = map.get(i);
 			
-			Integer val = Integer.parseInt(innerList.get(column));
+			Integer val = Integer.parseInt(innerList.get(column+3));
 			double sum = Double.parseDouble(innerList.get(10).replace(",", "").replaceAll("\"", ""));
 			
 			double normVal =Math.log10(val/sum * depth + 1); 
-			//System.out.println(val +" " + sum + " " + depth + " " + normVal);
+			System.out.println(val +" " + sum + " " + depth + " " + normVal);
 			
 			loggedList.add(normVal);
+		}
+		
+		reader.readLine();
+		
+		int index=0;
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			double valToCheck = Double.parseDouble(s.split("\t")[column]);
+			
+			System.out.println(valToCheck + " " + loggedList.get(index));
+			
+			if( Math.abs(valToCheck- loggedList.get(index)) > 0.0001)
+				throw new Exception("No");
 		}
 		
 		reader.close();
@@ -116,6 +132,8 @@ public class CompareMetadata
 					map.get(i).get(10).replace(".0", "").replace(",", "").replaceAll("\"", ""));
 			n++;
 		}
+		
+		
 		
 		return sum / n;
 	}
