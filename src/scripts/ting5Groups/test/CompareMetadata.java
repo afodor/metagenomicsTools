@@ -57,8 +57,12 @@ public class CompareMetadata
 		checkAMetadataColumn(map, 4, 6);
 		checkAMetadataColumn(map, 5, 7);
 		checkAMetadataColumn(map, 6, 8);
+		
+		checkAMetadataColumn(map, 9, 12);
 	}
 	
+	
+		
 	private static void checkAMetadataColumn(HashMap<Integer, List<String>> map,
 						int metaColumnToCheck, int originalRow) throws Exception
 	{
@@ -75,11 +79,11 @@ public class CompareMetadata
 			
 			List<String> innerList = map.get(Integer.parseInt(splits[0]));
 		
-			String aVal = splits[metaColumnToCheck];
-			String anotherVal = innerList.get(originalRow-2);
+			String aVal = splits[metaColumnToCheck].replace(".0", "").replace(",", "").replaceAll("\"", "");
+			String anotherVal = innerList.get(originalRow-2).replace(".0", "").replaceAll("\"","").replace(",", "");
 			
-			if( ! aVal.equals(anotherVal) && ! aVal.replace(".0", "").equals(anotherVal))
-				throw new Exception("No match " + aVal + " " + anotherVal);
+			if( ! aVal.equals(anotherVal))
+				throw new Exception("No match " + aVal + " " + anotherVal );
 			
 			System.out.println(aVal + " " + anotherVal);
 		}
