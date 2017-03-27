@@ -51,6 +51,12 @@ public class CompareMetadata
 	{
 		HashMap<Integer, List<String>> map = getParsedMap();
 		checkAMetadataColumn(map, 1, 2);
+		checkAMetadataColumn(map, 2, 3);
+		checkAMetadataColumn(map, 3, 5);
+		
+		checkAMetadataColumn(map, 4, 6);
+		checkAMetadataColumn(map, 5, 7);
+		checkAMetadataColumn(map, 6, 8);
 	}
 	
 	private static void checkAMetadataColumn(HashMap<Integer, List<String>> map,
@@ -72,7 +78,7 @@ public class CompareMetadata
 			String aVal = splits[metaColumnToCheck];
 			String anotherVal = innerList.get(originalRow-2);
 			
-			if( ! aVal.equals(anotherVal))
+			if( ! aVal.equals(anotherVal) && ! aVal.replace(".0", "").equals(anotherVal))
 				throw new Exception("No match " + aVal + " " + anotherVal);
 			
 			System.out.println(aVal + " " + anotherVal);
