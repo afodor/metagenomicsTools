@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_ADDPeer;
-
 import utils.ConfigReader;
 
 public class CompareMetadata
@@ -59,9 +57,68 @@ public class CompareMetadata
 		checkAMetadataColumn(map, 6, 8);
 		
 		checkAMetadataColumn(map, 9, 12);
+		
+		double sequenceDepth = getAverageSequenceDepth(map);
+		System.out.println(sequenceDepth);
+		
+		checkLogs(map, sequenceDepth, 21);
+		for(int x=11; x < 184; x++)
+		{
+			
+		}
+		
+		/*
+		List<String> list= map.get(1);
+		for(int x=0; x < list.size(); x++)
+			System.out.println(x + " " + list.get(x));
+			*/
 	}
 	
 	
+	private static void checkLogs(HashMap<Integer, List<String>> map, double depth, int column)
+		throws Exception
+	{
+		List<Integer> list = new ArrayList<Integer>();
+		
+
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getTingDir() 
+				+ File.separator + "5Groups" + File.separator + 
+				"otuAsColumnsLogNorm_5GroupsPlusMetadata.txt"	)));
+	
+		List<Double> loggedList = new ArrayList<Double>();
+		
+		for(Integer i : map.keySet())
+		{
+			List<String> innerList = map.get(i);
+			
+			Integer val = Integer.parseInt(innerList.get(column));
+			double sum = Double.parseDouble(innerList.get(10).replace(",", "").replaceAll("\"", ""));
+			
+			double normVal =Math.log10(val/sum * depth + 1); 
+			//System.out.println(val +" " + sum + " " + depth + " " + normVal);
+			
+			loggedList.add(normVal);
+		}
+		
+		reader.close();
+	}
+	
+	public static double getAverageSequenceDepth( HashMap<Integer, List<String>> map) throws Exception
+	{
+		double sum = 0;
+		int n=0;
+		
+		for( Integer i : map.keySet())
+		{
+			//System.out.println(map.get(i).get(13));
+			sum += Double.parseDouble(
+					map.get(i).get(10).replace(".0", "").replace(",", "").replaceAll("\"", ""));
+			n++;
+		}
+		
+		return sum / n;
+	}
 		
 	private static void checkAMetadataColumn(HashMap<Integer, List<String>> map,
 						int metaColumnToCheck, int originalRow) throws Exception
@@ -85,7 +142,7 @@ public class CompareMetadata
 			if( ! aVal.equals(anotherVal))
 				throw new Exception("No match " + aVal + " " + anotherVal );
 			
-			System.out.println(aVal + " " + anotherVal);
+			//System.out.println(aVal + " " + anotherVal);
 		}
 		
 		reader.close();
