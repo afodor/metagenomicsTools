@@ -9,7 +9,7 @@ import java.util.List;
 
 import utils.ConfigReader;
 
-public class CompareMetadata
+public class CompareMetadataAndLogs
 {
 	private static HashMap<Integer, List<String>> getParsedMap() throws Exception
 	{
