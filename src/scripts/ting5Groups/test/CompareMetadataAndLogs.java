@@ -11,6 +11,26 @@ import utils.ConfigReader;
 
 public class CompareMetadataAndLogs
 {
+	private static List<String> getRowNames() throws Exception
+	{
+		List<String> list = new ArrayList<String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getTingDir() 
+				+ File.separator + "5Groups" + File.separator + 
+				"20170312_Casp11_DSS_5groups_16S_DeNovo_L6.txt")));
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			if( s.trim().length() == 0 )
+				list.add("");
+			else
+				list.add(s.split("\t")[0].replaceAll("\"", ""));
+		}
+		
+		return list;
+	}
+	
 	private static HashMap<Integer, List<String>> getParsedMap() throws Exception
 	{
 		HashMap<Integer, List<String>> map = new HashMap<Integer,List<String>>();
@@ -61,27 +81,28 @@ public class CompareMetadataAndLogs
 		double sequenceDepth = getAverageSequenceDepth(map);
 		System.out.println(sequenceDepth);
 		
+
+		List<String> rowNames = getRowNames();
+		
+		
 		for(int x=11; x < 184; x++)
 		{
-			checkLogs(map, sequenceDepth, x);
+			checkLogs(map, sequenceDepth, x, rowNames);
 		}
 		
-		/*
-		List<String> list= map.get(1);
-		for(int x=0; x < list.size(); x++)
-			System.out.println(x + " " + list.get(x));
-			*/
+		//List<String> list= map.get(1);
+		//for(int x=0; x < list.size(); x++)
+			//System.out.println(x + " " + rowNames.get(x) + " " +  list.get(x));
 		
 		System.out.println("Passed");
 	}
 	
 	
-	private static void checkLogs(HashMap<Integer, List<String>> map, double depth, int column)
+	private static void checkLogs(HashMap<Integer, List<String>> map, double depth, int column,
+			List<String> rowNames)
 		throws Exception
 	{
-		List<Integer> list = new ArrayList<Integer>();
 		
-
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getTingDir() 
 				+ File.separator + "5Groups" + File.separator + 
@@ -102,7 +123,14 @@ public class CompareMetadataAndLogs
 			loggedList.add(normVal);
 		}
 		
-		reader.readLine();
+		String topLine = reader.readLine();
+		String aTaxa =topLine.split("\t")[column];
+		String anotherTaxa = rowNames.get(column + 7);
+		
+		System.out.println(aTaxa + " " + anotherTaxa);
+		
+		if( !aTaxa.equals(anotherTaxa))
+			throw new Exception("No");
 		
 		int index=0;
 		
