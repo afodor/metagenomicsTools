@@ -1,0 +1,20 @@
+rm(list=ls())
+
+lowBugA <- rnorm(1000, mean=5000, sd= 5000/20)
+lowBugB <- rnorm(1000, mean=5000, sd= 5000/20)
+lowBugC <- rnorm(1000, mean=5000, sd= 5000/20)
+HighBug <- rnorm(1000, mean=10000,sd=10000/5)
+
+sumAll <- lowBugA  + lowBugB + lowBugC + HighBug 
+
+plot(lowBugA, lowBugB)
+
+summary(lm( lowBugA ~ lowBugB ))
+
+normBugA <- lowBugA /sumAll
+normBugB <- lowBugB /sumAll 
+
+plot(normBugA , normBugB )
+
+summary(lm( normBugA~ normBugB))
+
