@@ -1,0 +1,17 @@
+rm(list=ls())
+
+
+# shannon entropy for a fair coin as a function of p(head)
+probHeads <- vector()
+probTails <- vector()
+entropy <- vector()
+
+for ( i in 1:999)
+{
+	probHeads[i] = i / 1000;
+	probTails[i] = 1 - probHeads[i];
+	entropy[i] = - ( probHeads[i] * log(probHeads[i])/log(2)  
+					+ probTails[i] *log(probTails[i])/log(2))
+}
+
+plot(probHeads, entropy)
