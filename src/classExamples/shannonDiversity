@@ -1,6 +1,5 @@
 rm(list=ls())
 
-
 # shannon entropy for a fair coin as a function of p(head)
 probHeads <- vector()
 probTails <- vector()
@@ -15,3 +14,26 @@ for ( i in 1:999)
 }
 
 plot(probHeads, entropy)
+
+
+# a loaded six-sided die 
+rm(list=ls())
+allProbSixes <- seq(.001, .999, .001)
+entropies <- vector()
+index <- 1
+
+for( probSix in allProbSixes ) 
+{
+	probrolls <- c(rep( (1-probSix)/5,5), probSix)
+	
+	entropy <- 0
+	for ( i in 1: 6 )
+	{
+		entropy = entropy + probrolls[i] * log(probrolls[i]) / log(2)
+	}
+	entropies[index] <- - entropy
+	index <- index + 1
+}
+
+plot(allProbSixes, entropies)
+
