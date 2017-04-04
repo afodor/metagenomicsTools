@@ -12,3 +12,8 @@ normBugB <- lowBugB /sumAll
 
 boxplot( normBugA[1:500], normBugA[501:1000])
 t.test(normBugA[1:500],normBugA[501:1000] )
+
+# ratio space not helpful
+aOverHigh <- log( lowBugA/HighBug)
+boxplot( aOverHigh [1:500], aOverHigh [501:1000])
+t.test(aOverHigh [1:500],aOverHigh [501:1000] )
