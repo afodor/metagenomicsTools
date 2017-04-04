@@ -7,35 +7,8 @@ HighBug <- c( rnorm(500, mean=10000,sd=10000/5), rnorm(500, mean=5000,sd=5000/5)
 
 sumAll <- lowBugA  + lowBugB + lowBugC + HighBug 
 
-par(mfrow=c(3,2))
-
-plot(lowBugA, lowBugB)
-
-summary(lm( lowBugA ~ lowBugB ))
-
 normBugA <- lowBugA /sumAll
 normBugB <- lowBugB /sumAll 
 
-plot(normBugA , normBugB )
-
-summary(lm( normBugA~ normBugB))
-
-
-bOverA <- log(lowBugB/ lowBugA )
-cOverA <- log(lowBugC/lowBugA)
-
-
-plot( bOverA, cOverA )
-
-bOverHigh <- log(lowBugB/ HighBug )
-cOverHigh <- log(lowBugC/HighBug)
-
-plot( bOverHigh, cOverHigh)
-summary(lm( cOverA~ bOverA))
-
-boxplot( normBugA[1:500], normBugA[501:1000], bOverA[1:500], bOverA[501:1000],
-	bOverHigh[1:500], bOverHigh[501:1000])
-boxplot( HighBug[1:500],HighBug[501:1000] )
-t.test(bOverA[1:500],bOverA[501:1000] )
-
-t.test(bOverHigh[1:500],bOverHigh[501:1000] )
+boxplot( normBugA[1:500], normBugA[501:1000])
+t.test(normBugA[1:500],normBugA[501:1000] )
