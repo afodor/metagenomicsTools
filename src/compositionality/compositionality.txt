@@ -19,8 +19,8 @@ plot(normBugA , normBugB )
 summary(lm( normBugA~ normBugB))
 
 
-bOverA <- lowBugB/ lowBugA 
-cOverA <- lowBugC/lowBugA
+bOverA <- log(lowBugB/ lowBugA )
+cOverA <- log(lowBugC/lowBugA)
 plot( bOverA, cOverA )
 
 summary(lm( cOverA~ bOverA))
