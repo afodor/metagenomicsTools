@@ -29,7 +29,7 @@ for( probSix in allProbSixes )
 	entropy <- 0
 	for ( i in 1: 6 )
 	{
-		entropy = entropy + probrolls[i] * log(probrolls[i]) / log(2)
+		entropy = entropy + probrolls[i] * log(probrolls[i]) / log(6)
 	}
 	entropies[index] <- - entropy
 	index <- index + 1
