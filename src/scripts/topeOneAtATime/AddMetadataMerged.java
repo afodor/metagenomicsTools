@@ -221,13 +221,14 @@ public class AddMetadataMerged
 		HashMap<String, Nov2016MetadataParser> novMetaMap = Nov2016MetadataParser.getMetaMap();
 		HashMap<String, Integer> caseControlMap = getCaseControlMap();
 		HashMap<String, String> ticLocaitonMap = getTicLocationMap();
+		HashMap<String, String> hemeMap = GetHemsizeMap.getHemsizeMap();
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
 		writer.write("id\tkey\t");
 		
-		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\tticLocation\t");
+		writer.write("waist\tticsCount\tage\tsex\tbmi\twhr\twbo\tbmi_CAT\tticLocation\themsize_s_ml\t");
 		
 		writer.write("readNum\tisBlankControl\tnumberSequencesPerSample\tshannonEntropy\tcaseControl\tset\tread");
 		
@@ -275,6 +276,8 @@ public class AddMetadataMerged
 				writer.write("\t");
 			else
 				writer.write(location + "\t");
+			
+			writer.write(  getStringOrNothing(hemeMap.get( key.split("_")[0])) + "\t");	
 			
 			writer.write( getReadNum(key) + "\t" + 
 						( key.indexOf("DV-000-") != -1) + "\t" + 
