@@ -308,7 +308,7 @@ public class AddMetadataMerged
 	static String getStringOrNothing(Object o)
 	{
 		if( o == null)
-			return "";
+			return "NA";
 		
 		return o.toString();
 	}

@@ -3,8 +3,8 @@ library("Kendall")
 
 setwd("C:\\topeOneAtATime\\merged")
 
-#taxaLevels <- c("otu_qiime_cr","otu","phylum","class","order","family","genus")
-taxaLevels <- c("genus")
+taxaLevels <- c("phylum","class","order","family","genus","otu_qiime_cr","otu")
+#taxaLevels <- c("genus")
 
 for(taxa in taxaLevels ) 
 {
@@ -31,12 +31,13 @@ for(taxa in taxaLevels )
 	rSquaredSex <- vector()
 	ticLocationPValue <- vector()
 	ticLocationRSquared <- vector()
+	pValuesHemeSize <- vector()
 	meanCase <- vector()
 	meanControl <- vector()
 	names <- vector()
 	
 	index <- 1
-	for( i in c(19:ncol(myT))) 	
+	for( i in c(20:ncol(myT))) 	
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{	
 			sampleSizeCase[index] <- length( myT[myT$caseControl==1,i])
@@ -99,6 +100,9 @@ for(taxa in taxaLevels )
 			plot( myT[,i],myT$ticsCount, main=paste(names[index], " p=" , pValuesTicsCount[index] ))
 			plot( myT[,i] ~ myT$wbo, main=paste(names[index], " p=" , pValuesWBO[index] ))
 			
+			pValuesHemeSize[index] <- anova(lm(myT[,i] ~ myT$hemsize_s_ml))$"Pr(>F)"[1]
+			
+			
 			index <- index + 1
 		}
 		
@@ -113,7 +117,7 @@ for(taxa in taxaLevels )
 
 	dFrame <- data.frame( names,sampleSizeCase,sampleSizeControl,meanCase, meanControl, pValuesCaseControl, rSquaredCaseControl, 
 	pValuesWaste , rSquaredValuesWaste, pValuesAge,rSquaredAge,pValuesSex,rSquaredSex, pValuesTicsCount,rSquaredTicsCount, pValuesWBO,rSquaredValuesWBO,
-	ticLocationPValue,ticLocationRSquared) 
+	ticLocationPValue,ticLocationRSquared,pValuesHemeSize) 
 	dFrame <- dFrame [order(dFrame$pValuesCaseControl),]
 	dFrame$caseControlAdjust <- p.adjust( dFrame$pValuesCaseControl, method = "BH")
 	dFrame$pValuesWasteAdjust <- p.adjust( dFrame$pValuesWaste , method = "BH")
@@ -122,6 +126,7 @@ for(taxa in taxaLevels )
 	dFrame$pValuesAgeAdjust <- p.adjust( dFrame$pValuesAge, method = "BH")
 	dFrame$pValuesSexeAdjust <- p.adjust( dFrame$pValuesSex, method = "BH")
 	dFrame$ticLocationPValueAdjust <- p.adjust( dFrame$ticLocationPValue, method = "BH")
+	dFrame$pValuesHemeSizeAdjust <- p.adjust( dFrame$pValuesHemeSize, method = "BH")
 	write.table(dFrame, file=paste("metapValuesFor_", taxa, "_read1_.txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()
 		
