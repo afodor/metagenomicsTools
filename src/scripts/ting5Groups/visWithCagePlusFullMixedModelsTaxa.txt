@@ -5,7 +5,7 @@ library("nlme")
 
 myT <- read.table("otuAsColumnsLogNorm_5GroupsPlusMetadata.txt", header=TRUE, sep="\t")
 
-pdf("pcoaByCageForTaxa.pdf")
+pdf("cageForTaxa.pdf")
 
 pValuesGenotype <- vector()
 pValuesTime <- vector()
@@ -39,7 +39,7 @@ for( i in 12:ncol(myT))
 	
 	par(mfrow=c(2,1))
 	
-	plot( mds ~ myT$cage,las=2, ylab=names(myT)[i],xlab="")
+	plot( mds ~ myT$cage,las=2, main=names(myT)[i],xlab="")
 	
 	for( j in 1:length(cage))
 	{
@@ -48,6 +48,7 @@ for( i in 12:ncol(myT))
 					col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
 	}
 	
+	plot( mds ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ))	
 	myAnova <- anova(M.mixed)
 	names[index] <- names(myT)[i]
 	pValuesGenotype[index] <-myAnova$"p-value"[2] 
