@@ -18,18 +18,18 @@ index <- 1
 for( i in 12:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 {	
-	mds <- myT[,i]
+	relativeAbundance <- myT[,i]
 	cage <- factor(myT$cage)
 	genotype <- factor(myT$genotype )
 	maxWeightLossPercent <- myT$maxWeightLossPercent
 	time <- myT$time
 	
-	myFrame <- data.frame(mds,cage,genotype,maxWeightLossPercent ,time)
+	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 	
-	M.mixed <- lme ( mds ~ genotype * time, method="REML", random = ~1 | cage,
+	M.mixed <- lme ( relativeAbundance ~ genotype * time, method="REML", random = ~1 | cage,
 				data = myFrame) 
 	
-	M.everything <- lme ( mds ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
+	M.everything <- lme ( relativeAbundance ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
 				data = myFrame) 
 	
 	mixedAnova <- anova(M.mixed)
@@ -46,13 +46,6 @@ for( i in 12:ncol(myT))
 	index <- index + 1
 }
 
-par(mfrow=c(2,2))
-
-hist(pValuesGenotype,breaks=20)
-hist(pValuesTime,breaks=20)
-hist(pValuesTimeGenotypeInteraction,breaks=20)
-
-dev.off()
 
 dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 
@@ -72,26 +65,36 @@ pdf("cageForTaxa.pdf")
 for( i in 1:nrow(dFrame))
 {
 	index <- dFrame$indexes[i]
-	mds <- myT[,index]
+	relativeAbundance <- myT[,index]
 	cage <- factor(myT$cage)
 	genotype <- factor(myT$genotype )
+	time <- myT$time
+	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
+	
 	
 	par(mfrow=c(2,1),mar=c(4,4,1,1), oma=c(2,2,1,1))
 	
-	plot( mds ~ myT$cage,las=2, main="cage",xlab="")
+	plot( relativeAbundance ~ myT$cage,las=2, main="cage",xlab="")
 	
 	for( j in 1:length(cage))
 	{
-		stripchart(mds[j]~ cage[j], pch = 16, 
+		stripchart(relativeAbundance[j]~ cage[j], pch = 16, 
 					data = myFrame,vertical = TRUE, add=TRUE,
 					col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
 	}
 	
-	plot( mds ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ))	
+	mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
+	plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
 	
 	mtext(dFrame$names[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
-	
 }
 
-dev.off()
+
+par(mfrow=c(2,2))
+
+hist(pValuesGenotype,breaks=20)
+hist(pValuesTime,breaks=20)
+hist(pValuesTimeGenotypeInteraction,breaks=20)
+
+dev.off()	
