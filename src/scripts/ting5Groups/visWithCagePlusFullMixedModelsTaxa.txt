@@ -5,12 +5,11 @@ library("nlme")
 
 myT <- read.table("otuAsColumnsLogNorm_5GroupsPlusMetadata.txt", header=TRUE, sep="\t")
 
-pdf("cageForTaxa.pdf")
-
 pValuesGenotype <- vector()
 pValuesTime <- vector()
 pValuesTimeGenotypeInteraction <- vector()
 pValuesWeightLoss <- vector()
+indexes <- vector()
 names <- vector()
 
 index <- 1
@@ -37,6 +36,46 @@ for( i in 12:ncol(myT))
 	
 	pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
 	
+	myAnova <- anova(M.mixed)
+	names[index] <- names(myT)[i]
+	pValuesGenotype[index] <-myAnova$"p-value"[2] 
+	pValuesTime[index] <-myAnova$"p-value"[3] 
+	pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
+	indexes[index] <- i
+	
+	index <- index + 1
+}
+
+par(mfrow=c(2,2))
+
+hist(pValuesGenotype,breaks=20)
+hist(pValuesTime,breaks=20)
+hist(pValuesTimeGenotypeInteraction,breaks=20)
+
+dev.off()
+
+dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
+
+dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+
+dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
+dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
+dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
+
+
+write.table(dFrame, file=paste("bigModelPValuesForTaxa.txt",sep=""), sep="\t",row.names=FALSE)
+
+
+pdf("cageForTaxa.pdf")
+
+for( i in 1:nrow(dFrame))
+{
+	index <- dFrame$indexes[i]
+	mds <- myT[,index]
+	cage <- factor(myT$cage)
+	genotype <- factor(myT$genotype )
+	
 	par(mfrow=c(2,1),mar=c(4,4,1,1), oma=c(2,2,1,1))
 	
 	plot( mds ~ myT$cage,las=2, main="cage",xlab="")
@@ -49,38 +88,10 @@ for( i in 12:ncol(myT))
 	}
 	
 	plot( mds ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ))	
-	myAnova <- anova(M.mixed)
-	names[index] <- names(myT)[i]
-	pValuesGenotype[index] <-myAnova$"p-value"[2] 
-	pValuesTime[index] <-myAnova$"p-value"[3] 
-	pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
 	
-	 mtext(names[index] ,
+	mtext(dFrame$names[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
-	
-	index <- index + 1
-	
-		
 	
 }
 
-par(mfrow=c(2,2))
-
-hist(pValuesGenotype,breaks=20)
-hist(pValuesTime,breaks=20)
-hist(pValuesTimeGenotypeInteraction,breaks=20)
-
 dev.off()
-
-dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss)
-
-dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
-
-dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
-dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
-dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
-dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
-
-
-write.table(dFrame, file=paste("bigModelPValuesForTaxa.txt",sep=""), sep="\t",row.names=FALSE)
-
