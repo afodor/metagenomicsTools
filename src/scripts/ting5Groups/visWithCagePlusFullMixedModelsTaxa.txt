@@ -37,9 +37,9 @@ for( i in 12:ncol(myT))
 	
 	pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
 	
-	par(mfrow=c(2,1))
+	par(mfrow=c(2,1),mar=c(4,4,1,1), oma=c(2,2,1,1))
 	
-	plot( mds ~ myT$cage,las=2, main=names(myT)[i],xlab="")
+	plot( mds ~ myT$cage,las=2, main="cage",xlab="")
 	
 	for( j in 1:length(cage))
 	{
@@ -55,7 +55,12 @@ for( i in 12:ncol(myT))
 	pValuesTime[index] <-myAnova$"p-value"[3] 
 	pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
 	
+	 mtext(names[index] ,
+        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+	
 	index <- index + 1
+	
+		
 	
 }
 
