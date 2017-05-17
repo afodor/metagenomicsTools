@@ -1,0 +1,26 @@
+rm(list=ls())
+
+setwd("C:\\tingData\\may_2017_rerun")
+
+myT <- read.table("pcoa_rerunPlusMetadata.txt", header=TRUE, sep="\t")
+
+t.test( myT$MDS1[myT$time==0 & myT$genotype == "WT"],  myT$MDS1[myT$time==0 & myT$genotype == "KO"])
+
+
+t.test( myT$MDS1[myT$time==3 & myT$genotype == "WT"],  myT$MDS1[myT$time==3 & myT$genotype == "KO"])
+
+
+t.test( myT$MDS1[myT$time==4 & myT$genotype == "WT"],  myT$MDS1[myT$time==4 & myT$genotype == "KO"])
+t.test( myT$MDS1[myT$time==12 & myT$genotype == "WT"],  myT$MDS1[myT$time==12 & myT$genotype == "KO"])
+t.test( myT$MDS1[myT$time==18 & myT$genotype == "WT"],  myT$MDS1[myT$time==18 & myT$genotype == "KO"])
+
+
+t.test( myT$shannonEntropy[myT$time==0 & myT$genotype == "WT"],  myT$shannonEntropy[myT$time==0 & myT$genotype == "KO"])
+
+
+t.test( myT$shannonEntropy[myT$time==3 & myT$genotype == "WT"],  myT$shannonEntropy[myT$time==3 & myT$genotype == "KO"])
+
+
+t.test( myT$shannonEntropy[myT$time==4 & myT$genotype == "WT"],  myT$shannonEntropy[myT$time==4 & myT$genotype == "KO"])
+t.test( myT$shannonEntropy[myT$time==12 & myT$genotype == "WT"],  myT$shannonEntropy[myT$time==12 & myT$genotype == "KO"])
+t.test( myT$shannonEntropy[myT$time==18 & myT$genotype == "WT"],  myT$shannonEntropy[myT$time==18 & myT$genotype == "KO"])
