@@ -1,0 +1,15 @@
+
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\tingData\\may_2017_rerun")
+
+inFileName <- paste( "otuAsColumns_rerun.txt", sep ="")
+myT <-read.table(inFileName,header=TRUE,sep="\t")
+numCols <- ncol(myT)
+myColClasses <- c("character", rep("numeric", numCols-1))
+myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+myPCOA <- capscale(myT~1,distance="bray")
+
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_rerun.txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_rerun.txt", sep=""), sep="\t")
