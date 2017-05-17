@@ -1,4 +1,4 @@
-package scripts.ting5Groups;
+package scripts.tingReProcessed;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,23 +17,23 @@ public class AddMetadata
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
 				+ File.separator + "otuAsColumns_rerun.txt");
 		
-		File pcoaFile = new File(ConfigReader.getTingDir() + File.separator +  "5Groups" 
+		File pcoaFile = new File(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
 				+ File.separator +
-				"pcoa_5Groups.txt");
+				"pcoa_rerun.txt");
 		
-		File pcoaMetadataFile = new File(ConfigReader.getTingDir() + File.separator +  "5Groups" 
+		File pcoaMetadataFile = new File(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
 				+ File.separator +
-				"pcoa_5GroupsPlusMetadata.txt");
+				"pcoa_rerunPlusMetadata.txt");
 		
 		addMetadata(wrapper, pcoaFile, pcoaMetadataFile, true);
 		
 		File inFile = new File(ConfigReader.getTingDir() + File.separator + 
-				 "5Groups" + File.separator + 
-				"otuAsColumnsLogNorm_5Groups.txt");
+				 "may_2017_rerun" + File.separator + 
+				"otuAsColumnsLogNorm_rerun.txt");
 		
 		File logNormMetaFile =  new File(ConfigReader.getTingDir() + File.separator + 
-				 "5Groups" + File.separator + 
-				"otuAsColumnsLogNorm_5GroupsPlusMetadata.txt");
+				 "may_2017_rerun" + File.separator + 
+				"otuAsColumnsLogNorm_rerunPlusMetadata.txt");
 		
 		addMetadata(wrapper, inFile, logNormMetaFile, false);
 	}

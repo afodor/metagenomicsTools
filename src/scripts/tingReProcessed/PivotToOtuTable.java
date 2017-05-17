@@ -48,7 +48,7 @@ public class PivotToOtuTable
 		OtuWrapper wrapper = new OtuWrapper(outFile);
 		wrapper.writeNormalizedLoggedDataToFile(new File(ConfigReader.getTingDir() 
 				+ File.separator +  "may_2017_rerun" 
-				+ File.separator + "otuAsColumns_rerun_normalized.txt"));
+				+ File.separator + "otuAsColumnsLogNorm_rerun.txt"));
 	}
 	
 	public static void main(String[] args) throws Exception
