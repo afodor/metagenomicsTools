@@ -14,26 +14,32 @@ public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
+		addMetadataForLevel(2);
+		addMetadataForLevel(6);
+	}
+	
+	public static void addMetadataForLevel(int i) throws Exception
+	{
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
-				+ File.separator + "otuAsColumns_rerun.txt");
+				+ File.separator + "otuAsColumns_rerun_" + i + ".txt");
 		
 		File pcoaFile = new File(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
 				+ File.separator +
-				"pcoa_rerun.txt");
+				"pcoa_rerun_L" + i + ".txt");
 		
 		File pcoaMetadataFile = new File(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
 				+ File.separator +
-				"pcoa_rerunPlusMetadata.txt");
+				"pcoa_rerunPlusMetadata_L" + i + ".txt");
 		
 		addMetadata(wrapper, pcoaFile, pcoaMetadataFile, true);
 		
 		File inFile = new File(ConfigReader.getTingDir() + File.separator + 
 				 "may_2017_rerun" + File.separator + 
-				"otuAsColumnsLogNorm_rerun.txt");
+				"otuAsColumnsLogNorm_rerun_" + i + ".txt");
 		
 		File logNormMetaFile =  new File(ConfigReader.getTingDir() + File.separator + 
 				 "may_2017_rerun" + File.separator + 
-				"otuAsColumnsLogNorm_rerunPlusMetadata.txt");
+				"otuAsColumnsLogNorm_rerunPlusMetadata_L" + i + ".txt");
 		
 		addMetadata(wrapper, inFile, logNormMetaFile, false);
 	}
