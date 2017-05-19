@@ -4,33 +4,42 @@ setwd("C:\\ashlee")
 
 myT <- read.table("transposed.txt", sep="\t", header=TRUE)
 
-pdf( "quickvis.pdf")
-
-par(mfrow=c(2,2))
-
 pValues <- vector()
 names <- vector()
+index <- vector()
 
 for( i in 2:ncol(myT))
 {
 	pValues[i-1] <-  anova( lm( myT[,i] ~ myT$category))$"Pr(>F)"[1]
 	names[i-1] <- names(myT)[i]
-	boxplot( myT[,i] ~ myT$category, las=2 , main = paste( names[i-1],format(pValues[i-1],digits=3) ))
-	
-	data <- myT[,i] 
-	category <- myT$category
-	myFrame <- data.frame( data, category)
-	
-	stripchart(data~ category, 
-			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
-	
+	index[i-1] <- i
 }
 
 dev.off()
 
-dFrame <- data.frame( names, pValues )
+dFrame <- data.frame( names, pValues,index )
 dFrame <- dFrame [order(dFrame$pValues),]
 
 dFrame$pValuesAdjusted <- p.adjust( dFrame$pValues, method = "BH")
 
 write.table(dFrame, file=paste("pValues.txt",sep=""), sep="\t",row.names=FALSE)
+
+pdf("quickVis.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	anIndex <- dFrame$index[i]
+	vals <-  as.numeric(myT[,anIndex])
+	
+	category <- myT$category
+	
+	boxplot( vals~ category, las=2 , main = paste( dFrame$names[i],format(dFrame$pValues[i],digits=3)))
+	myFrame <- data.frame( vals, category)
+
+	stripchart(vals~ category, 
+		data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	
+}
+
+dev.off()
