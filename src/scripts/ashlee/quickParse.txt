@@ -15,7 +15,15 @@ for( i in 2:ncol(myT))
 {
 	pValues[i-1] <-  anova( lm( myT[,i] ~ myT$category))$"Pr(>F)"[1]
 	names[i-1] <- names(myT)[i]
-	boxplot( myT[,i] ~ myT$category, las=2 )
+	boxplot( myT[,i] ~ myT$category, las=2 , main = paste( names[i-1],format(pValues[i-1],digits=3) ))
+	
+	data <- myT[,i] 
+	category <- myT$category
+	myFrame <- data.frame( data, category)
+	
+	stripchart(data~ category, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	
 }
 
 dev.off()
