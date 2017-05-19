@@ -71,8 +71,9 @@ for( i in 1:nrow(dFrame))
 	time <- myT$time
 	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 	
-	
 	par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
+	
+	boxplot( relativeAbundance ~ genotype)
 	
 	plot( relativeAbundance ~ myT$cage,las=2, main="cage",xlab="")
 	
@@ -90,8 +91,6 @@ for( i in 1:nrow(dFrame))
 	
 	plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 			main = mainText)
-	
-	plot( time ~ myT$maxWeightLossPercent, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ))
 	
 	mtext(dFrame$names[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
