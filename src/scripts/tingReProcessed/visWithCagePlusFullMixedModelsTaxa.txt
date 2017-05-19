@@ -29,21 +29,17 @@ for (aLevel in c(2,6))
 		
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		M.mixed <- lme ( relativeAbundance ~ genotype * time, method="REML", random = ~1 | cage,
-					data = myFrame) 
-		
 		M.everything <- lme ( relativeAbundance ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
 					data = myFrame) 
 		
-		mixedAnova <- anova(M.mixed)
+		myAnova<- anova(M.everything )
 		
-		pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
+		pValuesWeightLoss[index] <- myAnova$"p-value"[4]
 		
-		myAnova <- anova(M.mixed)
 		names[index] <- names(myT)[i]
 		pValuesGenotype[index] <-myAnova$"p-value"[2] 
 		pValuesTime[index] <-myAnova$"p-value"[3] 
-		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
+		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[5] 
 		indexes[index] <- i
 		
 		index <- index + 1
@@ -98,7 +94,7 @@ for (aLevel in c(2,6))
 		mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
 		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
 		
-		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLoss[i] , digits=3 ) )
+		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLossAdjusted[i] , digits=3 ) )
 		
 		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 				main = mainText)
