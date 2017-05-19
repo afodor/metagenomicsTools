@@ -3,112 +3,116 @@ rm(list=ls())
 setwd("C:\\tingData\\may_2017_rerun")
 library("nlme")
 
-myT <- read.table("otuAsColumnsLogNorm_rerunPlusMetadata.txt", header=TRUE, sep="\t")
-
-pValuesGenotype <- vector()
-pValuesTime <- vector()
-pValuesTimeGenotypeInteraction <- vector()
-pValuesWeightLoss <- vector()
-indexes <- vector()
-names <- vector()
-
-index <- 1
-
-# set to 8:ncol(myT) to pick up metadata and shannon entropy
-for( i in 12:ncol(myT))
-	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
-{	
-	relativeAbundance <- myT[,i]
-	cage <- factor(myT$cage)
-	genotype <- factor(myT$genotype )
-	maxWeightLossPercent <- myT$maxWeightLossPercent
-	time <- myT$time
-	
-	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
-	
-	M.mixed <- lme ( relativeAbundance ~ genotype * time, method="REML", random = ~1 | cage,
-				data = myFrame) 
-	
-	M.everything <- lme ( relativeAbundance ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
-				data = myFrame) 
-	
-	mixedAnova <- anova(M.mixed)
-	
-	pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
-	
-	myAnova <- anova(M.mixed)
-	names[index] <- names(myT)[i]
-	pValuesGenotype[index] <-myAnova$"p-value"[2] 
-	pValuesTime[index] <-myAnova$"p-value"[3] 
-	pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
-	indexes[index] <- i
-	
-	index <- index + 1
-}
-
-dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
-
-#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
-#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
-dFrame <- dFrame [order(dFrame$pValuesGenotype),]
-
-dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
-dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
-dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
-dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
-
-
-write.table(dFrame, file=paste("bigModelPValuesForTaxa.txt",sep=""), sep="\t",row.names=FALSE)
-
-
-pdf("cageForTaxa.pdf")
-
-for( i in 1:nrow(dFrame))
+for (aLevel in c(2,6))
 {
-	index <- dFrame$indexes[i]
-	relativeAbundance <- myT[,index]
-	cage <- factor(myT$cage)
-	genotype <- factor(myT$genotype )
-	time <- myT$time
-	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
+	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
+	myT <- read.table(fileName, header=TRUE, sep="\t")
 	
-	par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
+	pValuesGenotype <- vector()
+	pValuesTime <- vector()
+	pValuesTimeGenotypeInteraction <- vector()
+	pValuesWeightLoss <- vector()
+	indexes <- vector()
+	names <- vector()
 	
-	mainText = paste( "genotype adjust p=", 
-		format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
+	index <- 1
 	
-	boxplot( relativeAbundance ~ genotype, main=mainText)
+	# set to 8:ncol(myT) to pick up metadata and shannon entropy
+	for( i in 12:ncol(myT))
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{	
+		relativeAbundance <- myT[,i]
+		cage <- factor(myT$cage)
+		genotype <- factor(myT$genotype )
+		maxWeightLossPercent <- myT$maxWeightLossPercent
+		time <- myT$time
+		
+		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
+		
+		M.mixed <- lme ( relativeAbundance ~ genotype * time, method="REML", random = ~1 | cage,
+					data = myFrame) 
+		
+		M.everything <- lme ( relativeAbundance ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
+					data = myFrame) 
+		
+		mixedAnova <- anova(M.mixed)
+		
+		pValuesWeightLoss[index] <- anova(M.everything)$"p-value"[4]
+		
+		myAnova <- anova(M.mixed)
+		names[index] <- names(myT)[i]
+		pValuesGenotype[index] <-myAnova$"p-value"[2] 
+		pValuesTime[index] <-myAnova$"p-value"[3] 
+		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
+		indexes[index] <- i
+		
+		index <- index + 1
+	}
 	
-	stripchart(relativeAbundance ~ genotype, 
-			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
-			
-	plot( relativeAbundance ~ myT$cage,las=2, main="cage",xlab="")
+	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 	
-	for( j in 1:length(cage))
+	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+	dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
+	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+	
+	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
+	dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
+	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
+	
+	
+	write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	
+	pdf(paste("cageForTaxa_L", aLevel, ".pdf"))
+	
+	for( i in 1:nrow(dFrame))
 	{
-		stripchart(relativeAbundance[j]~ cage[j], pch = 16, 
-					data = myFrame,vertical = TRUE, add=TRUE,
-					col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
+		index <- dFrame$indexes[i]
+		relativeAbundance <- myT[,index]
+		cage <- factor(myT$cage)
+		genotype <- factor(myT$genotype )
+		time <- myT$time
+		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
+		
+		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
+		
+		mainText = paste( "genotype adjust p=", 
+			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
+		
+		boxplot( relativeAbundance ~ genotype, main=mainText)
+		
+		stripchart(relativeAbundance ~ genotype, 
+				data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+				
+		plot( relativeAbundance ~ myT$cage,las=2, main="cage",xlab="")
+		
+		for( j in 1:length(cage))
+		{
+			stripchart(relativeAbundance[j]~ cage[j], pch = 16, 
+						data = myFrame,vertical = TRUE, add=TRUE,
+						col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
+		}
+		
+		
+		mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
+		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
+		
+		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLoss[i] , digits=3 ) )
+		
+		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
+				main = mainText)
+		
+		mtext(dFrame$names[i] ,
+	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 	}
 	
 	
-	mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
-	plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
+	par(mfrow=c(2,2))
 	
-	mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLoss[i] , digits=3 ) )
+	hist(pValuesGenotype,breaks=20)
+	hist(pValuesTime,breaks=20)
+	hist(pValuesTimeGenotypeInteraction,breaks=20)
 	
-	plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
-			main = mainText)
-	
-	mtext(dFrame$names[i] ,
-        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+	dev.off()	
 }
-
-
-par(mfrow=c(2,2))
-
-hist(pValuesGenotype,breaks=20)
-hist(pValuesTime,breaks=20)
-hist(pValuesTimeGenotypeInteraction,breaks=20)
-
-dev.off()	
