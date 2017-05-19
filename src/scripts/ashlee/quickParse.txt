@@ -15,8 +15,6 @@ for( i in 2:ncol(myT))
 	index[i-1] <- i
 }
 
-dev.off()
-
 dFrame <- data.frame( names, pValues,index )
 dFrame <- dFrame [order(dFrame$pValues),]
 
