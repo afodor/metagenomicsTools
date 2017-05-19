@@ -46,10 +46,10 @@ for( i in 12:ncol(myT))
 	index <- index + 1
 }
 
-
 dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 
-dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 
 dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
@@ -72,7 +72,7 @@ for( i in 1:nrow(dFrame))
 	myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 	
 	
-	par(mfrow=c(2,1),mar=c(4,4,1,1), oma=c(2,2,1,1))
+	par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
 	
 	plot( relativeAbundance ~ myT$cage,las=2, main="cage",xlab="")
 	
@@ -85,6 +85,13 @@ for( i in 1:nrow(dFrame))
 	
 	mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
 	plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
+	
+	mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLoss[i] , digits=3 ) )
+	
+	plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
+			main = mainText)
+	
+	plot( time ~ myT$maxWeightLossPercent, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ))
 	
 	mtext(dFrame$names[i] ,
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
