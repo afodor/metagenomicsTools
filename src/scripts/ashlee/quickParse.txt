@@ -1,0 +1,28 @@
+rm(list=ls())
+
+setwd("C:\\ashlee")
+
+myT <- read.table("transposed.txt", sep="\t", header=TRUE)
+
+pdf( "quickvis.pdf")
+
+par(mfrow=c(2,2))
+
+pValues <- vector()
+names <- vector()
+
+for( i in 2:ncol(myT))
+{
+	pValues[i-1] <-  anova( lm( myT[,i] ~ myT$category))$"Pr(>F)"[1]
+	names[i-1] <- names(myT)[i]
+	boxplot( myT[,i] ~ myT$category, las=2 )
+}
+
+dev.off()
+
+dFrame <- data.frame( names, pValues )
+dFrame <- dFrame [order(dFrame$pValues),]
+
+dFrame$pValuesAdjusted <- p.adjust( dFrame$pValues, method = "BH")
+
+write.table(dFrame, file=paste("pValues.txt",sep=""), sep="\t",row.names=FALSE)
