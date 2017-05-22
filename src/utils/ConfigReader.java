@@ -43,6 +43,8 @@ public class ConfigReader
 	
 	public static final String IAN_ANOREXIA_DIR = "IAN_ANOREXIA_DIR";
 	
+	public static final String LACTO_CHECK_DIR = "LACTO_CHECK_DIR";
+	
 	public static final String MOTHUR_DIR = "MOTHUR_DIR";
 	public static final String CROSSOVER_EXERCISE_DIR = "CROSSOVER_EXERCISE_DIR";
 	
@@ -158,6 +160,10 @@ public class ConfigReader
 		return getConfigReader().getAProperty(LYTE_NOV_2016_DIR);
 	}
 	
+	public static String getLactoCheckDir() throws Exception
+	{
+		return getConfigReader().getAProperty(LACTO_CHECK_DIR);	
+	}
 	
 	public static String getTopeOneAtATimeDir() throws Exception
 	{

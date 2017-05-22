@@ -16,6 +16,8 @@ public class AddMetadata
 	{
 		addMetadataForLevel(2);
 		addMetadataForLevel(6);
+		
+		
 	}
 	
 	public static void addMetadataForLevel(int i) throws Exception
