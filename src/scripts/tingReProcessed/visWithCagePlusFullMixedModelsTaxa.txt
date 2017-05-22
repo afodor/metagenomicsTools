@@ -47,9 +47,10 @@ for (aLevel in c(2,6))
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 	
+	#dFrame <- dFrame [order(dFrame$pValuesTime),]
 	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
-	dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
-	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
+	dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	
 	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
@@ -60,7 +61,7 @@ for (aLevel in c(2,6))
 	write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 	
-	pdf(paste("cageForTaxa_L", aLevel, ".pdf"))
+	pdf(paste("cageForTaxaSortedGenotype_L", aLevel, ".pdf"))
 	
 	for( i in 1:nrow(dFrame))
 	{
