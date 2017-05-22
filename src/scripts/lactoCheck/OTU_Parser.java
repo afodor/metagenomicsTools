@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import utils.ConfigReader;
@@ -28,13 +29,17 @@ public class OTU_Parser
 	private static void writeResults( List<String> headers, List<Holder> allLacto  )
 		throws Exception
 	{
+		HashMap<String, PCR_DataParser> pcrMap =
+				PCR_DataParser.getPCRData();
+		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getLactoCheckDir() + File.separator + "merged.txt"	)));
 		
-		writer.write("id\tgroup");
+		writer.write("id\tgroup\tL_crispatus\tL_iners\tbglobulin");
 		
 		for(Holder h : allLacto)
-			writer.write("\t" + h.taxaString.replace(";", "_"));
+			writer.write("\t" + h.taxaString.replace(";", "_").
+						replace("k__Bacteria_ p__Firmicutes_ c__Bacilli_ o__Lactobacillales_ f__Lactobacillaceae_", ""));
 		
 		writer.write("\n");
 		
@@ -45,6 +50,13 @@ public class OTU_Parser
 			String[] subSplit = headers.get(x).split("\\.");
 			
 			writer.write("\t" + subSplit[2]);
+			
+			PCR_DataParser pcr = pcrMap.get(subSplit[2]);
+			
+			if( pcr == null)
+				writer.write("\t\t\t");
+			else
+				writer.write("\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + "\t" + pcr.getBglobulin());
 			
 			if( subSplit.length != 3)
 				throw new Exception("No");
