@@ -31,7 +31,7 @@ public class OTU_Parser
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getLactoCheckDir() + File.separator + "merged.txt"	)));
 		
-		writer.write("id");
+		writer.write("id\tgroup");
 		
 		for(Holder h : allLacto)
 			writer.write("\t" + h.taxaString.replace(";", "_"));
@@ -41,6 +41,13 @@ public class OTU_Parser
 		for( int x=0; x < headers.size(); x++)
 		{
 			writer.write(headers.get(x));
+			
+			String[] subSplit = headers.get(x).split("\\.");
+			
+			writer.write("\t" + subSplit[2]);
+			
+			if( subSplit.length != 3)
+				throw new Exception("No");
 			
 			for( Holder h : allLacto)
 			{
