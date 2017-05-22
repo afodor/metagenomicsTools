@@ -91,7 +91,9 @@ for (aLevel in c(2,6))
 		}
 		
 		
-		mainText = paste( "genotype * time adjust p=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ) )
+		mainText = paste( "genotype*time=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ),
+					"time=", format( dFrame$pValuesTimeAdjusted[i] , digits=3 ) )
+		
 		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
 		
 		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLossAdjusted[i] , digits=3 ) )
