@@ -55,7 +55,8 @@ public class FindTopHits
 		
 		HashMap<String, HitScores> topHitsMap = 
 				HitScores.getTopHitsAsQueryMap(ConfigReader.getLactoCheckDir() + File.separator + 
-						"otusToInersMatchingByBlast.txt");
+						"otusToCrispatusMatchingByBlast.txt");
+	//					"otusToInersMatchingByBlast.txt");
 		
 		HashSet<Integer> toKeep = new HashSet<Integer>();
 		
@@ -80,7 +81,7 @@ public class FindTopHits
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getLactoCheckDir() + File.separator + 
-				"mergedOnlyIners.txt")));
+				"mergedOnlyCrispatus.txt")));
 		
 		List<Boolean> includeColumn = new ArrayList<Boolean>();
 		
