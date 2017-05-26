@@ -6,7 +6,6 @@ import java.util.List;
 
 import parsers.FastaSequence;
 import utils.ConfigReader;
-import utils.Translate;
 
 public class CheckPrimer
 {

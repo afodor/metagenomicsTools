@@ -102,7 +102,7 @@ public class OTU_Parser
 			if(taxaString.contains("g__Lactobacillus"))
 			{
 				Holder h = new Holder();
-				h.taxaString = taxaString;
+				h.taxaString = splits[0];
 				
 				for( int x=1; x < splits.length-1; x++)
 					h.values.add(Double.parseDouble(splits[x]));
