@@ -30,11 +30,11 @@ public class Normalize
 		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getLactoCheckDir() + File.separator + 
-				"Lacto_CrispatusPlusRunIDLogNorm.tsv")));
+				"Lacto_InersLogNormPlusRunID.tsv")));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getLactoCheckDir() + File.separator + 
-				"Lacto_CrispatusPlusRunID.tsv")));
+				"Lacto_InersPlusRunID.tsv")));
 		
 		writer.write(reader.readLine() + "\n");
 		

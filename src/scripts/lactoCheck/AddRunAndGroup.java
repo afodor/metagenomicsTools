@@ -13,10 +13,11 @@ public class AddRunAndGroup
 	public static void main(String[] args) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getLactoCheckDir() + File.separator + "Lacto_Crispatus.tsv")));
+				ConfigReader.getLactoCheckDir() + File.separator 
+				+ "Lacto_Iners.tsv")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getLactoCheckDir() + File.separator + "Lacto_CrispatusPlusRunID.tsv"
+				ConfigReader.getLactoCheckDir() + File.separator + "Lacto_InersPlusRunID.tsv"
 				)));
 		
 		String[] splits= reader.readLine().split("\t");
