@@ -42,8 +42,10 @@ public class Normalize
 		{
 			String[] splits=  s.split("\t");
 			
-			for( int x=0;x < 7; x++)
-				writer.write(splits[x] + "\t");
+			writer.write(splits[0]);
+			
+			for( int x=1;x < 7; x++)
+				writer.write("\t" + splits[x]);
 			
 			double sequenceCount = map.get(splits[2].replaceAll("\"", ""));
 			

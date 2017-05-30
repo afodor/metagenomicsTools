@@ -2,24 +2,23 @@ rm(list=ls())
 
 setwd("C:\\lactoCheck")
 
-myT <- read.table("Lacto_CrispatusPlusRunID.tsv", sep="\t", header=TRUE, row.names=1)
+myT <- read.table("Lacto_CrispatusPlusRunIDLogNorm.tsv", sep="\t", header=TRUE, row.names=1)
 
 myT <- myT[myT$run == "Run1",]
 
 apply(myT[,7:21], 2, sum)
 
 
-
 par(mfrow=c(2,2))
 
-pValue = format( anova( lm( log10(myT$X130864+1) ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
-plot( log10(myT$X130864+1), myT$L_crispatus, main =pValue )
+pValue = format( anova( lm( myT$X130864 ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
+plot( myT$X130864, myT$L_crispatus, main =pValue )
 
-pValue = format( anova( lm( log10(myT$X463361+1) ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
-plot( log10(myT$X463361+1), myT$L_crispatus,main =pValue )
+pValue = format( anova( lm( myT$X463361 ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
+plot( myT$X463361, myT$L_crispatus,main =pValue )
 
-pValue = format( anova( lm( log10(myT$X498355+1) ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
-plot( log10(myT$X498355+1),  myT$L_crispatus ,main =pValue )
+pValue = format( anova( lm( myT$X498355 ~ myT$L_crispatus ))$"Pr(>F)"[1],3)
+plot( myT$X498355,  myT$L_crispatus ,main =pValue )
 
 plot(1, type="n", axes=F, xlab="", ylab="")
 
@@ -28,11 +27,11 @@ par(mfrow=c(2,2))
 pValue = format( anova( lm( myT$L_crispatus ~ myT$group_number))$"Pr(>F)"[1],3)
 plot( myT$L_crispatus ~ myT$group_number, main =pValue)
 
-pValue = format( anova( lm( log10(myT$X130864+1)~ myT$group_number))$"Pr(>F)"[1],3)
-plot( log10(myT$X130864+1)~ myT$group_number, main=pValue)
+pValue = format( anova( lm( myT$X130864~ myT$group_number))$"Pr(>F)"[1],3)
+plot( myT$X130864~ myT$group_number, main=pValue)
 
-pValue = format( anova( lm( log10(myT$X463361+1)~ myT$group_number))$"Pr(>F)"[1],3)
-plot( log10(myT$X463361+1)~ myT$group_number, main=pValue)
+pValue = format( anova( lm( myT$X463361~ myT$group_number))$"Pr(>F)"[1],3)
+plot( myT$X463361~ myT$group_number, main=pValue)
 
-pValue = format( anova( lm( log10(myT$X498355+1)~ myT$group_number))$"Pr(>F)"[1],3)
-plot( log10(myT$X498355+1)~ myT$group_number, main=pValue)
+pValue = format( anova( lm( myT$X498355~ myT$group_number))$"Pr(>F)"[1],3)
+plot( myT$X498355~ myT$group_number, main=pValue)
