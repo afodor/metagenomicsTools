@@ -1,0 +1,6 @@
+rm(list=ls())
+
+setwd("C:\\lactoCheck")
+
+myT <- read.table("Lacto_Crispatus.tsv", sep="\t", header=TRUE, row.names=1)
+
