@@ -4,7 +4,7 @@ setwd("C:\\tingData\\may_2017_rerun")
 
 for( level in c(2,6))
 {
-	inFileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", level,".txt",sep="")
+	inFileName <- paste("pcoa_rerunPlusMetadata_L", level,".txt",sep="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
@@ -12,7 +12,7 @@ for( level in c(2,6))
 		
 	times <- sort(unique( factor(myT$time)))
 		
-	pdf(paste("FiveGroupsOneAtATime_L", level, ".pdf",sep=""))
+	pdf(paste("FiveGroupsOneAtATimePCOA_L", level, ".pdf",sep=""))
 		
 	par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
 		
@@ -31,7 +31,7 @@ for( level in c(2,6))
 	index <-1 
 		
 	for( i in 5:ncol(myT))
-		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{
 			for( j in 1:length(times) ) 
 			{
@@ -99,7 +99,7 @@ for( level in c(2,6))
 		dFrame$pValuesTime12Adjusted <- p.adjust( dFrame$pValueList.time12, method = "BH")
 		dFrame$pValuesTime18Adjusted <- p.adjust( dFrame$pValueList.time18, method = "BH")
 		
-		write.table(dFrame, file=paste("pValuesFiveSeparateL_", level,".txt",sep=""), sep="\t",row.names=FALSE)
+		write.table(dFrame, file=paste("pValuesFiveSeparatePCOA_L", level, ".txt",sep=""), sep="\t",row.names=FALSE)
 		plot( logPMean0, logPMean3,pch=16,cex=2)
 		summary( lm(logPMean3 ~ logPMean0))
 		abline(lm(logPMean3 ~ logPMean0))
