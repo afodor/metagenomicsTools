@@ -2,102 +2,107 @@ rm(list=ls())
 
 setwd("C:\\tingData\\may_2017_rerun")
 
-inFileName <- "otuAsColumnsLogNorm_rerunPlusMetadata.txt"
-myT <-read.table(inFileName,header=TRUE,sep="\t")
-numCols <- ncol(myT)
-myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
-myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
-
-times <- sort(unique( factor(myT$time)))
-
-pdf("FiveGroupsOneAtATime.pdf")
-
-par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
-
-pValueList <- list(c(),c(),c(),c(),c())
-
-mean0WT <- vector()
-mean0KO <- vector()
-logPMean0 <- vector()
-
-mean3WT <- vector()
-mean3KO <- vector()
-logPMean3 <- vector()
-
-
-names <- vector()
-index <-1 
-
-for( i in 5:ncol(myT))
-	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
-	{
-		for( j in 1:length(times) ) 
+for( level in c(2,6))
+{
+	inFileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", level,".txt",sep="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c(rep("character",3), rep("numeric", numCols-3))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+		
+	times <- sort(unique( factor(myT$time)))
+		
+	pdf(paste("FiveGroupsOneAtATime_L", level, ".pdf",sep=""))
+		
+	par(mfcol=c(3,2), mar=c(4,4,1,1), oma=c(2,2,1,1))
+		
+	pValueList <- list(c(),c(),c(),c(),c())
+		
+	mean0WT <- vector()
+	mean0KO <- vector()
+	logPMean0 <- vector()
+		
+	mean3WT <- vector()
+	mean3KO <- vector()
+	logPMean3 <- vector()
+		
+		
+	names <- vector()
+	index <-1 
+		
+	for( i in 5:ncol(myT))
+		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{
-			val <- myT[myT$time==times[j],i]
-			genotypes <- myT$genotype[myT$time==times[j]]
-			
-			pVal <- t.test( val[ genotypes=="WT" ] ,val[ genotypes=="KO" ] )$p.value
-			boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ),
-			ylab= names(myT)[i])
-			
-			pValueList[[j]][index] <- pVal
-			names[index] <- names(myT)[i]
-			
-			myFrame <- data.frame(val, genotypes)
-			
-			stripchart(val ~ genotypes, 
-				data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names(myT)[i] )	
-				
-			if( j == 1 ) 
+			for( j in 1:length(times) ) 
 			{
-				mean0WT[index] = mean(val[ genotypes=="WT" ])
-				mean0KO[index] = mean(val[ genotypes=="KO" ])
+				val <- myT[myT$time==times[j],i]
+				genotypes <- myT$genotype[myT$time==times[j]]
+					
+				pVal <- t.test( val[ genotypes=="WT" ] ,val[ genotypes=="KO" ] )$p.value
+				boxplot( val ~ genotypes, main = paste("time=",times[j]," p=", format(pVal,digits=3),sep="" ),
+					ylab= names(myT)[i])
+					
+				pValueList[[j]][index] <- pVal
+				names[index] <- names(myT)[i]
+					
+				myFrame <- data.frame(val, genotypes)
+					
+				stripchart(val ~ genotypes, 
+						data = myFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names(myT)[i] )	
+						
+				if( j == 1 ) 
+				{
+					mean0WT[index] = mean(val[ genotypes=="WT" ])
+					mean0KO[index] = mean(val[ genotypes=="KO" ])
+						
+					logPMean0[index] = log10(pVal)
+						
+					if( mean0WT[index] > mean0KO[index] )
+						logPMean0[index] = - logPMean0[index] 
+				}
+					
+					if( j == 2 ) 
+					{
+						mean3WT[index] = mean(val[ genotypes=="WT" ])
+						mean3KO[index] = mean(val[ genotypes=="KO" ])
+						
+						logPMean3[index] = log10(pVal)
+						
+						if( mean3WT[index] > mean3KO[index] )
+							logPMean3[index] = - logPMean3[index] 
+					}
+				}
 				
-				logPMean0[index] = log10(pVal)
-				
-				if( mean0WT[index] > mean0KO[index] )
-					logPMean0[index] = - logPMean0[index] 
+				plot(1, type="n", axes=F, xlab="", ylab="")		
+				 mtext( names(myT)[i] ,
+		        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+		        
+		        index <- index + 1
 			}
 			
-			if( j == 2 ) 
-			{
-				mean3WT[index] = mean(val[ genotypes=="WT" ])
-				mean3KO[index] = mean(val[ genotypes=="KO" ])
-				
-				logPMean3[index] = log10(pVal)
-				
-				if( mean3WT[index] > mean3KO[index] )
-					logPMean3[index] = - logPMean3[index] 
-			}
+		for( i in 1:5)
+		{
+			hist(pValueList[[i]], breaks=20, main=paste("time=", times[i]), xlab="")
 		}
 		
-		plot(1, type="n", axes=F, xlab="", ylab="")		
-		 mtext( names(myT)[i] ,
-        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
-        
-        index <- index + 1
-	}
-	
-for( i in 1:5)
-{
-	hist(pValueList[[i]], breaks=20, main=paste("time=", times[i]), xlab="")
+		dev.off()
+		
+		names(pValueList) <- c( "time0", "time3", "time4", "time12", "time18" )
+		
+		dFrame <- data.frame( names,pValueList$time0,pValueList$time3,
+		pValueList$time4,pValueList$time12,pValueList$time18,mean0WT,mean0KO,logPMean0,
+		mean3WT,mean3KO,logPMean3) 
+		dFrame <- dFrame [order(dFrame$pValueList.time0),]
+		dFrame$pValuesTime0Adjusted <- p.adjust( dFrame$pValueList.time0, method = "BH")
+		dFrame$pValuesTime3Adjusted <- p.adjust( dFrame$pValueList.time3, method = "BH")
+		dFrame$pValuesTime4Adjusted <- p.adjust( dFrame$pValueList.time4, method = "BH")
+		dFrame$pValuesTime12Adjusted <- p.adjust( dFrame$pValueList.time12, method = "BH")
+		dFrame$pValuesTime18Adjusted <- p.adjust( dFrame$pValueList.time18, method = "BH")
+		
+		write.table(dFrame, file=paste("pValuesFiveSeparate.txt",sep=""), sep="\t",row.names=FALSE)
+		plot( logPMean0, logPMean3,pch=16,cex=2)
+		summary( lm(logPMean3 ~ logPMean0))
+		abline(lm(logPMean3 ~ logPMean0))
+		
 }
 
-dev.off()
-
-names(pValueList) <- c( "time0", "time3", "time4", "time12", "time18" )
-
-dFrame <- data.frame( names,pValueList$time0,pValueList$time3,
-pValueList$time4,pValueList$time12,pValueList$time18,mean0WT,mean0KO,logPMean0,
-mean3WT,mean3KO,logPMean3) 
-dFrame <- dFrame [order(dFrame$pValueList.time0),]
-dFrame$pValuesTime0Adjusted <- p.adjust( dFrame$pValueList.time0, method = "BH")
-dFrame$pValuesTime3Adjusted <- p.adjust( dFrame$pValueList.time3, method = "BH")
-dFrame$pValuesTime4Adjusted <- p.adjust( dFrame$pValueList.time4, method = "BH")
-dFrame$pValuesTime12Adjusted <- p.adjust( dFrame$pValueList.time12, method = "BH")
-dFrame$pValuesTime18Adjusted <- p.adjust( dFrame$pValueList.time18, method = "BH")
-
-write.table(dFrame, file=paste("pValuesFiveSeparate.txt",sep=""), sep="\t",row.names=FALSE)
-plot( logPMean0, logPMean3,pch=16,cex=2)
-summary( lm(logPMean3 ~ logPMean0))
-abline(lm(logPMean3 ~ logPMean0))
