@@ -47,10 +47,10 @@ for (aLevel in c(2,6))
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 	
-	#dFrame <- dFrame [order(dFrame$pValuesTime),]
+	dFrame <- dFrame [order(dFrame$pValuesTime),]
 	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
-	dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	
 	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
@@ -61,7 +61,7 @@ for (aLevel in c(2,6))
 	write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 	
-	pdf(paste("cageForTaxaSortedGenotype_L", aLevel, ".pdf"))
+	pdf(paste("cageForTaxaSortedTime_L", aLevel, ".pdf"))
 	
 	for( i in 1:nrow(dFrame))
 	{
@@ -96,11 +96,13 @@ for (aLevel in c(2,6))
 					"time=", format( dFrame$pValuesTimeAdjusted[i] , digits=3 ) )
 		
 		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
+		abline( lm(relativeAbundance ~ myT$time))
 		
 		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLossAdjusted[i] , digits=3 ) )
 		
 		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 				main = mainText)
+		abline( lm(myT$maxWeightLossPercent ~ relativeAbundance ))
 		
 		mtext(dFrame$names[i] ,
 	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
