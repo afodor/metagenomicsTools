@@ -1,0 +1,52 @@
+rm(list=ls())
+
+setwd("C:\\tingData\\may_2017_rerun")
+library("nlme")
+
+aLevel <- 6
+#for (aLevel in c(2,6))
+{
+	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
+	myT <- read.table(fileName, header=TRUE, sep="\t")
+	
+	pValuesGenotype <- vector()
+	pValuesTime <- vector()
+	pValuesWeightLoss <- vector()
+	indexes <- vector()
+	names <- vector()
+	
+	index <- 1
+	
+	# set to 8:ncol(myT) to pick up metadata and shannon entropy
+		for( i in 12:ncol(myT))
+			if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{	
+		relativeAbundance <- myT[,i]
+		cage <- factor(myT$cage)
+		genotype <- factor(myT$genotype )
+		maxWeightLossPercent  <- myT$maxWeightLossPercent
+		time <- as.numeric( myT$time)
+		
+		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
+		
+		names[index] <- names(myT)[i]
+		pValuesGenotype[index] <-anova(lm( relativeAbundance ~ genotype  ))$"Pr(>F)"[1]
+		pValuesTime[index] <-anova(lm( relativeAbundance ~ time  ))$"Pr(>F)"[1]
+		pValuesWeightLoss[index] <- anova(lm( relativeAbundance ~ maxWeightLossPercent   ))$"Pr(>F)"[1]
+		indexes[index] <- i
+		
+		index <- index + 1
+	}
+	
+	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesWeightLoss,indexes)
+	
+	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
+	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+	
+	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
+	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
+	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
+	
+	write.table(dFrame, file=paste("univariateModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
+}
