@@ -2,7 +2,8 @@ rm(list=ls())
 
 setwd("C:\\tingData\\may_2017_rerun")
 
-for( level in c(2,6))
+level <- 6
+#for( level in c(2,6))
 {
 	inFileName <- paste("pcoa_rerunPlusMetadata_L", level,".txt",sep="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
@@ -30,7 +31,7 @@ for( level in c(2,6))
 	names <- vector()
 	index <-1 
 		
-	for( i in 5:ncol(myT))
+	for( i in 11:22)
 		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 		{
 			for( j in 1:length(times) ) 
@@ -103,6 +104,14 @@ for( level in c(2,6))
 		plot( logPMean0, logPMean3,pch=16,cex=2)
 		summary( lm(logPMean3 ~ logPMean0))
 		abline(lm(logPMean3 ~ logPMean0))
+		
+		
+		sum( p.adjust(dFrame$pValueList.time0[!is.na(dFrame$pValueList.time0)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time3[!is.na(dFrame$pValueList.time3)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time4[!is.na(dFrame$pValueList.time4)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time12[!is.na(dFrame$pValueList.time12)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time18[!is.na(dFrame$pValueList.time18)],method="BH") < 0.1)
+		
 		
 }
 
