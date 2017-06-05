@@ -3,7 +3,8 @@
 	setwd("C:\\tingData\\may_2017_rerun")
 	library("nlme")
 	
-	for (aLevel in c(2,6))
+	aLevel <- 6
+	#for (aLevel in c(2,6))
 	{
 		fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 		myT <- read.table(fileName, header=TRUE, sep="\t")
@@ -59,7 +60,7 @@
 			pValuetimemaxWeightLossPercentInteraction,
 			pValueGenotypeTimeMaxWeightLossPercentInteraction ,indexes)
 		
-		dFrame <- dFrame [order(dFrame$pValuesTime),]
+		#dFrame <- dFrame [order(dFrame$pValuesTime),]
 		#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 		#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 		#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
