@@ -15,13 +15,14 @@ import utils.ConfigReader;
 
 public class PivotToOtuTable
 {
-	private static void writePivotTable(  HashMap<String, List<Integer>> map, String[] sampleNames) throws Exception
+	private static void writePivotTable(  HashMap<String, List<Integer>> map, String[] sampleNames,
+			int aLevel) throws Exception
 	{
 		List<String> taxaList = new ArrayList<String>(map.keySet());
 		Collections.sort(taxaList);
 		
 		File outFile = new File(ConfigReader.getTingDir() + File.separator +  "may_2017_rerun" 
-				+ File.separator + "otuAsColumns_rerun.txt");
+				+ File.separator + "otuAsColumns_rerun_" + aLevel + ".txt");
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(outFile));
 		
@@ -48,14 +49,20 @@ public class PivotToOtuTable
 		OtuWrapper wrapper = new OtuWrapper(outFile);
 		wrapper.writeNormalizedLoggedDataToFile(new File(ConfigReader.getTingDir() 
 				+ File.separator +  "may_2017_rerun" 
-				+ File.separator + "otuAsColumnsLogNorm_rerun.txt"));
+				+ File.separator + "otuAsColumnsLogNorm_rerun_" + aLevel + ".txt"));
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
+		pivotForALevel(2);
+		pivotForALevel(6);
+	}
+	
+	public static void pivotForALevel(int aLevel) throws Exception
+	{
 		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getTingDir() 
 				+ File.separator + "may_2017_rerun" + File.separator + 
-				"20170512_Casp11_DSS_5groups_16S_DeNovo_NoPhiX_NoPrimerSeq_L6.txt")));
+				"20170512_Casp11_DSS_5groups_16S_DeNovo_NoPhiX_NoPrimerSeq_L" + aLevel + ".txt")));
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -95,6 +102,6 @@ public class PivotToOtuTable
 		}
 		
 		reader.close();
-		writePivotTable(map, topSplits);
+		writePivotTable(map, topSplits, aLevel);
 	}
 }
