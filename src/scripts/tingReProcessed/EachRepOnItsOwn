@@ -104,5 +104,12 @@ for( level in c(2,6))
 		summary( lm(logPMean3 ~ logPMean0))
 		abline(lm(logPMean3 ~ logPMean0))
 		
+		sum( p.adjust(dFrame$pValueList.time0[!is.na(dFrame$pValueList.time0)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time3[!is.na(dFrame$pValueList.time3)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time4[!is.na(dFrame$pValueList.time4)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time12[!is.na(dFrame$pValueList.time12)],method="BH") < 0.1)
+		sum( p.adjust(dFrame$pValueList.time18[!is.na(dFrame$pValueList.time18)],method="BH") < 0.1)
+		
+		
 }
 
