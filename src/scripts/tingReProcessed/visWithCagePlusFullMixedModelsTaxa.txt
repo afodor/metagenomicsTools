@@ -63,7 +63,7 @@
 		#dFrame <- dFrame [order(dFrame$pValuesTime),]
 		#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 		#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
-		#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+		dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 		
 		dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 		dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
@@ -134,3 +134,13 @@
 		
 		dev.off()	
 	}
+	
+sum( dFrame$pValuesGenotypeAdjusted < 0.1)
+sum( dFrame$pValuesTimeAdjusted < 0.1)
+sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
+sum( dFrame$pValuesWeightLossAdjusted < 0.1)
+sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
+sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
+sum( dFrame$ allInteractionsAdjusted   < 0.1)
+
+
