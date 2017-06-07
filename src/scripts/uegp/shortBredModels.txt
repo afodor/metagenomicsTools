@@ -30,8 +30,26 @@ for( i in 47:ncol(myT))
 		names[index] <- names(myT)[i]
 		indexes[index] <- index
 		aLabel <- paste(names[index], format( pValuesUpDown[index],3 ))
+		
+		bug <- myT[,i]
+		time <- myT$Timepoint
+		location <- myT$Location
+		
+		myFrame <- data.frame( bug, time, location, updown )
+		
+			
 		boxplot(  myT[,i] ~ updown , main = aLabel) 
+		
+		stripchart(bug~ updown, 
+					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+		
 		plot(  myT[,i] ~ myT$Location, main= "location") 
+		
+		stripchart(bug~ location, 
+					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+		
 		plot(myT[,i]  ~ myT$Timepoint, main = "time")
 		plot(1, type="n", axes=F, xlab="", ylab="")
 		
