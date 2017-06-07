@@ -4,11 +4,12 @@ setwd("C:\\uegp\\june7")
 
 myT <- read.table("shortBREDwMetadataDotsRemovedOnlyDeepest.txt", header=TRUE,sep="\t")
 
+myT <- myT[ myT$Location == "Sugar Creek" | myT$Location == "Mallard Creek" ,]
+myT <- myT[ myT$Sample=="UP A" | myT$Sample=="UP B" | myT$Sample=="DS A" | myT$Sample=="DS B",]
 
-myT$Sample=="UP A" | myT$Sample=="UP B"
-myT$Sample=="DS A" | myT$Sample=="DS B"
-
+pValuesLocation <- vector()
 pValuesUpDown <- vector()
+pValuesTimepoint <- vector()
 names <- vector()
 index <- 1
 indexes <- vector()
@@ -19,25 +20,38 @@ par(mfrow=c(2,2))
 for( i in 47:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
-		upVals <- myT[myT$Sample=="UP A" | myT$Sample=="UP B",i]
-		downVals <- myT[myT$Sample=="DS A" | myT$Sample=="DS B",i]
-		
-		pValuesUpDown[index] <- t.test(upVals, downVals)$p.value
+		updown <- factor(ifelse( myT$Sample=="UP A" | myT$Sample=="UP B" , "UP", "DOWN"))
+	
+		myLm <- lm( myT[,i] ~ myT$Location + updown + factor(myT$Timepoint)  )		
+		myAnova <- anova(myLm)
+		pValuesLocation[index] <- myAnova$"Pr(>F)"[1]
+		pValuesUpDown[index] <- myAnova$"Pr(>F)"[2]
+		pValuesTimepoint[index] <- myAnova$"Pr(>F)"[3]
 		names[index] <- names(myT)[i]
 		indexes[index] <- index
 		aLabel <- paste(names[index], format( pValuesUpDown[index],3 ))
-		boxplot(  upVals, downVals, main = aLabel) 
+		boxplot(  myT[,i] ~ updown , main = aLabel) 
+		plot(  myT[,i] ~ myT$Location, main= "location") 
+		plot(myT[,i]  ~ myT$Timepoint, main = "time")
+		plot(1, type="n", axes=F, xlab="", ylab="")
+		
 		
 		index <- index + 1
 	}
 
-dFrame <- data.frame(names, pValuesUpDown)
+dFrame <- data.frame(names, indexes, pValuesUpDown, pValuesLocation,pValuesTimepoint)
 
 dFrame <- dFrame [order(dFrame$pValuesUpDown),]
 dFrame$pValuesUpDownAdjusted<- p.adjust( dFrame$pValuesUpDown, method = "BH")
+dFrame$pValuesLocationAdjusted<- p.adjust( dFrame$pValuesLocation, method = "BH")
+dFrame$pValuesTimepointAdjusted<- p.adjust( dFrame$pValuesTimepoint, method = "BH")
+	
 	
 write.table(dFrame, file=paste("shortbred_models", ".txt",sep=""), sep="\t",row.names=FALSE)
 
 hist(pValuesUpDown)
-	
+hist(pValuesLocation)
+hist(pValuesTimepoint)
+
+
 dev.off()
