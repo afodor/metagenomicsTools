@@ -21,6 +21,7 @@ for( i in 47:ncol(myT))
 	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{
 		updown <- factor(ifelse( myT$Sample=="UP A" | myT$Sample=="UP B" , "UP", "DOWN"))
+		updown <- factor(updown, c("UP", "DOWN"))
 	
 		myLm <- lm( myT[,i] ~ myT$Location + updown + factor(myT$Timepoint)  )		
 		myAnova <- anova(myLm)
@@ -44,13 +45,13 @@ for( i in 47:ncol(myT))
 					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 		
 		
-		plot(  myT[,i] ~ myT$Location, main= "location") 
+		plot(  myT[,i] ~ myT$Location, main= paste( "location ", format(pValuesLocation[index],3))) 
 		
 		stripchart(bug~ location, 
 					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 		
 		
-		plot(myT[,i]  ~ myT$Timepoint, main = "time")
+		plot(myT[,i]  ~ myT$Timepoint, main= paste( "time ", format(pValuesTimepoint[index],3)))
 		plot(1, type="n", axes=F, xlab="", ylab="")
 		
 		
