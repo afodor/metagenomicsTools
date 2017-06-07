@@ -19,7 +19,7 @@ public class RemoveDotsFromFirstLine
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getUEGPDir() + File.separator + "shortBREDwMetadataDotsRemoved.txt")));
 		
-		writer.write(reader.readLine().replaceAll("\\.", "_").replaceAll("\\|", "_") + "\n");
+		writer.write(reader.readLine().replaceAll("\\.", "_").replaceAll("\\|", "_").replaceAll("#", "@") + "\n");
 		
 		for(String s= reader.readLine() ; s != null; s= reader.readLine())
 		{
