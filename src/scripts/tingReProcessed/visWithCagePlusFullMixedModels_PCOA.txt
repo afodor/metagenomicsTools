@@ -48,7 +48,7 @@ aLevel <- 6
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesWeightLoss,indexes)
 	
-	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	

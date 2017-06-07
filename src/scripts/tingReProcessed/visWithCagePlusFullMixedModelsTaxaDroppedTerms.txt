@@ -35,7 +35,7 @@
 			
 			myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 			
-			M.everything <- lme ( relativeAbundance ~ genotype * time * maxWeightLossPercent, method="REML", random = ~1 | cage,
+			M.everything <- lme ( relativeAbundance ~ genotype * time + maxWeightLossPercent, method="REML", random = ~1 | cage,
 						data = myFrame) 
 			
 			myAnova<- anova(M.everything )
@@ -46,9 +46,6 @@
 			pValuesGenotype[index] <-myAnova$"p-value"[2] 
 			pValuesTime[index] <-myAnova$"p-value"[3] 
 			pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[5] 
-			pValueGenotypemaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[6] 
-			pValuetimemaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[7] 
-			pValueGenotypeTimeMaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[8] 
 		
 			indexes[index] <- i
 			
@@ -56,9 +53,7 @@
 		}
 		
 		dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,  
-		pValuesWeightLoss, pValueGenotypemaxWeightLossPercentInteraction,
-			pValuetimemaxWeightLossPercentInteraction,
-			pValueGenotypeTimeMaxWeightLossPercentInteraction ,indexes)
+		pValuesWeightLoss,indexes)
 		
 		#dFrame <- dFrame [order(dFrame$pValuesTime),]
 		#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
@@ -69,11 +64,6 @@
 		dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 		dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
 		dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
-		
-		dFrame$pValueGenotypemaxWeightLossPercentInteractionAdjusted <- p.adjust( dFrame$pValueGenotypemaxWeightLossPercentInteraction, method = "BH")
-		dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  <- p.adjust( dFrame$pValuetimemaxWeightLossPercentInteraction, method = "BH")
-		dFrame$allInteractionsAdjusted <- p.adjust( dFrame$pValueGenotypeTimeMaxWeightLossPercentInteraction , method = "BH")
-		
 		
 		write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 		
@@ -139,8 +129,5 @@ sum( dFrame$pValuesGenotypeAdjusted < 0.1)
 sum( dFrame$pValuesTimeAdjusted < 0.1)
 sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
 sum( dFrame$pValuesWeightLossAdjusted < 0.1)
-sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
-sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
-sum( dFrame$ allInteractionsAdjusted   < 0.1)
 
 
