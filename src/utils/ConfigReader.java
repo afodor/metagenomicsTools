@@ -56,6 +56,8 @@ public class ConfigReader
 	public static final String RDP_JAR_PATH= "RDP_JAR_PATH";
 	public static final String MOCK_SEQ_DIR="MOCK_SEQ_DIR";
 	
+	public static final String UEGP_DIR = "UEGP_DIR";
+	
 	public static final String D3_DIR = "D3_DIR";
 	
 	public static final String R_DIRECTORY = "R_DIRECTORY";
@@ -153,6 +155,11 @@ public class ConfigReader
 	public static String getSangLabMay2016Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(SANG_LAB_MAY_2016_DIR);
+	}
+	
+	public static String getUEGPDir() throws Exception
+	{
+		return getConfigReader().getAProperty(UEGP_DIR);
 	}
 	
 	public static String getLyteNov2016Dir() throws Exception

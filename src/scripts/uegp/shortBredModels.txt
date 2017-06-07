@@ -1,0 +1,5 @@
+rm(list=ls())
+
+setwd("C:\\uegp\\june7")
+
+myT <- read.table("shortBREDwMetadata.txt", header=TRUE,sep="\t")
