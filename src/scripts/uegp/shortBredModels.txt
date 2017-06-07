@@ -17,18 +17,19 @@ pdf("shortbredPlots.pdf")
 par(mfrow=c(2,2))
 
 for( i in 47:ncol(myT))
-{
-	upVals <- myT[myT$Sample=="UP A" | myT$Sample=="UP B",i]
-	downVals <- myT[myT$Sample=="DS A" | myT$Sample=="DS B",i]
-	
-	pValuesUpDown[index] <- t.test(upVals, downVals)$p.value
-	names[index] <- names(myT)[i]
-	indexes[index] <- index
-	aLabel <- paste(names[index], format( pValuesUpDown[index],3 ))
-	boxplot(  upVals, downVals, main = aLabel) 
-	
-	index <- index + 1
-}
+	if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+	{
+		upVals <- myT[myT$Sample=="UP A" | myT$Sample=="UP B",i]
+		downVals <- myT[myT$Sample=="DS A" | myT$Sample=="DS B",i]
+		
+		pValuesUpDown[index] <- t.test(upVals, downVals)$p.value
+		names[index] <- names(myT)[i]
+		indexes[index] <- index
+		aLabel <- paste(names[index], format( pValuesUpDown[index],3 ))
+		boxplot(  upVals, downVals, main = aLabel) 
+		
+		index <- index + 1
+	}
 
 dFrame <- data.frame(names, pValuesUpDown)
 
@@ -36,5 +37,7 @@ dFrame <- dFrame [order(dFrame$pValuesUpDown),]
 dFrame$pValuesUpDownAdjusted<- p.adjust( dFrame$pValuesUpDown, method = "BH")
 	
 write.table(dFrame, file=paste("shortbred_models", ".txt",sep=""), sep="\t",row.names=FALSE)
+
+hist(pValuesUpDown)
 	
 dev.off()
