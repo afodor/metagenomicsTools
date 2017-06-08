@@ -31,7 +31,7 @@ pValuesInteraction <- vector()
 mdsIndex <- vector()
 names <- vector()
 
-for( i in 491:500)
+for( i in 22:60)
 {
 	yVal <- myMerge[,i]
 	stress <- myMerge$Group
