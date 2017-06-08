@@ -31,7 +31,7 @@ pValuesInteraction <- vector()
 mdsIndex <- vector()
 names <- vector()
 
-for( i in 22:60)
+for( i in 491:500)
 {
 	yVal <- myMerge[,i]
 	stress <- myMerge$Group
@@ -57,7 +57,7 @@ for( i in 22:60)
 	index <- index + 1
 }
 
-dFrame <- data.frame(  pValuesStress,pValuesSex,pValuesInteraction,pValuesCage,names)
+dFrame <- data.frame(  names,pValuesStress,pValuesSex,pValuesInteraction,pValuesCage)
 
 dFrame <- dFrame [order(dFrame$pValuesInteraction),]
 dFrame$pValuesStressAdjusted<- p.adjust( dFrame$pValuesStress, method = "BH")
@@ -68,17 +68,25 @@ dFrame$pValuesCageAdjusted<- p.adjust( dFrame$pValuesCage, method = "BH")
 	
 write.table(dFrame, file=paste("behavior_models", ".txt",sep=""), sep="\t",row.names=FALSE)
 
-
-plot( mdsIndex, -log10( pValuesStress), ylim=c(0,10))
-lines( mdsIndex, -log10( pValuesStress), ylim=c(0,10))
-
-points( mdsIndex, -log10( pValuesSex),col="blue")
-lines( mdsIndex, -log10( pValuesSex),col="blue")
-
-points( mdsIndex, -log10( pValuesInteraction),col="red")
-lines( mdsIndex, -log10( pValuesInteraction), col="red")
-
-points( mdsIndex, -log10(pValuesCage), col="grey")
+pValuesCage<- p.adjust(pValuesCage, method="BH")
+plot( mdsIndex, -log10(pValuesCage), col="grey",pch=16,ylim=c(0,10))
 lines( mdsIndex, -log10(pValuesCage), col="grey")
 
+
+pValuesStress <- p.adjust(pValuesStress, method="BH")
+points( mdsIndex, -log10( pValuesStress), ylim=c(0,10),pch=16,col="black")
+lines( mdsIndex, -log10( pValuesStress), ylim=c(0,10),col="black")
+
+
+pValuesSex<- p.adjust(pValuesSex, method="BH")
+points( mdsIndex, -log10( pValuesSex),col="blue",pch=16)
+lines( mdsIndex, -log10( pValuesSex),col="blue")
+
+
+pValuesInteraction<- p.adjust(pValuesInteraction, method="BH")
+points( mdsIndex, -log10( pValuesInteraction),col="red",pch=16)
+lines( mdsIndex, -log10( pValuesInteraction), col="red")
+
+
+lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
 eigenvals(myPCOA)/sum(eigenvals(myPCOA))

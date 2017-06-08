@@ -8,7 +8,7 @@ setwd("C:\\MattStressManuscript")
 
 myT <- read.table("closedQIIMER1_L7_LogNormwithMetadata.txt", sep="\t", header=TRUE, comment.char="@")
 
-myT <- myT[myT$Source=="feces", ]
+myT <- myT[myT$Source=="Cecal Content", ]
 
 data <- myT[,64:490]
 
