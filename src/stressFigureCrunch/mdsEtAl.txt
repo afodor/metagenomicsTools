@@ -60,7 +60,27 @@ for( i in 491:500)
 	index <- index + 1
 }
 
-plot( mdsIndex, -log10( pValuesStress), ylim=c(0,10))
-lines( mdsIndex, -log10( pValuesSex),col="blue")
-lines( mdsIndex, -log10( pValuesInteraction), col="red")
+pValuesCage<- p.adjust(pValuesCage, method="BH")
+plot( mdsIndex, -log10(pValuesCage), col="grey",pch=16,ylim=c(0,10))
 lines( mdsIndex, -log10(pValuesCage), col="grey")
+
+
+pValuesStress <- p.adjust(pValuesStress, method="BH")
+points( mdsIndex, -log10( pValuesStress), ylim=c(0,10),pch=16,col="black")
+lines( mdsIndex, -log10( pValuesStress), ylim=c(0,10),col="black")
+
+
+pValuesSex<- p.adjust(pValuesSex, method="BH")
+points( mdsIndex, -log10( pValuesSex),col="blue",pch=16)
+lines( mdsIndex, -log10( pValuesSex),col="blue")
+
+
+pValuesInteraction<- p.adjust(pValuesInteraction, method="BH")
+points( mdsIndex, -log10( pValuesInteraction),col="red",pch=16)
+lines( mdsIndex, -log10( pValuesInteraction), col="red")
+
+
+lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+
+legend("topright",c("Stress", "Sex", "Stress:Sex", "cage"),pch=16, col=c("black", "blue", "red", "grey"))
+
