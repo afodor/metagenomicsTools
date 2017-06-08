@@ -44,12 +44,16 @@ for( i in 491:500)
 	myModel <- gls( yVal ~ stress * sex , method = "REML", correlation = corCompSymm(form= ~1|cage) ,
 	data = myFrame )
 	
+	myModelNoCage <-gls( yVal ~ stress * sex , method = "REML",data = myFrame ) 
+	
 	myAnova <- anova(myModel)
 	
 	mdsIndex[index] <- index
 	pValuesStress[index] <- summary(myModel)$tTable[2,4]
 	pValuesSex[index] <- summary(myModel)$tTable[3,4]
 	pValuesInteraction[index] <- summary(myModel)$tTable[4,4]
+	pValuesCage[index] <- anova( myModel, myModelNoCage)$"p-value"[2]
+	
 	
 	index <- index + 1
 }
@@ -57,4 +61,4 @@ for( i in 491:500)
 plot( mdsIndex, -log10( pValuesStress), ylim=c(0,10))
 lines( mdsIndex, -log10( pValuesSex),col="blue")
 lines( mdsIndex, -log10( pValuesInteraction), col="red")
-
+lines( mdsIndex, -log10(pValuesCage), col="grey")
