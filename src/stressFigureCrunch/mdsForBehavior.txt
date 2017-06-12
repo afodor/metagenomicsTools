@@ -58,6 +58,11 @@ for( i in 491:500)
 	
 	boxplot( yVal~ stress *sex, main= names[index], las=2) 
 	
+	
+	stripchart(yVal~ stress *sex, 
+					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+	
 	index <- index + 1
 }
 
