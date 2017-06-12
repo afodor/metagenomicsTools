@@ -32,6 +32,7 @@ mdsIndex <- vector()
 names <- vector()
 
 pdf( "behaviorMDS.pdf")
+par(mfrow=c(2,1))
 
 for( i in 491:500)
 {
@@ -62,6 +63,11 @@ for( i in 491:500)
 	stripchart(yVal~ stress *sex, 
 					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			
+	boxplot( yVal~ cage, main= names[index], las=2) 
+	
+	stripchart(yVal~ cage, 
+					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	
 	
 	index <- index + 1
 }
