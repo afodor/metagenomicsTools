@@ -61,9 +61,9 @@
 			pValueGenotypeTimeMaxWeightLossPercentInteraction ,indexes)
 		
 		#dFrame <- dFrame [order(dFrame$pValuesTime),]
-		#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
+		dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 		#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
-		dFrame <- dFrame [order(dFrame$pValuesGenotype),]
+		#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 		
 		dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 		dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
