@@ -29,7 +29,10 @@ pValuesSex <- vector()
 pValuesInteraction <- vector()
 mdsIndex <- vector()
 
-for( i in 491:500)
+
+pdf("forTaxa.pdf")
+#for( i in 491:500)
+for( i in 64:490)
 {
 	yVal <- myMerge[,i]
 	stress <- myMerge$Group
@@ -44,10 +47,17 @@ for( i in 491:500)
 	pValuesSex[index] <-  myAnova$"Pr(>F)"[2]
 	pValuesInteraction[index] <-  myAnova$"Pr(>F)"[3]
 	
+	boxplot( yVal~ stress *sex, main= names(myMerge)[i], las=2) 
+	
+	
+	stripchart(yVal~ stress *sex, 
+					data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+	
 	index <- index + 1
 }
 
-
+dev.off()
 pValuesStress <- p.adjust(pValuesStress, method="BH")
 plot( mdsIndex, -log10( pValuesStress), ylim=c(0,10),pch=16,col="black")
 lines( mdsIndex, -log10( pValuesStress), ylim=c(0,10),col="black")
@@ -63,7 +73,7 @@ points( mdsIndex, -log10( pValuesInteraction),col="red",pch=16)
 lines( mdsIndex, -log10( pValuesInteraction), col="red")
 
 
-lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+lines( c(0,500), c( -log10(.05),-log10(.05)) , lty=2)
 
 legend("topright",c("Stress", "Sex", "Stress:Sex", "cage"),pch=16, col=c("black", "blue", "red", "grey"))
 

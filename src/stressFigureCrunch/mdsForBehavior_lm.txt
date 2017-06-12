@@ -27,7 +27,8 @@ pValuesInteraction <- vector()
 mdsIndex <- vector()
 names <- vector()
 
-for( i in 491:500)
+for( i in 22:60)
+#for( i in 491:500)
 {
 	yVal <- myMerge[,i]
 	stress <- myMerge$Group
@@ -72,5 +73,5 @@ points( mdsIndex, -log10( pValuesInteraction),col="red",pch=16)
 lines( mdsIndex, -log10( pValuesInteraction), col="red")
 
 
-lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+lines( c(0,100), c( -log10(.05),-log10(.05)) , lty=2)
 eigenvals(myPCOA)/sum(eigenvals(myPCOA))

@@ -34,7 +34,9 @@ pValuesCage <- vector()
 pValuesInteraction <- vector()
 mdsIndex <- vector()
 
-for( i in 491:500)
+pdf("forTaxa.pdf")
+#for( i in 491:500)
+for( i in 64:490)
 {
 	yVal <- myMerge[,i]
 	stress <- myMerge$Group
