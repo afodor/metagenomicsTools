@@ -1,0 +1,69 @@
+
+rm(list=ls())
+
+setwd("C:\\MattStressManuscript")
+
+myT <- read.table("closedQIIMER1_L7_LogNormwithMetadata.txt", sep="\t", header=TRUE, comment.char="@")
+
+myT <- myT[myT$Source=="feces", ]
+
+data <- myT[,64:490]
+
+myPCOA <- capscale(data~1,distance="bray")
+	
+myMerge <- cbind( myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("pcoa_withMetadataallData",".txt",sep=""))
+
+plot(myMerge$MDS1,myMerge$MDS2, pch = ifelse( 
+	myMerge$Sex=="male", 16,5),col=ifelse(myMerge$Group=="Control", "Blue", "Red"),cex=1.6)
+
+legend("topright",c("Male Control", "Male stressed", "Female control", "Female stressed"),pch=c(16,16,5,5), col=c("Blue", "Red", "Blue", "Red"))
+	
+plot(myMerge$MDS2,myMerge$MDS3, pch = ifelse( 
+	myMerge$Sex=="male", 16,5),col=ifelse(myMerge$Group=="Control", "Blue", "Red"),cex=1.6)
+	
+index <-1
+pValuesStress <- vector()
+pValuesSex <- vector()
+pValuesInteraction <- vector()
+mdsIndex <- vector()
+
+for( i in 491:500)
+{
+	yVal <- myMerge[,i]
+	stress <- myMerge$Group
+	sex <- myMerge$Sex
+	
+	myFrame <- data.frame(yVal, stress, sex)
+	myModel <- lm( yVal ~ stress * sex ,data = myFrame )
+	myAnova <- anova(myModel)
+	
+	mdsIndex[index] <- index
+	pValuesStress[index] <-  myAnova$"Pr(>F)"[1]
+	pValuesSex[index] <-  myAnova$"Pr(>F)"[2]
+	pValuesInteraction[index] <-  myAnova$"Pr(>F)"[3]
+	
+	index <- index + 1
+}
+
+
+pValuesStress <- p.adjust(pValuesStress, method="BH")
+plot( mdsIndex, -log10( pValuesStress), ylim=c(0,10),pch=16,col="black")
+lines( mdsIndex, -log10( pValuesStress), ylim=c(0,10),col="black")
+
+
+pValuesSex<- p.adjust(pValuesSex, method="BH")
+points( mdsIndex, -log10( pValuesSex),col="blue",pch=16)
+lines( mdsIndex, -log10( pValuesSex),col="blue")
+
+
+pValuesInteraction<- p.adjust(pValuesInteraction, method="BH")
+points( mdsIndex, -log10( pValuesInteraction),col="red",pch=16)
+lines( mdsIndex, -log10( pValuesInteraction), col="red")
+
+
+lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+
+legend("topright",c("Stress", "Sex", "Stress:Sex", "cage"),pch=16, col=c("black", "blue", "red", "grey"))
+
