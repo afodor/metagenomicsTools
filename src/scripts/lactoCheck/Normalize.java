@@ -44,12 +44,12 @@ public class Normalize
 			
 			writer.write(splits[0]);
 			
-			for( int x=1;x < 7; x++)
+			for( int x=1;x <= 7; x++)
 				writer.write("\t" + splits[x]);
 			
-			double sequenceCount = map.get(splits[2].replaceAll("\"", ""));
+			double sequenceCount = map.get(splits[3].replaceAll("\"", ""));
 			
-			for( int x=7; x < splits.length - 4; x++)
+			for( int x=8; x < splits.length - 4; x++)
 			{
 				Double val = Double.parseDouble(splits[x]);
 				
@@ -68,7 +68,7 @@ public class Normalize
 		
 	}
 	
-	private static HashMap<String, Double> getTotalCounts() throws Exception
+	static HashMap<String, Double> getTotalCounts() throws Exception
 	{
 		List<String> names = new ArrayList<String>();
 		List<Double> counts = new ArrayList<Double>();

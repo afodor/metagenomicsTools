@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import utils.ConfigReader;
 
@@ -12,6 +13,11 @@ public class AddRunAndGroup
 {
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, Double> countMap = Normalize.getTotalCounts(); 
+		
+		for(String s : countMap.keySet())
+			System.out.println(s);
+		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getLactoCheckDir() + File.separator 
 				+ "Lacto_Iners.tsv")));
@@ -22,7 +28,7 @@ public class AddRunAndGroup
 		
 		String[] splits= reader.readLine().split("\t");
 		
-		writer.write(splits[0] + "\trun");
+		writer.write(splits[0] + "\trun\tsequenceDepth");
 		
 		for( int x=1; x < splits.length; x++)
 			writer.write("\t" + splits[x]);
@@ -35,7 +41,8 @@ public class AddRunAndGroup
 			
 			writer.write(splits[0]);
 			
-			writer.write("\t" + splits[1].substring(0, 4));
+			writer.write("\t" + splits[1].substring(0, 4) + "\t" + 
+								countMap.get(splits[1]));
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
