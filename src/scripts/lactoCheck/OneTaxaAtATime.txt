@@ -1,0 +1,19 @@
+rm(list=ls())
+
+setwd("C:\\lactoCheck")
+
+myT <- read.table("gaQiimeClosedRefColumnsAsTaxaNormHandHacked.txt", sep="\t", header=TRUE)
+
+apply( myT[,16:1606],1,sum)
+
+pdf("taxaByGroup.pdf")
+
+for( i in 16:1606)
+{
+	if( sum(myT[,i] > .01 ))
+	{
+		boxplot( myT[,i] ~ myT$group_number,main = names( myT )[i] )
+	}
+}
+
+dev.off()
