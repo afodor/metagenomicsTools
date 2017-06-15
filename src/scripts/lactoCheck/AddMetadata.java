@@ -55,8 +55,17 @@ public class AddMetadata
 			{
 				PCR_DataParser pcr = pcrMap.get(codes[2]);
 				
-				if( pcr == null)
+				if( pcr == null || ! pcr.getGroup().equals(codes[2]))
 					throw new Exception("No");
+				
+				writer.write(splits[0] + "\t" + codes[2] + "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
+						"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
+								originalWrapper.getShannonEntropy(splits[0]));
+				
+				for( int x=1; x < splits.length; x++)
+					writer.write("\t" + splits[x]);
+				
+				writer.write("\n");
 			}
 			else
 			{
@@ -65,6 +74,7 @@ public class AddMetadata
 			
 		}
 		
+		writer.flush();  writer.close();
 		reader.close();
 	}
 }
