@@ -20,10 +20,10 @@ public class AddRunAndGroup
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getLactoCheckDir() + File.separator 
-				+ "Lacto_Iners.tsv")));
+				+ "Lacto_Crispatus.tsv")));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getLactoCheckDir() + File.separator + "Lacto_InersPlusRunID.tsv"
+				ConfigReader.getLactoCheckDir() + File.separator + "Lacto_CrispatusPlusRunID.tsv"
 				)));
 		
 		String[] splits= reader.readLine().split("\t");

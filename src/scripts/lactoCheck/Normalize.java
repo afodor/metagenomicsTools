@@ -30,11 +30,11 @@ public class Normalize
 		
 		BufferedWriter writer= new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getLactoCheckDir() + File.separator + 
-				"Lacto_InersLogNormPlusRunID.tsv")));
+				"Lacto_CrispatusNormPlusRunID.tsv")));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getLactoCheckDir() + File.separator + 
-				"Lacto_InersPlusRunID.tsv")));
+				"Lacto_CrispatusPlusRunID.tsv")));
 		
 		writer.write(reader.readLine() + "\n");
 		
@@ -53,7 +53,8 @@ public class Normalize
 			{
 				Double val = Double.parseDouble(splits[x]);
 				
-				double newVal = Math.log10( val / sequenceCount * average + 1 );
+				double newVal = val / sequenceCount;
+						//Math.log10( val / sequenceCount * average + 1 );
 				writer.write("\t" + newVal);
 			}
 			
