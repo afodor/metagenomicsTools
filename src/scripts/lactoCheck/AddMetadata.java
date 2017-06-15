@@ -36,7 +36,7 @@ public class AddMetadata
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		writer.write(topSplits[0] + "groupNumber\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+		writer.write(topSplits[0] + "\tgroupNumber\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
