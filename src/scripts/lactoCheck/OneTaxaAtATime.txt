@@ -3,6 +3,7 @@ rm(list=ls())
 setwd("C:\\lactoCheck")
 
 myT <- read.table("gaQiimeClosedRefColumnsAsTaxaLogNormPlusMeta.txt", sep="\t", header=TRUE)
+myT <- 
 
 pdf("taxaByGroup.pdf")
 
