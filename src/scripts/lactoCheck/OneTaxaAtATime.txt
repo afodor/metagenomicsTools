@@ -10,7 +10,7 @@ names <- vector()
 pValues <- vector()
 index <- 1
 
-for( i in 3:(ncol(myT)))
+for( i in 4:(ncol(myT)))
 {
 	if( sum(myT[,i] != 0 ) > nrow(myT)/4  )
 	{
