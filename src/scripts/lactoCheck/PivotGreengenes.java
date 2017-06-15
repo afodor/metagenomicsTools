@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class PivotGreengenes
@@ -30,8 +31,9 @@ public class PivotGreengenes
 		
 		reader.close();
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getLactoCheckDir() + File.separator + "gaQiimeClosedRefColumnsAsTaxa.txt"	)));
+		File outFile = new File(ConfigReader.getLactoCheckDir() + File.separator + "gaQiimeClosedRefColumnsAsTaxa.txt"	);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
 		writer.write("sample");
 		
@@ -51,5 +53,9 @@ public class PivotGreengenes
 		}
 		
 		writer.flush();  writer.close();
+		
+		OtuWrapper wrapper =new OtuWrapper(outFile);
+		
+		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getLactoCheckDir() + File.separator + "gaQiimeClosedRefColumnsAsTaxaNorm.txt"));
 	}
 }
