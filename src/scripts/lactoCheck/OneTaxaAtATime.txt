@@ -2,18 +2,35 @@ rm(list=ls())
 
 setwd("C:\\lactoCheck")
 
-myT <- read.table("gaQiimeClosedRefColumnsAsTaxaNormHandHacked.txt", sep="\t", header=TRUE)
+myT <- read.table("gaQiimeClosedRefColumnsAsTaxaLogNormHandHacked.txt", sep="\t", header=TRUE)
 
 apply( myT[,16:1606],1,sum)
 
 pdf("taxaByGroup.pdf")
 
+names <- vector()
+pValues <- vector()
+index <- 1
+
 for( i in 16:1606)
 {
-	if( sum(myT[,i] > .01 ))
+	if( sum(myT[,i] != 0 ) > nrow(myT)/4  )
 	{
-		boxplot( myT[,i] ~ myT$group_number,main = names( myT )[i] )
+		names[index] <- names( myT )[i] 
+		pValues[index] <- anova( lm(myT[,i] ~ myT$group_number))$"Pr(>F)"[1]
+		boxplot( myT[,i] ~ myT$group_number,main=pValues[index])
+		mtext(names[index],side=1)
+		index <- index + 1
+		
 	}
 }
 
 dev.off()
+
+
+dFrame <- data.frame(names, pValues)
+
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH")
+	
+write.table(dFrame, file=paste("taxa_models", ".txt",sep=""), sep="\t",row.names=FALSE)

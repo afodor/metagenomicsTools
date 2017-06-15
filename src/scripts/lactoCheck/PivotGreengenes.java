@@ -57,5 +57,6 @@ public class PivotGreengenes
 		OtuWrapper wrapper =new OtuWrapper(outFile);
 		
 		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getLactoCheckDir() + File.separator + "gaQiimeClosedRefColumnsAsTaxaNorm.txt"));
+		wrapper.writeNormalizedLoggedDataToFile(new File(ConfigReader.getLactoCheckDir() + File.separator + "gaQiimeClosedRefColumnsAsTaxaLogNorm.txt"));
 	}
 }
