@@ -21,7 +21,7 @@ aLevel <- 6
 	index <- 1
 	
 	# set to 8:ncol(myT) to pick up metadata and shannon entropy
-	for( i in 12:17)
+	for( i in 12:22)
 		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
