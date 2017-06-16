@@ -64,7 +64,7 @@ public class AddMetadata
 		
 		String[] topSplits = reader.readLine().split("\t");
 
-		writer.write(topSplits[0] + "\tgroupID\tgroupNumber\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+		writer.write(topSplits[0] + "\trun\tgroupID\tgroupNumber\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -91,7 +91,7 @@ public class AddMetadata
 				if( pcr == null || ! pcr.getGroup().equals(codes[2]))
 					throw new Exception("No");
 				
-				writer.write(splits[0] + "\t" + codes[2] + "\t" + birthGroup +  "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
+				writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
 						"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 								originalWrapper.getShannonEntropy(splits[0]));
 				
