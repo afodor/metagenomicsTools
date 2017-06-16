@@ -21,10 +21,10 @@ aLevel <- 6
 	pValueGenotypeTimeMaxWeightLossPercentInteraction <- vector()
 	
 	pValuesTimeFromMedians <- vector()
-	  
+	average <- vector()
 	indexes <- vector()
 	names <- vector()
-	
+	average <- vector()
 	
 	index <- 1
 	
@@ -47,6 +47,7 @@ aLevel <- 6
 		
 		pValuesWeightLoss[index] <- myAnova$"p-value"[4]
 		
+		average[index] <- mean(myT[,i])
 		names[index] <- names(myT)[i]
 		pValuesGenotype[index] <-myAnova$"p-value"[2] 
 		pValuesTime[index] <-myAnova$"p-value"[3] 
@@ -72,7 +73,7 @@ aLevel <- 6
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,  
 	pValuesWeightLoss, pValueGenotypemaxWeightLossPercentInteraction,
 		pValuetimemaxWeightLossPercentInteraction,
-		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,indexes)
+		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,average,indexes)
 	
 	#dFrame <- dFrame [order(dFrame$pValuesTime),]
 	dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
