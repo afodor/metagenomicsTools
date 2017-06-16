@@ -114,3 +114,22 @@ aLevel <- 6
 	
 	dev.off()	
 }
+
+dFrame <- dFrame [order(dFrame$indexes),]
+plot( dFrame$indexes-12, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,4))
+lines( dFrame$indexes-12, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+
+lines( c(0,10), c( -log10(.10),-log10(.10)) , lty=2)
+
+points( dFrame$indexes-12, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( dFrame$indexes-12, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+
+points( dFrame$indexes-12, -log10(dFrame$pValuesWeightLossAdjusted), col="green",pch=16)
+lines( dFrame$indexes-12, -log10(dFrame$pValuesWeightLossAdjusted), col="green")
+
+
+points( dFrame$indexes-12, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
+lines( dFrame$indexes-12, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
+
+
+legend("topright",c("genotype", "time", "weight loss", "time:genotype"),pch=16, col=c("red", "blue", "green", "black"))
