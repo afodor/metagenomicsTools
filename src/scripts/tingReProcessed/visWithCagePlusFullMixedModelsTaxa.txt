@@ -138,7 +138,8 @@ aLevel <- 6
 		someCage <- myT$cage
 		someFrame <- data.frame( someBug, someCage)
 		medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
-		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"))
+		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"),
+			c("0","3","4","12","18"))
 		someFrame <- data.frame( medians, times)
 	
 		plot( medians~times  ,main=format( dFrame$pValuesTimeFromMediansAdjusted[i] , digits=3 )  )
