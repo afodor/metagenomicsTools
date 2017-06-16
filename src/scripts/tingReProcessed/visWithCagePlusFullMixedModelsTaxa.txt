@@ -16,6 +16,8 @@
 		pValueGenotypemaxWeightLossPercentInteraction <- vector()
 		pValuetimemaxWeightLossPercentInteraction <- vector()
 		pValueGenotypeTimeMaxWeightLossPercentInteraction <- vector()
+		
+		pValuesTimeFromMedians <- vector()
 		  
 		indexes <- vector()
 		names <- vector()
@@ -50,6 +52,15 @@
 			pValuetimemaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[7] 
 			pValueGenotypeTimeMaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[8] 
 		
+			someBug <- myT[,i]
+			someCage <- myT$cage
+			someFrame <- data.frame( someBug, someCage)
+			medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
+			times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"))
+			
+			pValuesTimeFromMedians[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
+			
+		
 			indexes[index] <- i
 			
 			index <- index + 1
@@ -58,7 +69,7 @@
 		dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,  
 		pValuesWeightLoss, pValueGenotypemaxWeightLossPercentInteraction,
 			pValuetimemaxWeightLossPercentInteraction,
-			pValueGenotypeTimeMaxWeightLossPercentInteraction ,indexes)
+			pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,indexes)
 		
 		#dFrame <- dFrame [order(dFrame$pValuesTime),]
 		dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
@@ -73,7 +84,7 @@
 		dFrame$pValueGenotypemaxWeightLossPercentInteractionAdjusted <- p.adjust( dFrame$pValueGenotypemaxWeightLossPercentInteraction, method = "BH")
 		dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  <- p.adjust( dFrame$pValuetimemaxWeightLossPercentInteraction, method = "BH")
 		dFrame$allInteractionsAdjusted <- p.adjust( dFrame$pValueGenotypeTimeMaxWeightLossPercentInteraction , method = "BH")
-		
+		dFrame$pValuesTimeFromMediansAdjusted <- p.adjust( dFrame$pValuesTimeFromMedians , method = "BH")
 		
 		write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 		
