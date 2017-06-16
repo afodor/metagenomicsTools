@@ -14,13 +14,14 @@ aLevel <- 6
 	pValuesTimeGenotypeInteraction <- vector()
 	pValuesWeightLoss <- vector()
 	pValues_genotype_maxWeightLossPercent <- vector()
+	pValues_time_maxWeightLossPercent <- vector()
 	indexes <- vector()
 	names <- vector()
 	
 	index <- 1
 	
 	# set to 8:ncol(myT) to pick up metadata and shannon entropy
-	for( i in 12:22)
+	for( i in 12:17)
 		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
@@ -43,13 +44,14 @@ aLevel <- 6
 		pValuesWeightLoss[index] <- myAnova$"p-value"[4]
 		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[5] 
 		pValues_genotype_maxWeightLossPercent[index] <- myAnova$"p-value"[6] 
+		pValues_time_maxWeightLossPercent[index] <- myAnova$"p-value"[7] 
 		indexes[index] <- i
 		
 		index <- index + 1
 	}
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,
-	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,indexes)
+	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,indexes)
 	
 	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
@@ -60,7 +62,7 @@ aLevel <- 6
 	dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
 	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
 	dFrame$pValues_genotype_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_genotype_maxWeightLossPercent, method = "BH")
-	
+	dFrame$pValues_time_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_time_maxWeightLossPercent, method = "BH")
 	
 	write.table(dFrame, file=paste("bigModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
@@ -137,6 +139,10 @@ lines( dFrame$indexes-12, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted),
 points( dFrame$indexes-12, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey",pch=16)
 lines( dFrame$indexes-12, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey")
 
+points( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow",pch=16)
+lines( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow")
 
-legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss")
-,pch=16, col=c("red", "blue", "green", "black","grey"))
+
+
+legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss")
+,pch=16, col=c("red", "blue", "green", "black","grey", "yellow"))
