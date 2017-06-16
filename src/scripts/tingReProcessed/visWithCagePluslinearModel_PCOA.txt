@@ -15,6 +15,7 @@ aLevel <- 6
 	pValuesWeightLoss <- vector()
 	pValues_genotype_maxWeightLossPercent <- vector()
 	pValues_time_maxWeightLossPercent <- vector()
+	pValues_threeWayInteraction <- vector()
 	indexes <- vector()
 	names <- vector()
 	
@@ -38,19 +39,21 @@ aLevel <- 6
 		
 		
 		names[index] <- names(myT)[i]
-		pValuesGenotype[index] <-myAnova$"Pr(>F)"[2] 
-		pValuesTime[index] <-myAnova$"Pr(>F)"[3] 
-		pValuesWeightLoss[index] <- myAnova$"Pr(>F)"[4]
-		pValuesTimeGenotypeInteraction[index] <-myAnova$"Pr(>F)"[5] 
-		pValues_genotype_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[6] 
-		pValues_time_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[7] 
+		pValuesGenotype[index] <-myAnova$"Pr(>F)"[1] 
+		pValuesTime[index] <-myAnova$"Pr(>F)"[2] 
+		pValuesWeightLoss[index] <- myAnova$"Pr(>F)"[3]
+		pValuesTimeGenotypeInteraction[index] <-myAnova$"Pr(>F)"[4] 
+		pValues_genotype_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[5] 
+		pValues_time_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[6] 
+		pValues_threeWayInteraction[index] <- myAnova$"Pr(>F)"[7] 
 		indexes[index] <- i
 		
 		index <- index + 1
 	}
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,
-	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,indexes)
+	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,
+	pValues_threeWayInteraction,indexes)
 	
 	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
@@ -62,6 +65,8 @@ aLevel <- 6
 	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
 	dFrame$pValues_genotype_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_genotype_maxWeightLossPercent, method = "BH")
 	dFrame$pValues_time_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_time_maxWeightLossPercent, method = "BH")
+	dFrame$pValues_threeWayInteractionAdjusted <- p.adjust( dFrame$pValues_threeWayInteraction, method = "BH")
+	
 	
 	write.table(dFrame, file=paste("bigModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
@@ -141,7 +146,12 @@ lines( dFrame$indexes-12, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdj
 points( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow",pch=16)
 lines( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow")
 
+points( dFrame$indexes-12, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange",pch=16)
+lines( dFrame$indexes-12, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange")
 
 
-legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss")
-,pch=16, col=c("red", "blue", "green", "black","grey", "yellow"))
+
+
+
+legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss","genotype:time:weight loss")
+,pch=16, col=c("red", "blue", "green", "black","grey", "yellow", "orange"))
