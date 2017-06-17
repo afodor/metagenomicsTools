@@ -41,7 +41,7 @@ aLevel <- 6
 		
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		M.everything <- lme ( relativeAbundance ~ genotype * time * maxWeightLossPercent, method="REML", random = ~1 | cage,
+		M.everything <- lme ( relativeAbundance ~ genotype * factor(time) * maxWeightLossPercent, method="REML", random = ~1 | cage,
 					data = myFrame) 
 		
 		myAnova<- anova(M.everything )
