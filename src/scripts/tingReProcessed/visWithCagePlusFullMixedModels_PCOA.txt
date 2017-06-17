@@ -75,7 +75,7 @@ aLevel <- 6
 		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,indexes)
 	
 	#dFrame <- dFrame [order(dFrame$pValuesTime),]
-	dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
+	#dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	
@@ -168,5 +168,8 @@ sum( dFrame$pValuesWeightLossAdjusted < 0.1)
 sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
 sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
 sum( dFrame$ allInteractionsAdjusted   < 0.1)
+
+plot( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red",pch=16,ylim=c(0,6))
+lines( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red")
 
 
