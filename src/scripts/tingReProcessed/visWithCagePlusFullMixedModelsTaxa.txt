@@ -55,7 +55,7 @@ aLevel <- 6
 	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,
 	pValues_threeWayInteraction,indexes)
 	
-	dFrame <- dFrame [order(dFrame$pValuesTime),]
+	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	
