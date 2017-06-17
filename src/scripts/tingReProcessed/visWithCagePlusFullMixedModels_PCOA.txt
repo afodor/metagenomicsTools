@@ -21,6 +21,7 @@ aLevel <- 6
 	pValueGenotypeTimeMaxWeightLossPercentInteraction <- vector()
 	
 	pValuesTimeFromMedians <- vector()
+	pValuesTimeFromMediansAsRegression <- vector()
 	  
 	indexes <- vector()
 	names <- vector()
@@ -29,7 +30,7 @@ aLevel <- 6
 	index <- 1
 	
 	# set to 8:ncol(myT) to pick up metadata and shannon entropy
-	for( i in 12:22)
+	for( i in 12:21)
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
@@ -63,7 +64,10 @@ aLevel <- 6
 		
 		pValuesTimeFromMedians[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
 		
-	
+		times <- as.numeric(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"))
+		
+		pValuesTimeFromMediansAsRegression[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
+		
 		indexes[index] <- i
 		
 		index <- index + 1
@@ -72,7 +76,8 @@ aLevel <- 6
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,  
 	pValuesWeightLoss, pValueGenotypemaxWeightLossPercentInteraction,
 		pValuetimemaxWeightLossPercentInteraction,
-		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,indexes)
+		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,
+		pValuesTimeFromMediansAsRegression,indexes)
 	
 	#dFrame <- dFrame [order(dFrame$pValuesTime),]
 	#dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
@@ -88,6 +93,7 @@ aLevel <- 6
 	dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  <- p.adjust( dFrame$pValuetimemaxWeightLossPercentInteraction, method = "BH")
 	dFrame$allInteractionsAdjusted <- p.adjust( dFrame$pValueGenotypeTimeMaxWeightLossPercentInteraction , method = "BH")
 	dFrame$pValuesTimeFromMediansAdjusted <- p.adjust( dFrame$pValuesTimeFromMedians , method = "BH")
+	dFrame$pValuesTimeFromMediansAsRegressionAdjusted <- p.adjust( dFrame$pValuesTimeFromMediansAsRegression, method = "BH")
 	
 	write.table(dFrame, file=paste("bigModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
@@ -169,7 +175,18 @@ sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
 sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
 sum( dFrame$ allInteractionsAdjusted   < 0.1)
 
-plot( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red",pch=16,ylim=c(0,6))
+plot( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red",pch=16,ylim=c(0,6),
+ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
 lines( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red")
+
+points( indexes-11, -log10(dFrame$pValuesTimeFromMediansAsRegressionAdjusted), col="blue",pch=16,ylim=c(0,6))
+lines( indexes-11, -log10(dFrame$pValuesTimeFromMediansAsRegressionAdjusted), col="blue")
+
+lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+
+legend("topright",c("as factor", "as regression"),pch=16, col=c("red", "blue"))
+
+
+
 
 
