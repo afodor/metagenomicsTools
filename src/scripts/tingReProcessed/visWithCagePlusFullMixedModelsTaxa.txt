@@ -1,10 +1,7 @@
-
-
 rm(list=ls())
 
 setwd("C:\\tingData\\may_2017_rerun")
 library("nlme")
-library("doBy")
 
 aLevel <- 6
 #for (aLevel in c(2,6))
@@ -16,21 +13,17 @@ aLevel <- 6
 	pValuesTime <- vector()
 	pValuesTimeGenotypeInteraction <- vector()
 	pValuesWeightLoss <- vector()
-	pValueGenotypemaxWeightLossPercentInteraction <- vector()
-	pValuetimemaxWeightLossPercentInteraction <- vector()
-	pValueGenotypeTimeMaxWeightLossPercentInteraction <- vector()
-	
-	pValuesTimeFromMedians <- vector()
-	average <- vector()
+	pValues_genotype_maxWeightLossPercent <- vector()
+	pValues_time_maxWeightLossPercent <- vector()
+	pValues_threeWayInteraction <- vector()
 	indexes <- vector()
 	names <- vector()
-	average <- vector()
 	
 	index <- 1
 	
 	# set to 8:ncol(myT) to pick up metadata and shannon entropy
 	for( i in 12:ncol(myT))
-		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
+		#if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
 		cage <- factor(myT$cage)
@@ -39,44 +32,30 @@ aLevel <- 6
 		time <- myT$time
 		
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
-		
-		M.everything <- lme ( relativeAbundance ~ genotype * time * maxWeightLossPercent, method="REML", random = ~1 | cage,
-					data = myFrame) 
+		 
+		M.everything <- lm( relativeAbundance ~ genotype * factor(time) * maxWeightLossPercent,data = myFrame) 
 		
 		myAnova<- anova(M.everything )
 		
-		pValuesWeightLoss[index] <- myAnova$"p-value"[4]
 		
-		average[index] <- mean(myT[,i])
 		names[index] <- names(myT)[i]
-		pValuesGenotype[index] <-myAnova$"p-value"[2] 
-		pValuesTime[index] <-myAnova$"p-value"[3] 
-		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[5] 
-		pValueGenotypemaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[6] 
-		pValuetimemaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[7] 
-		pValueGenotypeTimeMaxWeightLossPercentInteraction[index] <- myAnova$"p-value"[8] 
-	
-		someBug <- myT[,i]
-		someCage <- myT$cage
-		someFrame <- data.frame( someBug, someCage)
-		medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
-		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"))
-		
-		pValuesTimeFromMedians[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
-		
-	
+		pValuesGenotype[index] <-myAnova$"Pr(>F)"[1] 
+		pValuesTime[index] <-myAnova$"Pr(>F)"[2] 
+		pValuesWeightLoss[index] <- myAnova$"Pr(>F)"[3]
+		pValuesTimeGenotypeInteraction[index] <-myAnova$"Pr(>F)"[4] 
+		pValues_genotype_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[5] 
+		pValues_time_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[6] 
+		pValues_threeWayInteraction[index] <- myAnova$"Pr(>F)"[7] 
 		indexes[index] <- i
 		
 		index <- index + 1
 	}
 	
-	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,  
-	pValuesWeightLoss, pValueGenotypemaxWeightLossPercentInteraction,
-		pValuetimemaxWeightLossPercentInteraction,
-		pValueGenotypeTimeMaxWeightLossPercentInteraction ,pValuesTimeFromMedians,average,indexes)
+	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,
+	pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,
+	pValues_threeWayInteraction,indexes)
 	
-	#dFrame <- dFrame [order(dFrame$pValuesTime),]
-	dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
+	dFrame <- dFrame [order(dFrame$pValuesTime),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
 	#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 	
@@ -84,16 +63,15 @@ aLevel <- 6
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 	dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
 	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
-	
-	dFrame$pValueGenotypemaxWeightLossPercentInteractionAdjusted <- p.adjust( dFrame$pValueGenotypemaxWeightLossPercentInteraction, method = "BH")
-	dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  <- p.adjust( dFrame$pValuetimemaxWeightLossPercentInteraction, method = "BH")
-	dFrame$allInteractionsAdjusted <- p.adjust( dFrame$pValueGenotypeTimeMaxWeightLossPercentInteraction , method = "BH")
-	dFrame$pValuesTimeFromMediansAdjusted <- p.adjust( dFrame$pValuesTimeFromMedians , method = "BH")
-	
-	write.table(dFrame, file=paste("bigModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
+	dFrame$pValues_genotype_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_genotype_maxWeightLossPercent, method = "BH")
+	dFrame$pValues_time_maxWeightLossPercentAdjusted <- p.adjust( dFrame$pValues_time_maxWeightLossPercent, method = "BH")
+	dFrame$pValues_threeWayInteractionAdjusted <- p.adjust( dFrame$pValues_threeWayInteraction, method = "BH")
 	
 	
-	pdf(paste("cageForTaxaSortedTime_L", aLevel, ".pdf"))
+	write.table(dFrame, file=paste("bigModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	
+	pdf(paste("cageForPCOA_L", aLevel, ".pdf"))
 	
 	for( i in 1:nrow(dFrame))
 	{
@@ -104,7 +82,7 @@ aLevel <- 6
 		time <- myT$time
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		par(mfrow=c(3,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
+		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
 		
 		mainText = paste( "genotype adjust p=", 
 			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
@@ -123,30 +101,15 @@ aLevel <- 6
 						col = ifelse(genotype[j] == "KO", "RED", "BLUE"))	
 		}
 		
+		
 		mainText = paste( "genotype*time=", format( dFrame$pValuesTimeGenotypeInteractionAdjusted[i] , digits=3 ),
 					"time=", format( dFrame$pValuesTimeAdjusted[i] , digits=3 ) )
-		
 		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
-		abline( lm(relativeAbundance ~ myT$time))
 		
 		mainText = paste( "weight adjust p=", format( dFrame$pValuesWeightLossAdjusted[i] , digits=3 ) )
 		
 		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 				main = mainText)
-		abline( lm(myT$maxWeightLossPercent ~ relativeAbundance ))
-		
-		someBug <- myT[,index]
-		someCage <- myT$cage
-		someFrame <- data.frame( someBug, someCage)
-		medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
-		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"),
-			c("0","3","4","12","18"))
-		someFrame <- data.frame( medians, times)
-	
-		plot( medians~times  ,main=format( dFrame$pValuesTimeFromMediansAdjusted[i] , digits=3 )  )
-
-		stripchart(medians~times  , 
-				data = someFrame,vertical = TRUE, pch = 21, add=TRUE )		
 		
 		mtext(dFrame$names[i] ,
 	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
@@ -161,13 +124,32 @@ aLevel <- 6
 	
 	dev.off()	
 }
-	
-sum( dFrame$pValuesGenotypeAdjusted < 0.1)
-sum( dFrame$pValuesTimeAdjusted < 0.1)
-sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
-sum( dFrame$pValuesWeightLossAdjusted < 0.1)
-sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
-sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
-sum( dFrame$ allInteractionsAdjusted   < 0.1)
+
+dFrame <- dFrame [order(dFrame$indexes),]
+plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,35),
+ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
+lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+
+lines( c(0,nrow(dFrame)), c( -log10(.10),-log10(.10)) , lty=2)
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesWeightLossAdjusted), col="green",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesWeightLossAdjusted), col="green")
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
+
+points( dFrame$indexes-11, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey")
+
+points( dFrame$indexes-11, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow")
+
+points( dFrame$indexes-11, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange")
 
 
+legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss","genotype:time:weight loss")
+,pch=16, col=c("red", "blue", "green", "black","grey", "yellow", "orange"))
