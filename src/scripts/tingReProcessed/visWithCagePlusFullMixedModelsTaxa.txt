@@ -82,7 +82,7 @@ aLevel <- 6
 		time <- myT$time
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
+		par(mfrow=c(3,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
 		
 		mainText = paste( "genotype adjust p=", 
 			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
@@ -110,6 +110,21 @@ aLevel <- 6
 		
 		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 				main = mainText)
+				
+				
+		someBug <- myT[,index]
+		someCage <- myT$cage
+		someFrame <- data.frame( someBug, someCage)
+		medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
+		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"),
+		c("0","3","4","12","18"))
+		someFrame <- data.frame( medians, times)
+	
+		plot( medians~times  ,main=format( dFrame$pValuesTimeFromMediansAdjusted[i] , digits=3 )  )
+
+		stripchart(medians~times  , 
+				data = someFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
 		
 		mtext(dFrame$names[i] ,
 	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
