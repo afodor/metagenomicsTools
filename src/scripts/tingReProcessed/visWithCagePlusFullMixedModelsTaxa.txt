@@ -2,6 +2,7 @@
 	
 	setwd("C:\\tingData\\may_2017_rerun")
 	library("nlme")
+	library("doBy")
 	
 	aLevel <- 6
 	#for (aLevel in c(2,6))
@@ -17,6 +18,7 @@
 		pValues_time_maxWeightLossPercent <- vector()
 		pValues_threeWayInteraction <- vector()
 		pValuesTimeFromMedians <- vector()
+		average <- vector()
 		indexes <- vector()
 		names <- vector()
 		
@@ -47,6 +49,7 @@
 			pValues_genotype_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[5] 
 			pValues_time_maxWeightLossPercent[index] <- myAnova$"Pr(>F)"[6] 
 			pValues_threeWayInteraction[index] <- myAnova$"Pr(>F)"[7] 
+			average[index] <-mean(myT[,i])
 			
 			someBug <- myT[,i]
 			someCage <- myT$cage
@@ -64,10 +67,10 @@
 		
 		dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,
 		pValuesWeightLoss,pValues_genotype_maxWeightLossPercent,pValues_time_maxWeightLossPercent,
-		pValues_threeWayInteraction,pValuesTimeFromMedians,indexes)
+		pValues_threeWayInteraction,pValuesTimeFromMedians,indexes, average)
 		
 		dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
-		#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
+		#dFrame <- dFrame [order(dFrame$pValues_threeWayInteraction),]
 		#dFrame <- dFrame [order(dFrame$pValuesGenotype),]
 		
 		dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
@@ -82,7 +85,7 @@
 		write.table(dFrame, file=paste("bigModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 		
 		
-		pdf(paste("cageForPCOA_L", aLevel, ".pdf"))
+		pdf(paste("cageForTaxa_L", aLevel, ".pdf"))
 		
 		for( i in 1:nrow(dFrame))
 		{
@@ -150,6 +153,14 @@
 		
 		dev.off()	
 	}
+	
+	
+	aLm <-lm( dFrame$average~ log10(pValuesTime) ) 
+	aPValue <- format(anova(aLm )$"Pr(>F)"[1],3)
+	someText <- paste("p=",aPValue)
+	plot(dFrame$average, -log10(pValuesTime),xlab="mean log10 normalized abundance", 
+	ylab="-log10(pValue Time)",pch=16, main=someText)
+	
 	
 	dFrame <- dFrame [order(dFrame$indexes),]
 	plot( 1:nrow(dFrame), -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,35),

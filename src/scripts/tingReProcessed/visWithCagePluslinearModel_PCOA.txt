@@ -82,7 +82,7 @@ aLevel <- 6
 		time <- myT$time
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
+		par(mfrow=c(3,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
 		
 		mainText = paste( "genotype adjust p=", 
 			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
@@ -114,13 +114,6 @@ aLevel <- 6
 		mtext(dFrame$names[i] ,
 	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 	}
-	
-	
-	par(mfrow=c(2,2))
-	
-	hist(pValuesGenotype,breaks=20)
-	hist(pValuesTime,breaks=20)
-	hist(pValuesTimeGenotypeInteraction,breaks=20)
 	
 	dev.off()	
 }

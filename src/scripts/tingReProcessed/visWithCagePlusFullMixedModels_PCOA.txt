@@ -175,6 +175,7 @@ sum( dFrame$ pValueGenotypemaxWeightLossPercentInteractionAdjusted < 0.1)
 sum( dFrame$pValuetimemaxWeightLossPercentInteractionAdjusted  < 0.1)
 sum( dFrame$ allInteractionsAdjusted   < 0.1)
 
+
 plot( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red",pch=16,ylim=c(0,6),
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
 lines( indexes-11, -log10(dFrame$pValuesTimeFromMediansAdjusted), col="red")
