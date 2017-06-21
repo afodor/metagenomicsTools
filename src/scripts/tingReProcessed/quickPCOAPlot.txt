@@ -1,0 +1,6 @@
+rm(list=ls())
+
+setwd("C:\\tingData\\may_2017_rerun")
+
+myT <- read.table("pcoa_rerunPlusMetadata_L6.txt",sep="\t", header=TRUE)
+

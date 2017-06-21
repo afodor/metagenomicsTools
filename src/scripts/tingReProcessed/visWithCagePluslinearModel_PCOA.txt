@@ -33,7 +33,7 @@ aLevel <- 6
 		
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		 
-		M.everything <- lm( relativeAbundance ~ genotype * time * maxWeightLossPercent,data = myFrame) 
+		M.everything <- lm( relativeAbundance ~ genotype * factor(time) * maxWeightLossPercent,data = myFrame) 
 		
 		myAnova<- anova(M.everything )
 		
@@ -82,7 +82,7 @@ aLevel <- 6
 		time <- myT$time
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
+		par(mfrow=c(3,2),mar=c(4,4,1,1), oma=c(3,3,2,2))
 		
 		mainText = paste( "genotype adjust p=", 
 			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
@@ -115,39 +115,33 @@ aLevel <- 6
 	        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 	}
 	
-	
-	par(mfrow=c(2,2))
-	
-	hist(pValuesGenotype,breaks=20)
-	hist(pValuesTime,breaks=20)
-	hist(pValuesTimeGenotypeInteraction,breaks=20)
-	
 	dev.off()	
 }
 
 dFrame <- dFrame [order(dFrame$indexes),]
-plot( dFrame$indexes-12, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,8))
-lines( dFrame$indexes-12, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
+ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
+lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
 
 lines( c(0,10), c( -log10(.10),-log10(.10)) , lty=2)
 
-points( dFrame$indexes-12, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
 
-points( dFrame$indexes-12, -log10(dFrame$pValuesWeightLossAdjusted), col="green",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValuesWeightLossAdjusted), col="green")
+points( dFrame$indexes-11, -log10(dFrame$pValuesWeightLossAdjusted), col="green",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesWeightLossAdjusted), col="green")
 
-points( dFrame$indexes-12, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
 
-points( dFrame$indexes-12, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey")
+points( dFrame$indexes-11, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_genotype_maxWeightLossPercentAdjusted), col="grey")
 
-points( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow")
+points( dFrame$indexes-11, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_time_maxWeightLossPercentAdjusted ), col="yellow")
 
-points( dFrame$indexes-12, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange",pch=16)
-lines( dFrame$indexes-12, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange")
+points( dFrame$indexes-11, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange")
 
 
 
