@@ -6,8 +6,7 @@ setwd("C:\\tingData\\may_2017_rerun")
 library("nlme")
 library("doBy")
 
-aLevel <- 6
-#for (aLevel in c(2,6))
+for (aLevel in 2:6)
 {
 	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 	myT <- read.table(fileName, header=TRUE, sep="\t")
@@ -66,7 +65,7 @@ aLevel <- 6
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,
 	pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,pValuesWeightUnivariate ,indexes)
 	
-	dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
+	dFrame <- dFrame [order(dFrame$pValuesWeightUnivariate),]
 	
 	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")

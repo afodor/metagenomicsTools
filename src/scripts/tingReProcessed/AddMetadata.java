@@ -14,9 +14,8 @@ public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
-		addMetadataForLevel(2);
-		addMetadataForLevel(6);
-		
+		for( int x=2; x<=6; x++)
+			addMetadataForLevel(x);
 		
 	}
 	

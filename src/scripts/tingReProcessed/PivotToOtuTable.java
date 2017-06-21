@@ -54,8 +54,8 @@ public class PivotToOtuTable
 	
 	public static void main(String[] args) throws Exception
 	{
-		pivotForALevel(2);
-		pivotForALevel(6);
+		for( int x=2; x<=6; x++)
+		pivotForALevel(x);
 	}
 	
 	public static void pivotForALevel(int aLevel) throws Exception

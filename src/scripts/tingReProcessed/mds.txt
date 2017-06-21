@@ -4,7 +4,7 @@ library("vegan")
 
 setwd("C:\\tingData\\may_2017_rerun")
 
-for ( i in c(2,6))
+for ( i in 2:6)
 {		
 	inFileName <- paste( "otuAsColumnsLogNorm_rerun_", i, ".txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
