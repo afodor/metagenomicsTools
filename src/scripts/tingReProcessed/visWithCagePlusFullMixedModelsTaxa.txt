@@ -36,7 +36,7 @@
 			
 			myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 			 
-			M.everything <- lm( relativeAbundance ~ genotype * factor(time) * maxWeightLossPercent,data = myFrame) 
+			M.everything <- lm( relativeAbundance ~ genotype * factor(time) + maxWeightLossPercent,data = myFrame) 
 			
 			myAnova<- anova(M.everything )
 			
@@ -186,8 +186,11 @@
 	points( 1:nrow(dFrame), -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange",pch=16)
 	lines(  1:nrow(dFrame), -log10(dFrame$pValues_threeWayInteractionAdjusted  ), col="orange")
 	
-	legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss","genotype:time:weight loss")
-	,pch=16, col=c("red", "blue", "green", "black","grey", "yellow", "orange"))
+	#legend("topright",c("genotype", "time", "weight loss", "time:genotype", "genotype:weight loss", "time:weight loss","genotype:time:weight loss")
+	#,pch=16, col=c("red", "blue", "green", "black","grey", "yellow", "orange"))
 	
-	lines(  c(1,nrow(dFrame)), c( -log10(.10),-log10(.10)) , lty=2)
+	legend("topright",c("genotype", "time", "weight loss", "time:genotype"),pch=16, col=c("red", "blue", "green", "black","grey", "yellow", "orange"))
+	
+	
+	lines(  c(1,nrow(dFrame)), c( -log10(.05),-log10(.05)) , lty=2)
 	
