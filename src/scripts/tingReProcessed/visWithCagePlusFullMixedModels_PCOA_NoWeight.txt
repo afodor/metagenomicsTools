@@ -145,3 +145,28 @@ sum( dFrame$pValuesTimeAdjusted < 0.1)
 sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
 
 
+dFrame <- dFrame [order(dFrame$indexes),]
+plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
+ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
+lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+
+lines( c(0,10), c( -log10(.10),-log10(.10)) , lty=2)
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
+
+
+legend("topright",c("genotype", "time", "time:genotype"),pch=16, col=c("red", "blue", "black"))
+
+
+
+
+
+
+
+
+
+
