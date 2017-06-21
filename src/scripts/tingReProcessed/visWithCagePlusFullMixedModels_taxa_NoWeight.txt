@@ -144,14 +144,7 @@ for (aLevel in 2:6)
 	hist(pValuesTime,breaks=20)
 	hist(pValuesTimeGenotypeInteraction,breaks=20)
 	
-	dev.off()	
-}
 	
-sum( dFrame$pValuesGenotypeAdjusted < 0.1)
-sum( dFrame$pValuesTimeAdjusted < 0.1)
-sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
-
-
 dFrame <- dFrame [order(dFrame$indexes),]
 plot( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
@@ -163,10 +156,24 @@ lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeAdjusted), col="blue")
 points( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
 lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
 
+points( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green",pch=16)
+lines( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green")
+
 lines( c(0,nrow(dFrame)), c( -log10(.10),-log10(.10)) , lty=2)
 
-legend("topright",c("genotype", "time", "time:genotype"),pch=16, col=c("red", "blue", "black"))
 
+legend("topright",c("genotype", "time", "time:genotype", "weight"),pch=16, 
+	col=c("red", "blue", "black","green"))
+
+
+	
+	
+	dev.off()	
+}
+	
+sum( dFrame$pValuesGenotypeAdjusted < 0.1)
+sum( dFrame$pValuesTimeAdjusted < 0.1)
+sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
 
 
 
