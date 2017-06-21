@@ -17,6 +17,8 @@ aLevel <- 6
 	pValuesTimeGenotypeInteraction <- vector()
 	
 	pValuesTimeFromMedians <- vector()
+	
+	pValuesWeightUnivariate <- vector()
 	  
 	indexes <- vector()
 	names <- vector()
@@ -44,6 +46,8 @@ aLevel <- 6
 		pValuesGenotype[index] <-myAnova$"p-value"[2] 
 		pValuesTime[index] <-myAnova$"p-value"[3] 
 		pValuesTimeGenotypeInteraction[index] <-myAnova$"p-value"[4] 
+		
+		pValuesWeightUnivariate[index] <- anova(lm(  relativeAbundance ~ maxWeightLossPercent))$"Pr(>F)"[1]
 	
 		someBug <- myT[,i]
 		someCage <- myT$cage
@@ -59,7 +63,8 @@ aLevel <- 6
 		index <- index + 1
 	}
 	
-	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,indexes)
+	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,
+	pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,pValuesWeightUnivariate ,indexes)
 	
 	dFrame <- dFrame [order(dFrame$pValuesTimeFromMedians),]
 	
@@ -67,6 +72,9 @@ aLevel <- 6
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 	dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
 	dFrame$pValuesTimeFromMediansAdjusted <- p.adjust( dFrame$pValuesTimeFromMedians , method = "BH")
+	
+	dFrame$pValuesWeightUnivariateAdjusted<- p.adjust( dFrame$pValuesWeightUnivariate , method = "BH")
+	
 	
 	write.table(dFrame, file=paste("bigModelPValuesForTaxa_NoWeight_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
@@ -107,7 +115,7 @@ aLevel <- 6
 		plot( relativeAbundance ~ myT$time, col = ifelse(myT$genotype=="WT", "BLUE", "RED" ), main=mainText)	
 		abline( lm(relativeAbundance ~ myT$time))
 		
-		mainText = paste( "weight adjust ")
+		mainText = paste( "weight adjust p=",format(dFrame$pValuesWeightUnivariateAdjusted[i],digits=3))
 		
 		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
 				main = mainText)
