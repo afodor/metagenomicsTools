@@ -9,7 +9,7 @@ library("doBy")
 aLevel <- 6
 #for (aLevel in c(2,6))
 {
-	fileName <- paste("pcoa_rerunPlusMetadata_L", aLevel, ".txt",sep="")
+	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 	myT <- read.table(fileName, header=TRUE, sep="\t")
 	
 	pValuesGenotype <- vector()
@@ -17,7 +17,6 @@ aLevel <- 6
 	pValuesTimeGenotypeInteraction <- vector()
 	
 	pValuesTimeFromMedians <- vector()
-	pValuesMediansVsCategory <- vector()
 	  
 	indexes <- vector()
 	names <- vector()
@@ -25,7 +24,7 @@ aLevel <- 6
 	index <- 1
 	
 	# set to 8:ncol(myT) to pick up metadata and shannon entropy
-	for( i in 12:21)
+	for( i in 12:ncol(myT))
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
@@ -54,10 +53,6 @@ aLevel <- 6
 		
 		pValuesTimeFromMedians[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
 		
-		categoricalModel <- lm( medians ~ times )
-		numericModel <- lm( medians ~ as.numeric(times) )
-		
-		pValuesMediansVsCategory[index] <- anova( categoricalModel, numericModel)$"Pr(>F)"[2]
 	
 		indexes[index] <- i
 		
@@ -73,10 +68,10 @@ aLevel <- 6
 	dFrame$pValuesTimeGenotypeInteractionAdjusted <- p.adjust( dFrame$pValuesTimeGenotypeInteraction, method = "BH")
 	dFrame$pValuesTimeFromMediansAdjusted <- p.adjust( dFrame$pValuesTimeFromMedians , method = "BH")
 	
-	write.table(dFrame, file=paste("bigModelPValuesForPCOA_NoWeight_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("bigModelPValuesForTaxa_NoWeight_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 	
-	pdf(paste("cageForPCOASortedTimeNoWeight_L", aLevel, ".pdf"))
+	pdf(paste("cageForTaxaSortedTimeNoWeight_L", aLevel, ".pdf"))
 	
 	for( i in 1:nrow(dFrame))
 	{
@@ -151,18 +146,17 @@ sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
 
 
 dFrame <- dFrame [order(dFrame$indexes),]
-plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
+plot( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
-lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red")
 
-lines( c(0,10), c( -log10(.05),-log10(.05)) , lty=2)
+points( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeAdjusted), col="blue")
 
-points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
-lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+points( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
+lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
 
-points( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
-lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
-
+lines( c(0,nrow(dFrame)), c( -log10(.10),-log10(.10)) , lty=2)
 
 legend("topright",c("genotype", "time", "time:genotype"),pch=16, col=c("red", "blue", "black"))
 
