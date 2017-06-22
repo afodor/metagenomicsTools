@@ -6,6 +6,7 @@ setwd("C:\\tingData\\may_2017_rerun")
 library("nlme")
 library("doBy")
 
+
 for (aLevel in 2:6)
 {
 	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
