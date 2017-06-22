@@ -65,7 +65,7 @@ for (aLevel in 2:6)
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,
 	pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,pValuesWeightUnivariate ,indexes)
 	
-	dFrame <- dFrame [order(dFrame$pValuesTime),]
+	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	
 	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
