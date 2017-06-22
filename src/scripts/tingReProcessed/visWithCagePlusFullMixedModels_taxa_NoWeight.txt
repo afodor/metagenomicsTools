@@ -89,7 +89,7 @@ for (aLevel in 2:6)
 		time <- myT$time
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
-		par(mfrow=c(3,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
+		par(mfrow=c(2,2),mar=c(4,4,1,1), oma=c(2,2,1,1))
 		
 		mainText = paste( "genotype adjust p=", 
 			format( dFrame$pValuesGenotypeAdjusted[i] , digits=3 ) )
@@ -116,9 +116,9 @@ for (aLevel in 2:6)
 		
 		mainText = paste( "weight adjust p=",format(dFrame$pValuesWeightUnivariateAdjusted[i],digits=3))
 		
-		plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
-				main = mainText)
-		abline( lm(myT$maxWeightLossPercent ~ relativeAbundance ))
+		#plot( myT$maxWeightLossPercent ~ relativeAbundance , col = ifelse(myT$genotype=="WT", "BLUE", "RED" ),
+		#		main = mainText)
+		#abline( lm(myT$maxWeightLossPercent ~ relativeAbundance ))
 		
 		someBug <- myT[,index]
 		someCage <- myT$cage
@@ -156,13 +156,13 @@ lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeAdjusted), col="blue")
 points( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black",pch=16)
 lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted), col="black")
 
-points( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green",pch=16)
-lines( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green")
+#points( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green",pch=16)
+#lines( seq(1:nrow(dFrame)), -log10(dFrame$ pValuesWeightUnivariateAdjusted  ), col="green")
 
-lines( c(0,nrow(dFrame)), c( -log10(.10),-log10(.10)) , lty=2)
+lines( c(0,nrow(dFrame)), c( -log10(.05),-log10(.05)) , lty=2)
 
 
-legend("topright",c("genotype", "time", "time:genotype", "weight"),pch=16, 
+legend("topright",c("genotype", "time", "time:genotype"),pch=16, 
 	col=c("red", "blue", "black","green"))
 
 
