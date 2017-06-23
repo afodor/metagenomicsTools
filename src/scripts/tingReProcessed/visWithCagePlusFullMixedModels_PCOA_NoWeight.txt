@@ -1,5 +1,4 @@
 
-
 rm(list=ls())
 
 setwd("C:\\tingData\\may_2017_rerun")
@@ -148,7 +147,7 @@ sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
 
 
 dFrame <- dFrame [order(dFrame$indexes),]
-plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
+plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,7),
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
 lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
 

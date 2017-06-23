@@ -12,6 +12,7 @@ for (aLevel in 2:6)
 	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 	myT <- read.table(fileName, header=TRUE, sep="\t")
 	
+	means <- vector()
 	pValuesGenotype <- vector()
 	pValuesTime <- vector()
 	pValuesTimeGenotypeInteraction <- vector()
@@ -30,6 +31,7 @@ for (aLevel in 2:6)
 		if( sum( myT[,i] >0 ) > nrow(myT) /4 ) 
 	{	
 		relativeAbundance <- myT[,i]
+		
 		cage <- factor(myT$cage)
 		genotype <- factor(myT$genotype )
 		maxWeightLossPercent <- myT$maxWeightLossPercent
@@ -42,6 +44,7 @@ for (aLevel in 2:6)
 		
 		myAnova<- anova(M.everything )
 		
+		means[index] <- mean(relativeAbundance)
 		names[index] <- names(myT)[i]
 		pValuesGenotype[index] <-myAnova$"p-value"[2] 
 		pValuesTime[index] <-myAnova$"p-value"[3] 
@@ -64,7 +67,7 @@ for (aLevel in 2:6)
 	}
 	
 	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,
-	pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,pValuesWeightUnivariate ,indexes)
+	pValuesTimeGenotypeInteraction,pValuesTimeFromMedians,pValuesWeightUnivariate ,means,indexes)
 	
 	dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	
@@ -147,7 +150,7 @@ for (aLevel in 2:6)
 	
 	
 dFrame <- dFrame [order(dFrame$indexes),]
-plot( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,20),
+plot( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,14),
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
 lines( seq(1:nrow(dFrame)), -log10(dFrame$pValuesGenotypeAdjusted), col="red")
 
@@ -165,11 +168,8 @@ lines( c(0,nrow(dFrame)), c( -log10(.05),-log10(.05)) , lty=2)
 
 legend("topright",c("genotype", "time", "time:genotype"),pch=16, 
 	col=c("red", "blue", "black","green"))
-
-
 	
-	
-	dev.off()	
+dev.off()	
 }
 	
 sum( dFrame$pValuesGenotypeAdjusted < 0.1)
