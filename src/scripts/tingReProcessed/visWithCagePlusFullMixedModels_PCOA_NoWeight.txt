@@ -52,12 +52,9 @@ aLevel <- 6
 		medians <- summaryBy( someBug ~ someCage , data=someFrame, FUN=list(median))$someBug.median
 		times <- factor(c("0","0","0", "3","3","3","3","4","4","4","4","12","12","12","12","18","18","18"))
 		
-		pValuesTimeFromMedians[index] <- anova(lm( medians ~ times ))$"Pr(>F)"[1]
+		pValuesTimeFromMedians[index] <- anova(lm( medians ~ as.numeric(times) ))$"Pr(>F)"[1]
 		
-		categoricalModel <- lm( medians ~ times )
-		numericModel <- lm( medians ~ as.numeric(times) )
-		
-		pValuesMediansVsCategory[index] <- anova( categoricalModel, numericModel)$"Pr(>F)"[2]
+		pValuesMediansVsCategory[index] <- anova(lm( medians ~ factor(times) ))$"Pr(>F)"[1]
 	
 		indexes[index] <- i
 		
@@ -165,6 +162,14 @@ lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeGenotypeInteractionAdjusted),
 
 
 legend("topright",c("genotype", "time", "time:genotype"),pch=16, col=c("red", "blue", "black"))
+
+plot( 1:10, -log10(pValuesTimeFromMedians),ylim=c(0,6),col="BLUE")
+lines( 1:10, -log10(pValuesTimeFromMedians),ylim=c(0,6),col="BLUE")
+
+points( 1:10, -log10(pValuesMediansVsCategory),ylim=c(0,6),col="RED")
+lines( 1:10, -log10(pValuesMediansVsCategory),ylim=c(0,6),col="RED")
+
+
 
 
 
