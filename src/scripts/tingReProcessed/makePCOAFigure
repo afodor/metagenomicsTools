@@ -1,0 +1,9 @@
+rm(list=ls())
+
+setwd("C:\\tingData\\may_2017_rerun")
+myT <- read.table("pcoa_rerunPlusMetadata_L6.txt", header=TRUE, sep="\t")
+
+plot(myT$MDS2,myT$MDS3,col= factor( myT$time),pch=18,xlab="MDS 2",ylab="MSD 3",cex=1.3)
+
+times <- c("0 months","3 months", "4 months", "12 months", "18 months") 
+legend("topright",times,pch=18, col=palette()[1:5])
