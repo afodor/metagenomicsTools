@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import utils.Avevar;
 import utils.ConfigReader;
 
 public class CheckParse
@@ -29,6 +30,8 @@ public class CheckParse
 	
 		List<Integer> countsList = getTotalSeqsForSample();
 		
+		double average = new Avevar(countsList).getAve();
+		
 		HashMap<Integer, String> countsMap = getMapFromPivot(9);
 		
 		for( int x=1; x <=80; x++ )
@@ -47,10 +50,27 @@ public class CheckParse
 		}
 		
 		for( int x=11; x < pivotNames.size(); x++)
-			System.out.println(pivotNames.get(x) + " " + getDataForName(names, pivotNames.get(x)));
+		{
+			String name = pivotNames.get(x);
+			HashMap<Integer, String> expectedData = getMapFromPivot(x);
+			
+			HashMap<Integer, Integer> dataForName = getDataForName(names, pivotNames.get(x));
+			
+			for( int y=1; y <=80; y++)
+			{
+				double expectedRelativeAbundance = ((double) dataForName.get(y)) / countsList.get(y);
+				double expectedLogNorm = Math.log10( expectedRelativeAbundance * average + 1 );
+				double pivotedData= Double.parseDouble(expectedData.get(y));
+				
+				System.out.println(pivotedData + " " + expectedLogNorm);
+				
+				if(Math.abs(pivotedData - expectedLogNorm) > 0.01)
+					throw new Exception("Fail");
+			}
+		}
+			//System.out.println(pivotNames.get(x) + " " + ));
 		
-		System.out.println(pivotNames.get(11) + " " + getDataForName(names, pivotNames.get(11)));
-	
+		
 		
 		System.out.println("pass");
 	}
