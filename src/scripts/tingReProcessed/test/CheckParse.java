@@ -26,9 +26,7 @@ public class CheckParse
 		
 		List<String> pivotNames = getNamesFromPivot();
 		
-		//for( int x=0; x < pivotNames.size(); x++)
-			//System.out.println(pivotNames.get(x) + " " + getSkipNum(names, pivotNames.get(x)));
-		
+	
 		List<Integer> countsList = getTotalSeqsForSample();
 		
 		HashMap<Integer, String> countsMap = getMapFromPivot(9);
@@ -47,6 +45,12 @@ public class CheckParse
 			if( ! anInt.equals(anotherInt))
 				throw new Exception( x + " " +  "Fail " + anInt + " " + anotherInt + " " + countsMap.get(x));
 		}
+		
+		for( int x=11; x < pivotNames.size(); x++)
+			System.out.println(pivotNames.get(x) + " " + getDataForName(names, pivotNames.get(x)));
+		
+		System.out.println(pivotNames.get(11) + " " + getDataForName(names, pivotNames.get(11)));
+	
 		
 		System.out.println("pass");
 	}
@@ -91,6 +95,27 @@ public class CheckParse
 		return list;
 	}
 	
+	private static HashMap<Integer, Integer> getDataForName( List<String> names, String name) throws Exception
+	{
+		HashMap<Integer, Integer>  returnMap = new HashMap<Integer,Integer>();
+		
+		int skipNum = getSkipNum(names, name);
+		
+		HashMap<Integer, String> map = getMap(skipNum);
+		
+		if( map.size() != 80)
+			throw new Exception("No");
+		
+		for( int x=1; x <=80; x++)
+		{
+			Integer aVal = Integer.parseInt(map.get(x).replace("\"", "").replace(",", ""));
+			
+			returnMap.put(x, aVal);
+		}
+		
+		return returnMap;
+	}
+	
 	private static List<Integer> getTotalSeqsForSample() throws Exception
 	{
 		List<Integer> list = new ArrayList<>();
@@ -127,7 +152,7 @@ public class CheckParse
 	{
 		for( int x=0; x < names.size(); x++)
 			if( names.get(x).equals(name) )
-				return x-2;
+				return x-1;
 		
 		return -1;
 	}
