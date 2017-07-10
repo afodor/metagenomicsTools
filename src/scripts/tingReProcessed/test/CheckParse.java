@@ -26,9 +26,27 @@ public class CheckParse
 		
 		List<String> pivotNames = getNamesFromPivot();
 		
-		for( int x=0; x < pivotNames.size(); x++)
-			System.out.println(pivotNames.get(x) + " " + getSkipNum(names, pivotNames.get(x)));
+		//for( int x=0; x < pivotNames.size(); x++)
+			//System.out.println(pivotNames.get(x) + " " + getSkipNum(names, pivotNames.get(x)));
 		
+		List<Integer> countsList = getTotalSeqsForSample();
+		
+		HashMap<Integer, String> countsMap = getMapFromPivot(9);
+		
+		for( int x=1; x <=80; x++ )
+		{
+			Integer anInt = countsList.get(x);
+			
+			String someVal = countsMap.get(x);
+			
+			if( someVal.endsWith(".0"))
+				someVal = someVal.substring(0, someVal.length() -2);
+			
+			Integer anotherInt = Integer.parseInt(someVal);
+			
+			if( ! anInt.equals(anotherInt))
+				throw new Exception( x + " " +  "Fail " + anInt + " " + anotherInt + " " + countsMap.get(x));
+		}
 		
 		System.out.println("pass");
 	}
@@ -71,6 +89,37 @@ public class CheckParse
 		reader.close();
 		
 		return list;
+	}
+	
+	private static List<Integer> getTotalSeqsForSample() throws Exception
+	{
+		List<Integer> list = new ArrayList<>();
+		
+		for( int x=1; x <=81; x++)
+			list.add(0);
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getTingDir() + File.separator + "may_2017_rerun" + File.separator + 
+				"20170512_Casp11_DSS_5groups_16S_DeNovo_NoPhiX_NoPrimerSeq_L6.txt")));
+		
+		for( int x=1; x<=18; x++)
+			reader.readLine();
+		
+		for(String s= reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( splits.length != 81)
+				throw new Exception("No");
+			
+			for(int x=1; x <= 80; x++)
+				list.set(x, list.get(x) + Integer.parseInt(splits[x].replaceAll("\"", "").
+							replaceAll(",", "")));
+		}
+		
+		reader.close();
+		return list;
+		
 	}
 	
 	
