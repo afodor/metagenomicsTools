@@ -51,7 +51,6 @@ public class CheckParse
 		
 		for( int x=11; x < pivotNames.size(); x++)
 		{
-			String name = pivotNames.get(x);
 			HashMap<Integer, String> expectedData = getMapFromPivot(x);
 			
 			HashMap<Integer, Integer> dataForName = getDataForName(names, pivotNames.get(x));
