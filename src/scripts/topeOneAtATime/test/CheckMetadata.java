@@ -49,10 +49,14 @@ public class CheckMetadata
 						if( expected.length() ==0)
 							expected = "NA";
 						
+						String nextVal = splits[y+2];
 						
-						System.out.println(expected + " " + splits[y+2]);
+						if( nextVal.trim().length() == 0 )
+							nextVal = "NA";
 						
-						if( !expected.equals(splits[y+2]))
+						System.out.println(expected + " " + nextVal);
+						
+						if( !expected.equals(nextVal))
 						{
 
 							Double d1= Double.parseDouble(expected);
@@ -79,7 +83,7 @@ public class CheckMetadata
 		
 		BufferedReader reader = new BufferedReader(new FileReader(
 			ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-				"tk_out_22Nov2016.txt"));
+				"tk_out_24Jan2017.txt"));
 		
 		reader.readLine();
 		
@@ -96,7 +100,7 @@ public class CheckMetadata
 			
 			map.put(key, list);
 			
-			for( int x=1; x <= 8; x++)
+			for( int x=1; x <= 9; x++)
 				list.add(splits[x]);
 			
 		}
