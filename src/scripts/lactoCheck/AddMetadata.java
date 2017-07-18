@@ -79,22 +79,33 @@ public class AddMetadata
 			if(codes.length != 3)
 				throw new Exception("No " + splits[0]);
 
-			if( codes[2].startsWith("G"))
+			if( codes[2].startsWith("G")  || splits[0].endsWith("neg"))
 			{
-				Integer birthGroup = birthMap.get(codes[2]);
+				if( codes[2].startsWith("G")   )
+				{
+					Integer birthGroup = birthMap.get(codes[2]);
+					
+					if( birthGroup == null)
+						throw new Exception("No");
+					
+					PCR_DataParser pcr = pcrMap.get(codes[2]);
+					
+					if( pcr == null || ! pcr.getGroup().equals(codes[2]))
+						throw new Exception("No");
+					
+					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
+							"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
+									originalWrapper.getShannonEntropy(splits[0]));
 				
-				if( birthGroup == null)
-					throw new Exception("No");
-				
-				PCR_DataParser pcr = pcrMap.get(codes[2]);
-				
-				if( pcr == null || ! pcr.getGroup().equals(codes[2]))
-					throw new Exception("No");
-				
-				writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
-						"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
-								originalWrapper.getShannonEntropy(splits[0]));
-				
+				}
+				else
+				{
+					writer.write(splits[0] + "\t" + "neg" + "\t" +  "neg" + "\t" + "neg"+  "\t" 
+				+ "NA"+ "\t" + "NA" + 
+							"\t" + "NA"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
+									originalWrapper.getShannonEntropy(splits[0]));
+				}
+					
 				for( int x=1; x < splits.length; x++)
 					writer.write("\t" + splits[x]);
 				
