@@ -1,0 +1,15 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("orderasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
+
+myTData <- myT[,9:ncol(myT)]
+
+myPCOA <- capscale(myTData~1,distance="bray")
+
+myMerge <- cbind( myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("orderPlusPCOA_SamplesPlusNegative",".txt",sep=""))
