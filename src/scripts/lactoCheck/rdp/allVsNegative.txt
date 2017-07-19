@@ -8,7 +8,7 @@ taxaArray <- c("phylum","class","order","family","genus")
 
 for( taxa in taxaArray)
 {
-	inFile <- paste(taxa,"asColumnsLogNormPlusMeta.txt",sep="")
+	inFile <- paste(taxa,"asColumnsNormWithMetadata.txt",sep="")
 	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
 	
 	myT <- myT[ myT$run == "R1" ,]
@@ -23,7 +23,7 @@ for( taxa in taxaArray)
 	index <- 1
 	for( i in 7:ncol(myT))
 		if( sum( myT[,i] >0 ) > (nrow(myT) / 4) )
-			if( mean(myT[,i]) >= 2 )
+			if( mean(myT[,i]) >= 0.005 )
 	{
 		bugNegative <- myT[ myT$groupNumber == "neg",i]
 		
@@ -33,7 +33,7 @@ for( taxa in taxaArray)
 			groups[index] <- g
 			
 			bugPositive <- myT[ as.numeric(myT$groupNumber) == g, i ]
-			pValues[index] <- t.test( bugPositive, bugNegative)$p.value
+			pValues[index] <- t.test( bugPositive, bugNegative, alternative = c("greater"))$p.value
 			mainText =paste(names[index], "group", g, "p=", format( pValues[index],digits=3))
 			boxplot( bugPositive, bugNegative, main=mainText)
 			index <- index + 1

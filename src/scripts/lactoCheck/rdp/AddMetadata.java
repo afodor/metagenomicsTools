@@ -26,6 +26,17 @@ public class AddMetadata
 									+ File.separator +
 									 level + "asColumns.txt");
 			
+			File normFile = new File(  ConfigReader.getLactoCheckDir()+ File.separator + "rdp" 
+									+ File.separator +
+									 level + "asColumnsNorm.txt");
+			
+			File normFileWithMetadata = new File(  ConfigReader.getLactoCheckDir()+ File.separator + "rdp" 
+					+ File.separator +
+					 level + "asColumnsNormWithMetadata.txt");
+			
+			// this is hacked and avgNumber needs to be changed in the OtuWrapper class
+			//wrapper.writeNormalizedDataToFile(normFile);
+			
 			File logNormFile = new File(ConfigReader.getLactoCheckDir()+ File.separator + "rdp" 
 					+ File.separator + level + "asColumnsLogNorm.txt");
 			
@@ -33,6 +44,8 @@ public class AddMetadata
 					+ File.separator + level + "asColumnsLogNormPlusMeta.txt");
 			
 			addMetadata(logNormFile, metaFile, wrapper);
+			addMetadata(normFile, normFileWithMetadata, wrapper);
+			
 		}
 	}
 	
