@@ -17,6 +17,7 @@ pValues <- vector()
 
 index <- 1
 for( i in 7:ncol(myT))
+	if( sum( myT[,i] >0 ) > (nrow(myT) / 4) )
 {
 	bugNegative <- myT[ myT$groupNumber == "neg",i]
 	
