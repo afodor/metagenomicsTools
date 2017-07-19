@@ -12,6 +12,8 @@ pdf("OrderPosVsNegative.pdf")
 par(mfrow=c(3,2))
 
 names <- vector()
+groups <- vector()
+pValues <- vector()
 
 index <- 1
 for( i in 7:ncol(myT))
@@ -21,10 +23,11 @@ for( i in 7:ncol(myT))
 	for( g in 1:5)
 	{
 		names[index] <- names(myT)[i]
+		groups[index] <- g
 		
 		bugPositive <- myT[ as.numeric(myT$groupNumber) == g, i ]
-		
-		mainText =paste(names[index], "group", g)
+		pValues[index] <- t.test( bugPositive, bugNegative)$p.value
+		mainText =paste(names[index], "group", g, "p=", format( pValues[index],digits=3))
 		boxplot( bugPositive, bugNegative, main=mainText)
 		index <- index + 1
 	}
