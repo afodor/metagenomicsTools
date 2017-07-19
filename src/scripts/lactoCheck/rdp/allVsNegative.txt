@@ -4,44 +4,51 @@ rm(list=ls())
 
 setwd("C:\\lactoCheck\\rdp")
 
-myT <- read.table("orderasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
+taxaArray <- c("phylum","class","order","family","genus")
 
-myT <- myT[ myT$run == "R1" ,]
-
-pdf("OrderPosVsNegative.pdf")
-par(mfrow=c(3,2))
-
-names <- vector()
-groups <- vector()
-pValues <- vector()
-
-index <- 1
-for( i in 7:ncol(myT))
-	if( sum( myT[,i] >0 ) > (nrow(myT) / 4) )
+for( taxa in taxaArray)
 {
-	bugNegative <- myT[ myT$groupNumber == "neg",i]
+	inFile <- paste(taxa,"asColumnsLogNormPlusMeta.txt",sep="")
+	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
 	
-	for( g in 1:5)
+	myT <- myT[ myT$run == "R1" ,]
+	
+	pdf( paste(taxa, "PosVsNegative.pdf",sep=""))
+	par(mfrow=c(3,2))
+	
+	names <- vector()
+	groups <- vector()
+	pValues <- vector()
+	
+	index <- 1
+	for( i in 7:ncol(myT))
+		if( sum( myT[,i] >0 ) > (nrow(myT) / 4) )
 	{
-		names[index] <- names(myT)[i]
-		groups[index] <- g
+		bugNegative <- myT[ myT$groupNumber == "neg",i]
 		
-		bugPositive <- myT[ as.numeric(myT$groupNumber) == g, i ]
-		pValues[index] <- t.test( bugPositive, bugNegative)$p.value
-		mainText =paste(names[index], "group", g, "p=", format( pValues[index],digits=3))
-		boxplot( bugPositive, bugNegative, main=mainText)
-		index <- index + 1
+		for( g in 1:5)
+		{
+			names[index] <- names(myT)[i]
+			groups[index] <- g
+			
+			bugPositive <- myT[ as.numeric(myT$groupNumber) == g, i ]
+			pValues[index] <- t.test( bugPositive, bugNegative)$p.value
+			mainText =paste(names[index], "group", g, "p=", format( pValues[index],digits=3))
+			boxplot( bugPositive, bugNegative, main=mainText)
+			index <- index + 1
+		}
+		
+		
+		plot(0,type='n',axes=FALSE,ann=FALSE)
 	}
 	
+	dev.off()
 	
-	plot(0,type='n',axes=FALSE,ann=FALSE)
+	
+	dFrame <- data.frame( names, groups,pValues)
+	dFrame <- dFrame [order(pValues),]
+	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
+	
+	outFile <- paste( "pValuesNegVsControlByGroup", taxa, ".txt", sep="")
+	write.table(dFrame, file=outFile, sep="\t",row.names=FALSE)
 }
-
-dev.off()
-
-
-dFrame <- data.frame( names, groups,pValues)
-dFrame <- dFrame [order(pValues),]
-dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
-	
-write.table(dFrame, file=paste("pValuesNegVsControlByGroupOrder.txt",sep=""), sep="\t",row.names=FALSE)

@@ -768,11 +768,7 @@ public class NewRDPParserFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
-		File inFile = new File("c:\\temp\\F14FTSUSAT0494A-11-43-B_1.fq.gz_082A.fasta_TO_RDP.txt");
-		File outFile = new File("c:\\temp\\someRdpOut.xml");
-		writeXML(inFile, outFile);
-		
-		outFile = new File("c:\\temp\\someRdpOut.txt");
-		writeTabluarTaxa(inFile, outFile);
+		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length ; x++)
+			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 	}
 }
