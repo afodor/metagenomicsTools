@@ -38,3 +38,10 @@ for( i in 7:ncol(myT))
 }
 
 dev.off()
+
+
+dFrame <- data.frame( names, groups,pValues)
+dFrame <- dFrame [order(pValues),]
+dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
+	
+write.table(dFrame, file=paste("pValuesNegVsControlByGroupOrder.txt",sep=""), sep="\t",row.names=FALSE)
