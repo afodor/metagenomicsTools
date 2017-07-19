@@ -1,0 +1,36 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("orderasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
+
+myT <- myT[ myT$run == "R1" ,]
+
+pdf("OrderPosVsNegative.pdf")
+par(mfrow=c(3,2))
+
+names <- vector()
+
+index <- 1
+for( i in 7:ncol(myT))
+{
+	bugNegative <- myT[ myT$groupNumber == "neg",i]
+	
+	for( g in 1:5)
+	{
+		names[index] <- names(myT)[i]
+		
+		bugPositive <- myT[ as.numeric(myT$groupNumber) == g, i ]
+		
+		mainText =paste(names[index], "group", g)
+		boxplot( bugPositive, bugNegative, main=mainText)
+		index <- index + 1
+	}
+	
+	
+	plot(0,type='n',axes=FALSE,ann=FALSE)
+}
+
+dev.off()

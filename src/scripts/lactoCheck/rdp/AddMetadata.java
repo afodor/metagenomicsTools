@@ -95,7 +95,7 @@ public class AddMetadata
 			if(codes.length != 3)
 				throw new Exception("No " + key);
 
-			if( codes[2].startsWith("G")  || key.endsWith("neg") || key.endsWith("NC101"))
+			if( codes[2].startsWith("G")  || key.endsWith("neg"))
 			{
 				if( codes[2].startsWith("G")   )
 				{
@@ -116,18 +116,12 @@ public class AddMetadata
 				}
 				else if ( key.endsWith("neg"))
 				{
-					writer.write(splits[0] + "\t" + "neg" + "\t" +  "neg" + "\t" + "neg"+  "\t" 
+					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "neg"+  "\t" 
 				+ "NA"+ "\t" + "NA" + 
 							"\t" + "NA"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
 				}
-				else
-				{
-					writer.write(splits[0] + "\t" + "NC101" + "\t" +  "NC101" + "\t" + "NC101"+  "\t" 
-				+ "NA"+ "\t" + "NA" + 
-							"\t" + "NA"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
-									originalWrapper.getShannonEntropy(splits[0]));
-				}
+				else throw new Exception("No");
 					
 				for( int x=1; x < splits.length; x++)
 					writer.write("\t" + splits[x]);
