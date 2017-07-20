@@ -47,7 +47,7 @@ for( taxa in taxaArray)
 	
 	
 	dFrame <- data.frame( names, groups,pValues)
-	dFrame <- dFrame [order(pValues),]
+	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
 	
 	outFile <- paste( "pValuesNegVsControlByGroup", taxa, ".txt", sep="")
