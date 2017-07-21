@@ -75,6 +75,32 @@ public class AddMetadata
 		return map;
 	}
 	
+	private static class Holder
+	{
+		String otuName= null;
+		double frequency = -1;
+	}
+	
+	private static Holder getMostFrequent(String sampleName, OtuWrapper wrapper) throws Exception
+	{
+		Holder h = new Holder();
+		
+		int sampleIndex = wrapper.getIndexForSampleName(sampleName);
+		double sum = wrapper.getCountsForSample(sampleIndex);
+		for(int x=0; x < wrapper.getOtuNames().size();x++)
+		{
+			double val = wrapper.getDataPointsUnnormalized().get(sampleIndex).get(x)/ sum;
+			
+			if( h.frequency < val)
+			{
+				h.frequency = val;
+				h.otuName = wrapper.getOtuNames().get(x);
+			}
+		}
+		
+		return h;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -151,7 +177,7 @@ public class AddMetadata
 		String[] topSplits = reader.readLine().split("\t");
 
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
-				+ "\trun\tread\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tbirthMode\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+				+ "\trun\tread\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tbirthMode\tmostFrequentTaxa\tfractionMostFrequent\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -160,7 +186,12 @@ public class AddMetadata
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
+			
 			String[] splits = s.split("\t");
+			
+			Holder h = getMostFrequent(splits[0], originalWrapper);
+					
+			
 			String key = splits[0].replace("rdp_", "").replace(".txt.gz", "");
 					
 			String[] codes = key.split("_");
@@ -194,6 +225,7 @@ public class AddMetadata
 					
 					writer.write(key + "\t" + codes[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
 							codes[2].substring(0,1) + "\t"+ subjectNumber+ "\t" + birthMode + "\t" + 
+							h.otuName + "\t" + h.frequency + "\t" + 
 					qPCRString + "\t" + 
 					+ pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
 							"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
@@ -203,7 +235,8 @@ public class AddMetadata
 				else if ( key.endsWith("neg"))
 				{
 					System.out.println("In neg");
-					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\tneg\t" 
+					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\t"  + 
+							"neg\t"  + h.otuName + "\t"+ h.frequency + "\t" 
 				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
