@@ -114,7 +114,7 @@ public class AddMetadata
 		String[] topSplits = reader.readLine().split("\t");
 
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
-				+ "\trun\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+				+ "\trun\tread\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -149,7 +149,7 @@ public class AddMetadata
 					if( qPCR16SMap.get(codes[2]) != null )
 						qPCRString = qPCR16SMap.get(codes[2]).toString();
 					
-					writer.write(key + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
+					writer.write(key + "\t" + codes[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
 							codes[2].substring(0,1) + "\t"+ codes[2].replace("S", "").replace("G", "") + "\t" + 
 					qPCRString + "\t" + 
 					+ pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
@@ -160,7 +160,7 @@ public class AddMetadata
 				else if ( key.endsWith("neg"))
 				{
 					System.out.println("In neg");
-					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\t" 
+					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\t" 
 				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));

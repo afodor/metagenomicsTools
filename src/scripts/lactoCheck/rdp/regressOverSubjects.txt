@@ -1,0 +1,50 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\lactoCheck\\rdp")
+
+taxaArray <- c("phylum","class","order","family","genus")
+
+for( taxa in taxaArray)
+{
+	inFile <- paste(taxa,"asColumnsNormWithMetadata.txt",sep="")
+	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
+	
+	myT <- myT[ myT$run == "Run1" & myT$read == "R1" ,]
+	
+	subjectNumbers <- unique(myT$subjectNumber)
+	
+	pdf(paste("scatterBySubject_", taxa, ".pdf", sep=""))
+	
+	for ( i in 12:ncol(myT))
+	{
+		sSamples <- vector()
+		gSamples <- vector()
+	
+		
+		index <- 1
+		for( s in subjectNumbers) 
+			if ( s != 0 ) 
+			{
+	
+				anS <- myT[  myT$groupID==paste("S",s,sep="") ,i]
+				if( length(anS)!=1)
+					stop("parsing error")
+					
+				sSamples[index] <- anS[1]			
+				
+				anG <- myT[  myT$groupID==paste("G",s,sep="") ,i]
+				if( length(anG)!=1)
+					stop("parsing error")
+					
+				gSamples[index] <- anG[1]			
+				
+				index <- index + 1
+			}
+			
+		plot( sSamples,gSamples, main = names(myT)[i])
+	}
+	
+	dev.off()
+}
