@@ -6,7 +6,7 @@ setwd("C:\\lactoCheck\\rdp")
 
 myT <- read.table("orderasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
 myT <- myT[ myT$run == "Run1" & myT$read == "R1" & (myT$stoolOrGa=="G" | myT$stoolOrGa=="neg"),]
-myTData <- myT[,14:ncol(myT)]
+myTData <- myT[,16:ncol(myT)]
 	
 
 myPCOA <- capscale(myTData~1,distance="bray")
