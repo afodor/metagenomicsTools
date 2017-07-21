@@ -4,12 +4,13 @@ rm(list=ls())
 
 setwd("C:\\lactoCheck\\rdp")
 
-myT <- read.table("familyasColumnsNormWithMetadata.txt", header=TRUE,sep="\t",row.names=1)
-
+myT <- read.table("orderasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
+myT <- myT[ myT$run == "Run1" & myT$read == "R1" & (myT$stoolOrGa=="G" | myT$stoolOrGa=="neg"),]
 myTData <- myT[,14:ncol(myT)]
+	
 
 myPCOA <- capscale(myTData~1,distance="bray")
 
 myMerge <- cbind( myT, myPCOA$CA$u)
 
-write.table(myMerge , sep="\t", file=paste("familyNotLoggedPlusPCOA_SamplesPlusNegative",".txt",sep=""))
+write.table(myMerge , sep="\t", file=paste("orderLoggedPlusPCOA_SamplesPlusNegative",".txt",sep=""))
