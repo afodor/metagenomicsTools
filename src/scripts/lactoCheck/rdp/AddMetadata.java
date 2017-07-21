@@ -114,7 +114,7 @@ public class AddMetadata
 		String[] topSplits = reader.readLine().split("\t");
 
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
-				+ "\trun\tgroupID\tgroupNumber\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+				+ "\trun\tgroupID\tgroupNumber\tstoolOrGa\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -131,19 +131,17 @@ public class AddMetadata
 			if(codes.length != 3)
 				throw new Exception("No " + key);
 
-			if( codes[2].startsWith("G")  || key.endsWith("neg"))
+			if( codes[2].startsWith("G")  || key.endsWith("neg") || codes[2].startsWith("S"))
+				if(! codes[2].equals("S30"))
 			{
 				System.out.println(key);
-				if( codes[2].startsWith("G")   )
+				if( codes[2].startsWith("G")   || codes[2].startsWith("S"))
 				{
-					Integer birthGroup = birthMap.get(codes[2]);
+					Integer birthGroup = birthMap.get(codes[2].replace("S","G"));
 					
-					if( birthGroup == null)
-						throw new Exception("No");
+					PCR_DataParser pcr = pcrMap.get(codes[2].replace("S", "G"));
 					
-					PCR_DataParser pcr = pcrMap.get(codes[2]);
-					
-					if( pcr == null || ! pcr.getGroup().equals(codes[2]))
+					if( pcr == null || ! pcr.getGroup().equals(codes[2].replace("S", "G")))
 						throw new Exception("No");
 					
 					String qPCRString = "NA";
@@ -152,6 +150,7 @@ public class AddMetadata
 						qPCRString = qPCR16SMap.get(codes[2]).toString();
 					
 					writer.write(key + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
+							codes[2].substring(0,1) + "\t"+ 
 					qPCRString + "\t" + 
 					+ pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
 							"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
@@ -161,7 +160,7 @@ public class AddMetadata
 				else if ( key.endsWith("neg"))
 				{
 					System.out.println("In neg");
-					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\t" 
+					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t" 
 				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
