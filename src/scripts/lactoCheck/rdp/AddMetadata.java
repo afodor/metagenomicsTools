@@ -14,6 +14,31 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
+	private static HashMap<String, Double> getPCRMap() throws Exception
+	{
+		HashMap<String, Double> map = new HashMap<String,Double>();
+		
+		BufferedReader reader= new BufferedReader(new FileReader(new File(
+				ConfigReader.getLactoCheckDir() + File.separator + 
+					"qPCRData.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s = reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put(splits[0], Double.parseDouble(splits[2]));
+		}
+		
+		reader.close();
+		
+		return map;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -80,6 +105,7 @@ public class AddMetadata
 	{
 		HashMap<String, PCR_DataParser> pcrMap = PCR_DataParser.getPCRData();
 		HashMap<String, Integer> birthMap = getBirthGroupMap();
+		HashMap<String, Double> qPCR16SMap = getPCRMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -88,7 +114,7 @@ public class AddMetadata
 		String[] topSplits = reader.readLine().split("\t");
 
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
-				+ "\trun\tgroupID\tgroupNumber\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+				+ "\trun\tgroupID\tgroupNumber\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -120,7 +146,14 @@ public class AddMetadata
 					if( pcr == null || ! pcr.getGroup().equals(codes[2]))
 						throw new Exception("No");
 					
-					writer.write(key + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
+					String qPCRString = "NA";
+					
+					if( qPCR16SMap.get(codes[2]) != null )
+						qPCRString = qPCR16SMap.get(codes[2]).toString();
+					
+					writer.write(key + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
+					qPCRString + "\t" + 
+					+ pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
 							"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
 				
@@ -129,7 +162,7 @@ public class AddMetadata
 				{
 					System.out.println("In neg");
 					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\t" 
-				+ "0"+ "\t" + "0" + 
+				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
 				}
