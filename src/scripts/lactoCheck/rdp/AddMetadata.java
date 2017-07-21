@@ -81,9 +81,6 @@ public class AddMetadata
 		HashMap<String, PCR_DataParser> pcrMap = PCR_DataParser.getPCRData();
 		HashMap<String, Integer> birthMap = getBirthGroupMap();
 		
-		for(String s : pcrMap.keySet())
-			System.out.println(s);
-		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
@@ -110,6 +107,7 @@ public class AddMetadata
 
 			if( codes[2].startsWith("G")  || key.endsWith("neg"))
 			{
+				System.out.println(key);
 				if( codes[2].startsWith("G")   )
 				{
 					Integer birthGroup = birthMap.get(codes[2]);
@@ -129,9 +127,10 @@ public class AddMetadata
 				}
 				else if ( key.endsWith("neg"))
 				{
-					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "neg"+  "\t" 
-				+ "NA"+ "\t" + "NA" + 
-							"\t" + "NA"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
+					System.out.println("In neg");
+					writer.write(splits[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\t" 
+				+ "0"+ "\t" + "0" + 
+							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
 				}
 				else throw new Exception("No");
@@ -143,7 +142,7 @@ public class AddMetadata
 			}
 			else
 			{
-				System.out.println("Could not find" + splits[0]);
+				//System.out.println("Could not find" + splits[0]);
 			}
 			
 		}
