@@ -14,6 +14,42 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
+	private static HashMap<Integer, String> getBirthType() throws Exception
+	{
+		HashMap<Integer, String>  map = new HashMap<Integer,String>();
+		
+		map.put(1, "V");
+		map.put(2, "V");
+		map.put(5, "C");
+		map.put(6, "C");
+		map.put(7, "C");
+		map.put(8, "V");
+		map.put(9, "V");
+		map.put(10, "C");
+		map.put(11, "C");
+		map.put(12, "C");
+		map.put(13, "C");
+		map.put(14, "C");
+		map.put(15, "C");
+		map.put(16, "C");
+		map.put(17, "V");
+		map.put(18, "V");
+		map.put(19, "C");
+		map.put(20, "C");
+		map.put(21, "C");
+		map.put(22, "V");
+		map.put(23, "C");
+		map.put(24, "C");
+		map.put(25, "V");
+		map.put(26, "V");
+		map.put(27, "C");
+		map.put(28, "C");
+		map.put(29, "V");
+		
+		
+		return map;
+	}
+	
 	private static HashMap<String, Double> getPCRMap() throws Exception
 	{
 		HashMap<String, Double> map = new HashMap<String,Double>();
@@ -106,6 +142,7 @@ public class AddMetadata
 		HashMap<String, PCR_DataParser> pcrMap = PCR_DataParser.getPCRData();
 		HashMap<String, Integer> birthMap = getBirthGroupMap();
 		HashMap<String, Double> qPCR16SMap = getPCRMap();
+		HashMap<Integer, String> birthTypeMap = getBirthType();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -114,7 +151,7 @@ public class AddMetadata
 		String[] topSplits = reader.readLine().split("\t");
 
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
-				+ "\trun\tread\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
+				+ "\trun\tread\tgroupID\tgroupNumber\tstoolOrGa\tsubjectNumber\tbirthMode\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -149,8 +186,14 @@ public class AddMetadata
 					if( qPCR16SMap.get(codes[2]) != null )
 						qPCRString = qPCR16SMap.get(codes[2]).toString();
 					
+					Integer subjectNumber = Integer.parseInt(codes[2].replace("S", "").replace("G", "") );
+					String birthMode = "U";
+					
+					if( birthTypeMap.containsKey(subjectNumber) )
+						birthMode = birthTypeMap.get(subjectNumber);
+					
 					writer.write(key + "\t" + codes[0] + "\t" + codes[1] + "\t" +  codes[2] + "\t" + birthGroup +  "\t" + 
-							codes[2].substring(0,1) + "\t"+ codes[2].replace("S", "").replace("G", "") + "\t" + 
+							codes[2].substring(0,1) + "\t"+ subjectNumber+ "\t" + birthMode + "\t" + 
 					qPCRString + "\t" + 
 					+ pcr.getL_crispatus() + "\t" + pcr.getL_iners() + 
 							"\t" + pcr.getBglobulin() + "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
@@ -160,7 +203,7 @@ public class AddMetadata
 				else if ( key.endsWith("neg"))
 				{
 					System.out.println("In neg");
-					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\t" 
+					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\tneg\t" 
 				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));
