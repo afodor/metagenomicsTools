@@ -1,0 +1,46 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\lactoCheck\\rdp")
+
+taxaArray <- c("phylum","class","order","family","genus")
+
+for( taxa in taxaArray)
+{
+	inFile <- paste(taxa,"asColumnsNormWithMetadata.txt",sep="")
+	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
+	
+	myT <- myT[ myT$run == "Run1" | myT$groupID == "neg" ,]
+	myT <- myT[ myT$read== "R1" ,]
+	myT <- myT[ myT$stoolOrGa != "S" ,]
+	
+	pdf( paste(taxa, "PosVsNegative.pdf",sep=""))
+	
+	names <- vector()
+	pValues <- vector()
+	
+	index <- 1
+	for( i in 13:ncol(myT))
+		if( sum( myT[,i] >0 ) > (nrow(myT) / 4) )
+			if( mean(myT[,i]) >= 0.005 )
+	{
+		bugNegative <- myT[ myT$groupNumber == 0,i]
+		
+		names[index] <- names(myT)[i]
+		bugPositive <- myT[ myT$groupNumber >0, i ]
+		pValues[index] <- t.test( bugPositive, bugNegative, alternative = c("greater"))$p.value
+		mainText =paste(names[index], "p=", format( pValues[index],digits=3))
+		boxplot( bugPositive, bugNegative, main=mainText)
+		index <- index + 1
+	}
+		
+	dev.off()
+	
+	dFrame <- data.frame( names, pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedPValues<- p.adjust( dFrame$pValues, method = "BH" )
+	
+	outFile <- paste( "pValuesNegVsControlByGroup", taxa, ".txt", sep="")
+	write.table(dFrame, file=outFile, sep="\t",row.names=FALSE)
+}
