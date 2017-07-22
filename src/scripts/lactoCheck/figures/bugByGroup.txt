@@ -11,9 +11,23 @@ bug <- myT[,bugIndex]
 groupNumber <- myT$groupNumber
 	
 myFrame <- data.frame( bug, groupNumber )
-	
-boxplot(bug ~ groupNumber,staplewex=0, outwex=0)
-stripchart(bug ~ groupNumber, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 
-plot(bug ~ groupNumber)
+colors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$groupNumber[i] == 0) 
+	{
+		colors[i] = "red"			
+	}
+	else
+	{
+		if( myT$birthMode[i] == "C" )
+			colors[i] = "blue"
+		else
+			colors[i] = "black"
+	}
+}
+	
+plot(bug ~ groupNumber, main = names(myT)[bugIndex],cex=1.3,pch=16, col=colors)
 
