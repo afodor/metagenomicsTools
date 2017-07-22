@@ -4,5 +4,9 @@ setwd("C:\\lactoCheck")
 
 myT <- read.table("closedRefLoggedPlusPCOA_SamplesPlusNegative.txt", sep="\t", header=TRUE)
 
-plot(myT$MDS1, myT$MDS2,pch=16,col=ifelse( myT$stoolOrGa=="G" , "BLACK", "RED"),cex=ifelse( myT$stoolOrGa=="G" , 1, 2))
+plot(myT$MDS1, myT$MDS2,pch=16,
+col=ifelse( myT$stoolOrGa=="G" , "BLACK", "RED"),cex=ifelse( myT$stoolOrGa=="G" , 1.25, 2),
+xlab="MDS1", ylab="MDS2")
+
+
 
