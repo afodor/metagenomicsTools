@@ -1,0 +1,19 @@
+rm(list=ls())
+
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("orderasColumnsNormWithMetadata.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",] 
+
+bugIndex <- 34
+
+bug <- myT[,bugIndex]
+groupNumber <- myT$groupNumber
+	
+myFrame <- data.frame( bug, groupNumber )
+	
+boxplot(bug ~ groupNumber,staplewex=0, outwex=0)
+stripchart(bug ~ groupNumber, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+
+plot(bug ~ groupNumber)
+
