@@ -14,12 +14,14 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
-	private static HashMap<Integer, String> getBirthType() throws Exception
+	public static HashMap<Integer, String> getBirthType() throws Exception
 	{
 		HashMap<Integer, String>  map = new HashMap<Integer,String>();
 		
 		map.put(1, "V");
 		map.put(2, "V");
+		map.put(3, "C");
+		map.put(4, "C");
 		map.put(5, "C");
 		map.put(6, "C");
 		map.put(7, "C");
