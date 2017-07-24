@@ -6,11 +6,13 @@ myT <- read.table("orderasColumnsNormWithMetadata.txt", sep="\t", header=TRUE)
 myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",] 
 
 #bugIndex <- 34
-bugIndex <- 29
+#bugIndex <- 29
 #bugIndex <- 46
 #bugIndex <- 38
 #bugIndex <- 43
 #bugIndex <- 19
+bugIndex <- 13
+bugIndex <- 12
 
 bug <- myT[,bugIndex]
 groupNumber <- myT$groupNumber
@@ -35,6 +37,11 @@ for( i in 1:nrow(myT))
 }
 	
 plot(bug ~ groupNumber, main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+legend("center",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 
-#legend("center",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
+
+#qpcr
+plot(bug[myT$groupNumber>0] ~ groupNumber[myT$groupNumber>0], main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+#legend("center",c("cesarean","vaginal"),pch=16, col=c("red", "black"),cex=1.3)
+
 
