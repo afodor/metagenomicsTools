@@ -10,20 +10,22 @@ for( i in 1:nrow(myT))
 {
 	if( myT$groupNumber[i] == 0) 
 	{
-		colors[i] = "red"			
+		colors[i] = "blue"			
 	}
 	else
 	{
 		if( myT$birthMode[i] == "C" )
-			colors[i] = "blue"
+			colors[i] = "red"
 		else
 			colors[i] = "black"
 	}
 }
 
 plot(myT$MDS1, myT$MDS2,pch=16,
-col=colors,cex=ifelse( myT$stoolOrGa=="G" , 1.25, 2),
+col=colors,cex=ifelse( myT$stoolOrGa=="G" , 1.1, 2.25),
 xlab="MDS1", ylab="MDS2")
-legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("red", "blue", "black"))
+
+
+legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"))
 
 
