@@ -1,8 +1,11 @@
 rm(list=ls())
 
-setwd("C:\\lactoCheck")
+#setwd("C:\\lactoCheck")
+#myT <- read.table("closedRefLoggedPlusPCOA_SamplesPlusNegative.txt", sep="\t", header=TRUE)
 
-myT <- read.table("closedRefLoggedPlusPCOA_SamplesPlusNegative.txt", sep="\t", header=TRUE)
+setwd("C:\\lactoCheck\\rdp")
+myT <- read.table("genusLoggedPlusPCOA_SamplesPlusNegative.txt", sep="\t", header=TRUE)
+
 
 colors <- vector()
 
