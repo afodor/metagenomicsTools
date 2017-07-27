@@ -25,7 +25,7 @@ fnFs <- file.path(path, fnFs)
 filt_path <- file.path(path, "filtered") # Place filtered files in filtered/ subdirectory
 filtFs <- file.path(filt_path, paste0(sample.names, "_F_filt.fastq.gz"))
 
-out <- filterAndTrim(fnFs, filtFs, truncLen=c(240),
+out <- filterAndTrim(fnFs, filtFs, truncLen=c(160),
               maxN=0, maxEE=c(2), truncQ=2, rm.phix=TRUE,
               compress=TRUE, multithread=FALSE) # On Windows set multithread=FALSE
 head(out)
