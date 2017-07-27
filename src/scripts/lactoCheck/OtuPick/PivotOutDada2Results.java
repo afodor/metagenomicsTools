@@ -16,6 +16,8 @@ public class PivotOutDada2Results
 	public static void main(String[] args) throws Exception
 	{
 		pivotForDirectory("Escherichia_Shigella" );
+		pivotForDirectory("Clostridium_sensu_stricto" );
+		pivotForDirectory("Raoultella" );
 	}
 	
 	public static void pivotForDirectory(String directoryName) throws Exception

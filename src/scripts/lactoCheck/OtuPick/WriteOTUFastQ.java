@@ -19,7 +19,9 @@ public class WriteOTUFastQ
 {
 	public static void main(String[] args) throws Exception
 	{
-		writeForAGenus("Escherichia/Shigella", "Escherichia_Shigella");
+		writeForAGenus("Raoultella","Raoultella");
+		//writeForAGenus("Clostridium sensu stricto", "Clostridium_sensu_stricto");
+		//writeForAGenus("Escherichia/Shigella", "Escherichia_Shigella");
 	}
 	
 	public static void writeForAGenus(String genusString, String cleanString) throws Exception

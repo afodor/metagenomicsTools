@@ -4,8 +4,8 @@ rm(list=ls())
 
 library(dada2); packageVersion("dada2")
 
-setwd("C:\\lactoCheck\\Escherichia_Shigella")
-path <- "C:\\lactoCheck\\Escherichia_Shigella"
+setwd("C:\\lactoCheck\\Raoultella")
+path <- "C:\\lactoCheck\\Raoultella"
 list.files(path)
 
 fnFs <- sort(list.files(path, pattern=".fastq"))
