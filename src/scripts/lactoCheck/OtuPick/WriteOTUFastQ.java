@@ -1,9 +1,14 @@
 package scripts.lactoCheck.OtuPick;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 
+import parsers.FastQ;
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
@@ -12,9 +17,51 @@ public class WriteOTUFastQ
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> sequenceToSampleMap = getSequenceToSampleMap("Escherichia/Shigella");
+		writeForAGenus("Escherichia/Shigella");
+	}
+	
+	public static void writeForAGenus(String genusString) throws Exception
+	{
+		
+		HashMap<String, String> sequenceToSampleMap = getSequenceToSampleMap(genusString);
 		
 		System.out.println(sequenceToSampleMap.size());
+		
+		File outDirectory = new File( ConfigReader.getLactoCheckDir() + File.separator +
+						genusString);
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getLactoCheckDir() + File.separator + "fastq" + File.separator + 
+					"Run1-Sample-Name-1_S1_L001_R1_001.fastq.gz")));
+		
+		HashMap<String, BufferedWriter> writerMap = new HashMap<String, BufferedWriter>();
+		
+		for(FastQ fastq = FastQ.readOneOrNull(reader); fastq != null; fastq = FastQ.readOneOrNull(reader))
+		{
+			String key = fastq.getFirstTokenOfHeader();
+			
+			String sample = sequenceToSampleMap.get(key);
+			
+			if( sample != null)
+			{
+				BufferedWriter writer = writerMap.get(key);
+				
+				if( writer == null)
+				{
+					writer = new BufferedWriter(new FileWriter(new File(outDirectory.getAbsolutePath() + 
+							File.separator + sample)));
+				}
+				
+				fastq.writeToFile(writer);
+			}
+		}
+		
+		for(BufferedWriter writer : writerMap.values())
+		{
+			writer.flush();  writer.close();
+		}
+		
+		System.out.println("Finished");
 		
 	}
 	
