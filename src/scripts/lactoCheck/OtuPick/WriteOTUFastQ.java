@@ -59,6 +59,8 @@ public class WriteOTUFastQ
 				{
 					writer = new BufferedWriter(new FileWriter(new File(outDirectory.getAbsolutePath() + 
 							File.separator + sample.replaceAll("/", "_") +".fastq")));
+					
+					writerMap.put(sample,  writer);
 				}
 				
 				fastq.writeToFile(writer);
