@@ -3,10 +3,12 @@ package scripts.lactoCheck.OtuPick;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
 import parsers.NewRDPNode;
@@ -17,10 +19,10 @@ public class WriteOTUFastQ
 {
 	public static void main(String[] args) throws Exception
 	{
-		writeForAGenus("Escherichia/Shigella");
+		writeForAGenus("Escherichia/Shigella", "Escherichia_Shigella");
 	}
 	
-	public static void writeForAGenus(String genusString) throws Exception
+	public static void writeForAGenus(String genusString, String cleanString) throws Exception
 	{
 		
 		HashMap<String, String> sequenceToSampleMap = getSequenceToSampleMap(genusString);
@@ -28,32 +30,42 @@ public class WriteOTUFastQ
 		System.out.println(sequenceToSampleMap.size());
 		
 		File outDirectory = new File( ConfigReader.getLactoCheckDir() + File.separator +
-						genusString);
+						cleanString);
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getLactoCheckDir() + File.separator + "fastq" + File.separator + 
-					"Run1-Sample-Name-1_S1_L001_R1_001.fastq.gz")));
+		outDirectory.mkdir();
+		
+		BufferedReader reader = 
+		new BufferedReader(new InputStreamReader( 
+				new GZIPInputStream( new FileInputStream( ConfigReader.getLactoCheckDir() + File.separator + "fastq" + File.separator + 
+						"Run1-Sample-Name-1_S1_L001_R1_001.fastq.gz") ) ));
 		
 		HashMap<String, BufferedWriter> writerMap = new HashMap<String, BufferedWriter>();
 		
+		int numScreened =0;
+		int numHits =0;
 		for(FastQ fastq = FastQ.readOneOrNull(reader); fastq != null; fastq = FastQ.readOneOrNull(reader))
 		{
+			numScreened++;
 			String key = fastq.getFirstTokenOfHeader();
 			
 			String sample = sequenceToSampleMap.get(key);
 			
 			if( sample != null)
 			{
+				numHits++;
 				BufferedWriter writer = writerMap.get(key);
 				
 				if( writer == null)
 				{
 					writer = new BufferedWriter(new FileWriter(new File(outDirectory.getAbsolutePath() + 
-							File.separator + sample)));
+							File.separator + sample.replaceAll("/", "_") +".fastq")));
 				}
 				
 				fastq.writeToFile(writer);
 			}
+			
+			if( numScreened % 10000 == 0 )
+				System.out.println(numScreened + " " + numHits);
 		}
 		
 		for(BufferedWriter writer : writerMap.values())
@@ -95,7 +107,7 @@ public class WriteOTUFastQ
 							
 							if( node != null && node.getTaxaName().equals(genusString))
 							{
-								map.put(rdpLine.getSequenceId(),sample);
+								map.put("@" + rdpLine.getSequenceId(),sample);
 							}
 						}
 						
