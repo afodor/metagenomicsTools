@@ -30,3 +30,13 @@ out <- filterAndTrim(fnFs, filtFs, truncLen=c(240),
               compress=TRUE, multithread=FALSE) # On Windows set multithread=FALSE
 head(out)
 write.table(out, file="readSummary.txt")
+
+errF <- learnErrors(filtFs, multithread=TRUE)
+
+plotErrors(errF, nominalQ=TRUE)
+
+derepFs <- derepFastq(filtFs, verbose=TRUE)
+dadaFs <- dada(derepFs, err=errF, multithread=TRUE)
+
+seqtab <- makeSequenceTable(dadaFs )
+write.table( seqtab, file="dada2Out.txt")
