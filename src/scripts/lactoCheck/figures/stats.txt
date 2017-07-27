@@ -1,0 +1,12 @@
+rm(list=ls())
+
+rm(list=ls())
+	
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("genusasColumnsNormWithMetadata.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",] 
+myT <- myT[1:29,] # remove negative control
+
+myLm <- lm( myT$qPCR16S ~ myT$birthMode + myT$groupNumber )
+anova(myLm)
