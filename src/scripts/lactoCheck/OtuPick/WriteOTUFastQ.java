@@ -53,12 +53,12 @@ public class WriteOTUFastQ
 			if( sample != null)
 			{
 				numHits++;
-				BufferedWriter writer = writerMap.get(key);
+				BufferedWriter writer = writerMap.get(sample);
 				
 				if( writer == null)
 				{
 					writer = new BufferedWriter(new FileWriter(new File(outDirectory.getAbsolutePath() + 
-							File.separator + sample.replaceAll("/", "_") +".fastq")));
+							File.separator + sample +".fastq")));
 					
 					writerMap.put(sample,  writer);
 				}
