@@ -64,7 +64,8 @@ for ( i in 1:nrow(dFrame))
 {
 	index <- dFrame$tableIndex[i]
 	bug <- myWithNeg[,index]
-	birthMode <- myWithNeg$birthMode
+	birthMode <- factor(myWithNeg$birthMode, c("neg","C","V"))
+	
 	groupNumber <- myWithNeg$groupNumber
 	myFrame <- data.frame(bug,birthMode,groupNumber)
 	
@@ -76,8 +77,30 @@ for ( i in 1:nrow(dFrame))
 	
 
 	boxplot(bug ~ birthMode, main = names(myWithNeg)[index])
-
-	stripchart(bug ~ birthMode, data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=colors)		
+	
+	theseColors <- vector()
+	
+	for( i in 1:nrow(myWithNeg))
+	{
+		if( groupNumber[i] == 0) 
+		{
+			theseColors[i] = "blue"			
+		}
+		else
+		{
+			if( birthMode[i] == "C" )
+				theseColors[i] = "red"
+			else
+				theseColors[i] = "black"
+		}
+	}
+	
+	for( i in 1:length(theseColors))
+	{
+		
+		stripchart(bug[i] ~ birthMode[i], 
+		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
+	}
 	
 }
 
