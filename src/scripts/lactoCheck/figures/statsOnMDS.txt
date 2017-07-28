@@ -1,0 +1,102 @@
+
+rm(list=ls())
+	
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("genusLoggedPlusPCOA_SamplesPlusNegative.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
+myWithNeg <- myT 
+myT <- myT[1:29,] # remove negative control
+
+pValuesBirthMode <- vector()
+pValuesGroup <- vector()
+names <- vector()
+tableIndex <- vector()
+
+index <- 1
+for( i in 453:462)
+	{
+		bug <- myT[,i]
+		myLm <- lm( bug~ myT$birthMode + myT$groupNumber )
+		pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesGroup[index] <-  anova(myLm)$"Pr(>F)"[2]
+		names[index] <- names(myT)[i]
+		tableIndex[index] <- i
+		index <- index + 1
+	}
+	
+dFrame <- data.frame( names, pValuesBirthMode,pValuesGroup, tableIndex)
+dFrame <- dFrame [order(dFrame$pValuesBirthMode),]
+dFrame$pValuesBirthModeAdjusted<- p.adjust( dFrame$pValuesBirthMode, method = "BH" )	
+dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+
+write.table(dFrame, file=paste("pValuesForModeTimeGenusMDS.txt",sep=""), sep="\t",row.names=FALSE)
+
+
+colors <- vector()
+
+for( i in 1:nrow(myWithNeg))
+{
+	if( myWithNeg$groupNumber[i] == 0) 
+	{
+		colors[i] = "blue"			
+	}
+	else
+	{
+		if( myWithNeg$birthMode[i] == "C" )
+			colors[i] = "red"
+		else
+			colors[i] = "black"
+	}
+}
+	
+
+
+pdf("boxplotsGenusMDS.pdf")
+par(mfrow=c(1,2))
+
+for ( i in 1:nrow(dFrame))
+{
+	index <- dFrame$tableIndex[i]
+	bug <- myWithNeg[,index]
+	birthMode <- factor(myWithNeg$birthMode, c("neg","C","V"))
+	
+	groupNumber <- myWithNeg$groupNumber
+	myFrame <- data.frame(bug,birthMode,groupNumber)
+	
+	mainString= paste( names(myWithNeg)[index],"\n", "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
+							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
+	
+	plot(bug ~ groupNumber, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
+	
+
+	boxplot(bug ~ birthMode, main = names(myWithNeg)[index])
+	
+	theseColors <- vector()
+	
+	for( i in 1:nrow(myWithNeg))
+	{
+		if( groupNumber[i] == 0) 
+		{
+			theseColors[i] = "blue"			
+		}
+		else
+		{
+			if( birthMode[i] == "C" )
+				theseColors[i] = "red"
+			else
+				theseColors[i] = "black"
+		}
+	}
+	
+	for( i in 1:length(theseColors))
+	{
+		
+		stripchart(bug[i] ~ birthMode[i], 
+		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
+	}
+	
+}
+
+dev.off()
