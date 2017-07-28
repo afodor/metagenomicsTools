@@ -12,7 +12,8 @@ myLm <- lm( myT$qPCR16S ~ myT$birthMode + myT$groupNumber )
 anova(myLm)
 
 pValuesBirthMode <- vector()
-pValuesGroupMode <- vector()
+pValuesGroup <- vector()
+names <- vector()
 
 index <- 1
 for( i in 11:ncol(myT))
@@ -21,6 +22,14 @@ for( i in 11:ncol(myT))
 		bug <- myT[,i]
 		myLm <- lm( bug~ myT$birthMode + myT$groupNumber )
 		pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
-		pValuesGroupMode[index] <-  anova(myLm)$"Pr(>F)"[2]
+		pValuesGroup[index] <-  anova(myLm)$"Pr(>F)"[2]
+		names[index] <- names(myT)[i]
 		index <- index + 1
 	}
+	
+dFrame <- data.frame( names, pValuesBirthMode,pValuesGroup)
+dFrame <- dFrame [order(dFrame$pValuesBirthMode),]
+dFrame$pValuesBirthModeAdjusted<- p.adjust( dFrame$pValuesBirthMode, method = "BH" )	
+dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+
+write.table(dFrame, file=paste("pValuesForModeTimeGenus.txt",sep=""), sep="\t",row.names=FALSE)
