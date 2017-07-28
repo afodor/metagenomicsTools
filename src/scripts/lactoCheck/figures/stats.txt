@@ -18,7 +18,7 @@ names <- vector()
 tableIndex <- vector()
 
 index <- 1
-for( i in 11:ncol(myT))
+for( i in 16:ncol(myT))
 	if(  (sum(myT[,i] ==0) / nrow(myT)) < .25 )
 	{
 		bug <- myT[,i]
@@ -68,7 +68,10 @@ for ( i in 1:nrow(dFrame))
 	groupNumber <- myWithNeg$groupNumber
 	myFrame <- data.frame(bug,birthMode,groupNumber)
 	
-	plot(bug ~ groupNumber, main = names(myWithNeg)[index],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	mainString= paste( names(myWithNeg)[index],"\n", "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
+							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
+	
+	plot(bug ~ groupNumber, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 
