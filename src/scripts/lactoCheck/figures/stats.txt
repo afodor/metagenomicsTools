@@ -40,15 +40,15 @@ write.table(dFrame, file=paste("pValuesForModeTimeGenus.txt",sep=""), sep="\t",r
 
 colors <- vector()
 
-for( i in 1:nrow(myT))
+for( i in 1:nrow(myWithNeg))
 {
-	if( myT$groupNumber[i] == 0) 
+	if( myWithNeg$groupNumber[i] == 0) 
 	{
 		colors[i] = "blue"			
 	}
 	else
 	{
-		if( myT$birthMode[i] == "C" )
+		if( myWithNeg$birthMode[i] == "C" )
 			colors[i] = "red"
 		else
 			colors[i] = "black"
@@ -58,7 +58,7 @@ for( i in 1:nrow(myT))
 
 
 pdf("boxplotsGenus.pdf")
-mfrow(par=c(2,1))
+par(mfrow=c(1,2))
 
 for ( i in 1:nrow(dFrame))
 {
@@ -69,7 +69,7 @@ for ( i in 1:nrow(dFrame))
 	myFrame <- data.frame(bug,birthMode,groupNumber)
 	
 	plot(bug ~ groupNumber, main = names(myWithNeg)[index],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
-	legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
+	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 
 	boxplot(bug ~ birthMode, main = names(myWithNeg)[index])
