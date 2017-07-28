@@ -10,3 +10,17 @@ myT <- myT[1:29,] # remove negative control
 
 myLm <- lm( myT$qPCR16S ~ myT$birthMode + myT$groupNumber )
 anova(myLm)
+
+pValuesBirthMode <- vector()
+pValuesGroupMode <- vector()
+
+index <- 1
+for( i in 11:ncol(myT))
+	if(  (sum(myT[,i] ==0) / nrow(myT)) < .25 )
+	{
+		bug <- myT[,i]
+		myLm <- lm( bug~ myT$birthMode + myT$groupNumber )
+		pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesGroupMode[index] <-  anova(myLm)$"Pr(>F)"[2]
+		index <- index + 1
+	}
