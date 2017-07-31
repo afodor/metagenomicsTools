@@ -138,7 +138,7 @@ public class AddMetadata
 		}
 	}
 	
-	private static HashMap<String, Integer> getBirthGroupMap() throws Exception
+	public static HashMap<String, Integer> getBirthGroupMap() throws Exception
 	{
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
 		
