@@ -26,7 +26,7 @@ public class ToBiolockJMetadata
 		{
 			writer.write(s + "\t");
 			writer.write( groupMap.get(s) + "\t");
-			writer.write(typeMap.get(s) + "\n");
+			writer.write(typeMap.get(Integer.parseInt(s.replace("G", ""))) + "\n");
 		}
 		
 		writer.flush(); writer.close();
