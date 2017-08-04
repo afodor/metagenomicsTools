@@ -53,4 +53,9 @@ boxplot(bug ~ birthMode, main = names(myT)[bugIndex])
 
 stripchart(bug ~ birthMode, data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=colors)		
 			
+aRatio <- myT[,12]/myT[,13]
 
+aRatio <- aRatio[myT$groupNumber==5]
+aFrame <- data.frame(aRatio)
+boxplot(aRatio, ylab = paste(names(myT)[12],"/",names(myT)[13], "cycle number" ) )
+stripchart(aFrame$aRatio,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE )		
