@@ -15,3 +15,23 @@ for( i in 1:nrow(tData))
 		tData[i,j] = tData[i,j] / sampleSums[i]
 	}
 }
+
+pdf("testOutput.pdf")
+
+par(mfrow=c(2,1))
+
+birthMode <- myT$deliveryMode
+birthGroup <- myT$birthGroup
+
+for( i in 1:ncol(tData))
+{
+	bug <- tData[,i]
+	myFrame <- data.frame( bug, birthMode ,birthGroup )
+	
+	plot( bug ~ birthGroup)
+	
+	boxplot(bug ~ birthMode, main = names(tData)[i])
+	stripchart(bug ~ birthMode, data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE)		
+}
+
+dev.off()
