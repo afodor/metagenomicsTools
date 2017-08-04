@@ -1,0 +1,17 @@
+rm(list=ls())
+
+setwd("C:\\biolockJProjects\\1_RdpParser\\output")
+
+myT <- read.table("genus_RawCount_metaMerged.txt",header=TRUE, sep="\t",row.names=1)
+
+tData <- myT[,2:145]
+
+sampleSums <- apply(tData,1,sum)
+
+for( i in 1:nrow(tData))
+{
+	for( j in 1:ncol(tData))
+	{
+		tData[i,j] = tData[i,j] / sampleSums[i]
+	}
+}
