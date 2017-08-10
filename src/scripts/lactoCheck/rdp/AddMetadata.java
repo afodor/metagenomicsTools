@@ -201,7 +201,7 @@ public class AddMetadata
 			if(codes.length != 3)
 				throw new Exception("No " + key);
 
-			if( codes[2].startsWith("G")  || key.endsWith("neg") || codes[2].startsWith("S"))
+			if( codes[2].startsWith("G")  || key.endsWith("neg") || codes[2].startsWith("S") || key.endsWith("H20"))
 				if(! codes[2].equals("S30"))
 			{
 				System.out.println(key);
@@ -234,11 +234,17 @@ public class AddMetadata
 									originalWrapper.getShannonEntropy(splits[0]));
 				
 				}
-				else if ( key.endsWith("neg"))
+				else if ( key.endsWith("neg") || key.endsWith("H20"))
 				{
+					String negString = "neg";
+					
+					if( key.endsWith("H20"))
+						negString = "H20";
+					
 					System.out.println("In neg");
-					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"+  "\tneg\t0\t"  + 
-							"neg\t"  + h.otuName + "\t"+ h.frequency + "\t" 
+					writer.write(splits[0] + "\t" + codes[0] +"\t" +codes[1] + "\t" +  codes[2] + "\t" + "0"
+					+  "\t" + negString+ "\t0\t"  + negString
+							+"\t"  + h.otuName + "\t"+ h.frequency + "\t" 
 				+"0\t"+ "0"+ "\t" + "0" + 
 							"\t" + "0"+ "\t" + originalWrapper.getNumberSequences(splits[0]) + "\t" +
 									originalWrapper.getShannonEntropy(splits[0]));

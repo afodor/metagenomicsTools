@@ -5,7 +5,7 @@ rm(list=ls())
 setwd("C:\\lactoCheck\\rdp")
 
 myT <- read.table("genusasColumnsLogNormPlusMeta.txt", header=TRUE,sep="\t",row.names=1)
-myT <- myT[ myT$run == "Run1" & myT$read == "R1" & (myT$stoolOrGa=="G" | myT$stoolOrGa=="neg"),]
+myT <- myT[ myT$run == "Run1" & myT$read == "R1" & (myT$stoolOrGa=="G" | myT$stoolOrGa=="neg" | myT$stoolOrGa=="H20"),]
 myTData <- myT[,16:ncol(myT)]
 	
 
