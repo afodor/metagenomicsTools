@@ -65,7 +65,25 @@ for ( i in 1:nrow(dFrame))
 {
 	index <- dFrame$tableIndex[i]
 	bug <- myWithNeg[,index]
-	birthMode <- factor(myWithNeg$birthMode, c("neg","C","V"))
+	
+	birthMode <- vector()
+	
+	for( i in 1:nrow(myWithNeg))
+	{
+		if( myWithNeg$birthMode[i] == "C" || myWithNeg$birthMode[i] == "V"  )
+		{
+			if( myWithNeg$birthMode[i] == "C") 
+				birthMode[i] = "C"
+			else
+				birthMode[i] = "V"
+		}
+		else
+		{
+			birthMode[i] = "neg"
+		}
+	}
+	
+	birthMode <- factor(birthMode, c("neg","C","V"))
 	
 	groupNumber <- myWithNeg$groupNumber
 	myFrame <- data.frame(bug,birthMode,groupNumber)
@@ -86,9 +104,9 @@ for ( i in 1:nrow(dFrame))
 		if( groupNumber[i] == 0) 
 		{
 			if( myWithNeg$stoolOrGa[i] == "neg" ) 
-				colors[i] = "blue"		
+				theseColors[i] = "blue"		
 			else	
-				colors[i] = "orange"	
+				theseColors[i] = "orange"	
 		}
 		else
 		{
