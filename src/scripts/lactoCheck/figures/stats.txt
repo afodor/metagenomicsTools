@@ -68,18 +68,18 @@ for ( i in 1:nrow(dFrame))
 	
 	birthMode <- vector()
 	
-	for( i in 1:nrow(myWithNeg))
+	for( j in 1:nrow(myWithNeg))
 	{
-		if( myWithNeg$birthMode[i] == "C" || myWithNeg$birthMode[i] == "V"  )
+		if( myWithNeg$birthMode[j] == "C" || myWithNeg$birthMode[j] == "V"  )
 		{
-			if( myWithNeg$birthMode[i] == "C") 
-				birthMode[i] = "C"
+			if( myWithNeg$birthMode[j] == "C") 
+				birthMode[j] = "C"
 			else
-				birthMode[i] = "V"
+				birthMode[j] = "V"
 		}
 		else
 		{
-			birthMode[i] = "neg"
+			birthMode[j] = "neg"
 		}
 	}
 	
