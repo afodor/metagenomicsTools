@@ -1,13 +1,11 @@
 rm(list=ls())
-
-rm(list=ls())
 	
 setwd("C:\\lactoCheck\\rdp")
 
 myT <- read.table("genusasColumnsNormWithMetadata.txt", sep="\t", header=TRUE)
 myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
 myWithNeg <- myT 
-myT <- myT[1:29,] # remove negative control
+myT <- myT[1:29,] # remove negative controls
 
 myLm <- lm( myT$qPCR16S ~ myT$birthMode + myT$groupNumber )
 anova(myLm)
@@ -42,9 +40,12 @@ colors <- vector()
 
 for( i in 1:nrow(myWithNeg))
 {
-	if( myWithNeg$groupNumber[i] == 0) 
+	if( myWithNeg$groupNumber[i] == 0 ) 
 	{
-		colors[i] = "blue"			
+		if( myWithNeg$stoolOrGa[i] == "neg" ) 
+			colors[i] = "blue"		
+		else	
+			colors[i] = "orange"
 	}
 	else
 	{
@@ -84,7 +85,10 @@ for ( i in 1:nrow(dFrame))
 	{
 		if( groupNumber[i] == 0) 
 		{
-			theseColors[i] = "blue"			
+			if( myWithNeg$stoolOrGa[i] == "neg" ) 
+				colors[i] = "blue"		
+			else	
+				colors[i] = "orange"	
 		}
 		else
 		{
