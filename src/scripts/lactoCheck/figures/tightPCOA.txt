@@ -11,9 +11,12 @@ colors <- vector()
 
 for( i in 1:nrow(myT))
 {
-	if( myT$groupNumber[i] == 0) 
+	if( myT$groupNumber[i] == 0 ) 
 	{
-		colors[i] = "blue"			
+		if( myT$stoolOrGa[i] == "neg" ) 
+			colors[i] = "blue"		
+		else	
+			colors[i] = "orange"
 	}
 	else
 	{
@@ -25,10 +28,10 @@ for( i in 1:nrow(myT))
 }
 
 plot(myT$MDS1, myT$MDS2,pch=16,
-col=colors,cex=ifelse( myT$stoolOrGa=="G" , 1.1, 2.25),
+col=colors,cex=ifelse( myT$stoolOrGa=="G" , 1.1, 1.75),
 xlab="MDS1", ylab="MDS2")
 
 
-legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"))
+legend("topleft",c("negative control","water", "cesarean","vaginal"),pch=16, col=c("blue","orange", "red", "black"))
 
 
