@@ -1,0 +1,28 @@
+
+rm(list=ls())
+	
+setwd("C:\\lactoCheck\\")
+
+myT <- read.table("NormalizedToBGlobinPlusMetadata.txt", sep="\t", header=TRUE)
+
+bugIndex = 2
+
+bug <- myT[,bugIndex]
+groupNumber <- myT$birthGroup
+	
+myFrame <- data.frame( bug, groupNumber )
+
+colors <- vector()
+
+for( i in 1:nrow(myT))
+{
+		if( myT$deliveryMode[i] == "C" )
+			colors[i] = "red"
+		else
+			colors[i] = "black"
+}
+	
+plot(log10(bug) ~ groupNumber, main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+legend("topleft",c("cesarean","vaginal"),pch=16, col=c("red", "black"),cex=1.3)
+
+
