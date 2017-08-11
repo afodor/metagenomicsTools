@@ -1,0 +1,15 @@
+rm(list=ls())
+
+setwd("C:\\cardia")
+library("vegan")
+
+myT <-read.table("genus_LogNormalCountsMetaMerged.tsv", sep="\t", header=TRUE, row.names=1)
+myT$poolPlusLib <- factor( paste(myT$LibNum, myT$Pool,sep="_"))
+
+myTData <- myT[,1:519]
+myPCOA <- capscale(myTData~1,distance="bray")
+
+myMerge <- cbind( myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("genus_LogNormalCountsMetaMergedPlusPCOA.tsv",".txt",sep=""),
+row.names=FALSE)
