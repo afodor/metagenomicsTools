@@ -13,3 +13,32 @@ myMerge <- cbind( myT, myPCOA$CA$u)
 
 write.table(myMerge , sep="\t", file=paste("genus_LogNormalCountsMetaMergedPlusPCOA.tsv",".txt",sep=""),
 row.names=FALSE)
+
+pdf("genusOut.pdf")
+
+names <- vector()
+pValues <-vector()
+
+index <- 1
+
+for( i in 1:519) 
+{
+	bug <- myT[,i]
+	race <- myT$RACE
+	
+	if( sum( bug !=0) > nrow(myT)/4 )
+	{
+		myFrame <- data.frame(bug,race)
+		names[index] <- names(myT)[i]
+		pValues[index] <- wilcox.test( bug[myT$RACE==0],  bug[myT$RACE==1])$p.value
+		boxplot( bug ~ myT$RACE,main=paste(names(myT)[i],pValues[index] ))
+		
+		stripchart(bug~ race, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+		index=  index +1
+	}
+	
+}
+
+dev.off()
