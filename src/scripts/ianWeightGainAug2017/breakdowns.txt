@@ -16,7 +16,7 @@ for( c in cohorts)
 	nonHCWeights <- myT[myT$"Patient.cohort"==c & myT$Group!="HC",7]
 	
 	pValue <- t.test( hcWeights, nonHCWeights )$p.value
-	mainText <- paste(  c, "p=", pValue)
+	mainText <- paste(  c, "p=", format( pValue,digits=3))
 	boxplot( cWeights  ~ groups, main = mainText)
 	
 }
