@@ -142,6 +142,8 @@ public class ConfigReader
 	
 	public static final String LYTE_BEHAVIOR_MARCH_2017_DIR = "LYTE_BEHAVIOR_MARCH_2017_DIR";
 	
+	public static final String IAN_MOUSE_AUG_2017_DIR = "IAN_MOUSE_AUG_2017_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -150,6 +152,11 @@ public class ConfigReader
 	public static String getBioLockJDir() throws Exception
 	{
 		return getConfigReader().getAProperty(BIOLOCK_J_DIR);
+	}
+	
+	public static String getIanMouseAug2017Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_MOUSE_AUG_2017_DIR);
 	}
 	
 	public static String getSangLabMay2016Dir() throws Exception
