@@ -11,9 +11,19 @@ for( c in cohorts)
 {
 	cWeights <- myT[myT$"Patient.cohort"==c,7]
 	groups <- myT$Group[myT$"Patient.cohort"==c]
-	boxplot( cWeights  ~ groups, main = c)
+	
+	hcWeights <- myT[myT$"Patient.cohort"==c & myT$Group=="HC",7]
+	nonHCWeights <- myT[myT$"Patient.cohort"==c & myT$Group!="HC",7]
+	
+	pValue <- t.test( hcWeights, nonHCWeights )$p.value
+	mainText <- paste(  c, "p=", pValue)
+	boxplot( cWeights  ~ groups, main = mainText)
+	
 }
 
-boxplot( cWeights  ~ groups, main = c)
+
+cWeights <- myT[,7]
+groups <- myT$Group
+boxplot( cWeights  ~ groups, main = "all")
 
 
