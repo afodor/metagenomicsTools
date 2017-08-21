@@ -5,8 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.StringTokenizer;
 
-import sun.util.locale.StringTokenIterator;
 import utils.ConfigReader;
 
 public class AddPatientStratifier
@@ -27,7 +27,7 @@ public class AddPatientStratifier
 		for(String s = reader.readLine(); s != null ; s = reader.readLine())
 		{
 			String stratifeir = getStratifier(s) ;
-			writer.write(s + "\t" + stratifeir + "\t" + new StringTokenIterator(stratifeir, "_") + "\n");
+			writer.write(s + "\t" + stratifeir + "\t" + new StringTokenizer(stratifeir, "_").nextToken()+ "\n");
 		}
 		
 		writer.flush();  writer.close();

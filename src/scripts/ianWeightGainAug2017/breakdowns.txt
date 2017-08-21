@@ -1,5 +1,11 @@
 rm(list=ls())
 
+
+library("pscl")
+library("lmtest")
+library("nlme")
+
+
 setwd("C:\\IanNewAnalysis")
 
 myT <- read.table("2017-08-09_AN40_AN703_AN34_combinedPlusStratifier.txt", sep="\t", header=TRUE)
@@ -21,8 +27,17 @@ for( c in cohorts)
 	
 }
 
-
+par(mfrow=c(1,1))
 cWeights <- myT[,7]
 groups <- myT$Group
+stratifier <- myT$stratifier
+caseControl <- myT$caseControl
 
-boxplot( cWeights  ~ groups, main = "all")
+boxplot( cWeights  ~ stratifier , main = "all",las=2)
+
+myFrame <- data.frame(cWeights, groups, stratifier, caseControl)
+	
+fullModel <- gls( cWeights ~  caseControl, method="REML",correlation=corCompSymm(form=~1|factor(stratifier)),
+				data = myFrame )
+
+anova(fullModel)
