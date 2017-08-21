@@ -1,0 +1,19 @@
+rm(list=ls())
+
+setwd("C:\\IanNewAnalysis")
+
+myT <- read.table("2017-08-09_AN40_AN703_AN34_combined.txt", sep="\t", header=TRUE)
+
+cohorts <- sort(unique( myT$"Patient.cohort"))
+
+par(mfrow=c(2,2))
+for( c in cohorts)
+{
+	cWeights <- myT[myT$"Patient.cohort"==c,7]
+	groups <- myT$Group[myT$"Patient.cohort"==c]
+	boxplot( cWeights  ~ groups, main = c)
+}
+
+boxplot( cWeights  ~ groups, main = c)
+
+
