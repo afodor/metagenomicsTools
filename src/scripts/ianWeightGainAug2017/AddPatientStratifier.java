@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import sun.util.locale.StringTokenIterator;
 import utils.ConfigReader;
 
 public class AddPatientStratifier
@@ -21,11 +22,12 @@ public class AddPatientStratifier
 				"2017-08-09_AN40_AN703_AN34_combinedPlusStratifier.txt"
 				)));
 		
-		writer.write(reader.readLine() + "\tstratifier\n");
+		writer.write(reader.readLine() + "\tstratifier\tcaseControl\n");
 		
 		for(String s = reader.readLine(); s != null ; s = reader.readLine())
 		{
-			writer.write(s + "\t" +  getStratifier(s) + "\n");
+			String stratifeir = getStratifier(s) ;
+			writer.write(s + "\t" + stratifeir + "\t" + new StringTokenIterator(stratifeir, "_") + "\n");
 		}
 		
 		writer.flush();  writer.close();

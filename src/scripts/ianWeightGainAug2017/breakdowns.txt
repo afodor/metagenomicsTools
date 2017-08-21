@@ -24,9 +24,5 @@ for( c in cohorts)
 
 cWeights <- myT[,7]
 groups <- myT$Group
+
 boxplot( cWeights  ~ groups, main = "all")
-
-
-
-
-
