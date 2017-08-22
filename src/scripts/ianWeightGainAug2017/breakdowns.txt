@@ -25,6 +25,12 @@ for( c in cohorts)
 	mainText <- paste(  c, "p=", format( pValue,digits=3))
 	boxplot( cWeights  ~ groups, main = mainText)
 	
+	myFrame <- data.frame(cWeights, groups)
+	
+	stripchart(cWeights  ~ groups, 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+	
 }
 
 par(mfrow=c(1,1))
