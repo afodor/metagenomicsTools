@@ -23,13 +23,27 @@ for( c in cohorts)
 		nonHCWeights <- myT[myT$"Patient.cohort"==c & myT$Group!="HC",i]
 	
 		pValue <- t.test( hcWeights, nonHCWeights )$p.value
-		mainText <- paste( names(myT)[i], "\n",  c, "p=", format( pValue,digits=3))
+		
+		t1 <-  myT[myT$"Patient.cohort"==c & myT$Group=="T1",i]
+		t2 <-  myT[myT$"Patient.cohort"==c & myT$Group=="T2",i]
+		
+		pValueT1T1 <- format( t.test( t1, t2)$p.value, digits=3)
+		
+		mainText <- paste( names(myT)[i], "\n",  c, "p (HC vs. non HC)=", format( pValue,digits=3),
+		"\n", "p (T1 vs T2)", pValueT1T1)
 		boxplot( cWeights  ~ groups, main = mainText)
 	
 		myFrame <- data.frame(cWeights, groups)
 	
-		stripchart(cWeights  ~ groups, 
-			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		stripchart(cWeights[myT$Sex=="M"]  ~ groups[myT$Sex=="M"], 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
+			col="blue" ,cex=1.5)		
+			
+			
+		stripchart(cWeights[myT$Sex=="F"]  ~ groups[myT$Sex=="F"], 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,
+			col="red",cex=1.5 )		
+			
 			
 	}
 	
