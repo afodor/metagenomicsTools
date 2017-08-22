@@ -39,7 +39,7 @@ for( c in cohorts)
 dev.off()
 
 par(mfrow=c(1,1))
-cWeights <- myT[,7]
+cWeights <- myT[,6]
 groups <- myT$Group
 stratifier <- myT$stratifier
 caseControl <- myT$caseControl
