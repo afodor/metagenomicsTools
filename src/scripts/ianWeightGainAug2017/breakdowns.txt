@@ -52,22 +52,26 @@ for( c in cohorts)
 
 dev.off()
 
+i=7
 par(mfrow=c(1,1))
-cWeights <- myT[,6]
+cWeights <- myT[,i]
 groups <- myT$Group
 stratifier <- myT$stratifier
 caseControl <- myT$caseControl
 sex <- myT$Sex
 
-boxplot( cWeights  ~ stratifier , main = "all",las=2)
+boxplot( cWeights  ~ stratifier , main = names(myT)[i],las=2)
 
 myFrame <- data.frame(cWeights, groups, stratifier, caseControl,sex)
 	
 fullModel <- gls( cWeights ~  caseControl * sex, method="REML",correlation=corCompSymm(form=~1|factor(stratifier)),
 				data = myFrame )
 				
-stripchart(cWeights  ~ stratifier , 
-			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+stripchart(cWeights[myT$Sex=="M"]  ~ stratifier[myT$Sex=="M"] , 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,col="blue",cex=1.5 )	
+			
+stripchart(cWeights[myT$Sex=="F"]  ~ stratifier[myT$Sex=="F"] , 
+			data = myFrame,vertical = TRUE, pch = 21, add=TRUE,col="red",cex=1.5 )
 
 anova(fullModel)
 
