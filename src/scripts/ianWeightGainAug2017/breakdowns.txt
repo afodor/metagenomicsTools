@@ -1,10 +1,8 @@
 rm(list=ls())
 
-
 library("pscl")
 library("lmtest")
 library("nlme")
-
 
 setwd("C:\\IanNewAnalysis")
 
@@ -12,26 +10,33 @@ myT <- read.table("2017-08-09_AN40_AN703_AN34_combinedPlusStratifier.txt", sep="
 
 cohorts <- sort(unique( myT$"Patient.cohort"))
 
+pdf("boxplot.pdf")
 par(mfrow=c(2,2))
 for( c in cohorts)
 {
-	cWeights <- myT[myT$"Patient.cohort"==c,7]
-	groups <- myT$Group[myT$"Patient.cohort"==c]
+	for( i in 5:7)
+	{
+		cWeights <- myT[myT$"Patient.cohort"==c,i]
+		groups <- myT$Group[myT$"Patient.cohort"==c]
+		
+		hcWeights <- myT[myT$"Patient.cohort"==c & myT$Group=="HC",i]
+		nonHCWeights <- myT[myT$"Patient.cohort"==c & myT$Group!="HC",i]
 	
-	hcWeights <- myT[myT$"Patient.cohort"==c & myT$Group=="HC",7]
-	nonHCWeights <- myT[myT$"Patient.cohort"==c & myT$Group!="HC",7]
+		pValue <- t.test( hcWeights, nonHCWeights )$p.value
+		mainText <- paste( names(myT)[i], "\n",  c, "p=", format( pValue,digits=3))
+		boxplot( cWeights  ~ groups, main = mainText)
 	
-	pValue <- t.test( hcWeights, nonHCWeights )$p.value
-	mainText <- paste(  c, "p=", format( pValue,digits=3))
-	boxplot( cWeights  ~ groups, main = mainText)
+		myFrame <- data.frame(cWeights, groups)
 	
-	myFrame <- data.frame(cWeights, groups)
-	
-	stripchart(cWeights  ~ groups, 
+		stripchart(cWeights  ~ groups, 
 			data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 			
+	}
 	
+	plot(1, type="n", axes=F, xlab="", ylab="")
 }
+
+dev.off()
 
 par(mfrow=c(1,1))
 cWeights <- myT[,7]
