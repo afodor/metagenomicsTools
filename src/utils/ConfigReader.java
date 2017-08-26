@@ -144,9 +144,16 @@ public class ConfigReader
 	
 	public static final String IAN_MOUSE_AUG_2017_DIR = "IAN_MOUSE_AUG_2017_DIR";
 	
+	public static final String EMILY_TRANSFER_PROJECT = "EMILY_TRANSFER_PROJECT";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
+	}
+	
+	public static String getEmilyTransferProject() throws Exception
+	{
+		return getConfigReader().getAProperty(EMILY_TRANSFER_PROJECT);
 	}
 	
 	public static String getBioLockJDir() throws Exception
