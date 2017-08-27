@@ -14,6 +14,8 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
+	private static String TOP_LINE = "TOP_LINE";
+	
 	private static List<Boolean> getExcludeList(File inFile) throws Exception
 	{
 		List<Boolean> list = new ArrayList<Boolean>();
@@ -98,18 +100,66 @@ public class AddMetadata
 		
 		wrapper.writeNormalizedLoggedDataToFile(logFile);
 		
+		HashMap<String, String> metaLineMap = getMetadataLine();
+		
+		File metaFile = new File(ConfigReader.getEmilyTransferProject() + File.separator + 
+				"otu_table_mc2_w_taxAsColumnsfilteredLogNormalPlusMetadata.txt");
+		
+		addMetadata(metaFile, logFile , metaLineMap);
+		
 	}
 	
-	/*
+	private static void addMetadata( File metaFile, File inFile, HashMap<String, String> metaLineMap )
+		throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
+		
+		String[] topSplits= reader.readLine().split("\t");
+		
+		writer.write(topSplits[0].replace("#", "") + "\t" + metaLineMap.get(TOP_LINE));
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		writer.write("\n");
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = reader.readLine().split("\t");
+			
+			writer.write(splits[0] + "\t" + metaLineMap.get(splits[0]));
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			writer.write("\n");
+		}
+		
+		reader.close();
+	}
+	
 	private static HashMap<String, String> getMetadataLine() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String,String>();
 		
 		
-		//BufferedReader reader = new BufferedReader(new FileReader(			)));
+		BufferedReader reader = new BufferedReader(new FileReader(
+				ConfigReader.getEmilyTransferProject() + File.separator + 
+					"FMT_mdmf.txt"));
 		
-		//String topSplits = reader.readLine();
+		map.put(TOP_LINE, reader.readLine());
 		
-		//return map;
-	}*/
+		for(String s= reader.readLine(); s!= null; s= reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put(splits[0],s);
+		}
+		
+		
+		return map;
+	}
 }
