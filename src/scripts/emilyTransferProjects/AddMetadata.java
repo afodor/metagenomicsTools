@@ -116,9 +116,10 @@ public class AddMetadata
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
-		String[] topSplits= reader.readLine().split("\t");
+		String[] topSplits= reader.readLine().replaceAll("#", "")
+				.replaceAll("New.CleanUp.ReferenceOTU", "").split("\t");
 		
-		writer.write(topSplits[0].replace("#", "") + "\t" + metaLineMap.get(TOP_LINE));
+		writer.write(topSplits[0] + "\t" + metaLineMap.get(TOP_LINE).replaceAll("#", ""));
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -134,6 +135,8 @@ public class AddMetadata
 				writer.write("\t" + splits[x]);
 			writer.write("\n");
 		}
+		
+		writer.flush();  writer.close();
 		
 		reader.close();
 	}

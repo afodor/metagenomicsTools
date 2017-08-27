@@ -1,0 +1,15 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\emilyTransferProject")
+
+myT <- read.table("otu_table_mc2_w_taxAsColumnsfilteredLogNormalPlusMetadata.txt", header=TRUE,sep="\t",row.names=1)
+
+myTData <- myT[,15:ncol(myT)]
+	
+myPCOA <- capscale(myTData~1,distance="bray")
+
+myMerge <- cbind( myPCOA$CA$u,myT )
+
+write.table(myMerge , sep="\t", file=paste("pcoaFiltered",".txt",sep=""),row.names=FALSE)
