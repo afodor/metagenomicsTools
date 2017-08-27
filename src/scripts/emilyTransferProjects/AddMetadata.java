@@ -105,11 +105,12 @@ public class AddMetadata
 		File metaFile = new File(ConfigReader.getEmilyTransferProject() + File.separator + 
 				"otu_table_mc2_w_taxAsColumnsfilteredLogNormalPlusMetadata.txt");
 		
-		addMetadata(metaFile, logFile , metaLineMap);
+		addMetadata(metaFile, logFile , metaLineMap, wrapper);
 		
 	}
 	
-	private static void addMetadata( File metaFile, File inFile, HashMap<String, String> metaLineMap )
+	private static void addMetadata( File metaFile, File inFile, HashMap<String, String> metaLineMap,
+			OtuWrapper unnormalizedWrapper)
 		throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
@@ -119,7 +120,8 @@ public class AddMetadata
 		String[] topSplits= reader.readLine().replaceAll("#", "")
 				.replaceAll("New.CleanUp.ReferenceOTU", "").split("\t");
 		
-		writer.write(topSplits[0] + "\t" + metaLineMap.get(TOP_LINE).replaceAll("#", ""));
+		writer.write(topSplits[0] + "\t" + "numSequences\tshannonDiveristy\t" + 
+					metaLineMap.get(TOP_LINE).replaceAll("#", ""));
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -129,7 +131,9 @@ public class AddMetadata
 		{
 			String[] splits = reader.readLine().split("\t");
 			
-			writer.write(splits[0] + "\t" + metaLineMap.get(splits[0]));
+			writer.write(splits[0] + "\t" + unnormalizedWrapper.getNumberSequences(splits[0]) + 
+					"\t" + unnormalizedWrapper.getShannonEntropy(splits[0]) + "\t" + 
+							metaLineMap.get(splits[0]));
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
