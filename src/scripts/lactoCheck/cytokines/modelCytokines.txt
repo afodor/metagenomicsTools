@@ -1,0 +1,15 @@
+rm(list=ls())
+
+setwd("C:\\lactoCheck")
+
+myT <- read.table("cytokineData.txt", sep="\t", header=TRUE)
+
+pdf("cytokines.pdf")
+
+for ( i in 2:(ncol(myT)-1))
+{
+	cytData <- myT[,i]
+	boxplot( cytData ~ myT$group, name=names(myT)[i])
+}
+
+dev.off()
