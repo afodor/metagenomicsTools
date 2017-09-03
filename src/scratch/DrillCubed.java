@@ -10,7 +10,7 @@ public class DrillCubed
 	
 	private static Random random = new Random();
 	public static final int NUM_SECONDS = 180;
-	public static final int NUM_QUESTIONS = 10;
+	public static final int NUM_QUESTIONS = 20;
 	
 	private static void printIncorrect(List<Holder> list)
 	{
@@ -33,7 +33,7 @@ public class DrillCubed
 		{
 			char c = s.charAt(x);
 			
-			if( Character.isDigit(c))
+			if( Character.isDigit(c) || c == '-')
 				buff.append(c);
 		}
 		
@@ -81,6 +81,24 @@ public class DrillCubed
 		return h;
 	}
 	
+	private static Holder getMultiplication() 
+	{
+		int firstNum = random.nextInt(12) + 1;
+		int secondNum = random.nextInt(12) + 1;
+		
+		if( random.nextFloat() < .75)
+			firstNum = firstNum * -1;
+		
+		if( random.nextFloat() < .75)
+			secondNum = secondNum * -1;
+		
+		Holder h = new Holder();
+		h.question = firstNum + " times " + secondNum;
+		h.answer = firstNum * secondNum;
+		
+		return h;
+	}
+	
 	private static Holder getCubeRoot() 
 	{
 		int number = random.nextInt(10) + 1;
@@ -94,7 +112,7 @@ public class DrillCubed
 	
 	private static Holder getQuestion()
 	{
-		int choose = random.nextInt(4);
+		int choose = random.nextInt(8);
 		
 		if( choose == 0 )
 			return getSquare();
@@ -102,13 +120,13 @@ public class DrillCubed
 		if( choose == 1)
 			return getSquareRoot();
 		
-		if( choose == 2)
+		if( choose == 2 || choose == 3)
 			return getCube();
 		
-		if( choose == 3)
+		if( choose == 4 || choose == 5)
 			return getCubeRoot();
 		
-		return null;
+		return getMultiplication();
 	}
 	
 	public static void main(String[] args)
