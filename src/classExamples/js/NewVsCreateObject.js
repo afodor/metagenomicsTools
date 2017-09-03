@@ -72,3 +72,6 @@ var q = Object.create(aFoo2)
 aFoo2.a = 100
 console.log(q.a)
 console.log(p.a)
+
+// so Object.create() gives us a lot of flexibility
+// but should maybe be avoided without careful consideration
