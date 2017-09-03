@@ -59,9 +59,28 @@ public class DrillCubed
 		return h;
 	}
 	
+	private static Holder getSquareRoot() 
+	{
+		int number = random.nextInt(12) + 1;
+		
+		Holder h = new Holder();
+		h.question = "Square root of " + number * number;
+		h.answer = number;
+		
+		return h;
+	}
+	
 	private static Holder getQuestion()
 	{
-		return getSquare();
+		int choose = random.nextInt(2);
+		
+		if( choose == 0 )
+			return getSquare();
+		
+		if( choose == 1)
+			return getSquareRoot();
+		
+		return null;
 	}
 	
 	public static void main(String[] args)
