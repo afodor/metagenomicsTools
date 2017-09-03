@@ -43,7 +43,7 @@ funcE = Object.create(aFoo);
 
 // truly miserable scoping!  
 // because this.x++ got called on funcD, funcD has it's own copy of X
-// but FuncE does not!
+// but FuncE does not (since Object.create() does not invoke the constructor)!
 console.log(funcD.x);
 console.log(funcE.x);
 
