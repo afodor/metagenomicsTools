@@ -4,6 +4,12 @@
 'use strict';
 
 class Polygon {
+	
+	// this would be ok in java, but 
+	// in javascript all variables have to be declared 
+	// in the constructor
+	//this.someVal = 5;
+
   constructor(height, width) {
     this.height = height;
     this.width = width;
@@ -36,3 +42,5 @@ console.log( square1.area +  " " + square2.area)
 // (Java would not allow you do instantiate an object without invoking constructor)
 var square3 = Object.create(Square)
 console.log( square3.area)
+
+console.log( square1.someVal+  " " + square2.someVal)
