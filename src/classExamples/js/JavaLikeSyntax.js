@@ -44,3 +44,23 @@ var square3 = Object.create(Square)
 console.log( square3.area)
 
 console.log( square1.someVal+  " " + square2.someVal)
+
+// javascript is sort of a simulation of a strongly typed language
+// rather that a truly strongly typed language
+var Car = function()
+{
+	this.doors = 4;
+	this.make = "Chevy"
+		
+	this.getNumDoors = function() { return this.doors}
+}
+
+// it's really all about what happens to this
+// and what the scope of this is
+// rather than the type the way it is in Java
+Car.call(square1)
+
+// square1 has picked up the properties of a Car
+// from the Car constructor
+console.log(square1)
+console.log(square1.getNumDoors())
