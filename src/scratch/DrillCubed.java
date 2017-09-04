@@ -1,6 +1,7 @@
 package scratch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ public class DrillCubed
 	
 	private static Random random = new Random();
 	public static final int NUM_SECONDS = 180;
-	public static final int NUM_QUESTIONS = 20;
+	public static final int NUM_QUESTIONS = 100;
 	
 	private static void printIncorrect(List<Holder> list)
 	{
@@ -44,7 +45,7 @@ public class DrillCubed
 	{
 		String question;
 		int answer;
-		double attemptedAnswer;
+		int attemptedAnswer;
 		
 	}
 	
@@ -135,13 +136,21 @@ public class DrillCubed
 		 
 		long startTime = System.currentTimeMillis();
 		
+		HashSet<String> questions = new HashSet<String>();
+		
 		int numRight= 0;
 		int numWrong =0;
 		for( int x=0; x < NUM_QUESTIONS; x++)
 		{
+			Holder h = getQuestion();
+			
+			while( questions.contains(h.question))
+				h= getQuestion();
+			
+			questions.add(h.question);
+			
 			long time =( System.currentTimeMillis() - startTime ) / 1000;
 			System.out.println("\ntime = " + time + " seconds\n" + numRight + " right and " + numWrong + " wrong out of " + NUM_QUESTIONS + "\n");
-			Holder h = getQuestion();
 			System.out.println(h.question);
 			
 			try
