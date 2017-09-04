@@ -50,7 +50,7 @@ public class DrillCubed
 	
 	private static Holder getSquare() 
 	{
-		int number = random.nextInt(12) + 1;
+		int number = random.nextInt(15) + 1;
 		
 		Holder h = new Holder();
 		h.question = number + " squared ";
@@ -72,7 +72,7 @@ public class DrillCubed
 	
 	private static Holder getSquareRoot() 
 	{
-		int number = random.nextInt(12) + 1;
+		int number = random.nextInt(15) + 1;
 		
 		Holder h = new Holder();
 		h.question = "Square root of " + number * number;
@@ -112,7 +112,7 @@ public class DrillCubed
 	
 	private static Holder getQuestion()
 	{
-		int choose = random.nextInt(8);
+		int choose = random.nextInt(6);
 		
 		if( choose == 0 )
 			return getSquare();
@@ -120,10 +120,10 @@ public class DrillCubed
 		if( choose == 1)
 			return getSquareRoot();
 		
-		if( choose == 2 || choose == 3)
+		if( choose == 2 )
 			return getCube();
 		
-		if( choose == 4 || choose == 5)
+		if( choose == 3)
 			return getCubeRoot();
 		
 		return getMultiplication();
