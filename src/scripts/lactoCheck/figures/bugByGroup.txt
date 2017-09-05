@@ -39,7 +39,7 @@ for( i in 1:nrow(myT))
 plot(bug ~ groupNumber, main = names(myT)[bugIndex],cex=2.5,pch3=16, col=colors,xlab="group", ylab ="relative abundance")
 legend("center",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 
-qPCRData <- myT[myT$groupNumber>0,13]
+qPCRData <- myT[myT$groupNumber>0,13]-myT[myT$groupNumber>0,12]
 deliveryNoControl<- myT$birthMode[ myT$groupNumber>0]
 pcrFrame <- data.frame(  qPCRData ,deliveryNoControl)
 
