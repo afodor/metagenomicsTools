@@ -8,8 +8,8 @@ myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
 #bugIndex = 155
 #bugIndex = 121
 #bugIndex = 354
-#bugIndex = 436
-bugIndex = 225
+bugIndex = 436
+#bugIndex = 225
 #bugIndex = 11
 
 bug <- myT[,bugIndex]
@@ -37,8 +37,8 @@ for( i in 1:nrow(myT))
 	}
 }
 	
-plot(bug ~ groupNumber, main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
-legend("topleft",c("negative control", "water", "cesarean","vaginal"),pch=16, col=c("blue", "orange", "red", "black"),cex=1.3)
+plot(bug ~ groupNumber, main = names(myT)[bugIndex],cex=2.5,pch="O", col=colors,xlab="group", ylab ="relative abundance")
+legend("topleft",c("negative control", "water", "cesarean","vaginal"),pch="O", col=c("blue", "orange", "red", "black"),cex=1.3)
 
 
 #qpcr
