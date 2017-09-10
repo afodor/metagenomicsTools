@@ -129,7 +129,7 @@ public class AddMetadata
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			String[] splits = reader.readLine().split("\t");
+			String[] splits = s.split("\t");
 			
 			writer.write(splits[0] + "\t" + unnormalizedWrapper.getNumberSequences(splits[0]) + 
 					"\t" + unnormalizedWrapper.getShannonEntropy(splits[0]) + "\t" + 
