@@ -29,6 +29,17 @@ public class FromBiolockJDirectory
 		root.parent = null;
 		
 		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts(root);
+		
+		/* dump genus and parents to the console
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+			System.out.println(map.get(NewRDPParserFileLine.TAXA_ARRAY[x]).size());
+		
+		HashMap<String, Holder> genusMap = map.get(NewRDPParserFileLine.GENUS);
+		
+		for(String s : genusMap.keySet())
+			System.out.println(s + " " + genusMap.get(s).parent.name);
+			*/
+		
 		writeJSON(map, root);
 		
 	}
@@ -39,7 +50,7 @@ public class FromBiolockJDirectory
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				BIOLOCK_J_PROJECT_DIR +File.separator + "lactoExample.json")));
 		
-		writeNodeAndChildren(writer, rootNode, map, 1);
+		writeNodeAndChildren(writer, rootNode, map, 0);
 		
 		writer.flush(); writer.close();
 	}
