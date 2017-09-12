@@ -162,7 +162,9 @@ public class FromBiolockJDirectory
 					}
 					
 					treeNode.numSequences++;
-					rootNode.numSequences++;
+					
+					//makes prettier trees if this is zero..
+					//rootNode.numSequences++;
 					
 					if( treeNode.parent != parent)
 						throw new Exception("Parents don't match " + treeNode.parent + " " + parent);
