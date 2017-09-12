@@ -1,7 +1,12 @@
 package bottomUpTree.fromBioLockJ;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
@@ -19,21 +24,76 @@ public class FromBiolockJDirectory
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts();
-	
+		Holder root = new Holder();
+		root.name = ROOT_NODE;
+		root.parent = null;
+		
+		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts(root);
+		writeJSON(map, root);
+		
 	}
+	
+	// todo: The destination for the JSON file should be determined by BioLockJ
+	private static void writeJSON(HashMap<String, HashMap<String,Holder>> map, Holder rootNode) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				BIOLOCK_J_PROJECT_DIR +File.separator + "lactoExample.json")));
+		
+		writeNodeAndChildren(writer, rootNode, map, 1);
+		
+		writer.flush(); writer.close();
+	}
+	
+	private static void writeNodeAndChildren( BufferedWriter writer,
+			Holder node,HashMap<String, HashMap<String,Holder>> map ,
+			int nodeLevel) throws Exception
+	{
+		String taxaLevel = nodeLevel == 0 ? ROOT_NODE : NewRDPParserFileLine.TAXA_ARRAY[nodeLevel];
+		writer.write("{\n");
+
+		writer.write("\"numSeqs\": " +  node.numSequences + ",\n");		
+		writer.write("\"rpdLevel\": " +  taxaLevel +  ",\n");
+		writer.write("\"rdptaxa\": \"" + node.name + "\"\n");
+		//writer.write("\"pvalue_Subject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
+		
+		if( nodeLevel < NewRDPParserFileLine.TAXA_ARRAY.length -1  )
+		{
+			List<Holder> toAdd = new ArrayList<Holder>();
+			
+			HashMap<String, Holder> innerMap = map.get(NewRDPParserFileLine.TAXA_ARRAY[nodeLevel+1]);
+			
+			for(String s : innerMap.keySet())
+			{
+				Holder innerNode = innerMap.get(s);
+				
+				if( innerNode.parent == node )
+					toAdd.add(innerNode);
+			}
+			
+			if ( toAdd.size() > 0) 
+			{
+				writer.write(",\"children\": [\n");
+					
+				for( Iterator<Holder> i = toAdd.iterator(); i.hasNext();)
+				{
+					writeNodeAndChildren(writer,i.next(), map, nodeLevel + 1);
+					if( i.hasNext())
+						writer.write(",");
+				}
+						writer.write("]\n");
+			}
+		}
+
+		writer.write("}\n");
+}
 	
 
 	// outer key is the taxonomic level
 	// inner key is the name of the taxa
-	private static HashMap<String, HashMap<String,Holder>> getTaxonomyMapWithCounts()
+	private static HashMap<String, HashMap<String,Holder>> getTaxonomyMapWithCounts(Holder rootNode)
 		throws Exception
 	{
 		HashMap<String, HashMap<String,Holder>> map = new HashMap<>();
-		
-		Holder h = new Holder();
-		h.name = ROOT_NODE;
-		h.parent = null;
 		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -52,7 +112,7 @@ public class FromBiolockJDirectory
 			{
 				File inFile = new File(directoryToAdd.getAbsolutePath() + File.separator + 
 						s);
-				addOneFileToMap(map, inFile, h);
+				addOneFileToMap(map, inFile, rootNode);
 			}
 		}
 		
@@ -87,9 +147,11 @@ public class FromBiolockJDirectory
 						treeNode = new Holder();
 						treeNode.name = node.getTaxaName();
 						treeNode.parent = parent;
+						innerMap.put(node.getTaxaName(), treeNode);
 					}
 					
 					treeNode.numSequences++;
+					rootNode.numSequences++;
 					
 					if( treeNode.parent != parent)
 						throw new Exception("Parents don't match " + treeNode.parent + " " + parent);
@@ -105,6 +167,6 @@ public class FromBiolockJDirectory
 	{
 		String name;
 		Holder parent;
-		int numSequences;
+		long numSequences;
 	}
 }
