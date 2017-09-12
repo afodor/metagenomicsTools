@@ -10,7 +10,10 @@ public class FromBiolockJDirectory
 	private static final String BIOLOCK_J_PROJECT_DIR = 
 			"C:\\biolockJProjects";
 	
-	public static void main(String[] args)
+	// todo this will ultimately come from a properties file
+	private static final int RDP_THRESHOLD = 80;
+	
+	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts();
 		
