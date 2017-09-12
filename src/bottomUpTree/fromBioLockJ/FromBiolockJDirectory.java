@@ -1,11 +1,14 @@
 package bottomUpTree.fromBioLockJ;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import parsers.NewRDPNode;
@@ -29,6 +32,7 @@ public class FromBiolockJDirectory
 		root.parent = null;
 		
 		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts(root);
+		addPValues(map);
 		
 		/* dump genus and parents to the console
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -64,8 +68,17 @@ public class FromBiolockJDirectory
 
 		writer.write("\"numSeqs\": " +  node.numSequences + ",\n");		
 		writer.write("\"rpdLevel\": \"" +  taxaLevel +  "\",\n");
+		
+		if( node.pValues.size() > 0 )
+		{
+			for(String s : node.pValues.keySet())
+			{
+				writer.write("\"" + s + "\": " +  node.pValues.get(s)+ ",\n");
+			}
+		}
+		
 		writer.write("\"rdptaxa\": \"" + node.name + "\"\n");
-		//writer.write("\"pvalue_Subject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
+		
 		
 		if( nodeLevel < NewRDPParserFileLine.TAXA_ARRAY.length -1  )
 		{
@@ -130,6 +143,67 @@ public class FromBiolockJDirectory
 		return map;
 	}
 	
+	private static void addPValues( HashMap<String, HashMap<String,Holder>> map )
+		throws Exception
+	{
+		// todo: This directory should be set by BIOLOCK_J
+		File pValueDirectory = new File(BIOLOCK_J_PROJECT_DIR + File.separator + 
+				"localR" + File.separator  );
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			String taxaLevel = NewRDPParserFileLine.TAXA_ARRAY[x];
+			
+			File inFile = new File(pValueDirectory.getAbsolutePath() + File.separator + 
+					"meta_pValuesFor_" + taxaLevel + ".txt");
+			
+			BufferedReader reader = new BufferedReader(new FileReader(inFile));
+			
+			List<String> includeList = new ArrayList<>();
+			
+			String[] topSplits = reader.readLine().replaceAll("\"", "").split("\t");
+			
+			for( String s : topSplits)
+				if( s.startsWith("pValues"))
+					includeList.add(s);
+				else
+					includeList.add(null);
+			
+			HashMap<String, Holder> innerMap = map.get(taxaLevel);
+			
+			for(String s= reader.readLine(); s!= null; s= reader.readLine())
+			{
+				String[] splits = s.split("\t");
+				
+				if( splits.length != includeList.size())
+					throw new Exception("Parsing error unequal number of tokens " + inFile.getAbsolutePath() );
+				
+				Holder h = innerMap.get(splits[0].replaceAll("\"", ""));
+				
+				if( h != null)
+				{
+					for( int y=1; y< includeList.size(); y++)
+					{
+						String pValueString = includeList.get(y);
+						
+						if(pValueString != null)
+						{
+							h.pValues.put(pValueString, Double.parseDouble(splits[y]));
+						}
+					}
+				}
+				else
+				{
+					System.out.println("Could not find " + splits[0].replaceAll("\"", ""));
+				}
+				
+				
+			}
+			
+			reader.close();
+		}
+	}
+	
 	
 	private static void addOneFileToMap(HashMap<String, HashMap<String,Holder>> map,
 			File file, Holder rootNode) throws Exception
@@ -181,5 +255,7 @@ public class FromBiolockJDirectory
 		String name;
 		Holder parent;
 		long numSequences;
+		
+		HashMap<String, Double> pValues = new LinkedHashMap<>();
 	}
 }
