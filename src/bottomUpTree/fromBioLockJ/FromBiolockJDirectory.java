@@ -73,7 +73,7 @@ public class FromBiolockJDirectory
 		{
 			for(String s : node.pValues.keySet())
 			{
-				writer.write("\"" + s + "\": " +  node.pValues.get(s)+ ",\n");
+				writer.write("\"-log10(" +  s + ")\": " + -Math.log10(node.pValues.get(s))+ ",\n");
 			}
 		}
 		
