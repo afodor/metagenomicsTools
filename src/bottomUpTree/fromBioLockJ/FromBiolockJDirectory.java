@@ -32,7 +32,7 @@ public class FromBiolockJDirectory
 		root.parent = null;
 		
 		HashMap<String, HashMap<String,Holder>> map = getTaxonomyMapWithCounts(root);
-		addPValues(map);
+		addPValues(map,root);
 		
 		/* dump genus and parents to the console
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -143,7 +143,7 @@ public class FromBiolockJDirectory
 		return map;
 	}
 	
-	private static void addPValues( HashMap<String, HashMap<String,Holder>> map )
+	private static void addPValues( HashMap<String, HashMap<String,Holder>> map, Holder root )
 		throws Exception
 	{
 		// todo: This directory should be set by BIOLOCK_J
@@ -164,11 +164,18 @@ public class FromBiolockJDirectory
 			String[] topSplits = reader.readLine().replaceAll("\"", "").split("\t");
 			
 			for( String s : topSplits)
+			{
 				if( s.startsWith("pValues"))
+				{
 					includeList.add(s);
+					root.pValues.put(s, 1.0);
+				}
 				else
+				{
 					includeList.add(null);
-			
+				}
+			}
+				
 			HashMap<String, Holder> innerMap = map.get(taxaLevel);
 			
 			for(String s= reader.readLine(); s!= null; s= reader.readLine())
