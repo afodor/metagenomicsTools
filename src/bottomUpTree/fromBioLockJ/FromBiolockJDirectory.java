@@ -20,7 +20,7 @@ public class FromBiolockJDirectory
 	// todo this will ultimately come from a properties file
 	private static final int RDP_THRESHOLD = 80;
 	
-	private static final String ROOT_NODE= "ROOT";
+	private static final String ROOT_NODE= "root";
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -63,7 +63,7 @@ public class FromBiolockJDirectory
 		writer.write("{\n");
 
 		writer.write("\"numSeqs\": " +  node.numSequences + ",\n");		
-		writer.write("\"rpdLevel\": " +  taxaLevel +  ",\n");
+		writer.write("\"rpdLevel\": \"" +  taxaLevel +  "\",\n");
 		writer.write("\"rdptaxa\": \"" + node.name + "\"\n");
 		//writer.write("\"pvalue_Subject\": \"" +  pValuesSubject.get(enode.getNodeName())+ "\",\n");
 		
