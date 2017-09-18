@@ -52,7 +52,12 @@ for ( taxa in taxaLevels)
 	dFrame <- data.frame( pValueExamAge,pValueRace,pValueSex,pValueCenter ,
 	pValueEducation,pValueBloodPressure ,taxaNames ,	rSquared )
 	dFrame <- dFrame [order(dFrame$pValueBloodPressure ),]
-	dFrame$adjustedP<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
+	dFrame$adjustedPSex<- p.adjust( dFrame$pValueSex , method = "BH" )	
+	dFrame$adjustedCenter<- p.adjust( dFrame$pValueCenter, method = "BH" )	
+	dFrame$adjustedPEducation<- p.adjust( dFrame$pValueEducation , method = "BH" )	
+	dFrame$adjustedPRace<- p.adjust( dFrame$pValueRace, method = "BH" )	
+	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
+	
 	
 	write.table(dFrame, file=paste("adjustedModelValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
