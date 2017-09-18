@@ -32,10 +32,14 @@ findMetaColumn <- function(lowerNames, toFind)
 
 for ( taxa in taxaLevels) 
 {
+	pValues <- vector()
+	taxaNames <- vector()
+	metaNames <- vector()
+	index <- 1
+
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
 	
-		
 	lowerNames <- tolower(names(myT))
 	
 	for( name in toModel ) 
@@ -48,6 +52,7 @@ for ( taxa in taxaLevels)
 				numFound = numFound+ 1;
 		}
 		
+		
 		print(paste( name, numFound)) 
 	}
 	
@@ -58,15 +63,23 @@ for ( taxa in taxaLevels)
 	for( i in 2:(findIDColumn(myT)-1))
 	{
 		taxaName <- names(myT)[i]
+		taxaNames[index] <- taxaName;
 	
 		for( j in 1:length(toModel))
 		{
 			metaName <- toModel[j]
+			metaNames[index] <- metaName
 			metaIndex <- findMetaColumn(lowerNames, metaName)
 			
-			plotLabel <- paste( taxaName, metaName )
+			aLm <- lm(myT[,i] ~ myT[,metaIndex])  
+			myAnova <- anova(aLm)
+			pValues[index] <- myAnova$"Pr(>F)"[1]
+			
+			plotLabel <- paste( taxaName, metaName, format(pValues[index],digits=3) )
+			
 			plot( myT[,i] ,myT[,metaIndex],main=plotLabel)
-			#lm(myT[,i] ~ myT[,metaIndex])  
+			
+			index = index + 1
 		}
 	}
 	
