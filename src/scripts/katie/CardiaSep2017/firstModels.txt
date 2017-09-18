@@ -10,25 +10,38 @@ toModel <- tolower( c("Race","Sex","center","examage","Educ","I02cdavg",
 "I10smoke","I20bmi",
 "I20wst"))
 
-lowerNames <- tolower(names(myT))
-
-for( name in toModel ) 
-{
-	numFound <- 0;
-
-	for( i in 1:length(lowerNames))
-	{
-		if( lowerNames[i] == name ) 
-			numFound = numFound+ 1;
-	}
-	
-	print(paste( name, numFound)) 
-}
-
 setwd("C:\\KatieCardiaSep_2018")
+
+findIDColumn <- function(myT)
+{
+	for( i in 1:length(names(myT)))
+	{
+		if( names(myT)[i] == "ID")
+			return (i)
+	}
+}
 
 for ( taxa in taxaLevels) 
 {
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
+	
+		
+	lowerNames <- tolower(names(myT))
+	
+	for( name in toModel ) 
+	{
+		numFound <- 0;
+	
+		for( i in 1:length(lowerNames))
+		{
+			if( lowerNames[i] == name ) 
+				numFound = numFound+ 1;
+		}
+		
+		print(paste( name, numFound)) 
+	}
+	
+	print( findIDColumn(myT))
+		
 }
