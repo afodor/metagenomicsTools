@@ -84,4 +84,96 @@ for ( taxa in taxaLevels)
 	}
 	
 	dev.off()
+	rm(list=ls())
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+toModel <- tolower( c("Race","Sex","center","examage","Educ","I02cdavg",
+"I02csavg","a02sbp", "b02avgsy","c02avgsy" ,"e02avgsy" ,"f02avgsy" ,"g02csavg",
+"h02csavg","I08hbnow","Hbp30","Kiangcat","Dietscore2",
+"gnaprioriscore", "dnaprioriscore", "anaprioriscore",
+"I18total",
+"I10smoke","I20bmi",
+"I20wst"))
+
+setwd("C:\\KatieCardiaSep_2018")
+
+findIDColumn <- function(myT)
+{
+	for( i in 1:length(names(myT)))
+	{
+		if( names(myT)[i] == "ID")
+			return (i)
+	}
+}
+
+findMetaColumn <- function(lowerNames, toFind)
+{
+	for( i in 1:length(lowerNames))
+	{
+		if( lowerNames[i] == toFind)
+			return (i)
+	}
+}
+
+for ( taxa in taxaLevels) 
+{
+	pValues <- vector()
+	taxaNames <- vector()
+	metaNames <- vector()
+	index <- 1
+
+	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+	
+	lowerNames <- tolower(names(myT))
+	
+	for( name in toModel ) 
+	{
+		numFound <- 0;
+	
+		for( i in 1:length(lowerNames))
+		{
+			if( lowerNames[i] == name ) 
+				numFound = numFound+ 1;
+		}
+		
+		
+		print(paste( name, numFound)) 
+	}
+	
+	pdf( paste( taxa, "plot.pdf",sep=""))
+	
+	par(mfrow=c(3,2))
+	
+	for( i in 2:(findIDColumn(myT)-1))
+	{
+		taxaName <- names(myT)[i]
+		
+		for( j in 1:length(toModel))
+		{
+			taxaNames[index] <- taxaName;
+			metaName <- toModel[j]
+			metaNames[index] <- metaName
+			metaIndex <- findMetaColumn(lowerNames, metaName)
+			
+			aLm <- lm(myT[,i] ~ myT[,metaIndex])  
+			myAnova <- anova(aLm)
+			pValues[index] <- myAnova$"Pr(>F)"[1]
+			
+			plotLabel <- paste( taxaName, metaName, format(pValues[index],digits=3) )
+			
+			plot( myT[,i] ,myT[,metaIndex],main=plotLabel)
+			
+			index = index + 1
+		}
+	}
+	
+	dFrame <- data.frame( pValues, taxaNames,metaNames)
+	dFrame$adjustedP<- p.adjust( dFrame$pValues, method = "BH" )	
+	
+	write.table(dFrame, file=paste("pValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	dev.off()
+}
 }
