@@ -170,6 +170,7 @@ for ( taxa in taxaLevels)
 	}
 	
 	dFrame <- data.frame( pValues, taxaNames,metaNames)
+	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP<- p.adjust( dFrame$pValues, method = "BH" )	
 	
 	write.table(dFrame, file=paste("pValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
