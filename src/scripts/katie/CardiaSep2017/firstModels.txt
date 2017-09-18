@@ -21,6 +21,15 @@ findIDColumn <- function(myT)
 	}
 }
 
+findMetaColumn <- function(lowerNames, toFind)
+{
+	for( i in 1:length(lowerNames))
+	{
+		if( lowerNames[i] == toFind)
+			return (i)
+	}
+}
+
 for ( taxa in taxaLevels) 
 {
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
@@ -42,6 +51,23 @@ for ( taxa in taxaLevels)
 		print(paste( name, numFound)) 
 	}
 	
-	print( findIDColumn(myT))
-		
+	pdf( paste( taxa, "plot.pdf",sep=""))
+	
+	par(mfrow=c(3,2))
+	
+	for( i in 2:(findIDColumn(myT)-1))
+	{
+		taxaName <- names(myT)[i]
+	
+		for( j in 1:length(toModel))
+		{
+			metaName <- toModel[j]
+			metaIndex <- findMetaColumn(lowerNames, metaName)
+			
+			plotLabel <- paste( taxaName, metaName )
+			plot( lm(myT[,i] ~ myT[,metaIndex]) ) 
+		}
+	}
+	
+	dev.off()
 }
