@@ -1,0 +1,64 @@
+rm(list=ls())
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+setwd("C:\\KatieCardiaSep_2018")
+
+findIDColumn <- function(myT)
+{
+	for( i in 1:length(names(myT)))
+	{
+		if( names(myT)[i] == "ID")
+			return (i)
+	}
+}
+
+for ( taxa in taxaLevels) 
+{
+	pValueExamAge <- vector()
+	pValueRace <- vector()
+	pValueSex <- vector()
+	pValueCenter <- vector()
+	pValueAge <- vector()
+	pValueEducation<-vector()
+	pValueBloodPressure <- vector()
+	taxaNames <- vector()
+	rSquared <- vector()
+	index <- 1
+
+	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+	
+	for( i in 2:(findIDColumn(myT)-1))
+	{
+		taxaName <- names(myT)[i]
+		taxaNames[index] <- taxaName;
+	
+		aLm<- 
+			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
+		myAnova <- anova(aLm)
+		
+		pValueExamAge[index] <-  myAnova$"Pr(>F)"[1]
+		pValueSex[index] <- myAnova$"Pr(>F)"[2]
+		pValueCenter[index] <- myAnova$"Pr(>F)"[3]
+		pValueEducation[index] <- myAnova$"Pr(>F)"[4]
+		pValueRace[index] <- myAnova$"Pr(>F)"[5]
+		pValueBloodPressure[index] <- myAnova$"Pr(>F)"[6]
+		rSquared[index] <- summary(aLm)$"r.squared"
+		
+		index = index + 1
+	}
+	
+	dFrame <- data.frame( pValueExamAge,pValueRace,pValueSex,pValueCenter ,
+	pValueEducation,pValueBloodPressure ,taxaNames ,	rSquared )
+	dFrame <- dFrame [order(dFrame$pValueBloodPressure ),]
+	dFrame$adjustedPSex<- p.adjust( dFrame$pValueSex , method = "BH" )	
+	dFrame$adjustedCenter<- p.adjust( dFrame$pValueCenter, method = "BH" )	
+	dFrame$adjustedPEducation<- p.adjust( dFrame$pValueEducation , method = "BH" )	
+	dFrame$adjustedPRace<- p.adjust( dFrame$pValueRace, method = "BH" )	
+	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
+	
+	
+	write.table(dFrame, file=paste("adjustedModelValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+}
