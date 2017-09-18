@@ -35,6 +35,7 @@ for ( taxa in taxaLevels)
 	pValues <- vector()
 	taxaNames <- vector()
 	metaNames <- vector()
+	rSquared <- vector()
 	index <- 1
 
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
@@ -160,6 +161,7 @@ for ( taxa in taxaLevels)
 			aLm <- lm(myT[,i] ~ myT[,metaIndex])  
 			myAnova <- anova(aLm)
 			pValues[index] <- myAnova$"Pr(>F)"[1]
+			rSquared[index] <- summary(aLm)$"r.squared"
 			
 			plotLabel <- paste( taxaName, metaName, format(pValues[index],digits=3) )
 			
@@ -169,7 +171,7 @@ for ( taxa in taxaLevels)
 		}
 	}
 	
-	dFrame <- data.frame( pValues, taxaNames,metaNames)
+	dFrame <- data.frame( pValues, rSquared,taxaNames,metaNames)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP<- p.adjust( dFrame$pValues, method = "BH" )	
 	
