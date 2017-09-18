@@ -1,0 +1,24 @@
+rm(list=ls())
+
+setwd("C:\\KatieCardiaSep_2018")
+
+myT <- read.table("fullmeta_phylum_ln.txt", header=TRUE, sep="\t")
+
+includeVals <- vector()
+
+for( i in 1:length(names(myT)))
+{
+	if( names(myT[i])=="EXAMAGE" || names(myT[i])=="SEX" ||names(myT[i])=="CENTER" ||
+	names(myT[i])=="educ"|| names(myT[i])=="RACE"|| names(myT[i])=="I02CSAVG"  )
+	{
+		includeVals[i] = "1"
+	}
+	else
+	{
+		includeVals[i] = "0"
+	}
+	
+}
+
+myT <- myT[, includeVals == 1]
+
