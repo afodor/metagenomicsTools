@@ -122,6 +122,7 @@ for ( taxa in taxaLevels)
 	pValues <- vector()
 	taxaNames <- vector()
 	metaNames <- vector()
+	rSquared <- vector()
 	index <- 1
 
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
