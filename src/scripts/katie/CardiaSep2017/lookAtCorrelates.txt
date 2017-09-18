@@ -6,6 +6,10 @@ myT <- read.table("fullmeta_phylum_ln.txt", header=TRUE, sep="\t")
 
 includeVals <- vector()
 
+pdf("correlates.pdf")
+
+par(mfrow=c(3,2))
+
 for( i in 1:length(names(myT)))
 {
 	if( names(myT[i])=="EXAMAGE" || names(myT[i])=="SEX" ||names(myT[i])=="CENTER" ||
@@ -17,8 +21,20 @@ for( i in 1:length(names(myT)))
 	{
 		includeVals[i] = "0"
 	}
-	
 }
 
 myT <- myT[, includeVals == 1]
 
+for ( i in 1:(length(myT)-1))
+{
+	for( j in (i+1):length(myT))
+	{
+		aLm <- lm(myT[,i] ~ myT[,j])  
+		myAnova <- anova(aLm)
+		pValue <- myAnova$"Pr(>F)"[1]
+			
+		plot( myT[,i], myT[,j])
+	}
+}
+
+dev.off()
