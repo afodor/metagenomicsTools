@@ -8,7 +8,7 @@ includeVals <- vector()
 
 pdf("correlates.pdf")
 
-par(mfrow=c(3,2))
+par(mfrow=c(2,2))
 
 for( i in 1:length(names(myT)))
 {
@@ -32,8 +32,11 @@ for ( i in 1:(length(myT)-1))
 		aLm <- lm(myT[,i] ~ myT[,j])  
 		myAnova <- anova(aLm)
 		pValue <- myAnova$"Pr(>F)"[1]
-			
-		plot( myT[,i], myT[,j])
+		
+		legend <- paste( "p=",format(pValue, digits=3 ), "rsquared=",
+		format( summary(aLm)$"r.squared",digits=3) )
+		
+		plot( myT[,i], myT[,j],xlab=names(myT)[i],ylab=names(myT)[j],main=legend)
 	}
 }
 
