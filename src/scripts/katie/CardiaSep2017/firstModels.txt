@@ -1,0 +1,34 @@
+rm(list=ls())
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+toModel <- tolower( c("Race","Sex","center","examage","Educ","I02cdavg",
+"I02csavg","a02sbp", "b02avgsy","c02avgsy" ,"e02avgsy" ,"f02avgsy" ,"g02csavg",
+"h02csavg","I08hbnow","Hbp30","Kiangcat","Dietscore2",
+"gnaprioriscore", "dnaprioriscore", "anaprioriscore",
+"I18total",
+"I10smoke","I20bmi",
+"I20wst"))
+
+lowerNames <- tolower(names(myT))
+
+for( name in toModel ) 
+{
+	numFound <- 0;
+
+	for( i in 1:length(lowerNames))
+	{
+		if( lowerNames[i] == name ) 
+			numFound = numFound+ 1;
+	}
+	
+	print(paste( name, numFound)) 
+}
+
+setwd("C:\\KatieCardiaSep_2018")
+
+for ( taxa in taxaLevels) 
+{
+	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+}
