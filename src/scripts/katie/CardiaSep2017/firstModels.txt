@@ -65,7 +65,8 @@ for ( taxa in taxaLevels)
 			metaIndex <- findMetaColumn(lowerNames, metaName)
 			
 			plotLabel <- paste( taxaName, metaName )
-			plot( lm(myT[,i] ~ myT[,metaIndex]) ) 
+			plot( myT[,i] ,myT[,metaIndex],main=plotLabel)
+			#lm(myT[,i] ~ myT[,metaIndex])  
 		}
 	}
 	
