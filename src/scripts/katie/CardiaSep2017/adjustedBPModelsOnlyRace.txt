@@ -15,12 +15,7 @@ findIDColumn <- function(myT)
 
 for ( taxa in taxaLevels) 
 {
-	pValueExamAge <- vector()
 	pValueRace <- vector()
-	pValueSex <- vector()
-	pValueCenter <- vector()
-	pValueAge <- vector()
-	pValueEducation<-vector()
 	pValueBloodPressure <- vector()
 	taxaNames <- vector()
 	rSquared <- vector()
@@ -35,30 +30,22 @@ for ( taxa in taxaLevels)
 		taxaNames[index] <- taxaName;
 	
 		aLm<- 
-			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
+			lm(  myT[,i] ~  myT$I02CSAVG+ myT$RACE  )
 		myAnova <- anova(aLm)
 		
-		pValueExamAge[index] <-  myAnova$"Pr(>F)"[1]
-		pValueSex[index] <- myAnova$"Pr(>F)"[2]
-		pValueCenter[index] <- myAnova$"Pr(>F)"[3]
-		pValueEducation[index] <- myAnova$"Pr(>F)"[4]
-		pValueRace[index] <- myAnova$"Pr(>F)"[5]
-		pValueBloodPressure[index] <- myAnova$"Pr(>F)"[6]
+		pValueRace[index] <- myAnova$"Pr(>F)"[1]
+		pValueBloodPressure[index] <- myAnova$"Pr(>F)"[2]
 		rSquared[index] <- summary(aLm)$"r.squared"
 		
 		index = index + 1
 	}
 	
-	dFrame <- data.frame( pValueExamAge,pValueRace,pValueSex,pValueCenter ,
-	pValueEducation,pValueBloodPressure ,taxaNames ,	rSquared )
+	dFrame <- data.frame( pValueRace,pValueBloodPressure ,taxaNames ,rSquared )
 	dFrame <- dFrame [order(dFrame$pValueBloodPressure ),]
-	dFrame$adjustedPSex<- p.adjust( dFrame$pValueSex , method = "BH" )	
-	dFrame$adjustedCenter<- p.adjust( dFrame$pValueCenter, method = "BH" )	
-	dFrame$adjustedPEducation<- p.adjust( dFrame$pValueEducation , method = "BH" )	
 	dFrame$adjustedPRace<- p.adjust( dFrame$pValueRace, method = "BH" )	
 	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
 	
 	
-	write.table(dFrame, file=paste("adjustedModelValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("adjustedModelValuesForMetaRaceOnly", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
