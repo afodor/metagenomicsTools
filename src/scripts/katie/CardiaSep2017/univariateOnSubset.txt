@@ -64,5 +64,5 @@ for ( taxa in taxaLevels)
 	
 	
 	write.table(dFrame, file=paste("modelAsUnivariate", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-	
+	plot(dFrame[,13:17])
 }
