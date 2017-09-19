@@ -23,7 +23,6 @@ for ( taxa in taxaLevels)
 	pValueEducation<-vector()
 	pValueBloodPressure <- vector()
 	taxaNames <- vector()
-	rSquared <- vector()
 	index <- 1
 
 	fileName <- paste("fullmeta_", taxa, "_ln.txt",sep="")
@@ -35,22 +34,21 @@ for ( taxa in taxaLevels)
 		taxaNames[index] <- taxaName;
 	
 		aLm<- 
-			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
+			lm(  myT[,i] ~  + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
 		myAnova <- anova(aLm)
 		
-		pValueExamAge[index] <-  myAnova$"Pr(>F)"[1]
-		pValueSex[index] <- myAnova$"Pr(>F)"[2]
-		pValueCenter[index] <- myAnova$"Pr(>F)"[3]
-		pValueEducation[index] <- myAnova$"Pr(>F)"[4]
-		pValueRace[index] <- myAnova$"Pr(>F)"[5]
-		pValueBloodPressure[index] <- myAnova$"Pr(>F)"[6]
-		rSquared[index] <- summary(aLm)$"r.squared"
+		pValueExamAge[index] <-  anova(lm( myT[,i] ~ myT$EXAMAGE))$"Pr(>F)"[1]
+		pValueSex[index] <- anova(lm( myT[,i] ~ myT$SEX))$"Pr(>F)"[1]
+		pValueCenter[index] <- anova(lm( myT[,i] ~ myT$CENTER))$"Pr(>F)"[1]
+		pValueEducation[index] <- anova(lm( myT[,i] ~ myT$educ))$"Pr(>F)"[1]
+		pValueRace[index] <- anova(lm( myT[,i] ~ myT$RACE))$"Pr(>F)"[1]
+		pValueBloodPressure[index] <- anova(lm( myT[,i] ~ myT$I02CSAVG))$"Pr(>F)"[1]
 		
 		index = index + 1
 	}
 	
 	dFrame <- data.frame( pValueExamAge,pValueRace,pValueSex,pValueCenter ,
-	pValueEducation,pValueBloodPressure ,taxaNames ,	rSquared )
+	pValueEducation,pValueBloodPressure ,taxaNames )
 	dFrame <- dFrame [order(dFrame$pValueBloodPressure ),]
 	dFrame$adjustedPSex<- p.adjust( dFrame$pValueSex , method = "BH" )	
 	dFrame$adjustedCenter<- p.adjust( dFrame$pValueCenter, method = "BH" )	
@@ -59,6 +57,6 @@ for ( taxa in taxaLevels)
 	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
 	
 	
-	write.table(dFrame, file=paste("adjustedModelValuesForMeta", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("modelAsUnivariate", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
 }
