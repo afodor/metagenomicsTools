@@ -36,14 +36,13 @@ for ( taxa in taxaLevels)
 	
 		aLm<- 
 			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
-		myAnova <- anova(aLm)
-		
-		pValueExamAge[index] <-  myAnova$"Pr(>F)"[1]
-		pValueSex[index] <- myAnova$"Pr(>F)"[2]
-		pValueCenter[index] <- myAnova$"Pr(>F)"[3]
-		pValueEducation[index] <- myAnova$"Pr(>F)"[4]
-		pValueRace[index] <- myAnova$"Pr(>F)"[5]
-		pValueBloodPressure[index] <- myAnova$"Pr(>F)"[6]
+	
+		pValueExamAge[index] <-  summary(aLm)$coefficients[2,4]
+		pValueSex[index] <- summary(aLm)$coefficients[3,4]
+		pValueCenter[index] <- summary(aLm)$coefficients[4,4]
+		pValueEducation[index] <- summary(aLm)$coefficients[5,4]
+		pValueRace[index] <- summary(aLm)$coefficients[6,4]
+		pValueBloodPressure[index] <- summary(aLm)$coefficients[7,4]
 		rSquared[index] <- summary(aLm)$"r.squared"
 		
 		index = index + 1
