@@ -56,6 +56,12 @@ for ( taxa in taxaLevels)
 	dFrame$adjustedPRace<- p.adjust( dFrame$pValueRace, method = "BH" )	
 	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
 	
+	dFrame$logPSex<- -log10( dFrame$pValueSex )	
+	dFrame$logPCenter<- -log10( dFrame$pValueCenter)	
+	dFrame$logPEducation<- -log10( dFrame$pValueEducation )	
+	dFrame$logPPRace<- -log10( dFrame$pValueRace)	
+	dFrame$logPPBloodPressure<- -log10( dFrame$pValueBloodPressure )	
+	
 	
 	write.table(dFrame, file=paste("modelAsUnivariate", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
