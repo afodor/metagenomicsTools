@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html>
 <body>
+<script type="text/javascript">
 
-<textarea rows="5" cols="50">
+function setAnswer()
+{
+	aSeq= document.getElementById("sequenceArea").value;
+
+	numGC =0
+	for(  x=0; x < aSeq.length; x++)
+	{
+		c = aSeq.charAt(x).toLowerCase()
+		
+		if( c=="c" || c == "g")
+			numGC++;
+		
+	}
+	
+	answer = numGC /aSeq.length
+
+	myArea =  document.getElementById("answer").value=answer;
+	
+}
+
+
+</script>
+
+<textarea rows="10" cols="50" id="sequenceArea">
 Enter your DNA sequence here
-</textarea>
+</textarea>5
+
+<br>
+<button type="button" onClick="setAnswer()">Calculate GC content</button>
+<textarea rows="1" cols="10" id="answer"></textarea>
 
 </body>
 </html>
