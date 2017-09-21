@@ -55,6 +55,8 @@ for ( taxa in taxaLevels)
 	dFrame$adjustedCenter<- p.adjust( dFrame$pValueCenter, method = "BH" )	
 	dFrame$adjustedPEducation<- p.adjust( dFrame$pValueEducation , method = "BH" )	
 	dFrame$adjustedPRace<- p.adjust( dFrame$pValueRace, method = "BH" )	
+	dFrame$adjustedAge<- p.adjust( dFrame$pValueExamAge, method = "BH" )	
+	
 	dFrame$adjustedPBloodPressure<- p.adjust( dFrame$pValueBloodPressure , method = "BH" )	
 	
 	
