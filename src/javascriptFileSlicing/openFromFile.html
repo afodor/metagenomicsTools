@@ -3,6 +3,7 @@
 <body>
 <input type="file" id="files" name="files[]" multiple />
 <output id="list"></output>
+<br><textarea rows="20" cols="50" id="anArea"></textarea>
 <body>
 <script>
 //modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
@@ -16,10 +17,7 @@
                   f.size, ' bytes, last modified: ',
                   f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                   '</li>');
-        prefix = "ForceTree.html?"
-        fileToOpen = prefix.concat(escape(f.name))
-        console.log(fileToOpen)
-        window.open(fileToOpen, '_blank')
+        document.getElementById("anArea").value ="Got it"
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
   }
