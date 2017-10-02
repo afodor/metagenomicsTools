@@ -142,6 +142,8 @@
 	var statics = new StaticHolder();
 	
 	var myCount=0;
+	thisRef = this;
+	thisRef.myGo = null;
 	
 	window.onkeypress = function(e){ myGo.handleKeyboardEvent(e)}; 
 	
@@ -172,7 +174,7 @@
      // Closure to capture the file information.
       reader.onload = (function(theFile) 
       	{
-        	return function(e){var myGo = new GO(window,window,true,e.target.result);
+        	return function(e){thisRef.myGo = new GO(window,window,true,e.target.result);
 	 };
       	})(f);
 

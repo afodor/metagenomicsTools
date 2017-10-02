@@ -2005,7 +2005,7 @@ if( isRunFromTopWindow )
 	
 	var root = JSON.parse(jsonString);
 	
-  	statics.setRoot(jsonString);
+  	statics.setRoot(root);
   	thisContext.initialize();  // wait until the data is loaded to initialize
 }
 else
