@@ -16,7 +16,10 @@
                   f.size, ' bytes, last modified: ',
                   f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                   '</li>');
-        window.open("ForceTree.html", '_blank')
+        prefix = "ForceTree.html?"
+        fileToOpen = prefix.concat(escape(f.name))
+        console.log(fileToOpen)
+        window.open(fileToOpen, '_blank')
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
   }
