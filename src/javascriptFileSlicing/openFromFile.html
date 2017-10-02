@@ -5,7 +5,7 @@
 <output id="list"></output>
 <body>
 <script>
-# modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
+//modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
   function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
 
@@ -16,6 +16,7 @@
                   f.size, ' bytes, last modified: ',
                   f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                   '</li>');
+        window.open("ForceTree.html", '_blank')
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
   }
