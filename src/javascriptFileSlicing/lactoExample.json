@@ -1,0 +1,3079 @@
+{
+"numSeqs": 0,
+"rpdLevel": "root",
+"-log10(pValuesBirthGroup)": -0.0,
+"-log10(pValuesDeliveryMode)": -0.0,
+"-log10(pValuesNum_Reads)": -0.0,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": -0.0,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "root"
+,"children": [
+{
+"numSeqs": 43,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 0.23428966241396604,
+"-log10(pValuesDeliveryMode)": 0.16704181659548453,
+"-log10(pValuesNum_Reads)": 0.08364474938861413,
+"-log10(pValuesNum_Hits)": 0.08364474938861413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.07512829170796001,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16704181659548453,
+"-log10(pValuesAdjusted_Num_Reads)": 0.047918451517079845,
+"-log10(pValuesAdjusted_Num_Hits)": 0.05298162729349113,
+"rdptaxa": "Crenarchaeota"
+,"children": [
+{
+"numSeqs": 43,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.23428966241396604,
+"-log10(pValuesDeliveryMode)": 0.16704181659548453,
+"-log10(pValuesNum_Reads)": 0.08364474938861413,
+"-log10(pValuesNum_Hits)": 0.08364474938861413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16704181659548453,
+"-log10(pValuesAdjusted_Num_Reads)": 0.0166979597580008,
+"-log10(pValuesAdjusted_Num_Hits)": 0.020796943922089854,
+"rdptaxa": "Thermoprotei"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.23428966241396604,
+"-log10(pValuesDeliveryMode)": 0.16704181659548453,
+"-log10(pValuesNum_Reads)": 0.08364474938861413,
+"-log10(pValuesNum_Hits)": 0.08364474938861413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16704181659548453,
+"-log10(pValuesAdjusted_Num_Reads)": 0.044136208104940296,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Desulfurococcales"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.23428966241396604,
+"-log10(pValuesDeliveryMode)": 0.16704181659548453,
+"-log10(pValuesNum_Reads)": 0.08364474938861413,
+"-log10(pValuesNum_Hits)": 0.08364474938861413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.14071287787313547,
+"-log10(pValuesAdjusted_Num_Reads)": 0.032737467559593794,
+"-log10(pValuesAdjusted_Num_Hits)": 0.009543028870264147,
+"rdptaxa": "Pyrodictiaceae"
+,"children": [
+{
+"numSeqs": 4,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.23428966241396604,
+"-log10(pValuesDeliveryMode)": 0.16704181659548453,
+"-log10(pValuesNum_Reads)": 0.08364474938861413,
+"-log10(pValuesNum_Hits)": 0.08364474938861413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.12971749357167206,
+"-log10(pValuesAdjusted_Num_Reads)": 0.005463382692931607,
+"-log10(pValuesAdjusted_Num_Hits)": 0.00548417239339633,
+"rdptaxa": "Pyrolobus"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 710007,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 0.041817435622080366,
+"-log10(pValuesDeliveryMode)": 1.2039893403377615,
+"-log10(pValuesNum_Reads)": 0.10878270471972933,
+"-log10(pValuesNum_Hits)": 0.4946646627009086,
+"-log10(pValuesAdjusted_BirthGroup)": 0.041817435622080366,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019293490097984,
+"-log10(pValuesAdjusted_Num_Reads)": 0.047918451517079845,
+"-log10(pValuesAdjusted_Num_Hits)": 0.29054468004498446,
+"rdptaxa": "Proteobacteria"
+,"children": [
+{
+"numSeqs": 9563,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.3943582487441985,
+"-log10(pValuesDeliveryMode)": 1.1360265056072167,
+"-log10(pValuesNum_Reads)": 0.5938610932504175,
+"-log10(pValuesNum_Hits)": 1.0229324917087463,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019291053885616,
+"-log10(pValuesAdjusted_Num_Reads)": 0.22588430795582354,
+"-log10(pValuesAdjusted_Num_Hits)": 0.5757744603665271,
+"rdptaxa": "Alphaproteobacteria"
+,"children": [
+{
+"numSeqs": 94,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.034736613642952,
+"-log10(pValuesDeliveryMode)": 0.2812688843001393,
+"-log10(pValuesNum_Reads)": 0.2598933652552321,
+"-log10(pValuesNum_Hits)": 0.011048210819380089,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.24176034301646573,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Caulobacterales"
+,"children": [
+{
+"numSeqs": 94,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.034736613642952,
+"-log10(pValuesDeliveryMode)": 0.2812688843001393,
+"-log10(pValuesNum_Reads)": 0.2598933652552321,
+"-log10(pValuesNum_Hits)": 0.011048210819380089,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.2218855559190474,
+"-log10(pValuesAdjusted_Num_Reads)": 0.09639123350757176,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Caulobacteraceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Phenylobacterium"
+}
+,{
+"numSeqs": 8,
+"rpdLevel": "genus",
+"rdptaxa": "Caulobacter"
+}
+,{
+"numSeqs": 85,
+"rpdLevel": "genus",
+"rdptaxa": "Brevundimonas"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 921,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.6429134339224758,
+"-log10(pValuesDeliveryMode)": 0.608119901121359,
+"-log10(pValuesNum_Reads)": 0.23622760436330276,
+"-log10(pValuesNum_Hits)": 0.09602389608828647,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Sphingomonadales"
+,"children": [
+{
+"numSeqs": 914,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.6429134339224758,
+"-log10(pValuesDeliveryMode)": 0.608119901121359,
+"-log10(pValuesNum_Reads)": 0.23622760436330276,
+"-log10(pValuesNum_Hits)": 0.09602389608828647,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.08495992903265306,
+"-log10(pValuesAdjusted_Num_Hits)": 0.009543028870264147,
+"rdptaxa": "Sphingomonadaceae"
+,"children": [
+{
+"numSeqs": 23,
+"rpdLevel": "genus",
+"rdptaxa": "Sphingobium"
+}
+,{
+"numSeqs": 461,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.39941428076712726,
+"-log10(pValuesDeliveryMode)": 0.5636951177468809,
+"-log10(pValuesNum_Reads)": 0.14928885919604834,
+"-log10(pValuesNum_Hits)": 0.25358438039279574,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Sphingomonas"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 271,
+"rpdLevel": "order",
+"rdptaxa": "Rhodospirillales"
+,"children": [
+{
+"numSeqs": 271,
+"rpdLevel": "family",
+"rdptaxa": "Rhodospirillaceae"
+,"children": [
+{
+"numSeqs": 267,
+"rpdLevel": "genus",
+"rdptaxa": "Skermanella"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 5989,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.18967074241076604,
+"-log10(pValuesDeliveryMode)": 0.8592861816651997,
+"-log10(pValuesNum_Reads)": 0.33860011509964366,
+"-log10(pValuesNum_Hits)": 0.7034115943079826,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.18678179830464656,
+"rdptaxa": "Rhizobiales"
+,"children": [
+{
+"numSeqs": 2270,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.24135570771171475,
+"-log10(pValuesDeliveryMode)": 1.3692763064913247,
+"-log10(pValuesNum_Reads)": 0.06201453086298323,
+"-log10(pValuesNum_Hits)": 0.008373818619852355,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.3967161322995836,
+"-log10(pValuesAdjusted_Num_Reads)": 0.026542212700764383,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Aurantimonadaceae"
+,"children": [
+{
+"numSeqs": 2091,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.24135570771171475,
+"-log10(pValuesDeliveryMode)": 1.3692763064913247,
+"-log10(pValuesNum_Reads)": 0.06201453086298323,
+"-log10(pValuesNum_Hits)": 0.008373818619852355,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Aureimonas"
+}
+]
+}
+,{
+"numSeqs": 2637,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.022099348981509812,
+"-log10(pValuesDeliveryMode)": 0.49772634372287766,
+"-log10(pValuesNum_Reads)": 0.00708255441952756,
+"-log10(pValuesNum_Hits)": 0.4418031712229354,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013499177219591948,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.00708255441952756,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Methylobacteriaceae"
+,"children": [
+{
+"numSeqs": 2413,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.03812424804446287,
+"-log10(pValuesDeliveryMode)": 0.4973382115202403,
+"-log10(pValuesNum_Reads)": 0.037239222280789214,
+"-log10(pValuesNum_Hits)": 0.375747291942831,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Methylobacterium"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Psychroglaciecola"
+}
+]
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "family",
+"rdptaxa": "Rhizobiales_incertae_sedis"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Vasilyevaea"
+}
+]
+}
+,{
+"numSeqs": 42,
+"rpdLevel": "family",
+"rdptaxa": "Bradyrhizobiaceae"
+,"children": [
+{
+"numSeqs": 27,
+"rpdLevel": "genus",
+"rdptaxa": "Bradyrhizobium"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Afipia"
+}
+]
+}
+,{
+"numSeqs": 67,
+"rpdLevel": "family",
+"rdptaxa": "Phyllobacteriaceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudaminobacter"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1491,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.03706078693475704,
+"-log10(pValuesDeliveryMode)": 0.5874157311079146,
+"-log10(pValuesNum_Reads)": 0.1396359154378171,
+"-log10(pValuesNum_Hits)": 0.05542803279297465,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.07893807508420567,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Rhodobacterales"
+,"children": [
+{
+"numSeqs": 1491,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.03706078693475704,
+"-log10(pValuesDeliveryMode)": 0.5874157311079146,
+"-log10(pValuesNum_Reads)": 0.1396359154378171,
+"-log10(pValuesNum_Hits)": 0.05542803279297465,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.0553150297377812,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Rhodobacteraceae"
+,"children": [
+{
+"numSeqs": 363,
+"rpdLevel": "genus",
+"rdptaxa": "Rubellimicrobium"
+}
+,{
+"numSeqs": 388,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.01928185021275614,
+"-log10(pValuesDeliveryMode)": 0.5084836956613771,
+"-log10(pValuesNum_Reads)": 0.5799336161795106,
+"-log10(pValuesNum_Hits)": 0.10244010732848313,
+"-log10(pValuesAdjusted_BirthGroup)": 0.0038482315162414508,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.18199360750747257,
+"-log10(pValuesAdjusted_Num_Hits)": 0.018119221628447316,
+"rdptaxa": "Paracoccus"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Epsilonproteobacteria"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "order",
+"rdptaxa": "Campylobacterales"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Campylobacteraceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Campylobacter"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 8575,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.1506032035858962,
+"-log10(pValuesDeliveryMode)": 1.2462107335093473,
+"-log10(pValuesNum_Reads)": 0.5148808901793833,
+"-log10(pValuesNum_Hits)": 0.8644853400377751,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019291053885616,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2138508945154021,
+"-log10(pValuesAdjusted_Num_Hits)": 0.4965085547431811,
+"rdptaxa": "Betaproteobacteria"
+,"children": [
+{
+"numSeqs": 518,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.37477792328921505,
+"-log10(pValuesDeliveryMode)": 0.3170799010334214,
+"-log10(pValuesNum_Reads)": 0.2648698465672681,
+"-log10(pValuesNum_Hits)": 0.012563492581084346,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.2563820606798103,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Rhodocyclales"
+,"children": [
+{
+"numSeqs": 518,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.37477792328921505,
+"-log10(pValuesDeliveryMode)": 0.3170799010334214,
+"-log10(pValuesNum_Reads)": 0.2648698465672681,
+"-log10(pValuesNum_Hits)": 0.012563492581084346,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.09639123350757176,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Rhodocyclaceae"
+,"children": [
+{
+"numSeqs": 506,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.37477792328921505,
+"-log10(pValuesDeliveryMode)": 0.3170799010334214,
+"-log10(pValuesNum_Reads)": 0.2648698465672681,
+"-log10(pValuesNum_Hits)": 0.012563492581084346,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.048441324279291764,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Azospira"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 5675,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": -0.0,
+"-log10(pValuesDeliveryMode)": 1.247713892853505,
+"-log10(pValuesNum_Reads)": 0.31485430155082733,
+"-log10(pValuesNum_Hits)": 0.5382100015186793,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.36310731155557424,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.13072467494041093,
+"rdptaxa": "Burkholderiales"
+,"children": [
+{
+"numSeqs": 1927,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.2800707432459235,
+"-log10(pValuesDeliveryMode)": 0.7924296727087369,
+"-log10(pValuesNum_Reads)": 0.14293333025766544,
+"-log10(pValuesNum_Hits)": 0.36695253866621336,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.0553150297377812,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Comamonadaceae"
+,"children": [
+{
+"numSeqs": 12,
+"rpdLevel": "genus",
+"rdptaxa": "Hydrogenophaga"
+}
+,{
+"numSeqs": 800,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.4143497835156967,
+"-log10(pValuesDeliveryMode)": 0.3435147427734769,
+"-log10(pValuesNum_Reads)": 0.16602441917393268,
+"-log10(pValuesNum_Hits)": 0.16602441917393268,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Pelomonas"
+}
+,{
+"numSeqs": 333,
+"rpdLevel": "genus",
+"rdptaxa": "Comamonas"
+}
+,{
+"numSeqs": 49,
+"rpdLevel": "genus",
+"rdptaxa": "Delftia"
+}
+,{
+"numSeqs": 657,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.23344494270651495,
+"-log10(pValuesDeliveryMode)": 0.5108808510250036,
+"-log10(pValuesNum_Reads)": 0.5468738733485103,
+"-log10(pValuesNum_Hits)": 0.5968845586426468,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Schlegelella"
+}
+]
+}
+,{
+"numSeqs": 259,
+"rpdLevel": "family",
+"rdptaxa": "Alcaligenaceae"
+,"children": [
+{
+"numSeqs": 196,
+"rpdLevel": "genus",
+"rdptaxa": "Achromobacter"
+}
+]
+}
+,{
+"numSeqs": 872,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.07117099266475554,
+"-log10(pValuesDeliveryMode)": 0.40136304827870223,
+"-log10(pValuesNum_Reads)": 0.4718384788982748,
+"-log10(pValuesNum_Hits)": 0.8676144762387012,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.1792416507711572,
+"-log10(pValuesAdjusted_Num_Hits)": 0.2392255461883882,
+"rdptaxa": "Burkholderiaceae"
+,"children": [
+{
+"numSeqs": 11,
+"rpdLevel": "genus",
+"rdptaxa": "Burkholderia"
+}
+,{
+"numSeqs": 701,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.26669871810367074,
+"-log10(pValuesDeliveryMode)": 0.3074049379479701,
+"-log10(pValuesNum_Reads)": 0.2598933652552321,
+"-log10(pValuesNum_Hits)": 0.13722632907476218,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.048441324279291764,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03388220606129618,
+"rdptaxa": "Ralstonia"
+}
+,{
+"numSeqs": 157,
+"rpdLevel": "genus",
+"rdptaxa": "Limnobacter"
+}
+]
+}
+,{
+"numSeqs": 743,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.7275347255301455,
+"-log10(pValuesDeliveryMode)": 0.4064600022112315,
+"-log10(pValuesNum_Reads)": 0.44227206882877895,
+"-log10(pValuesNum_Hits)": 0.44227206882877895,
+"-log10(pValuesAdjusted_BirthGroup)": 0.019437353156737766,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.16655188638109697,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Sutterellaceae"
+,"children": [
+{
+"numSeqs": 529,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5627002365605936,
+"-log10(pValuesDeliveryMode)": 0.36238547020240797,
+"-log10(pValuesNum_Reads)": 0.20971467956015763,
+"-log10(pValuesNum_Hits)": 0.20971467956015763,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Parasutterella"
+}
+,{
+"numSeqs": 34,
+"rpdLevel": "genus",
+"rdptaxa": "Sutterella"
+}
+]
+}
+,{
+"numSeqs": 1265,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.07715944022579925,
+"-log10(pValuesDeliveryMode)": 0.5465056023562788,
+"-log10(pValuesNum_Reads)": 0.6990778586714159,
+"-log10(pValuesNum_Hits)": 0.17443683220079642,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03506838016985496,
+"rdptaxa": "Oxalobacteraceae"
+,"children": [
+{
+"numSeqs": 1028,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.07715944022579925,
+"-log10(pValuesDeliveryMode)": 0.5465056023562788,
+"-log10(pValuesNum_Reads)": 0.6990778586714159,
+"-log10(pValuesNum_Hits)": 0.17443683220079642,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2010226971161104,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Massilia"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1680,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.26029063637903216,
+"-log10(pValuesDeliveryMode)": 0.572478769876394,
+"-log10(pValuesNum_Reads)": 0.3725789306813946,
+"-log10(pValuesNum_Hits)": 0.19964041444854755,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.014003837486635856,
+"rdptaxa": "Neisseriales"
+,"children": [
+{
+"numSeqs": 1680,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.26029063637903216,
+"-log10(pValuesDeliveryMode)": 0.572478769876394,
+"-log10(pValuesNum_Reads)": 0.3725789306813946,
+"-log10(pValuesNum_Hits)": 0.19964041444854755,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12740675248241387,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04837273911789801,
+"rdptaxa": "Neisseriaceae"
+,"children": [
+{
+"numSeqs": 774,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.44164576782193976,
+"-log10(pValuesDeliveryMode)": 0.5062224892431113,
+"-log10(pValuesNum_Reads)": 0.1421081345388357,
+"-log10(pValuesNum_Hits)": 0.4522143865634434,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Neisseria"
+}
+,{
+"numSeqs": 79,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.28467376947456324,
+"-log10(pValuesDeliveryMode)": 0.37022078085482235,
+"-log10(pValuesNum_Reads)": 0.5998349516891376,
+"-log10(pValuesNum_Hits)": 0.1623938260243449,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.18199360750747257,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Morococcus"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 85,
+"rpdLevel": "order",
+"rdptaxa": "Hydrogenophilales"
+,"children": [
+{
+"numSeqs": 85,
+"rpdLevel": "family",
+"rdptaxa": "Hydrogenophilaceae"
+,"children": [
+{
+"numSeqs": 85,
+"rpdLevel": "genus",
+"rdptaxa": "Hydrogenophilus"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Deltaproteobacteria"
+}
+,{
+"numSeqs": 690298,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.01352366689673403,
+"-log10(pValuesDeliveryMode)": 1.0284544871158134,
+"-log10(pValuesNum_Reads)": 0.21287382414263906,
+"-log10(pValuesNum_Hits)": 0.35472952813142145,
+"-log10(pValuesAdjusted_BirthGroup)": 0.01352366689673403,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019291053885616,
+"-log10(pValuesAdjusted_Num_Reads)": 0.10813847362262577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.16284400189250853,
+"rdptaxa": "Gammaproteobacteria"
+,"children": [
+{
+"numSeqs": 8766,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.11266789946602582,
+"-log10(pValuesDeliveryMode)": 0.6166230347021291,
+"-log10(pValuesNum_Reads)": 0.2634584047496508,
+"-log10(pValuesNum_Hits)": 0.5906740107374583,
+"-log10(pValuesAdjusted_BirthGroup)": 0.006212568551738952,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.1320361617118093,
+"rdptaxa": "Pseudomonadales"
+,"children": [
+{
+"numSeqs": 6437,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.08898423268291535,
+"-log10(pValuesDeliveryMode)": 0.32819833785808583,
+"-log10(pValuesNum_Reads)": 0.027247573650598853,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.009873477581176331,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Pseudomonadaceae"
+,"children": [
+{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.04257926074457875,
+"-log10(pValuesDeliveryMode)": 0.4524296033095968,
+"-log10(pValuesNum_Reads)": 1.2358997275178303,
+"-log10(pValuesNum_Hits)": 0.37527738590341025,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Serpens"
+}
+,{
+"numSeqs": 5194,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.08898423268291535,
+"-log10(pValuesDeliveryMode)": 0.3271040214685672,
+"-log10(pValuesNum_Reads)": 0.027247573650598853,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Pseudomonas"
+}
+]
+}
+,{
+"numSeqs": 2292,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.15241226783776932,
+"-log10(pValuesDeliveryMode)": 0.7932994337227758,
+"-log10(pValuesNum_Reads)": 0.7450982726021064,
+"-log10(pValuesNum_Hits)": 0.7130613572368019,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.18638798182528313,
+"rdptaxa": "Moraxellaceae"
+,"children": [
+{
+"numSeqs": 81,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.06794699219601885,
+"-log10(pValuesDeliveryMode)": 0.33097727546119043,
+"-log10(pValuesNum_Reads)": -0.0,
+"-log10(pValuesNum_Hits)": 0.1923567914127164,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Alkanindiges"
+}
+,{
+"numSeqs": 1557,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.07676447649860332,
+"-log10(pValuesDeliveryMode)": 0.9296358739290734,
+"-log10(pValuesNum_Reads)": 1.080731329852324,
+"-log10(pValuesNum_Hits)": 0.9214931040851658,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.16816543742655268,
+"rdptaxa": "Acinetobacter"
+}
+,{
+"numSeqs": 230,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5340576870502735,
+"-log10(pValuesDeliveryMode)": 0.2419294790029628,
+"-log10(pValuesNum_Reads)": 0.026917670638428634,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16984304971993852,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Enhydrobacter"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 77,
+"rpdLevel": "order",
+"rdptaxa": "Pasteurellales"
+,"children": [
+{
+"numSeqs": 77,
+"rpdLevel": "family",
+"rdptaxa": "Pasteurellaceae"
+,"children": [
+{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Haemophilus"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 63,
+"rpdLevel": "order",
+"rdptaxa": "Aeromonadales"
+,"children": [
+{
+"numSeqs": 63,
+"rpdLevel": "family",
+"rdptaxa": "Aeromonadaceae"
+,"children": [
+{
+"numSeqs": 63,
+"rpdLevel": "genus",
+"rdptaxa": "Tolumonas"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 192,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.7270075292546729,
+"-log10(pValuesDeliveryMode)": 0.4017179210677531,
+"-log10(pValuesNum_Reads)": 0.4269640311368137,
+"-log10(pValuesNum_Hits)": 0.14912542021661662,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.29526259015346606,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Xanthomonadales"
+,"children": [
+{
+"numSeqs": 192,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.7270075292546729,
+"-log10(pValuesDeliveryMode)": 0.4017179210677531,
+"-log10(pValuesNum_Reads)": 0.4269640311368137,
+"-log10(pValuesNum_Hits)": 0.14912542021661662,
+"-log10(pValuesAdjusted_BirthGroup)": 0.019437353156737766,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.16655188638109697,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03261985114517938,
+"rdptaxa": "Xanthomonadaceae"
+,"children": [
+{
+"numSeqs": 175,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.7270075292546729,
+"-log10(pValuesDeliveryMode)": 0.4017179210677531,
+"-log10(pValuesNum_Reads)": 0.4269640311368137,
+"-log10(pValuesNum_Hits)": 0.14912542021661662,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.14099778190870876,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03388220606129618,
+"rdptaxa": "Stenotrophomonas"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 678203,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.006711482873001594,
+"-log10(pValuesDeliveryMode)": 0.9898982075501029,
+"-log10(pValuesNum_Reads)": 0.20363748782275534,
+"-log10(pValuesNum_Hits)": 0.36581502706944585,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12066325275799122,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04547987621007816,
+"rdptaxa": "Enterobacteriales"
+,"children": [
+{
+"numSeqs": 678203,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.006711482873001594,
+"-log10(pValuesDeliveryMode)": 0.9898982075501029,
+"-log10(pValuesNum_Reads)": 0.20363748782275534,
+"-log10(pValuesNum_Hits)": 0.36581502706944585,
+"-log10(pValuesAdjusted_BirthGroup)": 0.006711482873001594,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.06826968434956372,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Enterobacteriaceae"
+,"children": [
+{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Samsonia"
+}
+,{
+"numSeqs": 22860,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.24032194510410324,
+"-log10(pValuesDeliveryMode)": 0.35378997964500125,
+"-log10(pValuesNum_Reads)": 1.3239328109646489,
+"-log10(pValuesNum_Hits)": 1.2855427537334847,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3672981884320641,
+"rdptaxa": "Proteus"
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "genus",
+"rdptaxa": "Erwinia"
+}
+,{
+"numSeqs": 42,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.36396708170860426,
+"-log10(pValuesDeliveryMode)": 0.49702633983067696,
+"-log10(pValuesNum_Reads)": 0.503911538677936,
+"-log10(pValuesNum_Hits)": 0.05281835600726344,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Pragia"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Hafnia"
+}
+,{
+"numSeqs": 105,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.466424927820349,
+"-log10(pValuesDeliveryMode)": 0.7425133018436277,
+"-log10(pValuesNum_Reads)": 1.2274086675890343,
+"-log10(pValuesNum_Hits)": 0.7387226523275136,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Pluralibacter"
+}
+,{
+"numSeqs": 2773,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5792771896799375,
+"-log10(pValuesDeliveryMode)": 0.39259508192666076,
+"-log10(pValuesNum_Reads)": 0.8275466592214612,
+"-log10(pValuesNum_Hits)": 0.01373468546815251,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.24055041432937446,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Citrobacter"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Kosakonia"
+}
+,{
+"numSeqs": 9,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.44088982436719865,
+"-log10(pValuesDeliveryMode)": 0.8518347305989192,
+"-log10(pValuesNum_Reads)": 0.1497338649728573,
+"-log10(pValuesNum_Hits)": 0.12399530389337451,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.027085290885318337,
+"rdptaxa": "Leclercia"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.05412267096276781,
+"-log10(pValuesDeliveryMode)": 0.32621784222617745,
+"-log10(pValuesNum_Reads)": 0.43080831670636677,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.14099778190870876,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Shimwellia"
+}
+,{
+"numSeqs": 121,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.4886791827092561,
+"-log10(pValuesDeliveryMode)": 0.5562422758987616,
+"-log10(pValuesNum_Reads)": 1.1302753219115311,
+"-log10(pValuesNum_Hits)": 1.3424242339830832,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3672981884320641,
+"rdptaxa": "Morganella"
+}
+,{
+"numSeqs": 583,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.09693307801830185,
+"-log10(pValuesDeliveryMode)": 0.42712971158829544,
+"-log10(pValuesNum_Reads)": 0.029570533323358884,
+"-log10(pValuesNum_Hits)": 0.46569180369668595,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Enterobacter"
+}
+,{
+"numSeqs": 7095,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.06492421684928923,
+"-log10(pValuesDeliveryMode)": 1.238964292620445,
+"-log10(pValuesNum_Reads)": 0.11840937161081827,
+"-log10(pValuesNum_Hits)": 0.41725800055583284,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.021499358602761635,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Pseudocitrobacter"
+}
+,{
+"numSeqs": 276,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.2421078754692582,
+"-log10(pValuesDeliveryMode)": 0.09008163812056284,
+"-log10(pValuesNum_Reads)": 0.5063746809136129,
+"-log10(pValuesNum_Hits)": 0.25971030565742376,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.07157133258571269,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Serratia"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Buttiauxella"
+}
+,{
+"numSeqs": 32,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.0716158749778912,
+"-log10(pValuesDeliveryMode)": 0.9077020868209671,
+"-log10(pValuesNum_Reads)": -0.0,
+"-log10(pValuesNum_Hits)": 0.24130002665843195,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Mangrovibacter"
+}
+,{
+"numSeqs": 20416,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.1815770608388324,
+"-log10(pValuesDeliveryMode)": 0.4249726976615519,
+"-log10(pValuesNum_Reads)": 0.3226844065106762,
+"-log10(pValuesNum_Hits)": 0.6389558302668713,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.08346156082489731,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Klebsiella"
+}
+,{
+"numSeqs": 347,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": -0.0,
+"-log10(pValuesDeliveryMode)": 0.7222762059744177,
+"-log10(pValuesNum_Reads)": 0.1624137668933884,
+"-log10(pValuesNum_Hits)": 0.3194537461766897,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06213267839811482,
+"rdptaxa": "Yokenella"
+}
+,{
+"numSeqs": 12449,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.2897227974088401,
+"-log10(pValuesDeliveryMode)": 0.1778744179823881,
+"-log10(pValuesNum_Reads)": 0.19461554399398406,
+"-log10(pValuesNum_Hits)": 0.44657248183677173,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.13494621744057728,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Raoultella"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Lelliottia"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Obesumbacterium"
+}
+,{
+"numSeqs": 50,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.1873818596413094,
+"-log10(pValuesDeliveryMode)": 0.2174286102509215,
+"-log10(pValuesNum_Reads)": 0.37547177659631786,
+"-log10(pValuesNum_Hits)": 0.21361804110789176,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16307094792832877,
+"-log10(pValuesAdjusted_Num_Reads)": 0.10725854545624491,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Cosenzaea"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Budvicia"
+}
+,{
+"numSeqs": 88317,
+"rpdLevel": "genus",
+"rdptaxa": "Escherichia/Shigella"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 202,
+"rpdLevel": "order",
+"rdptaxa": "Oceanospirillales"
+,"children": [
+{
+"numSeqs": 200,
+"rpdLevel": "family",
+"rdptaxa": "Halomonadaceae"
+,"children": [
+{
+"numSeqs": 97,
+"rpdLevel": "genus",
+"rdptaxa": "Halomonas"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 309972,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 1.58843543469981,
+"-log10(pValuesDeliveryMode)": 0.669198707815754,
+"-log10(pValuesNum_Reads)": 0.047918451517079845,
+"-log10(pValuesNum_Hits)": 0.12504754033265156,
+"-log10(pValuesAdjusted_BirthGroup)": 0.9863754433718483,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.46037903187643026,
+"-log10(pValuesAdjusted_Num_Reads)": 0.047918451517079845,
+"-log10(pValuesAdjusted_Num_Hits)": 0.05298162729349113,
+"rdptaxa": "Fusobacteria"
+,"children": [
+{
+"numSeqs": 309972,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 1.58843543469981,
+"-log10(pValuesDeliveryMode)": 0.669198707815754,
+"-log10(pValuesNum_Reads)": 0.047918451517079845,
+"-log10(pValuesNum_Hits)": 0.12504754033265156,
+"-log10(pValuesAdjusted_BirthGroup)": 0.7252641951650655,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.399588385172857,
+"-log10(pValuesAdjusted_Num_Reads)": 0.015733768145678586,
+"-log10(pValuesAdjusted_Num_Hits)": 0.020796943922089854,
+"rdptaxa": "Fusobacteriia"
+,"children": [
+{
+"numSeqs": 309972,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 1.58843543469981,
+"-log10(pValuesDeliveryMode)": 0.669198707815754,
+"-log10(pValuesNum_Reads)": 0.047918451517079845,
+"-log10(pValuesNum_Hits)": 0.12504754033265156,
+"-log10(pValuesAdjusted_BirthGroup)": 0.4559832079604359,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.028613296321693054,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Fusobacteriales"
+,"children": [
+{
+"numSeqs": 46769,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.3448271263041346,
+"-log10(pValuesDeliveryMode)": 0.3011803259183481,
+"-log10(pValuesNum_Reads)": 0.9887761957059743,
+"-log10(pValuesNum_Hits)": 0.24759813675849324,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.22707860539999858,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04837273911789801,
+"rdptaxa": "Fusobacteriaceae"
+,"children": [
+{
+"numSeqs": 46712,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.3448271263041346,
+"-log10(pValuesDeliveryMode)": 0.3011803259183481,
+"-log10(pValuesNum_Reads)": 0.9887761957059743,
+"-log10(pValuesNum_Hits)": 0.24759813675849324,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.31462977509498646,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Fusobacterium"
+}
+]
+}
+,{
+"numSeqs": 261950,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 1.0956582599307918,
+"-log10(pValuesDeliveryMode)": 0.8910980327039449,
+"-log10(pValuesNum_Reads)": 0.0775498119759558,
+"-log10(pValuesNum_Hits)": 0.29129608653465966,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.032737467559593794,
+"-log10(pValuesAdjusted_Num_Hits)": 0.07508760427099573,
+"rdptaxa": "Leptotrichiaceae"
+,"children": [
+{
+"numSeqs": 259696,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 1.0956582599307918,
+"-log10(pValuesDeliveryMode)": 0.8910980327039449,
+"-log10(pValuesNum_Reads)": 0.0775498119759558,
+"-log10(pValuesNum_Hits)": 0.29129608653465966,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.005463382692931607,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Sneathia"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 2184,
+"rpdLevel": "phylum",
+"rdptaxa": "Cyanobacteria/Chloroplast"
+,"children": [
+{
+"numSeqs": 2164,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 1.0782179076258114,
+"-log10(pValuesDeliveryMode)": 0.5110509805855714,
+"-log10(pValuesNum_Reads)": 0.25997145272485117,
+"-log10(pValuesNum_Hits)": 0.05298162729349113,
+"-log10(pValuesAdjusted_BirthGroup)": 0.5341498632755357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.3649229449073332,
+"-log10(pValuesAdjusted_Num_Reads)": 0.11384341704661323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.020796943922089854,
+"rdptaxa": "Chloroplast"
+}
+]
+}
+,{
+"numSeqs": 25,
+"rpdLevel": "phylum",
+"rdptaxa": "Acidobacteria"
+,"children": [
+{
+"numSeqs": 20,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp3"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "class",
+"rdptaxa": "Acidobacteria_Gp5"
+}
+]
+}
+,{
+"numSeqs": 159649,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 0.2000670283162596,
+"-log10(pValuesDeliveryMode)": 0.9699058906831537,
+"-log10(pValuesNum_Reads)": 0.666304152978525,
+"-log10(pValuesNum_Hits)": 1.3691502042320802,
+"-log10(pValuesAdjusted_BirthGroup)": 0.07512829170796001,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.5439371584108735,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3652741573145438,
+"-log10(pValuesAdjusted_Num_Hits)": 0.9431814719598003,
+"rdptaxa": "Actinobacteria"
+,"children": [
+{
+"numSeqs": 159642,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.2000670283162596,
+"-log10(pValuesDeliveryMode)": 0.9699058906831537,
+"-log10(pValuesNum_Reads)": 0.666304152978525,
+"-log10(pValuesNum_Hits)": 1.3691502042320802,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019291053885616,
+"-log10(pValuesAdjusted_Num_Reads)": 0.22588430795582354,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6625507932928772,
+"rdptaxa": "Actinobacteria"
+,"children": [
+{
+"numSeqs": 156488,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.19075300892298458,
+"-log10(pValuesDeliveryMode)": 0.9679612885928445,
+"-log10(pValuesNum_Reads)": 0.8282975287461545,
+"-log10(pValuesNum_Hits)": 1.7213072152350228,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17492225550982984,
+"-log10(pValuesAdjusted_Num_Hits)": 0.8367006339370933,
+"rdptaxa": "Actinomycetales"
+,"children": [
+{
+"numSeqs": 214,
+"rpdLevel": "family",
+"rdptaxa": "Brevibacteriaceae"
+,"children": [
+{
+"numSeqs": 214,
+"rpdLevel": "genus",
+"rdptaxa": "Brevibacterium"
+}
+]
+}
+,{
+"numSeqs": 549,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.06790703772718772,
+"-log10(pValuesDeliveryMode)": 0.2762432182416397,
+"-log10(pValuesNum_Reads)": 0.6487061757023329,
+"-log10(pValuesNum_Hits)": 0.3645796132348203,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.2218855559190474,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Promicromonosporaceae"
+,"children": [
+{
+"numSeqs": 549,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.06790703772718772,
+"-log10(pValuesDeliveryMode)": 0.2762432182416397,
+"-log10(pValuesNum_Reads)": 0.6487061757023329,
+"-log10(pValuesNum_Hits)": 0.3645796132348203,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.19192233254160443,
+"-log10(pValuesAdjusted_Num_Reads)": 0.20038645262993324,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Cellulosimicrobium"
+}
+]
+}
+,{
+"numSeqs": 269,
+"rpdLevel": "family",
+"rdptaxa": "Intrasporangiaceae"
+,"children": [
+{
+"numSeqs": 266,
+"rpdLevel": "genus",
+"rdptaxa": "Janibacter"
+}
+]
+}
+,{
+"numSeqs": 2996,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.06847806971961493,
+"-log10(pValuesDeliveryMode)": 1.3261350580138762,
+"-log10(pValuesNum_Reads)": 0.7580887562329987,
+"-log10(pValuesNum_Hits)": 1.1406548403147552,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.3967161322995836,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.38732717365614383,
+"rdptaxa": "Micrococcaceae"
+,"children": [
+{
+"numSeqs": 441,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.053562872802792025,
+"-log10(pValuesDeliveryMode)": 0.22374821351043506,
+"-log10(pValuesNum_Reads)": 0.6487061757023329,
+"-log10(pValuesNum_Hits)": 0.6487061757023329,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.16356100752711786,
+"-log10(pValuesAdjusted_Num_Reads)": 0.20038645262993324,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Rothia"
+}
+,{
+"numSeqs": 18,
+"rpdLevel": "genus",
+"rdptaxa": "Arthrobacter"
+}
+,{
+"numSeqs": 817,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.39941428076712726,
+"-log10(pValuesDeliveryMode)": 0.6309595460907661,
+"-log10(pValuesNum_Reads)": 0.25358438039279574,
+"-log10(pValuesNum_Hits)": 0.4046971844233874,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.048441324279291764,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Micrococcus"
+}
+,{
+"numSeqs": 1656,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5360203644666451,
+"-log10(pValuesDeliveryMode)": 0.8078793601331739,
+"-log10(pValuesNum_Reads)": -0.0,
+"-log10(pValuesNum_Hits)": 0.054162902007727456,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Kocuria"
+}
+]
+}
+,{
+"numSeqs": 1369,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.9959572629545491,
+"-log10(pValuesDeliveryMode)": 0.44175860441233894,
+"-log10(pValuesNum_Reads)": 0.5679166578176539,
+"-log10(pValuesNum_Hits)": 0.9105597310245147,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.240557723431323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.24438224008480197,
+"rdptaxa": "Nocardioidaceae"
+,"children": [
+{
+"numSeqs": 138,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 1.3114243283017748,
+"-log10(pValuesDeliveryMode)": 1.0883684861661855,
+"-log10(pValuesNum_Reads)": 0.08077089954725271,
+"-log10(pValuesNum_Hits)": 0.3233460440391776,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.005463382692931607,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06213267839811482,
+"rdptaxa": "Nocardioides"
+}
+,{
+"numSeqs": 87,
+"rpdLevel": "genus",
+"rdptaxa": "Marmoricola"
+}
+]
+}
+,{
+"numSeqs": 3546,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.34411870272902084,
+"-log10(pValuesDeliveryMode)": 0.1527035589631998,
+"-log10(pValuesNum_Reads)": 1.0956448704394963,
+"-log10(pValuesNum_Hits)": 0.48000901746360647,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.13532946289377695,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Actinomycetaceae"
+,"children": [
+{
+"numSeqs": 617,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.13957786682479512,
+"-log10(pValuesDeliveryMode)": 0.29814783022994545,
+"-log10(pValuesNum_Reads)": 1.5334864328645004,
+"-log10(pValuesNum_Hits)": 0.684106657994074,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Varibaculum"
+}
+,{
+"numSeqs": 2504,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.25425809102090774,
+"-log10(pValuesDeliveryMode)": 0.03066281996517932,
+"-log10(pValuesNum_Reads)": 0.7570406221984848,
+"-log10(pValuesNum_Hits)": 0.3756960114586045,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.03066281996517932,
+"-log10(pValuesAdjusted_Num_Reads)": 0.23868548850577015,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Actinomyces"
+}
+,{
+"numSeqs": 389,
+"rpdLevel": "genus",
+"rdptaxa": "Mobiluncus"
+}
+]
+}
+,{
+"numSeqs": 644,
+"rpdLevel": "family",
+"rdptaxa": "Micromonosporaceae"
+,"children": [
+{
+"numSeqs": 14,
+"rpdLevel": "genus",
+"rdptaxa": "Actinoplanes"
+}
+]
+}
+,{
+"numSeqs": 370,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.3114233208092305,
+"-log10(pValuesDeliveryMode)": 0.5710266679792699,
+"-log10(pValuesNum_Reads)": 0.1421080986323804,
+"-log10(pValuesNum_Hits)": 0.5968845586426468,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.0553150297377812,
+"-log10(pValuesAdjusted_Num_Hits)": 0.14458688764801628,
+"rdptaxa": "Nocardiaceae"
+,"children": [
+{
+"numSeqs": 355,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.3114233208092305,
+"-log10(pValuesDeliveryMode)": 0.5710266679792699,
+"-log10(pValuesNum_Reads)": 0.1421080986323804,
+"-log10(pValuesNum_Hits)": 0.5968845586426468,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Rhodococcus"
+}
+]
+}
+,{
+"numSeqs": 464,
+"rpdLevel": "family",
+"rdptaxa": "Dietziaceae"
+,"children": [
+{
+"numSeqs": 464,
+"rpdLevel": "genus",
+"rdptaxa": "Dietzia"
+}
+]
+}
+,{
+"numSeqs": 8568,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.09025705155967215,
+"-log10(pValuesDeliveryMode)": 0.08630618188935503,
+"-log10(pValuesNum_Reads)": 0.013602079042573132,
+"-log10(pValuesNum_Hits)": 0.35707760584771936,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.07770601012743737,
+"-log10(pValuesAdjusted_Num_Reads)": 0.00708255441952756,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Corynebacteriaceae"
+,"children": [
+{
+"numSeqs": 8452,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.12401224857036003,
+"-log10(pValuesDeliveryMode)": 0.08717640591628883,
+"-log10(pValuesNum_Reads)": -0.0,
+"-log10(pValuesNum_Hits)": 0.403296248931973,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.07157133258571269,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Corynebacterium"
+}
+,{
+"numSeqs": 5,
+"rpdLevel": "genus",
+"rdptaxa": "Turicella"
+}
+]
+}
+,{
+"numSeqs": 1421,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.26881125508967096,
+"-log10(pValuesDeliveryMode)": 0.37711782570602176,
+"-log10(pValuesNum_Reads)": 1.2048636498392047,
+"-log10(pValuesNum_Hits)": 1.2048636498392047,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.40038346073321174,
+"rdptaxa": "Microbacteriaceae"
+,"children": [
+{
+"numSeqs": 315,
+"rpdLevel": "genus",
+"rdptaxa": "Leucobacter"
+}
+,{
+"numSeqs": 1029,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.26881125508967096,
+"-log10(pValuesDeliveryMode)": 0.37711782570602176,
+"-log10(pValuesNum_Reads)": 1.2048636498392047,
+"-log10(pValuesNum_Hits)": 1.2048636498392047,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3546259701725366,
+"rdptaxa": "Microbacterium"
+}
+]
+}
+,{
+"numSeqs": 5116,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.19438018087810374,
+"-log10(pValuesDeliveryMode)": 1.1288943240402363,
+"-log10(pValuesNum_Reads)": 0.04150880701491279,
+"-log10(pValuesNum_Hits)": 0.08677893406707385,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.26642218795655676,
+"-log10(pValuesAdjusted_Num_Reads)": 0.015179868292563377,
+"-log10(pValuesAdjusted_Num_Hits)": 0.009543028870264147,
+"rdptaxa": "Dermabacteraceae"
+,"children": [
+{
+"numSeqs": 922,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.19154536829967367,
+"-log10(pValuesDeliveryMode)": 0.09291453644848482,
+"-log10(pValuesNum_Reads)": 1.1301663185657569,
+"-log10(pValuesNum_Hits)": 0.5991132123878192,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.07157133258571269,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Dermabacter"
+}
+,{
+"numSeqs": 4001,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.05838499982706571,
+"-log10(pValuesDeliveryMode)": 1.0786342684347163,
+"-log10(pValuesNum_Reads)": 0.42737298413225167,
+"-log10(pValuesNum_Hits)": 0.33487871460570595,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.14099778190870876,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06213267839811482,
+"rdptaxa": "Brachybacterium"
+}
+]
+}
+,{
+"numSeqs": 120,
+"rpdLevel": "family",
+"rdptaxa": "Pseudonocardiaceae"
+,"children": [
+{
+"numSeqs": 18,
+"rpdLevel": "genus",
+"rdptaxa": "Pseudonocardia"
+}
+]
+}
+,{
+"numSeqs": 113,
+"rpdLevel": "family",
+"rdptaxa": "Dermacoccaceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Yimella"
+}
+,{
+"numSeqs": 50,
+"rpdLevel": "genus",
+"rdptaxa": "Kytococcus"
+}
+]
+}
+,{
+"numSeqs": 113306,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.23875445878390875,
+"-log10(pValuesDeliveryMode)": 0.8825162785990488,
+"-log10(pValuesNum_Reads)": 0.7531310662492451,
+"-log10(pValuesNum_Hits)": 1.2553244289881322,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.40038346073321174,
+"rdptaxa": "Propionibacteriaceae"
+,"children": [
+{
+"numSeqs": 93,
+"rpdLevel": "genus",
+"rdptaxa": "Friedmanniella"
+}
+,{
+"numSeqs": 112526,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.23875445878390875,
+"-log10(pValuesDeliveryMode)": 0.8813085107074574,
+"-log10(pValuesNum_Reads)": 0.7531310662492451,
+"-log10(pValuesNum_Hits)": 1.2553244289881322,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.23868548850577015,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3672981884320641,
+"rdptaxa": "Propionibacterium"
+}
+]
+}
+,{
+"numSeqs": 33,
+"rpdLevel": "family",
+"rdptaxa": "Mycobacteriaceae"
+,"children": [
+{
+"numSeqs": 33,
+"rpdLevel": "genus",
+"rdptaxa": "Mycobacterium"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 647,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.03090248264289791,
+"-log10(pValuesDeliveryMode)": 0.44968792585589434,
+"-log10(pValuesNum_Reads)": 0.3125833246245861,
+"-log10(pValuesNum_Hits)": 0.2020657338268978,
+"-log10(pValuesAdjusted_BirthGroup)": -0.0,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.29526259015346606,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.014003837486635856,
+"rdptaxa": "Bifidobacteriales"
+,"children": [
+{
+"numSeqs": 647,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.03090248264289791,
+"-log10(pValuesDeliveryMode)": 0.44968792585589434,
+"-log10(pValuesNum_Reads)": 0.3125833246245861,
+"-log10(pValuesNum_Hits)": 0.2020657338268978,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.09639123350757176,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04837273911789801,
+"rdptaxa": "Bifidobacteriaceae"
+,"children": [
+{
+"numSeqs": 231,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.10922947247119694,
+"-log10(pValuesDeliveryMode)": 0.23007906141622214,
+"-log10(pValuesNum_Reads)": 0.21088502500810474,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.1639829958223852,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Bifidobacterium"
+}
+,{
+"numSeqs": 399,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.10493762821690207,
+"-log10(pValuesDeliveryMode)": 0.698475111939515,
+"-log10(pValuesNum_Reads)": 0.04867687519920821,
+"-log10(pValuesNum_Hits)": 0.18679651477639986,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Gardnerella"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 92,
+"rpdLevel": "order",
+"rdptaxa": "Solirubrobacterales"
+,"children": [
+{
+"numSeqs": 72,
+"rpdLevel": "family",
+"rdptaxa": "Solirubrobacteraceae"
+,"children": [
+{
+"numSeqs": 72,
+"rpdLevel": "genus",
+"rdptaxa": "Solirubrobacter"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 2130,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.568878319846088,
+"-log10(pValuesDeliveryMode)": 0.4998314706638373,
+"-log10(pValuesNum_Reads)": 0.6915520515131671,
+"-log10(pValuesNum_Hits)": 0.3129184102683091,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.31419489370192555,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17492225550982984,
+"-log10(pValuesAdjusted_Num_Hits)": 0.030371820298341307,
+"rdptaxa": "Coriobacteriales"
+,"children": [
+{
+"numSeqs": 2130,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.568878319846088,
+"-log10(pValuesDeliveryMode)": 0.4998314706638373,
+"-log10(pValuesNum_Reads)": 0.6915520515131671,
+"-log10(pValuesNum_Hits)": 0.3129184102683091,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.07891193222485977,
+"rdptaxa": "Coriobacteriaceae"
+,"children": [
+{
+"numSeqs": 1515,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.8693430954467422,
+"-log10(pValuesDeliveryMode)": 0.48636444658146744,
+"-log10(pValuesNum_Reads)": 0.13625032623520883,
+"-log10(pValuesNum_Hits)": 0.1623938260243449,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Atopobium"
+}
+,{
+"numSeqs": 32,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.06794699219601885,
+"-log10(pValuesDeliveryMode)": 0.3088748295194793,
+"-log10(pValuesNum_Reads)": 0.845345476802,
+"-log10(pValuesNum_Hits)": 0.2648698465672681,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.24055041432937446,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04427486076710783,
+"rdptaxa": "Enterorhabdus"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 32937,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 0.11319973922572688,
+"-log10(pValuesDeliveryMode)": 0.664499014532356,
+"-log10(pValuesNum_Reads)": 1.2777962548104582,
+"-log10(pValuesNum_Hits)": 1.058327677197246,
+"-log10(pValuesAdjusted_BirthGroup)": 0.05520779224804032,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.46037903187643026,
+"-log10(pValuesAdjusted_Num_Reads)": 0.6757362634824954,
+"-log10(pValuesAdjusted_Num_Hits)": 0.7572976815332637,
+"rdptaxa": "Bacteroidetes"
+,"children": [
+{
+"numSeqs": 30435,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.20712780384352655,
+"-log10(pValuesDeliveryMode)": 0.638561326088386,
+"-log10(pValuesNum_Reads)": 1.0696037947142198,
+"-log10(pValuesNum_Hits)": 1.2943904179543024,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.399588385172857,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3950972428624655,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6625507932928772,
+"rdptaxa": "Bacteroidia"
+,"children": [
+{
+"numSeqs": 30435,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.20712780384352655,
+"-log10(pValuesDeliveryMode)": 0.638561326088386,
+"-log10(pValuesNum_Reads)": 1.0696037947142198,
+"-log10(pValuesNum_Hits)": 1.2943904179543024,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17949744252311053,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6230422520092032,
+"rdptaxa": "Bacteroidales"
+,"children": [
+{
+"numSeqs": 21522,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.1504535442980562,
+"-log10(pValuesDeliveryMode)": 0.48646867485044654,
+"-log10(pValuesNum_Reads)": 1.0966632862832213,
+"-log10(pValuesNum_Hits)": 1.7328877378361378,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.5024388164578627,
+"rdptaxa": "Prevotellaceae"
+,"children": [
+{
+"numSeqs": 21316,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.1504535442980562,
+"-log10(pValuesDeliveryMode)": 0.48646867485044654,
+"-log10(pValuesNum_Reads)": 1.0966632862832213,
+"-log10(pValuesNum_Hits)": 1.7328877378361378,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.4364679276163252,
+"rdptaxa": "Prevotella"
+}
+]
+}
+,{
+"numSeqs": 3484,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.24135570771171475,
+"-log10(pValuesDeliveryMode)": 0.3316958864902353,
+"-log10(pValuesNum_Reads)": 0.8808943432999785,
+"-log10(pValuesNum_Hits)": 0.6891554072952146,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.18638798182528313,
+"rdptaxa": "Porphyromonadaceae"
+,"children": [
+{
+"numSeqs": 3212,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.00898787116865252,
+"-log10(pValuesDeliveryMode)": 0.36893588087342083,
+"-log10(pValuesNum_Reads)": 0.8803857940949027,
+"-log10(pValuesNum_Hits)": 0.7180295499763312,
+"-log10(pValuesAdjusted_BirthGroup)": 0.0038482315162414508,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2519968640445919,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Porphyromonas"
+}
+,{
+"numSeqs": 127,
+"rpdLevel": "genus",
+"rdptaxa": "Parabacteroides"
+}
+]
+}
+,{
+"numSeqs": 4369,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.04836397162547497,
+"-log10(pValuesDeliveryMode)": 0.39369584366438304,
+"-log10(pValuesNum_Reads)": 0.5824679253162167,
+"-log10(pValuesNum_Hits)": 0.49403094710297435,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.240557723431323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09666546109200154,
+"rdptaxa": "Bacteroidaceae"
+,"children": [
+{
+"numSeqs": 4369,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.04836397162547497,
+"-log10(pValuesDeliveryMode)": 0.39369584366438304,
+"-log10(pValuesNum_Reads)": 0.5824679253162167,
+"-log10(pValuesNum_Hits)": 0.49403094710297435,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.18199360750747257,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Bacteroides"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1213,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 1.3942709761236416,
+"-log10(pValuesDeliveryMode)": 0.5914739114117706,
+"-log10(pValuesNum_Reads)": 0.29273163529318397,
+"-log10(pValuesNum_Hits)": 0.01004831688578478,
+"-log10(pValuesAdjusted_BirthGroup)": 0.7252641951650655,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.399588385172857,
+"-log10(pValuesAdjusted_Num_Reads)": 0.11384341704661323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Flavobacteriia"
+,"children": [
+{
+"numSeqs": 1213,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 1.3942709761236416,
+"-log10(pValuesDeliveryMode)": 0.5914739114117706,
+"-log10(pValuesNum_Reads)": 0.29273163529318397,
+"-log10(pValuesNum_Hits)": 0.01004831688578478,
+"-log10(pValuesAdjusted_BirthGroup)": 0.4559832079604359,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.01004831688578478,
+"rdptaxa": "Flavobacteriales"
+,"children": [
+{
+"numSeqs": 1210,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 1.3942709761236416,
+"-log10(pValuesDeliveryMode)": 0.5914739114117706,
+"-log10(pValuesNum_Reads)": 0.29273163529318397,
+"-log10(pValuesNum_Hits)": 0.01004831688578478,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.09639123350757176,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Flavobacteriaceae"
+,"children": [
+{
+"numSeqs": 100,
+"rpdLevel": "genus",
+"rdptaxa": "Capnocytophaga"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Epilithonimonas"
+}
+,{
+"numSeqs": 359,
+"rpdLevel": "genus",
+"rdptaxa": "Cloacibacterium"
+}
+,{
+"numSeqs": 174,
+"rpdLevel": "genus",
+"rdptaxa": "Flavobacterium"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Riemerella"
+}
+,{
+"numSeqs": 228,
+"rpdLevel": "genus",
+"rdptaxa": "Chryseobacterium"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 115,
+"rpdLevel": "class",
+"rdptaxa": "Sphingobacteriia"
+,"children": [
+{
+"numSeqs": 115,
+"rpdLevel": "order",
+"rdptaxa": "Sphingobacteriales"
+,"children": [
+{
+"numSeqs": 114,
+"rpdLevel": "family",
+"rdptaxa": "Sphingobacteriaceae"
+,"children": [
+{
+"numSeqs": 99,
+"rpdLevel": "genus",
+"rdptaxa": "Pedobacter"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 557411,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 0.3545816236368778,
+"-log10(pValuesDeliveryMode)": 0.23915352792045924,
+"-log10(pValuesNum_Reads)": 0.9391652872127395,
+"-log10(pValuesNum_Hits)": 1.7427501275150357,
+"-log10(pValuesAdjusted_BirthGroup)": 0.07512829170796001,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.18116158094277235,
+"-log10(pValuesAdjusted_Num_Reads)": 0.5131965549404593,
+"-log10(pValuesAdjusted_Num_Hits)": 0.9431814719598003,
+"rdptaxa": "Tenericutes"
+,"children": [
+{
+"numSeqs": 557411,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.3545816236368778,
+"-log10(pValuesDeliveryMode)": 0.23915352792045924,
+"-log10(pValuesNum_Reads)": 0.9391652872127395,
+"-log10(pValuesNum_Hits)": 1.7427501275150357,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20696884454905742,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3950972428624655,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6625507932928772,
+"rdptaxa": "Mollicutes"
+,"children": [
+{
+"numSeqs": 557261,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.3545816236368778,
+"-log10(pValuesDeliveryMode)": 0.23915352792045924,
+"-log10(pValuesNum_Reads)": 0.9391652872127395,
+"-log10(pValuesNum_Hits)": 1.7427501275150357,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.21984837272507257,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17949744252311053,
+"-log10(pValuesAdjusted_Num_Hits)": 0.8367006339370933,
+"rdptaxa": "Mycoplasmatales"
+,"children": [
+{
+"numSeqs": 557261,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.3545816236368778,
+"-log10(pValuesDeliveryMode)": 0.23915352792045924,
+"-log10(pValuesNum_Reads)": 0.9391652872127395,
+"-log10(pValuesNum_Hits)": 1.7427501275150357,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.1975953854210109,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.5024388164578627,
+"rdptaxa": "Mycoplasmataceae"
+,"children": [
+{
+"numSeqs": 544724,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.36592736978409524,
+"-log10(pValuesDeliveryMode)": 0.20748250669986767,
+"-log10(pValuesNum_Reads)": 1.0569336581973832,
+"-log10(pValuesNum_Hits)": 1.854969850903441,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.15887717326636625,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.4364679276163252,
+"rdptaxa": "Ureaplasma"
+}
+,{
+"numSeqs": 12462,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.09910390598442662,
+"-log10(pValuesDeliveryMode)": 1.3084996093853152,
+"-log10(pValuesNum_Reads)": 0.050483671914955335,
+"-log10(pValuesNum_Hits)": 0.06852280510778416,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Mycoplasma"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1316210,
+"rpdLevel": "phylum",
+"-log10(pValuesBirthGroup)": 2.247847427016927,
+"-log10(pValuesDeliveryMode)": 1.4713554960729702,
+"-log10(pValuesNum_Reads)": 1.5917405494626182,
+"-log10(pValuesNum_Hits)": 1.4680792241989808,
+"-log10(pValuesAdjusted_BirthGroup)": 1.3447574400249835,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.6019293490097984,
+"-log10(pValuesAdjusted_Num_Reads)": 0.688650562470676,
+"-log10(pValuesAdjusted_Num_Hits)": 0.9431814719598003,
+"rdptaxa": "Firmicutes"
+,"children": [
+{
+"numSeqs": 772349,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 1.5035294376203068,
+"-log10(pValuesDeliveryMode)": 2.6473734626651333,
+"-log10(pValuesNum_Reads)": 0.9884729328654577,
+"-log10(pValuesNum_Hits)": 0.6522014467003737,
+"-log10(pValuesAdjusted_BirthGroup)": 0.7252641951650655,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.5708798345079626,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3950972428624655,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3511714510363925,
+"rdptaxa": "Bacilli"
+,"children": [
+{
+"numSeqs": 66645,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.34454741814002865,
+"-log10(pValuesDeliveryMode)": 0.7413994130910917,
+"-log10(pValuesNum_Reads)": 0.7408060381903206,
+"-log10(pValuesNum_Hits)": 1.8173640508982598,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.35687896953703996,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17492225550982984,
+"-log10(pValuesAdjusted_Num_Hits)": 0.8367006339370933,
+"rdptaxa": "Bacillales"
+,"children": [
+{
+"numSeqs": 18,
+"rpdLevel": "family",
+"rdptaxa": "Planococcaceae"
+,"children": [
+{
+"numSeqs": 15,
+"rpdLevel": "genus",
+"rdptaxa": "Lysinibacillus"
+}
+]
+}
+,{
+"numSeqs": 36549,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.15531882053108534,
+"-log10(pValuesDeliveryMode)": 0.522394257068503,
+"-log10(pValuesNum_Reads)": 0.6851392543776934,
+"-log10(pValuesNum_Hits)": 1.5210220676135264,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.5009810535109719,
+"rdptaxa": "Staphylococcaceae"
+,"children": [
+{
+"numSeqs": 1088,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.2010146888236339,
+"-log10(pValuesDeliveryMode)": 0.7208601216095787,
+"-log10(pValuesNum_Reads)": 0.011048184266440065,
+"-log10(pValuesNum_Hits)": 0.32887569226868424,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": -0.0,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06213267839811482,
+"rdptaxa": "Jeotgalicoccus"
+}
+,{
+"numSeqs": 35324,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.1917717521788582,
+"-log10(pValuesDeliveryMode)": 0.4714955854156075,
+"-log10(pValuesNum_Reads)": 0.772938639749127,
+"-log10(pValuesNum_Hits)": 1.5626228595446958,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.23868548850577015,
+"-log10(pValuesAdjusted_Num_Hits)": 0.4113551842140465,
+"rdptaxa": "Staphylococcus"
+}
+]
+}
+,{
+"numSeqs": 393,
+"rpdLevel": "family",
+"rdptaxa": "Paenibacillaceae 1"
+,"children": [
+{
+"numSeqs": 375,
+"rpdLevel": "genus",
+"rdptaxa": "Paenibacillus"
+}
+]
+}
+,{
+"numSeqs": 10,
+"rpdLevel": "family",
+"rdptaxa": "Bacillaceae 2"
+}
+,{
+"numSeqs": 446,
+"rpdLevel": "family",
+"rdptaxa": "Bacillales_Incertae Sedis XI"
+,"children": [
+{
+"numSeqs": 446,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.04690190282976826,
+"-log10(pValuesDeliveryMode)": 0.8383044650222583,
+"-log10(pValuesNum_Reads)": 0.19605626383068941,
+"-log10(pValuesNum_Hits)": 0.36533646865320507,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Gemella"
+}
+]
+}
+,{
+"numSeqs": 16490,
+"rpdLevel": "family",
+"rdptaxa": "Bacillaceae 1"
+,"children": [
+{
+"numSeqs": 14468,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.9278010848672873,
+"-log10(pValuesDeliveryMode)": 0.8627517017873444,
+"-log10(pValuesNum_Reads)": 1.7812677772490664,
+"-log10(pValuesNum_Hits)": 2.2175124890834295,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.48930327169994275,
+"rdptaxa": "Bacillus"
+}
+]
+}
+]
+}
+,{
+"numSeqs": 674266,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 1.340589789258367,
+"-log10(pValuesDeliveryMode)": 2.7233629128683106,
+"-log10(pValuesNum_Reads)": 1.3108276657670268,
+"-log10(pValuesNum_Hits)": 1.2728687173081246,
+"-log10(pValuesAdjusted_BirthGroup)": 0.4559832079604359,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.361635076850718,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17949744252311053,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6230422520092032,
+"rdptaxa": "Lactobacillales"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "family",
+"rdptaxa": "Leuconostocaceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Leuconostoc"
+}
+]
+}
+,{
+"numSeqs": 296,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.11479459182998646,
+"-log10(pValuesDeliveryMode)": 0.6927094783379832,
+"-log10(pValuesNum_Reads)": 0.5912482084090538,
+"-log10(pValuesNum_Hits)": 0.20030672616383877,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.240557723431323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04837273911789801,
+"rdptaxa": "Aerococcaceae"
+,"children": [
+{
+"numSeqs": 83,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.27957424655633045,
+"-log10(pValuesDeliveryMode)": 0.9061198264439576,
+"-log10(pValuesNum_Reads)": 0.5436351232330958,
+"-log10(pValuesNum_Hits)": 0.5436351232330958,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Abiotrophia"
+}
+,{
+"numSeqs": 212,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.012827392290268557,
+"-log10(pValuesDeliveryMode)": 0.5522805978515591,
+"-log10(pValuesNum_Reads)": 0.05238054002689046,
+"-log10(pValuesNum_Hits)": 0.407528828688595,
+"-log10(pValuesAdjusted_BirthGroup)": 0.0038482315162414508,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 5.887319160790896E-4,
+"-log10(pValuesAdjusted_Num_Hits)": 0.06862914310011366,
+"rdptaxa": "Aerococcus"
+}
+]
+}
+,{
+"numSeqs": 491426,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 1.4843477310287045,
+"-log10(pValuesDeliveryMode)": 2.7684268267735797,
+"-log10(pValuesNum_Reads)": 0.9564588687327404,
+"-log10(pValuesNum_Hits)": 0.7681686438231589,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.3180872371613268,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.1916889258295468,
+"rdptaxa": "Lactobacillaceae"
+,"children": [
+{
+"numSeqs": 491382,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 1.4843477310287045,
+"-log10(pValuesDeliveryMode)": 2.7684268267735797,
+"-log10(pValuesNum_Reads)": 0.9564588687327404,
+"-log10(pValuesNum_Hits)": 0.7681686438231589,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.9303129968116035,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3057935439712764,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Lactobacillus"
+}
+]
+}
+,{
+"numSeqs": 7627,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.10224119335413565,
+"-log10(pValuesDeliveryMode)": 0.7437353173464853,
+"-log10(pValuesNum_Reads)": 0.5259243392949048,
+"-log10(pValuesNum_Hits)": 0.1572186058143935,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2162941718690058,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03261985114517938,
+"rdptaxa": "Carnobacteriaceae"
+,"children": [
+{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Catellicoccus"
+}
+,{
+"numSeqs": 7589,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.0486918168459028,
+"-log10(pValuesDeliveryMode)": 0.7438093315535661,
+"-log10(pValuesNum_Reads)": 0.5276988551748776,
+"-log10(pValuesNum_Hits)": 0.17803123467420073,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Granulicatella"
+}
+]
+}
+,{
+"numSeqs": 114340,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.5369300796775215,
+"-log10(pValuesDeliveryMode)": 1.5803082959639314,
+"-log10(pValuesNum_Reads)": 0.666304152978525,
+"-log10(pValuesNum_Hits)": 1.0055130859237413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.47479811119395793,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.29794290982580496,
+"rdptaxa": "Enterococcaceae"
+,"children": [
+{
+"numSeqs": 112516,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5369300796775215,
+"-log10(pValuesDeliveryMode)": 1.580263097990033,
+"-log10(pValuesNum_Reads)": 0.666304152978525,
+"-log10(pValuesNum_Hits)": 1.0055130859237413,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.25290416360370366,
+"-log10(pValuesAdjusted_Num_Reads)": 0.20038645262993324,
+"-log10(pValuesAdjusted_Num_Hits)": 0.22222219588768652,
+"rdptaxa": "Enterococcus"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Melissococcus"
+}
+]
+}
+,{
+"numSeqs": 44052,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.4759151435512233,
+"-log10(pValuesDeliveryMode)": 0.46990093137488437,
+"-log10(pValuesNum_Reads)": 0.15981316797993,
+"-log10(pValuesNum_Hits)": 0.03391073639080207,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.0553150297377812,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Streptococcaceae"
+,"children": [
+{
+"numSeqs": 1751,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.8706802575581416,
+"-log10(pValuesDeliveryMode)": 0.31910017085606057,
+"-log10(pValuesNum_Reads)": 0.3645796132348203,
+"-log10(pValuesNum_Hits)": 0.5468739645366458,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.10725854545624491,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Lactococcus"
+}
+,{
+"numSeqs": 42216,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.4633255604388088,
+"-log10(pValuesDeliveryMode)": 0.5088738224291669,
+"-log10(pValuesNum_Reads)": 0.1511093079686704,
+"-log10(pValuesNum_Hits)": 0.02692331661107847,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03290620322174283,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Streptococcus"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 1782,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.20476674344157206,
+"-log10(pValuesDeliveryMode)": 0.4133106528824391,
+"-log10(pValuesNum_Reads)": 0.9591545028450377,
+"-log10(pValuesNum_Hits)": 1.2066188376431524,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.30857530236242586,
+"-log10(pValuesAdjusted_Num_Reads)": 0.3950972428624655,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6625507932928772,
+"rdptaxa": "Erysipelotrichia"
+,"children": [
+{
+"numSeqs": 1782,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.20476674344157206,
+"-log10(pValuesDeliveryMode)": 0.4133106528824391,
+"-log10(pValuesNum_Reads)": 0.9591545028450377,
+"-log10(pValuesNum_Hits)": 1.2066188376431524,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.29526259015346606,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17949744252311053,
+"-log10(pValuesAdjusted_Num_Hits)": 0.6230422520092032,
+"rdptaxa": "Erysipelotrichales"
+,"children": [
+{
+"numSeqs": 1782,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.20476674344157206,
+"-log10(pValuesDeliveryMode)": 0.4133106528824391,
+"-log10(pValuesNum_Reads)": 0.9591545028450377,
+"-log10(pValuesNum_Hits)": 1.2066188376431524,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.40038346073321174,
+"rdptaxa": "Erysipelotrichaceae"
+,"children": [
+{
+"numSeqs": 1313,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.23319271040734293,
+"-log10(pValuesDeliveryMode)": 0.4011801760160277,
+"-log10(pValuesNum_Reads)": 1.525607466365927,
+"-log10(pValuesNum_Hits)": 1.6669168489945985,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.4364679276163252,
+"rdptaxa": "Erysipelotrichaceae_incertae_sedis"
+}
+,{
+"numSeqs": 164,
+"rpdLevel": "genus",
+"rdptaxa": "Bulleidia"
+}
+,{
+"numSeqs": 140,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.215026636267909,
+"-log10(pValuesDeliveryMode)": 0.4533719628167232,
+"-log10(pValuesNum_Reads)": 0.3233460440391776,
+"-log10(pValuesNum_Hits)": 0.025467738644033164,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.08346156082489731,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Turicibacter"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 412654,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.19068509996337543,
+"-log10(pValuesDeliveryMode)": 2.41597787452222,
+"-log10(pValuesNum_Reads)": 0.006548731197769627,
+"-log10(pValuesNum_Hits)": 0.4225340627957007,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.5708798345079626,
+"-log10(pValuesAdjusted_Num_Reads)": 0.006548731197769627,
+"-log10(pValuesAdjusted_Num_Hits)": 0.17949601410940655,
+"rdptaxa": "Clostridia"
+,"children": [
+{
+"numSeqs": 411520,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.19068509996337543,
+"-log10(pValuesDeliveryMode)": 2.41597787452222,
+"-log10(pValuesNum_Reads)": 0.006548731197769627,
+"-log10(pValuesNum_Hits)": 0.4225340627957007,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.3552800341686082,
+"-log10(pValuesAdjusted_Num_Reads)": 0.006548731197769627,
+"-log10(pValuesAdjusted_Num_Hits)": 0.060806226778107805,
+"rdptaxa": "Clostridiales"
+,"children": [
+{
+"numSeqs": 3372,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.26939743361032575,
+"-log10(pValuesDeliveryMode)": 0.3611616695775143,
+"-log10(pValuesNum_Reads)": 1.2501538622196264,
+"-log10(pValuesNum_Hits)": 0.5702876674444108,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.1414710922993032,
+"rdptaxa": "Eubacteriaceae"
+,"children": [
+{
+"numSeqs": 3308,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.26939743361032575,
+"-log10(pValuesDeliveryMode)": 0.3611616695775143,
+"-log10(pValuesNum_Reads)": 1.2501538622196264,
+"-log10(pValuesNum_Hits)": 0.5702876674444108,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Eubacterium"
+}
+]
+}
+,{
+"numSeqs": 3121,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.913402958877475,
+"-log10(pValuesDeliveryMode)": 0.2330677035832301,
+"-log10(pValuesNum_Reads)": 0.11212065822401258,
+"-log10(pValuesNum_Hits)": 0.30936085360313414,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.1975953854210109,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03801893770566256,
+"-log10(pValuesAdjusted_Num_Hits)": 0.07891193222485977,
+"rdptaxa": "Lachnospiraceae"
+,"children": [
+{
+"numSeqs": 24,
+"rpdLevel": "genus",
+"rdptaxa": "Mobilitalea"
+}
+,{
+"numSeqs": 3,
+"rpdLevel": "genus",
+"rdptaxa": "Blautia"
+}
+,{
+"numSeqs": 760,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.5128877062200864,
+"-log10(pValuesDeliveryMode)": 0.10282528564027428,
+"-log10(pValuesNum_Reads)": 0.3645796132348203,
+"-log10(pValuesNum_Hits)": 0.5468739645366458,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.07157133258571269,
+"-log10(pValuesAdjusted_Num_Reads)": 0.10725854545624491,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Anaerostipes"
+}
+,{
+"numSeqs": 172,
+"rpdLevel": "genus",
+"rdptaxa": "Robinsoniella"
+}
+,{
+"numSeqs": 50,
+"rpdLevel": "genus",
+"rdptaxa": "Dorea"
+}
+]
+}
+,{
+"numSeqs": 52930,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 1.0075167217200203,
+"-log10(pValuesDeliveryMode)": 2.7246274175952814,
+"-log10(pValuesNum_Reads)": 0.7977197592400943,
+"-log10(pValuesNum_Hits)": 1.5095812252728897,
+"-log10(pValuesAdjusted_BirthGroup)": 0.10892276977148256,
+"-log10(pValuesAdjusted_DeliveryMode)": 1.3180872371613268,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.5009810535109719,
+"rdptaxa": "Peptostreptococcaceae"
+,"children": [
+{
+"numSeqs": 44020,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium XI"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Intestinibacter"
+}
+,{
+"numSeqs": 679,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.04690190282976826,
+"-log10(pValuesDeliveryMode)": 0.4275398918446904,
+"-log10(pValuesNum_Reads)": 1.0792742384010177,
+"-log10(pValuesNum_Hits)": 1.0215515171186555,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.22222219588768652,
+"rdptaxa": "Peptostreptococcus"
+}
+,{
+"numSeqs": 210,
+"rpdLevel": "genus",
+"rdptaxa": "Filifactor"
+}
+]
+}
+,{
+"numSeqs": 324059,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiaceae 1"
+,"children": [
+{
+"numSeqs": 257208,
+"rpdLevel": "genus",
+"rdptaxa": "Clostridium sensu stricto"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Anaerobacter"
+}
+,{
+"numSeqs": 2,
+"rpdLevel": "genus",
+"rdptaxa": "Oceanirhabdus"
+}
+]
+}
+,{
+"numSeqs": 7379,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XI"
+,"children": [
+{
+"numSeqs": 3181,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.29338327847668844,
+"-log10(pValuesDeliveryMode)": 0.07665591897138456,
+"-log10(pValuesNum_Reads)": 0.5231890390326805,
+"-log10(pValuesNum_Hits)": 0.20427938663602593,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.0663150856331657,
+"-log10(pValuesAdjusted_Num_Reads)": 0.17655260429160577,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03915487429393929,
+"rdptaxa": "Finegoldia"
+}
+,{
+"numSeqs": 7,
+"rpdLevel": "genus",
+"rdptaxa": "Parvimonas"
+}
+,{
+"numSeqs": 1,
+"rpdLevel": "genus",
+"rdptaxa": "Ezakiella"
+}
+,{
+"numSeqs": 4128,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.21814125123331723,
+"-log10(pValuesDeliveryMode)": 0.03169489711474607,
+"-log10(pValuesNum_Reads)": 1.64120373808546,
+"-log10(pValuesNum_Hits)": 1.4385379714909272,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.03066281996517932,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3672981884320641,
+"rdptaxa": "Anaerococcus"
+}
+]
+}
+,{
+"numSeqs": 1168,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.6083868245859868,
+"-log10(pValuesDeliveryMode)": 0.3220419283605046,
+"-log10(pValuesNum_Reads)": 0.6384436845099523,
+"-log10(pValuesNum_Hits)": 0.10257947673843909,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.2530928031459363,
+"-log10(pValuesAdjusted_Num_Hits)": 0.009543028870264147,
+"rdptaxa": "Peptoniphilaceae"
+,"children": [
+{
+"numSeqs": 1122,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.6083868245859868,
+"-log10(pValuesDeliveryMode)": 0.3220419283605046,
+"-log10(pValuesNum_Reads)": 0.6384436845099523,
+"-log10(pValuesNum_Hits)": 0.10257947673843909,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.20038645262993324,
+"-log10(pValuesAdjusted_Num_Hits)": 0.018119221628447316,
+"rdptaxa": "Peptoniphilus"
+}
+]
+}
+,{
+"numSeqs": 460,
+"rpdLevel": "family",
+"rdptaxa": "Clostridiales_Incertae Sedis XIII"
+,"children": [
+{
+"numSeqs": 460,
+"rpdLevel": "genus",
+"rdptaxa": "Mogibacterium"
+}
+]
+}
+]
+}
+]
+}
+,{
+"numSeqs": 96169,
+"rpdLevel": "class",
+"-log10(pValuesBirthGroup)": 0.17251707283411788,
+"-log10(pValuesDeliveryMode)": 0.3537140156821514,
+"-log10(pValuesNum_Reads)": 0.30184440655533884,
+"-log10(pValuesNum_Hits)": 0.2225284254541386,
+"-log10(pValuesAdjusted_BirthGroup)": 0.11841852021449513,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.28676722605153787,
+"-log10(pValuesAdjusted_Num_Reads)": 0.11384341704661323,
+"-log10(pValuesAdjusted_Num_Hits)": 0.07640038977590088,
+"rdptaxa": "Negativicutes"
+,"children": [
+{
+"numSeqs": 96169,
+"rpdLevel": "order",
+"-log10(pValuesBirthGroup)": 0.17251707283411788,
+"-log10(pValuesDeliveryMode)": 0.3537140156821514,
+"-log10(pValuesNum_Reads)": 0.30184440655533884,
+"-log10(pValuesNum_Hits)": 0.2225284254541386,
+"-log10(pValuesAdjusted_BirthGroup)": 0.04123815819479876,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.2707397806173877,
+"-log10(pValuesAdjusted_Num_Reads)": 0.12977227344901587,
+"-log10(pValuesAdjusted_Num_Hits)": 0.014003837486635856,
+"rdptaxa": "Selenomonadales"
+,"children": [
+{
+"numSeqs": 95881,
+"rpdLevel": "family",
+"-log10(pValuesBirthGroup)": 0.17251707283411788,
+"-log10(pValuesDeliveryMode)": 0.3537140156821514,
+"-log10(pValuesNum_Reads)": 0.30184440655533884,
+"-log10(pValuesNum_Hits)": 0.2225284254541386,
+"-log10(pValuesAdjusted_BirthGroup)": 0.013528386573475357,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.23275901533338594,
+"-log10(pValuesAdjusted_Num_Reads)": 0.09639123350757176,
+"-log10(pValuesAdjusted_Num_Hits)": 0.04837273911789801,
+"rdptaxa": "Veillonellaceae"
+,"children": [
+{
+"numSeqs": 91804,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.1036512824651415,
+"-log10(pValuesDeliveryMode)": 0.36567663860313687,
+"-log10(pValuesNum_Reads)": 0.2320928679448007,
+"-log10(pValuesNum_Hits)": 0.14192914183657765,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.03506770205347614,
+"-log10(pValuesAdjusted_Num_Hits)": 0.03388220606129618,
+"rdptaxa": "Veillonella"
+}
+,{
+"numSeqs": 531,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.9958403323878762,
+"-log10(pValuesDeliveryMode)": 0.2580319789553999,
+"-log10(pValuesNum_Reads)": 1.5011279638341963,
+"-log10(pValuesNum_Hits)": 1.3788247269119065,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.1798714019601825,
+"-log10(pValuesAdjusted_Num_Reads)": 0.357963653861364,
+"-log10(pValuesAdjusted_Num_Hits)": 0.3672981884320641,
+"rdptaxa": "Dialister"
+}
+,{
+"numSeqs": 246,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.4026744043279558,
+"-log10(pValuesDeliveryMode)": 1.0866578506977351,
+"-log10(pValuesNum_Reads)": 0.7956497838647744,
+"-log10(pValuesNum_Hits)": 0.6622195715651571,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.23868548850577015,
+"-log10(pValuesAdjusted_Num_Hits)": 0.09133745223846525,
+"rdptaxa": "Megasphaera"
+}
+,{
+"numSeqs": 167,
+"rpdLevel": "genus",
+"-log10(pValuesBirthGroup)": 0.40436301180727596,
+"-log10(pValuesDeliveryMode)": 0.323447623347749,
+"-log10(pValuesNum_Reads)": 0.42895162825186983,
+"-log10(pValuesNum_Hits)": -0.0,
+"-log10(pValuesAdjusted_BirthGroup)": 0.017190341208820167,
+"-log10(pValuesAdjusted_DeliveryMode)": 0.20757799525290782,
+"-log10(pValuesAdjusted_Num_Reads)": 0.14099778190870876,
+"-log10(pValuesAdjusted_Num_Hits)": -0.0,
+"rdptaxa": "Allisonella"
+}
+]
+}
+]
+}
+]
+}
+]
+}
+]
+}

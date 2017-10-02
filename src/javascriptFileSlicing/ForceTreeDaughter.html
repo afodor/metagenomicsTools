@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link type="text/css" rel="stylesheet" href="style.css"/>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<aside id="sidebar">
+		<!--<br><input type="checkbox" id="dragNodes">drag nodes</input>-->
+					<br>scatter x:<select id="scatterX" onchange=myGo.redrawScreen()></select>
+        	<br>scatter y:<select id="scatterY" onchange=myGo.redrawScreen()></select>
+					</aside>
+	<script type="text/javascript" src="d3.v3.js"></script>
+		<script type="text/javascript" src="d3ForceTree.js"></script>
+		<script type="text/javascript">
+	
+	var myGo;
+
+	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
+	window.onkeypress = function(e) { myGo.handleKeyboardEvent(e)}; 
+	
+	window.onload = 
+	function ()
+	{	
+		myGo = new GO(opener.window,window,false);
+		
+		var myCount =0;
+		
+		window.onresize=function()
+				{ 
+					if( myGo != null ) 
+					{ 
+						myGo.reVis(false); 
+					}
+				};
+ 
+	}
+	
+		window.onunload = 
+			function()
+			{
+				if( myGo)
+					myGo.unregister();
+			}
+	</script>
+	
+</body>
+ 
+    
+</body>
+</html>
