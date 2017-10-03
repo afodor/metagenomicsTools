@@ -7,7 +7,7 @@ taxaLevels <- c("Phylum", "Class", "Order", "Family", "Genus", "Species", "OTU" 
 
 for( taxa in taxaLevels ) 
 {
-	inFileName <- paste( "Blood ", taxa,  " META 18July16.txt", sep ="")
+	inFileName <- paste( "Blood ", taxa,  " META 18July16LogNorm.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
 	myColClasses <- c("character", rep("numeric", numCols-1))
@@ -18,14 +18,12 @@ for( taxa in taxaLevels )
 
 	isControl <- substring(row.names(myT),1,1) == "C"
 	
-
-	for( i in 2: numCols)
+	for( i in 2: ncol(myT))
 	{
 		bug <- myT[,i]
+		myTitle <- names(myT)[i]
+		boxplot( bug ~ isControl , main = myTitle)
 	}
 	
-	dev.off()
-	
-	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
-	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+	dev.off()	
 }
