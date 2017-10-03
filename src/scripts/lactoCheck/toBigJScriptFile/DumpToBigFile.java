@@ -1,8 +1,6 @@
 package scripts.lactoCheck.toBigJScriptFile;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +11,25 @@ public class DumpToBigFile
 		List<File> jpegs = getJPegs();
 		
 		for(File f : jpegs)
-			System.out.println(f.getAbsolutePath());
+			System.out.println(f.getAbsolutePath() + " " + f.length());
 		
+		File jsonFile = new File(
+				"C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
 		
+	
+		int start =1;
+		
+		List<Holder> list = new ArrayList<Holder>();
+		Holder h = new Holder();
+		h.start = start;
+		h.stop= start + jsonFile.length();
+	}
+	
+	private static class Holder
+	{
+		String name;
+		long start;
+		long stop;
 	}
 	
 	
