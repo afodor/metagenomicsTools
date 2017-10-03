@@ -1,0 +1,23 @@
+rm(list=ls())
+library("vegan")
+
+
+setwd("C:\\tanyaBloodSeqs")
+
+taxaLevels <- c("Phylum", "Class", "Order", "Family", "Genus", "Species", "OTU" )
+
+for( taxa in taxaLevels ) 
+{
+	inFileName <- paste( "Blood ", taxa,  " META 18July16.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	myColClasses <- c("character", rep("numeric", numCols-1))
+	myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	myPCOA <- capscale(myT~1,distance="bray")
+
+	newT <- data.frame( cbind( myPCOA$CA$u, myT))
+	newT$isControl <- substring(row.names(myT),1,1) == "C"
+	
+	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+}
