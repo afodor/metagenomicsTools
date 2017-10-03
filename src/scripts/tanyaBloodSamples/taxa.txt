@@ -15,6 +15,7 @@ for( taxa in taxaLevels )
 	myPCOA <- capscale(myT~1,distance="bray")
 	pdf(paste(taxa,".pdf"))
 	pValues <- vector()
+	names <- vector()
 
 	isControl <- substring(row.names(myT),1,1) == "C"
 	
@@ -22,6 +23,7 @@ for( taxa in taxaLevels )
 	{
 		bug <- myT[,i]
 		pValues[i-1] <- t.test(bug[isControl ==TRUE] , bug[isControl ==FALSE])$p.value
+		names[i-1] <- names(myT)[i]
 		
 		myTitle <- paste( names(myT)[i], format(pValues[i-1],digits=3 ))
 	
@@ -29,5 +31,9 @@ for( taxa in taxaLevels )
 		
 	}
 	
+	dFrame <- data.frame( names, pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	write.table(dFrame, file=paste("pValues", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	dev.off()	
 }
