@@ -29,6 +29,11 @@ for( taxa in taxaLevels )
 	
 		boxplot( bug ~ isControl , main = myTitle)
 		
+		myFrame <- data.frame(bug ,isControl)
+		
+		stripchart(bug~ isControl, 	data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+		
 	}
 	
 	dFrame <- data.frame( names, pValues)
