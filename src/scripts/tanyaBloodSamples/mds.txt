@@ -17,6 +17,7 @@ for( taxa in taxaLevels )
 
 	newT <- data.frame( cbind( myPCOA$CA$u, myT))
 	newT$isControl <- substring(row.names(myT),1,1) == "C"
+	newT$names <- row.names(myT)
 	
 	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
 	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
