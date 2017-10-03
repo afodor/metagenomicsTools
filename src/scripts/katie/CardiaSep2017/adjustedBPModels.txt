@@ -35,7 +35,7 @@ for ( taxa in taxaLevels)
 		taxaNames[index] <- taxaName;
 	
 		aLm<- 
-			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$I02CSAVG )
+			lm(  myT[,i] ~ myT$EXAMAGE + myT$SEX + myT$CENTER + myT$educ + myT$RACE + myT$HBP30)
 	
 		pValueExamAge[index] <-  summary(aLm)$coefficients[2,4]
 		pValueSex[index] <- summary(aLm)$coefficients[3,4]
