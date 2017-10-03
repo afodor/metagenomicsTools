@@ -21,8 +21,12 @@ for( taxa in taxaLevels )
 	for( i in 2: ncol(myT))
 	{
 		bug <- myT[,i]
-		myTitle <- names(myT)[i]
+		pValues[i-1] <- t.test(bug[isControl ==TRUE] , bug[isControl ==FALSE])$p.value
+		
+		myTitle <- paste( names(myT)[i], format(pValues[i-1],digits=3 ))
+	
 		boxplot( bug ~ isControl , main = myTitle)
+		
 	}
 	
 	dev.off()	
