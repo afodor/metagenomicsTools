@@ -72,6 +72,18 @@ this.flatten= function (root)
     		
     		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
     		table = document.createElement('table')
+    		
+    		tr = document.createElement('tr')
+    		
+    		for( j =1; j < 5; j++)
+    		{
+    			var header = document.createElement("th");
+    			header.appendChild(document.createTextNode("cat" + j));
+    			tr.appendChild(header);
+    		}
+    		
+    		table.appendChild(tr);
+    		
     		for( i =1; i < 10; i++)
     		{
     			tr = document.createElement('tr')
@@ -86,6 +98,7 @@ this.flatten= function (root)
     			
     			 table.appendChild(tr);
     		}
+    		
     		
     		document.body.appendChild(table);
        	};
