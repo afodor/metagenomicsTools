@@ -6,9 +6,11 @@
   }
 </style>
 
-<input type="file" id="files" name="files[]" />
+<input type="file" id="files" name="files[]" /><br>
+<br><textarea cols="60" rows="20" id="text"></textarea>
+
 <output id="list"></output>
-<img id="image"/>
+<img id="image"/><br><br>
 
 <script>
 //modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
@@ -29,6 +31,9 @@
         	start = parseInt(enc.decode(window.bigBuffer.slice(0,20)))
         	end = parseInt(enc.decode(window.bigBuffer.slice(21,40)))
         	console.log(start + " " + end);
+        	
+        	document.getElementById('text').value = enc.decode(window.bigBuffer.slice(start-1,end-1))
+        	
         	
         	//help from https://gist.github.com/candycode/f18ae1767b2b0aba568e
         	var arrayBufferView = new Uint8Array( window.bigBuffer.slice(967873-1,981223-1));
