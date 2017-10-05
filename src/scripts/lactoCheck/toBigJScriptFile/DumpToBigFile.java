@@ -10,23 +10,44 @@ public class DumpToBigFile
 	{
 		List<File> jpegs = getJPegs();
 		
-		for(File f : jpegs)
-			System.out.println(f.getAbsolutePath() + " " + f.length());
-		
 		File jsonFile = new File(
-				"C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
+				"C:\\Users\\corei7\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
 		
-	
-		int start =1;
+		if( ! jsonFile.exists())
+			throw new Exception("Could not find " + jsonFile.getAbsolutePath());
+		
+		long last=0;
 		
 		List<Holder> list = new ArrayList<Holder>();
 		Holder h = new Holder();
-		h.start = start;
-		h.stop= start + jsonFile.length();
+		h.f = jsonFile;
+		h.start = 1;
+		h.stop= jsonFile.length();
+		h.name= jsonFile.getName();
+		last = h.stop;
+		list.add(h);
+		
+		for(File f : jpegs)
+		{
+			h = new Holder();
+			h.start = last + 1;
+			h.stop = h.start + f.length()-1;
+			h.f = f;
+			last = h.stop;
+			h.name = f.getName();
+			list.add(h);
+		}
+		
+		for( Holder holder: list)
+		{
+			System.out.println(holder.start + " " + holder.stop + " " + holder.f.length() + " " + holder.name);
+		}
+		
 	}
 	
 	private static class Holder
 	{
+		File f;
 		String name;
 		long start;
 		long stop;

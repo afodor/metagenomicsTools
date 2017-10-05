@@ -2,8 +2,6 @@ package scripts.tanyaBloodSamples;
 
 import java.io.File;
 
-import com.sun.org.apache.bcel.internal.generic.TABLESWITCH;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
