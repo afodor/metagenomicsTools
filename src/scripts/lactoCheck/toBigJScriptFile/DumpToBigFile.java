@@ -20,13 +20,13 @@ public class DumpToBigFile
 		if( ! jsonFile.exists())
 			throw new Exception("Could not find " + jsonFile.getAbsolutePath());
 		
-		long last=0;
+		int last=0;
 		
 		List<Holder> list = new ArrayList<Holder>();
 		Holder h = new Holder();
 		h.f = jsonFile;
-		h.start = 1;
-		h.stop= jsonFile.length();
+		h.start = 5;
+		h.stop= (int) jsonFile.length()+h.start - 1;
 		h.name= jsonFile.getName();
 		last = h.stop;
 		list.add(h);
@@ -35,7 +35,7 @@ public class DumpToBigFile
 		{
 			h = new Holder();
 			h.start = last + 1;
-			h.stop = h.start + f.length()-1;
+			h.stop =  (int)(h.start + f.length()-1);
 			h.f = f;
 			last = h.stop;
 			h.name = f.getName();
@@ -46,6 +46,13 @@ public class DumpToBigFile
 		
 		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
 				outFile));
+		
+		// first two numbers are positions of the json
+		bos.write(list.get(0).start);bos.write(list.get(0).stop);
+		
+		// next two numbers are positions of the table
+		bos.write(0);bos.write(0);
+		
 		
 		for( Holder holder: list)
 		{
@@ -75,8 +82,8 @@ public class DumpToBigFile
 	{
 		File f;
 		String name;
-		long start;
-		long stop;
+		int start;
+		int stop;
 	}
 	
 	
