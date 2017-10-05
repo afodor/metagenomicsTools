@@ -10,6 +10,21 @@ import java.util.List;
 
 public class DumpToBigFile
 {
+	private static final int BYTE_LENGTH = 20;
+	
+	private static byte[] getPaddedString(int i) throws Exception
+	{
+		String s= Integer.toString(i);
+		
+		if( s.length() > BYTE_LENGTH)
+			throw new Exception("too long");
+		
+		while( s.length() < BYTE_LENGTH)
+			s = " " + s;
+		
+		return s.getBytes();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		List<File> jpegs = getJPegs();
@@ -25,8 +40,8 @@ public class DumpToBigFile
 		List<Holder> list = new ArrayList<Holder>();
 		Holder h = new Holder();
 		h.f = jsonFile;
-		h.start = 5;
-		h.stop= (int) jsonFile.length()+h.start - 1;
+		h.start = 4 * BYTE_LENGTH + 1;
+		h.stop= (int) jsonFile.length()+h.start-1;
 		h.name= jsonFile.getName();
 		last = h.stop;
 		list.add(h);
@@ -48,10 +63,13 @@ public class DumpToBigFile
 				outFile));
 		
 		// first two numbers are positions of the json
-		bos.write(list.get(0).start);bos.write(list.get(0).stop);
+		bos.write(getPaddedString(list.get(0).start));
+		bos.write(getPaddedString(list.get(0).stop));
 		
+		System.out.println("LENGTH = " +getPaddedString(list.get(0).stop).length );
+				
 		// next two numbers are positions of the table
-		bos.write(0);bos.write(0);
+		bos.write(getPaddedString(0));bos.write(getPaddedString(0));
 		
 		
 		for( Holder holder: list)
