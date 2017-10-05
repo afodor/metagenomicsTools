@@ -69,6 +69,23 @@ this.flatten= function (root)
    			var imageUrl = urlCreator.createObjectURL(blob);
     		var img =  document.getElementById('image')
     		img.src = imageUrl;
+    		
+    		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
+    		table = document.createElement('table')
+    		for( i =1; i < 10; i++)
+    		{
+    			tr = document.createElement('tr')
+    			
+    			for( j=1; j < 5; j++)
+    			{	
+    				 var td1 = document.createElement('td');
+    				 var text1 = document.createTextNode('Text1');
+    				 td1.appendChild(text1);
+    				 tr.appendChild(td1);
+    			}
+    			
+    			 table.appendChild(tr);
+    		}
        	};
       })(f);
 
