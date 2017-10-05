@@ -1,6 +1,10 @@
 package scripts.lactoCheck.toBigJScriptFile;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +42,32 @@ public class DumpToBigFile
 			list.add(h);
 		}
 		
+		File outFile = new File("C:\\lactoCheck\\rdp\\lactoBlob.bioblob");
+		
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
+				outFile));
+		
 		for( Holder holder: list)
 		{
 			System.out.println(holder.start + " " + holder.stop + " " + holder.f.length() + " " + holder.name);
+			
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(holder.f));
+			
+			int b = in.read();
+			
+			while( b != -1)
+			{
+				bos.write(b);
+				b = in.read();
+			}
+			
+			in.close();
 		}
+		
+		
+		bos.flush();  bos.close();
+		
+		System.out.println(outFile.length() + " " + last);
 		
 	}
 	
