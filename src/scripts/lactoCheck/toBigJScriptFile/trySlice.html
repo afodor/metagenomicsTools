@@ -14,7 +14,8 @@
   function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
 
-	f = files[0].slice(95882-1,109397-1)
+	window.bigFile = files[0]
+	f = window.bigFile.slice(95882-1,109397-1)
     var reader = new FileReader();
 
       // Closure to capture the file information.

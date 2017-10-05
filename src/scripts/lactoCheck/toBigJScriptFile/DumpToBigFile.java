@@ -30,7 +30,7 @@ public class DumpToBigFile
 		List<File> jpegs = getJPegs();
 		
 		File jsonFile = new File(
-				"C:\\Users\\corei7\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
+				"C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
 		
 		if( ! jsonFile.exists())
 			throw new Exception("Could not find " + jsonFile.getAbsolutePath());
