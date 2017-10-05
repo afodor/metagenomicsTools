@@ -14,7 +14,7 @@
   function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
 
-	f = files[0].slice(1052797,1066339)
+	f = files[0].slice(95882-1,109397-1)
     var reader = new FileReader();
 
       // Closure to capture the file information.
@@ -22,7 +22,7 @@
         return function(e) {
           // Render thumbnail.
           var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+          span.innerHTML = ['<img  src="', e.target.result,
                             '" title="', escape(theFile.name), '"/>'].join('');
           document.getElementById('list').insertBefore(span, null);
         };
