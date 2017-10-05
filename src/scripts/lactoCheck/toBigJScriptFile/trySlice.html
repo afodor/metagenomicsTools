@@ -72,6 +72,7 @@ this.flatten= function (root)
     		
     		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
     		table = document.createElement('table')
+    		table.id = "bigTable"
     		
     		tr = document.createElement('tr')
     		
@@ -99,8 +100,9 @@ this.flatten= function (root)
     			 table.appendChild(tr);
     		}
     		
-    		
     		document.body.appendChild(table);
+   
+    		
        	};
       })(f);
 
