@@ -10,6 +10,8 @@
 <br><textarea cols="60" rows="20" id="text"></textarea>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://tablesorter.com/__jquery.tablesorter.min.js"></script>
+
 
 <output id="list"></output>
 <img id="image"/><br><br>
@@ -76,16 +78,15 @@ this.flatten= function (root)
     		table = document.createElement('table')
     		table.id = "bigTable"
     		
-    		tr = document.createElement('tr')
+    		// Create an empty <thead> element and add it to the table:
+			var header = table.createTHead();
+			var row = header.insertRow(0);    
     		
     		for( j =1; j < 5; j++)
     		{
-    			var header = document.createElement("th");
-    			header.appendChild(document.createTextNode("cat" + j));
-    			tr.appendChild(header);
+    			var cell = row.insertCell(0)
+    			cell.innerHTML = "<b>cat_" + j + "</b>";
     		}
-    		
-    		table.appendChild(tr);
     		
     		for( i =1; i < 10; i++)
     		{
