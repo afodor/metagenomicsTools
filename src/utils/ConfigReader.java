@@ -147,6 +147,7 @@ public class ConfigReader
 	public static final String EMILY_TRANSFER_PROJECT = "EMILY_TRANSFER_PROJECT";
 	
 	public static final String TANYA_BLOOD_DIR= "TANYA_BLOOD_DIR";
+	public static final String TANYA_BLOOD_DIR2= "TANYA_BLOOD_DIR2";
 	
 	
 	public static String getFragmentRecruiterSupportDir() throws Exception
@@ -167,6 +168,11 @@ public class ConfigReader
 	public static String getTanyaBloodDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TANYA_BLOOD_DIR);
+	}
+	
+	public static String getTanyaBloodDir2() throws Exception
+	{
+		return getConfigReader().getAProperty(TANYA_BLOOD_DIR2);
 	}
 	
 	public static String getIanMouseAug2017Dir() throws Exception
