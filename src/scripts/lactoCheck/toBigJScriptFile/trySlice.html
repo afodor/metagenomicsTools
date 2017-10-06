@@ -93,10 +93,11 @@ window.getHeaders=function(root)
 			$('#bigTable').DataTable( {
 			    data: flats,
 			    columns:  [
-        { data: 'numSeqs' },
-        { data: 'rpdLevel' },
-        { data: 'rdptaxa' },
-        { data : '-log10(pValuesBirthGroup)' } 
+        { data: 'numSeqs', title: 'numSeqs' },
+        { data: 'rpdLevel', title: 'rdpLevel' },
+        { data: 'rdptaxa' , title: 'rdpTaxa'},
+        { data : '-log10(pValuesBirthGroup)', title:  '-log10(pValuesBirthGroup)',
+        		 "defaultContent": "NA"} 
     ]
 			} );
     		
