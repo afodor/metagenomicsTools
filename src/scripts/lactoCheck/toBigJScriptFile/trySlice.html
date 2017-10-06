@@ -58,11 +58,26 @@ window.getColumns = function(root)
 	
 	for ( i in root)
 	{
-		anObj = {}
-		anObj.data = i
-		anObj.title = i
-		anObj.defaultContent = "NA"
-		a.push(anObj)
+		if( i.includes("Adjusted") || ! i.includes("pValues" ))
+		{		
+			if(  i!= "children" && i!="-log10(pValuesAdjusted_Num_Hits)")
+			{
+				anObj = {}
+				anObj.data = i
+				
+				title = i.replace("-log10(pValuesAdjusted_", "");
+				
+				if( title.charAt(title.length-1) == ")") 
+				{
+					title = title.substring(0, title.length-1)
+				}
+				
+				anObj.title = title
+				anObj.defaultContent = "-1"
+				a.push(anObj)		 
+			}
+		}
+	
 	}
 	
 	return a
