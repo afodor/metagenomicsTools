@@ -16,6 +16,11 @@
 	
 		pdf(paste(taxa,".pdf",sep=""))
 		par(mfrow=c(2,2))
+		
+		pValues <- vector()
+		taxaNames <- vector()
+		metaNames <- vector()
+		index <- 1
 	
 		for( i in 13:ncol(myT))
 		{
@@ -24,16 +29,26 @@
 			for(j in c(2,4,6,7:11) )
 			{
 				meta<- myT[,j]
+			
+				taxaNames[index] <- names(myT)[i]
+				metaNames[index] <- names(myT)[j]
 				
 				aLm <- lm(  bug~ meta)
 				pValue <- anova( aLm)$"Pr(>F)"[1]
+				pValues[index] <- pValue 
 					
 				title <- paste( names(myT)[i],"\n", names(myT)[j], "\n", format(pValue,digits=3) )
 				
 				boxplot(bug~ meta,main=title)
+				index = index + 1;
 			}
 		}
-		
+	
 		dev.off()
+	
+		dFrame <- data.frame( taxaNames, metaNames, pValues)
+		dFrame <- dFrame [order(dFrame$pValues),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+		write.table(dFrame, file=paste("pValues", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 		
 	}

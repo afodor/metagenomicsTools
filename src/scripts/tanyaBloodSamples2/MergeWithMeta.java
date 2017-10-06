@@ -120,7 +120,7 @@ public class MergeWithMeta
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 		
-		String[] topSplits = reader.readLine().replaceAll("/", "_").split("\t");
+		String[] topSplits = reader.readLine().replaceAll("/", "_").replaceAll("-", "").split("\t");
 		
 		for(String s= reader.readLine(); s != null; s=  reader.readLine())
 		{
