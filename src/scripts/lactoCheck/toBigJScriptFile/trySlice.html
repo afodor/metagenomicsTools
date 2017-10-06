@@ -51,6 +51,23 @@ window.getHeaders=function(root)
 }
 
 
+window.getColumns = function(root) 
+{
+	
+	a = []
+	
+	for ( i in root)
+	{
+		anObj = {}
+		anObj.data = i
+		anObj.title = i
+		anObj.defaultContent = "NA"
+		a.push(anObj)
+	}
+	
+	return a
+}
+
 //modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
   function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
@@ -92,13 +109,7 @@ window.getHeaders=function(root)
     					
 			$('#bigTable').DataTable( {
 			    data: flats,
-			    columns:  [
-        { data: 'numSeqs', title: 'numSeqs' },
-        { data: 'rpdLevel', title: 'rdpLevel' },
-        { data: 'rdptaxa' , title: 'rdpTaxa'},
-        { data : '-log10(pValuesBirthGroup)', title:  '-log10(pValuesBirthGroup)',
-        		 "defaultContent": "NA"} 
-    ]
+			    columns: window.getColumns(window.jsonTree)
 			} );
     		
        	};
