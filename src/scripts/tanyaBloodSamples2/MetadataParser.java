@@ -13,7 +13,7 @@ import utils.ConfigReader;
 public class MetadataParser
 {
 	
-	private static HashSet<String> getIncluded()
+	public static HashSet<String> getIncluded()
 	{
 		HashSet<String> set = new LinkedHashSet<String>();
 		
