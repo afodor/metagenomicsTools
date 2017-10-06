@@ -1,0 +1,37 @@
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\tanyaBloodSeqs\\secondSet")
+
+taxaLevels <- c("Phylum", "Class", "Order", "Family", "Genus", "Species", "OTU" )
+
+for( taxa in taxaLevels ) 
+{
+	inFileName <- paste( "Blood_" , taxa, "18July16MergedWithMeta.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	numCols <- ncol(myT)
+	#myColClasses <- c("character", rep("numeric", numCols-1))
+	#myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
+	names <- vector()
+
+	pdf(paste(taxa,".pdf",sep=""))
+	par(mfrow=c(2,2))
+
+	for( i in c(2,4,6,7:11))
+	{
+		meta <- myT[,i]
+		
+		for( j in 13:ncol(myT))
+		{
+			bug <- myT[,j]
+			
+			title <- paste( names(myT)[i], names(myT)[j] )
+			
+			boxplot(meta,bug,main=title)
+			
+		}
+	}
+	
+	dev.off()
+	
+}
