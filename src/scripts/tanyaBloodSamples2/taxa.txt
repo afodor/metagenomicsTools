@@ -1,37 +1,39 @@
-rm(list=ls())
-library("vegan")
-
-setwd("C:\\tanyaBloodSeqs\\secondSet")
-
-taxaLevels <- c("Phylum", "Class", "Order", "Family", "Genus", "Species", "OTU" )
-
-for( taxa in taxaLevels ) 
-{
-	inFileName <- paste( "Blood_" , taxa, "18July16MergedWithMeta.txt", sep ="")
-	myT <-read.table(inFileName,header=TRUE,sep="\t")
-	numCols <- ncol(myT)
-	#myColClasses <- c("character", rep("numeric", numCols-1))
-	#myT <-read.table(inFileName,header=TRUE,sep="\t",row.names=1,colClasses=myColClasses)
-	names <- vector()
-
-	pdf(paste(taxa,".pdf",sep=""))
-	par(mfrow=c(2,2))
-
-	for( i in c(2,4,6,7:11))
+	rm(list=ls())
+	library("vegan")
+	
+	setwd("C:\\tanyaBloodSeqs\\secondSet")
+	
+	taxaLevels <- c("Phylum", "Class", "Order", "Family", "Genus", "Species", "OTU" )
+	
+	for( taxa in taxaLevels ) 
 	{
-		meta <- myT[,i]
-		
-		for( j in 13:ncol(myT))
+		inFileName <- paste( "Blood_" , taxa, "18July16MergedWithMeta.txt", sep ="")
+		myT <-read.table(inFileName,header=TRUE,sep="\t")
+		numCols <- ncol(myT)
+		myColClasses <- c(rep("character",6), "numeric","character",  rep("numeric", numCols-8))
+		myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
+		names <- vector()
+	
+		pdf(paste(taxa,".pdf",sep=""))
+		par(mfrow=c(2,2))
+	
+		for( i in 13:ncol(myT))
 		{
-			bug <- myT[,j]
+			bug<- myT[,i]
 			
-			title <- paste( names(myT)[i], names(myT)[j] )
-			
-			boxplot(meta,bug,main=title)
-			
+			for(j in c(2,4,6,7:11) )
+			{
+				meta<- myT[,j]
+				
+				aLm <- lm(  bug~ meta)
+				pValue <- anova( aLm)$"Pr(>F)"[1]
+					
+				title <- paste( names(myT)[i],"\n", names(myT)[j], "\n", format(pValue,digits=3) )
+				
+				boxplot(bug~ meta,main=title)
+			}
 		}
+		
+		dev.off()
+		
 	}
-	
-	dev.off()
-	
-}
