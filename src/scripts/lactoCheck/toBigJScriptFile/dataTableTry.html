@@ -1,0 +1,43 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" language="javascript" src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+<div class="cdn">
+    <span>CSS</span>
+    <input type="text" value="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" readonly>
+
+</div>
+    <table id="example" class="display" cellspacing="0" width="100%">
+
+<script>
+
+data =[
+    {
+        "name":       "Tiger Nixon",
+        "position":   "System Architect",
+        "salary":     "$3,120",
+        "start_date": "2011/04/25",
+        "office":     "Edinburgh",
+        "extn":       "5421"
+    },
+    {
+        "name":       "Garrett Winters",
+        "position":   "Director",
+        "salary":     "$5,300",
+        "start_date": "2011/07/25",
+        "office":     "Edinburgh",
+        "extn":       "8422"
+    }
+]
+
+$('#example').DataTable( {
+    data: data,
+    columns: [
+        { data: 'name' },
+        { data: 'position' },
+        { data: 'salary' },
+        { data: 'office' }
+    ]
+} );
+
+</script>
