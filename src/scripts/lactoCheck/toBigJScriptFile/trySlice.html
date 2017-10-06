@@ -11,13 +11,14 @@
 
 <output id="list"></output>
 <img id="image"/><br><br>
+<table id="bigTable"></table>
 
 <script>
 
 //from https://www.w3schools.com/howto/howto_js_sort_table.asp
 function sortTable() {
   var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("myTable");
+  table = document.getElementById("bigTable");
   switching = true;
   /*Make a loop that will continue until
   no switching has been done:*/
@@ -51,8 +52,9 @@ function sortTable() {
 }
 
 function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("bigTable");
+  var table,rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("bigTable");
+  
   switching = true;
   //Set the sorting direction to ascending:
   dir = "asc"; 
@@ -165,35 +167,32 @@ this.flatten= function (root)
     		img.src = imageUrl;
     		
     		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
-    		table = document.createElement('table')
+    		var table = document.getElementById('bigTable')
     		table.id = "bigTable"
     		
-    		tr = document.createElement('tr')
-    		
-    		for( j =1; j < 5; j++)
-    		{
-    			var header = document.createElement("th");
-    			header.onclick="sortTable(" + (j-1) + ")"
-    			header.appendChild(document.createTextNode("cat" + j));
-    			tr.appendChild(header);
-    		}
-    		
-    		table.appendChild(tr);
+    		var tr = document.createElement('tr')
     		
     		for( i =1; i < 10; i++)
     		{
-    			tr = document.createElement('tr')
+    			var row = table.insertRow(0);
     			
     			for( j=1; j < 5; j++)
     			{	
-    				 var td1 = document.createElement('td');
-    				 var text1 = document.createTextNode('Text_' + i + '_' + j);
-    				 td1.appendChild(text1);
-    				 tr.appendChild(td1);
+    				 var cel = row.insertCell(0);
+    				 cel.innerHTML = "text_" + j + "_" + i
     			}
-    			
-    			 table.appendChild(tr);
     		}
+    		
+    		var header = table.createTHead();
+			var row = header.insertRow(0);    
+    		
+    		for( let j =0; j < 4; j++)
+    		{
+    			var cell = row.insertCell(0)
+    			cell.innerHTML = "<b>cat_" + j + "</b>";
+    			cell.onclick=function() { sortTable( j)}
+    		}
+    		
     		
     		document.body.appendChild(table);
    
