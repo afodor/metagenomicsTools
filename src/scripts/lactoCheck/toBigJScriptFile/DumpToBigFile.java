@@ -25,6 +25,18 @@ public class DumpToBigFile
 		return s.getBytes();
 	}
 	
+	public static String buildTableString(List<Holder> list) throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for(Holder h : list)
+		{
+			buff.append(h.name + " " + h.start + " " + h.stop);
+		}
+		
+		return buff.toString();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		List<File> jpegs = getJPegs();
@@ -57,6 +69,8 @@ public class DumpToBigFile
 			list.add(h);
 		}
 		
+		String tableString = buildTableString(list);
+		
 		File outFile = new File("C:\\lactoCheck\\rdp\\lactoBlob.bioblob");
 		
 		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
@@ -69,8 +83,8 @@ public class DumpToBigFile
 		System.out.println("LENGTH = " +getPaddedString(list.get(0).stop).length );
 				
 		// next two numbers are positions of the table
-		bos.write(getPaddedString(0));bos.write(getPaddedString(0));
-		
+		bos.write(getPaddedString(list.get(list.size()-1).stop + 1));
+		bos.write(getPaddedString(list.get(list.size()-1).stop + 1));
 		
 		for( Holder holder: list)
 		{
@@ -89,6 +103,8 @@ public class DumpToBigFile
 			in.close();
 		}
 		
+		for( byte b: tableString.getBytes())
+			bos.write(b);
 		
 		bos.flush();  bos.close();
 		
