@@ -110,7 +110,7 @@ function sortTable(n) {
 
 
 // Returns a list of all nodes under the root.
-this.flatten= function (root) 
+window.flatten= function (root) 
 {
   var myNodes = [];
   
@@ -133,6 +133,20 @@ this.flatten= function (root)
     
 }
 
+window.getHeaders=function(root)
+{
+	var nodes = [];
+	
+	for( var key in root)
+	{
+		if( key != "children")
+		{
+			nodes.push(key)	
+		}
+	}
+	
+	return nodes;
+}
 
 
 //modded from https://www.html5rocks.com/en/tutorials/file/dndfiles/
@@ -172,14 +186,17 @@ this.flatten= function (root)
     		
     		var tr = document.createElement('tr')
     		
-    		for( i =1; i < 10; i++)
+    		var headers = window.getHeaders(window.jsonTree )
+    		var flats = window.flatten(window.jsonTree )
+    		
+    		for( i =0; i < flats.length; i++)
     		{
-    			var row = table.insertRow(0);
+    			var row = table.insertRow(i);
     			
-    			for( j=1; j < 5; j++)
+    			for( j=0; j < headers.length; j++)
     			{	
-    				 var cel = row.insertCell(0);
-    				 cel.innerHTML = Math.random()
+    				 var cel = row.insertCell(j);
+    				 cel.innerHTML = flats[i][headers[j]]
     			}
     		}
     		
