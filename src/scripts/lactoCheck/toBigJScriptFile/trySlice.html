@@ -188,9 +188,9 @@ this.flatten= function (root)
     		
     		for( let j =0; j < 4; j++)
     		{
-    			var cell = row.insertCell(0)
+    			var cell = row.insertCell(j)
     			cell.innerHTML = "<b>cat_" + j + "</b>";
-    			cell.onclick=function() { sortTable( 3-j)}
+    			cell.onclick=function() { sortTable( j)}
     		}
     		
     		
