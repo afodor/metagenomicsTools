@@ -179,7 +179,7 @@ this.flatten= function (root)
     			for( j=1; j < 5; j++)
     			{	
     				 var cel = row.insertCell(0);
-    				 cel.innerHTML = "text_" + j + "_" + i
+    				 cel.innerHTML = Math.random()
     			}
     		}
     		
@@ -190,7 +190,7 @@ this.flatten= function (root)
     		{
     			var cell = row.insertCell(0)
     			cell.innerHTML = "<b>cat_" + j + "</b>";
-    			cell.onclick=function() { sortTable( j)}
+    			cell.onclick=function() { sortTable( 3-j)}
     		}
     		
     		
