@@ -50,6 +50,23 @@ window.getHeaders=function(root)
 	return nodes;
 }
 
+window.buildMap = function( inTable ) 
+{
+	map = {}
+
+	var res =inTable.split(" ")
+	
+	for( i =4; i < res.length; i++)
+	{
+		a = [];
+		a.push(res[i+1])
+		a.push(res[i+2])
+		map[ res[i] ] = a
+		i = i+3
+	}
+	
+	return map;
+}
 
 window.getColumns = function(root) 
 {
@@ -110,6 +127,8 @@ window.getColumns = function(root)
         	
         	tableString = enc.decode(window.bigBuffer.slice(tableStart -1,tableEnd -1))
         	console.log("\n\n" + tableString)
+        	tableMap = window.buildMap(tableString)
+        	console.log(tableMap)
         	
         	//help from https://gist.github.com/candycode/f18ae1767b2b0aba568e
         	var arrayBufferView = new Uint8Array( window.bigBuffer.slice(967873-1,981223-1));
