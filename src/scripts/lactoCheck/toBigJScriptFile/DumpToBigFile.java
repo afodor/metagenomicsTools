@@ -84,7 +84,7 @@ public class DumpToBigFile
 				
 		// next two numbers are positions of the table
 		bos.write(getPaddedString(list.get(list.size()-1).stop + 1));
-		bos.write(getPaddedString(list.get(list.size()-1).stop + 1));
+		bos.write(getPaddedString(list.get(list.size()-1).stop + 1 + tableString.length()));
 		
 		for( Holder holder: list)
 		{

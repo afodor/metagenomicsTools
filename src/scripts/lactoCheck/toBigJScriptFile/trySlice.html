@@ -100,10 +100,16 @@ window.getColumns = function(root)
         	enc = new TextDecoder();
         	start = parseInt(enc.decode(window.bigBuffer.slice(0,20)))
         	end = parseInt(enc.decode(window.bigBuffer.slice(21,40)))
-        	console.log(start + " " + end);
+        	//console.log(start + " " + end);
         	
         	jsonString = enc.decode(window.bigBuffer.slice(start-1,end-1))
         	window.jsonTree = JSON.parse(jsonString )
+        	
+        	tableStart = parseInt(enc.decode(window.bigBuffer.slice(41,60)))
+        	tableEnd = parseInt(enc.decode(window.bigBuffer.slice(61,80)))
+        	
+        	tableString = enc.decode(window.bigBuffer.slice(tableStart -1,tableEnd -1))
+        	console.log("\n\n" + tableString)
         	
         	//help from https://gist.github.com/candycode/f18ae1767b2b0aba568e
         	var arrayBufferView = new Uint8Array( window.bigBuffer.slice(967873-1,981223-1));
