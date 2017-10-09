@@ -142,18 +142,24 @@ window.getColumns = function(root)
     		img.src = imageUrl;
     		
     		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
-    		var table = document.getElementById('bigTable')
-    		table.id = "bigTable"
+    		var aTable = document.getElementById('bigTable')
+    		aTable.id = "bigTable"
     		
     		var tr = document.createElement('tr')
     		
     		var headers = window.getHeaders(window.jsonTree )
     		var flats = window.flatten(window.jsonTree )
     					
-			$('#bigTable').DataTable( {
+			var table = $('#bigTable').DataTable( {
 			    data: flats,
 			    columns: window.getColumns(window.jsonTree)
 			} );
+			
+			 $('#bigTable tbody').on('click', 'tr', function () 
+			 {
+        		var data = table.row( this ).data();
+        		alert( 'You clicked on '+data[0]+'\'s row' );
+    		 } );
     		
        	};
       })(f);
