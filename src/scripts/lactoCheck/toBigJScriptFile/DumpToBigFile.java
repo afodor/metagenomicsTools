@@ -31,10 +31,10 @@ public class DumpToBigFile
 		
 		for(Holder h : list)
 		{
-			buff.append(h.name + " " + h.start + " " + h.stop);
+			buff.append(h.name + " " + h.start + " " + h.stop + " ");
 		}
 		
-		return buff.toString();
+		return buff.toString().replaceAll(".jpg", "");
 	}
 	
 	public static void main(String[] args) throws Exception
