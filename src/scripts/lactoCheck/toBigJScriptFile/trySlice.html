@@ -133,14 +133,6 @@ window.getColumns = function(root)
         	tableMap = window.buildMap(tableString)
         	//console.log(tableMap)
         	
-        	//help from https://gist.github.com/candycode/f18ae1767b2b0aba568e
-        	var arrayBufferView = new Uint8Array( window.bigBuffer.slice(967873-1,981223-1));
-        	var blob = new Blob([ arrayBufferView ], { type: "image/jpeg" } );
-        	var urlCreator = window.URL || window.webkitURL;
-   			var imageUrl = urlCreator.createObjectURL(blob);
-    		var img =  document.getElementById('image')
-    		img.src = imageUrl;
-    		
     		// help from https://stackoverflow.com/questions/8302166/dynamic-creation-of-table-with-dom
     		var aTable = document.getElementById('bigTable')
     		aTable.id = "bigTable"
@@ -157,8 +149,21 @@ window.getColumns = function(root)
 			
 			 $('#bigTable tbody').on('click', 'tr', function () 
 			 {
-        		var data = table.row( this ).data();
-        		alert( 'You clicked on '+data[0]+'\'s row' );
+        		data = table.row( this ).data();
+        		var taxa = data["rdptaxa"]
+        		var buffPosition = tableMap[taxa]
+        		
+        		if( buffPosition ) 
+        		{		
+	        		//help from https://gist.github.com/candycode/f18ae1767b2b0aba568e
+	        		var arrayBufferView = new Uint8Array( window.bigBuffer.slice(buffPosition [0]-1,buffPosition[1]-1));
+	        		var blob = new Blob([ arrayBufferView ], { type: "image/jpeg" } );
+	        		var urlCreator = window.URL || window.webkitURL;
+	   				var imageUrl = urlCreator.createObjectURL(blob);
+	    			var img =  document.getElementById('image')
+	    			img.src = imageUrl;
+	        	}
+    		
     		 } );
     		
        	};
