@@ -98,6 +98,12 @@ window.getColumns = function(root)
 				
 				anObj.title = title
 				anObj.defaultContent = "-1"
+				
+				if( i == "id" ) 
+				{	
+					anObj.visible = false;
+				}
+				
 				a.push(anObj)		 
 			}
 		}
