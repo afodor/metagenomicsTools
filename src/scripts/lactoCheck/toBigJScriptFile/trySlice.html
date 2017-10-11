@@ -14,27 +14,31 @@
 window.globalID = 1;
 
 // Returns a list of all nodes under the root.
-window.flatten= function (root) 
+window.flatten= function (root, parent) 
 {
   var myNodes = [];
   
-  function addNodeAndChildren( aNode) 
+  function addNodeAndChildren( aNode,parent) 
   {
 	if( aNode != null) 
 	{
 		myNodes.push(aNode);
 		aNode.id = window.globalID
 		window.globalID++;
-	
+		
+		if(parent!= null) 
+			aNode.parentId = parent.id;
+		
 		if( aNode.children != null)
 			for( var x=0; x < aNode.children.length; x++)
 			{
-				addNodeAndChildren(aNode.children[x])
+				addNodeAndChildren(aNode.children[x], aNode)
 			}		
 		}
 	}
-  
-  addNodeAndChildren(root);
+
+  root.parentId= 0;  
+  addNodeAndChildren(root,null);
   return myNodes;
     
 }
@@ -99,7 +103,7 @@ window.getColumns = function(root)
 				anObj.title = title
 				anObj.defaultContent = "-1"
 				
-				if( i == "id" ) 
+				if( i == "id"  || i == "parentId") 
 				{	
 					anObj.visible = false;
 				}
