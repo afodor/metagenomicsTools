@@ -11,6 +11,8 @@
 
 <script>
 
+window.globalID = 1;
+
 // Returns a list of all nodes under the root.
 window.flatten= function (root) 
 {
@@ -21,6 +23,8 @@ window.flatten= function (root)
 	if( aNode != null) 
 	{
 		myNodes.push(aNode);
+		aNode.id = window.globalID
+		window.globalID++;
 	
 		if( aNode.children != null)
 			for( var x=0; x < aNode.children.length; x++)
