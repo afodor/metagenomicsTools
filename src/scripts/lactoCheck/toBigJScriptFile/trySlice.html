@@ -32,18 +32,9 @@ var w = 600,
     h = 400,
     node,
     link,
-    root;
-
-var force = d3.layout.force()
-    .on("tick", tick)
-    .charge(function(d) { return d._children ? -d.size / 100 : -30; })
-    .linkDistance(function(d) { return d.target._children ? 80 : 30; })
-    .size([w, h - 160]);
-
-var vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
-
+    root,
+    force,
+    vis;
 
 function update() {
   var nodes = flattenD3(root),
@@ -302,15 +293,33 @@ window.getColumns = function(root)
 	        	}
     		
     		 } );
+    		 
+    		 
+	vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+    
+    
+    root = window.jsonTree ;
+  	root.fixed = true;
+  	root.x = w / 2;
+  	root.y = h / 2 - 80;
+  		
+  		
+	force = d3.layout.force()
+    .on("tick", tick)
+    .charge(function(d) { return d._children ? -d.size / 100 : -30; })
+    .linkDistance(function(d) { return d.target._children ? 80 : 30; })
+    .size([w, h - 160]);
+
+
+  		
+  	update();
+  		
     		
        	};
        	
-       	  root = window.jsonTree ;
-  		 root.fixed = true;
-  		root.x = w / 2;
-  		root.y = h / 2 - 80;
-  		update();
-       	
+  		       	
       })(f);
 
       // Read in the image file as a data URL.
