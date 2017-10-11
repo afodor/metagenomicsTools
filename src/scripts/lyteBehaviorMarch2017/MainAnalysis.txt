@@ -103,7 +103,7 @@ for( t in tissues )
 	
 	myFrame$adjustedpValuesGroupFromMixed<- p.adjust( myFrame$pValuesGroupFromMixed, method = "BH" )
 	myFrame$adjustedpValuesSexFromMixed<- p.adjust( myFrame$pValuesSexFromMixed, method = "BH" )
-	myFrame$pValuesSexGroupFromMixedInteraction<- p.adjust( myFrame$pValuesSexGroupFromMixedInteraction, method = "BH" )
+	myFrame$adjustedInteraction<- p.adjust( myFrame$pValuesSexGroupFromMixedInteraction, method = "BH" )
 	myFrame$pValuesCageAdjust<- p.adjust( myFrame$pValuesCage, method = "BH" )
 	
 	
