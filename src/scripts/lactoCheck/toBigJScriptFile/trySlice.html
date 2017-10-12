@@ -107,6 +107,11 @@ function click(d) {
     d.children = d._children;
     d._children = null;
   }
+  
+  var table = $('#bigTable').DataTable();
+ 
+  table.search( d["rdptaxa"]).draw(); 
+  
   update();
 }
 
