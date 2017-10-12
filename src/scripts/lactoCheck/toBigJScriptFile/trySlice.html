@@ -34,10 +34,11 @@ var w = 600,
     link,
     root,
     force,
-    vis;
+    vis,
+    nodes;
 
 function update() {
-  var nodes = flattenD3(root),
+  nodes = flattenD3(root),
       links = d3.layout.tree().links(nodes);
 
   // Restart the force layout.
@@ -82,6 +83,111 @@ function update() {
   // Exit any old nodes.
   node.exit().remove();
 }
+
+arrangeForcePlot = function(arrangeChildren, root)
+{		
+	var topNode = root;
+	
+	if( arrangeChildren && lastSelected)
+	{
+		topNode = lastSelected;
+	}
+
+	var displayNodes = nodes;
+	
+	for( var x=0; x < displayNodes.length; x++)
+	{
+		displayNodes[x].fixed =false;
+		
+		if( arrangeChildren == false)
+			displayNodes[x].userMoved=false
+		
+		if(  arrangeChildren &&  topNode == displayNodes[x].parentDataNode )
+		{
+			displayNodes[x].fixed=true;
+			displayNodes[x].userMoved = true;
+		}
+	}
+	
+	numVisibleArray = [];
+	numAssignedArray = [];
+	
+	for( var x=0; x <= statics.getMaxLevel(); x++)
+	{
+		numVisibleArray.push(0);
+		numAssignedArray.push(0);
+	}
+	
+	// todo: this should not be hard coded
+	var localMaxLevel = 0;
+	
+	var nodesToRun = nodes;
+	
+	if( arrangeChildren && lastSelected )
+	{
+		nodesToRun = [];
+		
+		function addNodeAndChildren(aNode)
+		{
+			nodesToRun.push(aNode);
+			localMaxLevel = Math.max(aNode.nodeDepth, localMaxLevel);
+			
+			if( aNode.children)
+				for( var x=0; x < aNode.children.length; x++)
+					addNodeAndChildren(aNode.children[x]);
+		}
+		
+		addNodeAndChildren(lastSelected);
+
+	}
+	
+	for( var x=0; x < nodesToRun.length; x++ )
+	{
+		numVisibleArray[nodesToRun[x].nodeDepth] = numVisibleArray[nodesToRun[x].nodeDepth]+ 1;
+	}
+	
+	// if we are not arranging to a child node
+	// the root is at the top of the tree in the center of the screen
+	if( topNode == statics.getRoot())
+	{
+		topNode.xMap[thisID] =  w / 2.0  + 20.0;
+		topNode.yMap[thisID] = h /2.0;
+	}
+	
+	var radius = parseFloat( Math.min(w,h))/2.0;
+	
+	radius = radius - radius * parseFloat(aDocument.getElementById("gravitySlider").value)/100.0;
+
+	var localMinLevel = 0.0;
+	
+	if(  arrangeChildren &&  lastSelected)
+	{
+		radius = radius / aDocument.getElementById("localGravity").value;
+		localMinLevel = topNode.nodeDepth;
+	}
+	
+	localMinLevel = parseFloat(localMinLevel);
+		
+	var piTwice= 2.0* Math.PI ;
+	
+	var range = parseFloat( statics.getMaxLevel() - localMinLevel)
+	for( var x=0; x < nodesToRun.length; x++) if( nodesToRun[x].doNotShow==false ) 
+	{
+		var aPosition = parseFloat(numAssignedArray[nodesToRun[x].nodeDepth])
+				/numVisibleArray[nodesToRun[x].nodeDepth];
+		
+		var aRad = (parseFloat(nodesToRun[x].nodeDepth)- localMinLevel)/range * radius;
+		nodesToRun[x].xMap[thisID] = topNode.xMap[thisID]- 
+			aRad * Math.cos( piTwice * aPosition) ;
+		nodesToRun[x].yMap[thisID]  = aRad * Math.sin( piTwice *  aPosition) + topNode.yMap[thisID];
+		numAssignedArray[nodesToRun[x].nodeDepth] = numAssignedArray[nodesToRun[x].nodeDepth]+ 1;
+	}
+	
+	animationOn = false;
+	stopOnChild = true;
+	
+}
+
 
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
@@ -131,16 +237,19 @@ function flattenD3(root) {
 }
 
 window.globalID = 1;
+window.level = 0
 
 // Returns a list of all nodes under the root.
 window.flatten= function (root, parent) 
 {
   var myNodes = [];
   
+  window.level++;
   function addNodeAndChildren( aNode,parent) 
   {
 	if( aNode != null) 
 	{
+		aNode.nodeDepth =  window.level;
 		myNodes.push(aNode);
 		aNode.id = window.globalID
 		window.globalID++;
@@ -156,6 +265,7 @@ window.flatten= function (root, parent)
 		}
 	}
 
+	window.level--;
   root.parentId= 0;  
   addNodeAndChildren(root,null);
   return myNodes;
@@ -319,6 +429,8 @@ window.getColumns = function(root)
 
 
   		
+  	update();
+  	arrangeForcePlot();
   	update();
   		
     		
