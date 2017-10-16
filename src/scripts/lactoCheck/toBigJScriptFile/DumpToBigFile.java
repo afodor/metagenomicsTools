@@ -10,9 +10,9 @@ import java.util.List;
 
 public class DumpToBigFile
 {
-	private static final int BYTE_LENGTH = 20;
+	public static final int BYTE_LENGTH = 20;
 	
-	private static byte[] getPaddedString(int i) throws Exception
+	public static byte[] getPaddedString(int i) throws Exception
 	{
 		String s= Integer.toString(i);
 		
@@ -39,7 +39,7 @@ public class DumpToBigFile
 	
 	public static void main(String[] args) throws Exception
 	{
-		List<File> jpegs = getJPegs();
+		List<File> jpegs = getJPegs(new File("C:\\lactoCheck\\rdp"));
 		
 		File jsonFile = new File(
 				"C:\\Users\\afodor\\git\\metagenomicsTools\\src\\scripts\\lactoCheck\\toBigJScriptFile\\lactoExample.json");
@@ -112,20 +112,18 @@ public class DumpToBigFile
 		
 	}
 	
-	private static class Holder
+	public static class Holder
 	{
-		File f;
-		String name;
-		int start;
-		int stop;
+		public File f;
+		public String name;
+		public int start;
+		public int stop;
 	}
 	
 	
-	private static List<File> getJPegs()
+	public static List<File> getJPegs(File topDir)
 	{
 		List<File> list = new ArrayList<File>();
-		
-		File topDir =new File("C:\\lactoCheck\\rdp");
 		
 		for(String s : topDir.list())
 			if( s.endsWith(".jpg"))
