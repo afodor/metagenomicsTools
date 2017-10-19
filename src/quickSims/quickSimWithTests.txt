@@ -48,7 +48,7 @@ for( i in 1:numRows)
 	
 	pValues[i] <- t.test(myData[i,groupA],myData[i,groupB])$p.value
 	aTitle <- paste("gene", i, "p=", format(pValues[i],3))
-	boxplot(myData[i,groupA], myData[i,groupB])
+	boxplot(myData[i,groupA], myData[i,groupB],main=aTitle)
 }
 
 dev.off() # flush that pdf!
