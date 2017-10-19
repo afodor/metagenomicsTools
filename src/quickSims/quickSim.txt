@@ -3,7 +3,6 @@ rm(list=ls())
 
 numRows = 3000
 numCols = 10
-for( i in 1:numCols)
 
 myFrame <- data.frame(1:numRows)
 
@@ -11,15 +10,14 @@ myFrame <- data.frame(1:numRows)
 #likely, there are much better ways to do this!
 names(myFrame)[1] <- "tempColumn"
 
+aMean = 1000
+aVar = 100
 for( i in 1: numCols)
 {
 		vals <- vector(length=numRows)
 		
 		for( j in 1:numRows)
 		{
-			aMean = j /10
-			aMean = max( aMean,5)
-			aVar = aMean+ 5* aMean 
 			aVal = round( max( rnorm(1,mean=aMean,sd=sqrt(aVar)), 1))
 			vals[j] = aVal
 		}
