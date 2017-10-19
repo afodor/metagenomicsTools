@@ -40,15 +40,19 @@ pValues  <- vector()
 pdf("plots.pdf")
 myData <- data.matrix(myFrame)
 
-#8 graphs per page
-par(mfrow=c(4,2))
+#4 graphs per page
+par(mfrow=c(2,2))
 
 for( i in 1:numRows)
 {
 	
 	pValues[i] <- t.test(myData[i,groupA],myData[i,groupB])$p.value
 	aTitle <- paste("gene", i, "p=", format(pValues[i],3))
-	boxplot(myData[i,groupA], myData[i,groupB],main=aTitle)
+	data<- myData[1,]
+	condition <-  factor( c(rep("A",50),rep("B",50)))
+	someFrame <- data.frame(data,condition)
+	plot(data ~ condition,title=aTitle)
+	stripchart(data ~ condition, data = someFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])
 }
 
 dev.off() # flush that pdf!
