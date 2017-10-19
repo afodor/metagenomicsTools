@@ -29,3 +29,12 @@ for( i in 1: numCols)
 
 myFrame["tempColumn"] <- NULL
 row.names(myFrame) <- paste("Gene_",1:numRows,sep="")
+
+# run t-tests on each sample
+
+pValues  <- vector()
+
+for( i in 1:numRows)
+{
+
+}
