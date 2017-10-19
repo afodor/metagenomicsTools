@@ -32,9 +32,25 @@ row.names(myFrame) <- paste("Gene_",1:numRows,sep="")
 
 # run t-tests on each sample
 
+groupA <- 1:50
+groupB <- 51:100
+
+setwd("c:\\temp")
 pValues  <- vector()
+pdf("plots.pdf")
+myData <- data.matrix(myFrame)
+
+#8 graphs per page
+par(mfrow=c(4,2))
 
 for( i in 1:numRows)
 {
-
+	
+	pValues[i] <- t.test(myData[i,groupA],myData[i,groupB])$p.value
+	aTitle <- paste("gene", i, "p=", format(pValues[i],3))
+	boxplot(myData[i,groupA], myData[i,groupB])
 }
+
+dev.off() # flush that pdf!
+
+hist(pValues,breaks=20)
