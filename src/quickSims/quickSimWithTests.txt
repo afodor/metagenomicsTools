@@ -48,10 +48,10 @@ for( i in 1:numRows)
 	
 	pValues[i] <- t.test(myData[i,groupA],myData[i,groupB])$p.value
 	aTitle <- paste("gene", i, "p=", format(pValues[i],3))
-	data<- myData[1,]
+	data<- myData[i,]
 	condition <-  factor( c(rep("A",50),rep("B",50)))
 	someFrame <- data.frame(data,condition)
-	plot(data ~ condition,title=aTitle)
+	plot(data ~ condition,main=aTitle)
 	stripchart(data ~ condition, data = someFrame,vertical = TRUE, pch = 21, add=TRUE, ylab = names[index])
 }
 
