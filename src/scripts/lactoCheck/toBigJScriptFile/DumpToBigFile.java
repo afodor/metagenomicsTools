@@ -109,6 +109,7 @@ public class DumpToBigFile
 		bos.flush();  bos.close();
 		
 		System.out.println(outFile.length() + " " + last);
+		System.out.println(tableString);
 		
 	}
 	

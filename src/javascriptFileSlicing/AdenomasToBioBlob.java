@@ -15,7 +15,7 @@ public class AdenomasToBioBlob
 {
 	public static void main(String[] args) throws Exception
 	{
-		List<File> jpegs = new ArrayList<File>(); //getJPegs();
+		List<File> jpegs = DumpToBigFile.getJPegs(new File("C:\\AdenomasForRoshonda\\spreadsheets"));
 		
 		File jsonFile = new File(
 				"C:\\Users\\afodor\\git\\afodor.github.io\\ismeJRDP_CaseControl.json");
@@ -41,7 +41,10 @@ public class AdenomasToBioBlob
 			h.stop =  (int)(h.start + f.length()-1);
 			h.f = f;
 			last = h.stop;
-			h.name = f.getName();
+			//todo: Need a rational way to deal with bugs with spaces in their name.
+			// Biolock J need to have a consistent policy for bug names
+			// or have an alternative primary key 
+			h.name = f.getName().replaceAll(" .jpg", ".jpg");
 			list.add(h);
 		}
 		
@@ -85,6 +88,7 @@ public class AdenomasToBioBlob
 		bos.flush();  bos.close();
 		
 		System.out.println(outFile.length() + " " + last);
+		System.out.println(tableString);
 		
 	}
 }

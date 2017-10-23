@@ -6,7 +6,14 @@ library(lmtest)
 
 setwd("C:\\AdenomasForRoshonda\\spreadsheets")
 
-fileName = "pivoted_genusasColumnsLogNormalPlusCaseControl.txt"
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for( taxa in taxaLevels)
+{	
+	
+
+fileName = paste( "pivoted_", taxa, "asColumnsLogNormalPlusCaseControl.txt",sep="")
 myT <- read.table(fileName, header=TRUE, sep ="\t")
 		
 numCols <- ncol(myT)
@@ -26,7 +33,7 @@ normalityTestPValues <- vector()
 #par(mfrow=c(2,2))
 
 for( i in 3:ncol(myT))
-if( sum( myT[,i] >0 ) > nrow(myT) /4 )
+#if( sum( myT[,i] >0 ) > nrow(myT) /4 )
 {
 	myFrame <- data.frame( logBug = myT[,i],isCase = (myT$caseControl == "case")	)
 	myLm <- lm( myFrame$logBug ~ myFrame$isCase )
@@ -73,3 +80,4 @@ myFrame <- myFrame [order(myFrame$lmPValues),]
 write.table(myFrame, file="pValues.txt", sep="\t", col.names=NA)
 
 
+}
