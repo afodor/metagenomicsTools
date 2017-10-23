@@ -22,8 +22,8 @@ averageLogAll <- vector()
 sdAll <- vector()
 normalityTestPValues <- vector()
 
-pdf("genus.pdf")
-par(mfrow=c(2,2))
+#pdf("genus.pdf")
+#par(mfrow=c(2,2))
 
 for( i in 3:ncol(myT))
 if( sum( myT[,i] >0 ) > nrow(myT) /4 )
@@ -43,6 +43,8 @@ if( sum( myT[,i] >0 ) > nrow(myT) /4 )
 	lmPValues[index] <- anova(myLm)$"Pr(>F)"[1]
 	names[index] <- names( myT)[i]
 
+	jpeg(file=paste(names[index], ".jpg", space=""))
+
 	normalityTestPValues[index] <- ks.test( myFrame$logBug, "pnorm", mean = mean(myFrame$logBug),
 						sd =sd(myFrame$logBug) )$p.value
 	
@@ -50,13 +52,18 @@ if( sum( myT[,i] >0 ) > nrow(myT) /4 )
 		boxplot( as.numeric(myFrame$logBug) ~ myFrame$isCase, 
 				ylab = paste("log10(",names[index],")",sep=""),main = graphMain , xlab="is Case")
 		stripchart(logBug ~ isCase, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )
+		
+		dev.off();
+		
 		myHist <- hist( myFrame$logBug, breaks=20,prob=TRUE, 
 					main = paste( "p=", format(normalityTestPValues[index],digits=3) ))
 		normVals <- dnorm( myHist$mids, mean=mean(myFrame$logBug), sd= sd(myFrame$logBug)  )
 		lines( myHist$mids, normVals, col="RED")
+		
+	
 }
 
-dev.off()
+#dev.off()
 
 myFrame <- data.frame(names,averageLogCase,averageLogControl,pValuesWilcoxon,averageLogAll,lmPValues,
 					sdAll)
