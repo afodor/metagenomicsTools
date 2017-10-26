@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 
-public class GatherAllCSSSemaphoreAndFutureTask
+public class GatherAllCSSSimpleSemaphore
 {
 	public static final File SEQUENCE_DIR = new File( "C:\\AdenomasForRoshonda\\OriginalFiles");
 	

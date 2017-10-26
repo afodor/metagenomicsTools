@@ -16,7 +16,6 @@ public class GatherAllGCBlockingQueue
 	public static final File SEQUENCE_DIR = new File( "C:\\AdenomasForRoshonda\\OriginalFiles");
 	
 	private static final List<Float> resultsList = Collections.synchronizedList(new ArrayList<Float>());
-	private static final AtomicLong numberDone = new AtomicLong();
 	private static final AtomicLong numJobsSubmitted = new AtomicLong(0);
 	private static final int NUM_WORKERS = 4;
 	
