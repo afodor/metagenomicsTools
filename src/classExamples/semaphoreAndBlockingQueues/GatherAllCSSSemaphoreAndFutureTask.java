@@ -1,0 +1,72 @@
+package classExamples.semaphoreAndBlockingQueues;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
+
+import parsers.FastaSequence;
+import parsers.FastaSequenceOneAtATime;
+
+public class GatherAllCSSSemaphoreAndFutureTask
+{
+	public static final File SEQUENCE_DIR = new File( "C:\\AdenomasForRoshonda\\OriginalFiles");
+	
+	private static final List<Float> resultsList = Collections.synchronizedList(new ArrayList<Float>());
+	private static final int NUM_WORKERS = 4;
+	
+	private static FutureTask<List<Float>> getResultsListAsFuture(Semaphore semaphore, File inputFile)
+	{
+		return new FutureTask<>( new Callable<List<Float>>()
+		{
+			public List<Float> call() throws Exception 
+			{
+				List<Float> threadLocalList = new ArrayList<>();
+				
+				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFile);
+				
+				for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
+					threadLocalList.add(fs.getGCRatio());
+				
+				semaphore.release();
+				return threadLocalList;
+				
+			};
+		}
+		);
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		long startTime = System.currentTimeMillis();
+		
+		Semaphore semaphore = new Semaphore(4);
+		
+		String[] fileNames = SEQUENCE_DIR.list();
+		
+		
+		for(  String fileName : fileNames )
+		{	
+			if( fileName.endsWith(".fas"))
+			{
+				semaphore.acquire();
+				File seqFile = new File(SEQUENCE_DIR.getAbsolutePath() + File.separator + fileName);
+				FutureTask<List<Float>> fTask = getResultsListAsFuture(semaphore, seqFile);
+			}
+		}
+		
+		
+		
+		while( ! queue.isEmpty() || numJobsSubmitted.get() > 0  )
+			Thread.yield();
+		
+		System.out.println("Finished with " + resultsList.size());
+		System.out.println("Time " + ((System.currentTimeMillis() - startTime) / 1000f));
+	}
+}
