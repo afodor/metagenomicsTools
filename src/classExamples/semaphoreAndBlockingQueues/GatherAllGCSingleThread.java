@@ -7,7 +7,7 @@ import java.util.List;
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
 
-public class WriteAllGCSingleThread
+public class GatherAllGCSingleThread
 {
 	public static final File SEQUENCE_DIR = new File( "C:\\AdenomasForRoshonda\\OriginalFiles");
 	
