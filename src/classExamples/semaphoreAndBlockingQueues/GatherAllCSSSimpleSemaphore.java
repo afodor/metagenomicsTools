@@ -45,7 +45,6 @@ public class GatherAllCSSSimpleSemaphore
 				ex.printStackTrace();
 				System.exit(1);
 			}
-	
 		}
 	}
 	
@@ -76,7 +75,7 @@ public class GatherAllCSSSimpleSemaphore
 			numAcquired++;
 		}
 		
-		System.out.println("Finished with " + resultsList.size());
+		System.out.println("Simple semaphore finished with " + resultsList.size());
 		System.out.println("Time " + ((System.currentTimeMillis() - startTime) / 1000f));
 	}
 }

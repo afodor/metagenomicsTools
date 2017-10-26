@@ -77,7 +77,7 @@ public class GatherAllGCBlockingQueue
 		while( ! queue.isEmpty() || numJobsSubmitted.get() > 0  )
 			Thread.yield();
 		
-		System.out.println("Finished with " + resultsList.size());
+		System.out.println("BQ finished with " + resultsList.size());
 		System.out.println("Time " + ((System.currentTimeMillis() - startTime) / 1000f));
 	}
 }
