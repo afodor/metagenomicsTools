@@ -21,12 +21,13 @@ public class GatherAllCSSSemaphoreAndFutureTask
 	private static final List<Float> resultsList = Collections.synchronizedList(new ArrayList<Float>());
 	private static final int NUM_WORKERS = 4;
 	
-	private static FutureTask<List<Float>> getResultsListAsFuture(Semaphore semaphore, File inputFile)
+	private static FutureTask<List<Float>> getResultsListAsFuture(File inputFile, Semaphore semaphore)
 	{
 		return new FutureTask<>( new Callable<List<Float>>()
 		{
 			public List<Float> call() throws Exception 
 			{
+				System.out.println(inputFile.getAbsolutePath());
 				List<Float> threadLocalList = new ArrayList<>();
 				
 				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFile);
@@ -50,6 +51,7 @@ public class GatherAllCSSSemaphoreAndFutureTask
 		
 		String[] fileNames = SEQUENCE_DIR.list();
 		
+		List<FutureTask<List<Float>>> tasks = new ArrayList<>();
 		
 		for(  String fileName : fileNames )
 		{	
@@ -57,14 +59,14 @@ public class GatherAllCSSSemaphoreAndFutureTask
 			{
 				semaphore.acquire();
 				File seqFile = new File(SEQUENCE_DIR.getAbsolutePath() + File.separator + fileName);
-				FutureTask<List<Float>> fTask = getResultsListAsFuture(semaphore, seqFile);
+				FutureTask<List<Float>> fTask = getResultsListAsFuture( seqFile,semaphore);
+				tasks.add(fTask);
+				new Thread(fTask).start();;
 			}
 		}
 		
-		
-		
-		while( ! queue.isEmpty() || numJobsSubmitted.get() > 0  )
-			Thread.yield();
+		for( FutureTask<List<Float>> fTask : tasks)
+			resultsList.addAll(fTask.get());
 		
 		System.out.println("Finished with " + resultsList.size());
 		System.out.println("Time " + ((System.currentTimeMillis() - startTime) / 1000f));
