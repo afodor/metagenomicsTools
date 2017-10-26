@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.concurrent.Callable;import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.Semaphore;
 
@@ -17,27 +17,38 @@ public class GatherAllCSSSimpleSemaphore
 	
 	private static final List<Float> resultsList = Collections.synchronizedList(new ArrayList<Float>());
 	private static final int NUM_WORKERS = 4;
-	
-	private static FutureTask<List<Float>> getResultsListAsFuture(File inputFile, Semaphore semaphore)
+
+	private static class Worker implements Runnable
 	{
-		return new FutureTask<>( new Callable<List<Float>>()
+		private final File file;
+		private final Semaphore semaphore;
+		
+		public Worker(File file, Semaphore semaphore)
 		{
-			public List<Float> call() throws Exception 
+			this.file = file;
+			this.semaphore = semaphore;
+		}
+		
+		@Override
+		public void run()
+		{
+			try
 			{
-				System.out.println(inputFile.getAbsolutePath());
-				List<Float> threadLocalList = new ArrayList<>();
-				
-				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFile);
+				System.out.println(file.getAbsolutePath());
+				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(file);
 				
 				for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
-					threadLocalList.add(fs.getGCRatio());
+					resultsList.add(fs.getGCRatio());
 				
 				semaphore.release();
-				return threadLocalList;
-				
-			};
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+				System.exit(1);
+			}
+	
 		}
-		);
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -48,22 +59,24 @@ public class GatherAllCSSSimpleSemaphore
 		
 		String[] fileNames = SEQUENCE_DIR.list();
 		
-		List<FutureTask<List<Float>>> tasks = new ArrayList<>();
-		
 		for(  String fileName : fileNames )
 		{	
 			if( fileName.endsWith(".fas"))
 			{
 				semaphore.acquire();
 				File seqFile = new File(SEQUENCE_DIR.getAbsolutePath() + File.separator + fileName);
-				FutureTask<List<Float>> fTask = getResultsListAsFuture( seqFile,semaphore);
-				tasks.add(fTask);
-				new Thread(fTask).start();;
+				Worker w = new Worker(seqFile, semaphore);
+				new Thread(w).start();;
 			}
 		}
 		
-		for( FutureTask<List<Float>> fTask : tasks)
-			resultsList.addAll(fTask.get());
+		int numAcquired =0;
+		
+		while( numAcquired < NUM_WORKERS )
+		{
+			semaphore.acquire();
+			numAcquired++;
+		}
 		
 		System.out.println("Finished with " + resultsList.size());
 		System.out.println("Time " + ((System.currentTimeMillis() - startTime) / 1000f));
