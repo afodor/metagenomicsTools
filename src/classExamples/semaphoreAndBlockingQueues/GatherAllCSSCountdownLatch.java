@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;
@@ -32,7 +31,6 @@ public class GatherAllCSSCountdownLatch
 		{
 			try
 			{
-				System.out.println(file.getAbsolutePath());
 				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(file);
 				
 				for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence() )
