@@ -15,7 +15,8 @@ public class GatherAllCSSSemaphoreAndFutureTask
 {
 	public static final File SEQUENCE_DIR = new File( "C:\\AdenomasForRoshonda\\OriginalFiles");
 	
-	private static final List<Float> resultsList = Collections.synchronizedList(new ArrayList<Float>());
+	// list does not need to be synchronized
+	private static final List<Float> resultsList = new ArrayList<Float>();
 	private static final int NUM_WORKERS = 4;
 	
 	private static FutureTask<List<Float>> getResultsListAsFuture(File inputFile, Semaphore semaphore)
@@ -24,7 +25,7 @@ public class GatherAllCSSSemaphoreAndFutureTask
 		{
 			public List<Float> call() throws Exception 
 			{
-				System.out.println(inputFile.getAbsolutePath());
+				//System.out.println(inputFile.getAbsolutePath());
 				List<Float> threadLocalList = new ArrayList<>();
 				
 				FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(inputFile);
