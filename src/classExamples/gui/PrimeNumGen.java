@@ -64,7 +64,7 @@ public class PrimeNumGen extends JFrame
 				public void actionPerformed(ActionEvent e)
 				{
 					
-					String num = JOptionPane.showInputDialog("Enter First Number");
+					String num = JOptionPane.showInputDialog("Enter a large integer");
 					Integer max =null;
 					
 					try
