@@ -65,6 +65,8 @@ public class ConfigReader
 	
 	public static final String SANDRA_RIVER_JUNE_2012_Dir = "SANDRA_RIVER_JUNE_2012_Dir";
 	
+	public static final String CHINA_DIR_DEC_2017 = "CHINA_DIR_DEC_2017"; 
+	
 	public static final String METABOLITES_CASE_CONTROL = "METABOLITES_CASE_CONTROL";
 	public static final String SVM_DIR = "SVM_DIR";
 	public static final String JANELLE_RNA_SEQ_DIR = "JANELLE_RNA_SEQ_DIR";
@@ -194,6 +196,14 @@ public class ConfigReader
 	{
 		return getConfigReader().getAProperty(LYTE_NOV_2016_DIR);
 	}
+
+
+	public static String getChinaDecember2017Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(CHINA_DIR_DEC_2017);	
+	}
+	
+
 	
 	public static String getLactoCheckDir() throws Exception
 	{
