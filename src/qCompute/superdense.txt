@@ -34,3 +34,31 @@ aBit <- aBit / sqrt(2)
 (h %*% aBit)  # Hadamard gate operation yields pure |0>
 # 2nd bit is pure 0 ; answer is 00
 
+
+# for the not gate operator first bit operator is superimposed 0 and 1
+aBit <- matrix( c(1,1), nrow=2)
+aBit <- aBit / sqrt(2)
+(h %*% aBit)  # Hadamard gate operation yields pure |0>
+
+
+# for the z operator...
+aState <- matrix(c(1,1),nrow=2)
+aState <- aState / sqrt(2)
+z %*% aState
+#yields |0> - |1> for the first bit
+aBit <- matrix( c(1,-1), nrow=2)
+aBit <- aBit / sqrt(2)
+(h %*% aBit)  # Hadamard gate operation yields pure |1> ; 2nd bit is |0>
+
+# for the xz operator (maybe)
+
+h %*% (z %*% (x %*% aState)) # Hadamard operator yields pure |1>
+
+# intermediate state is maybe mislabeled in lecture?
+(z %*% (x %*% aState))  # seems is maybe 01 - 10 not 11 - 10 ???
+                        # then not gate would yield 01 - 11 
+                        # 2nd is pure 1,1 ---- maybe ???
+                        
+                        
+
+
