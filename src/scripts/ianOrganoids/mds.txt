@@ -1,0 +1,40 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ianOrganoids\\tables")
+
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+findAColumn <- function(name,myT)
+{
+	numCols = ncol(myT)
+	for( i in 1:numCols)
+	{
+		if(  names(myT)[i] == name )
+		{
+			return (i)
+		}
+		
+	}
+}
+
+for(taxa in taxaLevels ) 
+{
+	fileName <- paste0( taxa, "_LogNormalCountsMetaMerged.tsv")
+	myT <- read.table(fileName, header=TRUE,sep="\t",row.names=1,comment.char="@")
+	
+	colEnd <- findAColumn("BarcodeSequence", myT)
+	aData <- myT[1:(colEnd-1)]	
+	
+	myPCOA <- capscale(aData~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_",taxa,".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_",taxa,".txt", sep=""), sep="\t")	
+
+	myMerge <- cbind( myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste("mergeWithPcoa",taxa,".txt",sep=""))
+}
