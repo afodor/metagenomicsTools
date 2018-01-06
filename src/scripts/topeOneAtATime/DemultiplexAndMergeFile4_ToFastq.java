@@ -17,7 +17,7 @@ public class DemultiplexAndMergeFile4_ToFastq
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> primerMap = DemultiplexFile3.getAllMap(3);
+		HashMap<String, String> primerMap = DemultiplexFile3.getAllMap(4);
 		
 		HashSet<String> primer3Seqs = new HashSet<String>();
 		
