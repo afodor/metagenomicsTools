@@ -1,0 +1,64 @@
+rm(list=ls())
+
+# attempt to code along with Superdense coding: how to send two bits using one qubit
+# https://www.youtube.com/watch?v=w5rCn593Dig
+
+h <- matrix(c(1,1,1,-1),nrow=2)
+h <- h / sqrt(2)
+
+cnot <- matrix( c(1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0), nrow =4)
+
+x <- matrix( c(0,1,1,0), nrow=2)
+z <- matrix( c(1,0,0,-1),nrow=2)
+
+(q1 <- matrix( c(1,0), nrow=2))
+
+(q2 <- matrix( c(1,0), nrow=2))
+
+(q1 <- h %*% q1 ) 
+
+qState <- matrix( c(1, 0, 1, 0), nrow=4)
+qState <- qState / sum(qState ^ 2) 	
+
+# put in superpositions state
+qState <- cnot %*% qState
+qState <- qState / sum(qState ^ 2) 	
+
+
+# for the identity case
+qState <- cnot %*% qState  # this is 00 + 10 
+
+# first bit is superimposed 0 and 1
+aBit <- matrix( c(1,1), nrow=2)
+aBit <- aBit / sqrt(2)
+(h %*% aBit)  # Hadamard gate operation yields pure |0>
+# 2nd bit is pure 0 ; answer is 00
+
+
+# for the not gate operator first bit operator is superimposed 0 and 1
+aBit <- matrix( c(1,1), nrow=2)
+aBit <- aBit / sqrt(2)
+(h %*% aBit)  # Hadamard gate operation yields pure |0>
+
+
+# for the z operator...
+aState <- matrix(c(1,1),nrow=2)
+aState <- aState / sqrt(2)
+z %*% aState
+#yields |0> - |1> for the first bit
+aBit <- matrix( c(1,-1), nrow=2)
+aBit <- aBit / sqrt(2)
+(h %*% aBit)  # Hadamard gate operation yields pure |1> ; 2nd bit is |0>
+
+# for the xz operator (maybe)
+
+h %*% (z %*% (x %*% aState)) # Hadamard operator yields pure |1>
+
+# intermediate state is maybe mislabeled in lecture?
+(z %*% (x %*% aState))  # seems is maybe 01 - 10 not 11 - 10 ???
+                        # then not gate would yield 01 - 11 
+                        # 2nd is pure 1,1 ---- maybe ???
+                        
+                        
+
+
