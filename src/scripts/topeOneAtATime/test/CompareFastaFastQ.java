@@ -3,7 +3,6 @@ package scripts.topeOneAtATime.test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -74,6 +73,19 @@ public class CompareFastaFastQ
 					
 					map.put(fastqFile, fastaFile);
 				}
+				else if( s.indexOf("_2") != -1)
+				{
+					String firstToken = new StringTokenizer(s, "_").nextToken();
+					
+					File fastaFile = new File("C:\\topeOneAtATime\\file3\\fastaOut\\" 
+						+ firstToken	+ "_4_set3.fasta.gz");
+					
+					if( ! fastaFile.exists())
+						throw new Exception("Could not find " + fastaFile.getAbsolutePath());
+					
+					map.put(fastqFile, fastaFile);
+				}
+					
 			}
 		
 		return map;
