@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,25 +13,8 @@ import java.util.zip.GZIPInputStream;
 import parsers.FastQ;
 import utils.ConfigReader;
 
-public class DemultiplexAndMergeFile3_ToFastq
+public class DemultiplexAndMergeFile4_ToFastq
 {
-	static BufferedWriter getFromMap(HashMap<String, BufferedWriter> map, String key) throws Exception
-	{
-		BufferedWriter writer = map.get(key);
-		
-		if( writer == null)
-		{
-			writer = new BufferedWriter(new FileWriter(new File( 
-					ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-					"fastqOut" + File.separator + 
-					key + ".fastq")));
-			
-			map.put(key, writer);
-		}
-		
-		return writer;
-	}
-	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, String> primerMap = DemultiplexFile3.getAllMap(3);
@@ -57,38 +39,36 @@ public class DemultiplexAndMergeFile3_ToFastq
 			primer2Seqs.add(splits[1]);
 		}
 		
-		HashMap<String, BufferedWriter> writerMapForward = new HashMap<String, BufferedWriter>();
-		HashMap<String, BufferedWriter> writerMapBackward = new HashMap<String, BufferedWriter>();
-		
+		HashMap<String, BufferedWriter> writerMap = new HashMap<String, BufferedWriter>();
 
 		BufferedReader reader1 = 
-				new BufferedReader(new InputStreamReader( new GZIPInputStream(
-						new FileInputStream(
-								ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-								"file3" + File.separator + 
-								"DBCreads_R1_001.fastq.gz"))));
+				new BufferedReader(new InputStreamReader( 
+						new GZIPInputStream( new FileInputStream(
+						ConfigReader.getTopeOneAtATimeDir()+ File.separator + 
+						"file4" + File.separator + 
+									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R1.fastq.gz"))));
 		
 		BufferedReader reader2 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-								"file3" + File.separator + 
-								File.separator +  "DBCreads_R2_001.fastq.gz"))));
+								ConfigReader.getTopeOneAtATimeDir()+ File.separator + 
+								"file4" + File.separator + 
+								File.separator + 
+									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R2.fastq.gz"))));
 		
 		BufferedReader reader3 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-								"file3" + File.separator + 
-							File.separator + 	"DBCreads_R3_001.fastq.gz"))));
+								ConfigReader.getTopeOneAtATimeDir()+ File.separator + 
+								"file4" + File.separator + 	File.separator + 
+									"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R3.fastq.gz"))));
 		
 		BufferedReader reader4 = 
 				new BufferedReader(new InputStreamReader( 
 						new GZIPInputStream( new FileInputStream(
-								ConfigReader.getTopeOneAtATimeDir() + File.separator + 
-								"file3" + File.separator + 
-										"DBCreads_R4_001.fastq.gz"))));
-		
+								ConfigReader.getTopeOneAtATimeDir()+ File.separator + 
+								"file4" + File.separator + 			
+								"APJR3_20151123_M01994_IL100064365_NoIndex_L001_R4.fastq.gz"))));		
 		long numDone = 0;
 		long numMatched = 0;
 		for( FastQ fastq2 = FastQ.readOneOrNull(reader2); fastq2 != null;
@@ -135,14 +115,14 @@ public class DemultiplexAndMergeFile3_ToFastq
 							{
 								gotOne = true;
 								
-								BufferedWriter writerForward= 
-										getFromMap(writerMapForward, id +"_file3_1");
+								BufferedWriter forwardWriter= 
+									DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_1.fastq");
 								
-								BufferedWriter writerBackwards= 
-										getFromMap(writerMapForward, id +"_file3_2");
+								BufferedWriter backwardsWriter= 
+										DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_2.fastq");
 								
-								fastq1.writeToFile(writerForward);
-								fastq4.writeToFile(writerBackwards);
+								fastq1.writeToFile(forwardWriter);
+								fastq4.writeToFile(backwardsWriter);
 							}		
 						}
 					}
@@ -170,12 +150,7 @@ public class DemultiplexAndMergeFile3_ToFastq
 		if(  FastQ.readOneOrNull(reader4) != null )
 			throw new Exception("No");
 		
-		for( BufferedWriter writer : writerMapForward.values())
-		{
-			writer.flush();  writer.close();
-		}
-		
-		for( BufferedWriter writer : writerMapBackward.values())
+		for( BufferedWriter writer : writerMap.values())
 		{
 			writer.flush();  writer.close();
 		}
