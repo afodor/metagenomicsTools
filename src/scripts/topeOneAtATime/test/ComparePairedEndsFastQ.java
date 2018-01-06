@@ -17,6 +17,8 @@ public class ComparePairedEndsFastQ
 		
 		for(File f : pairedMap.keySet())
 			checkPairedEnds(f, pairedMap.get(f));
+		
+		System.out.println("finished");
 	}
 	
 	private static void checkPairedEnds(File fastQ1, File fastQ2) throws Exception
