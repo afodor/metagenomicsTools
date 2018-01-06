@@ -21,6 +21,11 @@ public class CompareFastaFastQ
 		for(File f : map.keySet())
 			checkFastQToFastA(f, map.get(f));
 		
+		map = get3Files();
+		
+		for(File f : map.keySet())
+			checkFastQToFastA(f, map.get(f));
+		
 		System.out.println("Finished");
 	}
 	
@@ -68,7 +73,7 @@ public class CompareFastaFastQ
 					String firstToken = new StringTokenizer(s, "_").nextToken();
 					
 					File fastaFile = new File("C:\\topeOneAtATime\\file4\\fastaOut\\" 
-						+ firstToken	+ "_1_set4.fasta.gz");
+						+ firstToken	+ "_1_set1.fasta.gz");
 					
 					if( ! fastaFile.exists())
 						throw new Exception("Could not find " + fastaFile.getAbsolutePath());
@@ -80,7 +85,7 @@ public class CompareFastaFastQ
 					String firstToken = new StringTokenizer(s, "_").nextToken();
 					
 					File fastaFile = new File("C:\\topeOneAtATime\\file4\\fastaOut\\" 
-						+ firstToken	+ "_4_set4.fasta.gz");
+						+ firstToken	+ "_4_set1.fasta.gz");
 					
 					if( ! fastaFile.exists())
 						throw new Exception("Could not find " + fastaFile.getAbsolutePath());
