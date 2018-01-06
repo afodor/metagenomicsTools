@@ -116,10 +116,10 @@ public class DemultiplexAndMergeFile4_ToFastq
 								gotOne = true;
 								
 								BufferedWriter forwardWriter= 
-									DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_1.fastq");
+									DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_1");
 								
 								BufferedWriter backwardsWriter= 
-										DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_2.fastq");
+										DemultiplexAndMergeFile3_ToFastq.getFromMap(writerMap, id +"_file4_2");
 								
 								fastq1.writeToFile(forwardWriter);
 								fastq4.writeToFile(backwardsWriter);
