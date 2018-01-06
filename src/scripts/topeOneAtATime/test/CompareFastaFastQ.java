@@ -17,7 +17,10 @@ public class CompareFastaFastQ
 {
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<File, File> map3 = get3Files();
 		
+		for(File f : map3.keySet())
+			checkFastQToFastA(f, map3.get(f));
 	}
 	
 	private static void checkFastQToFastA(File fastQ, File fasta) throws Exception
