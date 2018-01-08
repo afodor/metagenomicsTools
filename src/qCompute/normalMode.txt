@@ -5,8 +5,17 @@ t =0
 
 seqs <- seq(0, 10, .01)
 
+colors <- c("red","blue","green","orange","pink","yellow")
+
 while(TRUE)
 {
-	plot(seqs, cos( t) * sin( pi * seqs/5))
+	plot(seqs, cos( t) * sin( pi * seqs/1),col=colors[1])
+	
+	for( n in 2:length(colors))
+	{
+		lines(	seqs, cos( t) * sin( pi * seqs/n),col=colors[n])
+	}
+	
 	t = t + increment
+	Sys.sleep(.25)
 }
