@@ -1,21 +1,27 @@
 rm(list=ls())
 
-increment = 1
+increment = pi / 100
 t =0
 
-seqs <- seq(0, 10, .01)
+seqs <- seq(-2*pi, 2*pi, pi/100)
 
 colors <- c("red","blue","green","orange","pink","yellow")
 
+
 while(TRUE)
 {
-	plot(seqs, cos( t) * sin( pi * seqs/1),col=colors[1])
+	par(mfrow=c(2,1))
+	Sys.sleep(.05)
+	vals <- cos( (pi/10) * t) * sin( 1* pi * seqs/(4*pi))
+	plot(seqs, vals)
 	
-	for( n in 2:length(colors))
+	for( i in 2:7)
 	{
-		lines(	seqs, cos( t) * sin( pi * seqs/n),col=colors[n])
+		lines(seqs, cos( t) * sin( i* pi * seqs/(4*pi)),col=colors[i])
+		vals = vals + cos( t) * sin( i* pi * seqs/(4*pi))
 	}
 	
+	plot(seqs,vals)
 	t = t + increment
-	Sys.sleep(.25)
+	
 }
