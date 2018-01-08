@@ -5,7 +5,10 @@ t =0
 
 seqs <- seq(-2*pi, 2*pi, pi/100)
 
-colors <- c("red","blue","green","orange","pink","yellow")
+colors <- c("red","blue","green","orange","pink","yellow","black","cyan","dodgerblue",
+ "firebrick",
+ "forestgreen",
+ "gold")
 
 
 while(TRUE)
@@ -13,7 +16,7 @@ while(TRUE)
 	par(mfrow=c(2,1))
 	Sys.sleep(.05)
 	vals <- cos( (pi/10) * t) * sin( 1* pi * seqs/(4*pi))
-	plot(seqs, vals)
+	plot(seqs, vals,ylim=c(-1,1))
 	
 	for( i in 2:7)
 	{
