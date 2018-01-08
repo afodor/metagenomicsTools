@@ -18,7 +18,7 @@ while(TRUE)
 	vals <- cos( (pi/10) * t) * sin( 1* pi * seqs/(4*pi))
 	plot(seqs, vals,ylim=c(-1,1))
 	
-	for( i in 2:7)
+	for( i in 2:length(colors))
 	{
 		lines(seqs, cos( t) * sin( i* pi * seqs/(4*pi)),col=colors[i])
 		vals = vals + cos( t) * sin( i* pi * seqs/(4*pi))
