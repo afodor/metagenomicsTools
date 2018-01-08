@@ -1,0 +1,12 @@
+rm(list=ls())
+
+increment = 1
+t =0
+
+seqs <- seq(0, 10, .01)
+
+while(TRUE)
+{
+	plot(seqs, cos( t) * sin( pi * seqs/5))
+	t = t + increment
+}
