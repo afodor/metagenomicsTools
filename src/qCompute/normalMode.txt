@@ -3,7 +3,7 @@ rm(list=ls())
 increment = pi / 100
 t =0
 
-seqs <- seq(-2*pi, 2*pi, pi/100)
+seqs <- seq(0, 4*pi, pi/100)
 
 colors <- c("red","blue","green","orange","pink","yellow","black","cyan","dodgerblue",
  "firebrick",
