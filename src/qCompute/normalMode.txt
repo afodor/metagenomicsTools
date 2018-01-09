@@ -14,14 +14,13 @@ colors <- c("red","blue","green","orange","pink","yellow","black","cyan","dodger
 while(TRUE)
 {
 	par(mfrow=c(2,1))
-	Sys.sleep(.05)
 	vals <- cos( (pi/10) * t) * sin( 1* pi * seqs/(4*pi))
 	plot(seqs, vals,ylim=c(-1,1))
 	
-	for( i in 2:length(colors))
+	for( i in 2:2)
 	{
-		lines(seqs, cos( t) * sin( i* pi * seqs/(4*pi)),col=colors[i])
-		vals = vals + cos( t) * sin( i* pi * seqs/(4*pi))
+		lines(seqs, cos( (pi/10) *t) * sin( i* pi * seqs/(4*pi)),col=colors[i])
+		vals = vals + cos((pi/10) * t) * sin( i* pi * seqs/(4*pi))
 	}
 	
 	plot(seqs,vals)
