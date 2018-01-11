@@ -151,6 +151,12 @@ public class ConfigReader
 	public static final String TANYA_BLOOD_DIR= "TANYA_BLOOD_DIR";
 	public static final String TANYA_BLOOD_DIR2= "TANYA_BLOOD_DIR2";
 	
+	public static final String IAN_ORGANOID_DIRECTORY = "IAN_ORGANOID_DIRECTORY";
+	
+	public static String getIanOrganoidDirectory() throws Exception
+	{
+		return getConfigReader().getAProperty(IAN_ORGANOID_DIRECTORY);
+	}
 	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
