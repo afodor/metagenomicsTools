@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class OldOTUToLevel
@@ -87,6 +88,10 @@ public class OldOTUToLevel
 		}
 		
 		writer.flush();  writer.close();
+		
+		OtuWrapper wrapper = new OtuWrapper(outFile);
+		wrapper.writeNormalizedLoggedDataToFile(new File(ConfigReader.getIanOrganoidDirectory() + 
+				File.separator + level +"OldSheetLogNorm.txt"));
 	}
 	
 	private static String getTaxa(String lastColumn, String level) throws Exception

@@ -10,7 +10,7 @@ taxaLevels <- c("p","c","o","f","g")
 
 for(taxa in taxaLevels ) 
 {
-	fileName <- paste0( taxa, "OldSheet.txt")
+	fileName <- paste0( taxa, "OldSheetLogNorm.txt")
 	myT <- read.table(fileName, header=TRUE,sep="\t",row.names=1,comment.char="@")
 	
 	myPCOA <- capscale(myT~1,distance="bray")
