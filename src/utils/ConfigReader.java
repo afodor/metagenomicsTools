@@ -151,6 +151,8 @@ public class ConfigReader
 	public static final String TANYA_BLOOD_DIR= "TANYA_BLOOD_DIR";
 	public static final String TANYA_BLOOD_DIR2= "TANYA_BLOOD_DIR2";
 	
+	public static final String EMILY_JAN_2018_DIR = "EMILY_JAN_2018_DIR";
+	
 	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
@@ -160,6 +162,11 @@ public class ConfigReader
 	public static String getEmilyTransferProject() throws Exception
 	{
 		return getConfigReader().getAProperty(EMILY_TRANSFER_PROJECT);
+	}
+	
+	public static String getEmilyJan2018Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(EMILY_JAN_2018_DIR);
 	}
 	
 	public static String getBioLockJDir() throws Exception
