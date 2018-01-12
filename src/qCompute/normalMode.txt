@@ -1,0 +1,29 @@
+rm(list=ls())
+
+increment = pi / 100
+t =0
+
+seqs <- seq(0, 4*pi, pi/100)
+
+colors <- c("red","blue","green","orange","pink","yellow","black","cyan","dodgerblue",
+ "firebrick",
+ "forestgreen",
+ "gold")
+
+
+while(TRUE)
+{
+	par(mfrow=c(2,1))
+	vals <- cos( (pi/10) * t) * sin( 1* pi * seqs/(4*pi))
+	plot(seqs, vals,ylim=c(-1,1))
+	
+	for( i in 2:2)
+	{
+		lines(seqs, cos( (pi/10) *t) * sin( i* pi * seqs/(4*pi)),col=colors[i])
+		vals = vals + cos((pi/10) * t) * sin( i* pi * seqs/(4*pi))
+	}
+	
+	plot(seqs,vals)
+	t = t + increment
+	
+}
