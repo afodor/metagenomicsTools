@@ -17,6 +17,21 @@ import utils.Translate;
 
 public class Demultiplex
 {
+	/*
+	 * 
+AN703 R1: http://www.med.unc.edu/uploads/hupdj.undetermin.gz
+AN703 Index: http://www.med.unc.edu/uploads/hfyeg.undetermin.gz
+AN703 R2: http://www.med.unc.edu/uploads/gwhib.undetermin.gz
+
+AN40 R1: http://www.med.unc.edu/uploads/gwqqu.an40undete.gz
+AN40 Index: http://www.med.unc.edu/uploads/fexko.an40undete.gz
+AN40 R2: http://www.med.unc.edu/uploads/ibmhs.an40undete.gz
+
+AN34 R1: http://www.med.unc.edu/uploads/sspwa.an34undete.gz
+AN34 Index: http://www.med.unc.edu/uploads/aszxo.an34undete.gz
+AN34 R2: http://www.med.unc.edu/uploads/uvkap.an34undete.gz
+	 */
+	
 	public static void main(String[] args) throws Exception
 	{
 		demultiplexASample("AN703"
@@ -24,6 +39,19 @@ public class Demultiplex
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "hfyeg.undetermin.gz"), 
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "gwhib.undetermin.gz"),
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator + "2018-01-10_AN703_16S metadata.txt"));
+		
+		demultiplexASample("AN40"
+				, new File( ConfigReader.getEmilyJan2018Dir() + File.separator+  "gwqqu.an40undete.gz"), 
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "fexko.an40undete.gz"), 
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "ibmhs.an40undete.gz"),
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator + "2018-01-10_AN40_16S metadata.txt"));
+		
+		demultiplexASample("AN34"
+				, new File( ConfigReader.getEmilyJan2018Dir() + File.separator+  "sspwa.an34undete.gz"), 
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "aszxo.an34undete.gz"), 
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "uvkap.an34undete.gz"),
+				new File(ConfigReader.getEmilyJan2018Dir() + File.separator + "2018-01-10_AN34_16S metadata.txt"));
+
 	}
 	
 	private static BufferedWriter getOrCreateWriter(String filepath, HashMap<String, BufferedWriter> map)
@@ -44,12 +72,13 @@ public class Demultiplex
 	private static void demultiplexASample(String suffix, File r1File, File indexFile, File r2File,
 				File metaFile) throws Exception
 	{
+		System.out.println("\n\nStart " + metaFile.getAbsolutePath());
 		HashMap<String, BufferedWriter> writerMap = new HashMap<>();
 		
 		HashMap<String, String> barcodeMap = getSequenceToBarcodeMap(metaFile);
 		
-		for(String s : barcodeMap.keySet())
-			System.out.println(s + " "+  barcodeMap.get(s));
+		//for(String s : barcodeMap.keySet())
+		//	System.out.println(s + " "+  barcodeMap.get(s));
 		
 		BufferedReader reader1 = new BufferedReader((new InputStreamReader( new GZIPInputStream(
 				new FileInputStream(r1File)))));
@@ -60,7 +89,7 @@ public class Demultiplex
 		
 		long index =0;
 		double success =0;
-		for( FastQ fastq1 = FastQ.readOneOrNull(reader1) ; fastq1 != null; FastQ.readOneOrNull(reader1) )
+		for( FastQ fastq1 = FastQ.readOneOrNull(reader1) ; fastq1 != null; fastq1 =FastQ.readOneOrNull(reader1) )
 		{
 			index++;
 			FastQ fastq2 = FastQ.readOneOrNull(reader2);
@@ -73,7 +102,11 @@ public class Demultiplex
 			//if( ! fastq1.getFirstTokenOfHeader().equals(fastqIndex.getFirstTokenOfHeader()))
 				//throw new Exception("non identical header");
 			
-			String barcode = barcodeMap.get(fastqIndex.getSequence());
+			String keySeq = fastqIndex.getSequence();
+			keySeq = Translate.reverseTranscribe(keySeq);
+			keySeq = keySeq.substring(1);
+			
+			String barcode = barcodeMap.get(keySeq);
 			
 			if( barcode != null)
 			{
@@ -86,7 +119,7 @@ public class Demultiplex
 						"fastaOut" + File.separator + barcode +"_" + suffix + "_2.fasta";
 				
 				BufferedWriter writer1 = getOrCreateWriter(outfasta1, writerMap);
-				BufferedWriter writer2 = getOrCreateWriter(outfasta1, writerMap);
+				BufferedWriter writer2 = getOrCreateWriter(outfasta2, writerMap);
 				
 				writer1.write(">"+ fastq1.getFirstTokenOfHeader() + "\n");
 				writer1.write(fastq1.getSequence() + "\n");
@@ -99,11 +132,11 @@ public class Demultiplex
 			}
 			else
 			{
-				System.out.println("Could not find " + fastqIndex.getSequence());
-				System.exit(1);
+			//	System.out.println("Could not find " + fastqIndex.getSequence());
+			//	System.exit(1);
 			}
 			
-			if( index % 100000 ==0)
+			if( index % 1000000 ==0)
 				System.out.println(success +  " " + index + " " + (success/index));
 		}
 		
@@ -121,6 +154,8 @@ public class Demultiplex
 		reader1.close();
 		reader2.close();
 		indexReader.close();
+		
+		System.out.println("Finished " + success +  " " + index + " " + (success/index));
 	}
 	
 	private static HashMap<String, String> getSequenceToBarcodeMap( File metaFile) throws Exception
@@ -136,14 +171,13 @@ public class Demultiplex
 			StringTokenizer sToken =new StringTokenizer(s.replaceAll("\"", ""), "\t");
 			
 			String value = new String(sToken.nextToken());
-			String key = sToken.nextToken().trim();
 			
 			//System.out.println(key+  " " + value);
 			
 			//skipping a column not sure what is going on with the tabs here
 			if( !value.startsWith("Mouse"))
 			{
-				key = Translate.reverseTranscribe(key);
+				String key = sToken.nextToken().trim();
 				
 				if(map.containsKey(key))
 					throw new Exception("Duplicate key " + key);
@@ -155,7 +189,7 @@ public class Demultiplex
 			}
 			else
 			{
-				System.out.println("Warning invalid line " + key + " " + value);
+				System.out.println("Warning invalid line " + value);
 			}
 			
 		}
