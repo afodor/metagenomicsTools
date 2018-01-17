@@ -48,8 +48,8 @@ public class Demultiplex
 		
 		HashMap<String, String> barcodeMap = getSequenceToBarcodeMap(metaFile);
 		
-		for(String s : barcodeMap.keySet())
-			System.out.println(s + " "+  barcodeMap.get(s));
+		//for(String s : barcodeMap.keySet())
+		//	System.out.println(s + " "+  barcodeMap.get(s));
 		
 		BufferedReader reader1 = new BufferedReader((new InputStreamReader( new GZIPInputStream(
 				new FileInputStream(r1File)))));
@@ -73,7 +73,11 @@ public class Demultiplex
 			//if( ! fastq1.getFirstTokenOfHeader().equals(fastqIndex.getFirstTokenOfHeader()))
 				//throw new Exception("non identical header");
 			
-			String barcode = barcodeMap.get(fastqIndex.getSequence());
+			String keySeq = fastqIndex.getSequence();
+			keySeq = Translate.reverseTranscribe(keySeq);
+			keySeq = keySeq.substring(1);
+			
+			String barcode = barcodeMap.get(keySeq);
 			
 			if( barcode != null)
 			{
@@ -86,7 +90,7 @@ public class Demultiplex
 						"fastaOut" + File.separator + barcode +"_" + suffix + "_2.fasta";
 				
 				BufferedWriter writer1 = getOrCreateWriter(outfasta1, writerMap);
-				BufferedWriter writer2 = getOrCreateWriter(outfasta1, writerMap);
+				BufferedWriter writer2 = getOrCreateWriter(outfasta2, writerMap);
 				
 				writer1.write(">"+ fastq1.getFirstTokenOfHeader() + "\n");
 				writer1.write(fastq1.getSequence() + "\n");
@@ -99,8 +103,8 @@ public class Demultiplex
 			}
 			else
 			{
-				System.out.println("Could not find " + fastqIndex.getSequence());
-				System.exit(1);
+			//	System.out.println("Could not find " + fastqIndex.getSequence());
+			//	System.exit(1);
 			}
 			
 			if( index % 100000 ==0)
@@ -136,14 +140,13 @@ public class Demultiplex
 			StringTokenizer sToken =new StringTokenizer(s.replaceAll("\"", ""), "\t");
 			
 			String value = new String(sToken.nextToken());
-			String key = sToken.nextToken().trim();
 			
 			//System.out.println(key+  " " + value);
 			
 			//skipping a column not sure what is going on with the tabs here
 			if( !value.startsWith("Mouse"))
 			{
-				key = Translate.reverseTranscribe(key);
+				String key = sToken.nextToken().trim();
 				
 				if(map.containsKey(key))
 					throw new Exception("Duplicate key " + key);
@@ -155,7 +158,7 @@ public class Demultiplex
 			}
 			else
 			{
-				System.out.println("Warning invalid line " + key + " " + value);
+				System.out.println("Warning invalid line " + value);
 			}
 			
 		}
