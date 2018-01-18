@@ -32,6 +32,7 @@ E637
 G873
 	 */
 	
+	/*
 	public static final String[] EXPECTED_CONSERVED = 
 		{
 				"F214",
@@ -46,6 +47,16 @@ G873
 				"E637",
 				"G873"
 		};
+		*/
+	
+	public static final String[] EXPECTED_CONSERVED = 
+		{
+		"F405",
+		"C503",
+		"H536",
+		"E637",
+		"G873"
+			};
 	
 	private static boolean isConserved(String seq)
 	{
@@ -104,7 +115,7 @@ G873
 		BlossumMatrix bm = new BlossumMatrix("C:\\Users\\corei7\\git\\metagenomicsTools\\src\\scripts\\katieBlast\\blossom50.txt");
 		
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( ConfigReader.getKatieBlastDir() + File.separator + 
-				"matching_Conserved_2YAJ.txt")));
+				"matching_Conserved_2YAJ_from5.fas")));
 		
 		String topSeq = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
 				"2YAJ.txt").get(0).getSequence();
@@ -134,11 +145,16 @@ G873
 				{
 					targets.add(targetSeq);	
 					numConserved++;
+					/*
 					writer.write(fs.getFirstTokenOfHeader() + " " + nf.format( 100*(1-pa.getDistance()))+  "\n");
 					writer.write(pa.getFirstSequence() + "\n");
 					writer.write(pa.getMiddleString() + "\n");
 					writer.write(pa.getSecondSequence() + "\n");
 					writer.write("\n\n");
+					*/
+					
+					writer.write(fs.getHeader() + "\n");
+					writer.write(fs.getSequence() + "\n");
 					writer.flush();
 				}
 					
