@@ -1,10 +1,13 @@
 package scripts.emilyJan2018;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -37,6 +40,20 @@ public class AddMetadata
 		addToMap(meta1, map, "AN703");
 		addToMap(meta2, map, "AN40");
 		addToMap(meta3, map,"AN34");
+		
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
+			System.out.println(taxa);
+			
+			File inFile = new File(ConfigReader.getEmilyJan2018Dir() + File.separator + 
+					"spreadsheets" + File.separator  + "pivoted_" + taxa + "asColumnsLogNormal.txt");
+			
+			File outFile = new File(ConfigReader.getEmilyJan2018Dir() + File.separator + 
+					"spreadsheets" + File.separator  + "pivoted_" + taxa + "asColumnsLogNormalPlusMeta.txt");
+			
+			writeAMeta(inFile, outFile, top1, map);
+		}
 	}
 	
 	private static void addToMap(File inFile, HashMap<String, String> map, String suffix) throws Exception
@@ -61,9 +78,49 @@ public class AddMetadata
 		reader.close();
 	}
 	
-	private static void writeAMeta(File inFile, File outFile, String firstLine ) throws Exception
+	private static void writeAMeta(File inFile, File outFile, String firstLine,
+			HashMap<String, String> map ) throws Exception
 	{
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
+		BufferedWriter writer  = new BufferedWriter(new FileWriter(outFile));
+		
+		String topLine = reader.readLine();
+		String[] topSplits = topLine.split("\t");
+		
+		writer.write(topSplits[0] + "\tkey_donorID\tdonorID\treadNum\t" + firstLine  );
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write("\n");
+		
+		for(String s = reader.readLine();  s != null; s =reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			writer.write( splits[0] );
+			
+			String[] keySplits = splits[0].split("_");
+			String keyPlusDonor = keySplits[0] + "_" + keySplits[1];
+			writer.write("\t" + keyPlusDonor);
+			writer.write("\t" + keySplits[2].charAt(0));
+			String metaLine = map.get(keyPlusDonor);
+			
+			if( metaLine == null)
+				throw new Exception("No");
+			
+			writer.write("\t" + metaLine);
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
+			
+		}
+		
+		reader.close();
+		writer.flush();  writer.close();
 	}
 	
 	private static String getFirstLine(File file) throws Exception
