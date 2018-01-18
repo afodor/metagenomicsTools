@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import creOrthologs.kmers.chunk.MetadataFileLine;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 
@@ -103,20 +104,33 @@ public class AddMetadata
 			
 			String[] keySplits = splits[0].split("_");
 			String keyPlusDonor = keySplits[0] + "_" + keySplits[1];
-			writer.write("\t" + keyPlusDonor);
-			writer.write("\t" + keySplits[2].charAt(0));
+			
 			String metaLine = map.get(keyPlusDonor);
 			
 			if( metaLine == null)
 				throw new Exception("No");
 			
-			writer.write("\t" + metaLine);
+			String[] metaSplits = metaLine.split("\t");
 			
-			for( int x=1; x < splits.length; x++)
-				writer.write("\t" + splits[x]);
-			
-			writer.write("\n");
-			
+			if( metaSplits.length > 6)
+			{
+				writer.write("\t" + keyPlusDonor);
+				writer.write("\t" + keySplits[1]);
+				writer.write("\t" + keySplits[2].charAt(0));
+
+				
+				writer.write("\t" + metaLine);
+				
+				for( int x=1; x < splits.length; x++)
+					writer.write("\t" + splits[x]);
+				
+				writer.write("\n");
+
+			}
+			else
+			{
+				System.out.println("Warning: Problems with meta file ...." + keyPlusDonor);
+			}
 		}
 		
 		reader.close();
