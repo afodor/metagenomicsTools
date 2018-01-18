@@ -37,12 +37,21 @@ public class WriteUniqueSequences
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getKatieBlastDir() + File.separator + "matching_2YAJ.txt")));
 		
+		int numWritten = 0;
+		HashSet<String> includedSeqs = new HashSet<>();
+		
 		for(FastaSequence fs : seqMap.values())
 		{
-			writer.write(">" + fs.getHeader() + "\n");
-			writer.write( fs.getSequence() + "\n");
+			if( ! includedSeqs.contains(fs.getSequence()))
+			{
+				writer.write(fs.getHeader() + "\n");
+				writer.write( fs.getSequence() + "\n");
+				includedSeqs.add(fs.getSequence());
+				numWritten++;
+			}
 		}
 		
+		System.out.println(numWritten);
 		writer.flush();  writer.close();
 		
 	}
