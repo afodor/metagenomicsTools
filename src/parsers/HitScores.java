@@ -66,6 +66,30 @@ public class HitScores implements Comparable<HitScores>
 		}
 	}
 	
+	public static HashMap<String, HitScores> getTopHitsAsTargetMap(File inFile) throws Exception
+	{
+		List<HitScores> list = getAsList(inFile.getAbsolutePath());
+		
+		HashMap<String, HitScores> map = new HashMap<String,HitScores>();
+		
+		for(HitScores hs : list)
+		{
+			System.out.println(hs.getTargetId());
+			HitScores aHit = map.get(hs.getTargetId());
+			
+			if( aHit == null)
+			{
+				aHit = hs;
+				map.put(hs.getTargetId(), hs);
+			}
+			
+			if( hs.bitScore > aHit.bitScore)
+				map.put(hs.getTargetId(), hs);
+		}
+		
+		return map;
+	}
+	
 	public static HitScores getTopHitByBitScore(File file) throws Exception
 	{
 		List<HitScores> list = getAsList(file, file.getName().toLowerCase().endsWith("gz"));

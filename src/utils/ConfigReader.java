@@ -154,11 +154,17 @@ public class ConfigReader
 	public static final String EMILY_JAN_2018_DIR = "EMILY_JAN_2018_DIR";
 	public static final String IAN_ORGANOID_DIRECTORY = "IAN_ORGANOID_DIRECTORY";
 	
+	public static final String KATIE_BLAST_DIR = "KATIE_BLAST_DIR";
+	
 	public static String getIanOrganoidDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(IAN_ORGANOID_DIRECTORY);
 	}
 
+	public static String getKatieBlastDir() throws Exception
+	{
+		return getConfigReader().getAProperty(KATIE_BLAST_DIR);
+	}
 	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
