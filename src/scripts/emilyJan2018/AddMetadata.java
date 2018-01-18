@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import creOrthologs.kmers.chunk.MetadataFileLine;
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -53,7 +53,10 @@ public class AddMetadata
 			File outFile = new File(ConfigReader.getEmilyJan2018Dir() + File.separator + 
 					"spreadsheets" + File.separator  + "pivoted_" + taxa + "asColumnsLogNormalPlusMeta.txt");
 			
-			writeAMeta(inFile, outFile, top1, map);
+			File unnormalized = new File(ConfigReader.getEmilyJan2018Dir() + File.separator + 
+					"spreadsheets" + File.separator  + "pivoted_" + taxa + "asColumns.txt");
+			
+			writeAMeta(inFile, outFile, unnormalized, top1, map);
 		}
 	}
 	
@@ -79,9 +82,10 @@ public class AddMetadata
 		reader.close();
 	}
 	
-	private static void writeAMeta(File inFile, File outFile, String firstLine,
+	private static void writeAMeta(File inFile, File outFile, File unnormalizedFile, String firstLine,
 			HashMap<String, String> map ) throws Exception
 	{
+		OtuWrapper wrapper = new OtuWrapper(unnormalizedFile);
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		BufferedWriter writer  = new BufferedWriter(new FileWriter(outFile));
@@ -89,7 +93,7 @@ public class AddMetadata
 		String topLine = reader.readLine();
 		String[] topSplits = topLine.split("\t");
 		
-		writer.write(topSplits[0] + "\tkey_donorID\tdonorID\treadNum\t" + firstLine  );
+		writer.write(topSplits[0] + "\tkey_donorID\tdonorID\treadNum\tshannonDiveristy\tnumReads\t" + firstLine  );
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -117,7 +121,9 @@ public class AddMetadata
 				writer.write("\t" + keyPlusDonor);
 				writer.write("\t" + keySplits[1]);
 				writer.write("\t" + keySplits[2].charAt(0));
-
+				
+				writer.write("\t" + wrapper.getShannonEntropy(splits[0]));
+				writer.write("\t" + wrapper.getNumberSequences(splits[0]));
 				
 				writer.write("\t" + metaLine);
 				
