@@ -1,13 +1,17 @@
 package scripts.katieBlast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
+import parsers.FastaSequenceOneAtATime;
 import utils.ConfigReader;
 
 public class CheckConservedFromFullBlastOutput
@@ -24,15 +28,37 @@ public class CheckConservedFromFullBlastOutput
 		for( Integer i : innerMap.keySet())
 				System.out.println("\t\t" + i + " " + innerMap.get(i));
 		
-		int numFound =0;
+		HashSet<String> found = new HashSet<>();
 		
 		for( String target : map.keySet())
 		{
 			if( CheckConserved.isConserved(map.get(target)) )
-				numFound++;
+				found.add(target);
 		}
 		
-		System.out.println(numFound);
+		System.out.println(found.size());
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKatieBlastDir() +
+				File.separator + "matchingFromLocalAlignment.txt")));
+		
+		HashSet<String> foundSeqs = new HashSet<>();
+		
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(ConfigReader.getKatieBlastDir() + File.separator
+				+ 	"all.fst");
+		
+		for(FastaSequence fs = fsoat.getNextSequence(); fs != null; fs= fsoat.getNextSequence())
+		{
+			if( found.contains(fs.getFirstTokenOfHeader()))
+			{
+				foundSeqs.add(fs.getSequence());
+				
+				writer.write(">" + fs.getHeader() + "\n");
+				writer.write(">" + fs.getSequence() + "\n");
+			}
+		}
+		
+		System.out.println(foundSeqs.size() + " unique ");
+		writer.flush();  writer.close();
 	}
 	
 	/*
