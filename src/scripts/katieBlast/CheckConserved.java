@@ -32,7 +32,6 @@ E637
 G873
 	 */
 	
-	/*
 	public static final String[] EXPECTED_CONSERVED = 
 		{
 				"F214",
@@ -47,8 +46,8 @@ G873
 				"E637",
 				"G873"
 		};
-		*/
-	
+
+	/*
 	public static final String[] EXPECTED_CONSERVED = 
 		{
 		"F405",
@@ -57,6 +56,7 @@ G873
 		"E637",
 		"G873"
 			};
+			*/
 	
 	private static boolean isConserved(String seq)
 	{

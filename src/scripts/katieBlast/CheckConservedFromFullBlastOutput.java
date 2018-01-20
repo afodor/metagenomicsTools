@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
@@ -18,16 +19,10 @@ public class CheckConservedFromFullBlastOutput
 		
 		System.out.println("Got map size " + map.size());
 		
-		/*
-		for(String target : map.keySet())
-		{
-			HashMap<Integer, Character> innerMap = map.get(target);
-			System.out.println("\t" + target);
+		HashMap<Integer, Character> innerMap = map.get("SRS011239.206985-T1-C");
 			
-			for( Integer i : innerMap.keySet())
+		for( Integer i : innerMap.keySet())
 				System.out.println("\t\t" + i + " " + innerMap.get(i));
-		}
-		*/
 		
 		int numFound =0;
 		
@@ -63,7 +58,7 @@ public class CheckConservedFromFullBlastOutput
 				
 				if( innerMap == null)
 				{
-					innerMap = new HashMap<>();
+					innerMap = new LinkedHashMap<>();
 					outerMap.put(target, innerMap);
 				}
 				
@@ -122,7 +117,7 @@ public class CheckConservedFromFullBlastOutput
 								
 								if( mapVal == null)
 								{
-									innerMap.put(queryStartPos + index, targetC);
+									innerMap.put(queryStartPos + index-1, targetC);
 								}
 								else
 								{
