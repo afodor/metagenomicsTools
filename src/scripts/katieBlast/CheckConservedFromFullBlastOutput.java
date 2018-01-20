@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
@@ -28,7 +29,7 @@ public class CheckConservedFromFullBlastOutput
 		for( Integer i : innerMap.keySet())
 				System.out.println("\t\t" + i + " " + innerMap.get(i));
 		
-		HashSet<String> found = new HashSet<>();
+		HashSet<String> found = new LinkedHashSet<>();
 		
 		for( String target : map.keySet())
 		{
@@ -41,7 +42,7 @@ public class CheckConservedFromFullBlastOutput
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKatieBlastDir() +
 				File.separator + "matchingFromLocalAlignment.txt")));
 		
-		HashSet<String> foundSeqs = new HashSet<>();
+		HashSet<String> foundSeqs = new LinkedHashSet<>();
 		
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(ConfigReader.getKatieBlastDir() + File.separator
 				+ 	"all.fst");
@@ -52,8 +53,8 @@ public class CheckConservedFromFullBlastOutput
 			{
 				foundSeqs.add(fs.getSequence());
 				
-				writer.write(">" + fs.getHeader() + "\n");
-				writer.write(">" + fs.getSequence() + "\n");
+				writer.write(fs.getHeader() + "\n");
+				writer.write(fs.getSequence() + "\n");
 			}
 		}
 		
@@ -66,7 +67,7 @@ public class CheckConservedFromFullBlastOutput
 	 */
 	private static HashMap<String, HashMap<Integer,Character>> getMap(File blastFile) throws Exception
 	{
-		HashMap<String, HashMap<Integer,Character>> outerMap = new HashMap<>();
+		HashMap<String, HashMap<Integer,Character>> outerMap = new LinkedHashMap<>();
 		
 		String refSeq = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
 				"2YAJ.txt").get(0).getSequence();
