@@ -73,7 +73,7 @@ G873
 		return true;
 	}
 	
-	private static boolean isConserved(HashMap<Integer, Character> map) throws Exception
+	static boolean isConserved(HashMap<Integer, Character> map) throws Exception
 	{
 		for( String s : EXPECTED_CONSERVED)
 		{
@@ -81,7 +81,7 @@ G873
 			
 			int position = Integer.parseInt(s.substring(1)) - 1;
 			
-			if(  map.get(position) != c) 
+			if( map.get(position) == null ||   map.get(position) != c) 
 				return false;
 		}
 		

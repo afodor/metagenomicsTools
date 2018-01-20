@@ -13,7 +13,31 @@ public class CheckConservedFromFullBlastOutput
 {
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, HashMap<Integer,Character>> map = 
 		getMap(new File(ConfigReader.getKatieBlastDir() + File.separator + "2YAJToGutFull.txt"));
+		
+		System.out.println("Got map size " + map.size());
+		
+		/*
+		for(String target : map.keySet())
+		{
+			HashMap<Integer, Character> innerMap = map.get(target);
+			System.out.println("\t" + target);
+			
+			for( Integer i : innerMap.keySet())
+				System.out.println("\t\t" + i + " " + innerMap.get(i));
+		}
+		*/
+		
+		int numFound =0;
+		
+		for( String target : map.keySet())
+		{
+			if( CheckConserved.isConserved(map.get(target)) )
+				numFound++;
+		}
+		
+		System.out.println(numFound);
 	}
 	
 	/*
@@ -21,6 +45,8 @@ public class CheckConservedFromFullBlastOutput
 	 */
 	private static HashMap<String, HashMap<Integer,Character>> getMap(File blastFile) throws Exception
 	{
+		HashMap<String, HashMap<Integer,Character>> outerMap = new HashMap<>();
+		
 		String refSeq = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
 				"2YAJ.txt").get(0).getSequence();
 		
@@ -32,6 +58,15 @@ public class CheckConservedFromFullBlastOutput
 			if( s.startsWith(">"))
 			{
 				String target = s.substring(1).trim();
+				
+				HashMap<Integer, Character> innerMap = outerMap.get(target);
+				
+				if( innerMap == null)
+				{
+					innerMap = new HashMap<>();
+					outerMap.put(target, innerMap);
+				}
+				
 				System.out.println(target);
 			
 				for( int x=0;x  < 5; x++)
@@ -57,30 +92,48 @@ public class CheckConservedFromFullBlastOutput
 						
 						sToken.nextToken();
 						
-						int startPos = Integer.parseInt(sToken.nextToken());
+						int queryStartPos = Integer.parseInt(sToken.nextToken());
 						
 						String queryString = sToken.nextToken().trim();
+						
+						reader.readLine();
+						
+						String targetLine = reader.readLine();
+						StringTokenizer targetToken = new StringTokenizer(targetLine);
+						targetToken.nextToken(); targetToken.nextToken();
+						String targetString = targetToken.nextToken();
+						
+						if( ! targetLine.startsWith("Sbjct"))
+							throw new Exception("No");
+					
 						
 						int index =0;
 						for( int x=0; x < queryString.length(); x++)
 						{
-							char c = queryString.charAt(x);
+							char queryC = queryString.charAt(x);
+							char targetC = targetString.charAt(x);
 							
-							if( c != '-')
+							if( queryC != '-')
 							{
-								if( refSeq.charAt(startPos + index-1) != c)
+								if( refSeq.charAt(queryStartPos + index-1) != queryC)
 									throw new Exception("No");
+								
+								Character mapVal = innerMap.get(queryStartPos + index);
+								
+								if( mapVal == null)
+								{
+									innerMap.put(queryStartPos + index, targetC);
+								}
+								else
+								{
+									if( !mapVal.equals(targetC))
+										throw new Exception("No");
+								}
 								
 								index++;
 							}
 						}
 						
-						reader.readLine();
-						
-						String targetLine = reader.readLine();
-						
-						if( ! targetLine.startsWith("Sbjct"))
-							throw new Exception("No");
 						
 						System.out.println(queryLine + "\n" + targetLine + "\n");
 						
@@ -94,6 +147,6 @@ public class CheckConservedFromFullBlastOutput
 		}
 		
 		System.out.println("Scanned " + numScanned);
-		return null;
+		return outerMap;
 	}
 }
