@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
 import utils.ConfigReader;
@@ -20,8 +21,8 @@ public class CheckConservedFromFullBlastOutput
 	 */
 	private static HashMap<String, HashMap<Integer,Character>> getMap(File blastFile) throws Exception
 	{
-		FastaSequence ref = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
-				"2YAJ.txt").get(0);
+		String refSeq = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
+				"2YAJ.txt").get(0).getSequence();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(blastFile));
 		
@@ -51,6 +52,28 @@ public class CheckConservedFromFullBlastOutput
 					{
 						if( ! queryLine.startsWith("Query"))
 							throw new Exception("No " + queryLine);
+						
+						StringTokenizer sToken = new StringTokenizer(queryLine);
+						
+						sToken.nextToken();
+						
+						int startPos = Integer.parseInt(sToken.nextToken());
+						
+						String queryString = sToken.nextToken().trim();
+						
+						int index =0;
+						for( int x=0; x < queryString.length(); x++)
+						{
+							char c = queryString.charAt(x);
+							
+							if( c != '-')
+							{
+								if( refSeq.charAt(startPos + index-1) != c)
+									throw new Exception("No");
+								
+								index++;
+							}
+						}
 						
 						reader.readLine();
 						
