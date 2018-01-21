@@ -61,8 +61,12 @@ expectedLine <- mean( lInersWater ) - mean(lInersCrisp)
 
 lines( c(0,6), c(expectedLine,expectedLine),lty=2 )
 
+xAxis <- c(c(0,0),groupNumber[myT$groupNumber>0] )
+yAxis <- c(lInersCrisp,bug[myT$groupNumber>0]   )
+colors <- c( c("orange", "orange"), colors)
+
 #qpcr
-plot(bug[myT$groupNumber>0] ~ groupNumber[myT$groupNumber>0], main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+plot(yAxis ~ xAxis, main = names(myT)[bugIndex],cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
 #legend("center",c("cesarean","vaginal"),pch=16, col=c("red", "black"),cex=1.3)
 
 
