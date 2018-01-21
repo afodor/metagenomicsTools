@@ -19,12 +19,12 @@ public class CheckConservedFromFullBlastOutput
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<Integer,Character>> map = 
+		HashMap<String, Holder> map = 
 		getMap(new File(ConfigReader.getKatieBlastDir() + File.separator + "2YAJToGutFull.txt"));
 		
 		System.out.println("Got map size " + map.size());
 		
-		HashMap<Integer, Character> innerMap = map.get("SRS011239.206985-T1-C");
+		HashMap<Integer, Character> innerMap = map.get("SRS011239.206985-T1-C").map;
 			
 		for( Integer i : innerMap.keySet())
 				System.out.println("\t\t" + i + " " + innerMap.get(i));
@@ -33,7 +33,7 @@ public class CheckConservedFromFullBlastOutput
 		
 		for( String target : map.keySet())
 		{
-			if( CheckConserved.isConserved(map.get(target)) )
+			if( CheckConserved.isConserved(map.get(target).map) )
 				found.add(target);
 		}
 		
@@ -62,12 +62,19 @@ public class CheckConservedFromFullBlastOutput
 		writer.flush();  writer.close();
 	}
 	
+	private static class Holder
+	{
+		 HashMap<Integer,Character> map = new HashMap<Integer,Character>();
+		 double bitScore;
+		 double eScore;
+	}
+	
 	/*
 	 * Outer key is targetID
 	 */
-	private static HashMap<String, HashMap<Integer,Character>> getMap(File blastFile) throws Exception
+	private static HashMap<String, Holder> getMap(File blastFile) throws Exception
 	{
-		HashMap<String, HashMap<Integer,Character>> outerMap = new LinkedHashMap<>();
+		HashMap<String,Holder> outerMap = new LinkedHashMap<>();
 		
 		String refSeq = FastaSequence.readFastaFile(ConfigReader.getKatieBlastDir() + File.separator + 
 				"2YAJ.txt").get(0).getSequence();
@@ -81,13 +88,13 @@ public class CheckConservedFromFullBlastOutput
 			{
 				String target = s.substring(1).trim();
 				
-				HashMap<Integer, Character> innerMap = outerMap.get(target);
+				Holder h  = outerMap.get(target);
 				
-				if( innerMap == null)
-				{
-					innerMap = new LinkedHashMap<>();
-					outerMap.put(target, innerMap);
-				}
+				if( h != null)
+					throw new Exception("Duplicate");
+				
+				h = new Holder();
+				outerMap.put(target, h);
 				
 				System.out.println(target);
 			
@@ -140,11 +147,11 @@ public class CheckConservedFromFullBlastOutput
 								if( refSeq.charAt(queryStartPos + index-1) != queryC)
 									throw new Exception("No");
 								
-								Character mapVal = innerMap.get(queryStartPos + index);
+								Character mapVal = h.map.get(queryStartPos + index);
 								
 								if( mapVal == null)
 								{
-									innerMap.put(queryStartPos + index-1, targetC);
+									h.map.put(queryStartPos + index-1, targetC);
 								}
 								else
 								{
