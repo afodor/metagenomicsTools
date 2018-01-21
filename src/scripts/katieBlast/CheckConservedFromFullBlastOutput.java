@@ -135,7 +135,7 @@ public class CheckConservedFromFullBlastOutput
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getKatieBlastDir() + File.separator + "annotatedBlastHits.txt"	)));
 		
-		writer.write("target\tbitScore\teScore\tnumMatching\tisUnique\tsubstitutionString\nsequence\n");
+		writer.write("target\tbitScore\teScore\tnumMatching\tisUnique\tsubstitutionString\tsequence\n");
 		
 		HashSet<String> seqs = new HashSet<>();
 		
