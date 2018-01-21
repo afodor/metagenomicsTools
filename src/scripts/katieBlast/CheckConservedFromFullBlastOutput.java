@@ -48,6 +48,25 @@ public class CheckConservedFromFullBlastOutput
 		return val;
 	}
 	
+	static String getConservationString(HashMap<Integer, Character> map) throws Exception
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( String s : EXPECTED_CONSERVED)
+		{
+			char c = s.charAt(0);
+			
+			int position = Integer.parseInt(s.substring(1)) - 1;
+			
+			if( map.get(position) != null ) 
+				buff.append( "" +  c + (position+1) + map.get(position) + " " );
+			else
+				buff.append( "" +  s.charAt(0) + (position+1) + "-" + " " );
+		}
+		
+		return buff.toString().trim();
+	}
+	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -116,7 +135,7 @@ public class CheckConservedFromFullBlastOutput
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getKatieBlastDir() + File.separator + "annotatedBlastHits.txt"	)));
 		
-		writer.write("target\tbitScore\teScore\tnumMatching\tisUnique\tsequence\n");
+		writer.write("target\tbitScore\teScore\tnumMatching\tisUnique\tsubstitutionString\nsequence\n");
 		
 		HashSet<String> seqs = new HashSet<>();
 		
@@ -146,7 +165,8 @@ public class CheckConservedFromFullBlastOutput
 					if( targetSeq == null)
 						throw new Exception("No " + target);
 					
-					writer.write( "\t" +  (!seqs.contains(targetSeq)) + "\t" + targetSeq + "\n");
+					writer.write( "\t" +  (!seqs.contains(targetSeq)) + "\t" +
+							getConservationString(h.map) + "\t" + targetSeq + "\n");
 					writer.flush();
 					
 					seqs.add(targetSeq);
