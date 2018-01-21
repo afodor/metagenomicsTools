@@ -12,7 +12,7 @@ myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
 #bugIndex <- 43
 #bugIndex <- 19
 bugIndex <- 13
-bugIndex <- 12
+#bugIndex <- 12
 
 bug <- myT[,bugIndex]
 groupNumber <- myT$groupNumber
@@ -54,7 +54,7 @@ diffCopy <- myT[,13] - myT[,12]
 plot(diffCopy[myT$groupNumber>0]~ groupNumber[myT$groupNumber>0], main = paste(names(myT)[13],"-", names(myT)[12], " cycle number", sep=""),
 cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
 
-lInersCrisp <- c(39.73, 39.87)
+lwaterCrisp <- c(39.73, 39.87)
 lInersWater <- c(35.96, 36.08)
 
 expectedLine <- mean( lInersWater ) - mean(lInersCrisp)
@@ -62,7 +62,8 @@ expectedLine <- mean( lInersWater ) - mean(lInersCrisp)
 lines( c(0,6), c(expectedLine,expectedLine),lty=2 )
 
 xAxis <- c(c(0,0),groupNumber[myT$groupNumber>0] )
-yAxis <- c(lInersCrisp,bug[myT$groupNumber>0]   )
+#yAxis <- c(lwaterCrisp ,bug[myT$groupNumber>0]   )
+yAxis <- c(lInersWater ,bug[myT$groupNumber>0]   )
 colors <- c( c("orange", "orange"), colors)
 
 #qpcr
