@@ -58,6 +58,7 @@ G873
 		"G873"
 			};
 	
+	
 	private static boolean isConserved(String seq)
 	{
 		for( String s : EXPECTED_CONSERVED)

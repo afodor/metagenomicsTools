@@ -17,10 +17,44 @@ import utils.ConfigReader;
 
 public class CheckConservedFromFullBlastOutput
 {
+	public static final String[] EXPECTED_CONSERVED = 
+		{
+				"F214",
+				"R223",
+				"S344",
+				"G345",
+				"F405",
+				"C503",
+				"E505",
+				"H536",
+				"F537",
+				"E637",
+				"G873"
+		};
+	
+	static int getNumberConserved(HashMap<Integer, Character> map) throws Exception
+	{
+		int val =0;
+		for( String s : EXPECTED_CONSERVED)
+		{
+			char c = s.charAt(0);
+			
+			int position = Integer.parseInt(s.substring(1)) - 1;
+			
+			if( map.get(position) != null && map.get(position) == c) 
+				val++;
+		}
+		
+		return val;
+	}
+	
+	
 	public static void main(String[] args) throws Exception
 	{
+		File blastResultsFile = new File(ConfigReader.getKatieBlastDir() + File.separator + "2YAJToGutFull.txt");
+		
 		HashMap<String, Holder> map = 
-		getMap(new File(ConfigReader.getKatieBlastDir() + File.separator + "2YAJToGutFull.txt"));
+		getMap(blastResultsFile);
 		
 		System.out.println("Got map size " + map.size());
 		
@@ -30,11 +64,14 @@ public class CheckConservedFromFullBlastOutput
 				System.out.println("\t\t" + i + " " + innerMap.get(i));
 		
 		HashSet<String> found = new LinkedHashSet<>();
+		HashSet<String> allblastIDS = new LinkedHashSet<>();
 		
 		for( String target : map.keySet())
 		{
 			if( CheckConserved.isConserved(map.get(target).map) )
 				found.add(target);
+			
+			allblastIDS.add(target);
 		}
 		
 		System.out.println(found.size());
@@ -42,7 +79,7 @@ public class CheckConservedFromFullBlastOutput
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getKatieBlastDir() +
 				File.separator + "matchingFromLocalAlignment.txt")));
 		
-		HashSet<String> foundSeqs = new LinkedHashSet<>();
+		HashMap<String, String> allBlastSeqs = new LinkedHashMap<>();
 		
 		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(ConfigReader.getKatieBlastDir() + File.separator
 				+ 	"all.fst");
@@ -51,22 +88,83 @@ public class CheckConservedFromFullBlastOutput
 		{
 			if( found.contains(fs.getFirstTokenOfHeader()))
 			{
-				foundSeqs.add(fs.getSequence());
-				
 				writer.write(fs.getHeader() + "\n");
 				writer.write(fs.getSequence() + "\n");
 			}
+			
+			if( allblastIDS.contains(fs.getFirstTokenOfHeader()))
+				allBlastSeqs.put(fs.getFirstTokenOfHeader(), fs.getSequence());
 		}
 		
-		System.out.println(foundSeqs.size() + " unique ");
+		System.out.println(allBlastSeqs.size() + " unique ");
 		writer.flush();  writer.close();
+		
+		writeAnnotatedSummary(map, allBlastSeqs, blastResultsFile);
+	}
+	
+	private static void writeAnnotatedSummary(HashMap<String, Holder> map,
+			HashMap<String, String> allBlastSeqs,
+				File blastResultsFile) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(blastResultsFile));
+		
+		while( ! reader.readLine().startsWith("Sequences producing"))
+			;
+		
+		reader.readLine();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getKatieBlastDir() + File.separator + "annotatedBlastHits.txt"	)));
+		
+		writer.write("target\tbitScore\teScore\tnumMatching\tisUnique\tsequence\n");
+		
+		HashSet<String> seqs = new HashSet<>();
+		
+		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
+		{
+			StringTokenizer sToken = new StringTokenizer(s);
+			
+			String target = sToken.nextToken();
+			double bitScore = Double.parseDouble(sToken.nextToken());
+			double eScore = Double.parseDouble(sToken.nextToken());
+			
+			if( eScore < 10e-10)
+			{
+				Holder h = map.get(target);
+				
+				if( h != null)
+				{
+
+					writer.write(target + "\t" + bitScore + "\t" + eScore);
+					
+					String targetSeq = allBlastSeqs.get(target);
+					
+					int numMatch = getNumberConserved(h.map);
+					
+					writer.write("\t" + numMatch);
+					
+					if( targetSeq == null)
+						throw new Exception("No " + target);
+					
+					writer.write( "\t" +  (!seqs.contains(targetSeq)) + "\t" + targetSeq + "\n");
+					writer.flush();
+					
+					seqs.add(targetSeq);
+				}
+				else
+				{
+					System.out.println("Warning could not find holder for " + target + " " + bitScore + " " + eScore);
+				}
+			}
+		}
+			
+		writer.flush();  writer.close();
+		reader.close();
 	}
 	
 	private static class Holder
 	{
 		 HashMap<Integer,Character> map = new HashMap<Integer,Character>();
-		 double bitScore;
-		 double eScore;
 	}
 	
 	/*
