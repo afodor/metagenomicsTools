@@ -11,8 +11,8 @@ myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
 #bugIndex <- 38
 #bugIndex <- 43
 #bugIndex <- 19
-bugIndex <- 13
-#bugIndex <- 12
+#bugIndex <- 13
+bugIndex <- 12
 
 bug <- myT[,bugIndex]
 groupNumber <- myT$groupNumber
@@ -62,8 +62,8 @@ expectedLine <- mean( lInersWater ) - mean(lwaterCrisp)
 lines( c(0,6), c(expectedLine,expectedLine),lty=2 )
 
 xAxis <- c(c(0,0),groupNumber[myT$groupNumber>0] )
-#yAxis <- c(lwaterCrisp ,bug[myT$groupNumber>0]   )
-yAxis <- c(lInersWater ,bug[myT$groupNumber>0]   )
+yAxis <- c(lwaterCrisp ,bug[myT$groupNumber>0]   )
+#yAxis <- c(lInersWater ,bug[myT$groupNumber>0]   )
 colors <- c( c("orange", "orange"), colors)
 birthModeExtended <- c( c("water","water"), myT$birthMode[myT$groupNumber>0]    )
 
@@ -76,5 +76,5 @@ anotherFrame = data.frame(yAxis ,birthModeExtended)
 boxplot( yAxis ~ birthModeExtended)
 
 stripchart(yAxis ~ birthModeExtended, data = anotherFrame,vertical = TRUE, 
-	pch = 16,cex=1.25 ,add=TRUE ,col=c("red","red","orange"))		
+	pch = 16,cex=1.25 ,add=TRUE ,col=c("red","black","orange"))		
 
