@@ -1,0 +1,34 @@
+rm(list=ls())
+	
+setwd("C:\\lactoCheck\\rdp")
+
+myT <- read.table("genusasColumnsNormWithMetadata.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",] 
+
+bug <- myT$qPCR16S[myT$groupNumber>0]
+groupNumber <- myT$groupNumber[myT$groupNumber>0]
+	
+myFrame <- data.frame( bug, groupNumber )
+
+colors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$groupNumber[i] == 0) 
+	{
+		if( myT$stoolOrGa[i] == "neg" ) 
+			colors[i] = "blue"		
+		else	
+			colors[i] = "orange"		
+	}
+	else
+	{
+		if( myT$birthMode[i] == "C" )
+			colors[i] = "red"
+		else
+			colors[i] = "black"
+	}
+}
+
+
+plot(bug ~ groupNumber,cex=2.5,pch=19, col=colors)
