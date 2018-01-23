@@ -7,6 +7,8 @@ myT <- myT[ myT$stoolOrGa != "S" & myT$run == "Run1" & myT$read=="R1",]
 
 bug <- myT$qPCR16S[myT$groupNumber>0]
 groupNumber <- myT$groupNumber[myT$groupNumber>0]
+birthMode <- myT$birthMode[myT$groupNumber>0]
+
 	
 myFrame <- data.frame( bug, groupNumber )
 
@@ -32,3 +34,20 @@ for( i in 1:nrow(myT))
 
 
 plot(bug ~ groupNumber,cex=2.5,pch=19, col=colors)
+
+watercontrols <-  c( 33.05, 31.24, 34.32)
+negativecontrols <- c( 33.11, 33.30, 33.73)
+	
+bugPlus <- c(c(watercontrols ,negativecontrols) ,bug)
+groupPlus <-   c( c(-1,-1,-1,0,0,0), groupNumber)
+colPlus <- c(  c("orange","orange","orange", "blue","blue","blue"), colors )
+birthModePlus <- c(  c(-1,-1,-1, 0,0,0), c(birthMode))
+
+plot(bugPlus ~ groupPlus,cex=2.5,pch=19, col=colPlus)
+boxplot(bugPlus ~ birthModePlus,cex=2.5,pch=19)
+
+myFrame <- data.frame(bugPlus ,birthModePlus)
+
+stripchart(bugPlus ~ birthModePlus, data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=
+c("orange","blue","red","black"))		
+
