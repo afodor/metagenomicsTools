@@ -2,11 +2,11 @@ rm(list=ls())
 
 setwd("C:\\EmilyJan2018\\spreadsheets")
 
-filepath <- "pcoa_withMetadatagenus.txt";
+filepath <- "pcoa_withMetadatagenusNoQuotes.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
 numCols <- ncol(myT)
-myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
+myColClasses <- c(rep("character", 23), "numeric", rep("character", 26), rep("numeric", numCols-50))
 myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
