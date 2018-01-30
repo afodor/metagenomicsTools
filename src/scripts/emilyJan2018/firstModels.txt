@@ -1,0 +1,29 @@
+rm(list=ls())
+
+setwd("C:\\EmilyJan2018\\spreadsheets")
+
+filepath <- "pcoa_withMetadatagenus.txt";
+
+myT <-read.table(filepath,sep="\t",header=TRUE)
+numCols <- ncol(myT)
+myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
+myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
+
+myT <- myT[ myT$readNum == 1, ]
+
+# mouse only
+myT <- myT[ myT$Mouse.group != "n.a.", ]
+
+# first question - are there any differences between T1 and T2
+# model is y = T1/T2 + week + donor
+myTCaseOnly <- myT[ myT$Mouse.group != "HC", ]
+
+for( i in 51:471) 
+{
+	bug <- myTCaseOnly[,i]
+	
+	if( sum( bug != 0) > nrow(	myTCaseOnly ) / 4)
+	{
+		aLm <- lm( bug ~ myTCaseOnly$Mouse.group + myTCaseOnly$Week + myTCaseOnly$donorID)
+	}
+}
