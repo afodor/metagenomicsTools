@@ -47,13 +47,42 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 write.table(resultsFrame, file=paste("pValues_T1_T2.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("boxplots.pdf")
-par(mfrow=c(2,1))
+par(mfrow=c(2,2))
 for ( i in 1:nrow(resultsFrame))
 {
 	aTitle <-paste(resultsFrame$names[i], "p group=",format(resultsFrame$adjustedPGroup[i],digits=3) )
 	boxplot( myTCaseOnly[, resultsFrame$backIndex[i]] ~  myTCaseOnly$Mouse.group,main=aTitle )
-	aTitle <-paste(resultsFrame$names[i], "p time=",format(resultsFrame$adjustedPTime[i],digits=3) )
-	plot(  as.numeric(myTCaseOnly$Week), myTCaseOnly[, resultsFrame$backIndex[i]], main = aTitle ) 
+	
+	donors <- unique(myTCaseOnly$donorID)
+	
+	for( d in donors)
+	{
+		aTitle <-paste(resultsFrame$names[i], "donor",d)
+	
+		colors <- vector()
+	
+		subGroups = myTCaseOnly$Mouse.group[myTCaseOnly$donorID==d]
+		
+		for( j in 1:length(subGroups))
+		{
+			if(subGroups[j] == "T1")
+			{
+				colors[j] = "red";
+			} else if (subGroups[j] == "T2")
+			{
+				colors[j] = "black"
+			}
+			else
+			{
+				stop("No")
+			}
+		}
+		
+		plot(  as.numeric(myTCaseOnly$Week[myTCaseOnly$donorID==d]), 
+				myTCaseOnly[myTCaseOnly$donorID==d, resultsFrame$backIndex[i]], main = aTitle,
+				col = colors, xlab="time", ylab=paste("log10 normalized",resultsFrame$names[i] )) 
+		
+	}
 }
 
 dev.off()
