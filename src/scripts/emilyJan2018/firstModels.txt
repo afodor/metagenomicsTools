@@ -20,6 +20,7 @@ myTCaseOnly <- myT[ myT$Mouse.group != "HC", ]
 pValuesGroup <- vector()
 pValuesTime <- vector()
 names <- vector()
+backIndex <- vector()
 
 index <-1
 for( i in 51:471) 
@@ -32,11 +33,12 @@ for( i in 51:471)
 		pValuesGroup[index] <- unclass(summary(aLm))$coefficients[2,4]
 		pValuesTime[index] <- unclass(summary(aLm))$coefficients[3,4]
 		names[index] <- names(myTCaseOnly)[i]
+		backIndex[index] <- i
 		index <- index + 1
 	}
 }
 
-resultsFrame <- data.frame(names,pValuesTime,pValuesGroup)
+resultsFrame <- data.frame(names,pValuesTime,pValuesGroup, backIndex)
 
 resultsFrame <- resultsFrame [order(resultsFrame$pValuesGroup),]
 resultsFrame$adjustedPGroup <- p.adjust( resultsFrame$pValuesGroup, method = "BH" )	
@@ -44,3 +46,12 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 
 write.table(resultsFrame, file=paste("pValues_T1_T2.txt",sep=""), sep="\t",row.names=FALSE)
 
+pdf("boxplots.pdf")
+
+for ( i in 1:nrow(resultsFrame))
+{
+	aTitle <-paste(resultsFrame$names[i], "p group=",format(resultsFrame$adjustedPGroup[i],digits=3) )
+	boxplot( myTCaseOnly[, resultsFrame$backIndex[i]] ~  myTCaseOnly$Mouse.group,main=aTitle )
+}
+
+dev.off()
