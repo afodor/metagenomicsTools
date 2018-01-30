@@ -19,6 +19,7 @@ myT <- myT[ myT$Mouse.group != "n.a.", ]
 myTCaseOnly <- myT[ myT$Mouse.group != "HC", ]
 pValuesGroup <- vector()
 pValuesTime <- vector()
+names <- vector()
 
 index <-1
 for( i in 51:471) 
@@ -30,6 +31,16 @@ for( i in 51:471)
 		aLm <- lm( bug ~ myTCaseOnly$Mouse.group + as.numeric(myTCaseOnly$Week)+ myTCaseOnly$donorID)
 		pValuesGroup[index] <- unclass(summary(aLm))$coefficients[2,4]
 		pValuesTime[index] <- unclass(summary(aLm))$coefficients[3,4]
+		names[index] <- names(myTCaseOnly)[i]
 		index <- index + 1
 	}
 }
+
+resultsFrame <- data.frame(names,pValuesTime,pValuesGroup)
+
+resultsFrame <- resultsFrame [order(resultsFrame$pValuesGroup),]
+resultsFrame$adjustedPGroup <- p.adjust( resultsFrame$pValuesGroup, method = "BH" )	
+resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )	
+
+write.table(resultsFrame, file=paste("pValues_T1_T2.txt",sep=""), sep="\t",row.names=FALSE)
+
