@@ -23,13 +23,15 @@ for( i in 1:nrow(noControls ))
 
 
 mds1C <- mean(onlyControls$MDS1)
-subs <- noControls$MDS1 - mds1C 
+subs <- abs(noControls$MDS1 - mds1C )
 
-plot( 	noControls$qPCR16S , subs,pch=19,col=colors,cex=2.5, xlim=c(30,14),
+plot( 	noControls$qPCR16S , subs,pch=19,col=colors,cex=2.5, xlim=c(32,12),
 xlab="qPCR 16S cycle number", ylab = "Distance from negative control along MDS1" ) 
 
-xSeq <- seq( 30, 12, -.1)
+xSeq <- seq( 33, 12, -.1)
 
 alm <- lm( subs ~  noControls$qPCR16S )
 ySeq <- coef(alm)[[1]] + coef(alm)[[2]]*xSeq
 lines(xSeq,ySeq) 
+summary(alm)
+
