@@ -47,11 +47,13 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 write.table(resultsFrame, file=paste("pValues_T1_T2.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("boxplots.pdf")
-
+par(mfrow=c(2,1))
 for ( i in 1:nrow(resultsFrame))
 {
 	aTitle <-paste(resultsFrame$names[i], "p group=",format(resultsFrame$adjustedPGroup[i],digits=3) )
 	boxplot( myTCaseOnly[, resultsFrame$backIndex[i]] ~  myTCaseOnly$Mouse.group,main=aTitle )
+	aTitle <-paste(resultsFrame$names[i], "p time=",format(resultsFrame$adjustedPTime[i],digits=3) )
+	plot(  as.numeric(myTCaseOnly$Week), myTCaseOnly[, resultsFrame$backIndex[i]], main = aTitle ) 
 }
 
 dev.off()
