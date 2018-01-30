@@ -2,11 +2,11 @@ rm(list=ls())
 
 setwd("C:\\EmilyJan2018\\spreadsheets")
 
-filepath <- "pcoa_withMetadatagenusNoQuotes.txt";
+filepath <- "pcoa_withMetadatagenus.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
 numCols <- ncol(myT)
-myColClasses <- c(rep("character", 23), "numeric", rep("character", 26), rep("numeric", numCols-50))
+myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
 myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
@@ -17,13 +17,19 @@ myT <- myT[ myT$Mouse.group != "n.a.", ]
 # first question - are there any differences between T1 and T2
 # model is y = T1/T2 + week + donor
 myTCaseOnly <- myT[ myT$Mouse.group != "HC", ]
+pValuesGroup <- vector()
+pValuesTime <- vector()
 
+index <-1
 for( i in 51:471) 
 {
 	bug <- myTCaseOnly[,i]
 	
 	if( sum( bug != 0) > nrow(	myTCaseOnly ) / 4)
 	{
-		aLm <- lm( bug ~ myTCaseOnly$Mouse.group + myTCaseOnly$Week + myTCaseOnly$donorID)
+		aLm <- lm( bug ~ myTCaseOnly$Mouse.group + as.numeric(myTCaseOnly$Week)+ myTCaseOnly$donorID)
+		pValuesGroup[index] <- unclass(summary(aLm))$coefficients[2,4]
+		pValuesTime[index] <- unclass(summary(aLm))$coefficients[3,4]
+		index <- index + 1
 	}
 }
