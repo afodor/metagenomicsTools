@@ -80,11 +80,22 @@ for ( i in 1:nrow(resultsFrame))
 	
 	boxplot( myT[, resultsFrame$backIndex[i]] ~  donorString,main=aTitle ,las=2)
 	
+	aMin = min(myT[ , resultsFrame$backIndex[i]])
+	aMax = max(myT[ , resultsFrame$backIndex[i]])
+	aRange = c(aMin,aMax)
+	
 	for( d in donors ) 
 	{
 		plot( 
 			as.numeric(myT$Week[ myT$donorID ==d & caseControl =="case" ])
-			, myT[ myT$donorID == d & caseControl =="case"  , resultsFrame$backIndex[i]], col = "red", main=d  )
+			, myT[ myT$donorID == d & caseControl =="case"  , resultsFrame$backIndex[i]], col = "red", main=d ,
+			xlab="weeks", ylab=resultsFrame$names[i], ylim=aRange)
+			
+			
+		points( 
+			as.numeric(myT$Week[ myT$donorID ==d & caseControl =="control" ])
+			, myT[ myT$donorID == d & caseControl =="control"  , resultsFrame$backIndex[i]], col = "black", main=d ,
+			xlab="weeks", ylab=resultsFrame$names[i] )
 	}
 }
 
