@@ -67,3 +67,15 @@ resultsFrame$adjustedpValuesCaseControl<- p.adjust( resultsFrame$pValuesCaseCont
 resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )	
 
 write.table(resultsFrame, file=paste("pValues_caseControl.txt",sep=""), sep="\t",row.names=FALSE)
+
+pdf("caseControl.pdf")
+
+for ( i in 1:nrow(resultsFrame))
+{
+	aTitle <-paste(resultsFrame$names[i], "p case/control=",
+		format(resultsFrame$adjustedpValuesCaseControl[i],digits=3) )
+	
+	boxplot( myT[, resultsFrame$backIndex[i]] ~  donorString,main=aTitle ,las=2)
+}
+
+dev.off()
