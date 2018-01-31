@@ -128,7 +128,16 @@ for ( i in 1:nrow(resultsFrame))
 	lookup = names(myTHuman)==resultsFrame$names[i]
 	
 	boxplot( myTHuman[,lookup] ~ donorStringHuman,las=2 )
+	
+	hBug <-  myTHuman[,lookup] 
+	someFrame <- data.frame( hBug, donorStringHuman)
+	
+	stripchart(hBug ~ donorStringHuman, 
+			data = someFrame,vertical = TRUE, pch = 21, add=TRUE )	
+			
 	plot(0,type='n',axes=FALSE,ann=FALSE)
+		
+			
 }
 
 dev.off()
