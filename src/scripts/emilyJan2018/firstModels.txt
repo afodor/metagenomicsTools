@@ -27,7 +27,7 @@ for( i in 51:471)
 {
 	bug <- myTCaseOnly[,i]
 	
-	if( sum( bug != 0) > nrow(	myTCaseOnly ) / 4)
+	if( sum( bug != 0) > nrow(	myTCaseOnly ) / 10)
 	{
 		aLm <- lm( bug ~ myTCaseOnly$Mouse.group + as.numeric(myTCaseOnly$Week)+ myTCaseOnly$donorID)
 		pValuesGroup[index] <- unclass(summary(aLm))$coefficients[2,4]

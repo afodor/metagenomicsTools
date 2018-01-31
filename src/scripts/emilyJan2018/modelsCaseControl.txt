@@ -1,0 +1,69 @@
+rm(list=ls())
+
+setwd("C:\\EmilyJan2018\\spreadsheets")
+
+filepath <- "pcoa_withMetadatagenus.txt";
+
+myT <-read.table(filepath,sep="\t",header=TRUE)
+numCols <- ncol(myT)
+myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
+myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
+
+myT <- myT[ myT$readNum == 1, ]
+
+# mouse only
+myT <- myT[ myT$Mouse.group != "n.a.", ]
+
+donorString <- vector()
+caseControl <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$Mouse.group[i] == "T1" || myT$Mouse.group[i] == "T2" ) 
+	{
+		 donorString[i] = paste0(myT$donorID[i], "_case")
+		 caseControl[i] = "case"
+	}
+	else if(myT$Mouse.group[i] == "HC"  )
+	{
+		 donorString[i] = paste0(myT$donorID[i], "_control")
+		 caseControl[i] = "control"
+	}
+	else
+	{
+		stop("no")
+	}
+}
+
+# any difference between case and control
+# model will be bug = week + case/control + donorID
+# we'll start by ignoring T1/T2..
+
+pValuesCaseControl <- vector()
+pValuesTime <- vector()
+names <- vector()
+backIndex <- vector()
+
+index <-1
+for( i in 51:471) 
+{
+	bug <- myT[,i]
+	
+	if( sum( bug != 0) > nrow(	myT) / 10)
+	{
+		aLm <- lm( bug ~ caseControl + as.numeric(myT$Week) + donorString)
+		pValuesCaseControl[index] <- unclass(summary(aLm))$coefficients[2,4]
+		pValuesTime[index] <- unclass(summary(aLm))$coefficients[3,4]
+		names[index] <- names(myT)[i]
+		backIndex[index] <- i
+		index <- index + 1
+	}
+}
+
+resultsFrame <- data.frame(names,pValuesTime,pValuesCaseControl, backIndex)
+
+resultsFrame <- resultsFrame [order(resultsFrame$pValuesCaseControl),]
+resultsFrame$adjustedpValuesCaseControl<- p.adjust( resultsFrame$pValuesCaseControl, method = "BH" )	
+resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )	
+
+write.table(resultsFrame, file=paste("pValues_caseControl.txt",sep=""), sep="\t",row.names=FALSE)
