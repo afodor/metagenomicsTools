@@ -127,7 +127,8 @@ for ( i in 1:nrow(resultsFrame))
 	
 	lookup = names(myTHuman)==resultsFrame$names[i]
 	
-	boxplot(  )
+	boxplot( myTHuman[,lookup] ~ donorStringHuman,las=2 )
+	plot(0,type='n',axes=FALSE,ann=FALSE)
 }
 
 dev.off()
