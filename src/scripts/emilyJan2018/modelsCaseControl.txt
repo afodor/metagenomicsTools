@@ -14,6 +14,11 @@ myT <- myT[ myT$readNum == 1, ]
 # mouse only
 myT <- myT[ myT$Mouse.group != "n.a.", ]
 
+myTHuman <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
+myTHuman <- myTHuman[ myTHuman$readNum == 1, ]
+myTHuman <-myTHuman[ myTHuman$Mouse.group == "n.a.", ]
+
+
 donorString <- vector()
 caseControl <- vector()
 
@@ -34,6 +39,28 @@ for( i in 1:nrow(myT))
 		stop("no")
 	}
 }
+
+donorStringHuman <- vector()
+
+for( i in 1:nrow(myTHuman))
+{
+	twoChars = substr(myTHuman$Sample.ID[i],1,2)
+	if( twoChars == "T1" || twoChars == "T2" ) 
+	{
+		 donorStringHuman[i] = paste0(myTHuman$donorID[i], "_case")
+	}
+	else if(twoChars == "HC"  )
+	{
+		 donorStringHuman[i] = paste0(myTHuman$donorID[i], "_control")
+	}
+	else
+	{
+		donorStringHuman[i] = "NA"
+	}
+}
+
+
+
 
 # any difference between case and control
 # model will be bug = week + case/control + donorID
@@ -69,7 +96,7 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 write.table(resultsFrame, file=paste("pValues_caseControl.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("caseControl.pdf")
-par(mfrow=c(2,2))
+par(mfrow=c(3,2))
 
 donors <- unique(myT$donorID)
 
@@ -97,6 +124,10 @@ for ( i in 1:nrow(resultsFrame))
 			, myT[ myT$donorID == d & caseControl =="control"  , resultsFrame$backIndex[i]], col = "black", main=d ,
 			xlab="weeks", ylab=resultsFrame$names[i] )
 	}
+	
+	lookup = names(myTHuman)==resultsFrame$names[i]
+	
+	boxplot(  )
 }
 
 dev.off()
