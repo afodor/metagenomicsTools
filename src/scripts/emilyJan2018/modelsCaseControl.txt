@@ -69,6 +69,9 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 write.table(resultsFrame, file=paste("pValues_caseControl.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("caseControl.pdf")
+par(mfrow=c(2,2))
+
+donors <- unique(myT$donorID)
 
 for ( i in 1:nrow(resultsFrame))
 {
@@ -76,6 +79,13 @@ for ( i in 1:nrow(resultsFrame))
 		format(resultsFrame$adjustedpValuesCaseControl[i],digits=3) )
 	
 	boxplot( myT[, resultsFrame$backIndex[i]] ~  donorString,main=aTitle ,las=2)
+	
+	for( d in donors ) 
+	{
+		plot( 
+			as.numeric(myT$Week[ myT$donorID ==d & caseControl =="case" ])
+			, myT[ myT$donorID == d & caseControl =="case"  , resultsFrame$backIndex[i]], col = "red", main=d  )
+	}
 }
 
 dev.off()
