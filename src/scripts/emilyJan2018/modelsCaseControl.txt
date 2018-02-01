@@ -113,37 +113,41 @@ for ( i in 1:nrow(resultsFrame))
 	aTitle <-paste(resultsFrame$names[i], "p case/control=",
 		format(resultsFrame$adjustedpValuesCaseControl[i],digits=3) )
 	
-	boxplot( myT[, resultsFrame$backIndex[i]] ~  donorString,main=aTitle ,las=2)
+	toUse <- !is.na(myT[, resultsFrame$backIndex[i]] )
+	boxplot( myT[toUse, resultsFrame$backIndex[i]] ~  donorString[toUse],main=aTitle ,las=2)
 	
-	aMin = min(myT[ , resultsFrame$backIndex[i]])
-	aMax = max(myT[ , resultsFrame$backIndex[i]])
+	aMin = min(myT[ toUse, resultsFrame$backIndex[i]])
+	aMax = max(myT[ toUse, resultsFrame$backIndex[i]])
 	aRange = c(aMin,aMax)
 	
 	for( d in donors ) 
 	{
 		plot( 
-			as.numeric(myT$Week[ myT$donorID ==d & caseControl =="case" ])
-			, myT[ myT$donorID == d & caseControl =="case"  , resultsFrame$backIndex[i]], col = "red", main=d ,
+			as.numeric(myT$Week[ toUse & myT$donorID ==d & caseControl =="case" ])
+			, myT[ toUse & myT$donorID == d & caseControl =="case"  , resultsFrame$backIndex[i]], col = "red", main=d ,
 			xlab="weeks", ylab=resultsFrame$names[i], ylim=aRange)
 			
 			
 		points( 
-			as.numeric(myT$Week[ myT$donorID ==d & caseControl =="control" ])
-			, myT[ myT$donorID == d & caseControl =="control"  , resultsFrame$backIndex[i]], col = "black", main=d ,
+			as.numeric(myT$Week[ toUse &  myT$donorID ==d & caseControl =="control" ])
+			, myT[ toUse & myT$donorID == d & caseControl =="control"  , resultsFrame$backIndex[i]], col = "black", main=d ,
 			xlab="weeks", ylab=resultsFrame$names[i] )
 	}
 	
 	lookup = names(myTHuman)==resultsFrame$names[i]
 	
-	boxplot( myTHuman[,lookup] ~ donorStringHuman,las=2,main=paste("human",resultsFrame$names[i]),
+	toUse <- !is.na(myTHuman[,lookup] )
+	
+	boxplot( myTHuman[toUse,lookup] ~ donorStringHuman[toUse],las=2,main=paste("human",resultsFrame$names[i]),
 							ylab = resultsFrame$names[i])
 	
-	hBug <-  myTHuman[,lookup] 
-	someFrame <- data.frame( hBug, donorStringHuman)
+	hBug <-  myTHuman[toUse,lookup] 
+	donorStringHumanSub <- donorStringHuman[toUse]
+	someFrame <- data.frame( hBug, donorStringHumanSub)
 	
-	stripchart(hBug ~ donorStringHuman, 
+	stripchart(hBug ~ donorStringHumanSub, 
 			data = someFrame,vertical = TRUE, pch = 21, add=TRUE )	
-			
+	
 	plot(0,type='n',axes=FALSE,ann=FALSE)
 		
 			
