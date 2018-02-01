@@ -2,7 +2,8 @@ rm(list=ls())
 
 setwd("C:\\EmilyJan2018\\spreadsheets")
 
-filepath <- "pcoa_withMetadatagenus.txt";
+# manually replace "n.a" with NA
+filepath <- "pcoa_withMetadatagenusWithNA.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
 numCols <- ncol(myT)
@@ -12,11 +13,11 @@ myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 myT <- myT[ myT$readNum == 1, ]
 
 # mouse only
-myT <- myT[ myT$Mouse.group != "n.a.", ]
+myT <- myT[ !is.na (myT$Mouse.group), ]
 
 myTHuman <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 myTHuman <- myTHuman[ myTHuman$readNum == 1, ]
-myTHuman <-myTHuman[ myTHuman$Mouse.group == "n.a.", ]
+myTHuman <-myTHuman[  !is.na (myT$Mouse.group), ]
 
 
 donorString <- vector()
@@ -127,7 +128,8 @@ for ( i in 1:nrow(resultsFrame))
 	
 	lookup = names(myTHuman)==resultsFrame$names[i]
 	
-	boxplot( myTHuman[,lookup] ~ donorStringHuman,las=2 )
+	boxplot( myTHuman[,lookup] ~ donorStringHuman,las=2,main=paste("human",resultsFrame$names[i]),
+							ylab = resultsFrame$names[i])
 	
 	hBug <-  myTHuman[,lookup] 
 	someFrame <- data.frame( hBug, donorStringHuman)
