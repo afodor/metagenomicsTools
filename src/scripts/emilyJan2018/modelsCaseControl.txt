@@ -78,13 +78,15 @@ names <- vector()
 backIndex <- vector()
 
 index <-1
-for( i in 51:471) 
+todo <-c(21,22,25:41,51:471)
+for( i in todo) 
 {
-	bug <- myT[,i]
+	toUse <- !is.na(myT[,i])
+	bug <- myT[toUse,i]
 	
 	if( sum( bug != 0) > nrow(	myT) / 10)
 	{
-		aLm <- lm( bug ~ caseControl + as.numeric(myT$Week) + donorString)
+		aLm <- lm( bug ~ caseControl[toUse] + as.numeric(myT$Week[toUse]) + donorString[toUse])
 		pValuesCaseControl[index] <- unclass(summary(aLm))$coefficients[2,4]
 		pValuesTime[index] <- unclass(summary(aLm))$coefficients[3,4]
 		names[index] <- names(myT)[i]
