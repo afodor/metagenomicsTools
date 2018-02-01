@@ -7,7 +7,12 @@ filepath <- "pcoa_withMetadatagenusWithNA.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
 numCols <- ncol(myT)
-myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
+myColClasses <- c(rep("character", 20),
+				  rep("numeric", 2), 
+				  rep("character", 2),
+				  rep("numeric", 17),
+				  rep("character", 9),
+	   rep("numeric", numCols-50))
 myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
