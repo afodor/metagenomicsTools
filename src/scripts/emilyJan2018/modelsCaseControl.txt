@@ -1,4 +1,5 @@
 rm(list=ls())
+library("Kendall")
 
 setwd("C:\\EmilyJan2018\\spreadsheets")
 
@@ -153,4 +154,40 @@ for ( i in 1:nrow(resultsFrame))
 			
 }
 
+
 dev.off()
+
+# finally work on correlations of metadata to mousedata for mouse only
+
+metadataColumns <- c(21,22,25:41)
+mouseDataColumns <- 51:471
+metaName <- vector()
+bugName <- vector()
+pValues <- vector()
+sampleSize <- vector()
+index <- 1;
+
+for( i in metadataColumns )
+{
+	for( j in mouseDataColumns )
+	{
+		if( sum( myT[toUse,j] != 0) > nrow(	myT) / 10)
+		{
+			
+			toUse <- !is.na( myT[,i] ) & !is.na( myT[,j])
+			
+			if( sum(toUse) > 10 ) 
+			{
+				meta <- myT[toUse,i]
+				bug <- myT[toUse,j]
+				metaName[index] <- names(myT)[i]
+				bugName[index] <- names(myT)[j]
+				sampleSize[index] <- sum(toUse)
+				pValues[index] <- unclass(Kendall( meta, bug))$sl[1]
+				index<- index + 1	
+			}
+					
+		}
+	}
+}
+
