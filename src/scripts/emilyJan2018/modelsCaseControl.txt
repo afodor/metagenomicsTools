@@ -165,6 +165,8 @@ metaName <- vector()
 bugName <- vector()
 pValues <- vector()
 sampleSize <- vector()
+metaIndex <- vector()
+bugIndex <- vector()
 index <- 1;
 
 for( i in metadataColumns )
@@ -184,10 +186,36 @@ for( i in metadataColumns )
 				bugName[index] <- names(myT)[j]
 				sampleSize[index] <- sum(toUse)
 				pValues[index] <- unclass(Kendall( meta, bug))$sl[1]
+				metaIndex[index] <- i
+				bugIndex[index] <- j
 				index<- index + 1	
 			}
 					
 		}
 	}
 }
+
+corFrame <- data.frame(metaName,bugName,pValues,sampleSize,metaIndex,bugIndex)
+corFrame <- corFrame[order(corFrame$pValues),]
+corFrame$adjustedpValues<- p.adjust( corFrame$pValues, method = "BH" )	
+write.table(corFrame, file=paste("pValues_correlation.txt",sep=""), sep="\t",row.names=FALSE)
+
+pdf("correlations.pdf")
+
+par(mfrow=c(2,2))
+
+for( x in 1:nrow(corFrame))
+{
+	i <- corFrame$metaIndex[x]
+	j <- corFrame$bugIndex[x]
+	
+	toUse <- !is.na( myT[,i] ) & !is.na( myT[,j])
+	meta <- myT[toUse,i]
+	bug <- myT[toUse,j]
+		
+	aTitle <- paste("q", format(corFrame$adjustedpValues[x],digits=3))
+	plot(meta, bug, xlab=corFrame$metaName[x], ylab = corFrame$bugName[x],main=aTitle )
+}
+
+dev.off()
 
