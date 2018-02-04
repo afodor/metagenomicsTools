@@ -1,0 +1,11 @@
+rm(list=ls())
+
+numHeads<- 0:50
+
+plot(numHeads, dbinom(numHeads,50,p=.7),pch=8)
+
+for( i in 1:length(numHeads))
+{
+	points( numHeads[i], dmultinom( c(numHeads[i],50-numHeads[i]), prob=c(.7,.3) ), 
+		col="red",pch=19)
+}
