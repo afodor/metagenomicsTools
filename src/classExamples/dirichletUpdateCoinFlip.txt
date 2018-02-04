@@ -11,6 +11,8 @@ xAxis <- vector()
 yAxis <- vector()
 zAxis <- vector()
 
+data <- ""
+
 for( f in 1:10000)
 {
 	
@@ -21,14 +23,18 @@ for( f in 1:10000)
 		zAxis[i] <- ddirichlet( c(seqs[i],1-seqs[i]), alpha )
 	}
 	
-	plot3d( xAxis, yAxis, zAxis)	
+	plot3d( xAxis, yAxis, zAxis,main=data)	
 
 	if( runif(1) <=.25 ) 
 	{
 		alpha[1] = alpha[1] + 1
+		data <- paste(data,"H")
 	}
 	else
 	{
 		alpha[2] = alpha[2] + 1
+		data <- paste(data, "T")
 	}
+	
+	Sys.sleep(.25)
 }
