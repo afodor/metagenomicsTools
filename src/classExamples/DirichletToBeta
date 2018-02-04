@@ -1,0 +1,18 @@
+rm(list=ls())
+
+
+library("MCMCpack")
+
+# arbitrary alpha and beta
+alpha=5
+beta=7
+
+xVals <- seq(0.01,.99,.005)
+
+plot( xVals, dbeta( xVals,alpha,beta ),pch=8)
+
+for( i in 1:length(xVals))
+{
+	points(xVals[i], ddirichlet( c(xVals[i],1-xVals[i]), c(alpha,beta)),col="red",pch=19)
+}
+
