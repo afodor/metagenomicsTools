@@ -9,28 +9,26 @@ public class TestMultinomial
 	
 	public static void main(String[] args) throws Exception
 	{
-		int numTrials = 100000000;
+		long numTrials = 5000000000l;
 		int numRolls = 10;
 		double[] probs = { 0.2, 0.1, 0.1, 0.1, 0.1, 0.5};
 		
-		double numMatch = 0;
+		long numMatch = 0;
 		
 		HashMap<Integer, Integer> expected =getExpected();
 		
-		for ( int x=0; x < numTrials; x++)
+		for ( long x=0; x < numTrials; x++)
 		{
 			if( roll(probs, numRolls).equals(expected))
 				numMatch++;
 			
-			if( x % 1000000 == 0 )
+			if( x % 10000000 == 0 )
 			{
-				System.out.println(roll(probs, numRolls));
-				System.out.println(numMatch / (x+1));
-			}
-				
+				System.out.println( ((double)numMatch) / (x+1));
+			}	
 		}
 		
-		System.out.println(numMatch / numTrials);
+		System.out.println( (double)(numMatch) / numTrials);
 	}
 	
 	private static HashMap<Integer, Integer> getExpected() throws Exception
