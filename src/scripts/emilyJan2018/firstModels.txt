@@ -11,6 +11,9 @@ myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
 
+# human only 
+myTHuman <- myT[ myT$Mouse.group == "n.a.", ]
+
 # mouse only
 myT <- myT[ myT$Mouse.group != "n.a.", ]
 
@@ -47,7 +50,7 @@ resultsFrame$adjustedPTime<- p.adjust( resultsFrame$pValuesTime, method = "BH" )
 write.table(resultsFrame, file=paste("pValues_T1_T2.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("boxplots.pdf")
-par(mfrow=c(2,2))
+par(mfrow=c(3,2))
 for ( i in 1:nrow(resultsFrame))
 {
 	aTitle <-paste(resultsFrame$names[i], "p group=",format(resultsFrame$adjustedPGroup[i],digits=3) )
@@ -81,8 +84,23 @@ for ( i in 1:nrow(resultsFrame))
 		plot(  as.numeric(myTCaseOnly$Week[myTCaseOnly$donorID==d]), 
 				myTCaseOnly[myTCaseOnly$donorID==d, resultsFrame$backIndex[i]], main = aTitle,
 				col = colors, xlab="time", ylab=paste("log10 normalized",resultsFrame$names[i] )) 
-		
+				
 	}
+	
+	lookup = names(myTHuman)==resultsFrame$names[i]
+	
+	donorPlusTime <- vector()
+	
+	for( i in 1:nrow(myTHuman) ) 
+	{
+		donorPlusTime[i] <- paste0(myTHuman$donorID[i],"_",substring(myTHuman$Sample.ID[i],1,2))
+	}
+	
+	boxplot( myTHuman[,lookup] ~ donorPlusTime,las=2,main=paste("human",resultsFrame$names[i]),
+							ylab = resultsFrame$names[i])
+							
+	plot(0,type='n',axes=FALSE,ann=FALSE)
+	
 }
 
 dev.off()
