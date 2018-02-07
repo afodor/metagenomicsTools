@@ -156,6 +156,13 @@ public class ConfigReader
 	
 	public static final String KATIE_BLAST_DIR = "KATIE_BLAST_DIR";
 	
+	public static final String FARNAZ_FEB_2018_DIR = "FARNAZ_FEB_2018_DIR";
+	
+	public static String getFarnazFeb2018Directory() throws Exception
+	{
+		return getConfigReader().getAProperty(FARNAZ_FEB_2018_DIR);
+	}
+	
 	public static String getIanOrganoidDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(IAN_ORGANOID_DIRECTORY);
