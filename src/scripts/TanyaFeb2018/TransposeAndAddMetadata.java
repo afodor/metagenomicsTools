@@ -24,13 +24,30 @@ public class TransposeAndAddMetadata
 			String outFile = ConfigReader.getTanyaFeb2018Directory() + File.separator + 
 					"deblur-seqs-tax-blood-rarefied-400-" + s + ".from_biom_taxaAsColumns.txt";
 			
+			String logOutFile = ConfigReader.getTanyaFeb2018Directory() + File.separator + 
+					"deblur-seqs-tax-blood-rarefied-400-" + s + ".from_biom_taxaAsColumnsLogNorm.txt";
+			
 			OtuWrapper.transpose(inFile, outFile, false);
+		
+			OtuWrapper wrapper = new OtuWrapper(outFile);
+			wrapper.writeNormalizedLoggedDataToFile(logOutFile);
+			
+			File metadataFile = new File(ConfigReader.getTanyaFeb2018Directory() + File.separator + 
+					"metadata_31Jan18.txt");
+			
+			String firstLine = readFirstLine(metadataFile);
+			HashMap<String, String> metaMap = getMetaMap(metadataFile);
+			
+			String outFileWithMeta = ConfigReader.getTanyaFeb2018Directory() + File.separator + 
+					"deblur-seqs-tax-blood-rarefied-400-" + s + ".from_biom_taxaAsColumnsLogNormPlusMeta.txt";
+			
+			addColumns(new File(logOutFile), firstLine, metaMap, new File(outFileWithMeta));
 			
 		}
 	}
 	
 
-	private static void addColumns(File inFile, String firstLine,HashMap<Integer, String> metaMap, 
+	private static void addColumns(File inFile, String firstLine,HashMap<String, String> metaMap, 
 				File outFile) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
@@ -55,7 +72,7 @@ public class TransposeAndAddMetadata
 		{
 			String[] dataSplits=  s.split("\t");
 			
-			int key = Integer.parseInt(dataSplits[0]);
+			String key = dataSplits[0];
 			writer.write("" + key);
 			
 			String metaLine = metaMap.get(key);
@@ -74,9 +91,9 @@ public class TransposeAndAddMetadata
 		reader.close();
 	}
 	
-	private static HashMap<Integer, String> getMetaMap(File file) throws Exception
+	private static HashMap<String, String> getMetaMap(File file) throws Exception
 	{
-		HashMap<Integer, String> map = new HashMap<>();
+		HashMap<String, String> map = new HashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
@@ -85,7 +102,10 @@ public class TransposeAndAddMetadata
 		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			Integer id = Integer.parseInt(splits[0]);
+			String id = splits[0];
+			
+			while( id.startsWith("X"))
+				id=  id.substring(1);
 			
 			if( map.containsKey(id) )
 				throw new Exception("Duplicate id " + id);
