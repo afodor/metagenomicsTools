@@ -88,7 +88,11 @@ public class TransposeAndAddMetadata
 				writer.write("\t" +val );
 				
 			}
-				
+			
+			// last date is missing on blank samples
+			if( metaSplits.length == 91)
+				writer.write("NA\t");
+			
 			for( int x=1; x < dataSplits.length; x++)
 				writer.write("\t" + dataSplits[x]);
 			

@@ -5,23 +5,42 @@ rm(list=ls())
 setwd("C:\\tanyaFeb2018")
 
 #taxa <- c("Phylum", "Class", "Order", "Family", "Genus")
-taxa  = "Genus"
+taxa  = "Phylum"
 
 for( t in taxa )
 {
 	filepath <- paste0("deblur-seqs-tax-blood-rarefied-400-", t,  ".from_biom_taxaAsColumnsLogNormPlusMeta.txt")
 	
-	myT <- read.table(filepath,header=TRUE,sep="\t",row.names=1)
-		
+	myT <- read.table(filepath,header=TRUE,sep="\t")
+	lastDataCol <- which (names(myT)=="collection_timestamp.1")
+	dataT <- myT[,(lastDataCol+1):ncol(myT)]
+	myPCOA <- capscale(dataT~1,distance="bray")
+	myMerge <- cbind( myT, myPCOA$CA$u)
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allData_",t,".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_",t,".txt", sep=""), sep="\t")	
+	write.table(myMerge , sep="\t", file=paste("pcoa__withMetadata",t,".txt",sep=""),row.names=FALSE)
 }
 
-dataT <- myT[,29:ncol(myT)]
-	
-myPCOA <- capscale(dataT~1,distance="bray")
-		
-write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allData",".txt",sep=""))
-write.table(myPCOA$CA$eig,file=paste("eigenValues_",".txt", sep=""), sep="\t")	
+# phyla only
+proteobacteria <- which (names(myMerge)=="k__Bacteria.p__Proteobacteria")
 
-myMerge <- cbind( myT, myPCOA$CA$u)
+pdf("proteobateriaVsAll.pdf")
+par(mfrow=c(2,2))
 
-write.table(myMerge , sep="\t", file=paste("pcoa__withMetadata",".txt",sep=""))
+for( i in 2:ncol(myMerge)) 
+{
+	if( i != 3 &  i != 7 & i != 8 & i != 9 & i != 14 & i != 15 & i != 16 &  i != 17 & i != 18 & i != 19 &  
+			i != 21 & i != 23 & i != 25  & i != 28 & i != 29 & i != 32 & i != 34 & i != 35 & 
+			i != 36 & i != 38 & i != 41 & i != 42 & i != 43 & i != 44 & i != 46 & i != 50 & 
+			i != 52 & i != 54 & i != 56 & i != 58 & i != 61 & i != 64 & i != 67 & i != 69 & 
+			i != 11 & i != 71 & i != 72 & i != 74  & i != 78 & i != 80  & i != 82 & i != 83
+					& i != 84 & i != 87 & i != 90 ) 
+	{
+		aLm <- summary(lm(myMerge[,proteobacteria ]~myMerge[,i] ))
+		pVal <- aLm$coefficients[2,4]
+		aText <- paste(names(myMerge)[i], "p=",format(pVal,digits=4))
+		plot( myMerge[,i] ~ myMerge[,proteobacteria ],main=aText )
+	}
+}
+
+dev.off()
