@@ -1,0 +1,27 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\tanyaFeb2018")
+
+#taxa <- c("Phylum", "Class", "Order", "Family", "Genus")
+taxa  = "Genus"
+
+for( t in taxa )
+{
+	filepath <- paste0("deblur-seqs-tax-blood-rarefied-400-", t,  ".from_biom_taxaAsColumnsLogNormPlusMeta.txt")
+	
+	myT <- read.table(filepath,header=TRUE,sep="\t",row.names=1)
+		
+}
+
+dataT <- myT[,29:ncol(myT)]
+	
+myPCOA <- capscale(dataT~1,distance="bray")
+		
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allData",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("pcoa__withMetadata",".txt",sep=""))

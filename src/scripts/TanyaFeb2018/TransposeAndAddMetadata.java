@@ -79,8 +79,16 @@ public class TransposeAndAddMetadata
 			String[] metaSplits = metaLine.split("\t");
 			
 			for( int x=1; x < metaSplits.length; x++)
-				writer.write("\t" + metaSplits[x]);
-			
+			{
+				String val = metaSplits[x].trim();
+				
+				if( val.trim().length() ==0 || val.trim().equals("%"))
+					val = "NA";
+				
+				writer.write("\t" +val );
+				
+			}
+				
 			for( int x=1; x < dataSplits.length; x++)
 				writer.write("\t" + dataSplits[x]);
 			
