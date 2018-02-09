@@ -14,6 +14,7 @@ pdf("donorHuman.pdf")
 par(mfrow=c(2,2))
 bugNames <- vector()
 pValues <- vector()
+indexVals <- vector()
 outerIndex <- 1
 
 for ( i in 30:ncol(myT))
@@ -47,18 +48,20 @@ for ( i in 30:ncol(myT))
 	
 	bugNames[outerIndex] = names(myT)[i];
 	pValues[outerIndex]=1
+	indexVals[outerIndex] = outerIndex
 	
 	try(aLm <- lm(mouseVals ~ humanVals))
 	try(pValues[outerIndex] <- unclass(summary(aLm))$coefficients[2,4])
 	
 	namesWithBreaks = gsub(".", "\n", names(myT)[i],fixed=TRUE)
-	aText <- paste(namesWithBreaks, "\np=", format(pValues[outerIndex],digits=3))
+	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
+	"Index=",outerIndex)
 	plot( mouseVals, humanVals, main = aText,cex.main=.75)
 	outerIndex = outerIndex + 1	
 	}
 }
 
-aFrame <- data.frame(bugNames,pValues)
+aFrame <- data.frame(bugNames,pValues,indexVals)
 aFrame<- aFrame[order(aFrame$pValues),]
 aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 write.table(aFrame, file=paste("humanVsMouse.txt",sep=""), sep="\t",row.names=FALSE)
