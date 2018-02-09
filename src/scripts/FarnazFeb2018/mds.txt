@@ -8,6 +8,7 @@ myT <- read.table("otu_table_mc2_w_tax_L6WithMeta.txt",
 	header=TRUE,sep="\t",row.names=1)
 
 dataT <- myT[,29:ncol(myT)]
+dataT <- log10(dataT + 1e-05) + 5
 	
 myPCOA <- capscale(dataT~1,distance="bray")
 		
