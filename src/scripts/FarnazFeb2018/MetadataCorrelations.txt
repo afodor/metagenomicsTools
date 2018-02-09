@@ -32,30 +32,34 @@ makePretty <- function(s)
 	return (returnVal)
 }
 
-for ( i in 8:29)
+for ( i in 9:28)
 {
-	metaVals <- myT[,i];
-	
-	# first 10 MDS axes or so...
-	for( j in 30:508)
+	if( i != 14 ) 
 	{
-		bug <- myT[,j]
+		metaVals <- myT[,i];
 		
-		if( sum( bug != 0 ) > nrow(myT)/10)
+		# first 10 MDS axes or so...
+		for( j in 30:508)
 		{
-			bugNames <- makePretty (names(myT)[j])
-			aText = paste(bugNames,"\n", names(myT)[i] )
+			bug <- myT[,j]
 			
-			if( is.factor(myT[,i]) ) 
+			if( sum( bug != 0 ) > nrow(myT)/10)
 			{
-				boxplot( bug ~ metaVals , main=aText,cex.main=.75,las=2)		
-			}
-			else
-			{
-				plot( bug ~ metaVals , main=aText,cex.main=.75)		
+				bugNames <- makePretty (names(myT)[j])
+				aText = paste(bugNames,"\n", names(myT)[i] )
+				
+				if( is.factor(myT[,i]) ) 
+				{
+					boxplot( bug ~ metaVals , main=aText,cex.main=.75,las=2)		
+				}
+				else
+				{
+					plot( bug ~ metaVals , main=aText,cex.main=.75)		
+				}
 			}
 		}
 	}
+
 }
 
 dev.off()
