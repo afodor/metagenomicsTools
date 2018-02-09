@@ -1,0 +1,62 @@
+
+rm(list=ls())
+
+setwd("C:\\farnaz_Feb_2018")
+library("Kendall")
+
+filepath =paste("pcoa__withMetadata",".txt",sep="")
+
+myT <- read.table(filepath, sep="\t", header=TRUE)
+
+pdf("metaCorrelations.pdf")
+par(mfrow=c(2,2))
+
+makePretty <- function(s)
+{
+	val <- strsplit(s, ".",fixed=TRUE)
+	
+	index <- 1
+	returnVal <- ""
+	aLength = length(val[[1]] )
+	
+	while( index <= aLength ) 
+	{
+		returnVal <- paste(returnVal, val[[1]][index])
+		
+		if( index %% 2 == 0 & (index+1) < aLength) 
+			returnVal <- paste(returnVal, "\n")
+		
+		index <- index + 1
+	}
+	
+	return (returnVal)
+}
+
+for ( i in 8:29)
+{
+	metaVals <- myT[,i];
+	
+	# first 10 MDS axes or so...
+	for( j in 30:508)
+	{
+		bug <- myT[,j]
+		
+		if( sum( bug != 0 ) > nrow(myT)/10)
+		{
+			bugNames <- makePretty (names(myT)[j])
+			aText = paste(bugNames,"\n", names(myT)[i] )
+			
+			if( is.factor(myT[,i]) ) 
+			{
+				boxplot( bug ~ metaVals , main=aText,cex.main=.75,las=2)		
+			}
+			else
+			{
+				plot( bug ~ metaVals , main=aText,cex.main=.75)		
+			}
+		}
+	}
+}
+
+dev.off()
+
