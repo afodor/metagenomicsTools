@@ -1,8 +1,8 @@
 
-
 rm(list=ls())
 
 setwd("C:\\farnaz_Feb_2018")
+library("Kendall")
 
 filepath =paste("pcoa__withMetadata",".txt",sep="")
 
@@ -50,8 +50,7 @@ for ( i in 30:ncol(myT))
 	pValues[outerIndex]=1
 	indexVals[outerIndex] = outerIndex
 	
-	try(aLm <- lm(mouseVals ~ humanVals))
-	try(pValues[outerIndex] <- unclass(summary(aLm))$coefficients[2,4])
+	try(pValues[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
 	
 	namesWithBreaks = gsub(".", "\n", names(myT)[i],fixed=TRUE)
 	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
