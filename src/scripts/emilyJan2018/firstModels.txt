@@ -93,7 +93,7 @@ for ( i in 1:nrow(resultsFrame))
 	
 	for( i in 1:nrow(myTHuman) ) 
 	{
-		donorPlusTime[i] <- paste0(myTHuman$donorID[i],"_",substring(myTHuman$Sample.ID[i],1,2))
+		donorPlusTime[i] <- paste0(myTHuman$donorID[i],"_",substring(myTHuman$Slurry.ID[i],1,2))
 	}
 	
 	boxplot( myTHuman[,lookup] ~ donorPlusTime,las=2,main=paste("human",resultsFrame$names[i]),

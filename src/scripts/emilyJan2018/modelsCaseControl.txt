@@ -51,7 +51,7 @@ donorStringHuman <- vector()
 
 for( i in 1:nrow(myTHuman))
 {
-	twoChars = substr(myTHuman$Sample.ID[i],1,2)
+	twoChars = substr(myTHuman$Slurry.ID[i],1,2)
 	if( twoChars == "T1" || twoChars == "T2" ) 
 	{
 		 donorStringHuman[i] = paste0(myTHuman$donorID[i], "_case")
