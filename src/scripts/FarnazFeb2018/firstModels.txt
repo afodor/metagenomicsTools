@@ -1,0 +1,42 @@
+
+
+rm(list=ls())
+
+setwd("C:\\farnaz_Feb_2018")
+
+filepath =paste("pcoa__withMetadata",".txt",sep="")
+
+myT <- read.table(filepath, sep="\t", header=TRUE)
+
+humanDonorIDs <- myT$Donor[myT$Species=="Human"]
+
+pdf("donorHuman.pdf")
+for ( i in 30:ncol(myT))
+{
+	bug <- myT[,i]
+	
+	index <- 1
+	humanVals <- vector()
+	mouseVals <- vector()
+	
+	for( h in humanDonorIDs)
+	{
+		hBug <- bug[myT$Donor==h & myT$Species=="Human"]
+		
+		if( length(hBug) != 1)
+			stop("No")
+			
+		mouseBugs <- bug[myT$Donor==h & myT$Species=="Mouse"]
+		
+		for( i in 1:(length(mouseBugs)) ) 
+		{
+			humanVals[index] = hBug;
+			mouseVals[index] = mouseBugs[i]
+			index = index + 1	
+		}
+	}
+	
+	plot( mouseVals, humanVals, main = names(myT)[i])
+}
+
+dev.off()
