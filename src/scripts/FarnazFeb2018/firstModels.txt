@@ -39,7 +39,8 @@ pValues <- vector()
 indexVals <- vector()
 outerIndex <- 1
 
-for ( i in 30:ncol(myT))
+# first 10 MDS axes
+for ( i in 30:508)
 {
 
 	bug <- myT[,i]
