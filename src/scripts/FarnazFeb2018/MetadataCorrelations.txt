@@ -49,12 +49,13 @@ for ( i in 9:28)
 		{
 			bug <- myT[,j]
 			
-			pValues[index] <- unclass(summary(lm(bug ~ metaVals)))$coefficients[2,4]
-			nameMetadata[index] <- names(myT)[i]
-			nameBug[index] <- names(myT)[j]
-			
 			if( sum( bug != 0 ) > nrow(myT)/10)
 			{
+				
+				pValues[index] <- unclass(summary(lm(bug ~ metaVals)))$coefficients[2,4]
+				nameMetadata[index] <- names(myT)[i]
+				nameBug[index] <- names(myT)[j]
+			
 				bugNames <- makePretty (names(myT)[j])
 				aText = paste(bugNames,"\n", names(myT)[i], "p=", format(pValues[index] ,digits=3) )
 				
@@ -67,6 +68,7 @@ for ( i in 9:28)
 					plot( bug ~ metaVals , main=aText,cex.main=.75)		
 				}
 				
+				index = index + 1		
 			}
 		}
 	}
