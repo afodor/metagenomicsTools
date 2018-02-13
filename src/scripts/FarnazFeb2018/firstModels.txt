@@ -10,6 +10,28 @@ myT <- read.table(filepath, sep="\t", header=TRUE)
 
 humanDonorIDs <- myT$Donor[myT$Species=="Human"]
 
+makePretty <- function(s)
+{
+	val <- strsplit(s, ".",fixed=TRUE)
+	
+	index <- 1
+	returnVal <- ""
+	aLength = length(val[[1]] )
+	
+	while( index <= aLength ) 
+	{
+		returnVal <- paste(returnVal, val[[1]][index])
+		
+		if( index %% 2 == 0 & (index+1) < aLength) 
+			returnVal <- paste(returnVal, "\n")
+		
+		index <- index + 1
+	}
+	
+	return (returnVal)
+}
+
+
 pdf("donorHuman.pdf")
 par(mfrow=c(2,2))
 bugNames <- vector()
@@ -52,7 +74,7 @@ for ( i in 30:ncol(myT))
 	
 	try(pValues[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
 	
-	namesWithBreaks = gsub(".", "\n", names(myT)[i],fixed=TRUE)
+	namesWithBreaks = makePretty( names(myT)[i])
 	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
 	"Index=",outerIndex)
 	plot( mouseVals, humanVals, main = aText,cex.main=.75)
