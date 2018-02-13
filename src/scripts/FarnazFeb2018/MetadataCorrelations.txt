@@ -32,6 +32,12 @@ makePretty <- function(s)
 	return (returnVal)
 }
 
+pValues <- vector()
+nameMetadata <- vector()
+nameBug <- vector()
+index <- 1
+
+
 for ( i in 9:28)
 {
 	if( i != 14 ) 
@@ -43,10 +49,14 @@ for ( i in 9:28)
 		{
 			bug <- myT[,j]
 			
+			pValues[index] <- unclass(summary(lm(bug ~ metaVals)))$coefficients[2,4]
+			nameMetadata[index] <- names(myT)[i]
+			nameBug[index] <- names(myT)[j]
+			
 			if( sum( bug != 0 ) > nrow(myT)/10)
 			{
 				bugNames <- makePretty (names(myT)[j])
-				aText = paste(bugNames,"\n", names(myT)[i] )
+				aText = paste(bugNames,"\n", names(myT)[i], "p=", format(pValues[index] ,digits=3) )
 				
 				if( is.factor(myT[,i]) ) 
 				{
@@ -56,6 +66,7 @@ for ( i in 9:28)
 				{
 					plot( bug ~ metaVals , main=aText,cex.main=.75)		
 				}
+				
 			}
 		}
 	}
