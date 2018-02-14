@@ -72,8 +72,14 @@ for ( i in 9:28)
 			}
 		}
 	}
-
 }
+
+
+aFrame <- data.frame(pValues,nameMetadata,nameBug )
+aFrame<- aFrame[order(aFrame$pValues),]
+aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
+write.table(aFrame, file=paste("correlationPValues.txt",sep=""), sep="\t",row.names=FALSE)
+
 
 dev.off()
 
