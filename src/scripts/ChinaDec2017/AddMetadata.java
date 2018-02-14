@@ -67,13 +67,12 @@ public class AddMetadata
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getChinaDecember2017Dir() + File.separator + "tables" + 
-			File.separator + 
-				"pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt")));
+			File.separator + "pcoaPlusTaxa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt")));
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 					ConfigReader.getChinaDecember2017Dir() + File.separator + "tables" + 
 							File.separator + 
-					"pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "WithFirstChar.txt")));
+					"pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "WithMeta.txt")));
 			
 			writer.write("id\tfirstChar\t" +firstLine + "\t" + 
 			reader.readLine().replaceAll("\"", "") + "\n");
