@@ -6,6 +6,57 @@ taxaLevels <- c("phylum","class","order","family","genus")
 
 for(taxa in taxaLevels ) 
 {
+	pValues <- vector()
+	nameMetadata <- vector()
+	nameBug <- vector()
+	index <- 1
+			
 	fileName <- paste0("pcoa_", taxa, "WithMeta.txt")
 	myT <- read.table(fileName, sep="\t",header=TRUE)
+	
+	metaCols <- c(3,4,5,6)
+	
+	bugs <-  (which(names(myT)=="iadl") + 1) : ncol(myT)
+	
+	pdf( paste0(taxa ,"_firstModels.pdf"))
+	
+	par(mfrow=c(2,2))
+	
+	for( i in metaCols) 
+	{
+		metaVals <- myT[,i];
+	
+		for (j in bugs) 
+		{
+			bug <- myT[,j]
+			
+			if( sum( bug != 0 ) > nrow(myT)/10)
+			{
+				pValues[index] <- unclass(summary(lm(bug ~ metaVals)))$coefficients[2,4]
+				nameMetadata[index] <- names(myT)[i]
+				nameBug[index] <- names(myT)[j]
+			
+				bugNames <- names(myT)[j]
+				aText = paste(bugNames,"\n", names(myT)[i], "p=", format(pValues[index] ,digits=3) )
+				
+				if( is.factor(myT[,i]) ) 
+				{
+					boxplot( bug ~ metaVals , main=aText,cex.main=.75,las=2)		
+				}
+				else
+				{
+					plot( bug ~ metaVals , main=aText,cex.main=.75)		
+				}
+				
+				index = index + 1		
+			}
+		}
+	}
+	
+	dev.off()
+	
+	aFrame <- data.frame(pValues,nameMetadata,nameBug )
+	aFrame<- aFrame[order(aFrame$pValues),]
+	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
+	write.table(aFrame, file=paste("correlationPValues_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
