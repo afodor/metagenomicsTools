@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
@@ -74,7 +75,8 @@ public class AddMetadata
 							File.separator + 
 					"pcoa_" + NewRDPParserFileLine.TAXA_ARRAY[x] + "WithFirstChar.txt")));
 			
-			writer.write("id\tfirstChar\t" + reader.readLine().replaceAll("\"", "") + "\n");
+			writer.write("id\tfirstChar\t" +firstLine + "\t" + 
+			reader.readLine().replaceAll("\"", "") + "\n");
 			
 			for(String s= reader.readLine(); s != null; s= reader.readLine())
 			{
@@ -82,6 +84,13 @@ public class AddMetadata
 				String[] splits = s.split("\t");
 				
 				writer.write(splits[0] + "\t" + splits[0].charAt(0));
+				
+				String key = new StringTokenizer(splits[0], "_").nextToken();
+				
+				writer.write("\t" + metaMap.get(key));
+				
+				if( ! metaMap.containsKey(key))
+					throw new Exception("No " + key);
 				
 				for( int y=1; y < splits.length; y++)
 				writer.write("\t" + splits[y]);
