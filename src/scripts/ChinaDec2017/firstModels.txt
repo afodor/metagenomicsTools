@@ -39,7 +39,7 @@ for(taxa in taxaLevels )
 				bugNames <- names(myT)[j]
 				aText = paste(bugNames,"\n", names(myT)[i], "p=", format(pValues[index] ,digits=3) )
 				
-				if( is.factor(myT[,i]) ) 
+				if( i==3 || i == 7 || i == 8  ) 
 				{
 					boxplot( bug ~ metaVals , main=aText,cex.main=.75,las=2)		
 				}
@@ -60,3 +60,5 @@ for(taxa in taxaLevels )
 	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 	write.table(aFrame, file=paste("correlationPValues_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
+
