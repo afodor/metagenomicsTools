@@ -40,4 +40,10 @@ for(taxa in taxaLevels )
 	
 	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""))
 	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+	
+	
+	myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u[,1:10])
+
+	write.table(myMerge , sep="\t", file=paste("pcoaPlusTaxa_",taxa,".txt",sep=""),row.names=FALSE)
 }
+
