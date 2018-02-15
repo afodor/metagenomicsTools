@@ -4,8 +4,12 @@ rm(list=ls())
 
 taxaLevels <- c("phylum","class","order","family","genus")
 
+
 for(taxa in taxaLevels ) 
 {
+	pdf(paste0("twoWay", taxa, ".pdf"))
+	par(mfrow=c(2,2))
+
 	pValuesRegion <- vector()
 	pValuesUrbanRural <- vector()
 	pValuesInteraction <- vector()
@@ -15,8 +19,8 @@ for(taxa in taxaLevels )
 	fileName <- paste0("pcoa_", taxa, "WithMeta.txt")
 	myT <- read.table(fileName, sep="\t",header=TRUE)
 	
-	region <- myT$t1
-	ruralUrban <- myT$t2
+	region <- factor( myT$t1)
+	ruralUrban <- factor(myT$t2)
 	
 	bugs <-  (which(names(myT)=="iadl") + 1) : ncol(myT)
 	
@@ -27,15 +31,23 @@ for(taxa in taxaLevels )
 		if( sum( bug != 0 ) > nrow(myT)/10)
 		{
 			aLm <- lm(bug ~ region * ruralUrban)
-			pValuesRegion[index] <- unclass( summary(aLm)$coefficients)[2,4]
-			pValuesUrbanRural[index] <- unclass( summary(aLm)$coefficients)[3,4]
-			pValuesInteraction[index] <- unclass( summary(aLm)$coefficients)[4,4]
-		
+			anAnova <- anova(aLm)
+			
+			pValuesRegion[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesUrbanRural[index] <- anova(aLm)$"Pr(>F)"[2]
+			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[3]
 			nameBug[index] <- names(myT)[j]
+		
+			aText= paste( nameBug[index], "p region", format( pValuesRegion[index],digits=4),
+								"\npRuralUrban", format( pValuesUrbanRural[index],digits=4),
+								"\npInteraction", format( pValuesInteraction[index],digits=4))
+		
+			plot( bug ~ myT$t1,col=ifelse( myT$t2==1 , "red", "blue" ),main=aText)
 			index = index + 1		
 		}
 	}
 	
+	dev.off()
 	aFrame <- data.frame(nameBug ,pValuesRegion,pValuesUrbanRural,pValuesInteraction)
 	aFrame<- aFrame[order(aFrame$pValuesUrbanRural),]
 	write.table(aFrame, file=paste("PValuesTwoWay_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)

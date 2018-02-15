@@ -25,6 +25,11 @@ for(taxa in taxaLevels )
 	for( i in metaCols) 
 	{
 		metaVals <- myT[,i];
+		
+		if( i==3 || i == 7 || i == 8  ) 
+		{
+			metaVals = factor(metaVals)
+		}
 	
 		for (j in bugs) 
 		{
