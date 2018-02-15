@@ -1,0 +1,44 @@
+setwd("C:\\ChinaDec2017\\tables")
+
+rm(list=ls())
+
+taxaLevels <- c("phylum","class","order","family","genus")
+
+for(taxa in taxaLevels ) 
+{
+	pValuesRegion <- vector()
+	pValuesUrbanRural <- vector()
+	pValuesInteraction <- vector()
+	nameBug <- vector()
+	index <- 1
+			
+	fileName <- paste0("pcoa_", taxa, "WithMeta.txt")
+	myT <- read.table(fileName, sep="\t",header=TRUE)
+	
+	region <- myT$t1
+	ruralUrban <- myT$t2
+	
+	bugs <-  (which(names(myT)=="iadl") + 1) : ncol(myT)
+	
+	for (j in bugs) 
+	{
+		bug <- myT[,j]
+			
+		if( sum( bug != 0 ) > nrow(myT)/10)
+		{
+			aLm <- lm(bug ~ region * ruralUrban)
+			pValuesRegion[index] <- unclass( summary(aLm)$coefficients)[2,4]
+			pValuesUrbanRural[index] <- unclass( summary(aLm)$coefficients)[3,4]
+			pValuesInteraction[index] <- unclass( summary(aLm)$coefficients)[4,4]
+		
+			nameBug[index] <- names(myT)[j]
+			index = index + 1		
+		}
+	}
+	
+	aFrame <- data.frame(nameBug ,pValuesRegion,pValuesUrbanRural,pValuesInteraction)
+	aFrame<- aFrame[order(aFrame$pValuesUrbanRural),]
+	write.table(aFrame, file=paste("PValuesTwoWay_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
+}
+
+
