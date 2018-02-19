@@ -66,4 +66,12 @@ for(taxa in taxaLevels )
 	write.table(aFrame, file=paste("correlationPValues_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
 
+logVals <- -log10( aFrame$pValues) 
+names <- aFrame$nameMetadata
+boxplot( logVals~ names ,ylab="-log10(pValue)")
 
+someFrame <- data.frame( logVals , names )
+	
+stripchart(logVals~ names , data = someFrame,vertical = TRUE, pch = 21, add=TRUE )	
+	
+	
