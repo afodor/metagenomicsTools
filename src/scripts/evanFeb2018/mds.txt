@@ -1,0 +1,21 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\EvanFeb2018\\spreadsheets")
+
+taxa <- c("phylum", "class", "order", "family", "genus")
+
+for( t in taxa )
+{
+	filepath<- paste( "pivoted_", t,"asColumnsLogNormal.txt",sep ="")
+	myT <-read.table(filepath,sep="\t",header=TRUE,row.names=1)
+	myPCOA <- capscale(myT~1,distance="bray")
+
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_" ,t, "_allData",".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_",t,".txt", sep=""), sep="\t")	
+	
+	myMerge <- cbind( myT, myPCOA$CA$u)
+	write.table(myMerge , sep="\t", file=paste("pcoa_withTaxa",t,".txt",sep=""),row.names=FALSE)
+}
+	
