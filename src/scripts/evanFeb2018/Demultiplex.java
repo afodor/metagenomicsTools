@@ -25,6 +25,14 @@ public class Demultiplex
 		
 		demultiplex(mappingFile1, seqFile1, 1);
 		
+		File mappingFile2 = new File(ConfigReader.getEvanFeb2018Dir() + File.separator + 
+				"Dellon_Batch2.mapping.txt");
+		
+		File seqFile2= 
+				new File(
+						ConfigReader.getEvanFeb2018Dir() + File.separator + "Dellon_Batch2.fastq");
+		
+		demultiplex(mappingFile2, seqFile2, 2);
 	}
 	
 	private static void demultiplex(File mapFile, File sequenceFile, int batchNumber) throws Exception
@@ -90,7 +98,7 @@ public class Demultiplex
 		
 		reader.readLine();
 		
-		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
 			s = s.replaceAll("\"", "");
 			
