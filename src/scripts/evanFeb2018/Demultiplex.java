@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 
+import parsers.FastQ;
 import utils.ConfigReader;
 
 public class Demultiplex
@@ -19,6 +20,30 @@ public class Demultiplex
 
 		for(String s : barcode1.keySet())
 			System.out.println(s +  " "+ barcode1.get(s));
+		
+		BufferedReader fastq1Reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getEvanFeb2018Dir() + File.separator + 
+				"Batch_1_2015" + File.separator + "R_2015_03_31_14_16_19_user_Nikki.fastq")));
+		
+		long numFound =0;
+		long numTested =0;
+		
+		for( FastQ fq = FastQ.readOneOrNull(fastq1Reader); fq != null; fq = FastQ.readOneOrNull(fastq1Reader))
+		{
+			boolean gotOne =false;
+			
+			for(String s : barcode1.keySet())
+				if( fq.getSequence().startsWith(s))
+					gotOne = true;
+			
+			numTested++;
+			
+			if( gotOne)
+				numFound++;
+			
+			if( numTested % 10000 == 0 )
+				System.out.println(numFound + " " + numTested);
+		}
 	}
 	
 	private static HashMap<String, String> getBarcodeToSampleMap(File inFile) throws Exception
