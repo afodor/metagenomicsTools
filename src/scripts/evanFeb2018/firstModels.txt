@@ -24,11 +24,15 @@ for( t in taxa )
 	
 	for (j in  31:(which(names(myT)=="MDS10")))
 	{
-		taxaNames[index] <- names(myT)[j]
 		bug <- myT[,j]
-		aLm <- lm( myT[,j] ~ myT[,i] )
-		pValues[index]= unclass(summary(aLm))$coefficients[2,4]
-		index = index + 1
+		
+		if( sum( bug != 0) > nrow(	myT) / 10)
+		{	
+			taxaNames[index] <- names(myT)[j]
+			aLm <- lm( myT[,j] ~ myT[,i] )
+			pValues[index]= unclass(summary(aLm))$coefficients[2,4]
+			index = index + 1				
+		}
 	}
 	
 	corFrame <- data.frame(taxaNames,pValues)
