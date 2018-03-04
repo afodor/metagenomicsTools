@@ -16,6 +16,24 @@ for( t in taxa )
 		   rep("numeric", numCols-50))
 	myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 			
+	i <- 4
 	
+	taxaNames <- vector()
+	pValues <- vector()
+	index <- 1
+	
+	for (j in  31:(which(names(myT)=="MDS10")))
+	{
+		taxaNames[index] <- names(myT)[j]
+		bug <- myT[,j]
+		aLm <- lm( myT[,j] ~ myT[,i] )
+		pValues[index]= unclass(summary(aLm))$coefficients[2,4]
+		index = index + 1
+	}
+	
+	corFrame <- data.frame(taxaNames,pValues)
+	corFrame <- corFrame[order(corFrame$pValues),]
+	corFrame$adjustedpValues<- p.adjust( corFrame$pValues, method = "BH" )	
+	write.table(corFrame, file=paste("pValues_",t,".txt",sep=""), sep="\t",row.names=FALSE)
 }
 
