@@ -1,0 +1,21 @@
+rm(list=ls())
+
+setwd("C:\\EvanFeb2018\\spreadsheets")
+
+taxa <- c("phylum", "class", "order", "family", "genus" )
+
+for( t in taxa ) 
+{
+	filepath <- paste0("pcoa_withTaxa",t,"WithMetadata.txt")
+	myT <-read.table(filepath,sep="\t",header=TRUE)
+	numCols <- ncol(myT)
+	myColClasses <- c(
+					  rep("character", 24),
+					  rep("numeric", 2),
+					  rep("character", 4),
+		   rep("numeric", numCols-50))
+	myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
+			
+	
+}
+
