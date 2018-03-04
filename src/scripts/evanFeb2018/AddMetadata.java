@@ -35,6 +35,7 @@ public class AddMetadata
 	private static void addMetadata(File inFile, File outFile) throws Exception
 	{
 		HashMap<String, String[]> metaMap =getMetaLineMap();
+		String[] firstSplits = getFirstLineSplits();
 		
 		//System.out.println(metaMap.keySet());
 		
@@ -42,7 +43,12 @@ public class AddMetadata
 		
 		BufferedWriter writer=  new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("fileID\tsampleID\tbatch\t" + reader.readLine() + "\n");
+		writer.write("fileID\tsampleID\tbatch");
+		
+		for( int x=1; x < firstSplits.length; x++)
+			writer.write("\t" + firstSplits[x]);
+		
+		writer.write("\t" +  reader.readLine() + "\n");
 		
 		for(String s= reader.readLine(); s !=null; s= reader.readLine())
 		{
@@ -53,11 +59,31 @@ public class AddMetadata
 			String key = sToken.nextToken();
 			String[] metaSplits = metaMap.get(key);
 			
-			if( metaSplits == null)
-				System.out.println("Could not find " + key);
-			
+
 			writer.write(splits[0] + "\t" + key + "\t" + sToken.nextToken().charAt(0) );
 			
+			if( metaSplits == null)
+			{
+				System.out.println("Could not find " + key);
+				for( int x=1; x < firstSplits.length ; x++)
+					writer.write("\t" + "NA");
+			}
+			else
+			{
+				if( metaSplits.length != firstSplits.length)
+					throw new Exception("Unexpected length");
+				
+				for( int x=1; x < metaSplits.length; x++)
+				{
+					String val = metaSplits[x].trim();
+					
+					if( val == null || val.equals("."))
+						val = "NA";
+					
+					writer.write("\t" + val);
+				}
+			}
+				
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
 			
@@ -66,6 +92,21 @@ public class AddMetadata
 		
 		writer.flush();  writer.close();
 		reader.close();
+	}
+	
+	private static String[] getFirstLineSplits() throws Exception
+	{
+
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getEvanFeb2018Dir() + File.separator + 
+					"meta-data for analysis - 2018.02.21.txt")));
+		
+		String[] splits= reader.readLine().trim().replaceAll("\"","" ).split("\t");
+		
+		reader.close();
+		
+		return splits;
+		
 	}
 	
 	private static HashMap<String, String[]> getMetaLineMap() throws Exception
