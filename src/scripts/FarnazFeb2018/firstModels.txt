@@ -71,6 +71,10 @@ for ( i in 36:514)
 				index = index + 1	
 			}
 		}
+		else
+		{
+			print( paste("No mouse for ",h) )
+		} 
 	}
 	
 	bugNames[outerIndex] = names(myT)[i];
@@ -82,7 +86,7 @@ for ( i in 36:514)
 	namesWithBreaks = makePretty( names(myT)[i])
 	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
 	"Index=",outerIndex)
-	plot( mouseVals, humanVals, main = aText,cex.main=.75)
+	plot( jitter(mouseVals), jitter(humanVals), main = aText,cex.main=.75)
 	outerIndex = outerIndex + 1	
 	}
 }
