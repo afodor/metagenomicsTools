@@ -14,7 +14,7 @@ public class MergeMetadata
 	public static void main(String[] args) throws Exception
 	{
 		File metaFile = new File(ConfigReader.getFarnazFeb2018Directory() + File.separator + 
-					"Farnaz_MDMF_MBP_var.txt");
+					"Farnaz_MDMF_MBP_Final.txt");
 		
 		String firstLine = readFirstLine(metaFile);
 		HashMap<Integer, String> metaMap = getMetaMap(metaFile);
