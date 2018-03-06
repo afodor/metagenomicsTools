@@ -38,6 +38,7 @@ par(mfrow=c(2,2))
 bugNames <- vector()
 pValues <- vector()
 indexVals <- vector()
+corCoefs <- vector()
 outerIndex <- 1
 
 # first 10 MDS axes
@@ -80,6 +81,7 @@ for ( i in 36:514)
 	bugNames[outerIndex] = names(myT)[i];
 	pValues[outerIndex]=1
 	indexVals[outerIndex] = outerIndex
+	corCoefs[outerIndex] = cor(mouseVals ,humanVals, method="kendall")
 	
 	try(pValues[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
 	
@@ -91,7 +93,7 @@ for ( i in 36:514)
 	}
 }
 
-aFrame <- data.frame(bugNames,pValues,indexVals)
+aFrame <- data.frame(bugNames,pValues,indexVals,corCoefs)
 aFrame<- aFrame[order(aFrame$pValues),]
 aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 write.table(aFrame, file=paste("humanVsMouse.txt",sep=""), sep="\t",row.names=FALSE)
