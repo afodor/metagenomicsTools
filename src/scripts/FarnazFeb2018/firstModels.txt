@@ -55,6 +55,7 @@ for ( i in 36:514)
 	humanVals <- vector()
 	mouseVals <- vector()
 	timepointColors<- vector()
+	mouseIDs <- vector()
 	
 	for( h in humanDonorIDs)
 	{
@@ -65,6 +66,7 @@ for ( i in 36:514)
 			
 		mouseBugs <- bug[myT$Donor==h & myT$Species=="Mouse" & ( myT$Timepoint_code==2 | myT$Timepoint_code==3) ]
 		timepoints <- myT$Timepoint_code[myT$Donor==h & myT$Species=="Mouse" & ( myT$Timepoint_code==2 | myT$Timepoint_code==3) ]
+		mIDS <- myT$Mouse_human_ID[myT$Donor==h & myT$Species=="Mouse" & ( myT$Timepoint_code==2 | myT$Timepoint_code==3) ]
 		
 		if( length(timepoints) != length(mouseBugs)) 
 			stop("Logic error")
@@ -76,6 +78,8 @@ for ( i in 36:514)
 				humanVals[index] = hBug;
 				mouseVals[index] = mouseBugs[j]
 				timepointColors[index] = ifelse( timepoints[j] == 2, "black" , "red" )
+				
+				mouseIDs[index] = mIDS[j]
 				
 				if( timepoints[j] != 2 & timepoints[j] != 3)
 					stop("Logic error 2")
@@ -111,6 +115,8 @@ for ( i in 36:514)
 		stop("logic error 3")
 	
 	plot( jitter(mouseVals), jitter(humanVals), main = aText,cex.main=.75,col=timepointColors)
+	#todo: Can we make a different symbol for each mouseID??
+	#text(mouseVals,humanVals,mouseIDs)
 	outerIndex = outerIndex + 1	
 	}
 }
