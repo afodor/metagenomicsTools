@@ -8,7 +8,6 @@ filepath =paste("pcoa__withMetadata",".txt",sep="")
 
 myT <- read.table(filepath, sep="\t", header=TRUE)
 
-
 humanDonorIDs <- myT$Donor[myT$Species=="Human"]
 
 makePretty <- function(s)
@@ -52,6 +51,7 @@ for ( i in 36:514)
 	index <- 1
 	humanVals <- vector()
 	mouseVals <- vector()
+	timepointColors<- vector()
 	
 	for( h in humanDonorIDs)
 	{
@@ -61,7 +61,10 @@ for ( i in 36:514)
 			stop("No")
 			
 		mouseBugs <- bug[myT$Donor==h & myT$Species=="Mouse" & ( myT$Timepoint_code==2 | myT$Timepoint_code==3) ]
+		timepoints <- myT$Timepoint_code[myT$Donor==h & myT$Species=="Mouse" & ( myT$Timepoint_code==2 | myT$Timepoint_code==3) ]
 		
+		if( length(timepoints) != length(mouseBugs)) 
+			stop("Logic error")
 		
 		if( length( mouseBugs) > 0)
 		{
@@ -69,6 +72,11 @@ for ( i in 36:514)
 			{
 				humanVals[index] = hBug;
 				mouseVals[index] = mouseBugs[j]
+				timepointColors[index] = ifelse( timepoints[j] == 2, "black" , "red" )
+				
+				if( timepoints[j] != 2 & timepoints[j] != 3)
+					stop("Logic error 2")
+				
 				index = index + 1	
 			}
 		}
@@ -88,7 +96,11 @@ for ( i in 36:514)
 	namesWithBreaks = makePretty( names(myT)[i])
 	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
 	"Index=",outerIndex)
-	plot( jitter(mouseVals), jitter(humanVals), main = aText,cex.main=.75)
+	
+	if(length(mouseVals) != length(timepointColors) ) 
+		stop("logic error 3")
+	
+	plot( jitter(mouseVals), jitter(humanVals), main = aText,cex.main=.75,col=timepointColors)
 	outerIndex = outerIndex + 1	
 	}
 }
