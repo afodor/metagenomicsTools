@@ -38,6 +38,7 @@ bugNames <- vector()
 pValuesKendall <- vector()
 pValuesLinearModelHuman <- vector()
 pValuesLinearModelTimepoint <- vector()
+pValuesInteraction <- vector()
 indexVals <- vector()
 corCoefs <- vector()
 outerIndex <- 1
@@ -96,8 +97,9 @@ for ( i in 36:514)
 	corCoefs[outerIndex] = cor(mouseVals ,humanVals, method="kendall")
 	
 	try(pValuesKendall[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
-	try(pValuesLinearModelHuman[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals + timepointColors)))$coefficients[2,4])
-	try(pValuesLinearModelTimepoint[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals + timepointColors)))$coefficients[3,4])
+	try(pValuesLinearModelHuman[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals * timepointColors)))$coefficients[2,4])
+	try(pValuesLinearModelTimepoint[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals * timepointColors)))$coefficients[3,4])
+	try(pValuesInteraction[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals * timepointColors)))$coefficients[4,4])
 	
 	namesWithBreaks = makePretty( names(myT)[i])
 	aText <- paste0(namesWithBreaks, "\npKendall= ", format(pValuesKendall[outerIndex],digits=3),
@@ -113,12 +115,13 @@ for ( i in 36:514)
 	}
 }
 
-aFrame <- data.frame(bugNames,pValuesKendall,indexVals,corCoefs,pValuesLinearModelHuman,pValuesLinearModelTimepoint)
+aFrame <- data.frame(bugNames,pValuesKendall,indexVals,corCoefs,pValuesLinearModelHuman,pValuesLinearModelTimepoint,pValuesInteraction)
 aFrame<- aFrame[order(aFrame$pValuesKendall),]
 aFrame$adjustedpValuesKendall<- p.adjust( aFrame$pValuesKendall, method = "BH" )	
 aFrame$pValuesLinearModelHumanAdjusted <- p.adjust( aFrame$pValuesLinearModelHuman, method = "BH" )
 aFrame$pValuesLinearModelTimepointAdjusted <- p.adjust( aFrame$pValuesLinearModelTimepoint, method = "BH" )
+aFrame$pValuesInteractionAdjusted <- p.adjust( aFrame$pValuesInteraction, method = "BH" )
 write.table(aFrame, file=paste("humanVsMouse.txt",sep=""), sep="\t",row.names=FALSE)
 
-
 dev.off()
+
