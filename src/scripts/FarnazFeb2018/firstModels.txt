@@ -35,7 +35,9 @@ makePretty <- function(s)
 pdf("donorHuman.pdf")
 par(mfrow=c(2,2))
 bugNames <- vector()
-pValues <- vector()
+pValuesKendall <- vector()
+pValuesLinearModelHuman <- vector()
+pValuesLinearModelTimepoint <- vector()
 indexVals <- vector()
 corCoefs <- vector()
 outerIndex <- 1
@@ -87,15 +89,21 @@ for ( i in 36:514)
 	}
 	
 	bugNames[outerIndex] = names(myT)[i];
-	pValues[outerIndex]=1
+	pValuesKendall[outerIndex]=1
+	pValuesLinearModelHuman[outerIndex] = 1
+	pValuesLinearModelTimepoint[outerIndex]=1
 	indexVals[outerIndex] = outerIndex
 	corCoefs[outerIndex] = cor(mouseVals ,humanVals, method="kendall")
 	
-	try(pValues[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
+	try(pValuesKendall[outerIndex] <- Kendall(mouseVals ,humanVals)$sl[1])
+	try(pValuesLinearModelHuman[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals + timepointColors)))$coefficients[2,4])
+	try(pValuesLinearModelTimepoint[outerIndex] <- unclass(summary(lm( mouseVals ~ humanVals + timepointColors)))$coefficients[3,4])
 	
 	namesWithBreaks = makePretty( names(myT)[i])
-	aText <- paste0(namesWithBreaks, "\np= ", format(pValues[outerIndex],digits=3),
-	"Index=",outerIndex)
+	aText <- paste0(namesWithBreaks, "\npKendall= ", format(pValuesKendall[outerIndex],digits=3),
+	"\npLmHuman",format(pValuesLinearModelHuman[outerIndex][outerIndex],digits=3),
+	" pLmTime",format(pValuesLinearModelTimepoint[outerIndex][outerIndex],digits=3),
+	 "Index=",outerIndex)
 	
 	if(length(mouseVals) != length(timepointColors) ) 
 		stop("logic error 3")
@@ -105,9 +113,12 @@ for ( i in 36:514)
 	}
 }
 
-aFrame <- data.frame(bugNames,pValues,indexVals,corCoefs)
-aFrame<- aFrame[order(aFrame$pValues),]
-aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
+aFrame <- data.frame(bugNames,pValuesKendall,indexVals,corCoefs,pValuesLinearModelHuman,pValuesLinearModelTimepoint)
+aFrame<- aFrame[order(aFrame$pValuesKendall),]
+aFrame$adjustedpValuesKendall<- p.adjust( aFrame$pValuesKendall, method = "BH" )	
+aFrame$pValuesLinearModelHumanAdjusted <- p.adjust( aFrame$pValuesLinearModelHuman, method = "BH" )
+aFrame$pValuesLinearModelTimepointAdjusted <- p.adjust( aFrame$pValuesLinearModelTimepoint, method = "BH" )
 write.table(aFrame, file=paste("humanVsMouse.txt",sep=""), sep="\t",row.names=FALSE)
+
 
 dev.off()
