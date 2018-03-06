@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import parsers.FastQ;
@@ -31,18 +30,21 @@ public class WriteRareficationTable
 			String[] splits = s.split("_");
 			
 			if( splits[0].equals("Run1") && ! splits[2].startsWith("S"))
+			{
+
 				System.out.println(s);
 			
-			BufferedReader reader =  new BufferedReader(new InputStreamReader( 
+				BufferedReader reader =  new BufferedReader(new InputStreamReader( 
 					new GZIPInputStream( new FileInputStream( fastqDir + File.separator + s ) ) ));
 			
-			long count =0;
+				long count =0;
 			
-			for(FastQ fq = FastQ.readOneOrNull(reader); fq != null; fq= FastQ.readOneOrNull(reader))
-				count++;
+				for(FastQ fq = FastQ.readOneOrNull(reader); fq != null; fq= FastQ.readOneOrNull(reader))
+					count++;
 			
-			writer.write(s + "\t" + count + "\n");
-			writer.flush();
+				writer.write(s + "\t" + count + "\n");
+				writer.flush();
+			}
 		}
 		
 		writer.flush();  writer.close();
