@@ -101,9 +101,9 @@ for ( i in 36:514)
 	
 	namesWithBreaks = makePretty( names(myT)[i])
 	aText <- paste0(namesWithBreaks, "\npKendall= ", format(pValuesKendall[outerIndex],digits=3),
-	"\npLmHuman",format(pValuesLinearModelHuman[outerIndex][outerIndex],digits=3),
-	" pLmTime",format(pValuesLinearModelTimepoint[outerIndex][outerIndex],digits=3),
-	 "Index=",outerIndex)
+	" human=",format(pValuesLinearModelHuman[outerIndex],digits=3),
+	" time=" ,format(pValuesLinearModelTimepoint[outerIndex],digits=3),
+	 "\nIndex=",outerIndex)
 	
 	if(length(mouseVals) != length(timepointColors) ) 
 		stop("logic error 3")
