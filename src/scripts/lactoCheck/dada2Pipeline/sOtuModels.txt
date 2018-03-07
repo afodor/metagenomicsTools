@@ -1,0 +1,123 @@
+rm(list=ls())
+	
+setwd("C:\\lactoCheck")
+	
+myT <- read.table("pivotDADA2NormPlusMeta.txt", sep="\t", header=TRUE)
+myT <- myT[myT$sample != "NC101",] 
+myTWithNeg <- myT 
+myT <- myT[1:29,]
+
+pValuesBirthMode <- vector()
+pValuesGroup <- vector()
+names <- vector()
+tableIndex <- vector()
+
+index <- 1
+for( i in 13:ncol(myT))
+	if(  (sum(myT[,i] ==0) / nrow(myT)) < .25 )
+	{
+		bug <- myT[,i]
+		myLm <- lm( bug~ myT$birthMode + myT$birthGroup)
+		pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesGroup[index] <-  anova(myLm)$"Pr(>F)"[2]
+		names[index] <- names(myT)[i]
+		tableIndex[index] <- i
+		index <- index + 1
+	}
+	
+dFrame <- data.frame( names, pValuesBirthMode,pValuesGroup, tableIndex)
+dFrame <- dFrame [order(dFrame$pValuesBirthMode),]
+dFrame$pValuesBirthModeAdjusted<- p.adjust( dFrame$pValuesBirthMode, method = "BH" )	
+dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+
+write.table(dFrame, file=paste("pValuesForModeTimesOTU.txt",sep=""), sep="\t",row.names=FALSE)
+
+colors <- vector()
+
+for( i in 1:nrow(myTWithNeg))
+{
+	if( myTWithNeg$groupNumber[i] == 0 ) 
+	{
+		if( myTWithNeg$sample == "neg" ) 
+			colors[i] = "blue"		
+		else	
+			colors[i] = "orange"
+	}
+	else
+	{
+		if( myTWithNeg$birthMode[i] == "C" )
+			colors[i] = "red"
+		else
+			colors[i] = "black"
+	}
+}
+
+pdf("boxplotsOTU.pdf")
+par(mfrow=c(1,2))
+
+for ( i in 1:nrow(dFrame))
+{
+	index <- dFrame$tableIndex[i]
+	bug <- myTWithNeg[,index]
+	
+	birthMode <- vector()
+	
+	for( j in 1:nrow(myTWithNeg))
+	{
+		if( myTWithNeg$birthMode[j] == "C" || myTWithNeg$birthMode[j] == "V"  )
+		{
+			if( myTWithNeg$birthMode[j] == "C") 
+				birthMode[j] = "C"
+			else
+				birthMode[j] = "V"
+		}
+		else
+		{
+			birthMode[j] = "neg"
+		}
+	}
+	
+	birthMode <- factor(birthMode, c("neg","C","V"))
+	
+	groupNumber <- myTWithNeg$birthGroup
+	myFrame <- data.frame(bug,birthMode,groupNumber)
+	
+	mainString= paste( names(myTWithNeg)[index],"\n", "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
+							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
+	
+	plot(bug ~ groupNumber, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
+	
+
+	boxplot(bug ~ birthMode, main = names(myTWithNeg)[index])
+	
+	theseColors <- vector()
+	
+	for( i in 1:nrow(myTWithNeg))
+	{
+		if( groupNumber[i] == 0) 
+		{
+			if( myTWithNeg$stoolOrGa[i] == "neg" ) 
+				theseColors[i] = "blue"		
+			else	
+				theseColors[i] = "orange"	
+		}
+		else
+		{
+			if( birthMode[i] == "C" )
+				theseColors[i] = "red"
+			else
+				theseColors[i] = "black"
+		}
+	}
+	
+	for( i in 1:length(theseColors))
+	{
+		
+		stripchart(bug[i] ~ birthMode[i], 
+		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
+	}
+	
+}
+
+dev.off()
