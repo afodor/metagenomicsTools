@@ -84,7 +84,21 @@ for ( i in 1:nrow(dFrame))
 	mainString= paste( names(myTWithNeg)[index],"\n", "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
 							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
 	
-	plot(bug ~ groupNumber, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	asNumbers <- vector()
+	
+	for ( i in 1:length(groupNumber))
+	{
+		if( groupNumber[i] == "neg" ) 
+		{
+			asNumbers[i] = 0;
+		}
+		else
+		{
+			asNumbers[i] = as.numeric( groupNumber[i] )
+		}
+	}
+	
+	plot(bug ~ asNumbers, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 
