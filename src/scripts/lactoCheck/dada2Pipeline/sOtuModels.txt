@@ -52,7 +52,7 @@ for( i in 1:nrow(myTWithNeg))
 }
 
 pdf("boxplotsOTU.pdf")
-par(mfrow=c(1,2))
+par(mfrow=c(2,1),mar=c(4,4,1,1), oma=c(2,2,1,1))
 
 for ( i in 1:nrow(dFrame))
 {
@@ -131,6 +131,9 @@ for ( i in 1:nrow(dFrame))
 		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
 	}
 	
+	
+	mtext("HELLO HELLO HELLO HELLO HELLO HELLO " ,
+        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 }
 
 dev.off()
