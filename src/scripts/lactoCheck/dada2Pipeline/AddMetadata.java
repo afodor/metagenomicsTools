@@ -15,19 +15,30 @@ public class AddMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getLactoCheckDir() + 
-					File.separator + "pivotDADA2.txt");
+		File inFile = new File(ConfigReader.getLactoCheckDir() + 
+				File.separator + "pivotDADA2.txt");
+		OtuWrapper wrapper = new OtuWrapper(inFile);
+		
+		File normFile = new File(ConfigReader.getLactoCheckDir() + 
+				File.separator + "pivotDADA2Norm.txt");
 		
 		File logNormFile = new File(
 				ConfigReader.getLactoCheckDir() + 
 				File.separator + "pivotDADA2LogNorm.txt");
 		
 		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
+		wrapper.writeNormalizedDataToFile(normFile);
 		
 		File metaFile =new File(ConfigReader.getLactoCheckDir() + 
 				File.separator + "pivotDADA2LogNormPlusMeta.txt");
 		
 		addMetadata(logNormFile, metaFile, wrapper);
+		
+		metaFile =new File(ConfigReader.getLactoCheckDir() + 
+				File.separator + "pivotDADA2NormPlusMeta.txt");
+		
+		addMetadata(normFile, metaFile, wrapper);
+		
 	}
 	
 	private static HashMap<String, Double> getPCRMap() throws Exception
@@ -124,7 +135,7 @@ public class AddMetadata
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
 				+ "\tbirthGroup\tsubjectNumber\tbirthMode\tmostFrequentTaxa\tfractionMostFrequent\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
-		for( int x=1; x < topSplits.length; x++)
+		for( int x=1; x < topSplits.length && x < 50; x++)
 			writer.write("\t" + topSplits[x]);
 		
 		writer.write("\n");
@@ -178,7 +189,7 @@ public class AddMetadata
 			}
 			else throw new Exception("No");
 					
-			for( int x=1; x < splits.length; x++)
+			for( int x=1; x < splits.length&& x < 50; x++)
 				writer.write("\t" + splits[x]);
 				
 			writer.write("\n");
