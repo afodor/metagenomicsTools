@@ -67,9 +67,13 @@ public class PivotToOTUTable
 		
 		writer.write("sample");
 		
+		int index=1;
 		for(Holder h : list)
-			writer.write("\t" + h.seq);
-		
+		{
+			writer.write("\tseq" + index + "_" +  h.count);
+			index++;
+		}
+			
 		writer.write("\n");
 		
 		for(String s : samples)
@@ -91,12 +95,11 @@ public class PivotToOTUTable
 			writer.write("\n");
 		}
 		
-		
 		writer.flush();  writer.close();
 		
 		writer = new BufferedWriter(new FileWriter(fastaSumaryFile));
 		
-		int index=1;
+		index=1;
 		for(Holder h : list)
 		{
 			writer.write(">seq" + index + "_" + h.count + "\n");
