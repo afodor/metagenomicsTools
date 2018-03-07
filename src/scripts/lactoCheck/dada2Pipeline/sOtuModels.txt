@@ -14,7 +14,6 @@ tableIndex <- vector()
 
 index <- 1
 for( i in 13:ncol(myT))
-	if(  (sum(myT[,i] ==0) / nrow(myT)) < .25 )
 	{
 		bug <- myT[,i]
 		myLm <- lm( bug~ myT$birthMode + myT$birthGroup)
@@ -26,7 +25,7 @@ for( i in 13:ncol(myT))
 	}
 	
 dFrame <- data.frame( names, pValuesBirthMode,pValuesGroup, tableIndex)
-dFrame <- dFrame [order(dFrame$pValuesBirthMode),]
+#dFrame <- dFrame [order(dFrame$pValuesBirthMode),]
 dFrame$pValuesBirthModeAdjusted<- p.adjust( dFrame$pValuesBirthMode, method = "BH" )	
 dFrame$pValuesGroupAdjusted<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
 
