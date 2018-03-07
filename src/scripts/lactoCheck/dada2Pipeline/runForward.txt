@@ -22,7 +22,7 @@ out <- filterAndTrim(fnFs, filtFs, truncLen=c(90),
               compress=TRUE, multithread=FALSE) # On Windows set multithread=FALSE
 head(out)
 
-filtpath <- "C:\\SalixWorkingDir\\dadaRarification\\post\\filtered"
+filtpath <- "C:\\lactoCheck\\fastqDemultiplexedRarified\\filtered"
 
 filts <- list.files(filtpath, pattern="fastq.gz", full.names=TRUE) # CHANGE if different file extensions
 sample.names <- sapply(strsplit(basename(filts), "_"), `[`, 1) # Assumes filename = sample_XXX.fastq.gz
