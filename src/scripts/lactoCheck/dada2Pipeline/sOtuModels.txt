@@ -35,7 +35,7 @@ colors <- vector()
 
 for( i in 1:nrow(myTWithNeg))
 {
-	if( myTWithNeg$groupNumber[i] == 0 ) 
+	if( myTWithNeg$birthGroup[i] == 0 ) 
 	{
 		if( myTWithNeg$sample == "neg" ) 
 			colors[i] = "blue"		
