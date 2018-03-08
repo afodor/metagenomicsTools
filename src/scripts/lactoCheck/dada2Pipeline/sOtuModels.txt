@@ -2,11 +2,11 @@ rm(list=ls())
 	
 setwd("C:\\lactoCheck")
 	
-myT <- read.table("pivotDADA2NormPlusMeta.txt", sep="\t", header=TRUE)
+myT <- read.table("dada2AllTogetherPivotedNormPlusMeta.txt", sep="\t", header=TRUE)
 myT <- myT[myT$sample != "NC101",] 
 myTWithNeg <- myT 
 myT <- myT[1:28,]
-rdpTable <- read.table("dadaFastaToRDP2_12_summaryString.txt", sep="\t", header=TRUE)
+rdpTable <- read.table("allTogetherFastaToRDP2_12SummaryString.txt", sep="\t", header=TRUE)
 
 pValuesBirthMode <- vector()
 pValuesGroup <- vector()

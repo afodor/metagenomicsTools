@@ -14,11 +14,11 @@ public class WriteRDPSummaryStrings
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getLactoCheckDir() + File.separator + 
-				"dadaFastaToRDP2_12_summaryString.txt")));
+				"allTogetherFastaToRDP2_12SummaryString.txt")));
 		
 		HashMap<String, NewRDPParserFileLine> fileLines = NewRDPParserFileLine.getAsMapFromSingleThread(
 				ConfigReader.getLactoCheckDir() + File.separator + 
-							"dadaFastaToRDP2_12.txt");
+							"allTogetherFastaToRDP2_12.txt");
 		
 		writer.write("id\trdpSummaryString\n");
 		

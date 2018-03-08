@@ -16,26 +16,26 @@ public class AddMetadata
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(ConfigReader.getLactoCheckDir() + 
-				File.separator + "pivotDADA2.txt");
+				File.separator + "dada2AllTogetherPivoted.txt");
 		OtuWrapper wrapper = new OtuWrapper(inFile);
 		
 		File normFile = new File(ConfigReader.getLactoCheckDir() + 
-				File.separator + "pivotDADA2Norm.txt");
+				File.separator + "dada2AllTogetherPivotedNorm.txt");
 		
 		File logNormFile = new File(
 				ConfigReader.getLactoCheckDir() + 
-				File.separator + "pivotDADA2LogNorm.txt");
+				File.separator + "dada2AllTogetherPivotedLogNorm.txt");
 		
 		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
 		wrapper.writeNormalizedDataToFile(normFile);
 		
 		File metaFile =new File(ConfigReader.getLactoCheckDir() + 
-				File.separator + "pivotDADA2LogNormPlusMeta.txt");
+				File.separator + "dada2AllTogetherPivotedLogNormPlusMeta.txt");
 		
 		addMetadata(logNormFile, metaFile, wrapper);
 		
 		metaFile =new File(ConfigReader.getLactoCheckDir() + 
-				File.separator + "pivotDADA2NormPlusMeta.txt");
+				File.separator + "dada2AllTogetherPivotedNormPlusMeta.txt");
 		
 		addMetadata(normFile, metaFile, wrapper);
 		
