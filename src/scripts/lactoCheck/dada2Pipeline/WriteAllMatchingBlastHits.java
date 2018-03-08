@@ -22,12 +22,12 @@ public class WriteAllMatchingBlastHits
 		List<HitScores> hitList = HitScores.getAsList(ConfigReader.getLactoCheckDir() + File.separator + 
 				"allTogetherFastaToSilvaByBlast.txt");
 		
-		HashMap<String,HashSet<String>> queryMap = new HashMap<>();
+		HashMap<String,HashSet<String>> queryMap = new LinkedHashMap<>();
 		HashSet<String> allTargets = new HashSet<>();
 		
 		for(HitScores hs : hitList)
 		{
-			if( hs.getAlignmentLength() >=90 & hs.getNumMismatches() <= 2 )
+			if( hs.getAlignmentLength() >=90 & hs.getNumMismatches() <= 0 )
 			{
 				HashSet<String> inner = queryMap.get(hs.getQueryId());
 				
@@ -44,22 +44,22 @@ public class WriteAllMatchingBlastHits
 		
 		HashMap<String, String> headers = getSilvaHeaderLines(allTargets);
 		
-		for(String s : headers.keySet())
-			System.out.println(s + " " + headers.get(s));
-		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getLactoCheckDir() + File.separator + "silvaToDada2TopHitsMultiple.txt")));
 		
-		writer.write("queryID\ttargetIDs\theaderLines\n");
+		writer.write("queryID\ttargetID\theaderLine\n");
 		
 		for(String s : queryMap.keySet())
 		{
-			writer.write(s + "\t");
-			writer.write(queryMap.get(s) + "\t");
-			
 			for(String s2 : queryMap.get(s))
 			{
-				writer.write("{ " + headers.get(s2).substring(1) + "}");
+				String headerVal = headers.get(s2).substring(1);
+				if( headerVal.indexOf("uncultured") == -1 && headerVal.indexOf("unidentified")== -1)
+				{
+					writer.write(s + "\t");
+					writer.write(s2 + "\t");
+					writer.write( headerVal+ "\n");
+				}
 			}
 		}
 		
