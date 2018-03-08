@@ -5,7 +5,8 @@ setwd("C:\\lactoCheck")
 myT <- read.table("pivotDADA2NormPlusMeta.txt", sep="\t", header=TRUE)
 myT <- myT[myT$sample != "NC101",] 
 myTWithNeg <- myT 
-myT <- myT[1:29,]
+myT <- myT[1:28,]
+rdpTable <- read.table("dadaFastaToRDP2_12_summaryString.txt", sep="\t", header=TRUE)
 
 pValuesBirthMode <- vector()
 pValuesGroup <- vector()
@@ -35,9 +36,9 @@ colors <- vector()
 
 for( i in 1:nrow(myTWithNeg))
 {
-	if( myTWithNeg$birthGroup[i] == 0 ) 
+	if( myTWithNeg$birthGroup[i] == "neg" ) 
 	{
-		if( myTWithNeg$sample == "neg" ) 
+		if( myTWithNeg$sample[i] == "neg" ) 
 			colors[i] = "blue"		
 		else	
 			colors[i] = "orange"
@@ -108,9 +109,9 @@ for ( i in 1:nrow(dFrame))
 	
 	for( i in 1:nrow(myTWithNeg))
 	{
-		if( groupNumber[i] == 0) 
+		if( groupNumber[i] == "neg") 
 		{
-			if( myTWithNeg$stoolOrGa[i] == "neg" ) 
+			if( myTWithNeg$sample[i] == "neg" ) 
 				theseColors[i] = "blue"		
 			else	
 				theseColors[i] = "orange"	
@@ -131,8 +132,7 @@ for ( i in 1:nrow(dFrame))
 		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
 	}
 	
-	
-	mtext("HELLO HELLO HELLO HELLO HELLO HELLO " ,
+	mtext(rdpTable$rdpSummaryString[ rdpTable$id==names(myTWithNeg)[index] ],
         SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 }
 
