@@ -135,7 +135,7 @@ public class AddMetadata
 		writer.write(topSplits[0].replace("rdp_", "").replace(".txt.gz", "") 
 				+ "\tbirthGroup\tsubjectNumber\tbirthMode\tmostFrequentTaxa\tfractionMostFrequent\tqPCR16S\tL_crispatus\tL_iners\tbglobulin\tsequencingDepth\tshannonDiveristy");
 		
-		for( int x=1; x < topSplits.length && x < 50; x++)
+		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
 		
 		writer.write("\n");
@@ -189,7 +189,7 @@ public class AddMetadata
 			}
 			else throw new Exception("No");
 					
-			for( int x=1; x < splits.length&& x < 50; x++)
+			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
 				
 			writer.write("\n");

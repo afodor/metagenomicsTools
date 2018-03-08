@@ -17,12 +17,16 @@ index <- 1
 for( i in 13:ncol(myT))
 	{
 		bug <- myT[,i]
-		myLm <- lm( bug~ myT$birthMode + myT$birthGroup)
-		pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
-		pValuesGroup[index] <-  anova(myLm)$"Pr(>F)"[2]
-		names[index] <- names(myT)[i]
-		tableIndex[index] <- i
-		index <- index + 1
+		
+		if( sum(bug > .02) >= 1) 
+		{				
+			myLm <- lm( bug~ myT$birthMode + myT$birthGroup)
+			pValuesBirthMode[index] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesGroup[index] <-  anova(myLm)$"Pr(>F)"[2]
+			names[index] <- names(myT)[i]
+			tableIndex[index] <- i
+			index <- index + 1	
+		}
 	}
 	
 dFrame <- data.frame( names, pValuesBirthMode,pValuesGroup, tableIndex)
