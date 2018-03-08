@@ -82,8 +82,8 @@ for ( i in 1:nrow(dFrame))
 	groupNumber <- myTWithNeg$birthGroup
 	myFrame <- data.frame(bug,birthMode,groupNumber)
 	
-	mainString= paste( names(myTWithNeg)[index],"\n", "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
-							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
+	mainString= paste( "p birth=", format( dFrame$pValuesBirthModeAdjusted[i],digits=3 ), 
+							" ","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
 	
 	asNumbers <- vector()
 	
@@ -103,7 +103,7 @@ for ( i in 1:nrow(dFrame))
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 
-	boxplot(bug ~ birthMode, main = names(myTWithNeg)[index])
+	boxplot(bug ~ birthMode)
 	
 	theseColors <- vector()
 	
@@ -132,8 +132,8 @@ for ( i in 1:nrow(dFrame))
 		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
 	}
 	
-	mtext(rdpTable$rdpSummaryString[ rdpTable$id==names(myTWithNeg)[index] ],
-        SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
+	bottomText <- paste0(names(myTWithNeg)[index],"\n",rdpTable$rdpSummaryString[ rdpTable$id==names(myTWithNeg)[index] ])
+	mtext(bottomText,SOUTH<-1, line=0.2, adj=1.0, cex=.7,   col="black", outer=TRUE)
 }
 
 dev.off()
