@@ -91,21 +91,36 @@ for ( i in 1:nrow(dFrame))
 	
 	asNumbers <- vector()
 	
-	for ( i in 1:length(groupNumber))
+	for ( j in 1:length(groupNumber))
 	{
-		if( groupNumber[i] == "neg" ) 
+		if( groupNumber[j] == "neg" ) 
 		{
-			asNumbers[i] = 0;
+			asNumbers[j] = 0;
 		}
 		else
 		{
-			asNumbers[i] = as.numeric( groupNumber[i] )
+			asNumbers[j] = as.numeric( groupNumber[j] )
 		}
 	}
 	
 	plot(bug ~ asNumbers, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
+	textVals <- vector()
+	
+	for( i in 1:length(bug)) 
+	{
+		if( bug[i] >= .17)
+		{
+			textVals[i] = myT$subjectNumber[i]
+		}
+		else
+		{
+			textVals[i] = ""
+		}
+	}
+	
+	text(asNumbers-.25, bug,textVals) 
 
 	boxplot(bug ~ birthMode)
 	
@@ -131,7 +146,6 @@ for ( i in 1:nrow(dFrame))
 	
 	for( i in 1:length(theseColors))
 	{
-		
 		stripchart(bug[i] ~ birthMode[i], 
 		data = myFrame,vertical = TRUE, pch = 16,cex=1.25 ,add=TRUE ,col=theseColors[i])		
 	}
