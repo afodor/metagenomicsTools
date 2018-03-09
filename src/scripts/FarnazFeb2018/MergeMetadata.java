@@ -38,6 +38,8 @@ public class MergeMetadata
 		
 		writer.write("sampleID");
 		
+		writer.write("\tshannonDiversity");
+		
 		String[] topSplits = firstLine.split("\t");
 		
 		for( int x=1; x < topSplits.length; x++)
@@ -56,6 +58,21 @@ public class MergeMetadata
 			
 			int key = Integer.parseInt(dataSplits[0]);
 			writer.write("" + key);
+			
+			double shannonDiversity = 0;
+			
+			for( int x=1; x < dataSplits.length; x++)
+			{
+				double p = Double.parseDouble(dataSplits[x]);
+				
+				if( p > 0 )
+					shannonDiversity += p * Math.log(p);
+				
+			}
+			
+			shannonDiversity = -shannonDiversity;
+			writer.write("\t" + shannonDiversity);
+			
 			
 			String metaLine = metaMap.get(key);
 			String[] metaSplits = metaLine.split("\t");
