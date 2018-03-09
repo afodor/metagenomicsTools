@@ -27,7 +27,7 @@ public class WriteAllMatchingBlastHits
 		
 		for(HitScores hs : hitList)
 		{
-			if( hs.getAlignmentLength() >=90 & hs.getNumMismatches() <= 0 )
+			if( hs.getAlignmentLength() >=90 & hs.getNumMismatches() <= 1 )
 			{
 				HashSet<String> inner = queryMap.get(hs.getQueryId());
 				
