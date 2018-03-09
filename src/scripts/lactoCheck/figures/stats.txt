@@ -59,7 +59,7 @@ for( i in 1:nrow(myWithNeg))
 
 
 pdf("boxplotsGenus.pdf")
-par(mfrow=c(1,2))
+par(mfrow=c(2,1))
 
 for ( i in 1:nrow(dFrame))
 {
@@ -92,6 +92,24 @@ for ( i in 1:nrow(dFrame))
 							"\n","p group=",format( dFrame$pValuesGroupAdjusted[i],digits=3) )
 	
 	plot(bug ~ groupNumber, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	
+	textVals <- vector()
+	
+	for( i in 1:length(bug)) 
+	{
+		if( bug[i] >= .17)
+		{
+			textVals[i] = myT$subjectNumber[i]
+		}
+		else
+		{
+			textVals[i] = ""
+		}
+	}
+	
+	text(groupNumber-.25, bug,textVals) 
+	
+	
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 
