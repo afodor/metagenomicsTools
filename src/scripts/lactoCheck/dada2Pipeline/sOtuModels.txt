@@ -103,14 +103,14 @@ for ( i in 1:nrow(dFrame))
 		}
 	}
 	
-	plot(bug ~ asNumbers, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance")
+	plot(bug ~ asNumbers, main = mainString ,cex=2.5,pch=16, col=colors,xlab="group", ylab ="relative abundance",ylim=c(0,1))
 	#legend("topleft",c("negative control", "cesarean","vaginal"),pch=16, col=c("blue", "red", "black"),cex=1.3)
 	
 	textVals <- vector()
 	
 	for( i in 1:length(bug)) 
 	{
-		if( bug[i] >= .17)
+		if( bug[i] >= .01)
 		{
 			textVals[i] = myT$subjectNumber[i]
 		}
