@@ -16,20 +16,25 @@ import utils.ConfigReader;
 
 public class WriteAllMatchingBlastHits
 {
+	private static class Holder
+	{
+		String targetID;
+		int numMismatches;
+	}
 	
 	public static void main(String[] args) throws Exception
 	{
 		List<HitScores> hitList = HitScores.getAsList(ConfigReader.getLactoCheckDir() + File.separator + 
 				"allTogetherFastaToSilvaByBlast.txt");
 		
-		HashMap<String,HashSet<String>> queryMap = new LinkedHashMap<>();
+		HashMap<String,HashSet<Holder>> queryMap = new LinkedHashMap<>();
 		HashSet<String> allTargets = new HashSet<>();
 		
 		for(HitScores hs : hitList)
 		{
 			if( hs.getAlignmentLength() >=90 & hs.getNumMismatches() <= 1 )
 			{
-				HashSet<String> inner = queryMap.get(hs.getQueryId());
+				HashSet<Holder> inner = queryMap.get(hs.getQueryId());
 				
 				if( inner == null)
 				{
@@ -37,7 +42,10 @@ public class WriteAllMatchingBlastHits
 					queryMap.put(hs.getQueryId(), inner);
 				}
 				
-				inner.add(hs.getTargetId());
+				Holder h = new Holder();
+				h.targetID = hs.getTargetId();
+				h.numMismatches = hs.getNumMismatches();
+				inner.add(h);
 				allTargets.add(hs.getTargetId());
 			}
 		}
@@ -47,17 +55,18 @@ public class WriteAllMatchingBlastHits
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getLactoCheckDir() + File.separator + "silvaToDada2TopHitsMultiple.txt")));
 		
-		writer.write("queryID\ttargetID\theaderLine\n");
+		writer.write("queryID\ttargetID\tnumberMismatches\theaderLine\n");
 		
 		for(String s : queryMap.keySet())
 		{
-			for(String s2 : queryMap.get(s))
+			for(Holder h : queryMap.get(s))
 			{
-				String headerVal = headers.get(s2).substring(1);
+				String headerVal = headers.get(h.targetID).substring(1);
 				if( headerVal.indexOf("uncultured") == -1 && headerVal.indexOf("unidentified")== -1)
 				{
 					writer.write(s + "\t");
-					writer.write(s2 + "\t");
+					writer.write(h.targetID + "\t");
+					writer.write(h.numMismatches + "\t");
 					writer.write( headerVal+ "\n");
 				}
 			}
