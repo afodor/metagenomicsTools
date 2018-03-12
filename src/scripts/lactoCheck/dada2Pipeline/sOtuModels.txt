@@ -120,7 +120,7 @@ for ( i in 1:nrow(dFrame))
 		}
 	}
 	
-	#text(asNumbers-.25, bug,textVals) 
+	text(asNumbers-.25, bug,textVals) 
 
 	boxplot(bug ~ birthMode)
 	
