@@ -44,7 +44,7 @@ public class ComparePValues
 		{
 			Holder h= map.get(s);
 			
-			writer.write(s + getBlankOrVal(h.rdpPValue) + "\t" + getBlankOrVal(h.qiimePValue) + "\n" );
+			writer.write(s + "\t" + getBlankOrVal(h.rdpPValue) + "\t" + getBlankOrVal(h.qiimePValue) + "\n" );
 		}
 		
 		writer.flush(); writer.close();
