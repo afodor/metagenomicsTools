@@ -39,6 +39,13 @@ public class PivotSparseSpreadsheetFile
 					+ File.separator + "spreadsheets" + 
 					File.separator + "pivoted_" + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt");
+			
+			wrapper.writeNormalizedDataToFile(new File(ConfigReader.getEvanFeb2018Dir()
+					+ File.separator + "spreadsheets" + 
+					File.separator + "pivoted_" + 
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsNorm.txt"));
+			
+			
 		}
 	}
 	

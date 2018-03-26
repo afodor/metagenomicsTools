@@ -29,6 +29,18 @@ public class AddMetadata
 			
 			addMetadata(inFile, outFile);
 			
+			inFile = new File(ConfigReader.getEvanFeb2018Dir()
+					+ File.separator + "spreadsheets" + 
+					File.separator + "pivoted_" + 
+			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsNorm.txt");
+			
+			outFile = new File(ConfigReader.getEvanFeb2018Dir() + File.separator + 
+					"spreadsheets" + File.separator + "taxa" + 
+					NewRDPParserFileLine.TAXA_ARRAY[x]  +"norm.txt");
+			
+			addMetadata(inFile, outFile);
+			
+			
 		}
 	}
 	
