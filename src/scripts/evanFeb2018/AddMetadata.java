@@ -27,7 +27,7 @@ public class AddMetadata
 					"spreadsheets" + File.separator + "pcoa_withTaxa" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x]  +"WithMetadata.txt");
 			
-			addMetadata(inFile, outFile);
+			addMetadata(inFile, outFile,true);
 			
 			inFile = new File(ConfigReader.getEvanFeb2018Dir()
 					+ File.separator + "spreadsheets" + 
@@ -38,13 +38,13 @@ public class AddMetadata
 					"spreadsheets" + File.separator + "taxa" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x]  +"norm.txt");
 			
-			addMetadata(inFile, outFile);
+			addMetadata(inFile, outFile,false);
 			
 			
 		}
 	}
 	
-	private static void addMetadata(File inFile, File outFile) throws Exception
+	private static void addMetadata(File inFile, File outFile, boolean fromR) throws Exception
 	{
 		HashMap<String, String[]> metaMap =getMetaLineMap();
 		String[] firstSplits = getFirstLineSplits();
@@ -60,7 +60,14 @@ public class AddMetadata
 		for( int x=1; x < firstSplits.length; x++)
 			writer.write("\t" + firstSplits[x]);
 		
-		writer.write("\t" +  reader.readLine() + "\n");
+		String[] aLine = reader.readLine().split("\t");
+		
+		int start = fromR ? 0 :1;
+		
+		for( int x= start; x < aLine.length; x++)
+			writer.write("\t" +  aLine[x]);
+		
+		writer.write("\n");
 		
 		for(String s= reader.readLine(); s !=null; s= reader.readLine())
 		{

@@ -1,0 +1,51 @@
+rm(list=ls())
+
+setwd("C:\\EvanFeb2018\\spreadsheets")
+library(pscl)
+library(lmtest)
+
+
+taxa <- c("genus" )
+
+for( t in taxa ) 
+{
+	filepath <- paste0("taxa",t,"norm.txt")
+	myT <-read.table(filepath,sep="\t",header=TRUE)
+	numCols <- ncol(myT)
+	myColClasses <- c(
+					  rep("character", 30),
+				rep("numeric", numCols-30))
+	myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
+			
+	i <- 4
+	
+	taxaNames <- vector()
+	pValues <- vector()
+	index <- 1
+	
+	for (j in  31:ncol(myT))
+	{
+		bug <- myT[,j]
+		
+		if( sum( bug != 0) > nrow(	myT) / 10)
+		{	
+			taxaNames[index] <- names(myT)[j]
+			
+			bug <- round(bug)
+			meta <- myT[,i]
+			
+			aFrame <- data.frame(bug, meta)
+			
+			M4 <- zeroinfl( bug ~ meta | meta , data = aFrame, dist = "negbin", link = "logit")
+			
+			pValues[index]= lrtest(M4)$"Pr(>Chisq)"[2]
+			index = index + 1				
+		}
+	}
+	
+	corFrame <- data.frame(taxaNames,pValues)
+	corFrame <- corFrame[order(corFrame$pValues),]
+	corFrame$adjustedpValues<- p.adjust( corFrame$pValues, method = "BH" )	
+	write.table(corFrame, file=paste("pValuesZeroInfl_",t,".txt",sep=""), sep="\t",row.names=FALSE)
+}
+
