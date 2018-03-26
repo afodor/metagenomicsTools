@@ -24,22 +24,26 @@ for( t in taxa )
 	index <- 1
 	
 	for (j in  31:ncol(myT))
-	{
-		bug <- myT[,j]
-		
-		if( sum( bug != 0) > nrow(	myT) / 10)
-		{	
-			taxaNames[index] <- names(myT)[j]
-			
-			bug <- round(bug)
-			meta <- myT[,i]
-			
-			aFrame <- data.frame(bug, meta)
-			
-			M4 <- zeroinfl( bug ~ meta | meta , data = aFrame, dist = "negbin", link = "logit")
-			
-			pValues[index]= lrtest(M4)$"Pr(>Chisq)"[2]
-			index = index + 1				
+		if( j != 122 & j != 144 & j != 156 & j != 161 & j!= 238 & j != 255 & j != 258 & j != 263 & j!= 398 & j!=415
+		& j != 425 & j != 510  & j != 545) 
+		{
+			{
+				bug <- myT[,j]
+				
+				if( sum( bug != 0) > nrow(	myT) / 10)
+				{	
+					taxaNames[index] <- names(myT)[j]
+					
+					bug <- round(bug)
+					meta <- myT[,i]
+					
+					aFrame <- data.frame(bug, meta)
+					
+					M4 <- zeroinfl( bug ~ meta | meta , data = aFrame, dist = "negbin", link = "logit")
+					
+					pValues[index]= lrtest(M4)$"Pr(>Chisq)"[2]
+					index = index + 1				
+				}
 		}
 	}
 	
