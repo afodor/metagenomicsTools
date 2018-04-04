@@ -1,0 +1,17 @@
+setwd("C:\\sandraOyster")
+
+rm(list=ls())
+
+library("vegan")
+
+myT <- read.table("lab.txt",sep="\t")
+
+myTData <- myT[3:ncol(myT)]
+
+myPCOA <- capscale(myTData~1)
+
+myMerge <- cbind( myT[1:2], myPCOA$CA$u)
+	
+write.table(myMerge, sep="\t", file=paste("pcoa_lab.txt",sep=""),row.names=FALSE)
+write.table(myPCOA$CA$eig,file=paste("eigenValues_lab.txt", sep=""), sep="\t")
+

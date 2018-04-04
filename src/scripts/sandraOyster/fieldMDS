@@ -11,3 +11,4 @@ myPCOA <- capscale(myT~1)
 	
 write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_field.txt",sep=""))
 write.table(myPCOA$CA$eig,file=paste("eigenValues_field.txt", sep=""), sep="\t")
+
