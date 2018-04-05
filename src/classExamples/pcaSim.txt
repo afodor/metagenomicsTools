@@ -30,3 +30,7 @@ covM <- cov(data)
 eigen(covM)
 
 plot( data %*% eigen(covM)$vectors, col=cat,cex=1.25,pch=19) 
+myPCA <- princomp(data)
+summary(myPCA)
+plot(myPCA$scores[,1], myPCA$scores[,2],col=cat,cex=1.25,pch=19)
+wilcox.test(myPCA$scores[ cat=="red" ,1],myPCA$scores[ cat=="blue" ,1] )
