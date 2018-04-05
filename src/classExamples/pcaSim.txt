@@ -15,6 +15,7 @@ for ( i in -100:100)
 		cat[i] = "blue"	
 }
 
+par(mfrow=c(2,2))
 data <- matrix(c(a,b),ncol=2)
 
 a <- a - mean(a)
@@ -22,9 +23,8 @@ b <- b - mean(b)
 
 plot(data[,1],data[,2],col=cat,cex=1.25,pch=19)
 
-#aBasis <- matrix(c(13,0,0,25),nrow=2)
-#plot( data %*% aBasis, col=cat,cex=1.25,pch=19) 
-
+aBasis <- matrix(  c(1,0,0,-1), nrow=2)
+plot( data %*% aBasis, col=cat,cex=1.25,pch=19) 
 
 covM <- cov(data)
 eigen(covM)
