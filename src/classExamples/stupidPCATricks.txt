@@ -1,8 +1,10 @@
 rm(list=ls())
 
-# arbitrary simulated 5D dataset
+# arbitrary simulated 5D dataset with 2 independent columns
 
-simData <- matrix(rnorm(100), ncol=5)
+aCol <- rnorm(100)
+anotherCol <- rnorm(100)
+simData <- matrix(c(aCol,aCol,anotherCol,anotherCol,anotherCol) ,ncol=5)
 
 covMatrix <- cov(simData)
 
