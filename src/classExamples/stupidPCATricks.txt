@@ -1,0 +1,17 @@
+rm(list=ls())
+
+# arbitrary simulated 5D dataset
+
+simData <- matrix(rnorm(100), ncol=5)
+
+covMatrix <- cov(simData)
+
+eigenVectors <- eigen(covMatrix)$vectors
+
+# the eigen matrix is within round of a unitary matrix
+eigenVectors  %*% t(eigenVectors)
+
+# we can diagnolize the covariance matrix via a change in basis
+# See p.41 of Shankar - principles of quantum mechanics
+t(eigenVectors) %*% covMatrix %*% eigenVectors
+
