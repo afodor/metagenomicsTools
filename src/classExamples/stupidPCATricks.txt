@@ -39,10 +39,28 @@ for (i in 1:100)
 	}
 }
 
-aMatrix <- matrix( c(col1, col1, col2, col2),ncol=4)
+aMatrix <- matrix( c(col1, col2, col3, col4),ncol=4)
+
+for( i in 1:ncol(aMatrix))
+{
+	aMatrix[,i] = aMatrix[,i] - mean(aMatrix[,i])
+}
+
 
 myPCA <- princomp(aMatrix)
 
 colors <- c(rep("red",30), rep("blue",70))
 
 plot(myPCA$scores[,1], myPCA$scores[,2],col=colors)
+
+myCova <- cov(aMatrix)
+
+#non-orthognal
+t(myCova[,1] ) %*% myCova[,2]
+
+
+myEigen <- eigen(myCova)$vectors
+
+#orthogal 
+t(myEigen[,1] ) %*% myEigen[,2]
+
