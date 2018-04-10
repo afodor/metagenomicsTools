@@ -9,6 +9,7 @@ aLevel <- 6
 	fileName <- paste("pcoa_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 	myT <- read.table(fileName, header=TRUE, sep="\t")
 	
+	pValuesCage <- vector()
 	pValuesGenotype <- vector()
 	pValuesTime <- vector()
 	pValuesWeightLoss <- vector()
@@ -27,18 +28,20 @@ aLevel <- 6
 		maxWeightLossPercent  <- myT$maxWeightLossPercent
 		time <- as.numeric( myT$time)
 		
+		
 		myFrame <- data.frame(relativeAbundance,cage,genotype,maxWeightLossPercent ,time)
 		
 		names[index] <- names(myT)[i]
 		pValuesGenotype[index] <-anova(lm( relativeAbundance ~ genotype  ))$"Pr(>F)"[1]
 		pValuesTime[index] <-anova(lm( relativeAbundance ~ time  ))$"Pr(>F)"[1]
 		pValuesWeightLoss[index] <- anova(lm( relativeAbundance ~ maxWeightLossPercent   ))$"Pr(>F)"[1]
+		pValuesCage[index] <- anova(lm( relativeAbundance ~ cage ))$"Pr(>F)"[1]
 		indexes[index] <- i
 		
 		index <- index + 1
 	}
 	
-	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesWeightLoss,indexes)
+	dFrame <- data.frame(names, pValuesGenotype,pValuesTime,pValuesWeightLoss, pValuesCage, indexes)
 	
 	#dFrame <- dFrame [order(dFrame$pValuesTimeGenotypeInteraction),]
 	#dFrame <- dFrame [order(dFrame$pValuesWeightLoss),]
@@ -47,6 +50,8 @@ aLevel <- 6
 	dFrame$pValuesGenotypeAdjusted <- p.adjust( dFrame$pValuesGenotype, method = "BH")
 	dFrame$pValuesTimeAdjusted <- p.adjust( dFrame$pValuesTime, method = "BH")
 	dFrame$pValuesWeightLossAdjusted <- p.adjust( dFrame$pValuesWeightLoss, method = "BH")
+	dFrame$pValuesCageAdjusted <- p.adjust( dFrame$pValuesCage, method = "BH")
+	
 	
 	write.table(dFrame, file=paste("univariateModelPValuesForPCOA_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
@@ -55,8 +60,10 @@ plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=1
 ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
 lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
 
-lines( c(0,10), c( -log10(.10),-log10(.10)) , lty=2)
+lines( c(0,11), c( -log10(.10),-log10(.10)) , lty=2)
 
-points( c(1:11), -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
 lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
 
+points( c(1:11), -log10(dFrame$pValuesCageAdjusted), col="orange",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesCageAdjusted), col="orange")
