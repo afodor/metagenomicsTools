@@ -50,3 +50,18 @@ aLevel <- 6
 	
 	write.table(dFrame, file=paste("univariateModelPValuesForTaxa_L", aLevel, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
+
+plot( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red",pch=16,ylim=c(0,8),
+ylab="-log10(FDR adjusted p-value)", xlab="MDS Axis")
+lines( dFrame$indexes-11, -log10(dFrame$pValuesGenotypeAdjusted), col="red")
+
+lines( c(0,180), c( -log10(.10),-log10(.10)) , lty=2)
+
+points( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue",pch=16)
+lines( dFrame$indexes-11, -log10(dFrame$pValuesTimeAdjusted), col="blue")
+
+legend("topright",c("time", "genotype"),pch=16, col=c("blue", "red"))
+
+#points( c(1:11), -log10(dFrame$pValuesCageAdjusted), col="orange",pch=16)
+#lines( dFrame$indexes-11, -log10(dFrame$pValuesCageAdjusted), col="orange")
