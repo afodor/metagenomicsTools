@@ -6,8 +6,8 @@ setwd("C:\\tingData\\may_2017_rerun")
 library("nlme")
 library("doBy")
 
-
-for (aLevel in 2:6)
+aLevel = 6
+#for (aLevel in 2:6)
 {
 	fileName <- paste("otuAsColumnsLogNorm_rerunPlusMetadata_L", aLevel, ".txt",sep="")
 	myT <- read.table(fileName, header=TRUE, sep="\t")
@@ -175,12 +175,3 @@ dev.off()
 sum( dFrame$pValuesGenotypeAdjusted < 0.1)
 sum( dFrame$pValuesTimeAdjusted < 0.1)
 sum( dFrame$pValuesTimeGenotypeInteractionAdjusted < 0.1)
-
-
-
-
-
-
-
-
-
