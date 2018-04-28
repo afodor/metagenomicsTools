@@ -31,16 +31,13 @@ for(taxa in taxaLevels )
 			{
 				aLm <- lm( bug ~ myT[,i]) 
 			
-				aVal <- anova(aLm)$"Pr(>F)"
+				aVal <- anova(aLm)$"Pr(>F)"[1]
 				
-				if( ! is.na(aVal))
-				{
-					iIndex[index] <- i
-					jIndex[index] <- j
-					iNames[index] <- names(myT)[i]
-					jNames <- names(myT)[j]
-					pValues <- vector()
-				}
+				iIndex[index] <- i
+				jIndex[index] <- j
+				iNames[index] <- names(myT)[i]
+				jNames <- names(myT)[j]
+				pValues <- vector()
 					
 				index <- index + 1
 			}
@@ -52,3 +49,5 @@ for(taxa in taxaLevels )
 	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 	write.table(aFrame, file=paste("correlationPValuesReducedMeta_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
+
