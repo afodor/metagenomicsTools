@@ -2,9 +2,8 @@ rm(list=ls())
 
 setwd("C:\\ChinaDec2017\\mergedMetadataApril2018")
 
-#taxaLevels <- c("phylum","class","order","family","genus")
-
-taxaLevels <- c("phylum")
+#taxaLevels <- c("phylum")
+taxaLevels <- c("phylum","class","order","family","genus")
 
 iIndex <- vector()
 jIndex <- vector()
