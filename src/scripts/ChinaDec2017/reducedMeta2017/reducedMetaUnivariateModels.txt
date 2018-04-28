@@ -2,10 +2,50 @@ rm(list=ls())
 
 setwd("C:\\ChinaDec2017\\mergedMetadataApril2018")
 
-taxaLevels <- c("phylum","class","order","family","genus")
+#taxaLevels <- c("phylum","class","order","family","genus")
 
+taxaLevels <- c("phylum")
+
+iIndex <- vector()
+jIndex <- vector()
+iNames <- vector()
+jNames <- vector()
+pValues <- vector()
+
+index <-1 
 for(taxa in taxaLevels ) 
 {
 	fileName<- paste0("pcoa_", taxa, "WithReducedMeta.txt")
 	myT <- read.table(fileName, sep="\t",header=TRUE)
+	
+	metaStart =4
+	metaEnd =which(names(myT)=="occup")
+
+	for( i in metaStart:metaEnd)
+	{
+		for( j in (metaEnd+1):ncol(myT))
+		{
+			bug <- myT[,j]
+			
+			if( sum( bug != 0 ) > nrow(myT)/10)
+			{
+				aLm <- lm( i ~ j ) 
+			
+				aVal <- anova(aLm)$"Pr(>F)"
+				
+				if( ! is.na(aVal))
+				{
+					iIndex[index] <- i
+					jIndex[index] <- j
+					iNames[index] <- names(myT)[i]
+					jNames <- names(myT)[j]
+					pValues <- vector()
+				}
+					
+				index <- index + 1
+			}
+		}
+	}
+	
+	
 }
