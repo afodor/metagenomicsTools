@@ -29,7 +29,7 @@ for(taxa in taxaLevels )
 			
 			if( sum( bug != 0 ) > nrow(myT)/10)
 			{
-				aLm <- lm( i ~ j ) 
+				aLm <- lm( bug ~ myT[,i]) 
 			
 				aVal <- anova(aLm)$"Pr(>F)"
 				
@@ -47,5 +47,8 @@ for(taxa in taxaLevels )
 		}
 	}
 	
-	
+	aFrame <- data.frame(iIndex,jIndex,iNames,jNames,pValues)
+	aFrame<- aFrame[order(aFrame$pValues),]
+	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
+	write.table(aFrame, file=paste("correlationPValuesReducedMeta_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
