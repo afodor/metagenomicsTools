@@ -37,7 +37,7 @@ for(taxa in taxaLevels )
 				jIndex[index] <- j
 				iNames[index] <- names(myT)[i]
 				jNames <- names(myT)[j]
-				pValues <- vector()
+				pValues <- aVal
 					
 				index <- index + 1
 			}
