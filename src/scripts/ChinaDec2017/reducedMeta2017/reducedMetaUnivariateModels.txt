@@ -47,6 +47,27 @@ for(taxa in taxaLevels )
 	aFrame<- aFrame[order(aFrame$pValues),]
 	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 	write.table(aFrame, file=paste("correlationPValuesReducedMeta_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	pdf(paste0(taxa,"sigCorrelations.pdf"))
+	
+	for( z in 1:nrow(aFrame))
+	{
+		if( !is.na(aFrame$adjustedpValues[z] ) &  aFrame$adjustedpValues[z] < 0.1 )
+		{
+			i <- aFrame$iIndex[z]
+			j <- aFrame$jIndex[z]
+			aTitle <- paste0( names(myT)[i], "@", names(myT)[j] , "\n",
+			format(aFrame$adjustedpValues[z],digits=3) )
+			plot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j] )
+			
+			boxplot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j] )
+		}
+	}
+	
+	par(mfrow=c(2,2))
+	
+	
+	dev.off()
 }
 
 
