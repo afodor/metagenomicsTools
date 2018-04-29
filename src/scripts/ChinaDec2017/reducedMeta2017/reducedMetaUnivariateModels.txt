@@ -64,7 +64,14 @@ for(taxa in taxaLevels )
 			"p=", format(aFrame$adjustedpValues[z],digits=3), " r^2=", 
 				format(aFrame$rSquaredVals[z],digits=3))
 					
-			boxplot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j],las=2 )
+			if( length(unique(myT[,i] ) < 20 ))
+			{
+				boxplot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j],las=2 )
+			}
+			else
+			{
+				plot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j] )
+			}
 		}
 	}
 	
