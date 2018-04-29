@@ -10,6 +10,7 @@ jIndex <- vector()
 iNames <- vector()
 jNames <- vector()
 pValues <- vector()
+rSquaredVals <- vector()
 
 index <-1 
 for(taxa in taxaLevels ) 
@@ -37,18 +38,21 @@ for(taxa in taxaLevels )
 				iNames[index] <- names(myT)[i]
 				jNames[index] <- names(myT)[j]
 				pValues[index] <- aVal
-					
+				rSquaredVals[index] <- summary(aLm)$r.squared
+									
 				index <- index + 1
 			}
 		}
 	}
 	
-	aFrame <- data.frame(iIndex,jIndex,iNames,jNames,pValues)
+	aFrame <- data.frame(iIndex,jIndex,iNames,jNames,pValues,rSquaredVals)
 	aFrame<- aFrame[order(aFrame$pValues),]
 	aFrame$adjustedpValues<- p.adjust( aFrame$pValues, method = "BH" )	
 	write.table(aFrame, file=paste("correlationPValuesReducedMeta_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 	
 	pdf(paste0(taxa,"sigCorrelations.pdf"))
+	
+	par(mfrow=c(2,2))
 	
 	for( z in 1:nrow(aFrame))
 	{
@@ -57,14 +61,13 @@ for(taxa in taxaLevels )
 			i <- aFrame$iIndex[z]
 			j <- aFrame$jIndex[z]
 			aTitle <- paste0( names(myT)[i], "@", names(myT)[j] , "\n",
-			format(aFrame$adjustedpValues[z],digits=3) )
-			plot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j] )
-			
-			boxplot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j] )
+			"p=", format(aFrame$adjustedpValues[z],digits=3), " r^2=", 
+				format(aFrame$rSquaredVals[z],digits=3))
+					
+			boxplot( myT[,j] ~ myT[,i], main = aTitle,xlab =names(myT)[i], ylab=names(myT)[j],las=2 )
 		}
 	}
 	
-	par(mfrow=c(2,2))
 	
 	
 	dev.off()
