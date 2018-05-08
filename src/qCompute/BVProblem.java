@@ -2,52 +2,45 @@ package qCompute;
 
 public class BVProblem
 {
-	private static final int numBits = 3;
+	private static final int NUMBER_BITS = 3;
+	
+	private static final int a =7;
 	
 	public static void main(String[] args)
 	{
-		System.out.println( getVal(3, 2^0));
-		System.out.println( getVal(3, 2^1));		
-		System.out.println( getVal(3, 2^2));
+		System.out.println(u(1));
+		System.out.println(u(2));
+		System.out.println(u(4));
 	}
 	
-	private static int getVal(int a , int x)
+	private static final int u(int x)
 	{
-		int[] aBits = getBits(a);
-		int[] xBits = getBits(x);
+		String aBits = getBits(a);
+		String xBits = getBits(x);
+		//System.out.println(aBits);
+		//System.out.println(xBits);
 		
-		printBits(aBits);
-		printBits(xBits);
+		int aBit = Integer.parseInt("" + aBits.charAt(NUMBER_BITS-1));
+		int xBit = Integer.parseInt("" + xBits.charAt(NUMBER_BITS-1));
+		int val = aBit*xBit;
 		
-		int val = 1;
-		
-		for( int y=aBits.length-1; y >=0; y--)
-			val = val ^ ( aBits[y] * xBits[y] );
+		for( int i = NUMBER_BITS-2; i >=0; i--)
+		{
+			aBit = Integer.parseInt("" + aBits.charAt(i));
+			xBit = Integer.parseInt("" + xBits.charAt(i));
+			val = val ^ (aBit*xBit);
+		}
 		
 		return val;
 	}
 	
-	private static void printBits(int[] bits)
+	private static final String getBits(int x)
 	{
-		for( int x=bits.length-1; x >=0; x--)
-			System.out.print(bits[x] +  " ");
+		String val = Integer.toBinaryString(x);
 		
-		System.out.println();
-	}
-	
-	private static int[] getBits(int val)
-	{
+		while( val.length() < NUMBER_BITS)
+			val = "0" + val;
 		
-		int[] a = new int[numBits];
-		
-		
-		for( int x=0; x < a.length; x++)
-			a[x] = getBit(val, x);
-		
-		return a;
-	}
-	
-	private static int getBit(int n, int k) {
-	    return (n >> k) & 1;
+		return val;
 	}
 }
