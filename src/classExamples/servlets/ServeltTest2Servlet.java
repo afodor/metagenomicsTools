@@ -3,6 +3,7 @@ package classExamples.servlets;
 import java.io.IOException;
 import javax.servlet.http.*;
 
+
 @SuppressWarnings("serial")
 public class ServeltTest2Servlet extends HttpServlet
 {
