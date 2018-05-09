@@ -1,0 +1,11 @@
+rm(list=ls())
+
+setwd("C:\\Emily_May_2018\\4_RdpParser\\output")
+
+taxa <- c("phylum","class","order","family", "genus")
+
+for( t in taxa )
+{
+	fileName <- paste0(t,"_LogNormalCountsMetaMerged.tsv")
+	myT <- read.table(fileName,sep="\t",header=TRUE,row.names=1)
+}
