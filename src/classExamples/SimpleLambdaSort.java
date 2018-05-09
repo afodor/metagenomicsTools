@@ -46,11 +46,11 @@ public class SimpleLambdaSort
 			System.out.println(s);
 		
 		//as of Java 1.8, use Lambda functions to simplify the syntax
-		list.sort((o1, o2)->o1.name.compareTo(o2.name));
-		list.forEach(System.out::println);
+		//list.sort((o1, o2)->o1.name.compareTo(o2.name));
+		//list.forEach(System.out::println);
 		
 		// makes it easier to see the logic of the sort 
-		list.sort((o1, o2)->o1.id-o2.id);
-		list.forEach(System.out::println);
+		//list.sort((o1, o2)->o1.id-o2.id);
+		//list.forEach(System.out::println);
 	}
 }

@@ -18,7 +18,7 @@ public class GatherAllCSSSemaphoreAndFutureTask
 	private static final List<Float> resultsList = new ArrayList<Float>();
 	private static final int NUM_WORKERS = 4;
 	
-	private static FutureTask<List<Float>> getResultsListAsFuture(File inputFile, Semaphore semaphore)
+	private static FutureTask<List<Float>> getResultsListAsFuture(final File inputFile, final Semaphore semaphore)
 	{
 		return new FutureTask<>( new Callable<List<Float>>()
 		{
