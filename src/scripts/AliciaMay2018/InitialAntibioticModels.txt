@@ -47,4 +47,13 @@ dFrame$pValuesTypeAntibioticAdjusted<- p.adjust( dFrame$pValuesAntibiotic, metho
 write.table(dFrame, file="modelsL6.txt", row.names=FALSE, sep="\t")
 
 # todo:  Are antibiotics different ?
-#t.test( myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Antibiotic"]$shannon_alpha )
+t.test( myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Antibiotic",]$shannon_alpha ,
+			myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Control",]$shannon_alpha )
+			
+aLm <- lm(myMerge$shannon_alpha[myMerge$Type=="Sediment"] ~
+			as.numeric(myMerge$TimePoint[myMerge$Type=="Sediment"]) + myMerge$Sample[myMerge$Type=="Sediment"] 		  )
+
+boxplot( myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Antibiotic",]$shannon_alpha ,
+			myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Control",]$shannon_alpha )
+
+summary(aLm)
