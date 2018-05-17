@@ -1,0 +1,17 @@
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\Alicia")
+#remove the inital # from the input file
+myT <- read.table("final_map_w_alpha_L6.txt", header=TRUE, sep="\t",row.names=1)
+
+myTData <- myT[,18:ncol(myT)]
+
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("L6_allData",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("L6eigenValues_",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("L6_withMDS.txt",".txt",sep=""),row.names=FALSE)
