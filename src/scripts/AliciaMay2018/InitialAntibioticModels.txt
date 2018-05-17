@@ -36,3 +36,15 @@ if ( i != 9 & i != 12 & i != 15 &  i != 18 )
 	names[index] = names(myMerge)[i]
 	index = index + 1
 }
+
+dFrame <- data.frame(names, pValuesType,pValuesTime,pValuesAntibiotic, index)
+
+dFrame <- dFrame [order(dFrame$pValuesAntibiotic),]
+dFrame$pValuesTypeAdjusted<- p.adjust( dFrame$pValuesType, method = "BH" )	
+dFrame$pValuesTimeAdjusted<- p.adjust( dFrame$pValuesTime, method = "BH" )	
+dFrame$pValuesTypeAntibioticAdjusted<- p.adjust( dFrame$pValuesAntibiotic, method = "BH" )	
+	
+write.table(dFrame, file="modelsL6.txt", row.names=FALSE, sep="\t")
+
+# todo:  Are antibiotics different ?
+#t.test( myMerge[myMerge$Type=="Sediment" & myMerge$Sample=="Antibiotic"]$shannon_alpha )
