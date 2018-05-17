@@ -15,3 +15,24 @@ write.table(myPCOA$CA$eig,file=paste("L6eigenValues_",".txt", sep=""), sep="\t")
 myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
 
 write.table(myMerge , sep="\t", file=paste("L6_withMDS.txt",".txt",sep=""),row.names=FALSE)
+
+pValuesType <- vector()
+pValuesTime <- vector()
+pValuesAntibiotic <- vector()
+names <- vector()
+
+index <-1 
+for( i in 7:932)
+if ( i != 9 & i != 12 & i != 15 &  i != 18 ) 
+{
+	bug <- myMerge[,i]
+	
+	myLm <- lm( bug ~ myMerge$Type + myMerge$TimePoint + myMerge$Sample )
+	
+	myAnova <- anova(myLm)
+	pValuesType[index] <-  myAnova$"Pr(>F)"[1]
+	pValuesTime[index] <-  myAnova$"Pr(>F)"[2]
+	pValuesAntibiotic[index] <- myAnova$"Pr(>F)"[3]
+	names[index] = names(myMerge)[i]
+	index = index + 1
+}
