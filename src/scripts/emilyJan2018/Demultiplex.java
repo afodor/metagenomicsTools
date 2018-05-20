@@ -30,10 +30,16 @@ AN40 R2: http://www.med.unc.edu/uploads/ibmhs.an40undete.gz
 AN34 R1: http://www.med.unc.edu/uploads/sspwa.an34undete.gz
 AN34 Index: http://www.med.unc.edu/uploads/aszxo.an34undete.gz
 AN34 R2: http://www.med.unc.edu/uploads/uvkap.an34undete.gz
+
+AN81 R1: rszzz.an81s0l001.gz
+AN81 index: zqsfx.an81s0l001.gz
+AN81 R2: goicf.an81s0l001.gz
+
 	 */
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		demultiplexASample("AN703"
 				, new File( ConfigReader.getEmilyJan2018Dir() + File.separator+  "hupdj.undetermin.gz"), 
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "hfyeg.undetermin.gz"), 
@@ -51,7 +57,14 @@ AN34 R2: http://www.med.unc.edu/uploads/uvkap.an34undete.gz
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "aszxo.an34undete.gz"), 
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator+ "uvkap.an34undete.gz"),
 				new File(ConfigReader.getEmilyJan2018Dir() + File.separator + "2018-01-10_AN34_16S metadata.txt"));
-
+				*/
+		
+		demultiplexASample("AN81"
+				, new File( ConfigReader.getEmilyMay2018Dir() + File.separator+  "rszzz.an81s0l001.gz"), 
+				new File(ConfigReader.getEmilyMay2018Dir() + File.separator+ "zqsfx.an81s0l001.gz"), 
+				new File(ConfigReader.getEmilyMay2018Dir() + File.separator+ "goicf.an81s0l001.gz"),
+				new File(ConfigReader.getEmilyMay2018Dir() + File.separator + "2018-04-30_AN81_16S_metadata.txt"));
+		
 	}
 	
 	private static BufferedWriter getOrCreateWriter(String filepath, HashMap<String, BufferedWriter> map)
