@@ -152,6 +152,9 @@ public class ConfigReader
 	public static final String TANYA_BLOOD_DIR2= "TANYA_BLOOD_DIR2";
 	
 	public static final String EMILY_JAN_2018_DIR = "EMILY_JAN_2018_DIR";
+	
+	public static final String EMILY_MAY_2018_DIR = "EMILY_MAY_2018_DIR";
+	
 	public static final String IAN_ORGANOID_DIRECTORY = "IAN_ORGANOID_DIRECTORY";
 	
 	public static final String KATIE_BLAST_DIR = "KATIE_BLAST_DIR";
@@ -198,6 +201,11 @@ public class ConfigReader
 	public static String getEmilyJan2018Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(EMILY_JAN_2018_DIR);
+	}
+	
+	public static String getEmilyMay2018Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(EMILY_MAY_2018_DIR);
 	}
 	
 	public static String getBioLockJDir() throws Exception

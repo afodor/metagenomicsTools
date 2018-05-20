@@ -60,7 +60,7 @@ public class AddMetadata
 		}
 	}
 	
-	private static void addToMap(File inFile, HashMap<String, String> map, String suffix) throws Exception
+	public static void addToMap(File inFile, HashMap<String, String> map, String suffix) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -143,7 +143,7 @@ public class AddMetadata
 		writer.flush();  writer.close();
 	}
 	
-	private static String getFirstLine(File file) throws Exception
+	public static String getFirstLine(File file) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
