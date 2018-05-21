@@ -82,7 +82,7 @@ public class AddMetadata
 		reader.close();
 	}
 	
-	private static void writeAMeta(File inFile, File outFile, File unnormalizedFile, String firstLine,
+	public static void writeAMeta(File inFile, File outFile, File unnormalizedFile, String firstLine,
 			HashMap<String, String> map ) throws Exception
 	{
 		OtuWrapper wrapper = new OtuWrapper(unnormalizedFile);

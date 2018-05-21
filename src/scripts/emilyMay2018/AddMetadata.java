@@ -1,14 +1,9 @@
 package scripts.emilyMay2018;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.HashMap;
 
 import parsers.NewRDPParserFileLine;
-import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMetadata
@@ -55,7 +50,6 @@ public class AddMetadata
 		
 		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
-			/*
 			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 			System.out.println(taxa);
 			
@@ -68,9 +62,7 @@ public class AddMetadata
 			File unnormalized = new File(ConfigReader.getEmilyJan2018Dir() + File.separator + 
 					"spreadsheets" + File.separator  + "pivoted_" + taxa + "asColumns.txt");
 			
-			writeAMeta(inFile, outFile, unnormalized, top1, map);
-			*/
+			scripts.emilyJan2018.AddMetadata.writeAMeta(inFile, outFile, unnormalized, top1, map);
 		}
-	}
-	
+	}	
 }
