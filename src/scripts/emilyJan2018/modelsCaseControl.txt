@@ -154,7 +154,7 @@ dev.off()
 # finally work on correlations of metadata to mousedata for mouse only
 
 metadataColumns <- c(28:42)
-mouseDataColumns <- 54:503
+mouseDataColumns <- c(6,54:503)
 metaName <- vector()
 bugName <- vector()
 pValues <- vector()

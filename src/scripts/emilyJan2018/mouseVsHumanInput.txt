@@ -23,7 +23,7 @@ names <- vector()
 backIndex <- vector()
 
 index <-1
-for( i in 54:503) 
+for( i in c(6,54:503)) 
 {
 	bug <- myTCaseOnly[,i]
 	
