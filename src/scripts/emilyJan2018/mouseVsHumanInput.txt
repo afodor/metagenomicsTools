@@ -5,9 +5,6 @@ setwd("C:\\EmilyJan2018\\spreadsheets")
 filepath <- "pcoa_withMetadatagenus.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
-numCols <- ncol(myT)
-myColClasses <- c(rep("character", 50), rep("numeric", numCols-50))
-myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
 
@@ -26,7 +23,7 @@ names <- vector()
 backIndex <- vector()
 
 index <-1
-for( i in 51:471) 
+for( i in 53:502) 
 {
 	bug <- myTCaseOnly[,i]
 	
@@ -91,15 +88,15 @@ for ( i in 1:nrow(resultsFrame))
 	
 	donorPlusTime <- vector()
 	
-	for( i in 1:nrow(myTHuman) ) 
+	for( j in 1:nrow(myTHuman) ) 
 	{
-		donorPlusTime[i] <- paste0(myTHuman$donorID[i],"_",substring(myTHuman$Slurry.ID[i],1,2))
+		donorPlusTime[j] <- paste0(myTHuman$donorID[j],"_",substring(myTHuman$Slurry.ID[j],1,2))
 	}
 	
 	boxplot( myTHuman[,lookup] ~ donorPlusTime,las=2,main=paste("human",resultsFrame$names[i]),
 							ylab = resultsFrame$names[i])
 							
-	plot(0,type='n',axes=FALSE,ann=FALSE)
+	#plot(0,type='n',axes=FALSE,ann=FALSE)
 	
 }
 
