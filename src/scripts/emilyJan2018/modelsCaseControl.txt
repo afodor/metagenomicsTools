@@ -8,12 +8,12 @@ filepath <- "pcoa_withMetadatagenusWithNA.txt";
 
 myT <-read.table(filepath,sep="\t",header=TRUE)
 numCols <- ncol(myT)
-myColClasses <- c(rep("character", 20),
+myColClasses <- c(rep("character", 22),
 				  rep("numeric", 2), 
 				  rep("character", 2),
 				  rep("numeric", 17),
 				  rep("character", 9),
-	   rep("numeric", numCols-50))
+	   rep("numeric", numCols-52))
 myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 
 myT <- myT[ myT$readNum == 1, ]
@@ -24,7 +24,6 @@ myT <- myT[ !is.na (myT$Mouse.group), ]
 myTHuman <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
 myTHuman <- myTHuman[ myTHuman$readNum == 1, ]
 myTHuman <-myTHuman[  !is.na (myT$Mouse.group), ]
-
 
 donorString <- vector()
 caseControl <- vector()
@@ -52,7 +51,11 @@ donorStringHuman <- vector()
 for( i in 1:nrow(myTHuman))
 {
 	twoChars = substr(myTHuman$Slurry.ID[i],1,2)
-	if( twoChars == "T1" || twoChars == "T2" ) 
+	if( is.na( twoChars )) 
+	{
+		donorStringHuman[i] = "NA"
+	}
+	else if( twoChars == "T1" || twoChars == "T2" ) 
 	{
 		 donorStringHuman[i] = paste0(myTHuman$donorID[i], "_case")
 	}
@@ -67,8 +70,6 @@ for( i in 1:nrow(myTHuman))
 }
 
 
-
-
 # any difference between case and control
 # model will be bug = week + case/control + donorID
 # we'll start by ignoring T1/T2..
@@ -79,7 +80,7 @@ names <- vector()
 backIndex <- vector()
 
 index <-1
-todo <-c(21,22,25:41,51:471)
+todo <-c(5,6,10,17,23,24,29:43,49,50,53:502)
 for( i in todo) 
 {
 	toUse <- !is.na(myT[,i])
