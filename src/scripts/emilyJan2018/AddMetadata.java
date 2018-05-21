@@ -93,7 +93,7 @@ public class AddMetadata
 		String topLine = reader.readLine();
 		String[] topSplits = topLine.split("\t");
 		
-		writer.write(topSplits[0] + "\tkey_donorID\tdonorID\treadNum\tshannonDiveristy\tnumReads\t" + firstLine  );
+		writer.write(topSplits[0] + "\tkey_donorID\tdonorID\treadNum\tuniqueDonor\tshannonDiveristy\tnumReads\t" + firstLine  );
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -121,6 +121,16 @@ public class AddMetadata
 				writer.write("\t" + keyPlusDonor);
 				writer.write("\t" + keySplits[1]);
 				writer.write("\t" + keySplits[2].charAt(0));
+				
+				String mouseGroup = metaSplits[12];
+				System.out.println( "TIME CHECK " +  mouseGroup);
+				
+				if( mouseGroup.equals("T1") || mouseGroup.equals("T2"))
+					writer.write("\t" + keySplits[1] + "_case");
+				else if( mouseGroup.equals("HC"))
+					writer.write("\t" + keySplits[1] + "_control");
+				else 
+					writer.write("\tn.a.");
 				
 				writer.write("\t" + wrapper.getShannonEntropy(splits[0]));
 				writer.write("\t" + wrapper.getNumberSequences(splits[0]));

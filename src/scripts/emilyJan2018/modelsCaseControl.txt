@@ -74,10 +74,8 @@ backIndex <- vector()
 
 index <-1
 
-#todo <-c(5,6,10,17,23,24,29:43,49,50,53:502)
-
 # could capture earlier columns if cast to numeric
-todo <-c(5:502)
+todo <-c(6:503)
 for( i in todo) 
 {
 	toUse <- !is.na(myT[,i])
@@ -155,8 +153,8 @@ dev.off()
 
 # finally work on correlations of metadata to mousedata for mouse only
 
-metadataColumns <- c(27:41)
-mouseDataColumns <- 53:502
+metadataColumns <- c(28:42)
+mouseDataColumns <- 54:503
 metaName <- vector()
 bugName <- vector()
 pValues <- vector()

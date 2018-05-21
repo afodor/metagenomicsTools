@@ -12,9 +12,9 @@ for( t in taxa )
 	filepath<- paste( "pivoted_", t,"asColumnsLogNormalPlusMeta.txt",sep ="")
 	myT <-read.table(filepath,sep="\t",header=TRUE)
 	numCols <- ncol(myT)
-	myColClasses <- c(rep("character", 52), rep("numeric", numCols-52))
+	myColClasses <- c(rep("character", 53), rep("numeric", numCols-53))
 	myT <-read.table(filepath,sep="\t", colClasses=myColClasses,header=TRUE)
-	dataSub <- myT[  ,53:ncol(myT)]
+	dataSub <- myT[  ,54:ncol(myT)]
 	myPCOA <- capscale(dataSub~1,distance="bray")
 
 	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_" ,t, "_allData",".txt",sep=""))
