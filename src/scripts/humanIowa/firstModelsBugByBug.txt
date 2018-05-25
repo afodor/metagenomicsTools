@@ -1,0 +1,56 @@
+rm(list=ls())
+
+setwd("C:\\iowaHuman_May_2018")
+library("vegan")
+
+myT <- read.table("iowaRdpMetaGenusLognorm.tsv", sep="\t", header=TRUE,row.names=1)
+
+myTData <- myT[,1:35]
+
+pValues <-vector()
+metaNames <- vector()
+bugNames <- vector()
+metaIndex <- vector()
+bugIndex <- vector()
+index <- 1
+
+for( m in 36:ncol(myT))
+{
+	if( m != 38 & m != 44) 
+	{
+		for( p in 1:34 ) 
+		{
+			aLm <- lm( myT[,m] ~  myT[,p])
+			
+			pValues[index]  <-1 
+			
+			try( pValues[index] <- anova(aLm)$"Pr(>F)"[1])
+			metaNames[index] <- names(myT)[m]
+			bugNames [index] <- names(myT)[p]
+			metaIndex[index] <- m
+			bugIndex[index] <- p
+			index <- index + 1
+		}
+	}	
+}
+
+dFrame <- data.frame(pValues,metaNames,bugNames,metaIndex,bugIndex)
+
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+	
+write.table(dFrame, file="firstModelsGenusBugs.txt", row.names=FALSE, sep="\t")
+
+pdf("bugCorrelations.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	aTitle <- paste(  dFrame$bugNames[i], "vs",  dFrame$metaNames[i], "\nq=", 
+	dFrame$pValuesAdjusted[i])
+	plot( myT[,dFrame$bugIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+}
+
+dev.off()
+
+
