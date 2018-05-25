@@ -56,8 +56,10 @@ par(mfrow=c(2,2))
 for( i in 1:nrow(dFrame))
 {
 	aTitle <- paste(  names( myT )[dFrame$pcoaIndex[i]], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
-	dFrame$apValuesAdjusted[i])
+	dFrame$pValuesAdjusted[i])
 	plot( myT[,dFrame$pcoaIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
 }
 
 dev.off()
+
+
