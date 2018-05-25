@@ -19,8 +19,9 @@ write.table(myMerge , sep="\t", file=paste("genus_withMDS.txt",".txt",sep=""),ro
 pValues <-vector()
 pcoaColumns <- vector()
 metaNames <- vector()
+metaIndex <- vector()
+pcoaIndex <- vector()
 index <- 1
-
 
 for( m in 36:ncol(myT))
 {
@@ -35,14 +36,28 @@ for( m in 36:ncol(myT))
 			try( pValues[index] <- anova(aLm)$"Pr(>F)"[1])
 			metaNames[index] <- names(myT)[m]
 			pcoaColumns[index] <- p
+			metaIndex[index] <- m
+			pcoaIndex[index] <- p
 			index <- index + 1
 		}
 	}	
 }
 
-dFrame <- data.frame(pValues,pcoaColumns,metaNames)
+dFrame <- data.frame(pValues,pcoaColumns,metaNames,metaIndex,pcoaIndex)
 
 dFrame <- dFrame [order(dFrame$pValues),]
-dFrame$pValuesTypeAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
 	
 write.table(dFrame, file="firstModelsGenus.txt", row.names=FALSE, sep="\t")
+
+pdf("mdsCorrelations.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	aTitle <- paste(  names( myT )[dFrame$pcoaIndex[i]], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
+	dFrame$apValuesAdjusted[i])
+	plot( myT[,dFrame$pcoaIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+}
+
+dev.off()
