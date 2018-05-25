@@ -3,9 +3,9 @@ rm(list=ls())
 setwd("C:\\iowaHuman_May_2018")
 library("vegan")
 
-myT <- read.table("iowaRdpMeta.tsv", sep="\t", header=TRUE,row.names=1)
+myT <- read.table("iowaRdpMetaGenusLognorm.tsv", sep="\t", header=TRUE,row.names=1)
 
-myTData <- myT[,1:158]
+myTData <- myT[,1:35]
 
 myPCOA <- capscale(myTData~1,distance="bray")
 	
@@ -15,3 +15,28 @@ write.table(myPCOA$CA$eig,file=paste("genus_",".txt", sep=""), sep="\t")
 myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
 
 write.table(myMerge , sep="\t", file=paste("genus_withMDS.txt",".txt",sep=""),row.names=FALSE)
+
+pValues <-vector()
+pcoaColumns <- vector()
+metaNames <- vector()
+index <- 1
+
+
+for( m in 36:ncol(myT))
+{
+	if( m != 38 & m != 44) 
+	{
+		for( p in 1:5 ) 
+		{
+			aLm <- lm( myT[,m] ~  myPCOA$CA$u[,p])
+			
+			pValues[index]  <-1 
+			
+			try( pValues[index] <- anova(aLm)$"Pr(>F)"[1])
+			metaNames[index] <- names(myT)[m]
+			pcoaColumns[index] <- p
+			index <- index + 1
+		}
+	}	
+}
+
