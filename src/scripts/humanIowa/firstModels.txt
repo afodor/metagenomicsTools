@@ -1,0 +1,17 @@
+rm(list=ls())
+
+setwd("C:\\iowaHuman_May_2018")
+library("vegan")
+
+myT <- read.table("iowaRdpMeta.tsv", sep="\t", header=TRUE,row.names=1)
+
+myTData <- myT[,1:158]
+
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("genus_allData",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("genus_",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("genus_withMDS.txt",".txt",sep=""),row.names=FALSE)
