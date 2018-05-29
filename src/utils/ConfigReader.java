@@ -90,6 +90,8 @@ public class ConfigReader
 	public static final String IAN_LONGITUDINAL_DEC_2015_DIR= "IAN_LONGITUDINAL_DEC_2015_DIR";
 	public static final String TOPE_CONTROL_DIR = "TOPE_CONTROL_DIR";
 	
+	public static final String LAURA_DIR = "LAURA_DIR";
+	
 	public static final String ROSHONDA_CASE_CONTROL_DIR = "ROSHONDA_CASE_CONTROL_DIR";
 	
 	public static final String CHAPEL_HILL_WORKSHOP_DIR = "CHAPEL_HILL_WORKSHOP_DIR";
@@ -171,6 +173,11 @@ public class ConfigReader
 	public static String getEvanFeb2018Dir() throws Exception
 	{
 		return getConfigReader().getAProperty(EVAN_FEB_2018_DIR);
+	}
+	
+	public static String getLauraDir() throws Exception
+	{
+		return getConfigReader().getAProperty(LAURA_DIR);
 	}
 	
 	public static String getIanOrganoidDirectory() throws Exception
