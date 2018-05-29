@@ -21,7 +21,7 @@ for( t in taxa )
 	{
 		for( p in 6:ncol(myT) ) 
 		{
-			aLm <- lm( myT[,m] ~  myT[,p])
+			aLm <- lm( myT[,m] ~ log10( myT[,p] * 100000 + 1))
 				
 			pValues[index]  <-1 
 				
@@ -46,9 +46,10 @@ for( t in taxa )
 	
 	for( i in 1:nrow(dFrame))
 	{
-		aTitle <- paste(  dFrame$bugName[i], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
+		aTitle <- paste(  names(myT)[dFrame$bugName[i]], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
 		dFrame$pValuesAdjusted[i])
-		plot( myT[,dFrame$bugIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+		plot( log10(myT[,dFrame$bugIndex[i]]*100000 + 1) , myT[,dFrame$metaIndex[i]],main=aTitle,
+					xlab= names(myT)[dFrame$bugName[i]], ylab=names(myT)[dFrame$metaIndex[i]])
 	}
 	
 	dev.off()
