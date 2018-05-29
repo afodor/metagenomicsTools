@@ -1,0 +1,58 @@
+rm(list=ls())
+
+setwd("C:\\LauraProjects_May_2018\\SleeveGastroProject")
+library("vegan")
+
+taxa <- c("phyla","genus" )
+
+for( t in taxa )
+{
+	inFile <- paste0( t, "_tax_dataWithCages.txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	pValues <-vector()
+	bugIndex <- vector()
+	metaNames <- vector()
+	metaIndex <- vector()
+	bugName<- vector()
+	index <- 1
+	
+	for( m in 1:4)
+	{
+		for( p in 6:ncol(myT) ) 
+		{
+			aLm <- lm( myT[,m] ~  myT[,p])
+				
+			pValues[index]  <-1 
+				
+			try( pValues[index] <- anova(aLm)$"Pr(>F)"[1])
+			metaNames[index] <- names(myT)[m]
+			bugIndex[index] <- p
+			metaIndex[index] <- m
+			bugName[index] <- names(myT)[p]
+			index <- index + 1
+		}	
+	}
+	
+	dFrame <- data.frame(pValues,bugName,metaNames,metaIndex,bugIndex)
+	
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+		
+	write.table(dFrame, file=paste0("firstModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
+	
+	pdf(paste0(t,"_bugCorrelations.pdf"))
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+		aTitle <- paste(  dFrame$bugName[i], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
+		dFrame$pValuesAdjusted[i])
+		plot( myT[,dFrame$bugIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+	}
+	
+	dev.off()
+}
+
+	
+
