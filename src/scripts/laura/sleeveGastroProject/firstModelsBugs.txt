@@ -9,6 +9,8 @@ for( t in taxa )
 {
 	inFile <- paste0( t, "_tax_dataWithCages.txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	myT = myT[ myT$Time.point..weeks. == 25,]
+	
 	
 	pValues <-vector()
 	bugIndex <- vector()
