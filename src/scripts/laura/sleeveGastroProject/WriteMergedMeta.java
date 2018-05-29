@@ -13,7 +13,6 @@ public class WriteMergedMeta
 {
 	public static void main(String[] args) throws Exception
 	{
-		
 		String[] prefix = { "phyla","genus" };
 		
 		for( String p : prefix)

@@ -1,0 +1,65 @@
+rm(list=ls())
+
+setwd("C:\\LauraProjects_May_2018\\SleeveGastroProject")
+library("vegan")
+
+taxa <- c("phyla","genus" )
+
+for( t in taxa )
+{
+	inFile <- paste0( t, "_tax_dataWithCages.txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	myTData <- myT[,6:ncol(myT)]
+	myPCOA <- capscale(myTData~1,distance="bray")
+	write.table(myPCOA$CA$u, sep="\t", file=paste(t,"pcoa",".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste(t,"eigen",".txt", sep=""), sep="\t")	
+	myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste(t,"withMDS.txt",".txt",sep=""),row.names=FALSE)
+	
+	pValues <-vector()
+	pcoaColumns <- vector()
+	metaNames <- vector()
+	metaIndex <- vector()
+	pcoaIndex <- vector()
+	index <- 1
+	
+	for( m in 1:4)
+	{
+		for( p in 1:10 ) 
+		{
+			aLm <- lm( myT[,m] ~  myPCOA$CA$u[,p])
+				
+			pValues[index]  <-1 
+				
+			try( pValues[index] <- anova(aLm)$"Pr(>F)"[1])
+			metaNames[index] <- names(myT)[m]
+			pcoaColumns[index] <- p
+			metaIndex[index] <- m
+			pcoaIndex[index] <- p
+			index <- index + 1
+		}	
+	}
+	
+	dFrame <- data.frame(pValues,pcoaColumns,metaNames,metaIndex,pcoaIndex)
+	
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+		
+	write.table(dFrame, file=paste0("firstModels",t,".txt"), row.names=FALSE, sep="\t")
+	
+	pdf(paste0(t,"_mdsCorrelations.pdf"))
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+		aTitle <- paste(  "MDS_",t,dFrame$pcoaIndex[i], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
+		dFrame$pValuesAdjusted[i])
+		plot( myT[,dFrame$pcoaIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+	}
+	
+	dev.off()
+}
+
+	
+
