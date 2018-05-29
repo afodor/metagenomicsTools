@@ -89,6 +89,7 @@ public class ConfigReader
 	public static final String JOBIN_CARDIO_DIR = "JOBIN_CARDIO_DIR";
 	public static final String IAN_LONGITUDINAL_DEC_2015_DIR= "IAN_LONGITUDINAL_DEC_2015_DIR";
 	public static final String TOPE_CONTROL_DIR = "TOPE_CONTROL_DIR";
+	public static final String HUMAN_IOWA = "HUMAN_IOWA";
 	
 	public static final String LAURA_DIR = "LAURA_DIR";
 	
@@ -178,6 +179,11 @@ public class ConfigReader
 	public static String getLauraDir() throws Exception
 	{
 		return getConfigReader().getAProperty(LAURA_DIR);
+	}
+	
+	public static String getHumanIowa() throws Exception
+	{
+		return getConfigReader().getAProperty(HUMAN_IOWA);
 	}
 	
 	public static String getIanOrganoidDirectory() throws Exception
