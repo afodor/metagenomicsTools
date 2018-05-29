@@ -74,7 +74,7 @@ public class MetadataParserFileLine
 		return cageNumber;
 	}
 
-	private static HashMap<String, MetadataParserFileLine> getMetaMap() throws Exception
+	public static HashMap<String, MetadataParserFileLine> getMetaMap() throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getLauraDir() + File.separator + "SleeveGastroProject" + File.separator + 
