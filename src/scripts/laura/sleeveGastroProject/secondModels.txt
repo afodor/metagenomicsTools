@@ -4,16 +4,18 @@ setwd("C:\\LauraProjects_May_2018\\SleeveGastroProject")
 library("vegan")
 library("nlme")
 
-
 taxa <- c("phyla","genus" )
 for( t in taxa )
 {
 	inFile <- paste0( t, "withMDSNoQuotes.txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE)	
 
+
 	numCols <- ncol(myT)
 	myColClasses <- c("character","character","numeric","numeric","numeric","character", rep("numeric", numCols-6))
 	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
+
+	myT <- myT[!is.na(myT$Tumor.weight), ]
 		
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
@@ -34,6 +36,10 @@ for( t in taxa )
 			bug <- log( myT[,i] * 100000 + 1)	
 		}
 		
-		aLm <- lm( bug ~ weight* time ) 
+		if( sum( bug != 0) > nrow(myT) /4 ) 
+		{
+			aFrame <- data.frame(cage,time,weight,bug)
+			M.mixed <- lme( bug ~ time * weight, method = "REML", random = ~1 | cage, data =aFrame)
+		}
 	}
 }
