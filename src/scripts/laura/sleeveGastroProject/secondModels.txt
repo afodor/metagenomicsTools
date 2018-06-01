@@ -20,6 +20,7 @@ for( t in taxa )
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
 	pValuesInteraction <- vector()
+	bugNames <- vector()
 	bugIndex <- vector()
 	index <- 1
 	
@@ -40,6 +41,23 @@ for( t in taxa )
 		{
 			aFrame <- data.frame(cage,time,weight,bug)
 			M.mixed <- lme( bug ~ time * weight, method = "REML", random = ~1 | cage, data =aFrame)
+			
+			
+			pValuesTime[index] <-anova(M.mixed)$"p-value"[2]
+			pValuesTumor[index] <- anova(M.mixed)$"p-value"[3]
+			pValuesInteraction[index] <- anova(M.mixed)$"p-value"[4]
+			bugIndex[index] <- i
+			bugNames[index] <- names(myT)[i]
+			index = index + 1
 		}
 	}
+	
+	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesInteraction,bugIndex ) 
+	
+	dFrame <- dFrame [order(dFrame$pValuesTumor),]
+	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
+	dFrame$pValuesAdjustedTumor<- p.adjust( dFrame$pValuesTumor, method = "BH" )
+	dFrame$pValuesAdjustedInteraction<- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
+		
+	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
 }

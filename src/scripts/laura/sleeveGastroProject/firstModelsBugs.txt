@@ -41,7 +41,7 @@ for( t in taxa )
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
 		
-	write.table(dFrame, file=paste0("firstModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
+	write.table(dFrame, file=paste0("firstModelsBugsT2Only",t,".txt"), row.names=FALSE, sep="\t")
 	
 	pdf(paste0(t,"_bugCorrelations.pdf"))
 	par(mfrow=c(2,2))
