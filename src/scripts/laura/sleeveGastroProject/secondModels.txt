@@ -8,7 +8,12 @@ taxa <- c("phyla","genus" )
 for( t in taxa )
 {
 	inFile <- paste0( t, "withMDS.txt.txt")	
-	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)	
+	myT <- read.table(inFile, sep="\t", header=TRUE)	
+	
+	numCols <- ncol(myT)
+	myColClasses <- c("character","character",rep("numeric", numCols-2))
+	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
+	
 	
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
