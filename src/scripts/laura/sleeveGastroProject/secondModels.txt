@@ -4,19 +4,20 @@ setwd("C:\\LauraProjects_May_2018\\SleeveGastroProject")
 library("vegan")
 library("nlme")
 
+
 taxa <- c("phyla","genus" )
 for( t in taxa )
 {
-	inFile <- paste0( t, "withMDS.txt.txt")	
+	inFile <- paste0( t, "withMDSNoQuotes.txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE)	
-	
+
 	numCols <- ncol(myT)
-	myColClasses <- c("character","character",rep("numeric", numCols-2))
+	myColClasses <- c("character","character","numeric","numeric","numeric","character", rep("numeric", numCols-6))
 	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
-	
-	
+		
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
+	pValuesInteraction <- vector()
 	bugIndex <- vector()
 	index <- 1
 	
@@ -35,37 +36,4 @@ for( t in taxa )
 		
 		aLm <- lm( bug ~ weight* time ) 
 	}
-	
-		
-		
-		
-			metaNames[index] <- names(myT)[m]
-			bugIndex[index] <- p
-			metaIndex[index] <- m
-			bugName[index] <- names(myT)[p]
-			index <- index + 1	
-	}
-	
-	dFrame <- data.frame(pValues,bugName,metaNames,metaIndex,bugIndex)
-	
-	dFrame <- dFrame [order(dFrame$pValues),]
-	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
-		
-	write.table(dFrame, file=paste0("firstModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
-	
-	pdf(paste0(t,"_bugCorrelations.pdf"))
-	par(mfrow=c(2,2))
-	
-	for( i in 1:nrow(dFrame))
-	{
-		aTitle <- paste(  names(myT)[dFrame$bugName[i]], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
-		dFrame$pValuesAdjusted[i])
-		plot( log10(myT[,dFrame$bugIndex[i]]*100000 + 1) , myT[,dFrame$metaIndex[i]],main=aTitle,
-					xlab= names(myT)[dFrame$bugName[i]], ylab=names(myT)[dFrame$metaIndex[i]])
-	}
-	
-	dev.off()
 }
-
-	
-
