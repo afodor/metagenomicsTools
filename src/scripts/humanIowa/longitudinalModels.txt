@@ -1,0 +1,18 @@
+rm(list=ls())
+
+
+setwd("C:\\iowaHuman_May_2018")
+library("vegan")
+
+myT <- read.table("iowaRdpMetaGenusLognorm.tsv", sep="\t", header=TRUE,row.names=1)
+
+patientIDs <- vector()
+timepoints <- vector()
+
+splits <- strsplit(row.names(myT), "_")
+
+for( i in 1:length(splits))
+{	
+	patientIDs[i] = splits[[i]][1]
+	timepoints[i] = splits[[i]][2]
+}
