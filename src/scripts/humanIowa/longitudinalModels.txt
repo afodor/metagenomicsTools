@@ -1,6 +1,5 @@
 rm(list=ls())
 
-
 setwd("C:\\iowaHuman_May_2018")
 library("vegan")
 
@@ -15,4 +14,12 @@ for( i in 1:length(splits))
 {	
 	patientIDs[i] = splits[[i]][1]
 	timepoints[i] = splits[[i]][2]
+}
+
+bugRange <- 1:(which(names(myT) == "X.SAMPLEID"))
+
+for( i in bugRange) 
+{
+	bug <-  myT[,i]
+	
 }
