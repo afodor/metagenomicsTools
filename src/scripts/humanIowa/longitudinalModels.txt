@@ -16,10 +16,26 @@ for( i in 1:length(splits))
 	timepoints[i] = splits[[i]][2]
 }
 
-bugRange <- 1:(which(names(myT) == "X.SAMPLEID"))
+
+patientIDs <- factor(patientIDs)
+timepoints <- factor(timepoints)
+bugRange <- 1:(which(names(myT) == "X.SAMPLEID")-1)
+
+pValuesPatient <- vector()
+pValuestimepoint <- vector()
+bugNames <- vector()
+bugIndex <- vector()
+
+index <- 1
 
 for( i in bugRange) 
 {
 	bug <-  myT[,i]
-	
+	aLm <- lm( bug ~ patientIDs + timepoints   )	
+	anAnova <- anova(aLm)
+	pValuesPatient[index] <- anAnova$"Pr(>F)"[1]
+	pValuestimepoint[index] <- anAnova$"Pr(>F)"[2]
+	bugNames[index] <- names(myT)[i]
+	bugIndex[index] <- i
+	index = index + 1
 }
