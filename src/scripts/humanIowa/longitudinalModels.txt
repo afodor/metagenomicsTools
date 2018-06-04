@@ -39,3 +39,27 @@ for( i in bugRange)
 	bugIndex[index] <- i
 	index = index + 1
 }
+
+
+dFrame <- data.frame(pValuesPatient,pValuestimepoint ,bugNames ,bugIndex)
+
+dFrame <- dFrame [order(dFrame$pValuestimepoint ),]
+dFrame$pValuesAdjustedPatient<- p.adjust( dFrame$pValuesPatient, method = "BH" )
+dFrame$pValuesAdjustedTimepoint<- p.adjust( dFrame$pValuestimepoint, method = "BH" )	
+	
+write.table(dFrame, file="longitudnalModels.txt", row.names=FALSE, sep="\t")
+
+pdf("longitudnalCorrelations.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	aTitle <- paste(  dFrame$bugNames[i], "\nvs time\nq=", format( dFrame$pValuesAdjustedTimepoint[i],digits=3))
+	plot( myT[,dFrame$bugIndex[i]] ~ timepoints,main=aTitle)
+	
+	aTitle <- paste(  dFrame$bugNames[i], "\nvs patient\nq=",  format( dFrame$pValuesAdjustedPatient[i],digits=3))
+	plot( myT[,dFrame$bugIndex[i]] ~ patientIDs ,main=aTitle,las=2)
+}
+
+dev.off()
+
