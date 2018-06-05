@@ -63,8 +63,8 @@ for( t in taxa )
 	
 	for( i in 1:nrow(dFrame))
 	{
-	
-		boxplot( myT[ , dFrame$bugIndex[i] ] ~ treatment )
+		aText <- paste0(  dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTreatment[i],digits=3))
+		boxplot( myT[ , dFrame$bugIndex[i] ] ~ treatment, main=aText,cex.main=.8)
 		plot( myT[ , dFrame$bugIndex[i] ] ~ weight )	
 		plot( myT[ , dFrame$bugIndex[i] ] ~ cage)	
 		plot(0,type='n',axes=FALSE,ann=FALSE)
