@@ -34,7 +34,7 @@ public class WriteMergedMeta
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		writer.write(topSplits[0] + "\tcage");
+		writer.write(topSplits[0] + "\tcage\ttreatmentGroup");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -55,6 +55,13 @@ public class WriteMergedMeta
 				cage ="" +  mpfl.getCageNumber();
 			
 			writer.write(key + "\t" + cage );
+			
+			String treatmentGroup = "NA";
+			
+			if( mpfl != null)
+				treatmentGroup = mpfl.getTreatmentGroup();
+			
+			writer.write("\t" + treatmentGroup);
 			
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
