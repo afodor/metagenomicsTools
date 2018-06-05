@@ -57,4 +57,19 @@ for( t in taxa )
 	dFrame$pValuesAdjustedTreatment<- p.adjust( dFrame$pValuesTreatment, method = "BH" )
 		
 	write.table(dFrame, file=paste0("secondModelsBugs2ndTimePointOnly",t,".txt"), row.names=FALSE, sep="\t")
+	
+	pdf(paste0(t,"_timepoint2Plots.pdf"))
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+	
+		boxplot( myT[ , dFrame$bugIndex[i] ] ~ treatment )
+		plot( myT[ , dFrame$bugIndex[i] ] ~ weight )	
+		plot( myT[ , dFrame$bugIndex[i] ] ~ cage)	
+		plot(0,type='n',axes=FALSE,ann=FALSE)
+	}
+	
+	dev.off()
+	
 }
