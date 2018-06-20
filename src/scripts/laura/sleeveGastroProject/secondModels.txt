@@ -18,14 +18,15 @@ for( t in taxa )
 		
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
-	pValuesInteraction <- vector()
+	pValuesGroup<- vector()
 	bugNames <- vector()
 	bugIndex <- vector()
 	index <- 1
 	
 	cage <- myT$cage
 	time <- myT$Time.point..weeks.
-	weight <- myT$Tumor.volume
+	volume <- myT$Tumor.volume
+	treatmentGroup <- myT$treatmentGroup
 	
 	for( i in 8:(which(names(myT) == "MDS10")))
 	{
@@ -38,24 +39,53 @@ for( t in taxa )
 		
 		if( sum( bug != 0) > nrow(myT) /4 ) 
 		{
-			aFrame <- data.frame(cage,time,weight,bug)
-			M.mixed <- lme( bug ~ time * weight, method = "REML", random = ~1 | cage, data =aFrame)
+			aFrame <- data.frame(cage,time,volume,bug)
+			M.mixed <- lme( bug ~ time +volume+treatmentGroup, method = "REML", random = ~1 | cage, data =aFrame)
+			
 			pValuesTime[index] <-anova(M.mixed)$"p-value"[2]
 			pValuesTumor[index] <- anova(M.mixed)$"p-value"[3]
-			pValuesInteraction[index] <- anova(M.mixed)$"p-value"[4]
+			pValuesGroup[index] <- anova(M.mixed)$"p-value"[4]
 			bugIndex[index] <- i
 			bugNames[index] <- names(myT)[i]
 			index = index + 1
 		}
 	}
 	
-	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesInteraction,bugIndex ) 
+	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex ) 
 	
-	dFrame <- dFrame [order(dFrame$pValuesTumor),]
+	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 	dFrame$pValuesAdjustedTumor<- p.adjust( dFrame$pValuesTumor, method = "BH" )
-	dFrame$pValuesAdjustedInteraction<- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
+	dFrame$pValuesAdjustedGroup<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
 		
 	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
+	
+	pdf(paste0(t,"_plot2ndModels.pdf"))
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+		bug <- myT[,dFrame$bugIndex[i]]
+		
+		if ( substr(toString(dFrame$bugNames[i]),1,3) != "MDS")
+		{
+			bug <- log(bug * 100000 + 1)	
+		}
+		
+		aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
+		boxplot( bug ~ time, main=aText,cex.main=.8,xlab="timepoint")
+		
+		aText <- paste0(  "tumor volume" ,  "\nq= ",format( dFrame$pValuesAdjustedTumor[i],digits=3))
+		plot( bug ~ volume,main=aText,cex.main=.8,xlab="tumor volume" )	
+		
+		aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3))
+		boxplot( bug ~ treatmentGroup,main=aText,cex.main=.8,xlab="treatment group" )	
+		
+		boxplot( bug ~ cage, main ="cage", xlab="cage")	
+	}
+	
+	dev.off()
 }
+
+
 
