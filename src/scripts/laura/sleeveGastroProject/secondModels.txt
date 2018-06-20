@@ -10,12 +10,11 @@ for( t in taxa )
 	inFile <- paste0( t, "withMDSNoQuotes.txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE)	
 
-
 	numCols <- ncol(myT)
-	myColClasses <- c("character","character","numeric","numeric","numeric","character", rep("numeric", numCols-6))
+	myColClasses <- c("character","character","character","numeric","numeric","numeric","character", rep("numeric", numCols-7))
 	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
 
-	myT <- myT[!is.na(myT$Tumor.weight), ]
+	myT <- myT[!is.na(myT$Tumor.volume), ]
 		
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
@@ -26,7 +25,7 @@ for( t in taxa )
 	
 	cage <- myT$cage
 	time <- myT$Time.point..weeks.
-	weight <- myT$Tumor.weight
+	weight <- myT$Tumor.volume
 	
 	for( i in 8:(which(names(myT) == "MDS10")))
 	{
@@ -41,8 +40,6 @@ for( t in taxa )
 		{
 			aFrame <- data.frame(cage,time,weight,bug)
 			M.mixed <- lme( bug ~ time * weight, method = "REML", random = ~1 | cage, data =aFrame)
-			
-			
 			pValuesTime[index] <-anova(M.mixed)$"p-value"[2]
 			pValuesTumor[index] <- anova(M.mixed)$"p-value"[3]
 			pValuesInteraction[index] <- anova(M.mixed)$"p-value"[4]
@@ -61,3 +58,4 @@ for( t in taxa )
 		
 	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
 }
+
