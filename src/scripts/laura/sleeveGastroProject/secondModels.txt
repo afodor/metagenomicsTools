@@ -110,7 +110,7 @@ for( t in taxa )
 		"\n timepoint fob vs sg =", format( dFrame$pValuesFobVsSGAdjusted[i],digits=3))
 		boxplot( bug ~ treatmentGroup,main=aText,cex.main=.8,xlab="treatment group")	
 		
-		boxplot( bug ~ cage, main ="cage", xlab="cage")	
+		boxplot( bug ~ cage, main ="cage", xlab="cage",las=2)	
 	}
 	
 	dev.off()
