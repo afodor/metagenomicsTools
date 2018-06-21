@@ -98,6 +98,11 @@ for( t in taxa )
 		aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
 		boxplot( bug ~ time, main=aText,cex.main=.8,xlab="timepoint")
 		
+		myFrame <- data.frame( bug,time )
+		
+		stripchart(bug~ time, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+		
 		aText <- paste0(  "tumor volume" ,  "\nq= ",format( dFrame$pValuesAdjustedTumor[i],digits=3))
 		plot( bug ~ volume,main=aText,cex.main=.8,xlab="tumor volume",col=treatmentColors ,pch=16, cex=1.3 )	
 		
