@@ -26,8 +26,10 @@ for( t in taxa )
 	
 	cage <- myT$cage
 	time <- myT$Time.point..weeks.
+	time <- factor(time)
 	volume <- myT$Tumor.volume
 	treatmentGroup <- myT$treatmentGroup
+	treatmentGroup <- factor(treatmentGroup )
 	
 	treatmentColors <- vector()
 	
