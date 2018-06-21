@@ -19,6 +19,7 @@ for( t in taxa )
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
 	pValuesGroup<- vector()
+	pValuesFobVsSG <- vector()
 	bugNames <- vector()
 	bugIndex <- vector()
 	index <- 1
@@ -47,16 +48,20 @@ for( t in taxa )
 			pValuesGroup[index] <- anova(M.mixed)$"p-value"[4]
 			bugIndex[index] <- i
 			bugNames[index] <- names(myT)[i]
+	
+			pValuesFobVsSG[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "SG" ] ,bug[time == 25 &  treatmentGroup ==  "FOb" ])$p.value
+	
 			index = index + 1
 		}
 	}
 	
-	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex ) 
+	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex,pValuesFobVsSG ) 
 	
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 	dFrame$pValuesAdjustedTumor<- p.adjust( dFrame$pValuesTumor, method = "BH" )
 	dFrame$pValuesAdjustedGroup<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+	dFrame$pValuesFobVsSGAdjusted <- p.adjust( dFrame$pValuesFobVsSG , method = "BH" )	
 		
 	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
 	
@@ -78,7 +83,8 @@ for( t in taxa )
 		aText <- paste0(  "tumor volume" ,  "\nq= ",format( dFrame$pValuesAdjustedTumor[i],digits=3))
 		plot( bug ~ volume,main=aText,cex.main=.8,xlab="tumor volume" )	
 		
-		aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3))
+		aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3),
+		"\n timepoint fob vs sg =", format( dFrame$pValuesFobVsSGAdjusted[i],digits=3))
 		boxplot( bug ~ treatmentGroup,main=aText,cex.main=.8,xlab="treatment group" )	
 		
 		boxplot( bug ~ cage, main ="cage", xlab="cage")	
