@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\LauraProjects_May_2018\\IER_Project\\whitneyOut")
+
+library("vegan")
+
+myT <- read.table("IER_ProjectQiime_genus_Log10_norm_metaMerged.tsv", header=TRUE,sep="\t",row.names=1)
+
+myTData <- myT[,1:(which(names(myT)=="BarcodeSequence")-1)]
+
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_genusLog10Norm",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_pcoa_genusLog10Norm",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("pcoa_genusLog10NormMetadataallData",".txt",sep=""),row.names=FALSE)
