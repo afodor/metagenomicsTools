@@ -17,21 +17,20 @@ for( t in taxa )
 							
 	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
 
-	myT <- myT[!is.na(myT$Tumor.volume), ]
+	myT <- myT[!is.na(myT$TumorVolume ), ]
 		
 	pValuesTime <-vector()
 	pValuesTumor <- vector()
 	pValuesGroup<- vector()
-	pValuesFobVsSG <- vector()
 	bugNames <- vector()
 	bugIndex <- vector()
 	index <- 1
 	
-	cage <- myT$cage
+	cage <- myT$Cage.number
 	time <- myT$Time.point..weeks.
 	time <- factor(time)
-	volume <- myT$Tumor.volume
-	treatmentGroup <- myT$treatmentGroup
+	volume <- myT$TumorVolume
+	treatmentGroup <- myT$Treatment.Group
 	treatmentGroup <- factor(treatmentGroup )
 	
 	treatmentColors <- vector()
@@ -40,26 +39,16 @@ for( t in taxa )
 	{
 		if( treatmentGroup[i]=="Control" )
 			treatmentColors[i] = "RED"
-	
-		if( treatmentGroup[i]=="DIO" )
+		else
 			treatmentColors[i] = "BLUE"
-				
-		if( treatmentGroup[i]=="FOb" )
-			treatmentColors[i] = "YELLOW"
-			
-		if( treatmentGroup[i]=="SG" )
-			treatmentColors[i] = "BLACK"
 		
 	}
 	
-	for( i in 8:(which(names(myT) == "MDS10")))
+	toRun <- c(2:(which(names(myT)=="BarcodeSequence")-2),which(names(myT)=="MDS1"):which(names(myT)=="MDS10"))
+	
+	for( i in toRun)
 	{
 		bug <- myT[,i]
-		
-		if ( substr(names(myT)[i],1,3) != "MDS")
-		{
-			bug <- log( myT[,i] * 100000 + 1)	
-		}
 		
 		if( sum( bug != 0) > nrow(myT) /4 ) 
 		{
@@ -72,19 +61,16 @@ for( t in taxa )
 			bugIndex[index] <- i
 			bugNames[index] <- names(myT)[i]
 	
-			pValuesFobVsSG[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "SG" ] ,bug[time == 25 &  treatmentGroup ==  "FOb" ])$p.value
-	
 			index = index + 1
 		}
 	}
 	
-	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex,pValuesFobVsSG ) 
+	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex) 
 	
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 	dFrame$pValuesAdjustedTumor<- p.adjust( dFrame$pValuesTumor, method = "BH" )
 	dFrame$pValuesAdjustedGroup<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
-	dFrame$pValuesFobVsSGAdjusted <- p.adjust( dFrame$pValuesFobVsSG , method = "BH" )	
 		
 	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
 	
@@ -94,11 +80,6 @@ for( t in taxa )
 	for( i in 1:nrow(dFrame))
 	{
 		bug <- myT[,dFrame$bugIndex[i]]
-		
-		if ( substr(toString(dFrame$bugNames[i]),1,3) != "MDS")
-		{
-			bug <- log(bug * 100000 + 1)	
-		}
 		
 		aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
 		boxplot( bug ~ time, main=aText,cex.main=.8,xlab="timepoint")
@@ -111,8 +92,7 @@ for( t in taxa )
 		aText <- paste0(  "tumor volume" ,  "\nq= ",format( dFrame$pValuesAdjustedTumor[i],digits=3))
 		plot( bug ~ volume,main=aText,cex.main=.8,xlab="tumor volume",col=treatmentColors ,pch=16, cex=1.3 )	
 		
-		aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3),
-		"\n timepoint fob vs sg =", format( dFrame$pValuesFobVsSGAdjusted[i],digits=3))
+		aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3))
 		boxplot( bug ~ treatmentGroup,main=aText,cex.main=.8,xlab="treatment group")	
 		
 		boxplot( bug ~ cage, main ="cage", xlab="cage",las=2)	
@@ -120,7 +100,4 @@ for( t in taxa )
 	
 	dev.off()
 }
-
-
-
 
