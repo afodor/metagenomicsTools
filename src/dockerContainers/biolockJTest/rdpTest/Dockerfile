@@ -32,8 +32,6 @@ RUN apt-get update && \
 	wget \
 	nano
 
-
-
 #4.) =================    Java   ======================== #  
 # Add the appropriate repository, and autoselect menu options to avoid user interaction during install.
 RUN apt-get update && \
@@ -46,7 +44,6 @@ RUN apt-get update && \
    apt-get clean
 
 
-
 #10.) =======================  RDP  ========================== #  
 #RDP 2.12 (direct download link may break if it's a temporary link... look here: https://sourceforge.net/projects/rdp-classifier/)
 #shorten the rdp link for formatting reasons
@@ -55,3 +52,12 @@ RUN cd /apps/ && \
 	RDPLINKPT2="?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Frdp-classifier%2Ffiles%2Frdp-classifier%2Frdp_classifier_2.12.zip%2Fdownload&ts=1525888784" && \
 	wget -qO- $RDPLINKPT1$RDPLINKPT2 | bsdtar -xvf- && cd /
 
+# grab the latest git
+RUN apt-get install ant
+
+RUN cd /apps/ && \
+	git fetch && \
+	git checkout -f origin && \
+	ant
+
+	
