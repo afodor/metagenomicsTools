@@ -53,11 +53,15 @@ RUN cd /apps/ && \
 	wget -qO- $RDPLINKPT1$RDPLINKPT2 | bsdtar -xvf- && cd /
 
 # grab the latest git
-RUN apt-get install ant
+RUN apt-get -y install ant
 
-RUN cd /apps/ && \
+
+
+RUN mkdir /root/git && \
+    cd /root/git && \
+    git clone https://github.com/afodor/dockerpush.git && \
+    cd dockerpush && \
 	git fetch && \
 	git checkout -f origin && \
 	ant
 
-	
