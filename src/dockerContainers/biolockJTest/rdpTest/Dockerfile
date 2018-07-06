@@ -55,13 +55,18 @@ RUN cd /apps/ && \
 # grab the latest git
 RUN apt-get -y install ant
 
-
-
 RUN mkdir /root/git && \
     cd /root/git && \
     git clone https://github.com/afodor/dockerpush.git && \
     cd dockerpush && \
 	git fetch && \
 	git checkout -f origin && \
-	ant
+	ant &&\
+	cd bin &&\
+	chmod 777 runService.bat
 
+RUN apt-get install -y dos2unix
+RUN dos2unix /root/git/dockerpush/bin/runService.bat && \
+chmod 777 /root/git/dockerpush/bin/runService.bat
+
+CMD /root/git/dockerpush/bin/runService.bat
