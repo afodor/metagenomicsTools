@@ -33,11 +33,18 @@ public class MergeSampleCounts
 			
 			if(count ==null )
 				count =0;
+			else
+				countMap.remove(splits[0]);
 			
 			writer.write(s + "\t" + count + "\n");
 		}
 		
 		writer.flush();  writer.close();
+		
+		System.out.println(countMap.size() + " left");
+		
+		for(String s : countMap.keySet())
+			System.out.println(s + " " + countMap.get(s));
 	}
 	
 	private static HashMap<String, Integer> getSampleCounts() throws Exception
