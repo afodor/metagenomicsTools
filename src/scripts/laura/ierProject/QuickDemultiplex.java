@@ -48,7 +48,7 @@ public class QuickDemultiplex
 		Collections.sort(keys);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getLauraDir() + File.separator + "IER_Project" + File.separator + "sample.txt" )));
+				ConfigReader.getLauraDir() + File.separator + "IER_Project" + File.separator + "sampleCounts.txt" )));
 		
 		for(String s : keys)
 			writer.write(s + "\t" + sampleMap.get(s) + "\n");
