@@ -33,12 +33,24 @@ for( m in metaDataOfInterest[[1]]){
     metaNames[index] <-m
     pcoaColumns[index] <- p
     pcoaIndex[index] <- p
-    #metaIndex[index] <- which(colnames(myMerge) == m,TRUE) #why doesn't work?
+    metaIndex[index] <- which(colnames(myMerge) == m) #not working in R studio?
     index = index + 1
   }#end for
 }
-dFrame <- data.frame(pValues,pcoaColumns,metaNames,pcoaIndex)
+dFrame <- data.frame(pValues,pcoaColumns,metaNames,pcoaIndex,metaIndex)
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
 
 write.table(dFrame, file="specificMetadataGenus.txt", row.names=FALSE, sep="\t")
+
+pdf("pcoaCorrelations.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	aTitle <- paste(  "MDS",dFrame$pcoaIndex[i], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
+	dFrame$pValuesAdjusted[i])
+	plot( myT[,dFrame$pcoaIndex[i]], myT[,dFrame$metaIndex[i]],main=aTitle)
+}
+
+dev.off()
