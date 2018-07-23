@@ -1,0 +1,19 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\JamesEOE")
+
+myT <- read.table("genus_Normalized.tsv", header=TRUE,sep="\t",row.names=1)
+myTData <- myT[,7:ncol(myT)]
+
+myPCOA <- capscale(myTData ~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allGenus",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValuesallGenus_",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind(as.matrix(row.names(myT)),myT, myPCOA$CA$u)
+names(myMerge)[1] = "ID"
+
+write.table(myMerge , sep="\t", file=paste("allMdsGenus",".txt",sep=""),row.names=FALSE)
