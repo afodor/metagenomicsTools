@@ -46,24 +46,27 @@ for( i in 8:ncol(myT))
 	
 plot(pValuesBatch1_2CaseControl,pValuesBatch3_CaseControl)
 
-aFrame <- data.frame(names,	pValuesBatch1_2CaseControl,pValuesBatch3_CaseControl)
+# this is bugged because p-values are logged...
+
+dFrame <- data.frame(names,	pValuesBatch1_2CaseControl,pValuesBatch3_CaseControl)
 	
-	dFrame <- data.frame(	bugNames, pValuesTime,pValuesGroup,bugIndex) 
+dFrame <- dFrame [order(dFrame$	pValuesBatch1_2CaseControl),]
+dFrame$pValuesBatch1_2CaseControlAdjusted<- p.adjust( dFrame$pValuesBatch1_2CaseControl, method = "BH" )
+dFrame$pValuesBatch3_CaseControlAdjusted<- p.adjust( dFrame$pValuesBatch3_CaseControl, method = "BH" )	
+write.table(dFrame, file=paste0("secondModelsBugs.txt"), row.names=FALSE, sep="\t")
+
+
+#GRAPHS ARE HERE IF YOU ARE INTERESTED IN MAKING THEM 
+# FOR EACH BUG, PLOT CASE VS CONTROL FOR 1_2 vs. 3
+
+pdf(paste0("genus_plotModels.pdf"))
+par(mfrow=c(2,2))
 	
-	dFrame <- dFrame [order(dFrame$pValuesGroup),]
-	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
-	dFrame$pValuesAdjustedGroup<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+for( i in 1:nrow(dFrame))
+{
+	bug <- myT[,dFrame$bugIndex[i]]
 		
-	write.table(dFrame, file=paste0("secondModelsBugs",t,".txt"), row.names=FALSE, sep="\t")
-	
-	pdf(paste0(t,"_plot2ndModels.pdf"))
-	par(mfrow=c(2,2))
-	
-	for( i in 1:nrow(dFrame))
-	{
-		bug <- myT[,dFrame$bugIndex[i]]
-		
-		aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
+	aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
 		boxplot( bug ~ time, main=aText,cex.main=.8,xlab="timepoint")
 		
 		myFrame <- data.frame( bug,time )
