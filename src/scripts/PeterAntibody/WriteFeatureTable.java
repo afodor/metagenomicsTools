@@ -92,32 +92,37 @@ public class WriteFeatureTable
 		
 		writer.write("classification\tposition");
 		
-		for( int x=0; x < AMINO_ACID_CHARS.length; x++)
-			writer.write("\t" + AMINO_ACID_CHARS[x] );
+		List<String> positions= extractPositions(map);
+		
+		for(String s : positions)
+			for( int x=0; x < AMINO_ACID_CHARS.length; x++)
+				writer.write("\t" + s + "_" +  AMINO_ACID_CHARS[x] );
 		
 		writer.write("\n");
 		
-		List<String> positions= extractPositions(map);
 		List<String> classifications = extractClassifications(map);
 		
 		for(String c : classifications)
 		{
+
+			writer.write(c );
+			
 			for(String p : positions)
 			{
-				writer.write(c + "\t" + p);
-				
-				for( String aa : AMINO_ACID_CHARS)
-				{
-					String key = c + "_" + p + "_"+ aa;
-					
-					if( !map.containsKey(key))
-						writer.write("\tNA");
-					else
-						writer.write("\t" + map.get(key));
-				}
-				
-				writer.write("\n");
+				for(String s : positions)	
+					for( String aa : AMINO_ACID_CHARS)
+					{
+						String key = c + "_" + p + "_"+ aa;
+						
+						if( !map.containsKey(key))
+							writer.write("\tNA");
+						else
+							writer.write("\t" + map.get(key));
+					}	
 			}
+			
+			writer.write("\n");
+			
 		}
 		
 		writer.flush();  writer.close();
@@ -136,7 +141,10 @@ public class WriteFeatureTable
 				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				hcLc + "_STATS_"  + chotString + "_" + num + ".txt" )));
 		
-		StringTokenizer sToken = new StringTokenizer( reader.readLine().replace(" " , "-"));
+		String firstLine = reader.readLine();
+		String[] firstSplits = firstLine.split("\t");
+		
+		StringTokenizer sToken = new StringTokenizer( firstSplits[0].trim().replace(" " , "-"));
 		
 		String classificationKey = sToken.nextToken();
 		System.out.println(classificationKey);
