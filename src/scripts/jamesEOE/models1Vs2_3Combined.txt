@@ -19,7 +19,7 @@ pValuesBatch3_CaseControl <- vector()
 names <- vector()
 	
 index <- 1
-for( i in 7:ncol(myT))
+for( i in 8:ncol(myT))
 {
 	bug1_2 <- myT[myT$Batch==1 | myT$Batch==2  ,i]
 	caseControl1_2 <- myT$case[myT$Batch==1 | myT$Batch==2 ]
@@ -32,12 +32,21 @@ for( i in 7:ncol(myT))
 	lm1_2 <- lm( bug1_2 ~ factor( caseControl1_2 ) )
 	lm3 <- lm( bug3 ~ factor( caseControl3 ))
 	
-	pValuesBatch1_2CaseControl[index] <- anova(lm1_2)$"Pr(>F)"[1]
-	pValuesBatch3_CaseControl[index] <- anova(lm3)$"Pr(>F)"[1]
+	pValuesBatch1_2CaseControl[index] <- -log10( anova(lm1_2)$"Pr(>F)"[1])
+	pValuesBatch3_CaseControl[index] <- -log10(anova(lm3)$"Pr(>F)"[1])
+	
+	if( mean (bug1_2[caseControl1_2== "control"])  > mean (bug1_2[caseControl1_2== "EoE"])  )
+			pValuesBatch1_2CaseControl[index] = -pValuesBatch1_2CaseControl[index] 
+	
+	if( mean (bug3[caseControl3== "control"])  > mean (bug3[caseControl3== "EoE"])  )
+			pValuesBatch3_CaseControl[index] = -pValuesBatch3_CaseControl[index] 
+	
+	index <- index + 1
 }
 	
-	
-	aFrame <- data.frame(caseControl,bug)
+plot(pValuesBatch1_2CaseControl,pValuesBatch3_CaseControl)
+
+aFrame <- data.frame(names,	pValuesBatch1_2CaseControl,pValuesBatch3_CaseControl)
 	
 	dFrame <- data.frame(	bugNames, pValuesTime,pValuesGroup,bugIndex) 
 	
