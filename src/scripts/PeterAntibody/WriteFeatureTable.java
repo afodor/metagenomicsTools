@@ -1,9 +1,15 @@
 package scripts.PeterAntibody;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -15,24 +21,106 @@ public class WriteFeatureTable
 				"H",	"I",	"L",	"K",	"M"	, "N",	"P",	"Q",	"R",	"S"	, "T",	"V"
 				,"W"	,"Y"};
 	
+	public static final String[] CHAINS=  {"LC", "HC" };
+	
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String,Double> map = buildMap();
+		writeFeatureTable(map);
 	}
 	
 	private static HashMap<String,Double> buildMap() throws Exception
 	{
 		HashMap<String,Double> map = new HashMap<>();
 		
-		String[] chains =  {"LC", "HC" };
 		
-		for( String c : chains)
+		for( String c : CHAINS)
 			for( int x=1; x <=6; x++)
 			{
 				 addToMap(c, x, map);
 			}
 		
 		return map;
+	}
+	
+	private static List<String> extractPositions(HashMap<String,Double> map) throws Exception
+	{
+		HashSet<String> set =new HashSet<>();
+		
+		for(String s : map.keySet())
+		{
+			String[] splits =s.split("_");
+			
+			if( splits.length != 3)
+				throw new Exception("No");
+			
+			set.add(splits[1]);
+		}
+		
+		List<String> list =new ArrayList<>(set);
+		Collections.sort(list);
+		
+		return list;
+	}
+	
+
+	private static List<String> extractClassifications(HashMap<String,Double> map) throws Exception
+	{
+		HashSet<String> set =new HashSet<>();
+		
+		for(String s : map.keySet())
+		{
+			String[] splits =s.split("_");
+			
+			if( splits.length != 3)
+				throw new Exception("No");
+			
+			set.add(splits[0]);
+		}
+		
+		List<String> list =new ArrayList<>(set);
+		Collections.sort(list);
+		
+		return list;
+	}
+	private static void writeFeatureTable(HashMap<String,Double> map) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+				"combinedFeatureTable.txt")));
+		
+		writer.write("classification\tposition");
+		
+		for( int x=0; x < AMINO_ACID_CHARS.length; x++)
+			writer.write("\t" + AMINO_ACID_CHARS[x] );
+		
+		writer.write("\n");
+		
+		List<String> positions= extractPositions(map);
+		List<String> classifications = extractClassifications(map);
+		
+		for(String c : classifications)
+		{
+			for(String p : positions)
+			{
+				writer.write(c + "\t" + p);
+				
+				for( String aa : AMINO_ACID_CHARS)
+				{
+					String key = c + "_" + p + "_"+ aa;
+					
+					if( !map.containsKey(key))
+						writer.write("\tNA");
+					else
+						writer.write("\t" + map.get(key));
+				}
+				
+				writer.write("\n");
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	
@@ -48,7 +136,7 @@ public class WriteFeatureTable
 				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				hcLc + "_STATS_"  + chotString + "_" + num + ".txt" )));
 		
-		StringTokenizer sToken = new StringTokenizer( reader.readLine().replace(" " , "_"));
+		StringTokenizer sToken = new StringTokenizer( reader.readLine().replace(" " , "-"));
 		
 		String classificationKey = sToken.nextToken();
 		System.out.println(classificationKey);
