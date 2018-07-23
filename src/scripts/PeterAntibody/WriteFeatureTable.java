@@ -53,9 +53,13 @@ public class WriteFeatureTable
 		String classificationKey = sToken.nextToken();
 		System.out.println(classificationKey);
 		
-		for(String s= reader.readLine() ; s != null; s= reader.readLine())
+		for(String s= reader.readLine() ; s != null && s.trim().length()>0; s= reader.readLine())
 		{
 			String[] splits =s.split("\t");
+			
+			String position = splits[23];
+			
+			System.out.println(position);
 			
 		}
 		
