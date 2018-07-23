@@ -17,12 +17,12 @@ public class WriteFeatureTable
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<String,Double>> map = buildMap();
+		HashMap<String,Double> map = buildMap();
 	}
 	
-	private static HashMap<String, HashMap<String,Double>> buildMap() throws Exception
+	private static HashMap<String,Double> buildMap() throws Exception
 	{
-		HashMap<String, HashMap<String,Double>>  map = new HashMap<>();
+		HashMap<String,Double> map = new HashMap<>();
 		
 		String[] chains =  {"LC", "HC" };
 		
@@ -37,7 +37,7 @@ public class WriteFeatureTable
 	
 	
 	// outer key is classification_position_aaChar
-	private static void addToMap(String hcLc, int num,HashMap<String, HashMap<String,Double>> map) throws Exception
+	private static void addToMap(String hcLc, int num,HashMap<String,Double> map) throws Exception
 	{
 		String chotString = "Chotia";
 		
@@ -48,7 +48,7 @@ public class WriteFeatureTable
 				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				hcLc + "_STATS_"  + chotString + "_" + num + ".txt" )));
 		
-		StringTokenizer sToken = new StringTokenizer( reader.readLine());
+		StringTokenizer sToken = new StringTokenizer( reader.readLine().replace(" " , "_"));
 		
 		String classificationKey = sToken.nextToken();
 		System.out.println(classificationKey);
@@ -57,9 +57,22 @@ public class WriteFeatureTable
 		{
 			String[] splits =s.split("\t");
 			
-			String position = splits[23];
+			int startPos = 23;
+			String position = splits[startPos];
 			
-			System.out.println(position);
+			//System.out.println(position);
+			
+			for( int x=0; x < AMINO_ACID_CHARS.length; x++)
+			{
+				double val = Double.parseDouble(splits[startPos + x + 1]);
+				String key = classificationKey + "_" + position + "_" + AMINO_ACID_CHARS[x];
+				
+				//System.out.println(key);
+				if( map.containsKey(key))
+					throw new Exception("No " + key);
+				
+				map.put(key, val);
+			}
 			
 		}
 		
