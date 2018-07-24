@@ -10,13 +10,10 @@ classificaitons <- sort(unique(myT$classification))
 
 pdf("graphsByAA.pdf")
 
-par(mfrow=c(2,2))
+par(mfrow=c(2,1))
 for( aa in aas ) 
-{
-	for( c in chains)
-	{
-		plot( myT$positionLabel[ myT$aaChar == aa & myT$chain == c ] , myT$value[ myT$aaChar== aa & myT$chain== c ] )
-	}
+{	
+	plot( myT$positionLabel[ myT$aaChar == aa ] , myT$value[ myT$aaChar== aa ] )
 }
 
 dev.off()
