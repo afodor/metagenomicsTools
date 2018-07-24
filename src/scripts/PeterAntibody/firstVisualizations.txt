@@ -16,7 +16,7 @@ for( aa in aas )
 {	
 
 	aText <- paste0( "Residue: ", aa  )
-	plot( myT$positionLabel[ myT$aaChar == aa ], rep(0 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1),
+	plot( myT$positionLabel[ myT$aaChar == aa ], rep(-1 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1),
 		main=aText )
 
 	points( myT$positionLabel[ myT$aaChar == aa & myT$classification=="Therapeutic"  ] ,
