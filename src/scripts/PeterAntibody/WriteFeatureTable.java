@@ -97,6 +97,9 @@ public class WriteFeatureTable
 			int startPos = 23;
 			String position = splits[startPos];
 			
+			while(position.length() < 6)
+				position = position.charAt(0) + "0" + position.substring(1);
+			
 			//System.out.println(position);
 			
 			for( int x=0; x < AMINO_ACID_CHARS.length; x++)
