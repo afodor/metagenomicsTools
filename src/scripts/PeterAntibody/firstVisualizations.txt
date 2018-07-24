@@ -1,0 +1,22 @@
+rm(list=ls())
+
+setwd("C:\\peterBAnti")
+
+myT <- read.table("combinedFeatureTable.txt", sep="\t",header=TRUE)
+
+aas <- sort(unique(myT$aaChar))
+chains <- sort(unique(myT$chain))
+classificaitons <- sort(unique(myT$classification))
+
+pdf("graphsByAA.pdf")
+
+par(mfrow=c(2,2))
+for( aa in aas ) 
+{
+	for( c in chains)
+	{
+		plot( myT$positionLabel[ myT$aaChar == aa & myT$chain == c ] , myT$value[ myT$aaChar== aa & myT$chain== c ] )
+	}
+}
+
+dev.off()

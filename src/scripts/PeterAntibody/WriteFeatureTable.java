@@ -50,7 +50,7 @@ public class WriteFeatureTable
 				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"combinedFeatureTable.txt")));
 		
-		writer.write("classification\tchain\tposition\taaChar\tvalue\n");
+		writer.write("classification\tchain\tposition\tpositionLabel\taaChar\tvalue\n");
 		
 		for(String s : map.keySet())
 		{
@@ -61,7 +61,7 @@ public class WriteFeatureTable
 				throw new Exception("No");
 			
 			writer.write(splits[0] + "\t" + splits[1].charAt(0) 
-					+ "\t" +  splits[1].substring(1)+ "\t"
+					+ "\t" +  splits[1].substring(1)+ "\t" + splits[1] + "\t"
 					+ splits[2] + "\t" + map.get(s) + "\n" );
 		}
 		
