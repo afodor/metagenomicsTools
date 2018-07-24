@@ -44,89 +44,30 @@ public class WriteFeatureTable
 		return map;
 	}
 	
-	private static List<String> extractPositions(HashMap<String,Double> map) throws Exception
-	{
-		HashSet<String> set =new HashSet<>();
-		
-		for(String s : map.keySet())
-		{
-			String[] splits =s.split("_");
-			
-			if( splits.length != 3)
-				throw new Exception("No");
-			
-			set.add(splits[1]);
-		}
-		
-		List<String> list =new ArrayList<>(set);
-		Collections.sort(list);
-		
-		return list;
-	}
-	
-
-	private static List<String> extractClassifications(HashMap<String,Double> map) throws Exception
-	{
-		HashSet<String> set =new HashSet<>();
-		
-		for(String s : map.keySet())
-		{
-			String[] splits =s.split("_");
-			
-			if( splits.length != 3)
-				throw new Exception("No");
-			
-			set.add(splits[0]);
-		}
-		
-		List<String> list =new ArrayList<>(set);
-		Collections.sort(list);
-		
-		return list;
-	}
 	private static void writeFeatureTable(HashMap<String,Double> map) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"combinedFeatureTable.txt")));
 		
-		writer.write("classification\tposition");
+		writer.write("classification\tchain\tposition\taaChar\tvalue\n");
 		
-		List<String> positions= extractPositions(map);
-		
-		for(String s : positions)
-			for( int x=0; x < AMINO_ACID_CHARS.length; x++)
-				writer.write("\t" + s + "_" +  AMINO_ACID_CHARS[x] );
-		
-		writer.write("\n");
-		
-		List<String> classifications = extractClassifications(map);
-		
-		for(String c : classifications)
+		for(String s : map.keySet())
 		{
-
-			writer.write(c );
+			String[] splits =s.split("_");
 			
-			for(String p : positions)
-			{
-				for(String s : positions)	
-					for( String aa : AMINO_ACID_CHARS)
-					{
-						String key = c + "_" + p + "_"+ aa;
-						
-						if( !map.containsKey(key))
-							writer.write("\tNA");
-						else
-							writer.write("\t" + map.get(key));
-					}	
-			}
+			//System.out.println(s);
+			if( splits.length!=3)
+				throw new Exception("No");
 			
-			writer.write("\n");
-			
+			writer.write(splits[0] + "\t" + splits[1].charAt(0) 
+					+ "\t" +  splits[1].substring(1)+ "\t"
+					+ splits[2] + "\t" + map.get(s) + "\n" );
 		}
 		
 		writer.flush();  writer.close();
 	}
+	
 	
 	
 	// outer key is classification_position_aaChar
