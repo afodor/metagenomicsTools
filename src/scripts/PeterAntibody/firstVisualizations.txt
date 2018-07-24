@@ -11,9 +11,18 @@ classificaitons <- sort(unique(myT$classification))
 pdf("graphsByAA.pdf")
 
 par(mfrow=c(2,1))
+
 for( aa in aas ) 
 {	
-	plot( myT$positionLabel[ myT$aaChar == aa ] , myT$value[ myT$aaChar== aa ] )
+	plot( myT$positionLabel[ myT$aaChar == aa ], rep(0 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1) )
+
+	points( myT$positionLabel[ myT$aaChar == aa & myT$classification=="Therapeutic"  ] ,
+				 myT$value[ myT$aaChar== aa & myT$classification=="Therapeutic"  ], col = "red")
+				 
+	points( myT$positionLabel[ myT$aaChar == aa & myT$classification !="Therapeutic"  ] ,
+				 myT$value[ myT$aaChar== aa & myT$classification !="Therapeutic"  ], col="black")
 }
 
 dev.off()
+
+
