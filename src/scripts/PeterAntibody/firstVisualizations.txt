@@ -14,7 +14,10 @@ par(mfrow=c(2,1))
 
 for( aa in aas ) 
 {	
-	plot( myT$positionLabel[ myT$aaChar == aa ], rep(0 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1) )
+
+	aText <- paste0( "Residue: ", aa  )
+	plot( myT$positionLabel[ myT$aaChar == aa ], rep(0 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1),
+		main=aText )
 
 	points( myT$positionLabel[ myT$aaChar == aa & myT$classification=="Therapeutic"  ] ,
 				 myT$value[ myT$aaChar== aa & myT$classification=="Therapeutic"  ], col = "red")
