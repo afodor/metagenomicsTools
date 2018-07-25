@@ -95,15 +95,24 @@ public class WriteSortedFeatureTable
 				System.out.println("Warning " +  position + " " + sum + " " + Integer.parseInt(splits[22]));
 			
 
-		//	writer.write("classification\tchain\toriginalLabel\tsortLabel\taaChar\trawCount\tnormalizedCount\tn\n");
+		//	writer.write("classification\tchain\toriginalLabel\tsortLabel\taaChar\trawCount\tnormalizedCount\tnumAAs\n");
 		
 			for( int x=0; x < WriteFeatureTable.AMINO_ACID_CHARS.length; x++)
 			{
-				
+				writer.write(classificationKey + "\t");
+				writer.write(hcLc + "\t");
+				writer.write(position + "\t");
+				writer.write(sortPosition + "\t");
+				writer.write(WriteFeatureTable.AMINO_ACID_CHARS[x] + "\t");
+				writer.write(vals[x] + "\t");
+				writer.write( (vals[x] / ((double)sum)) + "\t"); ;
+				writer.write(sum + "\n");
 			}
 			
 			
 		}	
+		
+		writer.flush();
 		reader.close();
 	}
 }
