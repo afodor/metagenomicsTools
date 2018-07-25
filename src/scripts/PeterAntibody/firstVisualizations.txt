@@ -2,11 +2,9 @@ rm(list=ls())
 
 setwd("C:\\peterBAnti")
 
-myT <- read.table("combinedFeatureTable.txt", sep="\t",header=TRUE)
+myT <- read.table("mergedWithSortTerm.txt", sep="\t",header=TRUE)
 
 aas <- sort(unique(myT$aaChar))
-chains <- sort(unique(myT$chain))
-classificaitons <- sort(unique(myT$classification))
 
 pdf("graphsByAA.pdf")
 
@@ -14,16 +12,15 @@ par(mfrow=c(2,1))
 
 for( aa in aas ) 
 {	
+	aText <- paste0( "Residue: ", aa, " frequency "   )
+	plot( myT$sortLabel[ myT$aaChar == aa ], rep(-1 , length(myT$sortLabel[ myT$aaChar == aa ])), ylim=c(0,1),
+		main=aText)
 
-	aText <- paste0( "Residue: ", aa  )
-	plot( myT$positionLabel[ myT$aaChar == aa ], rep(-1 , length(myT$positionLabel[ myT$aaChar == aa ])), ylim=c(0,1),
-		main=aText )
-
-	points( myT$positionLabel[ myT$aaChar == aa & myT$classification=="Therapeutic"  ] ,
-				 myT$value[ myT$aaChar== aa & myT$classification=="Therapeutic"  ], col = "red")
+	points( myT$sortLabel[ myT$aaChar == aa & myT$classification=="Therapeutic"  ] ,
+				 myT$normalizedCount[ myT$aaChar== aa & myT$classification=="Therapeutic"  ], col = "red")
 				 
-	points( myT$positionLabel[ myT$aaChar == aa & myT$classification !="Therapeutic"  ] ,
-				 myT$value[ myT$aaChar== aa & myT$classification !="Therapeutic"  ], col="black")
+	points( myT$sortLabel[ myT$aaChar == aa & myT$classification !="Therapeutic"  ] ,
+				 myT$normalizedCount[ myT$aaChar== aa & myT$classification !="Therapeutic"  ], col="black")
 }
 
 dev.off()
