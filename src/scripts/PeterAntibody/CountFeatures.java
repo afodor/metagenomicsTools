@@ -52,6 +52,14 @@ public class CountFeatures
 			
 			if( assignment == null)
 				throw new Exception("No");
+			
+			HashMap<String,HashMap<String,Character>> map1 = map.get(assignment);
+			
+			if( assignment == null)
+			{
+				map1 =new HashMap<String,HashMap<String,Character>>();
+				map.put(assignment, map1);
+			}
 		}
 		
 		return map;
