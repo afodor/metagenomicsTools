@@ -24,7 +24,8 @@ public class QuickGroupCompare
 				ConfigReader.getLauraDir() + File.separator + 
 				"WhitneyComparison" + File.separator + "mergedPValues.txt")));
 		
-		writer.write("taxa\tierValGroupPValue\tierValTimePValue\tsleeveValGroupPValue\tsleeveValTimePValue\n");
+		writer.write("taxa\tierValGroupPValue\tierValTimePValue\tierTumorPValue\t" + 
+		"sleeveValGroupPValue\tsleeveValTimePValue\tsleeveTumorPValue\n");
 		
 		for( String s : map.keySet())
 		{
@@ -32,7 +33,10 @@ public class QuickGroupCompare
 			Holder h = map.get(s);
 			
 			writer.write( writeORNA(h.ierVALGroup) + "\t" + writeORNA(h.ierValTime) + "\t" + 
-							writeORNA(h.sleeveValGroup) + "\t" + writeORNA(h.sleeveValTime) + "\n");
+								writeORNA(h.ierValTumor) + "\t" + 
+							writeORNA(h.sleeveValGroup) + "\t" + writeORNA(h.sleeveValTime) + "\t" + 
+							writeORNA(h.sleeveValTumor) + 
+							"\n");
 		}
 			
 		writer.flush();  writer.close();
@@ -50,8 +54,10 @@ public class QuickGroupCompare
 	{
 		Double ierVALGroup = null;
 		Double ierValTime = null;
+		Double ierValTumor = null;
 		Double sleeveValGroup =null;
 		Double sleeveValTime = null;
+		Double sleeveValTumor = null;
 	}
 	
 	private static HashMap<String, Holder> addGroupPValueForSleeve(HashMap<String, Holder> map) throws Exception
@@ -79,6 +85,7 @@ public class QuickGroupCompare
 				}
 				
 				h.sleeveValTime = Double.parseDouble(splits[1]);
+				h.sleeveValTumor  = Double.parseDouble(splits[2]);
 				h.sleeveValGroup= Double.parseDouble(splits[3]);
 				
 			}
@@ -93,7 +100,7 @@ public class QuickGroupCompare
 		HashMap<String, Holder>  map = new HashMap<>();
 		
 		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getLauraDir() + File.separator + 
-				"WhitneyComparison" + File.separator + "IER_genus_ModelComparisons_noVol.txt")));
+				"WhitneyComparison" + File.separator + "IER_genus_ModelComparisons_Vol.txt")));
 		
 		reader.readLine();
 		
@@ -114,7 +121,8 @@ public class QuickGroupCompare
 				map.put(key, h);
 				
 				h.ierValTime = Double.parseDouble(splits[1]);
-				h.ierVALGroup = Double.parseDouble(splits[2]);
+				h.ierValTumor = Double.parseDouble(splits[2]);
+				h.ierVALGroup = Double.parseDouble(splits[3]);
 				
 			}
 		}
