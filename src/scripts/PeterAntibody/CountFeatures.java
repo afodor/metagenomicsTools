@@ -42,7 +42,6 @@ public class CountFeatures
 	 * */
 	private static HashMap< String, HashMap<String,HashMap<String,Character>>>  getMap() throws Exception
 	{
-		int count =0;
 		HashMap<String, String> fileToCatMap = getFileNameToCategoryMap();
 		
 		HashMap< String, HashMap<String,HashMap<String,Character>>> map = new HashMap<>();
@@ -53,6 +52,7 @@ public class CountFeatures
 		String[] files = topDir.list();
 		
 		for( String name : files)
+			if( ! name.endsWith("~") && ! name.endsWith("swp"))
 		{
 			System.out.println(name);
 			String assignment = fileToCatMap.get(name);
@@ -103,8 +103,7 @@ public class CountFeatures
 					
 					if( seqMap.containsKey(key) && seqMap.get(key) != charString.charAt(0))
 					{
-						System.out.println("Duplicate mismatch" + key + " " + seqMap.get(key) + " " + charString.charAt(0));
-						count++;
+						throw new Exception("Duplicate mismatch" + key + " " + seqMap.get(key) + " " + charString.charAt(0));
 					}
 						
 					seqMap.put(key, charString.charAt(0));
@@ -112,7 +111,6 @@ public class CountFeatures
 			}
 			
 			reader.close();
-			System.out.println("Duplicate " + count);
 		}
 		
 		return map;
