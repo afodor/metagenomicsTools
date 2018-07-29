@@ -44,7 +44,7 @@ for( i in 1:nrow(dFrame))
 	aTitle <- paste(  names(myT)[dFrame$bugName[i]], "vs",  names(myT)[dFrame$metaIndex[i]], "\nq=", 
 	dFrame$pValuesAdjusted[i])
 	plot( log10(myT[,dFrame$bugIndex[i]]*100000 + 1) , myT[,dFrame$metaIndex[i]],main=aTitle,
-					xlab= names(myT)[dFrame$bugName[i]], ylab=names(myT)[dFrame$metaIndex[i]])
+					xlab= names(myT)[dFrame$bugName[i]], ylab=names(myT)[dFrame$metaIndex[i]],cex.main=0.5)
 }
 	
 dev.off()
