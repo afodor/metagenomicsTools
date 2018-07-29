@@ -56,15 +56,23 @@ public class MergeQiimeToMeta
 			writer.write(key);
 			MetadataParserFileLine mpfl = metaMap.get(key);
 			
+			if( mpfl != null)
 			writer.write("\t" + mpfl.getTreatmentGroup() + "\t" + mpfl.getTimePoint() + "\t" + 
 						mpfl.getTumorVolume() + "\t" + mpfl.getTumorWeight() );
+			else
+				writer.write("\tNA" +"\tNA" + "\tNA" + 
+						"\tNA");
 			
-			if( mpfl.getCageNumber() == null)
+			if( mpfl == null || mpfl.getCageNumber() == null)
 				writer.write("\tNA");
 			else 
 				writer.write("\t" + mpfl.getCageNumber());
 			
-			writer.write("\t" + taxaMap.get(key).get(x));
+			for( int y=0 ; y < taxa.size(); y++)
+			{
+				writer.write("\t" + taxaMap.get(taxa.get(y)).get(x));
+			}
+			
 			
 			writer.write("\n");
 		}
