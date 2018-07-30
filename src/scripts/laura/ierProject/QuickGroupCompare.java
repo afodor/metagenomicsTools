@@ -24,8 +24,8 @@ public class QuickGroupCompare
 				ConfigReader.getLauraDir() + File.separator + 
 				"WhitneyComparison" + File.separator + "mergedPValues.txt")));
 		
-		writer.write("taxa\tierValGroupPValue\tierValTimePValue\tierTumorPValue\t" + 
-		"sleeveValGroupPValue\tsleeveValTimePValue\tsleeveTumorPValue\n");
+		writer.write("taxa\tierValGroupPValue\tierValTimePValue\tierTumorPValue\tierCoef\t" + 
+		"sleeveValGroupPValue\tsleeveValTimePValue\tsleeveTumorPValue\tsleeveCoef\n");
 		
 		for( String s : map.keySet())
 		{
@@ -33,9 +33,9 @@ public class QuickGroupCompare
 			Holder h = map.get(s);
 			
 			writer.write( writeORNA(h.ierVALGroup) + "\t" + writeORNA(h.ierValTime) + "\t" + 
-								writeORNA(h.ierValTumor) + "\t" + 
+								writeORNA(h.ierValTumor) + "\t" + writeORNA(h.ierCorrCoefficient) + "\t" + 
 							writeORNA(h.sleeveValGroup) + "\t" + writeORNA(h.sleeveValTime) + "\t" + 
-							writeORNA(h.sleeveValTumor) + 
+							writeORNA(h.sleeveValTumor) + "\t" +  writeORNA(h.sleeveCorrCoefficient) + 
 							"\n");
 		}
 			
@@ -55,15 +55,17 @@ public class QuickGroupCompare
 		Double ierVALGroup = null;
 		Double ierValTime = null;
 		Double ierValTumor = null;
+		Double ierCorrCoefficient = null;
 		Double sleeveValGroup =null;
 		Double sleeveValTime = null;
 		Double sleeveValTumor = null;
+		Double sleeveCorrCoefficient = null;
 	}
 	
 	private static HashMap<String, Holder> addGroupPValueForSleeve(HashMap<String, Holder> map) throws Exception
 	{
 		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getLauraDir() + File.separator + 
-				"WhitneyComparison" + File.separator + "secondModelsBugsgenus.txt")));
+				"SleeveGastroProject" + File.separator + "secondModelsBugsgenus.txt")));
 		
 		reader.readLine();
 		
@@ -85,9 +87,9 @@ public class QuickGroupCompare
 				}
 				
 				h.sleeveValTime = Double.parseDouble(splits[1]);
-				h.sleeveValTumor  = Double.parseDouble(splits[2]);
+				h.sleeveValTumor  = Double.parseDouble(splits[6]);
 				h.sleeveValGroup= Double.parseDouble(splits[3]);
-				
+				h.sleeveCorrCoefficient = Double.parseDouble(splits[7]);
 			}
 		}
 		
@@ -99,8 +101,10 @@ public class QuickGroupCompare
 	{
 		HashMap<String, Holder>  map = new HashMap<>();
 		
-		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getLauraDir() + File.separator + 
-				"WhitneyComparison" + File.separator + "IER_genus_ModelComparisons_Vol.txt")));
+		BufferedReader reader =new BufferedReader(new FileReader(new File(ConfigReader.getLauraDir() + 
+				File.separator + 
+				"IER_Project" + File.separator +  "whitneyOut" + File.separator 
+					+ "IER_genus_ModelComparisons_Vol2.txt")));
 		
 		reader.readLine();
 		
@@ -121,8 +125,9 @@ public class QuickGroupCompare
 				map.put(key, h);
 				
 				h.ierValTime = Double.parseDouble(splits[1]);
-				h.ierValTumor = Double.parseDouble(splits[2]);
+				h.ierValTumor = Double.parseDouble(splits[9]);
 				h.ierVALGroup = Double.parseDouble(splits[3]);
+				h.ierCorrCoefficient = Double.parseDouble(splits[11]);
 				
 			}
 		}
