@@ -13,6 +13,11 @@ public class BenitezMetadataParser
 	private final String status; // control active or inactive
 	private final String sraSampleRun;
 	
+	public String getSraSampleRun()
+	{
+		return sraSampleRun;
+	}
+	
 	public String getStudyGroup()
 	{
 		return studyGroup;
@@ -56,7 +61,27 @@ public class BenitezMetadataParser
 		
 	}
 	
-	private static HashMap<String,BenitezMetadataParser> getBenitezCaseControlMap( ) throws Exception
+	public static HashMap<String, BenitezMetadataParser> getMapBysampleRun()
+		throws Exception
+	{
+		HashMap<String,BenitezMetadataParser> metaMap =getBenitezCaseControlMap();
+		
+		HashMap<String, BenitezMetadataParser> returnMap = new HashMap<>();
+		
+		for(BenitezMetadataParser b: metaMap.values())
+		{
+			if( b.sraSampleRun != null &&  returnMap.containsKey(b.sraSampleRun))
+				throw new Exception("Duplicate " + b.sraSampleRun);
+			
+			if( b.sraSampleRun != null)
+				returnMap.put(b.sraSampleRun, b);
+		}
+		
+		
+		return returnMap;
+	}
+	
+	public static HashMap<String,BenitezMetadataParser> getBenitezCaseControlMap( ) throws Exception
 	{
 		HashMap<String,BenitezMetadataParser> map = new HashMap<>();
 		

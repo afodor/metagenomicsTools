@@ -30,10 +30,13 @@ public class EvanMetadataParser
 		for(String s =reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits =s.split("\t");
-			if( map.containsKey(splits[0]))
+			
+			String key = splits[0].trim();
+			
+			if( map.containsKey(key))
 				throw new Exception("No");
 			
-			map.put(splits[0], Integer.parseInt(splits[1]));
+			map.put(key, Integer.parseInt(splits[1]));
 		}
 		
 		return map;
