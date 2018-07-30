@@ -22,6 +22,9 @@ for( t in taxa )
 	pValuesFobVsSG <- vector()
 	bugNames <- vector()
 	bugIndex <- vector()
+	pValuesLog10VolumeWithDirection <- vector()
+	corCoeffVolumeBug <- vector()
+	
 	index <- 1
 	
 	cage <- myT$cage
@@ -68,6 +71,13 @@ for( t in taxa )
 			pValuesGroup[index] <- anova(M.mixed)$"p-value"[4]
 			bugIndex[index] <- i
 			bugNames[index] <- names(myT)[i]
+			
+			pValuesLog10VolumeWithDirection[index] <- log10(pValuesTumor[index] )
+    
+    		corCoeffVolumeBug[index] <- cor( bug,volume)
+    
+    		if(   corCoeffVolumeBug[index] < 0 ) 
+    			pValuesLog10VolumeWithDirection[index] = -pValuesLog10VolumeWithDirection[index] 
 	
 			pValuesFobVsSG[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "SG" ] ,bug[time == 25 &  treatmentGroup ==  "FOb" ])$p.value
 	
@@ -75,7 +85,8 @@ for( t in taxa )
 		}
 	}
 	
-	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex,pValuesFobVsSG ) 
+	dFrame <- data.frame(	bugNames, pValuesTime,pValuesTumor,pValuesGroup,bugIndex,pValuesFobVsSG ,
+	pValuesLog10VolumeWithDirection,corCoeffVolumeBug) 
 	
 	dFrame <- dFrame [order(dFrame$pValuesGroup),]
 	dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
