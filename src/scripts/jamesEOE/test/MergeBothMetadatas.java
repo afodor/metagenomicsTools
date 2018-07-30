@@ -14,9 +14,9 @@ public class MergeBothMetadatas
 	
 	public static void main(String[] args) throws Exception
 	{
-		//for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		for( int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
-			String taxa= "genus";
+			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 			writeMergedMetadata(taxa);
 			
 		}
@@ -26,6 +26,8 @@ public class MergeBothMetadatas
 	{
 		HashMap<String,BenitezMetadataParser> bMap = 
 				BenitezMetadataParser.getMapBysampleRun();
+		
+		System.out.println("Bmap size before =" + bMap.size());
 		
 		HashMap<String, Integer> eMap = EvanMetadataParser.getEvanCaseControlMap();
 		
@@ -56,6 +58,8 @@ public class MergeBothMetadatas
 			}
 		}
 		
+		System.out.println("Bmap size after =  " + bMap.size());
+		System.out.println("Emap size after = " + eMap.size());
 		reader.close();
 	}
 }
