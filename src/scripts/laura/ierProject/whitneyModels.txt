@@ -1,0 +1,141 @@
+#original otu data sent to us (not from blj)
+#excludes samples with NA tumor volume, includes vol in model 
+
+setwd('C:\\LauraProjects_May_2018\\IER_Project\\whitneyOut')
+library("nlme")
+
+rm(list=ls())
+
+project <- "IER"
+taxa <- "genus"
+
+inFile <- paste0("IER_",taxa,"_pcoa_metaMerged.txt")
+myT <- read.table(inFile, sep="\t", header=TRUE)	
+numCols <- ncol(myT)
+myColClasses <- c("character",rep("numeric", which(names(myT)=="BarcodeSequence")-2),
+                    "character","character","character","numeric","numeric","numeric","character",
+                    rep("numeric", numCols-which(names(myT)=="Cage.number")+1 ))
+
+myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
+myT <- myT[!is.na(myT$TumorVolume), ]
+
+pValuesTime <-vector()
+pValuesVolume <- vector()
+pValuesGroup<- vector()
+
+pValuesFobVsDIO <- vector()
+pValuesFobVsHCCR <- vector()
+pValuesFobVsLCCR <- vector()
+pValuesFobVsICR <- vector()
+pValuesHCCRVsLCCR <- vector()
+
+bugNames <- vector()
+bugIndex <- vector()
+index <- 1
+
+cage <- myT$Cage.number
+time <- myT$Time.point..weeks.
+time <- factor(time)
+volume <- myT$TumorVolume
+treatmentGroup <- myT$Treatment.Group
+treatmentGroup <- factor(treatmentGroup )
+
+treatmentColors <- vector()
+for( i in 1:length(treatmentGroup))
+{
+  if( treatmentGroup[i]=="Control" )
+    treatmentColors[i] = "RED"
+  
+  if( treatmentGroup[i]=="DIO" )
+    treatmentColors[i] = "BLUE"
+  
+  if( treatmentGroup[i]=="FOb" )
+    treatmentColors[i] = "YELLOW"
+  
+  if( treatmentGroup[i]=="HCCR" )
+    treatmentColors[i] = "GREEN"
+  
+  if( treatmentGroup[i]=="LCCR" )
+    treatmentColors[i] = "PURPLE"
+  
+  if( treatmentGroup[i]=="ICR" )
+    treatmentColors[i] = "ORANGE"
+}
+
+
+toRun <- c(2:(which(names(myT)=="BarcodeSequence")-1),which(names(myT)=="MDS1"):which(names(myT)=="MDS10"))
+
+for( i in toRun)
+{
+  bug <- myT[,i]
+  
+  if ( substr(names(myT)[i],1,3) != "MDS")
+  {
+    bug <- log( myT[,i] * 100000 + 1)	
+  }
+  
+  if( sum( bug != 0) > nrow(myT) /4 ) 
+  {
+    aFrame <- data.frame(cage,time,volume,bug)
+    M.mixed <- lme( bug ~ time + volume + treatmentGroup, method = "REML", random = ~1 | cage, data =aFrame)
+    
+    pValuesTime[index] <-anova(M.mixed)$"p-value"[2]
+    pValuesVolume[index] <-anova(M.mixed)$"p-value"[3]
+    pValuesGroup[index] <- anova(M.mixed)$"p-value"[4]
+    bugIndex[index] <- i
+    bugNames[index] <- names(myT)[i]
+    
+    pValuesFobVsDIO[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "FOb" ] ,bug[time == 25 &  treatmentGroup ==  "DIO" ])$p.value
+    pValuesFobVsHCCR[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "FOb" ] ,bug[time == 25 &  treatmentGroup ==  "HCCR" ])$p.value
+    pValuesFobVsLCCR[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "FOb" ] ,bug[time == 25 &  treatmentGroup ==  "LCCR" ])$p.value
+    pValuesFobVsICR[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "FOb" ] ,bug[time == 25 &  treatmentGroup ==  "ICR" ])$p.value
+    pValuesHCCRVsLCCR[index]  <- t.test( bug[time == 25 &  treatmentGroup ==  "HCCR" ] ,bug[time == 25 &  treatmentGroup ==  "LCCR" ])$p.value
+    
+    index = index + 1
+  }
+}
+
+dFrame <- data.frame(bugNames, pValuesTime, pValuesVolume, pValuesGroup, pValuesFobVsDIO, pValuesFobVsHCCR, pValuesFobVsLCCR, pValuesFobVsICR, pValuesHCCRVsLCCR, bugIndex) 
+dFrame <- dFrame [order(dFrame$pValuesGroup),]
+dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
+dFrame$pValuesAdjustedVolume<- p.adjust( dFrame$pValuesVolume, method = "BH" )
+dFrame$pValuesAdjustedGroup<- p.adjust( dFrame$pValuesGroup, method = "BH" )	
+
+dFrame$pValuesFobVsDIOAdjusted <- p.adjust( dFrame$pValuesFobVsDIO , method = "BH" )	
+dFrame$pValuesFobVsHCCRAdjusted <- p.adjust( dFrame$pValuesFobVsHCCR , method = "BH" )	
+dFrame$pValuesFobVsLCCRAdjusted <- p.adjust( dFrame$pValuesFobVsLCCR , method = "BH" )	
+dFrame$pValuesFobVsICRAdjusted <- p.adjust( dFrame$pValuesFobVsICR , method = "BH" )	
+dFrame$pValuesHCCRVsICCRAdjusted <- p.adjust( dFrame$pValuesHCCRVsLCCR , method = "BH" )	
+
+write.table(dFrame, file=paste0(project,"_",taxa,"_ModelComparisons_Vol2.txt"), row.names=FALSE, sep="\t")
+
+pdf(paste0(project,"_",taxa,"_ModelComparisons_Vol3.pdf"))
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+  bug <- myT[,dFrame$bugIndex[i]]
+  
+  if ( substr(toString(dFrame$bugNames[i]),1,3) != "MDS")
+  {
+    bug <- log(bug * 100000 + 1)	
+  }
+  aText <- paste0(  "time\n", dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTime[i],digits=3))
+  boxplot( bug ~ time, main=aText,cex.main=.4,xlab="timepoint")
+  
+  myFrame <- data.frame( bug,time )
+  
+  stripchart(bug~ time, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+  
+  aText <- paste0(  "tumor volume" ,  "\nq= ",format( dFrame$pValuesAdjustedVolume[i],digits=3))
+  plot( bug ~ volume,main=aText,cex.main=.8,xlab="tumor volume",col=treatmentColors ,pch=16, cex=1.3 )	
+  
+  aText <- paste0(  "treatment group" ,  "\nq= ",format( dFrame$pValuesAdjustedGroup[i],digits=3))
+  boxplot( bug ~ treatmentGroup,main=aText,cex.main=.8,xlab="treatment group", las = 2)	
+  
+  boxplot( bug ~ cage, main ="cage", xlab="cage",las=2)	
+}
+
+dev.off()
+
+#las makes the labels vertical
