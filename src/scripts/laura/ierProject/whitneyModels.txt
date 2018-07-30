@@ -22,6 +22,8 @@ myT <- myT[!is.na(myT$TumorVolume), ]
 pValuesTime <-vector()
 pValuesVolume <- vector()
 pValuesGroup<- vector()
+pValuesLog10VolumeWithDirection <- vector()
+corCoeffVolumeBug <- vector()
 
 pValuesFobVsDIO <- vector()
 pValuesFobVsHCCR <- vector()
@@ -81,6 +83,14 @@ for( i in toRun)
     
     pValuesTime[index] <-anova(M.mixed)$"p-value"[2]
     pValuesVolume[index] <-anova(M.mixed)$"p-value"[3]
+    
+    pValuesLog10VolumeWithDirection[index] <- log10(pValuesVolume[index] )
+    
+    corCoeffVolumeBug[index] <- cor( bug,volume)
+    
+    if(   corCoeffVolumeBug[index] < 0 ) 
+    	pValuesLog10VolumeWithDirection[index] = -pValuesLog10VolumeWithDirection[index] 
+    
     pValuesGroup[index] <- anova(M.mixed)$"p-value"[4]
     bugIndex[index] <- i
     bugNames[index] <- names(myT)[i]
@@ -95,7 +105,8 @@ for( i in toRun)
   }
 }
 
-dFrame <- data.frame(bugNames, pValuesTime, pValuesVolume, pValuesGroup, pValuesFobVsDIO, pValuesFobVsHCCR, pValuesFobVsLCCR, pValuesFobVsICR, pValuesHCCRVsLCCR, bugIndex) 
+dFrame <- data.frame(bugNames, pValuesTime, pValuesVolume,  pValuesGroup, pValuesFobVsDIO, pValuesFobVsHCCR, pValuesFobVsLCCR, pValuesFobVsICR, pValuesHCCRVsLCCR,
+ pValuesLog10VolumeWithDirection, bugIndex,corCoeffVolumeBug) 
 dFrame <- dFrame [order(dFrame$pValuesGroup),]
 dFrame$pValuesAdjustedTime<- p.adjust( dFrame$pValuesTime, method = "BH" )
 dFrame$pValuesAdjustedVolume<- p.adjust( dFrame$pValuesVolume, method = "BH" )
