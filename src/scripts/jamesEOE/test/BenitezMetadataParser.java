@@ -11,6 +11,7 @@ public class BenitezMetadataParser
 {
 	private final String studyGroup; // control or EOE
 	private final String status; // control active or inactive
+	private final String sraSampleRun;
 	
 	public String getStudyGroup()
 	{
@@ -27,14 +28,32 @@ public class BenitezMetadataParser
 		String[] splits = s.split("\t");
 		this.studyGroup  = splits[11];
 		this.status = splits[12];
+		
+		String lastCol = null;
+		
+		if( splits.length > 31)
+		
+		lastCol = splits[splits.length-1];
+		
+		this.sraSampleRun = lastCol;
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String,BenitezMetadataParser> map = getBenitezCaseControlMap();
+		HashMap<String,BenitezMetadataParser> bMap = getBenitezCaseControlMap();
 		
-		for(String s : map.keySet())
-			System.out.println(s + " " + map.get(s).studyGroup + " " + map.get(s).status);
+		for(String s : bMap.keySet())
+			System.out.println(s + " " + bMap.get(s).studyGroup + " " + bMap.get(s).status
+					+ " " + bMap.get(s).sraSampleRun);
+		
+		HashMap<String, Integer> eMap = EvanMetadataParser.getEvanCaseControlMap();
+		
+		for(String s : eMap.keySet())
+			if( bMap.containsKey(s))
+				throw new Exception("No");
+		
+		System.out.println("No duplciates");
+		
 	}
 	
 	private static HashMap<String,BenitezMetadataParser> getBenitezCaseControlMap( ) throws Exception

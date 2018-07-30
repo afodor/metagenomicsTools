@@ -17,7 +17,7 @@ public class EvanMetadataParser
 			System.out.println(s + " " + map.get(s));
 	}
 	
-	private static HashMap<String,Integer> getEvanCaseControlMap( ) throws Exception
+	public static HashMap<String,Integer> getEvanCaseControlMap( ) throws Exception
 	{
 		HashMap<String,Integer> map = new HashMap<>();
 		
