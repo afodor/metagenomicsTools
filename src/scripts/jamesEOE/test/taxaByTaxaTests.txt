@@ -9,8 +9,8 @@ for( t in taxa )
 	inFile <- paste0( "AF_merged_" , t, ".txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 	
-	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer"
-						& myT$activeInactive != "Inactive",  ]
+	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
+	#myT <- myT[myT$activeInactive != "Inactive",  ]
 	
 	pValues <-vector()
 	bugIndex <- vector()
@@ -21,7 +21,7 @@ for( t in taxa )
 	{
 		bug <- myT[,i]
 		
-		if( sum( bug != 0 ) > nrow(myT) / 4 ) 
+		#if( sum( bug != 0 ) > nrow(myT) / 4 ) 
 		{
 			aLm <- lm( bug ~ myT$caseControl)
 			pValues[index] <- anova(aLm)$"Pr(>F)"[1]		
