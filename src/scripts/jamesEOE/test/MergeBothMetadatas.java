@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeBothMetadatas
@@ -39,9 +40,16 @@ public class MergeBothMetadatas
 		
 		writer.write("id\tcaseControl\tactiveInactive\tsource");
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-			ConfigReader.getJamesEoeDirectory() + File.separator + "test" + 
-				File.separator + level+ ".tsv")));
+		File inFie = new File(ConfigReader.getJamesEoeDirectory() + File.separator + "test" + 
+				File.separator + level+ ".tsv");
+		
+		File logFile = new File(ConfigReader.getJamesEoeDirectory() + File.separator + "test" + 
+				File.separator + level+ "logNorm.tsv");
+		
+		OtuWrapper wrapper = new OtuWrapper(inFie);
+		wrapper.writeNormalizedLoggedDataToFile(logFile);
+				
+		BufferedReader reader = new BufferedReader(new FileReader(logFile));
 		
 		String[] firstLine = reader.readLine().split("\t");
 		
