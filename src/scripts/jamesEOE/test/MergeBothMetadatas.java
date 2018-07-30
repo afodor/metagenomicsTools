@@ -64,7 +64,7 @@ public class MergeBothMetadatas
 			
 			String id = splits[0];
 			
-			writer.write(id );
+			writer.write(id + "\t" );
 			
 			if( bMap.containsKey(id))
 			{
