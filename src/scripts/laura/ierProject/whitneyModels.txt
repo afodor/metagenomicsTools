@@ -14,7 +14,7 @@ myT <- read.table(inFile, sep="\t", header=TRUE)
 numCols <- ncol(myT)
 myColClasses <- c("character",rep("numeric", which(names(myT)=="BarcodeSequence")-2),
                     "character","character","character","numeric","numeric","numeric","character",
-                    rep("numeric", numCols-which(names(myT)=="Cage.number")+1 ))
+                    rep("numeric", numCols-whicha(names(myT)=="Cage.number")+1 ))
 
 myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
 myT <- myT[!is.na(myT$TumorVolume), ]
