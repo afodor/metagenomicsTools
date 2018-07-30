@@ -56,7 +56,7 @@ public class MergeBothMetadatas
 			
 			String id = splits[0];
 			
-			writer.write(id + "\t" );
+			writer.write(id );
 			
 			if( bMap.containsKey(id))
 			{
@@ -88,6 +88,5 @@ public class MergeBothMetadatas
 		System.out.println("Emap size after = " + eMap.size());
 		reader.close();
 		writer.flush();  writer.close();
-		
 	}
 }
