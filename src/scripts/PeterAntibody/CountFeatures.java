@@ -1,10 +1,13 @@
 package scripts.PeterAntibody;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -35,36 +38,37 @@ public class CountFeatures
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap< String, HashMap<String,HashMap<String,Character>>> map = getMap();
+		Map< String, Map<String,Map<String,Character>>> map = getMap();
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+				"seqCounts_5635.txt")));
+		
+		writer.write("sequenceID\tclassification\tnumPositions\n");
 		
 		System.out.println(map.keySet());
 		
-		HashSet<String> sequenceIds = new HashSet<>();
-		
-		for( HashMap<String,HashMap<String,Character>> map1 : map.values())
+		for( String classification : map.keySet())
 		{
-			for(String s : map1.keySet())
+			Map<String,Map<String,Character>> map1 = map.get(classification);
+			
+			for(String seqID : map1.keySet())
 			{
-				if( sequenceIds.contains(s))
-					throw new Exception("Duplicate " + s);
-				
-				sequenceIds.add(s);
+				writer.write(seqID + "\t"  + classification + "\t"
+						+ map1.get(seqID).size() + "\n");
 			}
-		}
-		
-		System.out.println("Finished with " + sequenceIds.size());
+		}	
 	}
 	
 	/**
 	 * keys are classification, then sequenceid, then position then AminoAcid
 	 * 
 	 * */
-	private static HashMap< String, HashMap<String,HashMap<String,Character>>>  getMap() throws Exception
+	private static Map< String, Map<String,Map<String,Character>>>  getMap() throws Exception
 	{
-		HashMap<String, String> fileToCatMap = getFileNameToCategoryMap();
+		Map<String, String> fileToCatMap = getFileNameToCategoryMap();
 		
-		HashMap< String, HashMap<String,HashMap<String,Character>>> map = new HashMap<>();
+		Map< String, Map<String,Map<String,Character>>> map = new HashMap<>();
 		
 		File topDir = new File(ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"oneAtATime" + File.separator + 
@@ -81,15 +85,15 @@ public class CountFeatures
 			if( assignment == null)
 				throw new Exception("No");
 			
-			HashMap<String,HashMap<String,Character>> map1 = map.get(assignment);
+			Map<String,Map<String,Character>> map1 = map.get(assignment);
 			
 			if( map1 == null)
 			{
-				map1 =new HashMap<String,HashMap<String,Character>>();
+				map1 =new LinkedHashMap<String,Map<String,Character>>();
 				map.put(assignment, map1);
 			}
 			
-			HashMap<String,Character> seqMap = null;
+			Map<String,Character> seqMap = null;
 			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(topDir.getAbsolutePath()
 					+ File.separator + name)));
