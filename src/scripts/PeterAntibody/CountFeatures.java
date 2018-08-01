@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -35,6 +36,24 @@ public class CountFeatures
 	public static void main(String[] args) throws Exception
 	{
 		HashMap< String, HashMap<String,HashMap<String,Character>>> map = getMap();
+		
+		
+		System.out.println(map.keySet());
+		
+		HashSet<String> sequenceIds = new HashSet<>();
+		
+		for( HashMap<String,HashMap<String,Character>> map1 : map.values())
+		{
+			for(String s : map1.keySet())
+			{
+				if( sequenceIds.contains(s))
+					throw new Exception("Duplicate " + s);
+				
+				sequenceIds.add(s);
+			}
+		}
+		
+		System.out.println("Finished with " + sequenceIds.size());
 	}
 	
 	/**
