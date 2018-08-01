@@ -44,7 +44,7 @@ public class CountFeatures
 			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"seqCounts_5635.txt")));
 		
-		writer.write("sequenceID\tclassification\tnumPositions\n");
+		writer.write("sequenceID\tclassification\tnumPositions\tnumH\tnumL\n");
 		
 		System.out.println(map.keySet());
 		
@@ -54,8 +54,21 @@ public class CountFeatures
 			
 			for(String seqID : map1.keySet())
 			{
+				int numH = 0;
+				int numL = 0;
+				
+				for(String s : map1.get(seqID).keySet())
+				{
+					if( s.startsWith("H"))
+						numH++;
+					else if( s.startsWith("L"))
+						numL++;
+					else throw new Exception("No " + s);
+				}
+				
 				writer.write(seqID + "\t"  + classification + "\t"
-						+ map1.get(seqID).size() + "\n");
+						+ map1.get(seqID).size() + "\t" + numH + "\t" + 
+								numL + "\n");
 			}
 		}	
 	}
