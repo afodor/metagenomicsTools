@@ -15,18 +15,19 @@ public class CountFeatures
 	{
 		HashMap<String, String> map = new HashMap<>();
 		
-		map.put("dekosky_basis_aa_hc_chothia.txt", "dekosky_basis"); 
+		map.put("dekosky_basis_aa_hc_chothia.txt", "dekosky_basis");
 		map.put("imgt_human_hc_chothia.txt", "imgt_human");
-		map.put("mouse_heavy_germline_chothia.txt", "mouse_germline");
-		map.put("dekosky_basis_aa_lc_chothia.txt","dekosky_basis");
-		map.put("imgt_human_lc_chothia.txt", "mouse_germline");
-		map.put("human_heavy_germline_chothia.txt", "human_germline");  
-		map.put("imgt_mouse_hc_chothia.txt","imgt_mouse" ); 
+		map.put("mouse_germline_kappa_chothia.txt", "mouse_germline");
+		map.put("dekosky_basis_aa_lc_chothia.txt", "dekosky_basis");
+		map.put("imgt_human_lc_chothia.txt","imgt_human" );   
 		map.put("therapeutic_hc_chothia.txt", "therapeutic");
-		map.put("human_kappa_germline_chothia.txt", "human_kappa_germline");  
-		map.put("imgt_mouse_lc_chothia.txt", "imgt_mouse");
-		map.put("therapeutic_lc_chothia.txt", "therapeutic");
-		map.put("mouse_kappa_germline_chothia.txt","mouse_germline" );
+		map.put("human_germline_hc_chothia.txt", "human_germline");
+		map.put("imgt_mouse_hc_chothia.txt", "imgt_mouse");
+		map.put( "therapeutic_lc_chothia.txt", "therapeutic");
+		map.put( "human_germline_kappa_chothia.txt", "human_germline"); 
+		map.put("imgt_mouse_lc_chothia.txt", "imgt_mouse"); 
+		map.put("human_germline_lambda_chothia.txt", "human_germline");
+		map.put("mouse_germline_hc_chothia.txt", "mouse_germline");
 		
 		return map;
 	}
@@ -47,7 +48,8 @@ public class CountFeatures
 		HashMap< String, HashMap<String,HashMap<String,Character>>> map = new HashMap<>();
 		
 		File topDir = new File(ConfigReader.getPeterAntibodyDirectory() + File.separator + 
-				"oneAtATime" + File.separator + "inputFiles");
+				"oneAtATime" + File.separator + 
+						"inputFiles" + File.separator + "Aug_1" );
 		
 		String[] files = topDir.list();
 		
