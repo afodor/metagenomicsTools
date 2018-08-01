@@ -15,6 +15,22 @@ import utils.ConfigReader;
 
 public class CountFeatures
 {
+	public static HashSet<Character> getAASet() throws Exception
+	{
+		HashSet<Character> set = new HashSet<>();
+		
+		for( String s : WriteFeatureTable.AMINO_ACID_CHARS)
+			set.add(s.charAt(0));
+		
+		for( String s : WriteFeatureTable.AMINO_ACID_CHARS)
+			set.add(s.toLowerCase().charAt(0));
+		
+		if( set.size() != 40 )
+			throw new Exception("No");
+		
+		return set;
+	}
+	
 	private static HashMap<String, String> getFileNameToCategoryMap()
 	{
 		HashMap<String, String> map = new HashMap<>();
@@ -38,6 +54,7 @@ public class CountFeatures
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashSet<Character> aaSet = getAASet();
 		Map< String, Map<String,Map<String,Character>>> map = getMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
@@ -57,13 +74,18 @@ public class CountFeatures
 				int numH = 0;
 				int numL = 0;
 				
-				for(String s : map1.get(seqID).keySet())
+				Map<String,Character> map2= map1.get(seqID);
+				
+				for(String s : map2.keySet())
 				{
 					if( s.startsWith("H"))
 						numH++;
 					else if( s.startsWith("L"))
 						numL++;
 					else throw new Exception("No " + s);
+					
+					if( ! aaSet.contains(map2.get(s)))
+						throw new Exception("No " + map2.get(s));
 				}
 				
 				writer.write(seqID + "\t"  + classification + "\t"
