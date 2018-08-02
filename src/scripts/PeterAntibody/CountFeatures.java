@@ -93,6 +93,8 @@ public class CountFeatures
 								numL + "\n");
 			}
 		}	
+		
+		writer.flush(); writer.close();
 	}
 	
 	/**
