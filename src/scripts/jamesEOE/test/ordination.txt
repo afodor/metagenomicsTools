@@ -1,0 +1,28 @@
+
+rm(list=ls())
+
+library("vegan")
+
+setwd("C:\\JamesEOE\\test")
+
+taxa <- c("phylum","class", "order", "family","genus" )
+
+for( t in taxa )
+{
+	inFile <- paste0( "AF_merged_" , t, ".txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
+	myT <- myT[myT$activeInactive != "Inactive",  ]
+	
+	myTData <- myT[,5:ncol(myT)]
+
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_genusLog10Norm",".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_pcoa_genusLog10Norm",".txt", sep=""), sep="\t")	
+
+	myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste0("pcoa_",t,"Log10NormMetadataNoInactive",".txt"),row.names=FALSE)
+}

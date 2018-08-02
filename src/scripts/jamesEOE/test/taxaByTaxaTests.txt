@@ -55,6 +55,7 @@ for( t in taxa )
 	dev.off()
 		
 	write.table(dFrame, file=paste0(t,"af_FirstModelsBenitez.txt"), row.names=FALSE, sep="\t")
+
 	
 }
 
