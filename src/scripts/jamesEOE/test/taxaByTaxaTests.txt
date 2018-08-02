@@ -10,7 +10,7 @@ for( t in taxa )
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 	
 	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
-	#myT <- myT[myT$activeInactive != "Inactive",  ]
+	myT <- myT[myT$activeInactive != "Inactive",  ]
 	
 	pValues <-vector()
 	bugIndex <- vector()
@@ -21,9 +21,9 @@ for( t in taxa )
 	{
 		bug <- myT[,i]
 		
-		#if( sum( bug != 0 ) > nrow(myT) / 4 ) 
+		if( sum( bug != 0 ) > nrow(myT) / 10 ) 
 		{
-			aLm <- lm( bug ~ myT$caseControl)
+			aLm <- lm( bug ~ factor( myT$caseControl))
 			pValues[index] <- anova(aLm)$"Pr(>F)"[1]		
 			bugName[index] <- names(myT)[i]
 			bugIndex[index] <- i
@@ -35,6 +35,24 @@ for( t in taxa )
 	
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+	
+	pdf( paste0(t, ".pdf"))
+	
+	par(mfrow=c(2,2))
+	for( i in 1:nrow(dFrame))
+	{
+		aBug = myT[,dFrame$bugIndex[i]]
+		aCC =myT$caseControl
+		aFrame <- data.frame(aBug, aCC)
+		
+		graphName = paste( dFrame$bugName[i])
+		boxplot( aBug~ aCC, ylab = dFrame$bugName[i],
+					main = graphName )	
+			
+		stripchart(aBug~ aCC, data = aFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
+	
+	dev.off()
 		
 	write.table(dFrame, file=paste0(t,"af_FirstModelsBenitez.txt"), row.names=FALSE, sep="\t")
 	
