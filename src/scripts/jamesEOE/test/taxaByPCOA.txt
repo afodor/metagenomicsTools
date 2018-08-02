@@ -1,0 +1,62 @@
+rm(list=ls())
+
+setwd("C:\\JamesEOE\\test")
+
+taxa <- c("phylum","class", "order", "family","genus" )
+
+for( t in taxa )
+{
+	inFile <- paste0( "pcoa_",t,"Log10NormMetadataNoInactive.txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
+	myT <- myT[myT$activeInactive != "Inactive",  ]
+	
+	pValues <-vector()
+	bugIndex <- vector()
+	bugName<- vector()
+	index <- 1
+	
+	startPos <- which(names(myT) == "MDS1")
+	endPos <- startPos + 10
+	
+	for( i in startPos:endPos ) 
+	{
+		bug <- myT[,i]
+		aLm <- lm( bug ~ factor( myT$caseControl))
+		pValues[index] <- anova(aLm)$"Pr(>F)"[1]		
+		bugName[index] <- names(myT)[i]
+		bugIndex[index] <- i
+		index = index + 1	
+	}
+	
+	dFrame <- data.frame(pValues,bugName,bugIndex)
+	
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+	
+	pdf( paste0("pcoa_",t, ".pdf"))
+	
+	par(mfrow=c(2,2))
+	for( i in 1:nrow(dFrame))
+	{
+		aBug = myT[,dFrame$bugIndex[i]]
+		aCC =myT$caseControl
+		aFrame <- data.frame(aBug, aCC)
+		
+		graphName = paste( dFrame$bugName[i])
+		boxplot( aBug~ aCC, ylab = dFrame$bugName[i],
+					main = graphName )	
+			
+		stripchart(aBug~ aCC, data = aFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
+	
+	dev.off()
+		
+	write.table(dFrame, file=paste0(t,"af_PCOAFirstModelsBenitez.txt"), row.names=FALSE, sep="\t")
+
+	
+}
+
+	
+
