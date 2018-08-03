@@ -5,9 +5,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -52,6 +55,69 @@ public class CountFeatures
 		return map;
 	}
 	
+	private static Map<String,Character> getInnerMap(Map< String, Map<String,Map<String,Character>>> map ,
+				String id) throws Exception
+	{
+		for(Map<String,Map<String,Character>> map1 : map.values())
+		{
+			if( map1.containsKey(id))
+				return map1.get(id);
+		}
+		
+		throw new Exception("Could not find " + id);
+	}
+	
+	private static void writePairwiseFeatureMap(HashSet<String> toInclude,
+			Map< String, Map<String,Map<String,Character>>> map ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+				"pairwiseLC_" + LC_THRESHOLD + ".txt")));
+		
+		writer.write("id1\tid2\tn1\tn2\tsitesinCommon\tnumMatch\tperecentIdentity\n");
+		
+		List<String> list = new ArrayList<>(toInclude);
+		Collections.sort(list);
+		
+		for(int x=0; x < list.size() -1 ; x++)
+		{
+			System.out.println("Writing pairs " + x + " of " + list.size());
+			String id1 =list.get(x);
+			Map<String,Character> innerMap1 = getInnerMap(map, id1);
+			
+			for( int y=x+1; y < list.size(); y++)
+			{
+				double n=0;
+				int match=0;
+				String id2 = list.get(y);
+				Map<String,Character> innerMap2 = getInnerMap(map, id2);
+				
+				for(String s : innerMap1.keySet())
+					if( s.startsWith("l") || s.startsWith("L"))
+				{
+					Character c2 = innerMap2.get(s);
+					
+					if( c2 != null && ( c2 == 'L' || c2 =='l' ))
+					{
+						n++;
+						
+						if( innerMap1.get(s).equals(c2))
+							match++;
+					}
+				}
+				
+				
+				writer.write(id1 + "\t" + id2 + "\t" + innerMap1.size() + "\t" + 
+								innerMap2.size() + "\t" + n + "\t" + match + "\t" + 
+										(match/n) + "\n");
+			}
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	public static final int LC_THRESHOLD = 100;
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashSet<Character> aaSet = getAASet();
@@ -64,6 +130,8 @@ public class CountFeatures
 		writer.write("sequenceID\tclassification\tnumPositions\tnumH\tnumL\n");
 		
 		System.out.println(map.keySet());
+	
+		HashSet<String> lcToInclude = new HashSet<>();
 		
 		for( String classification : map.keySet())
 		{
@@ -88,6 +156,9 @@ public class CountFeatures
 						throw new Exception("No " + map2.get(s));
 				}
 				
+				if( numL >= LC_THRESHOLD )
+					lcToInclude.add(seqID);
+				
 				writer.write(seqID + "\t"  + classification + "\t"
 						+ map1.get(seqID).size() + "\t" + numH + "\t" + 
 								numL + "\n");
@@ -95,6 +166,8 @@ public class CountFeatures
 		}	
 		
 		writer.flush(); writer.close();
+		
+		writePairwiseFeatureMap(lcToInclude, map);
 	}
 	
 	/**
