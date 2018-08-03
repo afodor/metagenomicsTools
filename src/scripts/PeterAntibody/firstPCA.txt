@@ -1,0 +1,5 @@
+rm(list=ls())
+
+setwd("C:\\peterBAnti")
+
+myT <- read.table("pairwiseLC_100ForR.txt", sep="\t", row.names=1)

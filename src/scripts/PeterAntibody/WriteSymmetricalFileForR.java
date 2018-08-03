@@ -89,5 +89,7 @@ public class WriteSymmetricalFileForR
 			
 			writer.write("\n");
 		}
+		
+		writer.flush(); writer.close();
 	}
 }
