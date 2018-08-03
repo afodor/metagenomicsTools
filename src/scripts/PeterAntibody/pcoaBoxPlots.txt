@@ -1,0 +1,24 @@
+rm(list=ls())
+
+setwd("C:\\peterBAnti")
+
+
+myT <- read.table("lc_pcoaWithMetadata.txt",header=TRUE,sep="\t")
+
+pdf("mdsPCA.pdf")
+
+par(mfrow=c(2,2))
+for( i in 3:22) 
+{
+	aMain <- names(myT)[i]
+	boxplot( myT[,i] ~ myT$classificaiton,las=2,main =aMain)
+	
+	mds <- myT[,i]
+	classificaiton <- myT$classificaiton
+	aFrame <- data.frame(mds, classificaiton )
+	stripchart(mds~ classificaiton , data = aFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	
+}
+
+dev.off()
+
