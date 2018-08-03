@@ -245,6 +245,7 @@ public class CountFeatures
 					String key = new String(sToken.nextToken());
 				
 					String charString = sToken.nextToken();
+					charString = charString.toUpperCase();
 					if( charString.length() != 1)
 						throw new Exception("No " + s);
 					
