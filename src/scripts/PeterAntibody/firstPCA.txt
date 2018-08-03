@@ -3,3 +3,11 @@ rm(list=ls())
 setwd("C:\\peterBAnti")
 
 myT <- read.table("pairwiseLC_100ForR.txt", sep="\t", row.names=1)
+
+myT <- 1 -myT
+
+myCmdScale <- cmdscale(myT, k=20, eig=TRUE)
+
+names = attributes(myCmdScale$points)$dimnames[[1]]
+
+write.table(myCmdScale$points, file="lc_pcoa.txt", sep="\t")
