@@ -55,13 +55,25 @@ public class CountFeatures
 		return map;
 	}
 	
-	private static Map<String,Character> getInnerMap(Map< String, Map<String,Map<String,Character>>> map ,
+	private static Map<String,Character> getLCInnerMap(Map< String, Map<String,Map<String,Character>>> map ,
 				String id) throws Exception
 	{
 		for(Map<String,Map<String,Character>> map1 : map.values())
 		{
 			if( map1.containsKey(id))
-				return map1.get(id);
+			{
+				Map<String,Character> returnMap = new LinkedHashMap<>();
+				
+				Map<String,Character> innerMap =map1.get(id);
+				
+				for(String s : innerMap.keySet())
+				{
+					if(s.startsWith("L") || s.startsWith("l"))
+						returnMap.put(s,innerMap.get(s));
+				}
+				
+				return returnMap;
+			}
 		}
 		
 		throw new Exception("Could not find " + id);
@@ -83,21 +95,21 @@ public class CountFeatures
 		{
 			System.out.println("Writing pairs " + x + " of " + list.size());
 			String id1 =list.get(x);
-			Map<String,Character> innerMap1 = getInnerMap(map, id1);
+			Map<String,Character> innerMap1 = getLCInnerMap(map, id1);
 			
 			for( int y=x+1; y < list.size(); y++)
 			{
 				double n=0;
 				int match=0;
 				String id2 = list.get(y);
-				Map<String,Character> innerMap2 = getInnerMap(map, id2);
+				Map<String,Character> innerMap2 = getLCInnerMap(map, id2);
 				
 				for(String s : innerMap1.keySet())
 					if( s.startsWith("l") || s.startsWith("L"))
 				{
 					Character c2 = innerMap2.get(s);
 					
-					if( c2 != null && ( c2 == 'L' || c2 =='l' ))
+					if( c2 != null )
 					{
 						n++;
 						
