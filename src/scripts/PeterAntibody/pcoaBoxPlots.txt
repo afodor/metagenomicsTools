@@ -8,7 +8,7 @@ myT <- read.table("lc_pcoaWithMetadata.txt",header=TRUE,sep="\t")
 pdf("mdsPCA.pdf")
 
 par(mfrow=c(2,2))
-for( i in 3:22) 
+for( i in 3:13) 
 {
 	aMain <- names(myT)[i]
 	boxplot( myT[,i] ~ myT$classificaiton,las=2,main =aMain)
