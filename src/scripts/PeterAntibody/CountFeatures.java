@@ -186,7 +186,7 @@ public class CountFeatures
 	 * keys are classification, then sequenceid, then position then AminoAcid
 	 * 
 	 * */
-	private static Map< String, Map<String,Map<String,Character>>>  getMap() throws Exception
+	public static Map< String, Map<String,Map<String,Character>>>  getMap() throws Exception
 	{
 		Map<String, String> fileToCatMap = getFileNameToCategoryMap();
 		
