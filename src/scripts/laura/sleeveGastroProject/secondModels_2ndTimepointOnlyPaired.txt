@@ -23,7 +23,9 @@ for( t in taxa )
 	yGroup <- vector()
 	meanXGroup <- vector()
 	meanYGroup <- vector()
-	
+	xSampleSize <- vector()
+	ySampleSize <- vector()
+		
 	index <- 1
 	
 	volume <- myT$Tumor.volume
@@ -55,6 +57,10 @@ for( t in taxa )
 					yGroup[index] <- groups[y]
 					meanXGroup[index] <- mean(xVals)
 					meanYGroup[index] <- mean(yVals) 
+					
+					xSampleSize[index] <- length(xVals)
+					ySampleSize[index] <- length(yVals)
+					
 					log10PValues[index] <- -log10(pValues[index])
 					if( meanXGroup[index] < 	meanYGroup[index] ) 
 						log10PValues[index] <- -log10PValues[index]
@@ -66,7 +72,7 @@ for( t in taxa )
 	}
 	
 	dFrame <- data.frame(pValues,log10PValues,bugNames,xGroup,yGroup,
-		meanXGroup,meanYGroup)
+		xSampleSize, ySampleSize, meanXGroup,meanYGroup)
 	
 	dFrame <- dFrame[order(dFrame$pValues),]
 	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )
