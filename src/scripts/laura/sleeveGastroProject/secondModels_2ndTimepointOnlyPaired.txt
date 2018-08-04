@@ -24,7 +24,6 @@ for( t in taxa )
 	meanXGroup <- vector()
 	meanYGroup <- vector()
 	
-	bugIndex <- vector()
 	index <- 1
 	
 	volume <- myT$Tumor.volume
@@ -65,32 +64,12 @@ for( t in taxa )
 			}
 		}
 	}
-}
 	
-	dFrame <- data.frame(bugNames, pValuesTumor, pValuesTreatment, bugIndex ) 
+	dFrame <- data.frame(pValues,log10PValues,bugNames,xGroup,yGroup,
+		meanXGroup,meanYGroup)
 	
-	dFrame <- dFrame[order(dFrame$pValuesTreatment),]
-	dFrame$pValuesAdjustedTumor<- p.adjust( dFrame$pValuesTumor, method = "BH" )
-	dFrame$pValuesAdjustedTreatment<- p.adjust( dFrame$pValuesTreatment, method = "BH" )
+	dFrame <- dFrame[order(dFrame$pValues),]
+	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )
 		
-	write.table(dFrame, file=paste0("secondModelsBugs2ndTimePointOnly",t,".txt"), row.names=FALSE, sep="\t")
-	
-	pdf(paste0(t,"_timepoint2Plots.pdf"))
-	par(mfrow=c(2,2))
-	
-	for( i in 1:nrow(dFrame))
-	{
-		aText <- paste0(  dFrame$bugNames[i] ,  "\nq= ",format( dFrame$pValuesAdjustedTreatment[i],digits=3))
-		boxplot( myT[ , dFrame$bugIndex[i] ] ~ treatment, main=aText,cex.main=.8)
-		
-		aText <- paste0(  "weight" ,  "\nq= ",format( dFrame$pValuesAdjustedTumor[i],digits=3))
-		plot( myT[ , dFrame$bugIndex[i] ] ~ weight,main=aText,cex.main=.8 )	
-		
-		aText <- paste0(  "cage" )
-		boxplot( myT[ , dFrame$bugIndex[i] ] ~ cage)	
-		plot(0,type='n',axes=FALSE,ann=FALSE)
-	}
-	
-	dev.off()
-	
+	write.table(dFrame, file=paste0("pariedModelsBugs2ndTimePointOnly",t,".txt"), row.names=FALSE, sep="\t")	
 }
