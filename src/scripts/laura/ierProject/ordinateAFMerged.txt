@@ -1,0 +1,20 @@
+rm(list=ls())
+
+setwd("C:\\LauraProjects_May_2018\\IER_Project")
+
+library("vegan")
+
+myT <- read.table("MergedMetaAF.txt", header=TRUE,sep="\t",row.names=1)
+
+myTData <- myT[,8:ncol(myT)]
+myTData <- log10( myTData * 100000 + 1 )
+
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_genusLog10Norm_AF_Parse",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_pcoa_genusLog10Norm_AF_Parse",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+names(myMerge)[1]="id"
+
+write.table(myMerge , sep="\t", file=paste("pcoa_genusLog10NormMetadataallDataAFParse",".txt",sep=""),row.names=FALSE)
