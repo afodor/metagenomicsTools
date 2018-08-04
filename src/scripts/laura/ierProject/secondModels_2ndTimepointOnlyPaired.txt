@@ -9,7 +9,8 @@ numCols <- ncol(myT)
 myColClasses <- c("character","character","character","numeric","numeric","character", rep("numeric", numCols-6))
 myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
 
-myT = myT[ myT$Time.point..weeks. == 25,]
+myT = myT[ myT$timePoint == 25,]
+myT = myT[ !is.na(myT$treatmentGroup) , ]
 	
 groups <- sort(unique( myT$treatmentGroup))
 pValues <- vector()
