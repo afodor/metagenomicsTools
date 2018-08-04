@@ -12,7 +12,8 @@ for( t in taxa )
 	myColClasses <- c("character","character","character","numeric","numeric","numeric","character", rep("numeric", numCols-7))
 	myT <-read.table(inFile,header=TRUE,sep="\t",colClasses=myColClasses)
 
-	myT <- myT[!is.na(myT$Tumor.volume), ]
+	# don't care about missing tumor for microbiome 
+	#myT <- myT[!is.na(myT$Tumor.volume), ]
 	myT = myT[ myT$Time.point..weeks. == 25,]
 	
 	groups <- sort(unique( myT$treatmentGroup))
