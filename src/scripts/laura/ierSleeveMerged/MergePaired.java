@@ -60,13 +60,15 @@ public class MergePaired
 				Double val = innerMap.get(s);
 				
 				if( val == null)
-					writer.write("\t");
+					writer.write("NA\t");
 				else
 					writer.write("\t" + val);
 			}
 			
 			writer.write("\n");
 		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static List<String> getComparisonList(HashMap<String, Map<String,Double>> map)
@@ -105,7 +107,7 @@ public class MergePaired
 				map.put(id, innerMap);
 			}
 			
-			String innerKey = prefix + splits[3] + "@" + splits[4];
+			String innerKey = prefix + splits[3] + "_" + splits[4];
 			
 			if( innerMap.containsKey(innerKey))
 				throw new Exception("No");
