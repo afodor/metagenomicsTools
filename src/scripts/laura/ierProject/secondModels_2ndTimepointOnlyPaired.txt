@@ -69,8 +69,7 @@ for( i in 8:endCol)
 	}
 }
 	
-dFrame <- data.frame(pValues,log10PValues,bugNames,xGroup,yGroup,
-	xSampleSize, ySampleSize, meanXGroup,meanYGroup)
+dFrame <- data.frame(bugNames,pValues,log10PValues,xGroup,yGroup,xSampleSize, ySampleSize, meanXGroup,meanYGroup)
 	
 dFrame <- dFrame[order(dFrame$pValues),]
 dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )
