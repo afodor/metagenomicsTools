@@ -68,8 +68,9 @@ for( i in 8:endCol)
 		}
 	}
 }
-	
-dFrame <- data.frame(bugNames,pValues,log10PValues,xGroup,yGroup,xSampleSize, ySampleSize, meanXGroup,meanYGroup)
+
+mergedGroups <- paste0(xGroup,"@",yGroup)	
+dFrame <- data.frame(bugNames,pValues,log10PValues,xGroup,yGroup,xSampleSize, ySampleSize, meanXGroup,meanYGroup,mergedGroups)
 	
 dFrame <- dFrame[order(dFrame$pValues),]
 dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )
