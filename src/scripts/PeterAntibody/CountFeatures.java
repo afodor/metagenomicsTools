@@ -190,7 +190,7 @@ public class CountFeatures
 	{
 		Map<String, String> fileToCatMap = getFileNameToCategoryMap();
 		
-		Map< String, Map<String,Map<String,Character>>> map = new HashMap<>();
+		Map< String, Map<String,Map<String,Character>>> map = new LinkedHashMap<>();
 		
 		File topDir = new File(ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"oneAtATime" + File.separator + 
@@ -201,7 +201,7 @@ public class CountFeatures
 		for( String name : files)
 			if( ! name.endsWith("~") && ! name.endsWith("swp"))
 		{
-			System.out.println(name);
+			//System.out.println(name);
 			String assignment = fileToCatMap.get(name);
 			
 			if( assignment == null)
@@ -225,13 +225,13 @@ public class CountFeatures
 				if( s.startsWith(">"))
 				{
 					String key = s.substring(1, s.lastIndexOf("|"));
-					System.out.println(key);
+					//System.out.println(key);
 					
 					seqMap = map1.get(key);
 					
 					if( seqMap == null)
 					{
-						seqMap = new HashMap<String,Character>();
+						seqMap = new LinkedHashMap<String,Character>();
 						map1.put(key, seqMap);
 					}
 				}
