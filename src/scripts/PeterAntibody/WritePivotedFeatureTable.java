@@ -34,6 +34,44 @@ public class WritePivotedFeatureTable
 		{
 			System.out.println(s);
 		}
+		
+		writer.write("id\tclassificaiton");
+		
+		for( String s : positionlist)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String classificaiton : map.keySet())
+		{
+			Map<String,Map<String,Character>> map1=  map.get(classificaiton);
+			
+			for(String proteinID : map1.keySet())
+			{
+				writer.write(proteinID + "\t" + classificaiton);
+				
+				Map<String,Character> map2 =map1.get(proteinID);
+				
+				for(String position : positionlist)
+				{
+					Character c = map2.get(position);
+					
+					if( c== null)
+					{
+						writer.write("\tNA");
+					}
+					else
+					{
+						c =Character.toUpperCase(c);
+						writer.write("\t" + c);
+					}
+				}
+				
+				writer.write("\n");
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	public static List<String> getAllPositions( Map< String, Map<String,Map<String,Character>>> map )
