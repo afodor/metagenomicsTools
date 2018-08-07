@@ -39,7 +39,7 @@ public class WritePivotedFeatureTable
 	
 		for(Holder h : protIDs)
 		{
-			writer.write(h.protName.replaceAll("\"","") + "\t" + h.classificaiton.replaceAll("\"",""));
+			writer.write(clense( h.protName) + "\t" +clense(h.classificaiton));
 				
 			Map<String,Map<String,Character>>  map1 =map.get(h.classificaiton);
 			Map<String,Character> map2 = map1.get(h.protName);
@@ -63,6 +63,24 @@ public class WritePivotedFeatureTable
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static String clense(String s)
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < s.length(); x++)
+		{
+			char c= s.charAt(x);
+			
+			if( Character.isAlphabetic(c) || Character.isDigit(c))
+				buff.append("" + c);
+			else
+				buff.append("_");
+		
+		}
+		
+		return buff.toString();
 	}
 	
 	private static class Holder implements Comparable<Holder>
