@@ -4,3 +4,14 @@ setwd("C:\\peterBAnti")
 
 myT <- read.table("pivotedPositions.txt", sep="\t", header=TRUE,row.names=1)
 
+for( i in 3:ncol(myT))
+{
+	mostCommon = names(sort(summary(myT[,i]), decreasing=T)[1])
+	
+	if( mostCommon == "NA's")
+	{
+			mostCommon = names(sort(summary(myT[,i]), decreasing=T)[2])
+	}
+	
+	print( paste( i , names(myT)[i],  mostCommon))
+}
