@@ -15,8 +15,27 @@ for( i in 3:ncol(myT))
 	{
 		mostCommon = names(sort(summary(myT[,i]), decreasing=T)[2])
 	}
+		
+	residues = myT[ !is.na(myT[,i]) ,i]
+	assignment = myT$classificaiton[!is.na(myT[,i])]
 	
+	if( length(residues ) != length(assignment ) )
+		stop("No " + length(residues )  + " " + length(assignment ));
+	
+	mostCommonIsTherap = sum(residues == mostCommon  & assignment == "therapeutic"  )
+	notMostCommonIsTherap = sum(residues != mostCommon  & assignment == "therapeutic"  )
+	mostCommonNotTherap = sum(residues == mostCommon  & assignment != "therapeutic"  )
+	notMostCommonNotTherap = sum(residues != mostCommon  & assignment != "therapeutic"  )
+	
+	if(  mostCommonIsTherap  + notMostCommonIsTherap +mostCommonNotTherap + notMostCommonNotTherap != length(residues ) ) 
+		stop("No logic error")
+		
+	aMatrix= matrix( c(mostCommonIsTherap, notMostCommonIsTherap,mostCommonNotTherap ,notMostCommonNotTherap ), nrow=2 )
 	
 	
 	print( paste( i , names(myT)[i],  mostCommon))
+	
+	pValues[index] = fisher.test(aMatrix)$p.value
+	positionNames[index] = names(myT)[i]
+	index = index + 1
 }
