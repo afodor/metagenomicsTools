@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +18,14 @@ public class WriteFrequenciesToGraph
 	{
 		Map< String, Map<String,Map<String,Character>>> map = CountFeatures.getMap();
 		List<String> positions = WritePivotedFeatureTable.getAllPositions(map);
+		List<String> classifications = new ArrayList<>( map.keySet());
+		Collections.sort(classifications);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"frequenciesForGraphing.txt")));
 		
-		writer.write("classificaiton\tposition\taa\tfrequency\tabsoluteNumber\n");
+		writer.write("classificaiton\tposition\taa\tfrequency\tabsoluteNumber\tclassificationIndex\n");
 		
 		for(String position : positions)
 		{
@@ -38,8 +42,9 @@ public class WriteFrequenciesToGraph
 				}
 			}
 			
-			for(String classification : map.keySet())
+			for(int x=0; x < classifications.size(); x++)
 			{
+				String classification = classifications.get(x);
 				Map<Character,Integer> countMap = classToPositioMap.get(classification);
 				
 				for( Character c : CountFeatures.getAASet())
@@ -48,7 +53,8 @@ public class WriteFrequenciesToGraph
 					writer.write(position + "\t");
 					writer.write(c + "\t");
 					writer.write( (countMap.get(c) / totalCount) + "\t");
-					writer.write( countMap.get(c) + "\n");
+					writer.write( countMap.get(c) + "\t");
+					writer.write((x+1) + "\n");
 				}
 			}
 		}

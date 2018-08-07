@@ -54,47 +54,14 @@ hist(pValues)
 
 # code below this point is pretty broken (too inefficient...)
 
+graphFreqs <- read.table("frequenciesForGraphing.txt", sep="\t", header=TRUE)
 pdf("sortedBySignificance.pdf")
-par(mfrow=c(4,5))
-
-aaS = 
-c("A"	,"C",	"D",	"E",	"F",	"G", 	
-				"H",	"I",	"L",	"K",	"M"	, "N",	"P",	"Q",	"R",	"S"	, "T",	"V"
-				,"W"	,"Y")
-				
-conditions = sort(unique(myT$classificaiton))
 
 for( i in 1 : nrow(dFrame))
 {
-	for( j in 1 : length(aaS)) 
-	{
-		fractions <- vector()
-		colIndex <- dFrame$columnIndex[i]
-		numValid <- sum( !is.na(myT[,colIndex ]))
-		
-		for( k in 1: length(conditions))
-		{
-			numMatch = 0;
-			
-			for( x in 1:nrow(myT)) 
-			{	
-				if( ! is.na( myT[x,colIndex] ) ) 
-				{
-					if( myT$classificaiton[x] == conditions[k] &  myT[x,colIndex] == aaS[j] ) 
-					{
-						numMatch = numMatch + 1
-					}
-				}
-			}
-		
-			fractions[k] = numMatch / numValid
-		}
-		
-		aLegend = paste( dFrame$positionNames[i], aaS[j])
-		plot( 1:length(conditions), fractions ,main=aLegend) 
-	}
+	select = graphFreqs$position == toString(dFrame$positionNames[i])
+	plot( graphFreqs$classificationIndex[select] , graphFreqs$frequency[select])
 }
 
 dev.off()
-
 
