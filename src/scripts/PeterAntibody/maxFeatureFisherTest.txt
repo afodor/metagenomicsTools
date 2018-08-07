@@ -5,6 +5,7 @@ setwd("C:\\peterBAnti")
 myT <- read.table("pivotedPositions.txt", sep="\t", header=TRUE,row.names=1)
 pValues <- vector()
 positionNames <- vector()
+columnIndex <- vector()
 
 index <- 1
 for( i in 3:ncol(myT))
@@ -37,10 +38,12 @@ for( i in 3:ncol(myT))
 	
 	pValues[index] = fisher.test(aMatrix)$p.value
 	positionNames[index] = names(myT)[i]
+	columnIndex[index] <- i
+	
 	index = index + 1
 }
 
-dFrame <- data.frame(positionNames,pValues)
+dFrame <- data.frame(positionNames,pValues,columnIndex)
 	
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
@@ -48,4 +51,48 @@ dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )
 write.table(dFrame, file=paste0("firstModels.txt"), row.names=FALSE, sep="\t")
 
 hist(pValues)
+
+pdf("sortedBySignificance.pdf")
+par(mfrow=c(4,5))
+
+aaS = 
+c("A"	,"C",	"D",	"E",	"F",	"G", 	
+				"H",	"I",	"L",	"K",	"M"	, "N",	"P",	"Q",	"R",	"S"	, "T",	"V"
+				,"W"	,"Y")
+				
+conditions = sort(unique(myT$classificaiton))
+
+for( i in 1 : nrow(dFrame))
+{
+	for( j in 1 : length(aaS)) 
+	{
+		fractions <- vector()
+		colIndex <- dFrame$columnIndex[i]
+		numValid <- sum( !is.na(myT[,colIndex ]))
+		
+		for( k in 1: length(conditions))
+		{
+			numMatch = 0;
+			
+			for( x in 1:nrow(myT)) 
+			{	
+				if( ! is.na( myT[x,colIndex] ) ) 
+				{
+					if( myT$classificaiton[x] == conditions[k] &  myT[x,colIndex] == aaS[j] ) 
+					{
+						numMatch = numMatch + 1
+					}
+				}
+			}
+		
+			fractions[k] = numMatch / numValid
+		}
+		
+		aLegend = paste( dFrame$positionNames[i], aaS[j])
+		plot( 1:length(conditions), fractions ,main=aLegend) 
+	}
+}
+
+dev.off()
+
 
