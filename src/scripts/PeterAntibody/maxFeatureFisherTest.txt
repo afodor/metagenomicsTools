@@ -39,3 +39,13 @@ for( i in 3:ncol(myT))
 	positionNames[index] = names(myT)[i]
 	index = index + 1
 }
+
+dFrame <- data.frame(positionNames,pValues)
+	
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+		
+write.table(dFrame, file=paste0("firstModels.txt"), row.names=FALSE, sep="\t")
+
+hist(pValues)
+
