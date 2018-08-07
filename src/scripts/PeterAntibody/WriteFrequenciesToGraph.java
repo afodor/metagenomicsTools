@@ -1,0 +1,95 @@
+package scripts.PeterAntibody;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import utils.ConfigReader;
+
+public class WriteFrequenciesToGraph
+{
+	public static void main(String[] args) throws Exception
+	{
+		Map< String, Map<String,Map<String,Character>>> map = CountFeatures.getMap();
+		List<String> positions = WritePivotedFeatureTable.getAllPositions(map);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+				"frequenciesForGraphing.txt")));
+		
+		writer.write("classificaiton\tposition\taa\tfrequency\tabsoluteNumber\n");
+		
+		for(String position : positions)
+		{
+			Map<String, Map<Character,Integer>> classToPositioMap = getMapsForPosition(map, position);
+			
+			double totalCount =0;
+			
+			for( String s : classToPositioMap.keySet() )
+			{
+				 Map<Character,Integer> map1 = classToPositioMap.get(s);
+				for(Character c : map1.keySet())
+				{
+					totalCount += map1.get(c);
+				}
+			}
+			
+			for(String classification : map.keySet())
+			{
+				Map<Character,Integer> countMap = classToPositioMap.get(classification);
+				
+				for( Character c : CountFeatures.getAASet())
+				{
+					writer.write(classification + "\t");
+					writer.write(position + "\t");
+					writer.write(c + "\t");
+					writer.write( (countMap.get(c) / totalCount) + "\t");
+					writer.write( countMap.get(c) + "\n");
+				}
+			}
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	// outer key is classification
+	// inner key is one of 20 amino acids
+	private static Map<String, Map<Character,Integer>> getMapsForPosition(Map< String, Map<String,Map<String,Character>>> map,
+										String position) throws Exception
+	{
+		Map<String, Map<Character,Integer>> returnMap = new HashMap<>();
+		
+		for(String s : map.keySet())
+		{
+			Map<Character,Integer> innerMap = new HashMap<>();
+			
+			for( Character c : CountFeatures.getAASet())
+				innerMap.put(c, 0);
+			
+			Map<String,Map<String,Character>> map1 = map.get(s);
+			
+			for(String protID: map1.keySet())
+			{
+				Map<String,Character> map2 = map1.get(protID);
+				
+				Character c= map2.get(position);
+				
+				if( c != null)
+				{
+					Integer aVal = innerMap.get(c);
+					aVal++;
+					innerMap.put(c, aVal);
+				}
+			}
+			
+			returnMap.put(s, innerMap);
+		}
+			
+		return returnMap;
+	}
+	
+}

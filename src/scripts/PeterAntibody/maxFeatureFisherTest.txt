@@ -52,6 +52,8 @@ write.table(dFrame, file=paste0("firstModels.txt"), row.names=FALSE, sep="\t")
 
 hist(pValues)
 
+# code below this point is pretty broken (too inefficient...)
+
 pdf("sortedBySignificance.pdf")
 par(mfrow=c(4,5))
 

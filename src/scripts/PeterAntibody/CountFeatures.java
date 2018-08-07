@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -20,7 +21,7 @@ public class CountFeatures
 {
 	public static HashSet<Character> getAASet() throws Exception
 	{
-		HashSet<Character> set = new HashSet<>();
+		HashSet<Character> set = new LinkedHashSet<>();
 		
 		for( String s : WriteFeatureTable.AMINO_ACID_CHARS)
 			set.add(s.charAt(0));
