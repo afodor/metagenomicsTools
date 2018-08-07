@@ -225,6 +225,14 @@ public class CountFeatures
 				if( s.startsWith(">"))
 				{
 					String key = s.substring(1, s.lastIndexOf("|"));
+
+					String lowerkey = key.toLowerCase();
+					
+					if( lowerkey.endsWith("hc") || lowerkey.endsWith("hc"))
+						key = key.substring(0, key.length()-2);
+					
+					key = key.replaceAll("|", "_");
+					
 					//System.out.println(key);
 					
 					seqMap = map1.get(key);

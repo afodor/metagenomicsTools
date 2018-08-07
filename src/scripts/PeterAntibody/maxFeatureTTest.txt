@@ -1,0 +1,6 @@
+rm(list=ls())
+
+setwd("C:\\peterBAnti")
+
+myT <- read.table("pivotedPositions.txt", sep="\t", header=TRUE,row.names=1)
+

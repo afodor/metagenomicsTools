@@ -18,8 +18,6 @@ import utils.ConfigReader;
 
 public class WritePivotedFeatureTable
 {
-	
-	// run CountFeatures first
 	public static void main(String[] args) throws Exception
 	{
 		Map< String, Map<String,Map<String,Character>>> map = CountFeatures.getMap();
@@ -30,48 +28,75 @@ public class WritePivotedFeatureTable
 		
 		List<String> positionlist = getAllPositions(map);
 		
-		for(String s : positionlist)
-		{
-			System.out.println(s);
-		}
-		
 		writer.write("id\tclassificaiton");
 		
 		for( String s : positionlist)
-			writer.write("\t" + s);
+			writer.write("\t" + s.replaceAll("\"",""));
 		
 		writer.write("\n");
 		
-		for(String classificaiton : map.keySet())
+		List<Holder> protIDs = getAllProteins(map);
+	
+		for(Holder h : protIDs)
 		{
-			Map<String,Map<String,Character>> map1=  map.get(classificaiton);
+			writer.write(h.protName.replaceAll("\"","") + "\t" + h.classificaiton.replaceAll("\"",""));
+				
+			Map<String,Map<String,Character>>  map1 =map.get(h.classificaiton);
+			Map<String,Character> map2 = map1.get(h.protName);
 			
-			for(String proteinID : map1.keySet())
+			for(String position : positionlist)
 			{
-				writer.write(proteinID + "\t" + classificaiton);
-				
-				Map<String,Character> map2 =map1.get(proteinID);
-				
-				for(String position : positionlist)
-				{
-					Character c = map2.get(position);
+				Character c = map2.get(position);
 					
-					if( c== null)
-					{
-						writer.write("\tNA");
-					}
-					else
-					{
+				if( c== null)
+				{
+					writer.write("\tNA");
+				}
+				else
+				{
 						c =Character.toUpperCase(c);
 						writer.write("\t" + c);
-					}
 				}
-				
-				writer.write("\n");
 			}
+				
+			writer.write("\n");
 		}
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static class Holder implements Comparable<Holder>
+	{
+		String protName;
+		String classificaiton;
+		
+		@Override
+		public int compareTo(Holder arg0)
+		{
+			return this.classificaiton.compareTo(arg0.classificaiton);
+		}
+	}
+	
+	
+	private static List<Holder> getAllProteins(Map< String, Map<String,Map<String,Character>>> map ) throws Exception
+	{
+		List<Holder> list =new ArrayList<>();
+		
+		for(String classificaiton : map.keySet())
+		{
+			 Map<String,Map<String,Character>> map1 = map.get(classificaiton);
+			 
+			 for(String id : map1.keySet())
+			 {
+				 Holder h = new Holder();
+				 h.classificaiton = classificaiton;
+				 h.protName = id;
+				 list.add(h);
+			 }
+		}
+		
+		Collections.sort(list);
+		return list;
 	}
 	
 	public static List<String> getAllPositions( Map< String, Map<String,Map<String,Character>>> map )
