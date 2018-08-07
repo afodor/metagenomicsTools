@@ -231,7 +231,7 @@ public class CountFeatures
 					if( lowerkey.endsWith("hc") || lowerkey.endsWith("hc"))
 						key = key.substring(0, key.length()-2);
 					
-					key = key.replaceAll("|", "_");
+					key = key.replaceAll("\\|", "_");
 					
 					//System.out.println(key);
 					
