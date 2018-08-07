@@ -228,7 +228,7 @@ public class CountFeatures
 
 					String lowerkey = key.toLowerCase();
 					
-					if( lowerkey.endsWith("hc") || lowerkey.endsWith("hc"))
+					if( lowerkey.endsWith("hc") || lowerkey.endsWith("lc"))
 						key = key.substring(0, key.length()-2);
 					
 					key = key.replaceAll("\\|", "_");
