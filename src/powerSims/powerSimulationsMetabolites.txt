@@ -8,7 +8,7 @@ sampleSizeForEachGroup <- 40
 numHypotheses <- 500
 numUnder <- 0
 numBonferroniUnder <-0
-fractionTruePositives <- 0.1
+fractionTruePositives <- 0.25
 numTruePositves <-0;
 effectSize <- 1.38
 
