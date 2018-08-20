@@ -34,6 +34,16 @@ public class MergeMetadata
 		File metaFile = new File(ConfigReader.getFarnazDada2Directory() + File.separator + "Farnaz_MDMF_MBP.txt");
 		
 		addMetadata(inFile, outFile, metaFile,true);
+		
+		inFile = new File(ConfigReader.getFarnazDada2Directory() + File.separator + 
+				"PivotedForwardReadsLogNorm.txt");
+		
+		 outFile = new File(ConfigReader.getFarnazDada2Directory() + File.separator + 
+					"dadaClustersLogNormWithMeta.txt");
+		 
+		 addMetadata(inFile, outFile, metaFile,false);
+		 
+		 
 	}
 	
 	private static void addMetadata(File inFile, File outFile, File metaFile,boolean fromR) throws Exception
