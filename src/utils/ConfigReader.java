@@ -170,6 +170,8 @@ public class ConfigReader
 	
 	public static final String JAMES_EOE_DIR= "JAMES_EOE_DIR";
 	
+	public static final String FARNAZ_DADA2_DIR = "FARNAZ_DADA2_DIR";
+	
 	public static String getPeterAntibodyDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(PETER_ANTIBODY_DIR);
@@ -180,6 +182,11 @@ public class ConfigReader
 		return getConfigReader().getAProperty(FARNAZ_FEB_2018_DIR);
 	}
 	
+	
+	public static String getFarnazDada2Directory() throws Exception
+	{
+		return getConfigReader().getAProperty(FARNAZ_DADA2_DIR);
+	}
 
 	public static String getJamesEoeDirectory() throws Exception
 	{
