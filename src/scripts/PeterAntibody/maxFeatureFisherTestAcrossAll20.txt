@@ -1,0 +1,69 @@
+rm(list=ls())
+
+setwd("C:\\peterBAnti")
+
+myT <- read.table("pivotedPositions.txt", sep="\t", header=TRUE,row.names=1)
+pValues <- vector()
+positionNames <- vector()
+columnIndex <- vector()
+
+ AMINO_ACID_CHARS=
+		c("A"	,"C",	"D",	"E",	"F",	"G", 	
+				"H",	"I",	"L",	"K",	"M"	, "N",	"P",	"Q",	"R",	"S"	, "T",	"V"
+				,"W"	,"Y");
+	
+index <- 1
+for( i in 3:ncol(myT))
+{
+	aPValue = 1
+	
+	residues = myT[ !is.na(myT[,i]) ,i]
+	assignment = myT$classificaiton[!is.na(myT[,i])]
+	
+	if( length(residues ) != length(assignment ) )
+		stop("No " + length(residues )  + " " + length(assignment ));
+	
+	for( j in 1:length( AMINO_ACID_CHARS))
+	{
+		matchesIsTherap = sum(residues == AMINO_ACID_CHARS[j] & assignment == "therapeutic"  )
+		notMatchesIsTherap = sum(residues != AMINO_ACID_CHARS[j]& assignment == "therapeutic"  )
+		matchesNotTherap = sum(residues == AMINO_ACID_CHARS[j]& assignment != "therapeutic"  )
+		notMatchesCommonNotTherap = sum(residues != AMINO_ACID_CHARS[j]  & assignment != "therapeutic"  )
+		
+		if(  matchesIsTherap + notMatchesIsTherap +matchesNotTherap +notMatchesCommonNotTherap!= length(residues ) ) 
+			stop("No logic error")
+			
+		aMatrix= matrix( c(matchesIsTherap , notMatchesIsTherap ,matchesNotTherap ,notMatchesCommonNotTherap), nrow=2 )
+	
+		aPValue = min(aPValue ,fisher.test(aMatrix)$p.value)
+	}
+	
+	
+	pValues[index] =aPValue  
+	positionNames[index] = names(myT)[i]
+	columnIndex[index] <- i
+	
+	index = index + 1
+}
+
+dFrame <- data.frame(positionNames,pValues,columnIndex)
+	
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
+		
+write.table(dFrame, file=paste0("firstModelsAll20.txt"), row.names=FALSE, sep="\t")
+
+hist(pValues)
+
+graphFreqs <- read.table("frequenciesForGraphing.txt", sep="\t", header=TRUE)
+pdf("sortedBySignificanceAll20.pdf")
+
+for( i in 1 : nrow(dFrame))
+{
+	aText <- paste(dFrame$positionNames[i] , "q=", format( dFrame$pValuesAdjusted[i],digits=3))
+	select = graphFreqs$position == toString(dFrame$positionNames[i])
+	plot( graphFreqs$classificationIndex[select] , graphFreqs$frequency[select], ylim=c(0,1),main=aText)
+}
+
+dev.off()
+
