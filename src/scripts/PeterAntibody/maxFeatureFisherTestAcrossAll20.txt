@@ -72,7 +72,7 @@ for( i in 1 : nrow(dFrame))
 	
 	for( j in 1:length(graphFreqs$classificationIndex[select] ))
 	{
-		if(graphFreqs$frequency[select][j] > 0.1 )
+		if(graphFreqs$frequency[select][j] > 0.2 )
 		{
 			myText[j] =  toString( graphFreqs$aa[select][j] )
 		}
@@ -90,7 +90,7 @@ for( i in 1 : nrow(dFrame))
 	}
 	
 	text(graphFreqs$classificationIndex[select],graphFreqs$frequency[select]+0.03,labels=myText,col="RED")
-	legend("topleft",legend=legendText)
+	legend("top",legend=legendText)
 }
 
 dev.off()
