@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.security.acl.Acl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,32 +32,42 @@ public class WriteFrequenciesToGraph
 		{
 			Map<String, Map<Character,Integer>> classToPositioMap = getMapsForPosition(map, position);
 			
-			double totalCount =0;
+			HashMap<String,Integer> countsForClass = new HashMap<>();
 			
 			for( String s : classToPositioMap.keySet() )
 			{
+				int totalCount=0;
+				
 				 Map<Character,Integer> map1 = classToPositioMap.get(s);
 				for(Character c : map1.keySet())
 				{
 					totalCount += map1.get(c);
 				}
+				
+				countsForClass.put(s,  totalCount);
 			}
 			
 			for(int x=0; x < classifications.size(); x++)
 			{
 				String classification = classifications.get(x);
-				Map<Character,Integer> countMap = classToPositioMap.get(classification);
 				
-				for( Character c : CountFeatures.getAASet())
-					if( Character.isUpperCase(c))
-					{
-						writer.write(classification + "\t");
-						writer.write(position + "\t");
-						writer.write(c + "\t");
-						writer.write( (countMap.get(c) / totalCount) + "\t");
-						writer.write( countMap.get(c) + "\t");
-						writer.write((x+1) + "\n");
-					}
+				if( countsForClass.get(classification) > 0 )
+				{
+
+					Map<Character,Integer> countMap = classToPositioMap.get(classification);
+					
+					for( Character c : CountFeatures.getAASet())
+						if( Character.isUpperCase(c))
+						{	
+							writer.write(classification + "\t");
+							writer.write(position + "\t");
+							writer.write(c + "\t");
+							writer.write( (countMap.get(c) / ((double)countsForClass.get(classification)) ) + "\t");
+							writer.write( countMap.get(c) + "\t");
+							writer.write((x+1) + "\n");
+						}
+				}
+				
 			}
 		}
 		
