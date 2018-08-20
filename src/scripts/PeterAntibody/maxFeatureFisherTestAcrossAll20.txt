@@ -58,14 +58,8 @@ hist(pValues)
 graphFreqs <- read.table("frequenciesForGraphing.txt", sep="\t", header=TRUE)
 pdf("sortedBySignificanceAll20.pdf")
 
-legendText <- vector()
 
 uniqueClass <- unique(graphFreqs$classificaiton)
-
-for( i in 1:6) 
-{
-	legendText[i] =  paste(i,":",toString(uniqueClass[i]))	
-}
 
 for( i in 1 : nrow(dFrame))
 {
@@ -74,6 +68,7 @@ for( i in 1 : nrow(dFrame))
 	plot( graphFreqs$classificationIndex[select] , graphFreqs$frequency[select], ylim=c(0,1),main=aText)
 	
 	myText <- vector()
+	legendText <- vector()
 	
 	for( j in 1:length(graphFreqs$classificationIndex[select] ))
 	{
@@ -86,6 +81,12 @@ for( i in 1 : nrow(dFrame))
 			myText[j] = ""
 		}
 		
+	}
+	
+	for( j in 1:6)
+	{
+		vals <- graphFreqs$absoluteNumber[ graphFreqs$classificaiton  == uniqueClass[j] & graphFreqs$position ==toString(dFrame$positionNames[i]) ]
+		legendText[j] =  paste0(j,": ",toString(uniqueClass[j]), " n=",sum(vals))
 	}
 	
 	text(graphFreqs$classificationIndex[select],graphFreqs$frequency[select]+0.03,labels=myText,col="RED")
