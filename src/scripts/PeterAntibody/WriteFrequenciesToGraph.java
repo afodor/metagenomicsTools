@@ -48,14 +48,15 @@ public class WriteFrequenciesToGraph
 				Map<Character,Integer> countMap = classToPositioMap.get(classification);
 				
 				for( Character c : CountFeatures.getAASet())
-				{
-					writer.write(classification + "\t");
-					writer.write(position + "\t");
-					writer.write(c + "\t");
-					writer.write( (countMap.get(c) / totalCount) + "\t");
-					writer.write( countMap.get(c) + "\t");
-					writer.write((x+1) + "\n");
-				}
+					if( Character.isUpperCase(c))
+					{
+						writer.write(classification + "\t");
+						writer.write(position + "\t");
+						writer.write(c + "\t");
+						writer.write( (countMap.get(c) / totalCount) + "\t");
+						writer.write( countMap.get(c) + "\t");
+						writer.write((x+1) + "\n");
+					}
 			}
 		}
 		

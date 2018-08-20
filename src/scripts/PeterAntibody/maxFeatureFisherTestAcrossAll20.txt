@@ -63,6 +63,23 @@ for( i in 1 : nrow(dFrame))
 	aText <- paste(dFrame$positionNames[i] , "q=", format( dFrame$pValuesAdjusted[i],digits=3))
 	select = graphFreqs$position == toString(dFrame$positionNames[i])
 	plot( graphFreqs$classificationIndex[select] , graphFreqs$frequency[select], ylim=c(0,1),main=aText)
+	
+	myText <- vector()
+	
+	for( j in 1:length(graphFreqs$classificationIndex[select] ))
+	{
+		if(graphFreqs$frequency[select][j] > 0.1 )
+		{
+			myText[j] =  toString( graphFreqs$aa[select][j] )
+		}
+		else
+		{	
+			myText[j] = ""
+		}
+		
+	}
+	
+	text(graphFreqs$classificationIndex[select],graphFreqs$frequency[select]+0.03,labels=myText,col="RED")
 }
 
 dev.off()
