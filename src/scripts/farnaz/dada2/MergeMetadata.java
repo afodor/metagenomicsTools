@@ -33,10 +33,10 @@ public class MergeMetadata
 		
 		File metaFile = new File(ConfigReader.getFarnazDada2Directory() + File.separator + "Farnaz_MDMF_MBP.txt");
 		
-		addMetadata(inFile, outFile, metaFile);
+		addMetadata(inFile, outFile, metaFile,true);
 	}
 	
-	private static void addMetadata(File inFile, File outFile, File metaFile) throws Exception
+	private static void addMetadata(File inFile, File outFile, File metaFile,boolean fromR) throws Exception
 	{
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
@@ -49,7 +49,13 @@ public class MergeMetadata
 		
 		writer.write(getFirstLine(metaFile));
 		
-		writer.write("\t"  + firstLine + "\n" );
+		String[] firstSplits = firstLine.split("\t");
+		int startPos = fromR ? 0:1;
+		
+		for( int x=startPos; x < firstSplits.length; x++)
+			writer.write("\t" + firstSplits[x]);
+		
+		writer.write("\n" );
 		
 		HashMap<String, String> metaMap = getFirstLineMap(metaFile);
 		
