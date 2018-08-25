@@ -79,13 +79,12 @@ for( i in 1 : nrow(dFrame))
 		else
 		{	
 			myText[j] = ""
-		}
-		
+		}		
 	}
 	
 	for( j in 1:6)
 	{
-		vals <- graphFreqs$absoluteNumber[ graphFreqs$classificaiton  == uniqueClass[j] & graphFreqs$position ==toString(dFrame$positionNames[i]) ]
+		vals <- graphFreqs$absoluteNumber[ graphFreqs$classification == uniqueClass[j] & graphFreqs$position ==toString(dFrame$positionNames[i]) ]
 		legendText[j] =  paste0(j,": ",toString(uniqueClass[j]), " (n=",sum(vals),")")
 	}
 	
