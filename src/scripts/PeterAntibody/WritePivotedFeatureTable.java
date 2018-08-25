@@ -28,7 +28,7 @@ public class WritePivotedFeatureTable
 		
 		List<String> positionlist = getAllPositions(map);
 		
-		writer.write("id\tclassificaiton");
+		writer.write("id\tclassification");
 		
 		for( String s : positionlist)
 			writer.write("\t" + s.replaceAll("\"",""));
@@ -37,10 +37,22 @@ public class WritePivotedFeatureTable
 		
 		List<Holder> protIDs = getAllProteins(map);
 	
+		BufferedWriter keyWriter = new BufferedWriter(new FileWriter(new File(
+				ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+				"proteinKeys.txt")));
+		
+		keyWriter.write("primaryKey\tid\tclassificaiton\n");
+		int id =0;
+		
 		for(Holder h : protIDs)
 		{
-			writer.write(clense( h.protName) + "\t" +clense(h.classificaiton));
-				
+			id++;
+			String protID = "prot" + id;
+			writer.write(protID + "\t" +clense(h.classificaiton));
+		
+			keyWriter.write(protID + "\t" + h.protName + "\t" + clense( h.classificaiton )+ "\n");
+			keyWriter.flush();
+			
 			Map<String,Map<String,Character>>  map1 =map.get(h.classificaiton);
 			Map<String,Character> map2 = map1.get(h.protName);
 			
@@ -54,8 +66,11 @@ public class WritePivotedFeatureTable
 				}
 				else
 				{
-						c =Character.toUpperCase(c);
-						writer.write("\t" + c);
+
+					if( ! Character.isUpperCase(c))
+						throw new Exception("No " + c);
+					
+					writer.write("\t" + c);
 				}
 			}
 				
@@ -63,6 +78,7 @@ public class WritePivotedFeatureTable
 		}
 		
 		writer.flush();  writer.close();
+		keyWriter.flush();  keyWriter.close();
 	}
 	
 	private static String clense(String s)

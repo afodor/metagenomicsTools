@@ -26,10 +26,7 @@ public class CountFeatures
 		for( String s : WriteFeatureTable.AMINO_ACID_CHARS)
 			set.add(s.charAt(0));
 		
-		for( String s : WriteFeatureTable.AMINO_ACID_CHARS)
-			set.add(s.toLowerCase().charAt(0));
-		
-		if( set.size() != 40 )
+		if( set.size() != 20 )
 			throw new Exception("No");
 		
 		return set;
@@ -206,7 +203,7 @@ public class CountFeatures
 			String assignment = fileToCatMap.get(name);
 			
 			if( assignment == null)
-				throw new Exception("No");
+				throw new Exception("No " + name);
 			
 			Map<String,Map<String,Character>> map1 = map.get(assignment);
 			
