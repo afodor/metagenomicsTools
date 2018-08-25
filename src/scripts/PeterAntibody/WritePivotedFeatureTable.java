@@ -48,9 +48,9 @@ public class WritePivotedFeatureTable
 		{
 			id++;
 			String protID = "prot" + id;
-			writer.write(protID + "\t" +clense(h.classificaiton));
+			writer.write(protID + "\t" +h.classificaiton);
 		
-			keyWriter.write(protID + "\t" + h.protName + "\t" + clense( h.classificaiton )+ "\n");
+			keyWriter.write(protID + "\t" + h.protName + "\t" + h.classificaiton + "\n");
 			keyWriter.flush();
 			
 			Map<String,Map<String,Character>>  map1 =map.get(h.classificaiton);
