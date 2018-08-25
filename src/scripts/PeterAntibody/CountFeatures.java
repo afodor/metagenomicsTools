@@ -220,7 +220,7 @@ public class CountFeatures
 		
 			for(String s= reader.readLine(); s != null ; s= reader.readLine())
 			{
-				if(s.trim().length() > 0 )
+				if(s.trim().length() > 0 && ! s.startsWith("Warning" ) )
 				{
 					if( s.startsWith(">"))
 					{
