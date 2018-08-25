@@ -18,7 +18,7 @@ for( i in 3:ncol(myT))
 	aPValue = 1
 	
 	residues = myT[ !is.na(myT[,i]) ,i]
-	assignment = myT$classificaiton[!is.na(myT[,i])]
+	assignment = myT$classification[!is.na(myT[,i])]
 	
 	if( length(residues ) != length(assignment ) )
 		stop("No " + length(residues )  + " " + length(assignment ));
@@ -59,7 +59,7 @@ graphFreqs <- read.table("frequenciesForGraphing.txt", sep="\t", header=TRUE)
 pdf("sortedBySignificanceAll20.pdf")
 
 
-uniqueClass <- unique(graphFreqs$classificaiton)
+uniqueClass <- unique(graphFreqs$classification)
 
 for( i in 1 : nrow(dFrame))
 {
