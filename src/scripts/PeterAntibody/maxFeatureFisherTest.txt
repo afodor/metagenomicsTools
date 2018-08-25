@@ -18,7 +18,7 @@ for( i in 3:ncol(myT))
 	}
 		
 	residues = myT[ !is.na(myT[,i]) ,i]
-	assignment = myT$classificaiton[!is.na(myT[,i])]
+	assignment = myT$classification[!is.na(myT[,i])]
 	
 	if( length(residues ) != length(assignment ) )
 		stop("No " + length(residues )  + " " + length(assignment ));
