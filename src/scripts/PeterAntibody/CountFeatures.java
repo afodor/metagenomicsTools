@@ -217,53 +217,56 @@ public class CountFeatures
 			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(topDir.getAbsolutePath()
 					+ File.separator + name)));
-			
-			for(String s= reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
+		
+			for(String s= reader.readLine(); s != null ; s= reader.readLine())
 			{
-				if( s.startsWith(">"))
+				if(s.trim().length() > 0 )
 				{
-					String key = s.substring(1, s.lastIndexOf("|"));
+					if( s.startsWith(">"))
+					{
+						String key = s.substring(1, s.lastIndexOf("|"));
 
-					String lowerkey = key.toLowerCase();
-					
-					if( lowerkey.endsWith("hc") || lowerkey.endsWith("lc"))
-						key = key.substring(0, key.length()-2);
-					
-					key = key.replaceAll("\\|", "_");
-					
-					//System.out.println(key);
-					
-					seqMap = map1.get(key);
-					
-					if( seqMap == null)
-					{
-						seqMap = new LinkedHashMap<String,Character>();
-						map1.put(key, seqMap);
-					}
-				}
-				else
-				{
-					StringTokenizer sToken =new StringTokenizer(s);
-					
-					if( sToken.countTokens() != 2)
-						throw new Exception("No " + s);
-					
-					String key = new String(sToken.nextToken());
-				
-					String charString = sToken.nextToken();
-					charString = charString.toUpperCase();
-					if( charString.length() != 1)
-						throw new Exception("No " + s);
-					
-					if( seqMap.containsKey(key) && seqMap.get(key) != charString.charAt(0))
-					{
-						throw new Exception("Duplicate mismatch" + key + " " + seqMap.get(key) + " " + charString.charAt(0));
-					}
+						String lowerkey = key.toLowerCase();
 						
-					seqMap.put(key, charString.charAt(0));
+						if( lowerkey.endsWith("hc") || lowerkey.endsWith("lc"))
+							key = key.substring(0, key.length()-2);
+						
+						key = key.replaceAll("\\|", "_");
+						
+						//System.out.println(key);
+						
+						seqMap = map1.get(key);
+						
+						if( seqMap == null)
+						{
+							seqMap = new LinkedHashMap<String,Character>();
+							map1.put(key, seqMap);
+						}
+					}
+					else
+					{
+						StringTokenizer sToken =new StringTokenizer(s);
+						
+						if( sToken.countTokens() != 2)
+							throw new Exception("No " + s);
+						
+						String key = new String(sToken.nextToken());
+					
+						String charString = sToken.nextToken();
+						charString = charString.toUpperCase();
+						if( charString.length() != 1)
+							throw new Exception("No " + s);
+						
+						if( seqMap.containsKey(key) && seqMap.get(key) != charString.charAt(0))
+						{
+							throw new Exception("Duplicate mismatch" + key + " " + seqMap.get(key) + " " + charString.charAt(0));
+						}
+							
+						seqMap.put(key, charString.charAt(0));
+					}
 				}
 			}
-			
+				
 			reader.close();
 		}
 		
