@@ -26,7 +26,7 @@ public class WriteFrequenciesToGraph
 			ConfigReader.getPeterAntibodyDirectory() + File.separator + 
 				"frequenciesForGraphing.txt")));
 		
-		writer.write("classificaiton\tposition\taa\tfrequency\tabsoluteNumber\tclassificationIndex\n");
+		writer.write("classification\tposition\taa\tfrequency\tabsoluteNumber\tclassificationIndex\n");
 		
 		for(String position : positions)
 		{
