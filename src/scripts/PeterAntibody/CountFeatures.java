@@ -32,7 +32,7 @@ public class CountFeatures
 		return set;
 	}
 	
-	private static HashMap<String, String> getFileNameToCategoryMap()
+	public static HashMap<String, String> getFileNameToCategoryMap()
 	{
 		HashMap<String, String> map = new HashMap<>();
 		
