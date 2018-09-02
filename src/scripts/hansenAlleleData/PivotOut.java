@@ -20,8 +20,10 @@ public class PivotOut
 
 		HashMap<Integer, String> myDateMap =getDateMap(inFile);
 		
+		HashMap<Integer, String> mouseIDMap =getMouseIDMap(inFile);
+		
 		for(Integer i : myWTMap.keySet())
-			System.out.println(i + " " + myWTMap.get(i) + " " + myDateMap.get(i));
+			System.out.println(i + " " + myWTMap.get(i) + " " + myDateMap.get(i) + " " + mouseIDMap.get(i));
 	}
 	
 	private static HashMap<Integer,String> getWtKoMap(File f) throws Exception
@@ -51,6 +53,36 @@ public class PivotOut
 		
 		return map;
 	}
+
+	private static HashMap<Integer,String> getMouseIDMap(File f) throws Exception
+	{
+		HashMap<Integer,String> map = new LinkedHashMap();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		reader.readLine();reader.readLine();
+		
+		int x=0;
+		
+		TabReader tReader =new TabReader(reader.readLine());
+		
+		String aString = "NA";
+		
+		while(tReader.hasMore())
+		{
+			String aVal = tReader.nextToken();
+			
+			if( aVal.trim().length() > 0)
+				aString = aVal;
+			
+			map.put(x, aString);
+			x++;
+		}
+		
+		reader.close();
+		
+		return map;
+	}
+
 	
 
 	private static HashMap<Integer,String> getDateMap(File f) throws Exception
