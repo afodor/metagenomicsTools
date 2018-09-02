@@ -8,11 +8,25 @@ index <- 1
 pValues <- vector()
 alleleNames <- vector()
 
-for( i in 7:(ncol(myT)-1))
+for( i in 1:nrow(myT))
 {
-	wtData <- myT[ startsWith(names(myT), "WT"),i]
-	koData <- myT[startsWith(names(myT), "KO"),i]
+	wtData <- as.numeric( myT[ i,startsWith(names(myT), "WT")])
 	
-	pValues[index] <- t.test(wtData ,koData )$p.value
+	wtData <- wtData[ !is.na(wtData) ]
+	
+	koData <- as.numeric( myT[i,startsWith(names(myT), "KO")])
+
+	koData <- koData[ !is.na(koData) ]
+
+	pValues[index] <- 1
+	
+	if( length(wtData) >3 & length(koData) > 3) 
+	{	
+		if( sum(wtData) >0 | sum(koData) >0 ) 
+		{
+			pValues[index] <- wilcox.test(wtData ,koData )$p.value
+		}		
+	}
+		
 	index <- index + 1	
 }	
