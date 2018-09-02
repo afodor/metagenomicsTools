@@ -16,10 +16,10 @@ public class PivotOut
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"inputTextFiles" + File.separator + "ecoli.txt");
+				"inputTextFiles" + File.separator + "B_caccae.txt");
 		
 		File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"outputTextFiles" + File.separator + "ecoliForR.txt");
+				"outputTextFiles" + File.separator + "B_caccaeForR.txt");
 		
 		writeFileForR(inFile, outFile);
 	
