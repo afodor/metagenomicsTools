@@ -1,8 +1,10 @@
 package scripts.hansenAlleleData;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -14,16 +16,55 @@ public class PivotOut
 	public static void main(String[] args) throws Exception
 	{
 		File inFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"ecoli.txt");
+				"inputTextFiles" + File.separator + "ecoli.txt");
 		
+		File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
+				"outputTextFiles" + File.separator + "ecoliForR.txt");
+	
+	}
+	
+	public static void writeFileForR(File inFile, File outFile) throws Exception
+	{	
 		HashMap<Integer, String> myWTMap =getWtKoMap(inFile);
-
+ 
 		HashMap<Integer, String> myDateMap =getDateMap(inFile);
 		
 		HashMap<Integer, String> mouseIDMap =getMouseIDMap(inFile);
 		
 		for(Integer i : myWTMap.keySet())
 			System.out.println(i + " " + myWTMap.get(i) + " " + myDateMap.get(i) + " " + mouseIDMap.get(i));
+		
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		
+		reader.readLine();  reader.readLine();  reader.readLine();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		String topLine = reader.readLine();
+		
+		String[] topSplits= topLine.split("\t");
+
+		writer.write(topSplits[0]);
+	
+		for( int x=1; x < 6; x++)
+			writer.write("\t" + topSplits[x]);
+
+		for( int x=6; x < topSplits.length-2; x++ )
+		{
+			String key = getKey(x, myWTMap, myDateMap, mouseIDMap);
+			
+			String nextKey = getKey(x+1, myWTMap, myDateMap, mouseIDMap);
+			
+			if( ! key.equals(nextKey))
+				throw new Exception("Parsing error");
+		}
+		
+	}
+	
+	private static String getKey(int x, HashMap<Integer, String> myWTMap, HashMap<Integer, String>  myDateMap,
+			HashMap<Integer, String> mouseIDMap ) throws Exception
+	{
+		return myWTMap.get(x) +"_" +mouseIDMap.get(x) + "_" + myDateMap.get(x);
 	}
 	
 	private static HashMap<Integer,String> getWtKoMap(File f) throws Exception
