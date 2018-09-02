@@ -30,3 +30,17 @@ for( i in 1:nrow(myT))
 		
 	index <- index + 1	
 }	
+
+Chrom <- myT$Chrom  
+Index <- myT$Index 
+Ref  <- myT$Ref  
+Alt  <-   myT$Alt   
+Effect <-myT$Effect   
+Gene_ID <- myT$Gene_ID  
+
+dFrame <- data.frame(Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,pValues )
+
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )	
+write.table(dFrame, file=paste("pValuesForKOWT.txt",sep=""), sep="\t",row.names=FALSE)
+
