@@ -7,6 +7,7 @@ myT <- read.table("B_caccaeForR.txt",header=TRUE,sep="\t")
 index <- 1
 pValues <- vector()
 alleleNames <- vector()
+rowIndex <- vector()
 
 for( i in 1:nrow(myT))
 {
@@ -19,6 +20,7 @@ for( i in 1:nrow(myT))
 	koData <- koData[ !is.na(koData) ]
 
 	pValues[index] <- 1
+	rowIndex[index] <- i
 	
 	if( length(wtData) >3 & length(koData) > 3) 
 	{	
@@ -38,9 +40,34 @@ Alt  <-   myT$Alt
 Effect <-myT$Effect   
 Gene_ID <- myT$Gene_ID  
 
-dFrame <- data.frame(Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,pValues )
+dFrame <- data.frame(rowIndex, Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,pValues )
 
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )	
 write.table(dFrame, file=paste("pValuesForKOWT.txt",sep=""), sep="\t",row.names=FALSE)
 
+pdf("out.pdf")
+
+par(mfrow=c(2,2))
+
+for( j in 1:nrow(dFrame))
+{
+	i <- dFrame$rowIndex[j]
+
+	wtData <- as.numeric( myT[ i,startsWith(names(myT), "WT")])
+	
+	wtData <- wtData[ !is.na(wtData) ]
+	
+	koData <- as.numeric( myT[i,startsWith(names(myT), "KO")])
+
+	koData <- koData[ !is.na(koData) ]
+	
+	text <- dFrame$pValues[j]
+	
+	if( length(wtData) >3 & length(koData) > 3) 
+	{
+		boxplot( wtData, koData ,main=text)		
+	}
+}
+
+dev.off()
