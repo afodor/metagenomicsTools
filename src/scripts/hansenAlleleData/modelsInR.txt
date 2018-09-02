@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\JonHansenNewdata\\outputTextFiles")
+
+myT <- read.table("B_caccaeForR.txt",header=TRUE,sep="\t")
+
+index <- 1
+pValues <- vector()
+alleleNames <- vector()
+
+for( i in 7:(ncol(myT)-1))
+{
+	wtData <- myT[ startsWith(names(myT), "WT"),i]
+	koData <- myT[startsWith(names(myT), "KO"),i]
+	
+	pValues[index] <- t.test(wtData ,koData )$p.value
+	index <- index + 1	
+}	
