@@ -22,7 +22,6 @@ public class PivotOut
 				"outputTextFiles" + File.separator + "B_caccaeForR.txt");
 		
 		writeFileForR(inFile, outFile);
-	
 	}
 	
 	public static void writeFileForR(File inFile, File outFile) throws Exception
