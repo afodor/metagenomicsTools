@@ -172,9 +172,16 @@ public class ConfigReader
 	
 	public static final String FARNAZ_DADA2_DIR = "FARNAZ_DADA2_DIR";
 	
+	public static final String HANSEN_ALLELE_DIR = "HANSEN_ALLELE_DIR";
+	
 	public static String getPeterAntibodyDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(PETER_ANTIBODY_DIR);
+	}
+	
+	public static String getHansenAlleleDirectory() throws Exception
+	{
+		return getConfigReader().getAProperty(HANSEN_ALLELE_DIR);
 	}
 	
 	public static String getFarnazFeb2018Directory() throws Exception
