@@ -20,6 +20,8 @@ public class PivotOut
 		
 		File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
 				"outputTextFiles" + File.separator + "ecoliForR.txt");
+		
+		writeFileForR(inFile, outFile);
 	
 	}
 	
@@ -57,8 +59,39 @@ public class PivotOut
 			
 			if( ! key.equals(nextKey))
 				throw new Exception("Parsing error");
+			
+			writer.write("\t" + key);
+			
+			x++;
 		}
 		
+		writer.write("\tcontrol\n");
+		
+		for(String s = reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			writer.write(splits[0]);
+			for( int x=1; x < 6; x++)
+				writer.write("\t" + splits[x]);
+			
+			for( int x=6; x < splits.length-1; x++)
+			{
+				double aVal = Double.parseDouble(splits[x]);
+				double anotherVal =Double.parseDouble(splits[x+1]);
+				
+				if( anotherVal >= 10 )
+					writer.write("\t" +(aVal / anotherVal) );
+				else
+					writer.write("\tNA");
+				
+				x++;
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static String getKey(int x, HashMap<Integer, String> myWTMap, HashMap<Integer, String>  myDateMap,
