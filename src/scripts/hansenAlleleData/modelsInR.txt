@@ -62,7 +62,7 @@ for( j in 1:nrow(dFrame))
 
 	koData <- koData[ !is.na(koData) ]
 	
-	text <- dFrame$pValues[j]
+	text <- paste("Index= ", myT$Index[i], " p=", format( dFrame$pValues[j],digits=3))
 	
 	if( length(wtData) >3 & length(koData) > 3) 
 	{
