@@ -138,14 +138,21 @@ for( j in 1:nrow(dFrame))
 		 
 		  
 		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates)), as.numeric(max(dates))), ylim=c(0, yMax))
-		 		
+		 
+		 maxVal = which(vals == max(vals[!is.na(vals)]))[1]
+		 
 		 for( k in 1:(length(uniqueIDs))) 
 		 {
 		 	if( substr(uniqueIDs[k],1,2) == "WT"  )
 		 	{
 		 		points( dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
 		 		lines(dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
-		 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]],uniqueIDs[k] )
+		 		
+		 		if( k == maxVal) 
+		 		{	
+		 			text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]],uniqueIDs[k] )
+		 		}
+		 		
 		 	}
 		 }
 	}
