@@ -102,8 +102,7 @@ for( j in 1:nrow(dFrame))
 		
 		boxplot( vals, names = newNames,las=2,
 		 main=paste(myT$Chrom[i],"\n", myT$Effect[i]),cex.main=0.8, medcol=colors)
-		 
-		 
+		
 		 yMax = max(vals[!is.na(vals)])
 		 
 		 # strip off the control
@@ -125,32 +124,37 @@ for( j in 1:nrow(dFrame))
 		 uniqueIDs <- unique( animalIds)
 		 
 		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates)), as.numeric(max(dates))), ylim=c(0, yMax))
-		 		
-		 for( k in 1:(length(uniqueIDs))) 
-		 {
-		 	if( substr(uniqueIDs[k],1,2) == "KO"  )
-		 	{
-		 		points( dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
-		 		lines(dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
-		 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]],uniqueIDs[k] )
-		 	}
-		 }
-		 
-		  
+		 		  
 		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates)), as.numeric(max(dates))), ylim=c(0, yMax))
-		 
-		 maxVal = which(vals == max(vals[!is.na(vals)]))[1]
 		 
 		 for( k in 1:(length(uniqueIDs))) 
 		 {
 		 	if( substr(uniqueIDs[k],1,2) == "WT"  )
 		 	{
-		 		points( dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
-		 		lines(dates[animalIds==uniqueIDs[k]], vals[animalIds==uniqueIDs[k]])
+		 		toGraph = vals[animalIds==uniqueIDs[k]]  
+		 		datesToGraph <- dates[animalIds==uniqueIDs[k]]
+		 		maxVal = which( toGraph == max(toGraph[!is.na(toGraph)]))[1]
+			
+		 		points( datesToGraph, toGraph)
+		 		lines(datesToGraph, toGraph)
 		 		
-		 		if( k == maxVal) 
-		 		{	
-		 			text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]],uniqueIDs[k] )
+		 		if( !is.na(maxVal) )
+		 		{
+			 		textVals <- vector()
+			 		
+			 		for( m in 1:length(toGraph))
+			 		{
+			 			if( m == maxVal ) 
+			 			{
+			 				textVals[m] =  uniqueIDs[k]
+			 			}
+			 			else
+			 			{
+			 				textVals[m] =  ""
+			 			}
+			 		}
+			 		
+			 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]], textVals)	
 		 		}
 		 		
 		 	}
