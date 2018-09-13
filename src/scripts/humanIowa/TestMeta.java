@@ -15,6 +15,7 @@ public class TestMeta
 	 * The middle key is the metadata name
 	 * The inner key is the 
 	 */
+	@SuppressWarnings("unused")
 	private static HashMap<String,HashMap<String,String>> getMapFromDerviedFile() throws Exception
 	{
 		/*

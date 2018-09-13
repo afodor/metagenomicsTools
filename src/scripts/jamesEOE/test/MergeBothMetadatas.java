@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import parsers.NewRDPNode;
 import parsers.NewRDPParserFileLine;
 import parsers.OtuWrapper;
 import utils.ConfigReader;

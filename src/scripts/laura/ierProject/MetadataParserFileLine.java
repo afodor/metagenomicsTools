@@ -71,7 +71,7 @@ public class MetadataParserFileLine
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, MetadataParserFileLine> map = getMetaMap();
+		//HashMap<String, MetadataParserFileLine> map = getMetaMap();
 	}
 	
 	public static HashMap<String, MetadataParserFileLine> getMetaMap() throws Exception

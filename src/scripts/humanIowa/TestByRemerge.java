@@ -57,10 +57,12 @@ public class TestByRemerge
 			
 			Double val = innerMap.get(group);
 			
+			/*
 			String out= "NA";
 			
 			if( val != null)
 				out = val.toString();
+			*/
 			
 			writer.write("\t" + val);
 			

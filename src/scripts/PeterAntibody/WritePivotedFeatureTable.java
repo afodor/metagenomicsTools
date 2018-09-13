@@ -1,18 +1,14 @@
 package scripts.PeterAntibody;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
@@ -81,6 +77,7 @@ public class WritePivotedFeatureTable
 		keyWriter.flush();  keyWriter.close();
 	}
 	
+	@SuppressWarnings("unused")
 	private static String clense(String s)
 	{
 		StringBuffer buff = new StringBuffer();

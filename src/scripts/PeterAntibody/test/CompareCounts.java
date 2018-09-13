@@ -81,9 +81,9 @@ public class CompareCounts
 				
 				if( fileToCatMap.get(fileName).equals(classificaiton))
 				{
-					File inFile =new File(ConfigReader.getPeterAntibodyDirectory() + File.separator + 
-							"oneAtATime" + File.separator +   "inputFiles" + File.separator + "Aug_1" + 
-									File.separator + fileName);
+				//	File inFile =new File(ConfigReader.getPeterAntibodyDirectory() + File.separator + 
+					//		"oneAtATime" + File.separator +   "inputFiles" + File.separator + "Aug_1" + 
+						//			File.separator + fileName);
 					
 					Integer aNum = innerMap.get(position + "@" + aa );
 					if( aNum==null)
