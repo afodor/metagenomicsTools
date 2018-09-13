@@ -67,14 +67,12 @@ for( j in 1:nrow(dFrame))
 	
 	if( length(wtData) >3 & length(koData) > 3) 
 	{
-		
-		
-		wtLabel <- paste0( "WT(n=", length(wtData),")")
 		koLabel <- paste0( "KO(n=", length(koData),")")
-		boxplot( wtData, koData ,main=text,names=c(wtLabel,koLabel))		
+		wtLabel <- paste0( "WT(n=", length(wtData),")")
+		boxplot( koData ,wtData,main=text,names=c(koLabel,wtLabel))		
 		
-		allData <- c(wtData,koData)
-		cats <- c( rep("WT",length(wtData)), rep("KO",length(koData) ))
+		allData <- c(koData,wtData)
+		cats <- c( rep("KO",length(koData) ),rep("WT",length(wtData)) )
 		myFrame <- data.frame( allData, cats )
 			
 		stripchart(allData ~ cats, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
@@ -102,8 +100,6 @@ for( j in 1:nrow(dFrame))
 		
 		boxplot( vals, names = newNames,las=2 )
 	}
-	
-	
 }
 
 dev.off()
