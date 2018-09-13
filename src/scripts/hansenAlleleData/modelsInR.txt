@@ -62,12 +62,20 @@ for( j in 1:nrow(dFrame))
 
 	koData <- koData[ !is.na(koData) ]
 	
-	text <- paste("Index= ", myT$Index[i], " p=", format( dFrame$pValues[j],digits=3))
+	text <- paste("Index= ", myT$Index[i], " p=", format( dFrame$pValues[j],digits=3),
+						" bh_adjP=",format( dFrame$adjustedPValues[j],digits=3) )
 	
 	if( length(wtData) >3 & length(koData) > 3) 
 	{
 		boxplot( wtData, koData ,main=text)		
+		
+		allData <- c(wtData,koData)
+		cats <- c( rep("WT",length(wtData)), rep("KO",length(koData) ))
+		myFrame <- data.frame( allData, cats )
+			
+		stripchart(allData ~ cats, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 	}
 }
 
 dev.off()
+
