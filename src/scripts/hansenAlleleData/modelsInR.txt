@@ -123,9 +123,9 @@ for( j in 1:nrow(dFrame))
 		 
 		 uniqueIDs <- unique( animalIds)
 		 
-		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates)), as.numeric(max(dates))), ylim=c(0, yMax))
+		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax))
 		 		  
-		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates)), as.numeric(max(dates))), ylim=c(0, yMax))
+		 plot(1, type="n", xlab="", ylab="", xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax))
 		 
 		 for( k in 1:(length(uniqueIDs))) 
 		 {
@@ -154,7 +154,7 @@ for( j in 1:nrow(dFrame))
 			 			}
 			 		}
 			 		
-			 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]], textVals)	
+			 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]]+ rnorm(1,0,.02), textVals)	
 		 		}
 		 		
 		 	}
