@@ -157,7 +157,7 @@ for( j in 1:nrow(dFrame))
 		colors = c(rep("black", length(vals)-1), "red")
 		
 		boxplot( vals, names = newNames,las=2,
-		main=paste(myT$Chrom[i],"\n", myT$Effect[i]),cex.main=0.8, medcol=colors)
+		main=paste(myT$Chrom[i],"\n", myT$Effect[i], "\n", myT$Gene_ID[i] ),cex.main=0.8, medcol=colors)
 		
 		yMax = max(vals[!is.na(vals)])
 		 
