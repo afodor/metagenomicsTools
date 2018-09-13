@@ -98,7 +98,8 @@ for( j in 1:nrow(dFrame))
 			}
 		}
 		
-		boxplot( vals, names = newNames,las=2 )
+		
+		boxplot( vals, names = newNames,las=2, main=paste(myT$Chrom[i],"\n", myT$Effect[i]),cex.main=0.8 )
 	}
 }
 
