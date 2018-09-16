@@ -123,14 +123,15 @@ for( fileName in inFiles )
 	
 		koData <- koData[ !is.na(koData) ]
 		
-		text <- paste("Index= ", myT$Index[i], " p=", format( dFrame$pValues[j],digits=3),
-							" bh_adjP=",format( dFrame$adjustedPValues[j],digits=3) )
+		text <- paste0("Index= ", myT$Index[i], " p=", format( dFrame$pValues[j],digits=3),
+							" bh_adjP=",format( dFrame$adjustedPValues[j],digits=3), "\n",
+							"avg. read depth=" , format( dFrame$averageReadDepth[j],digits=3))
 		
 		if( length(wtData) >3 & length(koData) > 3 & dFrame$pValues[j] < .25) 
 		{
 			koLabel <- paste0( "KO(n=", length(koData),")")
 			wtLabel <- paste0( "WT(n=", length(wtData),")")
-			boxplot( koData ,wtData,main=text,names=c(koLabel,wtLabel))		
+			boxplot( koData ,wtData,main=text,names=c(koLabel,wtLabel),cex.main=0.8)		
 			
 			allData <- c(koData,wtData)
 			cats <- c( rep("KO",length(koData) ),rep("WT",length(wtData)) )
