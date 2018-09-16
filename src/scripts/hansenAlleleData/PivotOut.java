@@ -84,6 +84,8 @@ public class PivotOut
 		for( int x=1; x < 6; x++)
 			writer.write("\t" + topSplits[x]);
 
+		writer.write("\taverageReadDepth");
+		
 		for( int x=6; x < topSplits.length-2; x++ )
 		{
 			String key = getKey(x, myWTMap, myDateMap, mouseIDMap);
@@ -108,18 +110,31 @@ public class PivotOut
 			for( int x=1; x < 6; x++)
 				writer.write("\t" + splits[x]);
 			
+			StringBuffer buff = new StringBuffer();
+			long totalReads = 0;
+			long numAboveThreshold =0;
 			for( int x=6; x < splits.length-1; x++)
 			{
 				double aVal = Double.parseDouble(splits[x]);
 				double anotherVal =Double.parseDouble(splits[x+1]);
 				
 				if( anotherVal >= 10 )
-					writer.write("\t" +(aVal / anotherVal) );
+				{
+					buff.append("\t" +(aVal / anotherVal) );
+					totalReads += anotherVal;
+					numAboveThreshold++;
+				}
 				else
+				{
 					writer.write("\tNA");
-				
+				}
+					
 				x++;
 			}
+			
+			double averageReadDepth = ((double)totalReads)/numAboveThreshold;
+			
+			writer.write("\t" +averageReadDepth + buff.toString());
 			
 			writer.write("\n");
 		}
