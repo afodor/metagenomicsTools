@@ -5,8 +5,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import utils.ConfigReader;
 import utils.TabReader;
@@ -19,6 +23,8 @@ public class PivotOut
 				"inputTextFiles");
 		
 		String[] inputFiles = inDirectory.list();
+		
+		List<String> fileNames =new ArrayList<String>();
 		
 		for(String s : inputFiles)
 		{
@@ -33,9 +39,21 @@ public class PivotOut
 						"outputTextFiles" + File.separator +  prefix +  "ForR.txt");
 				
 				System.out.println(inFile.getName() + " "+ outFile.getName());
+				fileNames.add(outFile.getName());
 				writeFileForR(inFile, outFile);
 			}
 		}
+		
+		System.out.print("inFiles <- c(");
+		for(int x=0; x < fileNames.size(); x++)
+		{
+			System.out.print( "\"" +  fileNames.get(x).replace("ForR.txt", "")  + "\"" );
+			
+			if( x < fileNames.size() - 1)
+				System.out.print(",");
+		}
+		
+		System.out.println(")");
 	}
 	
 	public static void writeFileForR(File inFile, File outFile) throws Exception
