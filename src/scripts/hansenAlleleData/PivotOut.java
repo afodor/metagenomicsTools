@@ -126,7 +126,7 @@ public class PivotOut
 				}
 				else
 				{
-					writer.write("\tNA");
+					buff.append("\tNA");
 				}
 					
 				x++;
@@ -134,6 +134,9 @@ public class PivotOut
 			
 			double averageReadDepth = ((double)totalReads)/numAboveThreshold;
 			
+			if( numAboveThreshold == 0 )
+				averageReadDepth = 0;
+				
 			writer.write("\t" +averageReadDepth + buff.toString());
 			
 			writer.write("\n");
