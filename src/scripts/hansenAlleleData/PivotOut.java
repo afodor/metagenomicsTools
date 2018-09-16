@@ -15,13 +15,27 @@ public class PivotOut
 {
 	public static void main(String[] args) throws Exception
 	{
-		File inFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"inputTextFiles" + File.separator + "B_caccae.txt");
+		File inDirectory = new File( ConfigReader.getHansenAlleleDirectory() + File.separator + 
+				"inputTextFiles");
 		
-		File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"outputTextFiles" + File.separator + "B_caccaeForR.txt");
+		String[] inputFiles = inDirectory.list();
 		
-		writeFileForR(inFile, outFile);
+		for(String s : inputFiles)
+		{
+			if( s.endsWith( ".txt"))
+			{
+				File inFile = new File(inDirectory.getAbsolutePath() + File.separator + 
+							s);
+				
+				String prefix = s.replace(".txt", "");
+		
+				File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
+						"outputTextFiles" + File.separator +  prefix +  "ForR.txt");
+				
+				System.out.println(inFile.getName() + " "+ outFile.getName());
+				writeFileForR(inFile, outFile);
+			}
+		}
 	}
 	
 	public static void writeFileForR(File inFile, File outFile) throws Exception
@@ -32,8 +46,10 @@ public class PivotOut
 		
 		HashMap<Integer, String> mouseIDMap =getMouseIDMap(inFile);
 		
+		/*
 		for(Integer i : myWTMap.keySet())
 			System.out.println(i + " " + myWTMap.get(i) + " " + myDateMap.get(i) + " " + mouseIDMap.get(i));
+		*/
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
