@@ -174,6 +174,13 @@ public class ConfigReader
 	
 	public static final String HANSEN_ALLELE_DIR = "HANSEN_ALLELE_DIR";
 	
+	public static final String TOPE_VICKI_DIR = "TOPE_VICKI_DIR";
+	
+	public static final String getTopeVickiDir() throws Exception
+	{
+		return getConfigReader().getAProperty(TOPE_VICKI_DIR);
+	}
+	
 	public static String getPeterAntibodyDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(PETER_ANTIBODY_DIR);
