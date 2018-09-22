@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeAtLevel
@@ -24,7 +25,12 @@ public class MergeAtLevel
 		for(String level : levels)
 		{
 			Map<String, Map<String,Integer>> map = mergeAtLevel(level);
-			writeFile(map, level);
+			File rawFile = writeFile(map, level);
+			
+			File loggedFile = new File(ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedLogged.txt");
+			
+			OtuWrapper wrapper = new OtuWrapper(rawFile);
+			wrapper.writeNormalizedLoggedDataToFile(loggedFile);
 		}
 	}
 	
@@ -42,11 +48,13 @@ public class MergeAtLevel
 		return map;
 	}
 	 
-	private static void writeFile( Map<String, Map<String,Integer>>  map, String level)
+	private static File writeFile( Map<String, Map<String,Integer>>  map, String level)
 		throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txxt"	)));
+		File file = new File(
+				ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txt"	);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		
 		writer.write("sample");
 		
@@ -66,9 +74,9 @@ public class MergeAtLevel
 		
 		for(String s : map.keySet())
 		{
-			writer.write(s);
-			
 			Map<String, Integer> innerMap = map.get(s);
+			
+			int allCount = 0;
 			
 			for(String t : taxaList)
 			{
@@ -77,13 +85,31 @@ public class MergeAtLevel
 				if( count == null)
 					count =0;
 				
-				writer.write("\t" + count);
+				allCount = allCount + count;
 			}
 			
-			writer.write("\n");
+			if( allCount > 0 )
+			{
+
+				writer.write(s);
+				
+				for(String t : taxaList)
+				{
+					Integer count = innerMap.get(t);
+					
+					if( count == null)
+						count =0;
+					
+					writer.write("\t" + count);
+				}
+				
+				writer.write("\n");
+			}
 		}
 		
 		writer.flush();  writer.close();
+		
+		return file;
 	}
 	
 	private static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level) throws Exception
