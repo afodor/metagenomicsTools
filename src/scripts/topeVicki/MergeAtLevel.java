@@ -1,10 +1,14 @@
 package scripts.topeVicki;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -19,7 +23,8 @@ public class MergeAtLevel
 		
 		for(String level : levels)
 		{
-			mergeAtLevel(level);
+			Map<String, Map<String,Integer>> map = mergeAtLevel(level);
+			writeFile(map, level);
 		}
 	}
 	
@@ -35,6 +40,50 @@ public class MergeAtLevel
 		addToMap(map, file2, level);
 		
 		return map;
+	}
+	 
+	private static void writeFile( Map<String, Map<String,Integer>>  map, String level)
+		throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txxt"	)));
+		
+		writer.write("sample");
+		
+		HashSet<String> taxa = new HashSet<>();
+		for(String s : map.keySet())
+		{
+			taxa.addAll(map.get(s).keySet());
+		}
+		
+		List<String> taxaList =new ArrayList<>(taxa);
+		Collections.sort(taxaList);
+		
+		for(String s : taxaList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String s : map.keySet())
+		{
+			writer.write(s);
+			
+			Map<String, Integer> innerMap = map.get(s);
+			
+			for(String t : taxaList)
+			{
+				Integer count = innerMap.get(t);
+				
+				if( count == null)
+					count =0;
+				
+				writer.write("\t" + count);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level) throws Exception
