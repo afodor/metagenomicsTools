@@ -17,6 +17,31 @@ public class MetadataFileParser
 	private final String tumorHistology;
 	private final int tumorGrade;
 
+	public String getSampleID()
+	{
+		return sampleID;
+	}
+
+	public String getRace()
+	{
+		return race;
+	}
+
+	public String getBmi()
+	{
+		return bmi;
+	}
+
+	public String getTumorHistology()
+	{
+		return tumorHistology;
+	}
+
+	public int getTumorGrade()
+	{
+		return tumorGrade;
+	}
+
 	private MetadataFileParser(String s)
 	{
 		String[] splits = s.split("\t");
