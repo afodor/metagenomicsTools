@@ -33,7 +33,7 @@ public class MetadataFileParser
 		HashMap<String, MetadataFileParser> map = new HashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(ConfigReader.getTopeVickiDir()+
-				File.separator + "meta.txt")));
+				File.separator + "metadata.txt")));
 		
 		reader.readLine();
 		
@@ -56,5 +56,10 @@ public class MetadataFileParser
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MetadataFileParser> metaMap =MetadataFileParser.getMetaMap();
+		
+		for(String s : metaMap.keySet())
+		{
+			System.out.println(s + " " + metaMap.get(s).sampleID +  " " + metaMap.get(s).tumorGrade);
+		}
 	}
 }
