@@ -1,0 +1,27 @@
+rm(list=ls())
+
+setwd("C:\\topeVickiData")
+
+levels <- c( "p", "c","o","f","g" )
+
+library("vegan")
+
+for( level in levels ) 
+{
+	inFile <- paste0( level, "_mergedLoggedMeta.txt" )
+	
+	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
+
+	
+	myTData <- myT[,6:(ncol(myT))]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", level,"Log10Norm",".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValue_", level,"Log10Norm",".txt",sep=""), sep="\t")	
+	
+	myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste("pcoa_",level, "Log10NormMetadataallData",".txt",sep=""),row.names=FALSE)		
+}
+	
