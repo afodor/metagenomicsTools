@@ -42,15 +42,35 @@ public class MergeAtLevel
 		File file1 = new File(ConfigReader.getTopeVickiDir() + File.separator + "raw1.txt");
 		File file2 = new File(ConfigReader.getTopeVickiDir() + File.separator + "raw2.txt");
 		
-		addToMap(map, file1, level);
-		addToMap(map, file2, level);
+		addToMap(map, file1, level,"_1");
+		addToMap(map, file2, level,"_2");
 		
 		return map;
+	}
+	
+	private static void ensureNoDuplciates(File file) throws Exception
+	{
+		BufferedReader reader =new BufferedReader(new FileReader(file));
+		
+		String[] splits =  reader.readLine().split("\t");
+		
+		HashSet<String> set = new HashSet<>();
+		
+		for(String s : splits)
+		{
+			if(set.contains(s))
+				throw new Exception("Duplicate " + s);
+			
+			set.add(s);
+		}
+		
+		reader.close();
 	}
 	 
 	private static File writeFile( Map<String, Map<String,Integer>>  map, String level)
 		throws Exception
 	{
+		System.out.println("Writing with " + map.size());
 		File file = new File(
 				ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txt"	);
 		
@@ -112,8 +132,10 @@ public class MergeAtLevel
 		return file;
 	}
 	
-	private static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level) throws Exception
+	private static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level,
+			String sampleSuffix) throws Exception
 	{
+		ensureNoDuplciates(file);
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		reader.readLine();
@@ -133,12 +155,12 @@ public class MergeAtLevel
 				
 				for( int x=1; x < splits.length-1; x++)
 				{
-					Map<String,Integer> innerMap = map.get(topSplits[x]);
+					Map<String,Integer> innerMap = map.get(topSplits[x]+ sampleSuffix);
 					
 					if( innerMap == null)
 					{
 						innerMap = new HashMap<>();
-						map.put(topSplits[x], innerMap);						
+						map.put(topSplits[x] + sampleSuffix, innerMap);						
 					}
 					
 					innerMap.put(taxa, Integer.parseInt(splits[x]));
@@ -147,6 +169,7 @@ public class MergeAtLevel
 		}
 		
 		reader.close();
+		System.out.println("Returning with " + map.size());
 	}
 	
 	private static String getTaxa(String s, String level) throws Exception

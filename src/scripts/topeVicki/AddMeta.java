@@ -44,7 +44,7 @@ public class AddMeta
 				String[] splits = s.split("\t");
 				writer.write(splits[0]);
 				
-				MetadataFileParser mfp = metaMap.get(splits[0]);
+				MetadataFileParser mfp = metaMap.get(splits[0].substring(0,splits[0].length()-2));
 				
 				if( mfp == null)
 				{
