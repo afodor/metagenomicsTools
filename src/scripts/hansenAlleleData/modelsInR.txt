@@ -3,7 +3,7 @@ rm(list=ls())
 library("Kendall")
 setwd("C:\\JonHansenNewdata\\outputTextFiles")
 
-makeAGraph <- function(filter,labelNames,vals) 
+makeAGraph <- function(filter,labelNames,vals,pValue) 
 {
 	 animalIds <- vector()
 	 dates <- vector()
@@ -22,7 +22,7 @@ makeAGraph <- function(filter,labelNames,vals)
 	 
 	 plot(1, type="n", xlab="date", ylab="fraction allele", 
 	 xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax),
-	 main=filter)
+	 main=paste(filter,"(pValue all time=",format(pValue,digits=3),")"))
 	 		  
 	 for( k in 1:(length(uniqueIDs))) 
 	 {
@@ -197,8 +197,8 @@ for( fileName in inFiles )
 			 
 			# strip off the control
 			vals = vals[1:(length(vals)-1)]
-			makeAGraph ("KO",labelNames,vals) 
-			makeAGraph ("WT",labelNames,vals) 
+			makeAGraph ("KO",labelNames,vals,dFrame$pValues_dates[j]) 
+			makeAGraph ("WT",labelNames,vals,dFrame$pValues_dates[j]) 
 		}
 	}
 	
