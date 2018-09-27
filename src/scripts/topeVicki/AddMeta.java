@@ -21,10 +21,10 @@ public class AddMeta
 		
 		for(String level : levels)
 		{
-			File loggedFile = new File(ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedLogged.txt");
+			File loggedFile = new File(ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txt");
 			
 			File metaFile = new File(ConfigReader.getTopeVickiDir() + File.separator + 
-					level + "_mergedLoggedMeta.txt");
+					level + "_mergedRawMeta.txt");
 			
 			BufferedReader reader = new BufferedReader(new FileReader(loggedFile));
 			

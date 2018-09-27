@@ -20,17 +20,21 @@ public class MergeAtLevel
 {
 	public static void main(String[] args) throws Exception
 	{
-		String[] levels = { "p", "c","o","f","g" };
+		String [] levels = { "p", "c","o","f","g" };
+		//String [] levels = { "g" };
+		
 		
 		for(String level : levels)
 		{
 			Map<String, Map<String,Integer>> map = mergeAtLevel(level);
 			File rawFile = writeFile(map, level);
 			
+			/*
 			File loggedFile = new File(ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedLogged.txt");
 			
 			OtuWrapper wrapper = new OtuWrapper(rawFile);
 			wrapper.writeNormalizedLoggedDataToFile(loggedFile);
+			*/
 		}
 	}
 	
@@ -76,7 +80,7 @@ public class MergeAtLevel
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		
-		writer.write("sample");
+		writer.write("sample\tsequenceDepth");
 		
 		HashSet<String> taxa = new HashSet<>();
 		for(String s : map.keySet())
@@ -92,6 +96,8 @@ public class MergeAtLevel
 		
 		writer.write("\n");
 		
+
+		int numWritten = 0;
 		for(String s : map.keySet())
 		{
 			Map<String, Integer> innerMap = map.get(s);
@@ -108,10 +114,11 @@ public class MergeAtLevel
 				allCount = allCount + count;
 			}
 			
-			if( allCount > 0 )
+			System.out.println(s + "  " + allCount + " " + (allCount > 0) );
+			//if( allCount > 0 )
 			{
-
-				writer.write(s);
+				numWritten++;
+				writer.write(s + "\t" + allCount);
 				
 				for(String t : taxaList)
 				{
@@ -128,6 +135,7 @@ public class MergeAtLevel
 		}
 		
 		writer.flush();  writer.close();
+		System.out.println("Wrote " + numWritten);
 		
 		return file;
 	}
