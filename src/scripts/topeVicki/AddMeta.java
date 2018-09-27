@@ -17,7 +17,8 @@ public class AddMeta
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MetadataFileParser> metaMap = MetadataFileParser.getMetaMap();
-		String[] levels = { "p", "c","o","f","g" };
+		//String[] levels = { "p", "c","o","f","g" };
+		String[] levels = { "p" };
 		
 		for(String level : levels)
 		{

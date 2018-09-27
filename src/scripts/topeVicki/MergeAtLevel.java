@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -20,8 +19,8 @@ public class MergeAtLevel
 {
 	public static void main(String[] args) throws Exception
 	{
-		String [] levels = { "p", "c","o","f","g" };
-		//String [] levels = { "g" };
+		//String [] levels = { "p", "c","o","f","g" };
+		String [] levels = { "p" };
 		
 		
 		for(String level : levels)
@@ -74,7 +73,7 @@ public class MergeAtLevel
 	private static File writeFile( Map<String, Map<String,Integer>>  map, String level)
 		throws Exception
 	{
-		System.out.println("Writing with " + map.size());
+		//System.out.println("Writing with " + map.size());
 		File file = new File(
 				ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedRaw.txt"	);
 		
@@ -114,7 +113,7 @@ public class MergeAtLevel
 				allCount = allCount + count;
 			}
 			
-			System.out.println(s + "  " + allCount + " " + (allCount > 0) );
+			//System.out.println(s + "  " + allCount + " " + (allCount > 0) );
 			//if( allCount > 0 )
 			{
 				numWritten++;
@@ -149,10 +148,14 @@ public class MergeAtLevel
 		reader.readLine();
 		
 		String[] topSplits =reader.readLine().split("\t");
+		//System.out.println("TS0" + topSplits[0] + " TS1" + topSplits[1]);
 		
-		for(String s= reader.readLine(); s  != null; s= reader.readLine())
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
+				
 			String taxa = getTaxa(s, level);
+			//String[] checkSplits = s.split("\t");
+			//System.out.println(taxa + " " + checkSplits[checkSplits.length-1]);
 			
 			if( taxa != null)
 			{
@@ -168,10 +171,23 @@ public class MergeAtLevel
 					if( innerMap == null)
 					{
 						innerMap = new HashMap<>();
-						map.put(topSplits[x] + sampleSuffix, innerMap);						
+						map.put(topSplits[x] + sampleSuffix, innerMap);				
 					}
 					
-					innerMap.put(taxa, Integer.parseInt(splits[x]));
+					if( x== 1 && Integer.parseInt(splits[x])> 1 )
+						System.out.println(taxa + " " +  splits[0] + " " + splits[x] + " sample " + topSplits[x]);
+
+					Integer oldVal = innerMap.get(taxa);
+					
+					if( oldVal == null)
+						oldVal = 0;
+					
+					innerMap.put(taxa, oldVal + Integer.parseInt(splits[x]));
+					
+					if( Integer.parseInt(splits[x]) > 10 )
+					{
+						//System.out.println("check " + x + " " +  topSplits[x] + " " + taxa + " " +  Integer.parseInt(splits[x]) );
+					}
 				}
 			}
 		}
@@ -205,6 +221,7 @@ public class MergeAtLevel
 			}
 		}
 		
-		return null;
+		throw new Exception("Could not find " + level + " " + last);
+		//return null;
 	}
 }
