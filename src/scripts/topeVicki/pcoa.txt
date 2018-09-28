@@ -2,19 +2,30 @@ rm(list=ls())
 
 setwd("C:\\topeVickiData")
 
-levels <- c( "p", "c","o","f","g" )
+#levels <- c( "p", "c","o","f","g" )
+
+levels <- c( "p")
 
 library("vegan")
 
 for( level in levels ) 
 {
-	inFile <- paste0( level, "_mergedLoggedMeta.txt" )
+	inFile <- paste0( level, "_mergedRawMeta.txt" )
 	
 	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
+	
+	myTData <- myT[,7:(ncol(myT))]
 
+	sums <- rowSums( myTData )
 	
-	myTData <- myT[,6:(ncol(myT))]
-	
+	for( i in 1:nrow(myTData) ) 
+	{	
+		for( j in 1:ncol(myTData))
+		{
+			myTData[i,j] = log10( myTData[i,j] / sums[i] * mean(sums) + 1) 
+		}
+	}
+ 	
 	myPCOA <- capscale(myTData~1,distance="bray")
 	
 	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_", level,"Log10Norm",".txt",sep=""))
