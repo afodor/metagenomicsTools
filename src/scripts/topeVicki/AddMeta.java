@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import parsers.OtuWrapper;
 import utils.ConfigReader;
@@ -31,7 +32,7 @@ public class AddMeta
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 			
-			writer.write("id\trace\tbmi\ttumorHistology\ttumorGrade");
+			writer.write("id\trace\tbmi\ttumorHistology\ttumorGrade\tbatch");
 			
 			String[] topSplits = reader.readLine().split("\t");
 			
@@ -44,6 +45,10 @@ public class AddMeta
 			{
 				String[] splits = s.split("\t");
 				writer.write(splits[0]);
+				System.out.println(splits[0]);
+				
+				StringTokenizer sToken = new StringTokenizer(splits[0], "_");
+				sToken.nextToken();
 				
 				MetadataFileParser mfp = metaMap.get(splits[0].substring(0,splits[0].length()-2));
 				
@@ -54,8 +59,10 @@ public class AddMeta
 				else
 				{
 					writer.write("\t" + mfp.getRace() + "\t" + mfp.getBmi() + "\t" + 
-										mfp.getTumorHistology() + "\t" + mfp.getTumorGrade());
+										mfp.getTumorHistology() + "\t" + mfp.getTumorGrade() );
 				}
+				
+				writer.write("\t" + "Batch" + sToken.nextToken());
 				
 				for( int x=1; x < splits.length; x++)
 					writer.write("\t"  + splits[x]);

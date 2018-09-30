@@ -1,0 +1,42 @@
+
+rm(list=ls())
+
+setwd("C:\\farnazMDS\\analysis")
+
+myT <- read.table("allMergeMeta.txt", sep="\t", header=TRUE)
+
+ids <- unique( myT$Slurry.ID[myT$Sample.type == "Fecal.slurry"]) 
+
+humanVals <- vector()
+mouseVals <- vector()
+slurryIds <- vector()
+
+index <- 1
+
+for( id in ids ) 
+{
+	mds1HumanVals <- myT$MDS1[ myT$Slurry.ID  == id & myT$Sample.type == "Fecal.slurry"]
+	
+	if( length( mds1HumanVals ) > 1 ) 
+	{
+		stop("Wrong length ")
+	}
+		
+		
+	if( length( mds1HumanVals )  > 0 ) 
+	{
+		mds1MouseVals <- myT$MDS1[ myT$Slurry.ID  == id & myT$Sample.type == "Mouse.feces"]
+	
+		if( length(mds1MouseVals ))
+		{
+			
+			for( i in 1:length(mds1MouseVals ))
+			{
+				humanVals[index] = 	mds1HumanVals[1]
+				mouseVals[index] = 	mds1MouseVals[i]
+				slurryIds[index] = id;
+				index = index + 1
+			}		 
+		}
+	}
+}

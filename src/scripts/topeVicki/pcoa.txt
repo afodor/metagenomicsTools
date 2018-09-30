@@ -14,7 +14,7 @@ for( level in levels )
 	
 	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
 	
-	myTData <- myT[,7:(ncol(myT))]
+	myTData <- myT[,8:(ncol(myT))]
 
 	sums <- rowSums( myTData )
 	
