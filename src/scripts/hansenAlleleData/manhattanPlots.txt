@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\JonHansenNewdata\\outputTextFiles")
+
+inFiles <- c("Bhansenii","Bvulgatus","B_caccae","B_dentium","Cbolteae","Ccomes","ecoli","Erectale","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
+
+pdf(paste0("ManhattanPlots",".pdf"))	
+par(mfrow=c(2,1))
+
+for( f in inFiles ) 
+{
+	aFile <- paste0(f,"pValues.txt")
+	myT <- read.table(aFile, header=TRUE,sep="\t")
+	plot(myT$Index, myT$adjustedPValues_dates+ 1e-12 ,log="y",main=paste(f,"\n", "Dates"),xlab="Index", ylab="pValue date")
+	plot(myT$Index, myT$adjustedPValues_KOWT + 1e-12,log="y",main=paste(f,"\n", "KO vs WT"),xlab="Index", ylab="pValue KO vs. WT")
+}
+
+dev.off()
