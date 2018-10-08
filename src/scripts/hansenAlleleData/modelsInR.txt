@@ -58,7 +58,7 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 	 }
 }
 
-inFiles <- c("B_caccae","ecoli")
+inFiles <- c("Bhansenii","Bvulgatus","B_caccae","B_dentium","Cbolteae","Ccomes","ecoli","Erectale","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
 
 for( fileName in inFiles ) 
 {
