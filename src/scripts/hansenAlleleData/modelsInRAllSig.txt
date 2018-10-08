@@ -60,7 +60,7 @@ makeAGraph <- function(bug,filter,labelNames,vals,pValue, adjString)
 
 inFiles <- c("Bhansenii","Bvulgatus","B_caccae","B_dentium","Cbolteae","Ccomes","ecoli","Erectale","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
 
-pdf(paste0("all",".pdf"))	
+pdf(paste0("allKO_WT",".pdf"))	
 par(mfrow=c(2,2))
 
 for( fileName in inFiles ) 
@@ -147,7 +147,7 @@ for( fileName in inFiles )
 	
 	dFrame <- data.frame(rowIndex, Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,averageReadDepth ,pValues_KOWT,pValues_dates)
 	
-	dFrame <- dFrame [order(dFrame$pValues_dates),]
+	dFrame <- dFrame [order(dFrame$pValues_KOWT),]
 	dFrame$adjustedPValues_KOWT <- p.adjust( dFrame$pValues_KOWT, method = "BH" )
 	dFrame$adjustedPValues_dates <- p.adjust( dFrame$pValues_dates, method = "BH" )
 		
@@ -169,7 +169,7 @@ for( fileName in inFiles )
 							" bh_adjP=",format( dFrame$adjustedPValues_KOWT[j],digits=3), "\n",
 							"avg. read depth=" , format( dFrame$averageReadDepth[j],digits=3))
 		
-		if( length(wtData) >3 &  dFrame$adjustedPValues_dates[j]  <= .001 & length(koData) > 3 & (dFrame$pValues_KOWT[j] < .25 |dFrame$pValues_dates[j] < .25  ) ) 
+		if( length(wtData) >3 &  dFrame$adjustedPValues_KOWT[j]  <= .05 & length(koData) > 3 & (dFrame$pValues_KOWT[j] < .25 |dFrame$pValues_dates[j] < .25  ) ) 
 		{
 			koLabel <- paste0( "KO(n=", length(koData),")")
 			wtLabel <- paste0( "WT(n=", length(wtData),")")
