@@ -1,0 +1,16 @@
+
+rm(list=ls())  # this is optional - remove all old variables 
+
+setwd("C:\\Users\\afodor\\git\\afodor.github.io\\classes\\ChapelHill2018")  # where you want your input and output files to live
+
+myT <- read.table("genus_taxaAsColumns.txt", sep="\t", header=TRUE,row.names=1)
+
+hist(rowSums(myT),breaks=20)
+
+myTNorm <- sweep(myT, 1, rowSums(myT), '/')
+
+myTNorm <- cbind(row.names(myT), myTNorm)
+names(myTNorm)[[1]] = "SampleID"
+
+write.table(myTNorm, file="taxaAsColumnsNorm.txt",sep="\t",row.names=FALSE)
+
