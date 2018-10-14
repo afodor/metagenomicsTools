@@ -1,0 +1,17 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\Users\\corei7\\git\\afodor.github.io\\classes\\ChapelHill2018")
+
+myT <- read.table("genusWithMeta.txt", sep="\t", header=TRUE,row.names=1)
+
+myT <- myT[ myT$readNumber ==1, ]
+
+myTData <- myT[,5:ncol(myT)]
+
+myPCOA <- capscale(myTData~1,distance="bray")
+
+plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "red", "blue"))
