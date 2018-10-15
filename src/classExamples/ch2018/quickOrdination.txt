@@ -20,3 +20,9 @@ plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "r
 xlab="MDS 1 (15.6% explained)", ylab="MDS 2 (11.7% explained)", main="Rural urban MDS", pch=19,cex=1.3)
 
 legend( "topleft", legend=c("urban", "rural"), col=c("red","blue"), pch=19,cex=1.3 )
+
+
+myMerge <- cbind(row.names(myT), myPCOA$CA$u[,1:5], myT)
+names(myMerge)[[1]] = "SampleID"
+
+write.table(myMerge, file="taxaAsColumnsLogNormPlusMDS.txt", sep="\t", row.names=FALSE)
