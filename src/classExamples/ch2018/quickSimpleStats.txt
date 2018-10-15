@@ -31,10 +31,20 @@ for( i in dataCols )
 				
 		pValuesRuralUrban[index] <- 
 				t.test( yData[myT$ruralUrban=="rural"], yData[myT$ruralUrban=="urban"] )$p.value
-				
+		
+		names[index] = names(myT)[i]
+		
 		index = index + 1
 	}
 }
+
+dFrame <- data.frame(names,pValuesTime,pValuesRuralUrban,pValuesSubject)
+dFrame <- dFrame [order(dFrame$pValuesRuralUrban),]
+dFrame$adjustedPUrbanRural <- p.adjust( dFrame$pValuesRuralUrban, method = "BH" )	
+dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )	
+dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )	
+
+write.table(dFrame, file="pValuesForTaxaTimeUrbanRural.txt", sep="\t",row.names=FALSE)
 
 par(mfrow=c(2,2))
 
