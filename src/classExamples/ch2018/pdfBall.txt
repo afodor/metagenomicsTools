@@ -12,8 +12,10 @@ firstTaxaCol <- which(names(myT)=="timepoint") + 1
 dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
 
 pdf("pdfBall.pdf")
+par(mfrow=c(2,2))
 
 patientIDS <- myT$patientID 
+timepoints <- myT$timepoint
 
 for( i in dataCols ) 
 {
@@ -22,11 +24,14 @@ for( i in dataCols )
 	if( sum(yData > 0) >= nrow(myT)/4 ) 
 	{
 		aName <- names(myT)[i]
+		
+		myFrame <- data.frame( patientIDS ,timepoints,yData )
+		
 		boxplot( yData ~ patientIDS , main = paste(aName,"by patient"), ylab = aName, las=2 ) 
-		
-		myFrame <- data.frame( patientIDS ,yData )
-		
 		stripchart( yData ~ patientIDS , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+		boxplot( yData ~ timepoints, main = paste(aName,"by timepoint"), ylab = aName, las=2 ) 
+		stripchart( yData ~ timepoints, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 	}
 }
 
