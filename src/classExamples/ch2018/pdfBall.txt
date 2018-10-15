@@ -1,0 +1,12 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\afodor.github.io\\classes\\ChapelHill2018")
+
+myT <- read.table("taxaAsColumnsLogNormPlusMDS.txt", sep="\t", header=TRUE,row.names=1)
+
+mds1Col <- which(names(myT)=="MDS1")
+mds5Col <- which(names(myT)=="MDS5")
+firstTaxaCol <- which(names(myT)=="timepoint") + 1
+
+dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
