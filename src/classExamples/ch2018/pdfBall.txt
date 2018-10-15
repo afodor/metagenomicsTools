@@ -25,7 +25,6 @@ for( i in dataCols )
 	if( sum(yData > 0) >= nrow(myT)/4 ) 
 	{
 		aName <- names(myT)[i]
-		
 		myFrame <- data.frame( patientIDS ,timepoints, ruralUrban, yData )
 		
 		boxplot( yData ~ patientIDS , main = paste(aName,"by patient"), ylab = aName, las=2 ) 
