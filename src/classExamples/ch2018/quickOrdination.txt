@@ -4,7 +4,7 @@ library("vegan")
 
 rm(list=ls())
 
-setwd("C:\\Users\\corei7\\git\\afodor.github.io\\classes\\ChapelHill2018")
+setwd("C:\\Users\\afodor\\git\\afodor.github.io\\classes\\ChapelHill2018")
 
 myT <- read.table("genusWithMeta.txt", sep="\t", header=TRUE,row.names=1)
 
@@ -17,6 +17,6 @@ myPCOA <- capscale(myTData~1,distance="bray")
 plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "red", "blue"))
 
 plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "red", "blue"),
-xlab="MDS 1", ylab="MDS 2", main="Rural urban MDS", pch=19,cex=1.3)
+xlab="MDS 1 (15.6% explained)", ylab="MDS 2 (11.7% explained)", main="Rural urban MDS", pch=19,cex=1.3)
 
 legend( "topleft", legend=c("urban", "rural"), col=c("red","blue"), pch=19,cex=1.3 )
