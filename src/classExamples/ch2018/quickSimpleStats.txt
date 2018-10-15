@@ -36,3 +36,12 @@ for( i in dataCols )
 	}
 }
 
+par(mfrow=c(2,2))
+
+hist(pValuesTime,breaks=20)
+hist(pValuesRuralUrban ,breaks=20)
+hist(pValuesSubject , breaks = 20 )
+
+
+
+
