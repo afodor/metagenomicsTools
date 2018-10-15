@@ -26,3 +26,5 @@ myMerge <- cbind(row.names(myT), myPCOA$CA$u[,1:5], myT)
 names(myMerge)[[1]] = "SampleID"
 
 write.table(myMerge, file="taxaAsColumnsLogNormPlusMDS.txt", sep="\t", row.names=FALSE)
+
+
