@@ -16,6 +16,7 @@ par(mfrow=c(2,2))
 
 patientIDS <- myT$patientID 
 timepoints <- myT$timepoint
+ruralUrban <- myT$ruralUrban
 
 for( i in dataCols ) 
 {
@@ -25,13 +26,18 @@ for( i in dataCols )
 	{
 		aName <- names(myT)[i]
 		
-		myFrame <- data.frame( patientIDS ,timepoints,yData )
+		myFrame <- data.frame( patientIDS ,timepoints, ruralUrban, yData )
 		
 		boxplot( yData ~ patientIDS , main = paste(aName,"by patient"), ylab = aName, las=2 ) 
 		stripchart( yData ~ patientIDS , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 		
 		boxplot( yData ~ timepoints, main = paste(aName,"by timepoint"), ylab = aName, las=2 ) 
 		stripchart( yData ~ timepoints, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+		boxplot( yData ~ ruralUrban , main = paste(aName,"by rural/urban"), ylab = aName, las=2 ) 
+		stripchart( yData ~ ruralUrban , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+		
+		plot(0,type='n',axes=FALSE,ann=FALSE)
 	}
 }
 
