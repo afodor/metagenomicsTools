@@ -19,10 +19,10 @@ for( i in dataCols )
 {
 	yData <- myT[,i]
 	
-	if( sum(yData > 0) >= .25 ) 
+	if( sum(yData > 0) >= nrow(myT)/4 ) 
 	{
 		aName <- names(myT)[i]
-		boxplot( yData ~ patientIDS , main = aName, ylab = aName ) 
+		boxplot( yData ~ patientIDS , main = paste(aName,"by patient"), ylab = aName, las=2 ) 
 		
 		myFrame <- data.frame( patientIDS ,yData )
 		
