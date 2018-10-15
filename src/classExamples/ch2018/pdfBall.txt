@@ -10,3 +10,25 @@ mds5Col <- which(names(myT)=="MDS5")
 firstTaxaCol <- which(names(myT)=="timepoint") + 1
 
 dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
+
+pdf("pdfBall.pdf")
+
+patientIDS <- myT$patientID 
+
+for( i in dataCols ) 
+{
+	yData <- myT[,i]
+	
+	if( sum(yData > 0) >= .25 ) 
+	{
+		aName <- names(myT)[i]
+		boxplot( yData ~ patientIDS , main = aName, ylab = aName ) 
+		
+		myFrame <- data.frame( patientIDS ,yData )
+		
+		stripchart( yData ~ patientIDS , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
+}
+
+dev.off()
+
