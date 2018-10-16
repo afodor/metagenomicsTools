@@ -1,0 +1,57 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\corei7\\git\\afodor.github.io\\classes\\ChapelHill2018")
+
+myT <- read.table("taxaAsColumnsLogNormPlusMDS.txt", sep="\t", header=TRUE,row.names=1)
+
+mds1Col <- which(names(myT)=="MDS1")
+mds5Col <- which(names(myT)=="MDS5")
+firstTaxaCol <- which(names(myT)=="timepoint") + 1
+
+dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
+
+names <- vector()
+meanRural <- vector()
+meanUrban <- vector()
+pValuesRuralUrban <- vector()
+index <- 1 
+
+for( i in dataCols ) 
+{
+	yData <- myT[,i]
+	
+	if( sum(yData > 0) >= nrow(myT)/4 ) 
+	{
+	
+		pValuesRuralUrban[index] <- 
+				t.test( yData[myT$ruralUrban=="rural"], yData[myT$ruralUrban=="urban"] )$p.value
+		
+		meanRural[index] <- mean(yData[myT$ruralUrban=="rural"])
+		meanUrban[index] <- mean( yData[myT$ruralUrban=="urban"])
+		names[index] = names(myT)[i]	
+		index = index + 1
+	}
+}
+
+names <- vector()
+colors <- vector()
+
+for( i in 1:length(pValuesRuralUrban)) 
+{
+	if( p.adjust( pValuesRuralUrban[i], method = "BH" ) <.01)
+	{
+		names[i] = names(myT)[i]
+		colors[i] = "red"
+	}
+	else
+	{
+		names[i] = ""
+		colors[i] = "black"
+	}
+}
+
+plot( meanRural, meanUrban, xlab="mean rural", ylab="mean urban", pch=19,col = colors)
+		
+lines(c(0,5),c(0,5), lty=2)
+text(meanRural, meanUrban,names)
