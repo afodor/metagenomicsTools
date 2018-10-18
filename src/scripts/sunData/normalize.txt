@@ -1,0 +1,19 @@
+rm(list=ls()) 
+
+setwd("C:\\sunData\\")  
+
+
+myT <- read.table("g_merged.txt", sep="\t", header=TRUE,row.names=1)
+
+myTData <- myT[,3:ncol(myT)]
+
+hist(rowSums(myTData),breaks=20)
+
+myTNorm <- sweep(myTData, 1, rowSums(myTData), '/')
+
+myTNorm <- log10( mean(myT$sequenceDepth) * myTNorm + 1 ) 
+
+myTNorm <- cbind(row.names(myT), myT[,1:2], myTNorm)
+names(myTNorm)[[1]] = "SampleID"
+
+write.table(myTNorm, file="genusAsColumnsNorm.txt",sep="\t",row.names=FALSE)
