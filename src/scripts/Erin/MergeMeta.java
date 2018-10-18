@@ -32,7 +32,7 @@ public class MergeMeta
 			
 			writer.write(topSplits[0]);
 			
-			writer.write("\tF1_vs_F2\tpreOrPost");
+			writer.write("\tmetaKey\tF1_vs_F2\tpreOrPost");
 			
 			for( int x=1; x < topSplits.length; x++)
 				writer.write("\t" + topSplits[x]);
@@ -51,7 +51,7 @@ public class MergeMeta
 				
 				writer.write(splits[0]);
 				
-				writer.write("\t" + meta.substring(0, 2));
+				writer.write("\t" + meta + "\t" + meta.substring(0, 2));
 				
 				if( meta.indexOf("pre") != -1)
 					writer.write("\tpre");
