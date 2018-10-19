@@ -13,10 +13,9 @@ public class MergeMeta
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> map = keyToMeta();
-		
-		for(String s : map.keySet())
-			System.out.println(s + " " + map.get(s));
+		HashMap<String, String> map4 = keyToMeta(4);
+
+		HashMap<String, String> map5 = keyToMeta(5);
 		
 		String [] levels = { "p", "c","o","f","g" };
 		
@@ -32,7 +31,7 @@ public class MergeMeta
 			
 			writer.write(topSplits[0]);
 			
-			writer.write("\tmetaKey\tF1_vs_F2\tpreOrPost");
+			writer.write("\tmetaKey\tF1_vs_F2\tpreOrPost\tnonStrongReactor");
 			
 			for( int x=1; x < topSplits.length; x++)
 				writer.write("\t" + topSplits[x]);
@@ -44,20 +43,22 @@ public class MergeMeta
 			{
 				String[] splits = s.split("\t");
 				
-				String meta = map.get(splits[0]);
+				String meta = map4.get(splits[0]);
 				
 				if( meta == null)
 					throw new Exception("No");
 				
 				writer.write(splits[0]);
 				
-				writer.write("\t" + meta + "\t" + meta.substring(0, 2));
+				writer.write("\t" + meta + "\t" + meta.substring(0, 2) );
 				
 				if( meta.indexOf("pre") != -1)
 					writer.write("\tpre");
 				else if( meta.indexOf("post") != -1 )
 					writer.write("\tpost");
 				else throw new Exception("No");
+				
+				writer.write("\t" + map5.get(splits[0]));
 				
 				for( int x=1; x < splits.length; x++)
 					writer.write("\t" + splits[x]);
@@ -68,7 +69,7 @@ public class MergeMeta
 		}
 	}
 	
-	private static HashMap<String, String> keyToMeta() throws Exception
+	private static HashMap<String, String> keyToMeta(int colToGet) throws Exception
 	{
 		HashMap<String, String> map = new LinkedHashMap<>();
 		
@@ -88,9 +89,10 @@ public class MergeMeta
 				throw new Exception("No");
 			}
 			
-			map.put(splits[0], splits[4]);
+			map.put(splits[0], splits[colToGet]);
 		}
 		
 		return map;
 	}
+	
 }
