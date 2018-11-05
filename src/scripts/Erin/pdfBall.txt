@@ -1,0 +1,50 @@
+setwd("c:\\erin")
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+levels <- c("p", "c","o","f","g");
+
+
+for( level in levels ) 
+{
+
+	inFile =paste0("taxaAsColumnsLogNormPlusMDS_",level,".txt")
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+
+	mds1Col <- which(names(myT)=="MDS1")
+	mds5Col <- which(names(myT)=="MDS5")
+	firstTaxaCol <- which(names(myT)=="preOrPost") + 1
+
+	dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
+
+	pdf(paste0("pdfBall_", level, ".pdf"))
+	par(mfrow=c(2,2))
+
+	preOrPost<- myT$preOrPost
+
+	F1OrF2<- myT$F1_vs_F2
+
+	for( i in dataCols ) 
+	{
+		yData <- myT[,i]
+	
+		if( sum(yData > 0) >= nrow(myT)/4 ) 
+		{
+			aName <- names(myT)[i]
+			myFrame <- data.frame( preOrPost,F1OrF2, yData )
+			
+			boxplot( yData ~ preOrPost, main = paste(aName,"preOrPost"), ylab = aName, las=2 ) 
+			stripchart( yData ~ preOrPost, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+			
+			boxplot( yData ~ F1OrF2, main = paste(aName,"F1 or F2"), ylab = aName, las=2 ) 
+			stripchart( yData ~ F1OrF2, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		}
+	}
+}
+
+dev.off()
+

@@ -1,0 +1,57 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\afodor.github.io\\classes\\ChapelHill2018")
+
+myT <- read.table("taxaAsColumnsLogNormPlusMDS.txt", sep="\t", header=TRUE,row.names=1)
+
+mds1Col <- which(names(myT)=="MDS1")
+mds5Col <- which(names(myT)=="MDS5")
+firstTaxaCol <- which(names(myT)=="timepoint") + 1
+
+dataCols <- c( mds1Col:mds5Col , firstTaxaCol :(ncol(myT)) ) 
+
+names <- vector()
+pValuesTime <- vector()
+pValuesRuralUrban <- vector()
+pValuesSubject <- vector()
+index <- 1 
+
+for( i in dataCols ) 
+{
+	yData <- myT[,i]
+	
+	if( sum(yData > 0) >= nrow(myT)/4 ) 
+	{
+		pValuesTime[index] <- 
+				t.test( yData[myT$timepoint=="first_A"], yData[myT$timepoint=="second_B"] )$p.value
+				
+		pValuesSubject[index] <- 
+				anova(lm( yData ~ myT$patientID))$"Pr(>F)"[1]
+				
+		pValuesRuralUrban[index] <- 
+				t.test( yData[myT$ruralUrban=="rural"], yData[myT$ruralUrban=="urban"] )$p.value
+		
+		names[index] = names(myT)[i]
+		
+		index = index + 1
+	}
+}
+
+dFrame <- data.frame(names,pValuesTime,pValuesRuralUrban,pValuesSubject)
+dFrame <- dFrame [order(dFrame$pValuesRuralUrban),]
+dFrame$adjustedPUrbanRural <- p.adjust( dFrame$pValuesRuralUrban, method = "BH" )	
+dFrame$adjustedPSubject <- p.adjust( dFrame$pValuesSubject, method = "BH" )	
+dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )	
+
+write.table(dFrame, file="pValuesForTaxaTimeUrbanRural.txt", sep="\t",row.names=FALSE)
+
+par(mfrow=c(2,2))
+
+hist(pValuesTime,breaks=20)
+hist(pValuesRuralUrban ,breaks=20)
+hist(pValuesSubject , breaks = 20 )
+
+
+
+

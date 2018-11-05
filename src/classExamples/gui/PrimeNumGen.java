@@ -38,7 +38,7 @@ public class PrimeNumGen extends JFrame
 		this.thisFrame = this;
 		cancelButton.setEnabled(false);
 		aTextField.setEditable(false);
-		setSize(200, 200);
+		setSize(400, 200);
 		setLocationRelativeTo(null);
 		//kill java VM on exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,10 +102,12 @@ public class PrimeNumGen extends JFrame
 	private class UserInput implements Runnable
 	{
 		private final int max;
+		private final long startTime;
 		
 		private UserInput(int num)
 		{
 			this.max = num;
+			this.startTime = System.currentTimeMillis();
 		}
 		
 		public void run()
@@ -120,7 +122,9 @@ public class PrimeNumGen extends JFrame
 						
 					if( System.currentTimeMillis() - lastUpdate > 500)
 					{
-						final String outString= "Found " + list.size() + " in " + i + " of " + max;
+						float time = (System.currentTimeMillis() -startTime )/1000f;
+						final String outString= "Found " + list.size() + " in " + i + " of " + max + " " 
+									+ time + " seconds ";
 						
 						SwingUtilities.invokeLater( new Runnable()
 						{
@@ -142,17 +146,22 @@ public class PrimeNumGen extends JFrame
 				buff.append(i2 + "\n");
 			
 			if( cancel)
-				buff.append("cancelled");
+				buff.append("cancelled\n");
+			
+			float time = (System.currentTimeMillis() - startTime )/1000f;
+			buff.append("Time = " + time + " seconds " );
 			
 			SwingUtilities.invokeLater( new Runnable()
 			{
 				@Override
 				public void run()
 				{
+					
 					cancel = false;
 					primeButton.setEnabled(true);
 					cancelButton.setEnabled(false);
 					aTextField.setText( (cancel ? "cancelled " : "") +  buff.toString());
+					
 				}
 			});
 			

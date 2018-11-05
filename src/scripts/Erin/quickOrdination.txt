@@ -1,0 +1,38 @@
+setwd("c:\\erin")
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+levels <- c("p", "c","o","f","g");
+
+par(mfrow=c(3,2))
+
+for( level in levels ) 
+{
+	inFile <- paste0("loggedPlusMeta_", level,".txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	myTData <- myT[,5:ncol(myT)]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	#plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$preOrPost== "pre", "red", "blue"),
+	#xlab="MDS 1", ylab="MDS 2", main="Pre vs Post", pch=19,cex=1.3)
+	
+	#legend( "topleft", legend=c("pre", "post"), col=c("red","blue"), pch=19,cex=1.3 )
+	
+	
+	plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$F1_vs_F2== "F1", "red", "blue"),
+	xlab="MDS 1", ylab="MDS 2", main="F1 vs F2", pch=19,cex=1.3)
+	
+	legend( "topleft", legend=c("F1", "F2"), col=c("red","blue"), pch=19,cex=1.3 )
+	
+	
+	myMerge <- cbind(row.names(myT), myPCOA$CA$u[,1:5], myT)
+	names(myMerge)[[1]] = "SampleID"
+	
+	
+	write.table(myMerge, file=paste0("taxaAsColumnsLogNormPlusMDS_", level, ".txt"), sep="\t", row.names=FALSE)			
+}
