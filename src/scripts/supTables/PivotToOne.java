@@ -25,7 +25,6 @@ public class PivotToOne
 		// key is taxa
 		HashMap<String, List<Double>> taxaMap = new LinkedHashMap<>();
 		
-		
 		for(String s= reader.readLine(); s != null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
@@ -51,36 +50,66 @@ public class PivotToOne
 		
 		writer.write("id\tpfs\tos");
 		
-		for( int x=1; x < topSplits.length; x++)
-			writer.write("\t"+ topSplits[x]);
+		for( String taxaName : taxaMap.keySet())
+			writer.write("\t"+ taxaName.replaceAll(" ", "_").replaceAll(";", "@"));
 		
 		writer.write("\n");
 		
-		reader = new BufferedReader(new FileReader(new File("c:\\temp\\table1.txt")));
+		HashMap<String, Holder> metaMap =getMetaMap();
 		
-		reader.readLine();
-		
-		String[] splits= reader.readLine().split("\t");
-		
-		String key = splits[0];
-		
-		writer.write(key + "\t" + splits[1] + "\t" + splits[2]);
-		
-		List<Double> innerList = taxaMap.get(key);
-		
-		if(innerList== null)
-			throw new Exception("Could not find " + key);
-		
-		for( int x=1; x < innerList.size(); x++)
+		for( int x=1; x < topSplits.length; x++)
 		{
-			writer.write("\t" + innerList.get(x));
+			writer.write(topSplits[x].replaceAll(" ", "_").replaceAll(";", "@"));
+			
+			Holder h = metaMap.get(topSplits[x]);
+			
+			if( h == null)
+				throw new Exception("No " + topSplits[x]);
+			
+			writer.write("\t" + h.pfs + "\t" + h.os );
+			
+			for(String taxaName : taxaMap.keySet())
+				writer.write("\t" + taxaMap.get(taxaName).get(x-1));
+			
+			writer.write("\n");
 		}
 		
-		writer.write("\n");
-		
-		reader.close();
 		
 		writer.flush();  writer.close();
 		
+	}
+	
+	private static HashMap<String, Holder> getMetaMap() throws Exception
+	{
+		HashMap<String, Holder> map =new HashMap<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File("c:\\temp\\table1.txt")));
+		
+		reader.readLine();
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits= s.split("\t");
+			
+			String key = splits[0];
+			
+			if( map.containsKey(key))
+				throw new Exception("No");
+			
+			Holder h = new Holder();
+			h.os = Integer.parseInt(splits[2]);
+			h.pfs = Integer.parseInt(splits[1]);
+			map.put(key, h);
+			
+		}
+		
+		reader.close();
+		return map;
+	}
+	
+	private static class Holder
+	{
+		int pfs;
+		int os;
 	}
 }
