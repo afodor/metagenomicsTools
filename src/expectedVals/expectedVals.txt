@@ -9,8 +9,9 @@ numPacks <- numWins + 1
 numTournaments <- vector()
 expectedCosts <- vector()
 expectedPacks <- vector()
+expectedWC <- vector()
 
-winProbs <- seq(.35,.65,.01)
+winProbs <- seq(.35,.73,.01)
 
 index <- 1
 
@@ -39,7 +40,8 @@ for( winProb in winProbs )
 	numTournaments[index] <- 20000 / expectedCost 
 	expectedCosts[index] <- expectedCost
 	expectedPacks[index] <- numTournaments[index] *  totalPacks
+	expectedWC[index] <- expectedPacks[index] / 24 + expectedPacks[index] / 6
 	index <- index + 1
 }
 
-aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks)
+aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedWC)
