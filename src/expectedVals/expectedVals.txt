@@ -1,0 +1,45 @@
+rm(list=ls())
+
+numWins <- c(0:5)
+
+numGems <- c(0,0,800,1500,1800,2100)
+
+numPacks <- numWins + 1
+
+numTournaments <- vector()
+expectedCosts <- vector()
+expectedPacks <- vector()
+
+winProbs <- seq(.35,.65,.01)
+
+index <- 1
+
+for( winProb in winProbs ) 
+{
+	print(winProb)
+	probs <- dnbinom(numWins, 2,1-winProb)
+	
+	probs[6] = 1 - sum(probs[1:5])
+	
+	ePacks<- vector()
+	
+	for( i in 1:6) 
+		ePacks[i] = probs[i] * numPacks[i]
+		
+	totalPacks <- sum(ePacks)
+	
+	expectedGems <- vector()
+	
+	for( i in 1:6)
+		expectedGems[i] = probs[i] * numGems[i]
+		
+	totalGems <- sum(expectedGems)
+	expectedCost <- 1500 - totalGems	
+	
+	numTournaments[index] <- 20000 / expectedCost 
+	expectedCosts[index] <- expectedCost
+	expectedPacks[index] <- numTournaments[index] *  totalPacks
+	index <- index + 1
+}
+
+aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks)
