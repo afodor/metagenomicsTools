@@ -19,7 +19,7 @@ lines(myTS$winProbs, myTS$expectedPacks,col="RED")
 lines(myTC$winProbs, myTC$expectedPacks,col="BLUE")
 
 
-plot(myTCC$winProbs, myTCC$totalCards)
+plot(myTCC$winProbs, myTCC$totalCards,ylim=c(0,5000))
 lines(myTS$winProbs, myTS$totalCards,col="RED")
 lines(myTC$winProbs, myTC$totalCards,col="BLUE")
 
