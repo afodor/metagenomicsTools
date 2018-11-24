@@ -1,0 +1,16 @@
+rm(list=ls())
+
+setwd("c:\\temp")
+
+myTCC = read.table(file="s1.txt",sep="\t",header=TRUE)
+myTS = read.table(file="s2.txt", sep="\t", header=TRUE)
+
+par(mfrow=c(2,1))
+
+plot(myTCC$winProbs, myTCC$expectedRares)
+lines(myTCC$winProbs, myTS$expectedRares,col="RED")
+
+
+
+plot(myTCC$winProbs, myTCC$expectedPacks)
+lines(myTS$winProbs, myTS$expectedPacks,col="RED")

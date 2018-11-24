@@ -12,14 +12,14 @@ expectedPacks <- vector()
 expectedWC <- vector()
 expectedRares <- vector()
 
-winProbs <- seq(.35,.73,.01)
+winProbs <- seq(.35,.6,.01)
 
 index <- 1
 
 for( winProb in winProbs ) 
 {
 	print(winProb)
-	probs <- dnbinom(numWins, 1,1-winProb)
+	probs <- dnbinom(numWins, 3,1-winProb)
 	
 	probs[8] = 1 - sum(probs[1:7])
 	
