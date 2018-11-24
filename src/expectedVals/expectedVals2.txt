@@ -1,11 +1,10 @@
 rm(list=ls())
 
-setwd("c:\\temp")
-numWins <- c(0:5)
+numWins <- c(0:7)
 
-numGems <- c(0,0,800,1500,1800,2100)
+numGems <- c(200,400,600,1200,1400,1600,2000,2200)
 
-numPacks <- numWins + 1
+numPacks <- rep(3,length(numGems))
 
 numTournaments <- vector()
 expectedCosts <- vector()
@@ -20,32 +19,32 @@ index <- 1
 for( winProb in winProbs ) 
 {
 	print(winProb)
-	probs <- dnbinom(numWins, 2,1-winProb)
+	probs <- dnbinom(numWins, 1,1-winProb)
 	
-	probs[6] = 1 - sum(probs[1:5])
+	probs[8] = 1 - sum(probs[1:7])
 	
 	ePacks<- vector()
 	
-	for( i in 1:6) 
+	for( i in 1:8) 
 		ePacks[i] = probs[i] * numPacks[i]
 		
 	totalPacks <- sum(ePacks)
 	
 	expectedGems <- vector()
 	
-	for( i in 1:6)
+	for( i in 1:8)
 		expectedGems[i] = probs[i] * numGems[i]
 		
 	totalGems <- sum(expectedGems)
-	expectedCost <- 1500 - totalGems	
+	expectedCost <- 2000- totalGems	
 	
 	numTournaments[index] <- 20000 / expectedCost 
 	expectedCosts[index] <- expectedCost
 	expectedPacks[index] <- numTournaments[index] *  totalPacks
 	expectedWC[index] <- expectedPacks[index] / 24 + expectedPacks[index] / 6
-	expectedRares[index] <- 3 * numTournaments[index]  + expectedPacks[index]
+	expectedRares[index] <- 6 * numTournaments[index]  + expectedPacks[index]
 	index <- index + 1
 }
 
-aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedWC,expectedRares)
-write.table(aFrame, file="s1.txt",sep="\t",row.names=FALSE)
+aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedRares,expectedWC)
+write.table(aFrame, file="s2.txt",sep="\t",row.names=FALSE)
