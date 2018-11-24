@@ -2,9 +2,9 @@ rm(list=ls())
 
 numWins <- c(0:7)
 
-numGems <- c(200,400,600,1200,1400,1600,2000,2200)
+numGems <- c(50,100,200,300,450,650,850,950)
 
-numPacks <- rep(3,length(numGems))
+numPacks <- c(1.2,1.22,1.24,1.26,1.3,1.35,1.4,2)
 
 numTournaments <- vector()
 expectedCosts <- vector()
@@ -37,16 +37,16 @@ for( winProb in winProbs )
 		expectedGems[i] = probs[i] * numGems[i]
 		
 	totalGems <- sum(expectedGems)
-	expectedCost <- 2000- totalGems	
+	expectedCost <- 750- totalGems	
 	
 	numTournaments[index] <- 20000 / expectedCost 
 	expectedCosts[index] <- expectedCost
 	expectedPacks[index] <- numTournaments[index] *  totalPacks
 	expectedWC[index] <- expectedPacks[index] / 24 + expectedPacks[index] / 6
-	expectedRares[index] <- 6 * numTournaments[index]  + expectedPacks[index]
-	totalCards[index] <- 6*15 * numTournaments[index]   + expectedPacks[index] * 8
+	expectedRares[index] <- 3 * numTournaments[index]  + expectedPacks[index]
+	totalCards[index] <- 3*15 * numTournaments[index]   + expectedPacks[index] * 8
 	index <- index + 1
 }
 
 aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedRares,expectedWC,totalCards)
-write.table(aFrame, file="s2.txt",sep="\t",row.names=FALSE)
+write.table(aFrame, file="s3.txt",sep="\t",row.names=FALSE)

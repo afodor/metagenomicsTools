@@ -4,13 +4,28 @@ setwd("c:\\temp")
 
 myTCC = read.table(file="s1.txt",sep="\t",header=TRUE)
 myTS = read.table(file="s2.txt", sep="\t", header=TRUE)
+myTC = read.table(file="s3.txt", sep="\t", header=TRUE)
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,2))
 
-plot(myTCC$winProbs, myTCC$expectedRares)
-lines(myTCC$winProbs, myTS$expectedRares,col="RED")
-
+plot(myTCC$winProbs, myTCC$expectedRares,ylim=c(0,350))
+lines(myTS$winProbs, myTS$expectedRares,col="RED")
+lines(myTC$winProbs, myTC$expectedRares,col="BLUE")
+legend("topleft", legend=c("CC", "S", "C"), col=c("black", "red", "blue"), lty=1:2, cex=0.8)
 
 
 plot(myTCC$winProbs, myTCC$expectedPacks)
 lines(myTS$winProbs, myTS$expectedPacks,col="RED")
+lines(myTC$winProbs, myTC$expectedPacks,col="BLUE")
+
+
+plot(myTCC$winProbs, myTCC$totalCards)
+lines(myTS$winProbs, myTS$totalCards,col="RED")
+lines(myTC$winProbs, myTC$totalCards,col="BLUE")
+
+plot(myTCC$winProbs, myTCC$totalCards / 1000 + myTCC$expectedWC)
+lines(myTS$winProbs, myTS$totalCards / 1000 + myTS$expectedWC,col="RED")
+lines(myTC$winProbs, myTC$totalCards / 1000 + myTC$expectedWC,col="BLUE")
+
+
+ 

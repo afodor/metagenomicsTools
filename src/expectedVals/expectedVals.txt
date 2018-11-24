@@ -12,6 +12,7 @@ expectedCosts <- vector()
 expectedPacks <- vector()
 expectedWC <- vector()
 expectedRares <- vector()
+totalCards <- vector()
 
 winProbs <- seq(.35,.6,.01)
 
@@ -44,8 +45,9 @@ for( winProb in winProbs )
 	expectedPacks[index] <- numTournaments[index] *  totalPacks
 	expectedWC[index] <- expectedPacks[index] / 24 + expectedPacks[index] / 6
 	expectedRares[index] <- 3 * numTournaments[index]  + expectedPacks[index]
+	totalCards[index] <- 45 * numTournaments[index]   + expectedPacks[index] * 8
 	index <- index + 1
 }
 
-aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedWC,expectedRares)
+aFrame <- data.frame( winProbs,numTournaments,expectedCosts,expectedPacks,expectedWC,expectedRares,totalCards)
 write.table(aFrame, file="s1.txt",sep="\t",row.names=FALSE)
