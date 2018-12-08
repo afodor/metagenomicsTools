@@ -1,6 +1,6 @@
 rm(list=ls())
 
-setwd("C:\\Carroll_Nov_2015\\correctedMetadata")
+setwd("F:\\Caroll_Nov_2015\\spreadsheets")
 library("Kendall")
 
 taxa <- c("phylum","class","order","family","genus")

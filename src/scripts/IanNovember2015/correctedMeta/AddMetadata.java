@@ -20,7 +20,7 @@ public class AddMetadata
 		HashMap<Integer, String> map = new HashMap<Integer,String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getIanNov2015Dir() + File.separator + "correctedMetadata" + File.separator + 
+				ConfigReader.getIanNov2015Dir() + File.separator + "spreadsheets" + File.separator + 
 				"mapMetaOnly.txt")));
 		
 		reader.readLine();
@@ -42,7 +42,7 @@ public class AddMetadata
 	private static String getMetaLine() throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getIanNov2015Dir() + File.separator + "correctedMetadata" + File.separator + 
+				ConfigReader.getIanNov2015Dir() + File.separator + "spreadsheets" + File.separator + 
 				"mapMetaOnly.txt")));
 		
 		String s= reader.readLine();
@@ -72,7 +72,7 @@ public class AddMetadata
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormal.txt");
 			
 			File outFile = new File(	ConfigReader.getIanNov2015Dir() 
-					+ File.separator + "correctedMetadata" +
+					+ File.separator + "spreadsheets" +
 					File.separator + "pivoted_" + 
 			NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadata.txt");
 			
