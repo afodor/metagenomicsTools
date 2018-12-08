@@ -18,15 +18,16 @@ getTaxaColumnNum <- function(myT)
 	return (-1);
 }
 
+par(mfrow=c(3,2))
+	
+for ( t in taxa ) 
+{
 	namesA <- vector()
 	namesB <- vector()
 	kendallP <- vector()
 	rVals <- vector()
 	index <- 1
 	
-
-for ( t in taxa ) 
-{
 	inFileName <- paste( "pivoted_", t, "asColumnsLogNormalPlusMetadata.txt" , sep="") 
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	numCols <- ncol(myT)
@@ -34,8 +35,6 @@ for ( t in taxa )
 	myT <-read.table(inFileName,header=TRUE,sep="\t",colClasses=myColClasses)
 	myT <- myT[ myT$read== "r1" & ! is.na(myT$Screener.age) , ]
 	names <- vector()	
-	
-	pdf( paste(t , "correlationPlots.pdf",sep=""))
 	
   	taxCol <- getTaxaColumnNum(myT)	
 
@@ -55,20 +54,19 @@ for ( t in taxa )
 			 	myText <- paste( namesA[index] ,namesB[index] ,"\n", "p=" ,  
 			 			format(	kendallP[index] , digits=3), "r=", 
 			 			 format( rVals[index], digits=3)) 
-			 		plot(myT[,j],myT[,i] , main=myText, ylab =namesA[index], xlab=namesB[index]  )
-			 		abline(aLm)
+			 		#plot(myT[,j],myT[,i] , main=myText, ylab =namesA[index], xlab=namesB[index]  )
+			 		#abline(aLm)
 			 	
 			 	index <- index + 1
 			 }
 		}
 	}
-	
-dev.off()
-}
 
+	
 dFrame <- data.frame( namesA, namesB,kendallP, rVals)
 dFrame <- dFrame [order(dFrame$kendallP),]
 dFrame$adjKendall<-  p.adjust( dFrame$kendallP, method = "BH" )
 	
-write.table( file= paste( "pValuesTaxaVsMetadataAll.txt", sep=""), dFrame, row.names=FALSE, sep="\t")
-	
+write.table( file= paste( "pValuesTaxaVsMetadata",t,".txt", sep=""), dFrame, row.names=FALSE, sep="\t")
+hist(kendallP,main=t)
+}
