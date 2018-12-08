@@ -21,7 +21,7 @@ public class AddMetadata
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getIanNov2015Dir() + File.separator + "correctedMetadata" + File.separator + 
-				"2018.12.05_Susan.map.Charlotte.txt")));
+				"mapMetaOnly.txt")));
 		
 		reader.readLine();
 		
@@ -43,7 +43,7 @@ public class AddMetadata
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				ConfigReader.getIanNov2015Dir() + File.separator + "correctedMetadata" + File.separator + 
-				"2018.12.05_Susan.map.Charlotte.txt")));
+				"mapMetaOnly.txt")));
 		
 		String s= reader.readLine();
 		
