@@ -53,24 +53,25 @@ public class MergeAtLevel
 		writer.write("\n");
 		
 		for(String s : map.keySet())
-		{
-			writer.write(s);
-			
-			for(String s2 : taxaList)
+			if( ! s.equals("Unassigned"))
 			{
-				Integer aVal = map.get(s).get(s2);
-				if( aVal == null)
-					aVal =0;
+				writer.write(s);
 				
-				writer.write("\t" + aVal);
+				for(String s2 : taxaList)
+				{
+					Integer aVal = map.get(s).get(s2);
+					if( aVal == null)
+						aVal =0;
+					
+					writer.write("\t" + aVal);
+				}
+				
+				writer.write("\n");
 			}
 			
-			writer.write("\n");
+			writer.flush();  writer.close();
+			return outFile;
 		}
-		
-		writer.flush();  writer.close();
-		return outFile;
-	}
 	
 	private static HashMap<String, HashMap<String,Integer>> getMap(String level) throws Exception
 	{
