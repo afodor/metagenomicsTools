@@ -1,0 +1,22 @@
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\giardia_murine_fmt\\data")
+
+levels<- c("kingdom",  "phylum" , "class" , "order" , "family", "genus" )
+
+library("vegan")
+
+for( taxa in levels) 
+{
+	inFile <- paste0(taxa,"_logNormPlusMeta.txt")
+	myT <- read.table(inFile, header=TRUE,sep="\t",row.names=1)
+	myTData <- myT[,((which(names(myT)=="shannonDiveristy"))+1):ncol(myT)]
+	myPCOA <- capscale(myTData~1,distance="bray")
+	write.table(myPCOA$CA$u, sep="\t", file=paste0("pcoa_",taxa,"Log10Norm",".txt"))
+	write.table(myPCOA$CA$eig,file=paste0("eigenValues_pcoa_",taxa,"Log10Norm",".txt"), sep="\t")	
+
+	myMerge <- cbind( row.names(myT), myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste0("pcoa_",taxa,"Log10NormMetadataallData",".txt"),row.names=FALSE)
+}
+	
