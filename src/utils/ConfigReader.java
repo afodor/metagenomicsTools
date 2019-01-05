@@ -176,6 +176,8 @@ public class ConfigReader
 	
 	public static final String TOPE_VICKI_DIR = "TOPE_VICKI_DIR";
 	
+	public static final String LUTHUR_RNA_SEQ_DIR = "LUTHUR_RNA_SEQ_DIR";
+	
 	public static final String getTopeVickiDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_VICKI_DIR);
@@ -577,6 +579,11 @@ public class ConfigReader
 	public static String getJanelleRNASeqDir() throws Exception
 	{
 		return getConfigReader().getAProperty(JANELLE_RNA_SEQ_DIR);
+	}
+	
+	public static String getLuthurJan2019Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(LUTHUR_RNA_SEQ_DIR);
 	}
 	
 	private boolean isSetToTrue(String namedProperty)

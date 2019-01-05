@@ -1,5 +1,6 @@
 package javafxDemos;
 
+/*
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -32,4 +33,6 @@ public class HelloWorld extends Application {
         primaryStage.setScene(new Scene(root, 300, 250));
         primaryStage.show();
     }
+
 }
+*/
