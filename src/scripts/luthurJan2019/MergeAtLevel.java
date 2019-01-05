@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeAtLevel
@@ -22,9 +23,12 @@ public class MergeAtLevel
 		{
 			System.out.println(level);
 			HashMap<String, HashMap<String,Integer>> map = getMap(level);
-			writeResults(map, level);
-		}
+			File unloggedFile = writeResults(map, level);
 			
+			OtuWrapper wrapper = new OtuWrapper(unloggedFile);
+			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getLuthurJan2019Dir() + File.separator + 
+					"data" + File.separator + level + "_logNorm.txt");
+		}
 	}
 	
 	private static File writeResults( HashMap<String, HashMap<String,Integer>> map , String level ) throws Exception
