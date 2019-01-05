@@ -19,6 +19,48 @@ public class SequenceToTaxaParser
 	private final String genus;
 	private final String species;
 	
+	
+	
+	public String getKey()
+	{
+		return key;
+	}
+
+	public String getKingdom()
+	{
+		return kingdom;
+	}
+
+	public String getPhylum()
+	{
+		return phylum;
+	}
+
+	public String getaClass()
+	{
+		return aClass;
+	}
+
+	public String getOrder()
+	{
+		return order;
+	}
+
+	public String getFamily()
+	{
+		return family;
+	}
+
+	public String getGenus()
+	{
+		return genus;
+	}
+
+	public String getSpecies()
+	{
+		return species;
+	}
+
 	private SequenceToTaxaParser(String s) throws Exception
 	{
 		String[] splits = s.split("\t");
