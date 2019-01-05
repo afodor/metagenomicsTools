@@ -19,23 +19,27 @@ public class SequenceToTaxaParser
 	private final String genus;
 	private final String species;
 	
-	public static final String[] TAXA_LEVELS = { "phylum" , "class" , "order" , "family", "genus" };
+	public static final String[] TAXA_LEVELS = { "kingdom",  "phylum" , "class" , "order" , "family", "genus" };
 	
 	public String getForALevel(String s) throws Exception
 	{
+
 		if( s.equals(TAXA_LEVELS[0]))
-			return phylum;
+			return kingdom;
 		
 		if( s.equals(TAXA_LEVELS[1]))
-			return aClass;
+			return phylum;
 		
 		if( s.equals(TAXA_LEVELS[2]))
-			return order;
+			return aClass;
 		
 		if( s.equals(TAXA_LEVELS[3]))
+			return order;
+		
+		if( s.equals(TAXA_LEVELS[4]))
 			return family;
 
-		if( s.equals(TAXA_LEVELS[4]))
+		if( s.equals(TAXA_LEVELS[5]))
 			return genus;
 		
 		throw new Exception(s + " not supported");
