@@ -70,6 +70,18 @@ for( taxa in levels)
 				
 		stripchart(data[myT$challenge=="GIARDIA"]  ~ diet[myT$challenge=="GIARDIA"] 
 				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="BLUE")	
+
+		graphMain =  paste( dFrame$names[i], " adj. p challenge=", format(dFrame$adjustedPChallenge[i] , digits=3), "\n",
+						 " adj. p interaction=", format(dFrame$adjustedPInteraction[i] , digits=3))
+						
+		plot( data  ~ myT$challenge, ylab = names[index],main = graphMain )	
+		
+		stripchart(data[myT$challenge=="PBS"]  ~ challenge[myT$challenge=="PBS"] 
+				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="RED")		
+				
+		stripchart(data[myT$challenge=="GIARDIA"]  ~ challenge[myT$challenge=="GIARDIA"] 
+				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="BLUE")	
+				
 		
 	}
 	
