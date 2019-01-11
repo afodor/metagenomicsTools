@@ -1,0 +1,42 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\giardia_murine_fmt\\data")
+
+
+levels<- c("kingdom",  "phylum" , "class" , "order" , "family", "genus" )
+
+library("vegan")
+
+for( taxa in levels) 
+{
+	inFile <- paste0( "pcoa_", taxa, "Log10NormMetadataallData.txt")
+	myT <- read.table(inFile, sep="\t", header=TRUE, row.names=1)
+
+	# 15 only 
+	myT <- myT[ myT$experiment=="GMN15",]
+	
+	pValuesDiet <- vector()
+	pValuesChallenge <- vector()
+	pValuesInteraction <- vector()
+	names <- vector()
+	index <- 1
+	
+	startPos <- which(names(myT)=="shannonDiveristy")
+	endPos <- which(names(myT)=="MDS5")
+	
+	for( i in (startPos:endPos) ) 
+	{
+		yData <- myT[,i]
+		
+		if( sum( yData != 0) > nrow(myT) /10 ) 
+		{
+			aLm <- lm( yData ~ myT$diet * myT$challenge )
+			pValuesDiet[index] <- summary(aLm)$coefficients[2,4]
+			pValuesChallenge[index] <- summary(aLm)$coefficients[3,4]
+			pValuesInteraction[index] <- summary(aLm)$coefficients[4,4]
+		}
+		
+		index <- index + 1
+	}
+}
