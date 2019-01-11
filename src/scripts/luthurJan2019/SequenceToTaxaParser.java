@@ -18,8 +18,16 @@ public class SequenceToTaxaParser
 	private final String family;
 	private final String genus;
 	private final String species;
+	private final int intId;
 	
-	public static final String[] TAXA_LEVELS = { "kingdom",  "phylum" , "class" , "order" , "family", "genus" };
+	private static int spinner =0;
+	
+	public static final String[] TAXA_LEVELS = { "kingdom",  "phylum" , "class" , "order" , "family", "genus", "species" };
+	
+	public int getIntId()
+	{
+		return intId;
+	}
 	
 	public String getForALevel(String s) throws Exception
 	{
@@ -41,6 +49,9 @@ public class SequenceToTaxaParser
 
 		if( s.equals(TAXA_LEVELS[5]))
 			return genus;
+		
+		if( s.equals(TAXA_LEVELS[6]))
+			return family + "_" + genus + "_" + intId;
 		
 		throw new Exception(s + " not supported");
 		
@@ -97,6 +108,9 @@ public class SequenceToTaxaParser
 		this.order = splits[4];
 		this.family = splits[5];
 		this.genus = splits[6];
+		spinner++;
+		
+		this.intId = spinner;
 		
 		this.species = splits[7];
 		

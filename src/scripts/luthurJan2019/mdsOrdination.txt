@@ -2,7 +2,7 @@ rm(list=ls())
 
 setwd("C:\\Users\\afodor\\git\\giardia_murine_fmt\\data")
 
-levels<- c("kingdom",  "phylum" , "class" , "order" , "family", "genus" )
+levels<- c("kingdom",  "phylum" , "class" , "order" , "family", "genus", "species" )
 
 library("vegan")
 
