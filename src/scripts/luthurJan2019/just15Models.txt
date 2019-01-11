@@ -10,11 +10,15 @@ library("vegan")
 
 for( taxa in levels) 
 {
+
 	inFile <- paste0( "pcoa_", taxa, "Log10NormMetadataallData.txt")
 	myT <- read.table(inFile, sep="\t", header=TRUE, row.names=1)
 
 	# 15 only 
 	myT <- myT[ myT$experiment=="GMN15",]
+
+	challenge <- myT$challenge;
+	diet <- myT$diet;
 	
 	pValuesDiet <- vector()
 	pValuesChallenge <- vector()
@@ -58,6 +62,15 @@ for( taxa in levels)
 		data <- myT[ , dFrame$originalColumn[i] ]
 		graphMain =  paste( dFrame$names[i], " adj. p diet=", format(dFrame$adjustedPDiet[i] , digits=3))
 		plot( data  ~ myT$diet, ylab = names[index],main = graphMain )	
+		
+		myFrame <- data.frame(data,challenge,diet)
+		
+		stripchart(data[myT$challenge=="PBS"]  ~ diet[myT$challenge=="PBS"] 
+				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="RED")		
+				
+		stripchart(data[myT$challenge=="GIARDIA"]  ~ diet[myT$challenge=="GIARDIA"] 
+				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="BLUE")	
+		
 	}
 	
 	dev.off()
