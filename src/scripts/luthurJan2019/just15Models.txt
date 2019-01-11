@@ -19,6 +19,7 @@ for( taxa in levels)
 	pValuesDiet <- vector()
 	pValuesChallenge <- vector()
 	pValuesInteraction <- vector()
+	originalColumn <- vector()
 	names <- vector()
 	index <- 1
 	
@@ -36,6 +37,7 @@ for( taxa in levels)
 			pValuesDiet[index] <- summary(aLm)$coefficients[2,4]
 			pValuesChallenge[index] <- summary(aLm)$coefficients[3,4]
 			pValuesInteraction[index] <- summary(aLm)$coefficients[4,4]
+			originalColumn[index] <- i
 			index <- index + 1
 		}
 	}
@@ -48,5 +50,6 @@ for( taxa in levels)
 	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
 	
 	write.table(dFrame, file=paste("pValuesForTaxa_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
 }
 
