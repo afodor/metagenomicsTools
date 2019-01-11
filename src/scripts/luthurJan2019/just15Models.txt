@@ -42,7 +42,7 @@ for( taxa in levels)
 		}
 	}
 	
-	dFrame <- data.frame( names,pValuesDiet,pValuesChallenge, pValuesInteraction)
+	dFrame <- data.frame( names,pValuesDiet,pValuesChallenge, pValuesInteraction,originalColumn)
 	dFrame <- dFrame [order(dFrame$pValuesDiet),]
 	
 	dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet, method = "BH" )	
@@ -51,5 +51,15 @@ for( taxa in levels)
 	
 	write.table(dFrame, file=paste("pValuesForTaxa_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
+	pdf(paste0(taxa,"m15.pdf"))
+	par(mfrow=c(2,2))
+	for( i in 1:nrow(dFrame)) 
+	{
+		data <- myT[ , dFrame$originalColumn[i] ]
+		graphMain =  paste( dFrame$names[i], " adj. p diet=", format(dFrame$adjustedPDiet[i] , digits=3))
+		plot( data  ~ myT$diet, ylab = names[index],main = graphMain )	
+	}
+	
+	dev.off()
 }
 
