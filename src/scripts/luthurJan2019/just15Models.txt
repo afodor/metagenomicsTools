@@ -32,6 +32,7 @@ for( taxa in levels)
 		if( sum( yData != 0) > nrow(myT) /10 ) 
 		{
 			aLm <- lm( yData ~ myT$diet * myT$challenge )
+			names[index] <- names(myT)[i]
 			pValuesDiet[index] <- summary(aLm)$coefficients[2,4]
 			pValuesChallenge[index] <- summary(aLm)$coefficients[3,4]
 			pValuesInteraction[index] <- summary(aLm)$coefficients[4,4]
@@ -39,4 +40,14 @@ for( taxa in levels)
 		
 		index <- index + 1
 	}
+	
+	dFrame <- data.frame( names,pValuesDiet,pValuesChallenge, pValuesInteraction)
+	dFrame <- dFrame [order(dFrame$pValuesDiet),]
+	
+	dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet, method = "BH" )	
+	dFrame$adjustedPChallenge <- p.adjust( dFrame$pValuesChallenge, method = "BH" )	
+	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
+	
+	write.table(dFrame, file=paste("pValuesForTaxa_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
