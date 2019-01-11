@@ -43,7 +43,7 @@ public class AddMetadata
 		
 		writer.write("sample");
 		
-		writer.write("sampleID\tmouseID\tsex\tcage\tdiet\tchallenge\tage\tdayOnDiet\tdayAfterFMT\tdaysPostChallenge\tshannonDiveristy");
+		writer.write("sampleID\tmouseID\texperiment\tsex\tcage\tdiet\tchallenge\tage\tdayOnDiet\tdayAfterFMT\tdaysPostChallenge\tshannonDiveristy");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -64,7 +64,7 @@ public class AddMetadata
 			
 			writer.write(splits[0]);
 			
-			writer.write("\t" + mfp.getMouseID() + "\t" + mfp.getSex() + "\t" + mfp.getCage() + "\t" + mfp.getDiet() + "\t"+ 
+			writer.write("\t" + mfp.getMouseID() + "\t" + mfp.getExperiment() + "\t" +  mfp.getSex() + "\t" + mfp.getCage() + "\t" + mfp.getDiet() + "\t"+ 
 			mfp.getChallenge() + "\t" + mfp.getAge() + "\t"+ mfp.getDayOnDiet() + "\t" + mfp.getDayAfterFMT()  + "\t" + 
 						mfp.getDaysPostChallenge() + "\t" + wrapper.getShannonEntropy(splits[0]) );
 			

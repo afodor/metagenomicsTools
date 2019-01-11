@@ -106,26 +106,30 @@ public class MergeAtLevel
 			if( map.containsKey(key))
 				throw new Exception("Duplicate");
 			
-			HashMap<String, Integer> innerMap = new HashMap<>();
-			map.put(key, innerMap);
-			
-			for( int x=1; x < splits.length; x++)
+			if( key.startsWith("GMN15") || key.startsWith("GMN19"))
 			{
-				Integer sVal = Integer.parseInt(splits[x]);
+
+				HashMap<String, Integer> innerMap = new HashMap<>();
+				map.put(key, innerMap);
 				
-				if( sVal > 0)
+				for( int x=1; x < splits.length; x++)
 				{
-					Integer oldVal = innerMap.get(topSplits[x]);
+					Integer sVal = Integer.parseInt(splits[x]);
 					
-					if(oldVal == null)
-						oldVal =0;
-					
-					innerMap.put(topSplits[x], sVal + oldVal);
+					if( sVal > 0)
+					{
+						Integer oldVal = innerMap.get(topSplits[x]);
+						
+						if(oldVal == null)
+							oldVal =0;
+						
+						innerMap.put(topSplits[x], sVal + oldVal);
+					}
 				}
+				
 			}
-			
 		}
-		
+				
 		reader.close();
 		return map;
 	}

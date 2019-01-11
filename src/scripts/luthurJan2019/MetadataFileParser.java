@@ -20,6 +20,7 @@ public class MetadataFileParser
 	private final String dayOnDiet;
 	private final String dayAfterFMT;
 	private final String daysPostChallenge;
+	private final String experiment;
 	
 	
 	public String getSampleID()
@@ -71,6 +72,11 @@ public class MetadataFileParser
 	{
 		return daysPostChallenge;
 	}
+	
+	public String getExperiment()
+	{
+		return experiment;
+	}
 
 	private MetadataFileParser(String s) throws Exception
 	{
@@ -79,6 +85,7 @@ public class MetadataFileParser
 		this.sampleID =splits[0];
 		this.mouseID = splits[5];
 		this.sex= splits[8];
+		this.experiment = splits[3];
 		this.cage =splits[13];
 		this.diet = splits[14];
 		this.challenge = splits[15];
