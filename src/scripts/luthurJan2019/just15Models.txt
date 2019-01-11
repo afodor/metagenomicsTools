@@ -36,9 +36,8 @@ for( taxa in levels)
 			pValuesDiet[index] <- summary(aLm)$coefficients[2,4]
 			pValuesChallenge[index] <- summary(aLm)$coefficients[3,4]
 			pValuesInteraction[index] <- summary(aLm)$coefficients[4,4]
+			index <- index + 1
 		}
-		
-		index <- index + 1
 	}
 	
 	dFrame <- data.frame( names,pValuesDiet,pValuesChallenge, pValuesInteraction)
