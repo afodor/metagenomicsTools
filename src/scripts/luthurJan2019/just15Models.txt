@@ -60,7 +60,7 @@ for( taxa in levels)
 	for( i in 1:nrow(dFrame)) 
 	{
 		data <- myT[ , dFrame$originalColumn[i] ]
-		graphMain =  paste( dFrame$names[i], " adj. p diet=", format(dFrame$adjustedPDiet[i] , digits=3))
+		graphMain =  paste( dFrame$names[i], "\nadj. p diet=", format(dFrame$adjustedPDiet[i] , digits=3))
 		plot( data  ~ diet, ylab = names[index],main = graphMain )	
 		
 		myFrame <- data.frame(data,challenge,diet)
