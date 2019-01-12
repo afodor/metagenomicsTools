@@ -66,10 +66,10 @@ for( taxa in levels)
 		myFrame <- data.frame(data,challenge,diet)
 		
 		stripchart(data[myT$challenge=="PBS"]  ~ diet[myT$challenge=="PBS"] 
-				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="RED")		
+				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="RED",cex=1.3,method="jitter")		
 				
 		stripchart(data[myT$challenge=="GIARDIA"]  ~ diet[myT$challenge=="GIARDIA"] 
-				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="BLUE")	
+				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="BLUE",cex=1.3,method="jitter")	
 
 		graphMain =  paste( " adj. p challenge=", format(dFrame$adjustedPChallenge[i] , digits=3), "\n",
 						 " adj. p interaction=", format(dFrame$adjustedPInteraction[i] , digits=3))
@@ -77,10 +77,10 @@ for( taxa in levels)
 		plot( data  ~ challenge, ylab = names[index],main = graphMain )	
 		
 		stripchart(data[myT$challenge=="PBS"]  ~ challenge[myT$challenge=="PBS"] 
-				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="RED")		
+				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="RED",cex=1.3,method="jitter")		
 				
 		stripchart(data[myT$challenge=="GIARDIA"]  ~ challenge[myT$challenge=="GIARDIA"] 
-				,data = myFrame,vertical = TRUE, pch = 21, add=TRUE ,col="BLUE")	
+				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="BLUE",cex=1.3,method="jitter")	
 				
 		
 	}
