@@ -35,11 +35,29 @@ for( taxa in levels)
 		challengePrefix[i] = old
 	}
 
+	
+	challengeColors<- vector()
+	
+	for( i in 1:length(challengePrefix))
+	{
+		if( challengePrefix[i] == "FMT_CD" )
+		{
+			challengeColors[i] = "blue"
+		}
+		
+		if( challengePrefix[i] == "FMT_PD" )
+		{
+			challengeColors[i] = "red"
+		}
+	}
+	
 	challengePrefix = factor(challengePrefix)
+	
+	
 	# no cage information
 	#cage <- droplevels(myT$cage)
 	
-	pValuesDiet <- vector()
+	pValuesChallengePrefix <- vector()
 	pValuesTime<- vector()
 	pValuesInteraction <- vector()
 	originalColumn <- vector()
@@ -55,54 +73,45 @@ for( taxa in levels)
 		
 		if( sum( yData != 0) > nrow(myT) /10 ) 
 		{
-			someFrame <- data.frame( yData, diet,challenge,cage )
-			aMixed <- lme( yData ~ diet * challenge, method ="REML",random = ~1 | cage, data=someFrame)
+			aLm <- lm( yData ~ challenge * time)
 			names[index] <- names(myT)[i]
-			pValuesDiet[index] <-  anova(aMixed)$"p-value"[2]
-			pValuesChallenge[index] <- anova(aMixed)$"p-value"[3]
-			pValuesInteraction[index] <- anova(aMixed)$"p-value"[4]
+			pValuesChallengePrefix[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesTime[index] <- anova(aLm)$"Pr(>F)"[2]
+			pValuesInteraction[index] <- anova(aLm)$"Pr(>F)"[3]
 			originalColumn[index] <- i
 			index <- index + 1
 		}
 	}
 	
-	dFrame <- data.frame( names,pValuesDiet,pValuesChallenge, pValuesInteraction,originalColumn)
-	dFrame <- dFrame [order(dFrame$pValuesDiet),]
+	dFrame <- data.frame( names,pValuesChallengePrefix,pValuesTime, pValuesInteraction,originalColumn)
+	dFrame <- dFrame [order(dFrame$pValuesChallengePrefix),]
 	
-	dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet, method = "BH" )	
-	dFrame$adjustedPChallenge <- p.adjust( dFrame$pValuesChallenge, method = "BH" )	
-	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
+	dFrame$adjustedPChallengePrefix <- p.adjust( dFrame$pValuesChallengePrefix, method = "BH" )	
+	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )
+	dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )		
 	
-	write.table(dFrame, file=paste("pValuesMixedForTaxa_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	write.table(dFrame, file=paste("pValuesForTimeInput_GM19_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
-	pdf(paste0(taxa,"m15_Mixed.pdf"))
+	pdf(paste0(taxa,"m19_timeInput.pdf"))
 	par(mfrow=c(2,2))
 	for( i in 1:nrow(dFrame)) 
 	{
 		data <- myT[ , dFrame$originalColumn[i] ]
-		graphMain =  paste( dFrame$names[i], "\nadj. p diet=", format(dFrame$adjustedPDiet[i] , digits=3))
-		plot( data  ~ diet, ylab = names[index],main = graphMain )	
+		graphMain =  paste( dFrame$names[i], "\nadj. p time=", format(dFrame$adjustedPTime[i] , digits=3))
+		plot( data  ~ time, ylab = names[index],main = graphMain ,col= challengeColors )	
 		
-		myFrame <- data.frame(data,challenge,diet)
+		myFrame <- data.frame(data,challengePrefix,time)
 		
-		stripchart(data[myT$challenge=="PBS"]  ~ diet[myT$challenge=="PBS"] 
-				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="RED",cex=1.3,method="jitter")		
-				
-		stripchart(data[myT$challenge=="GIARDIA"]  ~ diet[myT$challenge=="GIARDIA"] 
-				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="BLUE",cex=1.3,method="jitter")	
-
-		graphMain =  paste( " adj. p challenge=", format(dFrame$adjustedPChallenge[i] , digits=3), "\n",
+		graphMain =  paste( " adj. p input=", format(dFrame$adjustedPChallengePrefix[i] , digits=3), "\n",
 						 " adj. p interaction=", format(dFrame$adjustedPInteraction[i] , digits=3))
 						
-		plot( data  ~ challenge, ylab = names[index],main = graphMain )	
+		plot( data  ~ challengePrefix, ylab = names[index],main = graphMain )	
 		
-		stripchart(data[myT$challenge=="PBS"]  ~ challenge[myT$challenge=="PBS"] 
+		stripchart(data[myT$challengePrefix=="FMT_CD"]  ~ challenge[myT$challengePrefix=="FMT_CD"] 
+				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="BLUE",cex=1.3,method="jitter")		
+					
+		stripchart(data[myT$challengePrefix=="FMT_PD"]  ~ challenge[myT$challengePrefix=="FMT_PD"] 
 				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="RED",cex=1.3,method="jitter")		
-				
-		stripchart(data[myT$challenge=="GIARDIA"]  ~ challenge[myT$challenge=="GIARDIA"] 
-				,data = myFrame,vertical = TRUE, pch = 19, add=TRUE ,col="BLUE",cex=1.3,method="jitter")	
-				
-		
 	}
 	
 	dev.off()
