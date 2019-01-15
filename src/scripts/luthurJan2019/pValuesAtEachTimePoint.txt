@@ -1,0 +1,62 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\giardia_murine_fmt\\data")
+
+taxa <- "genus"
+
+inFile <- paste0( "pcoa_", taxa, "Log10NormMetadataallData.txt")
+myT <- read.table(inFile, sep="\t", header=TRUE, row.names=1)
+
+# 19 only 
+myT <- myT[ myT$experiment=="GMN19",]
+
+days <- c(64,68,71,82)
+par(mfrow=c(2,2))
+
+for( day in days)
+{
+	myTSub <- myT[ myT$dayOnDiet == day, ]
+	
+	startPos <- which(names(myTSub)=="shannonDiveristy")
+	endPos <- which(names(myTSub)=="MDS5")
+	pValuesDiet <- vector()
+	
+	challengePrefix<- vector()
+	challenge <- myTSub$challenge
+	
+	for( i in 1:length(challenge))
+	{
+		old <- toString( challenge[i])
+		if( old == "FMT_CD_GIARDIA" | old == "FMT_CD_PBS"  )
+		{
+			old = "FMT_CD"
+		}
+		
+		if( old == "FMT_PD_GIARDIA" | old == "FMT_PD_PBS" )
+		{
+			old = "FMT_PD"
+		}
+		
+		challengePrefix[i] = old
+	}
+	
+	challengePrefix <- factor(challengePrefix)	
+	index <- 1
+		
+	for( i in (startPos:endPos) ) 
+	{
+		yData <- myTSub[,i]
+		
+		if( sum( yData != 0) > nrow(myT) /10 ) 
+		{	
+			aLm <- lm(yData ~ challengePrefix)
+			pValuesDiet[index] <- anova(aLm)$"Pr(>F)"[1]
+			index = index + 1
+		}
+	}
+	
+	hist(pValuesDiet,breaks=20)
+}
+
+
