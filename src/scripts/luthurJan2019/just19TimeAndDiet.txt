@@ -15,6 +15,7 @@ for( taxa in levels)
 
 	challenge <- droplevels( myT$challenge);
 	diet <- droplevels(myT$diet);
+	time <-  myT$dayOnDiet
 	
 	challengePrefix<- vector()
 	
