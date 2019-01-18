@@ -60,3 +60,23 @@ t.test( myTOnly64$MDS2[myTOnly64$challenge== "FMT_CD"],myTOnly64$MDS2[myTOnly64$
 
 legend("topleft", legend = c("CD fecal input", "PD fecal "), cex = 1.3, col = c("black", "red"), pch = 19)
 
+
+myTOnly64 = myT[ myT$dayOnDiet== 68, ] 
+
+plot(myTOnly64$MDS1, myTOnly64$MDS2,pch=19,cex=1.3,xlab="MDS1 (42.2% explained)", ylab="MDS2 (15.4% explained)",
+col=ifelse(myTOnly64$challenge== "FMT_CD", "black", "red"),xlim=c(min(myT$MDS1),max(myT$MDS1)),ylim=c(min(myT$MDS2),max(myT$MDS2)) )
+
+t.test( myTOnly64$MDS2[myTOnly64$challenge== "FMT_CD"],myTOnly64$MDS2[myTOnly64$challenge== "FMT_PD"])
+
+legend("topleft", legend = c("CD fecal input", "PD fecal input"), cex = 1.3, col = c("black", "red"), pch = 19)
+
+
+myTOnly64 = myT[ myT$dayOnDiet== 71, ] 
+
+plot(myTOnly64$MDS1, myTOnly64$MDS2,pch=19,cex=1.3,xlab="MDS1 (42.2% explained)", ylab="MDS2 (15.4% explained)",
+col=ifelse(myTOnly64$challenge== "FMT_CD", "black", "red"),xlim=c(min(myT$MDS1),max(myT$MDS1)),ylim=c(min(myT$MDS2),max(myT$MDS2)) )
+
+t.test( myTOnly64$MDS2[myTOnly64$challenge== "FMT_CD"],myTOnly64$MDS2[myTOnly64$challenge== "FMT_PD"])
+
+legend("topleft", legend = c("CD fecal input", "PD fecal input"), cex = 1.3, col = c("black", "red"), pch = 19)
+
