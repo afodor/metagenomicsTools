@@ -1,0 +1,38 @@
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\giardia_murine_fmt\\data")
+
+myT<- read.table("pcoa_genusLog10NormMetadataallData.txt", sep="\t",header=TRUE)
+
+colors <- vector()
+
+for( i in 1:length(myT$dayOnDiet))
+{
+	if( myT$dayOnDiet[i] == 22 ) 
+	{
+		colors[i] = "red"
+	}
+	
+	if( myT$dayOnDiet[i] == 64 ) 
+	{
+		colors[i] = "blue"
+	}
+	
+	if( myT$dayOnDiet[i] == 68) 
+	{
+		colors[i] = "yellow"
+	}
+	
+	if( myT$dayOnDiet[i] == 71 ) 
+	{
+		colors[i] = "black"
+	}
+	
+	if( myT$dayOnDiet[i] == 82) 
+	{
+		colors[i] = "green"
+	}
+}
+
+
+plot(myT$MDS1, myT$MDS2,pch=19,cex=1.3,col=colors,xlab="MDS1 (42.2% explained)", ylab="MDS2 (15.4% explained)")
