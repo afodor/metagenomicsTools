@@ -1,8 +1,10 @@
 package scripts.shanPValueScramble;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,7 +15,6 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.processing.Filer;
-
 import utils.ConfigReader;
 
 public class DoPermutations
@@ -47,6 +48,53 @@ public class DoPermutations
 			resultsList.add(getNumAtThreshold(map));
 			System.out.println("Permuation " + x);
 		}
+		
+		writeResults(map, resultsList);
+	}
+	
+	private static void writeResults(HashMap<String, List<Double>> map,List<List<Integer>> resultsList ) throws Exception
+	{
+		File outFile = new File(ConfigReader.getChinaMay2017Dir() + File.separator + 
+				"shanPValues" + File.separator + "permutedBelowThreshold_China_anova_t1.txt");
+		
+
+		if( resultsList.size() != NUM_PERMUTATIONS + 1)
+			throw new Exception("No " + resultsList.size() + " " +  (NUM_PERMUTATIONS + 1));
+		
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("test\tunpermuted");
+		
+		for( int x=0;x < NUM_PERMUTATIONS; x++)
+			writer.write("\tperm" + x );
+		
+		writer.write("\n");
+		
+		int index =0;
+		
+		for(String s : map.keySet())
+		{
+			writer.write(s);
+			
+
+			for( int x=0; x < resultsList.size(); x++)
+			{
+				List<Integer> innerList = resultsList.get(x);
+				writer.write("\t" + innerList.get(index));				
+			}
+			
+			writer.write("\n");
+			
+			
+			index++;
+		}
+		
+		if( index != map.size())
+			throw new Exception("No");
+		
+		writer.flush();  writer.close();
+	
 	}
 	
 	private static void permute(HashMap<String, List<Double>> map ) throws Exception
