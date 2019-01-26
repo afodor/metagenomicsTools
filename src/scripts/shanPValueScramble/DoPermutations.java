@@ -20,6 +20,7 @@ public class DoPermutations
 {
 	public static final int NUM_PROVINCES =15;
 	public static final double P_VALUE_THRESHOLD =0.05;
+	public static final int NUM_PERMUTATIONS = 1000;
 	
 	// just a constant, arbitrary seed
 	private static final Random RANDOM = new Random(3241121);
@@ -39,7 +40,13 @@ public class DoPermutations
 		List<List<Integer>> resultsList = new ArrayList<>();
 		resultsList.add(getNumAtThreshold(map));
 		
-		permute(map);
+		for( int x=0; x < NUM_PERMUTATIONS; x++)
+		{
+
+			permute(map);
+			resultsList.add(getNumAtThreshold(map));
+			System.out.println("Permuation " + x);
+		}
 	}
 	
 	private static void permute(HashMap<String, List<Double>> map ) throws Exception
