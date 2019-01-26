@@ -178,6 +178,8 @@ public class ConfigReader
 	
 	public static final String LUTHUR_RNA_SEQ_DIR = "LUTHUR_RNA_SEQ_DIR";
 	
+	public static final String CHINA_MAY_2017_DIR = "CHINA_MAY_2017_DIR";
+	
 	public static final String getTopeVickiDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_VICKI_DIR);
@@ -186,6 +188,11 @@ public class ConfigReader
 	public static String getPeterAntibodyDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(PETER_ANTIBODY_DIR);
+	}
+	
+	public static String getChinaMay2017Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(CHINA_MAY_2017_DIR);
 	}
 	
 	public static String getHansenAlleleDirectory() throws Exception
