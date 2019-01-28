@@ -1,0 +1,5 @@
+rm(list=ls())
+
+setwd("C:\\China_May2018\\shanPValues")
+
+myT <- read.table("permutedBelowThreshold_China_anova_t1.txt", sep="\t",header=TRUE,row.names=1)

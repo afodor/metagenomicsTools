@@ -45,11 +45,48 @@ public class DoPermutations
 		{
 
 			permute(map);
+			
+			if( x==0 )
+				writeAPermutation(map);
+			
 			resultsList.add(getNumAtThreshold(map));
 			System.out.println("Permuation " + x);
 		}
 		
 		writeResults(map, resultsList);
+	}
+	
+	private static void writeAPermutation( HashMap<String, List<Double>> map) throws Exception
+	{
+		File outFile = new File(ConfigReader.getChinaMay2017Dir() + File.separator + 
+				"shanPValues" + File.separator + "anAnovaPermutation.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("key");
+		
+		for( int x=1; x <= NUM_PROVINCES; x++)
+			writer.write("\t" + x);
+		
+		writer.write("\n");
+		
+		for(String s : map.keySet())
+		{
+			writer.write(s);
+			
+			List<Double> list =map.get(s);
+			
+			if( list.size() != NUM_PROVINCES)
+				throw new Exception("No");
+			
+			for( Double d : list)
+			writer.write("\t" + d);
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+		
 	}
 	
 	private static void writeResults(HashMap<String, List<Double>> map,List<List<Integer>> resultsList ) throws Exception
