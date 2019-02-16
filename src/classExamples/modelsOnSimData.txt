@@ -1,0 +1,92 @@
+
+rm(list=ls())
+
+numRows = 500
+numCols = 20
+for( i in 1:numCols)
+
+myFrame <- data.frame(1:numRows)
+
+#initiate the data.frame with the correct # of rows to suppress error messages.
+#likely, there are much better ways to do this!
+names(myFrame)[1] <- "tempColumn"
+
+for( i in 1: numCols)
+{
+		vals <- vector(length=numRows)
+		
+		for( j in 1:numRows)
+		{
+			aMean = j / 10 
+			aMean = max( aMean,5)
+			aVar = aMean * 50
+			aVal = round( max( rnorm(1,mean=aMean,sd=sqrt(aVar)), 1))
+			vals[j] = aVal
+		}
+		
+		colName <- paste( "sample" , i ,sep="")
+		
+		myFrame[[colName]] = vals
+}
+
+myFrame["tempColumn"] <- NULL
+row.names(myFrame) <- paste("Gene_",1:numRows,sep="")
+
+allPValsNegBinom <- vector()
+allPValsTTest <- vector()
+allPValsWilcox <- vector()
+allPValsPoiss <- vector()
+
+meanReads1 = mean(apply(myFrame,2,sum)[1:5])
+meanReads2 = mean(apply(myFrame,2,sum)[6:10])
+
+for( i in 1:nrow(myFrame))
+{
+	vals1 <- as.numeric( myFrame[i,1:10])
+	vals2 <- as.numeric( myFrame[i,11:20])
+	
+	mean1 = mean(vals1)
+	mean2 = mean(vals2)
+				
+	var1 = max( var(vals1), mean1 )
+			
+	r = round( mean1^2 / (var1-mean1))
+	p = mean1 / var1
+		
+	allPValsNegBinom[i] = pnbinom(mean2,r,p);
+	
+	if(allPValsNegBinom[i] < 0.5)
+		allPValsNegBinom[i] = 2 * allPValsNegBinom[i]
+	else
+		 allPValsNegBinom[i] = 2 * (1-allPValsNegBinom[i])
+		
+	poisBackround = mean1/ meanReads1
+	
+	allPValsPoiss[i] = poisson.test(round(mean2),round(meanReads2) ,poisBackround,alternative="two.sided")$p.value
+	allPValsTTest[i] = t.test( vals1,vals2 )$p.value
+}
+
+par(mfrow=c(3,2))
+
+hist(allPValsNegBinom,main="Negative binomial test")
+hist(allPValsTTest, main="t test")
+hist(allPValsPoiss, main = "poisson test")
+
+source("http://bioconductor.org/biocLite.R")
+biocLite("DESeq")
+library("DESeq")
+
+conditions <- factor(c( rep("S1",10), rep("S2",10) ))
+
+cds <- newCountDataSet(myFrame, conditions)
+cds <- estimateSizeFactors(cds)
+cds <- estimateDispersions(cds,)
+res <- nbinomTest(cds,"S1", "S2")
+
+hist(res$pval, main="Dseq")
+
+plot( log10(allPValsNegBinom), log10(res$pval) )
+plot( log10(allPValsNegBinom), log10(allPValsTTest) )
+
+
+#edit(res[order(res$padj),])
