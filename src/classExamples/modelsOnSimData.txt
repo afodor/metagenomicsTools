@@ -1,7 +1,7 @@
 
 rm(list=ls())
 
-numRows = 500
+numRows = 3000
 numCols = 20
 for( i in 1:numCols)
 
@@ -33,9 +33,8 @@ myFrame["tempColumn"] <- NULL
 row.names(myFrame) <- paste("Gene_",1:numRows,sep="")
 
 allPValsNegBinom <- vector()
-allPValsTTest <- vector()
-allPValsWilcox <- vector()
 allPValsPoiss <- vector()
+allPValsTTest <- vector()
 
 meanReads1 = mean(apply(myFrame,2,sum)[1:5])
 meanReads2 = mean(apply(myFrame,2,sum)[6:10])
@@ -44,10 +43,15 @@ for( i in 1:nrow(myFrame))
 {
 	vals1 <- as.numeric( myFrame[i,1:10])
 	vals2 <- as.numeric( myFrame[i,11:20])
+	allPValsTTest[i] = t.test( vals1,vals2 )$p.value
 	
 	mean1 = mean(vals1)
 	mean2 = mean(vals2)
-				
+	
+	poisBackround = mean1/ meanReads1
+	allPValsPoiss[i] = poisson.test(round(mean2),round(meanReads2) ,
+				poisBackround,alternative="two.sided")$p.value
+	
 	var1 = max( var(vals1), mean1 )
 			
 	r = round( mean1^2 / (var1-mean1))
@@ -59,11 +63,7 @@ for( i in 1:nrow(myFrame))
 		allPValsNegBinom[i] = 2 * allPValsNegBinom[i]
 	else
 		 allPValsNegBinom[i] = 2 * (1-allPValsNegBinom[i])
-		
-	poisBackround = mean1/ meanReads1
 	
-	allPValsPoiss[i] = poisson.test(round(mean2),round(meanReads2) ,poisBackround,alternative="two.sided")$p.value
-	allPValsTTest[i] = t.test( vals1,vals2 )$p.value
 }
 
 par(mfrow=c(3,2))
