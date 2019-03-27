@@ -41,9 +41,10 @@ public class CheckAbundances
 	}
 	
 	//outer key is body site; inner key is taxa;
-	private static HashMap<String, HashMap<String,List<Double>>> getBodySiteToTaxa() throws Exception
+	private static HashMap<String, HashMap<String,List<Double>>> getBodySiteToTaxa(String filter) throws Exception
 	{
 		HashMap<String, String> siteMap = getBodySiteMap();
+		List<Long> rowSums = getRowSums(filter);
 		
 		HashMap<String, HashMap<String,List<Double>>> map = new HashMap();
 		
@@ -71,12 +72,44 @@ public class CheckAbundances
 			bodySites.add(bodySite);
 		}
 		
+		
+		
 		reader.close();
 		return map;
 	}
 	
+	private static List<Long> getRowSums(String filter) throws Exception
+	{
+		List<Long> list= new ArrayList<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\Thomas_Dolphin\\hierarch_merge.txt")));
+		
+		String[] tops = reader.readLine().split("\t");
+		
+		for( int x=4;  x < tops.length; x++)
+			list.add(0l);
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( splits.length != tops.length)
+				throw new Exception("No");
+			
+			if( splits[3].equals(filter))
+			{
+				for( int x=4; x < splits.length; x++)
+					list.set(x-4, list.get(x-4)+ Long.parseLong(splits[x]));
+			}
+		}
+		
+		reader.close();
+		
+		return list;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa();
+		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa("genus");
 	}
 }
