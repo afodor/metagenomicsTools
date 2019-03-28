@@ -1,8 +1,10 @@
 package scripts.dolphinCheck;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -146,8 +148,35 @@ public class CheckAbundances
 		return list;
 	}
 	
+	private static void writeResults(HashMap<String, HashMap<String,List<Double>>>  map, String filter ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter( new File("C:\\Thomas_Dolphin\\summedOut_" + filter + ".txt")));
+		
+		writer.write("bodySite\tgenus\tfraction\n");
+		
+		for(String s : map.keySet())
+		{
+			HashMap<String,List<Double>> innerMap = map.get(s);
+			
+			for(String s2: innerMap.keySet())
+			{
+				List<Double> list= innerMap.get(s2);
+				
+				for(Double d : list)
+				{
+					writer.write(s + "\t" + s2 + "\t" + d + "\n");
+				}
+			}
+			
+		}
+		
+		writer.flush(); writer.close();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa("genus");
+		String filter = "genus";
+		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa(filter);
+		writeResults(bigMap, filter);
 	}
 }
