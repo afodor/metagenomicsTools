@@ -42,6 +42,23 @@ public class CheckAbundances
 		
 	}
 	
+	private static HashMap<String, String> bodySiteDecoded()
+	{
+		HashMap<String, String>  map =new HashMap<>();
+		
+		//Body site A is fecal, B is blowhole, C is blowhole plate, D is gastric, E is skin, and F is genital.
+		
+		map.put("A","fecal");
+		map.put("B","blowhole");
+		map.put("C", "blowhole_plate");
+		map.put("D", "gastric");
+		map.put("E" ,"skin"); 
+		map.put("F", "genital");
+		
+		
+		return map;
+	}
+	
 	//outer key is body site; inner key is taxa relative abundance
 	private static HashMap<String, HashMap<String,List<Double>>> getBodySiteToTaxa(String filter) throws Exception
 	{
@@ -85,7 +102,7 @@ public class CheckAbundances
 			{
 				for( int x=4; x < splits.length; x++)
 				{
-					String bodySite = topSplits[x];
+					String bodySite =  bodySites.get(x-4);
 					
 					if( bodySite != null)
 					{
@@ -164,7 +181,7 @@ public class CheckAbundances
 				
 				for(Double d : list)
 				{
-					writer.write(s + "\t" + s2 + "\t" + d + "\n");
+					writer.write( bodySiteDecoded().get(s) + "\t" + s2 + "\t" + d + "\n");
 				}
 			}
 			
