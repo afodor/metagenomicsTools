@@ -169,7 +169,7 @@ public class CheckAbundances
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter( new File("C:\\Thomas_Dolphin\\summedOut_" + filter + ".txt")));
 		
-		writer.write("bodySite\tgenus\tfraction\n");
+		writer.write("bodySite\t" + filter + "\tfraction\n");
 		
 		for(String s : map.keySet())
 		{
@@ -181,7 +181,12 @@ public class CheckAbundances
 				
 				for(Double d : list)
 				{
-					writer.write( bodySiteDecoded().get(s) + "\t" + s2 + "\t" + d + "\n");
+					String bodySite = bodySiteDecoded().get(s) ;
+					
+					if(bodySite == null)
+						bodySite = s;
+					
+					writer.write( bodySite+ "\t" + s2 + "\t" + d + "\n");
 				}
 			}
 			
@@ -192,7 +197,7 @@ public class CheckAbundances
 	
 	public static void main(String[] args) throws Exception
 	{
-		String filter = "genus";
+		String filter = "phylum";
 		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa(filter);
 		writeResults(bigMap, filter);
 	}
