@@ -190,7 +190,7 @@ public class CheckAbundances
 				Avevar av = new Avevar(list);
 				
 				if(av.getAve()>0)
-					writer.write( bodySiteDecoded+ "\t" + av.getAve()+ "\t" + av.getSD() + "\t" + list.size() + "\n");
+					writer.write( bodySiteDecoded+ "\t" + taxa + "\t" +  av.getAve()+ "\t" + av.getSD() + "\t" + list.size() + "\n");
 			}
 			
 		}
