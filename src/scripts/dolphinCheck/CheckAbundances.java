@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import utils.Avevar;
+
 public class CheckAbundances
 {
 	private static HashMap<String, String> getBodySiteMap() throws Exception
@@ -165,6 +167,38 @@ public class CheckAbundances
 		return list;
 	}
 	
+	private static void writeAverages(HashMap<String, HashMap<String,List<Double>>>  map, String filter ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter( new File("C:\\Thomas_Dolphin\\averageOut_" + filter + ".txt")));
+		
+		
+		writer.write("bodySite\t" + filter + "\taverage\tsd\tsampleSize\n");
+		
+		for(String bodySite : map.keySet())
+		{
+
+			String bodySiteDecoded = bodySiteDecoded().get(bodySite) ;
+			
+			if(bodySiteDecoded== null)
+				bodySiteDecoded= bodySite;
+			
+			HashMap<String,List<Double>> innerMap = map.get(bodySite);
+			
+			for(String taxa: innerMap.keySet())
+			{
+				List<Double> list= innerMap.get(taxa);
+				Avevar av = new Avevar(list);
+				
+				if(av.getAve()>0)
+					writer.write( bodySiteDecoded+ "\t" + av.getAve()+ "\t" + av.getSD() + "\t" + list.size() + "\n");
+			}
+			
+		}
+		
+		writer.flush(); writer.close();
+	}
+
+	
 	private static void writeResults(HashMap<String, HashMap<String,List<Double>>>  map, String filter ) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter( new File("C:\\Thomas_Dolphin\\summedOut_" + filter + ".txt")));
@@ -197,8 +231,14 @@ public class CheckAbundances
 	
 	public static void main(String[] args) throws Exception
 	{
-		String filter = "phylum";
-		HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa(filter);
-		writeResults(bigMap, filter);
+		String[] filters = {"phylum","genus"};
+		
+		for(String filter : filters)
+		{
+			HashMap<String, HashMap<String,List<Double>>>  bigMap = getBodySiteToTaxa(filter);
+			writeResults(bigMap, filter);
+			writeAverages(bigMap, filter);
+		}
+			
 	}
 }
