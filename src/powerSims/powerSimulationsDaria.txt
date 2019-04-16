@@ -1,7 +1,7 @@
 # this power simulation assumes perfectly a normal distribution 
-# and then applies a t-test.
-# Real data, of course, are likely to have a different distribution
-# so these results should be considered a rough approximation
+# and then applies a wilcoxon test which is robsust to the
+# underlying distribution.  This will lower our power in comparison to
+# a t-test but yields a more robust power estimate.
 
 rm(list=ls())
 
@@ -48,7 +48,7 @@ for( j in 1 : numHypotheses )
 		}
 	}
 	
-	pValues[j] <- t.test(data,data2)$p.value 
+	pValues[j] <- wilcox.test(data,data2)$p.value 
 	truePositives[j] <- isATruePositive
 	
 	if( isATruePositive  & pValues[j] < 0.05 )
