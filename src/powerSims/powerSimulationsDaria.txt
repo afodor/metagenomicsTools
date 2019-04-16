@@ -4,13 +4,18 @@
 # so these results should be considered a rough approximation
 
 rm(list=ls())
-sampleSizeForEachGroup <- 35
+
+# in our proposal, we will have 3 diets, but we power 
+# for a comparison comparing one low fiber group to 
+# the merging of the two high fiber groups
+sampleSizeForGroup1 <- 20
+sampleSizeForGroup2 <- 55
 numHypotheses <- 100
 numUnder <- 0
 numBonferroniUnder <-0
 fractionTruePositives <- 1
 numTruePositves <-0;
-effectSize <- 0.65
+effectSize <- 0.7  #effect size is defined as difference in means/sd
 
 pValues <- vector();
 truePositives <- vector()
@@ -25,9 +30,13 @@ for( j in 1 : numHypotheses )
 	data<-vector()
 	data2<-vector()
 
-	for( i in 1 : sampleSizeForEachGroup)
+	for( i in 1 : sampleSizeForGroup1 )
 	{
 		data[i] = rnorm(1)
+	}
+	
+	for( i in 1:sampleSizeForGroup2 )
+	{
 	
 		if( isATruePositive  ) 
 		{
