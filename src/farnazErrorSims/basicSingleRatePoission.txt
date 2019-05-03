@@ -1,0 +1,35 @@
+rm(list=ls())
+
+
+setwd("C:\\farnazFiltering")
+
+myT <- read.table("hashmapTableChina10seq.txt",sep="\t", header=TRUE)
+
+trueExpression <- myT[,2]
+
+baseError <- 0.01
+
+allResults <- data.frame(samples=c(1:80))
+
+for( i in 1:600 ) 
+{
+	variantCount <- vector()
+
+	for( j in 1:length(trueExpression))
+	{
+		variantCount[j] <- rbinom( 1, trueExpression[j], baseError) 
+	}
+	
+	allResults= cbind( allResults, variantCount)
+}
+	
+correlationCoeffs = vector()
+abundance= vector()
+
+for( i in 2:601) 
+{
+	correlationCoeffs[i-1] = cor ( trueExpression, allResults[i])
+	abundance[i-1] = log10( sum(allResults[i]) )
+}
+
+plot(correlationCoeffs,abundance)
