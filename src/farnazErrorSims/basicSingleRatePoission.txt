@@ -7,7 +7,7 @@ myT <- read.table("hashmapTableChina10seq.txt",sep="\t", header=TRUE)
 
 trueExpression <- myT[,2]
 
-baseError <- 0.01
+baseError <- 0.2
 
 allResults <- data.frame(samples=c(1:80))
 
@@ -33,3 +33,4 @@ for( i in 2:601)
 }
 
 plot(correlationCoeffs,abundance)
+log10(sum(trueExpression))
