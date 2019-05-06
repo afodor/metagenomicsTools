@@ -13,21 +13,30 @@ public class MergeMetadata
 {
 	public static void main(String[] args) throws Exception
 	{
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				ConfigReader.getAaronExerciseDirectory() + File.separator + 
-					"pcoa_genus.txt")));
+		addMeta(ConfigReader.getAaronExerciseDirectory() + File.separator + 
+				"pcoa_genus.txt", ConfigReader.getAaronExerciseDirectory() +File.separator + 
+				"pcoa_genusSimpleMeta.txt", true);
+		
+		addMeta(ConfigReader.getAaronExerciseDirectory() + File.separator + 
+				"genusLogNorm.tsv", ConfigReader.getAaronExerciseDirectory() +File.separator + 
+				"genusLogNormSimpleMeta.txt", false);
+	}
+	
+	public static void addMeta(String inFile, String outFile, boolean fromR) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(inFile)));
 		
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getAaronExerciseDirectory() +File.separator + 
-				"pcoa_genusSimpleMeta.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outFile)));
 		
 		
 		writer.write("sampleId\tsubjectID\ttimepoint");
 		
 		String[] topSplits = reader.readLine().replaceAll("\"","").split("\t");
 		
-		for( int x=0; x < topSplits.length; x++)
+		int startPos = fromR ? 0 :1;
+		
+		for( int x=startPos; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
 		
 		writer.write("\n");
