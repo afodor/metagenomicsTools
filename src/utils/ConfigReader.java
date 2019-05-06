@@ -180,6 +180,13 @@ public class ConfigReader
 	
 	public static final String CHINA_MAY_2017_DIR = "CHINA_MAY_2017_DIR";
 	
+	public static final String AARON_EXERCISE_TEST_DIR = "AARON_EXERCISE_TEST_DIR";
+	
+	public static String getAaronExerciseDirectory() throws Exception
+	{
+		return getConfigReader().getAProperty(AARON_EXERCISE_TEST_DIR );
+	}
+	
 	public static final String getTopeVickiDir() throws Exception
 	{
 		return getConfigReader().getAProperty(TOPE_VICKI_DIR);
