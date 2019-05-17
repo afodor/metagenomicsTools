@@ -1,0 +1,16 @@
+rm(list=ls())
+
+library("pwr")
+
+infectedPDDay10 <- c( 251.94500, 116.36960, 137.09350, 130.39350,  56.95684, 379.17830)
+uninfectedPDay10 <-  c(107.633400 ,  8.086639 ,  8.316540 , 17.906660 , 22.307610 , 23.621320)
+
+diff <- mean(infectedPDDay10 ) - mean(uninfectedPDay10) 
+sdEst <- sd(c(infectedPDDay10 ,uninfectedPDay10))
+
+dEst <- diff/sdEst
+
+pwr.t.test( d=dEst, sig=.05, power=.8)
+
+
+

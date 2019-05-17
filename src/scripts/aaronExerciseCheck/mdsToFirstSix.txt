@@ -1,0 +1,22 @@
+rm(list=ls())
+
+setwd("C:\\aaronExeciseTest");
+
+myT <- read.table("pcoa_genusSimpleMeta.txt", sep="\t", header=TRUE)
+
+pValuesSubject <- vector()
+pValuesTimepoint <- vector()
+colName <- vector()
+
+subjects <- factor(myT[,2]) 
+timepoints <- factor(myT[,3])
+
+
+for( i in 4:10)
+{
+	data <- myT[,i]
+	myLm <- lm( myT[,i] ~ subjects + timepoints ) 
+	
+	pValuesSubject[i-3] <- anova(myLm)$"Pr(>F)"[1]
+	pValuesTimepoint[i-3] <- anova(myLm)$"Pr(>F)"[2]
+}
