@@ -25,4 +25,16 @@ dEst2 <- diff2/sdEst2
 pwr.t.test( d=dEst2, sig=.05, power=.8)
 
 
+giardiaInfectivityDay7PD <- c(18487.8,19974.58,94553.57,103461.5)
+giardiaInfectivityDay7CD <- c(17338.31,15570,8068.783,1090.594)
+
+
+diff3 <- mean(giardiaInfectivityDay7PD ) - mean(giardiaInfectivityDay7CD ) 
+sdEst3 <- sd(c(giardiaInfectivityDay7PD ,giardiaInfectivityDay7CD ))
+
+dEst3 <- diff3/sdEst3
+
+# power for day 7 infectivity PD vs CD around 12
+pwr.t.test( d=dEst3, sig=.05, power=.8)
+
 
