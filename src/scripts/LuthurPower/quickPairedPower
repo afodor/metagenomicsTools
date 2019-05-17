@@ -1,5 +1,6 @@
 rm(list=ls())
 
+#install.packages("pwr")
 library("pwr")
 
 infectedPDDay10 <- c( 251.94500, 116.36960, 137.09350, 130.39350,  56.95684, 379.17830)
@@ -10,7 +11,18 @@ sdEst <- sd(c(infectedPDDay10 ,uninfectedPDay10))
 
 dEst <- diff/sdEst
 
+# power for infected vs uinfected PDay10 which is approx 10 per group
 pwr.t.test( d=dEst, sig=.05, power=.8)
+
+GiardiaInfectedCD_Day10 <- c(13.472870 , 2.864622 ,42.834410 , 2.634722, 10.779760,  2.142078)
+
+diff2 <- mean(infectedPDDay10 ) - mean(GiardiaInfectedCD_Day10 ) 
+sdEst2 <- sd(c(infectedPDDay10 ,GiardiaInfectedCD_Day10 ))
+
+dEst2 <- diff2/sdEst2
+
+# power for infected CD vs PD Day10 which is approx 9 per group
+pwr.t.test( d=dEst2, sig=.05, power=.8)
 
 
 
