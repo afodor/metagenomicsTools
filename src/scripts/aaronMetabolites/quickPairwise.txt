@@ -1,0 +1,47 @@
+rm(list=ls())
+
+setwd("C:\\aaronMetabolites")
+
+myT <-read.table("gc_data_numeric.csv", sep=",", header=TRUE,row.names=1)
+
+expGroups <- c("CRP", "CNP", "CWP", "LR", "SWP", "SP", "SNP")
+
+numGroups = length(expGroups )
+
+iGroups <- vector()
+jGroup <- vector()
+index <- 1
+pValues <- vector()
+metabloliteName <- vector()
+
+for( m in 1:nrow(myT) )
+{	
+	for ( i in 1:(numGroups-1) ) 
+	{
+		iCols <- startsWith(names(myT), expGroups[i])
+		iData <- myT[m, iCols]
+	
+		for( j in i:numGroups) 
+		{
+			jCols <- startsWith(names(myT), expGroups[j])
+			jData <- myT[m,jCols]
+			
+			if( sum(!is.na(iData)) >1 & sum(!is.na(jData)) >1   )
+			{
+				iGroups[index]  <- expGroups[i]
+				jGroup[index] <-expGroups[j]
+				pValues[index] <- t.test(iData, jData)$p.value
+				metabloliteName[index] <- row.names(myT)[m]
+			
+				index = index + 1
+				print( paste(index, " " , metabloliteName, "\n"))
+			}
+		}
+	}
+}
+
+myFrame <-data.frame(metabloliteName,iGroups,jGroup, pValues)
+
+sum(p.adjust(pValues, method="BH") < .1)
+
+hist(Values)
