@@ -27,9 +27,21 @@ public class CompareMetaphlan
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			System.out.println(splits[1] + " " + Float.parseFloat(splits[2]));
+			System.out.println(splits[0] + "@" + splits[1] + " " + Float.parseFloat(splits[2]));
 		}
 		
 		return map;
+	}
+	
+	private static String getLastMatchOrNull(String s, String level)
+	{
+		s = s.substring(s.lastIndexOf("|") +1, s.length());
+		
+		String startString = level + "__";
+		
+		if( ! s.startsWith(startString))
+			return null;
+		
+		return s.replace(startString, "");
 	}
 }
