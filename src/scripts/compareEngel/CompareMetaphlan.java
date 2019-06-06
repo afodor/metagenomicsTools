@@ -22,7 +22,40 @@ public class CompareMetaphlan
 	
 	private static class Holder
 	{
-		Float virginiaParse;
+		Double virginiaParse;
+		Double biolockJMetaphlan;
+		Double krakenCount;
+	}
+	
+	private static void addForAFile( File inFile , boolean isMetaphlan,  HashMap<String, HashMap<String,Holder>>  bigMap) throws Exception
+	{
+		OtuWrapper wrapper = new OtuWrapper(inFile);
+		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = new StringTokenizer( wrapper.getSampleNames().get(x), "_").nextToken();
+			
+			HashMap<String, Holder> innerMap = bigMap.get(sampleName);
+			
+			if( innerMap== null)
+				throw new Exception("Could not find " + sampleName);
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				Holder h = innerMap.get(wrapper.getOtuNames().get(y));
+				
+				if( h== null)
+				{
+					h = new Holder();
+					innerMap.put(wrapper.getOtuNames().get(y), h);
+				}
+				
+				if( isMetaphlan )
+					h.biolockJMetaphlan = wrapper.getDataPointsNormalized().get(x).get(y);
+				else
+					h.krakenCount= wrapper.getDataPointsNormalized().get(x).get(y);
+			}
+		}
 	}
 	
 	public static void writeForALevel(String level) throws Exception
@@ -31,40 +64,20 @@ public class CompareMetaphlan
 		HashMap<String, HashMap<String,Holder>>  map = parseMetaphlanSummaryAtLevel(
 				new File( ConfigReader.getEngelCheckDir() + File.separator +  "allSamples.metaphlan2.bve.profile.txt"), "" + level.charAt(0));
 	
-		OtuWrapper wrapper = new OtuWrapper(
-				ConfigReader.getEngelCheckDir() + File.separator +  "racialDisparityMetaphlan2_2019Jun03_taxaCount_"+ level + ".tsv");
+		File blj_metaphan = new File(ConfigReader.getEngelCheckDir() + File.separator +  "racialDisparityMetaphlan2_2019Jun03_taxaCount_"+ level + ".tsv");
+	
+		addForAFile(blj_metaphan, true, map);
+		
+		File blj_kraken = new File(ConfigReader.getEngelCheckDir() + File.separator +  
+				"racialDisparityKraken2_2019Jun03_taxaCount_" + level + ".tsv");
+		
+		addForAFile(blj_kraken, false, map);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getEngelCheckDir() + File.separator + 
 											"comparison_" + level + ".txt")));
 		
-		writer.write("sample\ttaxa\tvirginiaCount\tbiolockJCount\n");
+		writer.write("sample\ttaxa\tvirginiaCount\tbiolockJCount\tkrakenCount\n");
 		
-		for(int x=0; x < wrapper.getSampleNames().size(); x++)
-		{
-			String sampleName = new StringTokenizer( wrapper.getSampleNames().get(x), "_").nextToken();
-			
-			HashMap<String, Holder> virginiaMap = map.get(sampleName);
-			
-			if( virginiaMap == null)
-				throw new Exception("Could not find " + sampleName);
-			
-			for( int y=0; y < wrapper.getOtuNames().size(); y++)
-			{
-				Holder h = virginiaMap.get(wrapper.getOtuNames().get(y));
-				
-				writer.write(sampleName + "\t" + wrapper.getOtuNames().get(y) + "\t");
-				
-				if( h!= null)
-					writer.write(h.virginiaParse + "\t");
-				else
-					writer.write(0 + "\t");
-				
-				virginiaMap.remove(wrapper.getOtuNames().get(y));
-				
-				writer.write(wrapper.getDataPointsNormalized().get(x).get(y) + "\n");
-			}
-			
-		}
 		
 		for(String s : map.keySet())
 		{
@@ -72,7 +85,9 @@ public class CompareMetaphlan
 			
 			for(String s2 : innerMap.keySet())
 			{
-				writer.write(s + "\t" + s2 + "\t" + innerMap.get(s2).virginiaParse + "\t0\n");
+				Holder h = innerMap.get(s2);
+				writer.write(s + "\t" + s2 + "\t" + getValOrZero(h.virginiaParse) + "\t" + getValOrZero(h.biolockJMetaphlan) + "\t" + 
+									getValOrZero(h.krakenCount) + "\n");
 			}
 		}
 		
@@ -80,7 +95,13 @@ public class CompareMetaphlan
 	}
 	
 	
-	
+	private static double getValOrZero( Double d )
+	{
+		if( d == null)
+			return 0;
+		
+		return d;
+	}
 	
 	// outer key is sample id;
 	// inner key is taxa name
@@ -114,7 +135,7 @@ public class CompareMetaphlan
 					throw new Exception("Duplicate " + lastMatch);
 					
 				Holder h= new Holder();
-				h.virginiaParse = Float.parseFloat(splits[2]);
+				h.virginiaParse = Double.parseDouble(splits[2]);
 				innerMap.put(lastMatch, h);
 			}
 		}
