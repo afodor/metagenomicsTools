@@ -184,6 +184,8 @@ public class ConfigReader
 	
 	public static final String ENGEL_CHECK_DIR = "ENGEL_CHECK_DIR";
 	
+	public static final String GRANT_CHECK_DIR = "GRANT_CHECK_DIR";
+	
 	public static String getAaronExerciseDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(AARON_EXERCISE_TEST_DIR );
@@ -192,6 +194,11 @@ public class ConfigReader
 	public static String getEngelCheckDir() throws Exception
 	{
 		return getConfigReader().getAProperty(ENGEL_CHECK_DIR);
+	}
+	
+	public static String getGrantCheckDir() throws Exception
+	{
+		return getConfigReader().getAProperty(GRANT_CHECK_DIR);
 	}
 	
 	public static final String getTopeVickiDir() throws Exception
