@@ -1,11 +1,12 @@
 package scripts.compareEngel;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -21,19 +22,22 @@ public class CompareMetaphlan
 	
 	private static class Holder
 	{
-		Float biolockJParse;
 		Float virginiaParse;
 	}
 	
 	public static void writeForALevel(String level) throws Exception
 	{
-
 		System.out.println(level);
 		HashMap<String, HashMap<String,Holder>>  map = parseMetaphlanSummaryAtLevel(
 				new File( ConfigReader.getEngelCheckDir() + File.separator +  "allSamples.metaphlan2.bve.profile.txt"), "" + level.charAt(0));
 	
 		OtuWrapper wrapper = new OtuWrapper(
 				ConfigReader.getEngelCheckDir() + File.separator +  "racialDisparityMetaphlan2_2019Jun03_taxaCount_"+ level + ".tsv");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(ConfigReader.getEngelCheckDir() + File.separator + 
+											"comparison_" + level + ".txt")));
+		
+		writer.write("sample\ttaxa\tvirginiaCount\tbiolockJCount\n");
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
@@ -43,8 +47,35 @@ public class CompareMetaphlan
 			
 			if( virginiaMap == null)
 				throw new Exception("Could not find " + sampleName);
+			
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
+			{
+				Holder h = virginiaMap.get(wrapper.getOtuNames().get(y));
+				
+				writer.write(sampleName + "\t" + wrapper.getOtuNames().get(y) + "\t");
+				
+				if( h!= null)
+					writer.write(h.virginiaParse + "\t");
+				else
+					writer.write(0 + "\t");
+				
+				virginiaMap.remove(wrapper.getOtuNames().get(y));
+				
+				writer.write(wrapper.getDataPointsUnnormalized().get(x).get(y) + "\n");
+			}
+			
+			for(String s : map.keySet())
+			{
+				HashMap<String, Holder> innerMap = map.get(s);
+				
+				for(String s2 : innerMap.keySet())
+				{
+					writer.write(s + "\t" + s2 + "\t" + innerMap.get(s2).virginiaParse + "\t0\n");
+				}
+			}
 		}
 		
+		writer.flush();  writer.close();
 	}
 	
 	
