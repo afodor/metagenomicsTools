@@ -4,28 +4,57 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.StringTokenizer;
+
+import parsers.OtuWrapper;
+import utils.ConfigReader;
 
 public class CompareMetaphlan
 {
 	public static void main(String[] args) throws Exception
 	{
+		String[] levels = {"phylum", "class", "order", "family", "genus", "species"};
 		
-		HashMap<String, HashMap<String,Float>>  map = parseMetaphlanSummaryAtLevel(new File("C:\\EngelCheck\\allSamples.metaphlan2.bve.profile.txt"), "g");
-		
-		for(String s : map.keySet())
-		{
-			System.out.println(s);
-			
-			for(String s2 : map.get(s).keySet())
-				System.out.println( "\t" + s2 + "\t" + map.get(s).get(s2));
-		}
+		for(String s : levels)
+			writeForALevel(s);
 	}
+	
+	private static class Holder
+	{
+		Float biolockJParse;
+		Float virginiaParse;
+	}
+	
+	public static void writeForALevel(String level) throws Exception
+	{
+
+		System.out.println(level);
+		HashMap<String, HashMap<String,Holder>>  map = parseMetaphlanSummaryAtLevel(
+				new File( ConfigReader.getEngelCheckDir() + File.separator +  "allSamples.metaphlan2.bve.profile.txt"), "" + level.charAt(0));
+	
+		OtuWrapper wrapper = new OtuWrapper(
+				ConfigReader.getEngelCheckDir() + File.separator +  "racialDisparityMetaphlan2_2019Jun03_taxaCount_"+ level + ".tsv");
+		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleName = new StringTokenizer( wrapper.getSampleNames().get(x), "_").nextToken();
+			
+			HashMap<String, Holder> virginiaMap = map.get(sampleName);
+			
+			if( virginiaMap == null)
+				throw new Exception("Could not find " + sampleName);
+		}
+		
+	}
+	
+	
+	
 	
 	// outer key is sample id;
 	// inner key is taxa name
-	private static HashMap<String, HashMap<String,Float>> parseMetaphlanSummaryAtLevel(File f, String level) throws Exception
+	private static HashMap<String, HashMap<String,Holder>> parseMetaphlanSummaryAtLevel(File f, String level) throws Exception
 	{
-		HashMap<String, HashMap<String,Float>> map = new HashMap<>();
+		HashMap<String, HashMap<String,Holder>> map = new HashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 		
@@ -40,7 +69,7 @@ public class CompareMetaphlan
 			
 			if( lastMatch != null)
 			{
-				HashMap<String, Float> innerMap = map.get(splits[0]);
+				HashMap<String, Holder> innerMap = map.get(splits[0]);
 				
 				if( innerMap==null)
 				{	
@@ -52,7 +81,9 @@ public class CompareMetaphlan
 				if( innerMap.containsKey(lastMatch))
 					throw new Exception("Duplicate " + lastMatch);
 					
-				innerMap.put(lastMatch, Float.parseFloat(splits[2]));
+				Holder h= new Holder();
+				h.virginiaParse = Float.parseFloat(splits[2]);
+				innerMap.put(lastMatch, h);
 			}
 		}
 		
