@@ -61,17 +61,18 @@ public class CompareMetaphlan
 				
 				virginiaMap.remove(wrapper.getOtuNames().get(y));
 				
-				writer.write(wrapper.getDataPointsUnnormalized().get(x).get(y) + "\n");
+				writer.write(wrapper.getDataPointsNormalized().get(x).get(y) + "\n");
 			}
 			
-			for(String s : map.keySet())
+		}
+		
+		for(String s : map.keySet())
+		{
+			HashMap<String, Holder> innerMap = map.get(s);
+			
+			for(String s2 : innerMap.keySet())
 			{
-				HashMap<String, Holder> innerMap = map.get(s);
-				
-				for(String s2 : innerMap.keySet())
-				{
-					writer.write(s + "\t" + s2 + "\t" + innerMap.get(s2).virginiaParse + "\t0\n");
-				}
+				writer.write(s + "\t" + s2 + "\t" + innerMap.get(s2).virginiaParse + "\t0\n");
 			}
 		}
 		
