@@ -55,8 +55,8 @@ for( taxa in taxaLevels )
 	
 	for( i in 1:nrow(dFrame))
 	{
-		data <- myT[,which(names(myT) == dFrame$taxaName[i])]
-		meta <- myT[,which(names(myT) == dFrame$metaName[i])]
+		data <- myT[,which(names(myT) == toString( dFrame$taxaName[i]))]
+		meta <- myT[,which(names(myT) == toString( dFrame$metaName[i]))]
 		
 		aTitle <- paste(dFrame$taxaName[i], "vs", dFrame$metaName[i])
 		
