@@ -6,13 +6,13 @@ setwd("C:\\EngelCheck")
 
 taxaLevels <- c("phylum", "class", "order", "family", "genus", "species")
 
-pValues <- vector()
-metaName <- vector()
-taxaName <- vector()
-
-index <- 1
 for( taxa in taxaLevels ) 
 {
+	index <- 1
+	pValues <- vector()
+	metaName <- vector()
+	taxaName <- vector()
+		
 	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
 	
 	startCol <- 7
@@ -60,7 +60,7 @@ for( taxa in taxaLevels )
 		
 		aTitle <- paste(dFrame$taxaName[i], "vs", dFrame$metaName[i])
 		
-		if( dFrame$metaName[i]== "yripct" ) 
+		if(  dFrame$metaName[i]== "yripct" ) 
 		{
 			plot(data, meta,main=aTitle)
 		}
