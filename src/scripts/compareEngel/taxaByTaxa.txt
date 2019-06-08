@@ -43,4 +43,14 @@ for( taxa in taxaLevels )
 			
 		}
 	}
+	
+		
+	pdf(paste0("pValues",taxa,".pdf"))
+	
+	par(mfrow=c(2,2))
+	hist(pValues[metaName =="yripct"],main="yripc")
+	hist(pValues[metaName =="c_mrace"],main="c_mrace")
+	hist(pValues[metaName =="c_case2"],,main="c_case2")
+	
+	dev.off()
 }
