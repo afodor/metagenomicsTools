@@ -1,0 +1,11 @@
+rm(list=ls())
+
+
+setwd("C:\\EngelCheck")
+
+taxaLevels <- c("phylum", "class", "order", "family", "genus", "species")
+
+for( taxa in taxaLevels ) 
+{
+	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
+}
