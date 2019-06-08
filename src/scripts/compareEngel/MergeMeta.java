@@ -6,8 +6,6 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import com.sun.org.apache.xml.internal.serializer.utils.StringToIntTable;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -53,7 +51,7 @@ public class MergeMeta
 			
 			if( mfp == null)
 			{
-				writer.write("\t\t\t");
+				writer.write("NA\tNA\tNA\t");
 				System.out.println("Could not find " + sampleID);
 			}
 			else
@@ -64,7 +62,7 @@ public class MergeMeta
 				+"\t" + mfp.getC_case2());
 			}
 			
-			writer.write(wrapper.getShannonEntropy(x) + "\t" + wrapper.getNumberSequences(aName));
+			writer.write("\t" + wrapper.getShannonEntropy(x) + "\t" + wrapper.getNumberSequences(aName));
 			
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)
 				writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(x).get(y));
@@ -79,7 +77,7 @@ public class MergeMeta
 	private static String getFloatOrEmpty(Float f)
 	{
 		if( f== null)
-			return "";
+			return "NA";
 		
 		return f.toString();
 	}
