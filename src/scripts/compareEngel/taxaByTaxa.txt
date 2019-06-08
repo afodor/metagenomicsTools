@@ -1,11 +1,46 @@
 rm(list=ls())
 
+library("Kendall")
 
 setwd("C:\\EngelCheck")
 
 taxaLevels <- c("phylum", "class", "order", "family", "genus", "species")
 
+pValues <- vector()
+metaName <- vector()
+taxaName <- vector()
+
+index <- 1
 for( taxa in taxaLevels ) 
 {
 	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
+	
+	startCol <- 7
+	endCol <- which(names(myT) == "MDS5")
+	
+	for( i in startCol:endCol )
+	{
+		bug <- myT[,i]
+	
+		for (metaCol in 4:6) 
+		{
+			meta <- myT[,metaCol]
+			metaName[index] <- names(myT)[metaCol]
+			taxaName[index] <- names(myT)[i]
+			
+			# last two columns are factors (but not ancestry)
+			if( metaCol > 4 ) 
+			{
+				meta <- factor(meta)
+				pValues[index] <- wilcox.test( bug ~ meta )$p.value
+			}	
+			else
+			{	
+				pValues[index] <- Kendall(bug,meta)$sl[1]	
+			}
+			
+			index <- index + 1
+			
+		}
+	}
 }

@@ -1,6 +1,5 @@
 rm(list=ls())
 library("vegan")
-
 setwd("C:\\EngelCheck")
 
 taxaLevels <- c("phylum", "class", "order", "family", "genus", "species")
@@ -14,7 +13,7 @@ for( taxa in taxaLevels )
 	
 	myPCOA <- capscale(myTData~1,distance="bray")
 
-	newT <- data.frame( cbind( myPCOA$CA$u, myT))
+	newT <- data.frame( cbind(  myT,myPCOA$CA$u))
 	newT$names <- row.names(myT)
 	
 	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
