@@ -44,6 +44,10 @@ for( taxa in taxaLevels )
 		}
 	}
 	
+	dFrame <- data.frame( metaName , taxaName ,pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	write.table(dFrame, file=paste("pValues", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 		
 	pdf(paste0("pValues",taxa,".pdf"))
 	
