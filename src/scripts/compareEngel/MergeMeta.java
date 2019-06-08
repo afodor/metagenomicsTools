@@ -58,7 +58,9 @@ public class MergeMeta
 			}
 			else
 			{
-				writer.write(mfp.getEupct() + "\t" + mfp.getYripct() + "\t" + mfp.getC_mrace() 
+				writer.write( getFloatOrEmpty(mfp.getEupct())
+						+ "\t" + getFloatOrEmpty(mfp.getYripct()) + "\t" 
+							+ mfp.getC_mrace() 
 				+"\t" + mfp.getC_case2());
 			}
 			
@@ -72,5 +74,13 @@ public class MergeMeta
 		}
 		
 		writer.flush(); writer.close();
+	}
+	
+	private static String getFloatOrEmpty(Float f)
+	{
+		if( f== null)
+			return "";
+		
+		return f.toString();
 	}
 }
