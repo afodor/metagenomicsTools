@@ -1,0 +1,24 @@
+
+setwd("C:\\EngelCheck")
+
+rm(list=ls())
+
+myT <- read.table("comparison_phylum.txt", sep="\t", header=TRUE)
+
+plot( myT$virginiaCount, myT$biolockJCount,xlab="Virginia metaphlan", ylab="uncc count",pch=16,cex=1.2)
+
+means<- vector()
+taxaNames <- vector()
+
+allTaxa <- sort(unique(myT$taxa))
+
+index <- 1
+for( taxa in allTaxa ) 
+{
+	taxaNames[index] <- taxa
+	means[index] <- sum( mean(myT$biolockJCount[ myT$taxa== taxa ]))
+	index = index + 1
+}
+
+aFrame <- data.frame(means,taxaNames)
+aFrame <-  aFrame[order(aFrame$means),]
