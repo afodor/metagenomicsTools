@@ -6,8 +6,12 @@ rm(list=ls())
 myT <- read.table("comparison_phylum.txt", sep="\t", header=TRUE)
 
 plot( myT$virginiaCount, myT$biolockJCount,xlab="Virginia metaphlan", ylab="uncc count",pch=16,cex=1.2)
+plot( myT$krakenCount, myT$biolockJCount,xlab="kraken count", ylab="uncc count",pch=16,cex=1.2)
 
-means<- vector()
+
+meansCharlotte<- vector()
+meansVirginia <- vector()
+meansKraken <- vector()
 taxaNames <- vector()
 
 allTaxa <- sort(unique(myT$taxa))
@@ -16,9 +20,13 @@ index <- 1
 for( taxa in allTaxa ) 
 {
 	taxaNames[index] <- taxa
-	means[index] <- sum( mean(myT$biolockJCount[ myT$taxa== taxa ]))
+	meansCharlotte[index] <- sum( mean(myT$biolockJCount[ myT$taxa== taxa ]))
+	meansVirginia[index] <-  sum( mean(myT$virginiaCount[ myT$taxa== taxa ]))
+	meansKraken[index] <- sum(mean(myT$krakenCount[ myT$taxa== taxa ]))
 	index = index + 1
 }
 
-aFrame <- data.frame(means,taxaNames)
-aFrame <-  aFrame[order(aFrame$means),]
+aFrame <- data.frame(taxaNames,meansCharlotte,meansVirginia,meansKraken)
+aFrame <-  aFrame[order(aFrame$meansCharlotte,decreasing = TRUE),]
+
+write.table(aFrame,row.names=FALSE, file="phylaCounts.txt",sep="\t")
