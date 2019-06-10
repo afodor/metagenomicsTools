@@ -1,0 +1,82 @@
+rm(list=ls())
+
+library("Kendall")
+
+setwd("C:\\EngelCheck")
+
+taxaLevels <- c("phylum", "class", "order", "family", "genus", "species")
+
+for( taxa in taxaLevels ) 
+{
+	index <- 1
+	pValues <- vector()
+	metaName <- vector()
+	taxaName <- vector()
+		
+	myT <- read.table(file=paste("pcoaKraken_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
+	
+	startCol <- 7
+	endCol <- which(names(myT) == "MDS5")
+	
+	for( i in startCol:endCol )
+	{
+		bug <- myT[,i]
+	
+		for (metaCol in 4:6) 
+		{
+			meta <- myT[,metaCol]
+			metaName[index] <- names(myT)[metaCol]
+			taxaName[index] <- names(myT)[i]
+			
+			# last two columns are factors (but not ancestry)
+			if( metaCol > 4 ) 
+			{
+				meta <- factor(meta)
+				pValues[index] <- wilcox.test( bug ~ meta )$p.value
+			}	
+			else
+			{	
+				pValues[index] <- Kendall(bug,meta)$sl[1]	
+			}
+			
+			index <- index + 1
+			
+		}
+	}
+	
+	dFrame <- data.frame( metaName , taxaName ,pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	write.table(dFrame, file=paste("pValuesKraken", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+		
+	pdf(paste0("pValues_Kraken",taxa,".pdf"))
+	
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+		data <- myT[,which(names(myT) == toString( dFrame$taxaName[i]))]
+		meta <- myT[,which(names(myT) == toString( dFrame$metaName[i]))]
+		
+		aTitle <- paste(dFrame$taxaName[i], "\nvs", dFrame$metaName[i],"\np=",format(dFrame$pValues[i],3), " adj p =",format(dFrame$adjustedP[i],3))
+		
+		if(  dFrame$metaName[i]== "yripct" ) 
+		{
+			plot(data, meta,main=aTitle,ylab=dFrame$taxaName[i],xlab=dFrame$metaName[i])
+		}
+		else
+		{
+			boxplot( data~ meta, main = aTitle,ylab=dFrame$taxaName[i],xlab=dFrame$metaName[i])
+		
+			myFrame <- data.frame(meta,data)	
+		
+			stripchart(data~ meta, 	data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+		}
+	}
+	
+	hist(pValues[metaName =="yripct"],main="yripc")
+	hist(pValues[metaName =="c_mrace"],main="c_mrace")
+	hist(pValues[metaName =="c_case2"],,main="c_case2")
+	
+	dev.off()
+}
