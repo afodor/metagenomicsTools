@@ -3,11 +3,21 @@ setwd("C:\\EngelCheck")
 
 rm(list=ls())
 
-myT <- read.table("comparison_phylum.txt", sep="\t", header=TRUE)
+#myT <- read.table("comparison_phylum.txt", sep="\t", header=TRUE)
+myT <- read.table("comparison_genus.txt", sep="\t", header=TRUE)
 
-plot( myT$virginiaCount, myT$biolockJCount,xlab="Virginia metaphlan", ylab="uncc count",pch=16,cex=1.2)
-plot( myT$krakenCount, myT$biolockJCount,xlab="kraken count", ylab="uncc count",pch=16,cex=1.2)
+myColors <- ifelse(grepl( "nclassif", myT$taxa, ignore.case=TRUE), "red", "black")
 
+
+plot( myT$virginiaCount, myT$biolockJCount,xlab="Virginia metaphlan", ylab="uncc count",pch=16,cex=1.2,col=myColors)
+
+legend("topright", legend=c("classified", "unclassified"), col=c("black", "red"), pch=16,cex=1.2)
+
+plot( myT$krakenCount, myT$biolockJCount,xlab="kraken count", ylab="uncc count",pch=16,cex=1.2,col=myColors)
+legend("topright", legend=c("classified", "unclassified"), col=c("black", "red"), pch=16,cex=1.2)
+
+plot( myT$krakenCount, myT$virginiaCount,xlab="kraken count", ylab="virginia count",pch=16,cex=1.2)
+legend("topright", legend=c("classified", "unclassified"), col=c("black", "red"), pch=16,cex=1.2)
 
 meansCharlotte<- vector()
 meansVirginia <- vector()
@@ -29,4 +39,4 @@ for( taxa in allTaxa )
 aFrame <- data.frame(taxaNames,meansCharlotte,meansVirginia,meansKraken)
 aFrame <-  aFrame[order(aFrame$meansCharlotte,decreasing = TRUE),]
 
-write.table(aFrame,row.names=FALSE, file="phylaCounts.txt",sep="\t")
+write.table(aFrame,row.names=FALSE, file="genusCounts.txt",sep="\t")
