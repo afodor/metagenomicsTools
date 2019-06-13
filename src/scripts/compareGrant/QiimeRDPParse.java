@@ -12,6 +12,9 @@ public class QiimeRDPParse
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, HashMap<String,Double>>  expectedMap = getExpectedMap();
+		
+		for(String s : expectedMap.keySet())
+			System.out.println(s + " " + expectedMap.get(s));
 	}
 	
 	// outer key is the sample 
