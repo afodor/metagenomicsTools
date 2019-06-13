@@ -4,17 +4,60 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import utils.ConfigReader;
 
 public class QiimeRDPParse
 {
 	public static void main(String[] args) throws Exception
+	{	
+		checkAllFiles();
+	}
+	
+	private static void checkAllFiles() throws Exception
 	{
 		HashMap<String, HashMap<String,Double>>  expectedMap = getExpectedMap();
 		
-		for(String s : expectedMap.keySet())
-			System.out.println(s + " " + expectedMap.get(s));
+		String[] files = new File( ConfigReader.getGrantCheckDir()).list();
+		
+		for(String s : files)
+		{
+			if( s.startsWith("s10_2019Jun05_otuCount_") && s.endsWith(".tsv"))
+			{
+				String sampleID = s.replace("s10_2019Jun05_otuCount_", "").replace(".tsv", "");
+				
+				HashMap<String, Double> innerMap = expectedMap.get(sampleID);
+				
+				if( innerMap == null )
+					throw new Exception("Could not find " +sampleID);
+
+				for(String s2 : innerMap.keySet())
+					System.out.println(s2);
+				
+				BufferedReader reader = new BufferedReader(new FileReader(new File(
+					ConfigReader.getGrantCheckDir() + File.separator + s	)));
+				
+				for(String s2= reader.readLine(); s2 != null; s2= reader.readLine())
+				{
+					StringTokenizer sToken = new StringTokenizer(s2, "\t");
+					
+					if( sToken.countTokens() != 2)
+						throw new Exception("Expecting two tokens");
+					
+					String key = sToken.nextToken();
+					Double val = Double.parseDouble(sToken.nextToken());
+					Double foundCount = innerMap.get(key);
+					
+					if( foundCount == null )
+						throw new Exception("Could not find " + key);
+					else
+						System.out.println("found " + key);
+				}
+				
+				reader.close();
+			}
+		}
 	}
 	
 	// outer key is the sample 
