@@ -64,7 +64,11 @@ public class QiimeRDPParse
 						
 						innerMap.remove(key);
 					}
-					
+					else
+					{
+						// note this doesn't yet do any testing
+						checkUnclassified(innerMap, s2);
+					}
 				}
 				
 				reader.close();
@@ -78,6 +82,11 @@ public class QiimeRDPParse
 				System.out.println("\t\tPASS " + sampleID + "\n\n\n");
 			}
 		}
+	}
+	
+	private static void checkUnclassified( HashMap<String, Double> innerMap, String unclassifiedLine ) throws Exception
+	{
+		System.out.println(unclassifiedLine);
 	}
 	
 	// outer key is the sample 
