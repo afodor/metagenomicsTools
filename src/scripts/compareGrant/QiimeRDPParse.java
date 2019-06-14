@@ -102,7 +102,7 @@ public class QiimeRDPParse
 		double aVal= Double.parseDouble(sToken.nextToken());
 		
 		if( Math.abs(aVal - count) > 0.001)
-			throw new Exception("Mismatch " + taxa + " " +  aVal+ " " + count );
+			throw new Exception("Mismatch " + taxa + " " +  aVal+ " " + count  + " " + unclassifiedLine);
 		else
 			System.out.println("Match " + taxa + " " + aVal + " " + count);
 	}
@@ -120,21 +120,31 @@ public class QiimeRDPParse
 		double sum =0;
 		
 		HashSet<String> setToRemove = new HashSet<>();
+		String firstPart = fullLine.substring(0, fullLine.indexOf(taxaName));
+		System.out.println("\t\t FIRST " + firstPart );
 		
 		for(String s: innerMap.keySet())
 		{
 			if( s.indexOf(taxaName) != -1 )
 			{
 				String subString = s.substring(s.indexOf(taxaName) + taxaName.length(), s.length());
-				String firstPart = fullLine.substring(0, fullLine.indexOf(taxaName) - taxaName.length());
 				
-				boolean foundSubClass = false;
+				boolean foundPossibleMatch = true;
 				
-				for( int x=1; x < TAXA_LEVELS.length; x++)
-					if( subString.indexOf(TAXA_LEVELS[x]+ "__") != -1 && s.indexOf(firstPart) != - 1)
-						foundSubClass =true;
+				if( s.indexOf(firstPart) == - 1)
+				{
+					foundPossibleMatch = false;
+				}
+				else
+				{
+					for( int x=1; x < TAXA_LEVELS.length; x++)
+						if( subString.indexOf(TAXA_LEVELS[x]+ "__") != -1 )
+						{
+							foundPossibleMatch=false;
+						}
+				}
 				
-				if( ! foundSubClass)
+				if(  foundPossibleMatch)
 				{
 					if( setToRemove.contains(s))
 						throw new Exception("Duplicate ");
