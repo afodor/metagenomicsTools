@@ -58,6 +58,9 @@ public class QiimeRDPParse
 							throw new Exception("Could not find " + key +  " " + val);
 						//else
 							//System.out.println("found " + key);
+						
+						if( Math.abs(foundCount - val) > 0.001)
+							throw new Exception("Failed to match " + foundCount + " " + val );
 					}
 					
 				}
