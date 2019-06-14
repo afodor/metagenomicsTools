@@ -70,7 +70,6 @@ public class QiimeRDPParse
 					}
 					else
 					{
-						// note this doesn't yet do any testing
 						checkUnclassified(innerMap, s2);
 					}
 				}
@@ -79,8 +78,8 @@ public class QiimeRDPParse
 				
 				for(String s3 : innerMap.keySet())
 				{
-					if( innerMap.get(s3)> 0 )
-						System.out.println("\t\t\tLEFTOVER " + s3 + " " + innerMap.get(s3));
+					if( innerMap.get(s3)> 0 && ! s3.startsWith("Unassigned") && ! s3.startsWith("Other") )
+						throw new Exception("\t\t\tLEFTOVER " + s3 + " " + innerMap.get(s3));
 				}
 					
 				System.out.println("\t\tPASS " + sampleID + "\n\n\n");
