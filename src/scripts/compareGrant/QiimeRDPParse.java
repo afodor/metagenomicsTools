@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 import utils.ConfigReader;
@@ -26,11 +27,12 @@ public class QiimeRDPParse
 			if( s.startsWith("s10_2019Jun05_otuCount_") && s.endsWith(".tsv"))
 			{
 				String sampleID = s.replace("s10_2019Jun05_otuCount_", "").replace(".tsv", "");
+				System.out.println("Starting " + sampleID);
 				
 				HashMap<String, Double> innerMap = expectedMap.get(sampleID);
 				
 				if( innerMap == null )
-					throw new Exception("Could not find " +sampleID);
+					throw new Exception("Could not find " +sampleID );
 
 				for(String s2 : innerMap.keySet())
 					System.out.println(s2);
@@ -46,16 +48,22 @@ public class QiimeRDPParse
 						throw new Exception("Expecting two tokens");
 					
 					String key = sToken.nextToken();
-					Double val = Double.parseDouble(sToken.nextToken());
-					Double foundCount = innerMap.get(key);
 					
-					if( foundCount == null )
-						throw new Exception("Could not find " + key);
-					else
-						System.out.println("found " + key);
+					if( key.toLowerCase().indexOf("unclassified")== -1)
+					{
+						Double val = Double.parseDouble(sToken.nextToken());
+						Double foundCount = innerMap.get(key);
+						
+						if( foundCount == null )
+							throw new Exception("Could not find " + key +  " " + val);
+						//else
+							//System.out.println("found " + key);
+					}
+					
 				}
 				
 				reader.close();
+				System.out.println("\t\tPASS " + sampleID + "\n\n\n");
 			}
 		}
 	}
@@ -63,7 +71,7 @@ public class QiimeRDPParse
 	// outer key is the sample 
 	private static HashMap<String, HashMap<String,Double>> getExpectedMap() throws Exception
 	{
-		HashMap<String, HashMap<String,Double>>  map =new HashMap<>();
+		HashMap<String, HashMap<String,Double>>  map =new LinkedHashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 			ConfigReader.getGrantCheckDir() + File.separator + "otu_table_L6.txt")));
@@ -74,7 +82,7 @@ public class QiimeRDPParse
 		
 		for( int x=1; x < topSplits.length; x++)
 		{
-			HashMap<String,Double> innerMap =new HashMap<>();
+			HashMap<String,Double> innerMap =new LinkedHashMap<>();
 			
 			map.put(topSplits[x], innerMap);
 		}
@@ -83,7 +91,7 @@ public class QiimeRDPParse
 		{
 			String[] splits = s.split("\t");
 			
-			String taxa = splits[0];
+			String taxa = convertToTree( splits[0]);
 			
 			for( int x=1; x < splits.length; x++)
 			{
@@ -97,6 +105,19 @@ public class QiimeRDPParse
 		}
 		
 		return map;
+	}
+	
+	private static String convertToTree(String s)
+	{
+		s = s.replaceAll(";", "|");
+		s = s.replace("D_0__Bacteria|", "").replace("D_0__Archaea|", "");
+		
+		String[] vals = { "", "phylum", "class", "order", "family", "genus" };
+		
+		for( int x=1; x<=5; x++)
+			s = s.replace("D_" + x, vals[x]);
+		
+		return s;
 	}
 	
 }
