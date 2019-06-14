@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -11,6 +13,8 @@ import utils.ConfigReader;
 
 public class QiimeRDPParse
 {
+	public static String[] TAXA_LEVELS =  { "", "phylum", "class", "order", "family", "genus" };
+	
 	public static void main(String[] args) throws Exception
 	{	
 		checkAllFiles();
@@ -87,6 +91,18 @@ public class QiimeRDPParse
 	private static void checkUnclassified( HashMap<String, Double> innerMap, String unclassifiedLine ) throws Exception
 	{
 		System.out.println(getTaxaFromUnclassified(unclassifiedLine) + " " + unclassifiedLine );
+		String taxa = getTaxaFromUnclassified(unclassifiedLine);
+		double count =getMatchingCount(innerMap, taxa);
+		
+		StringTokenizer sToken = new StringTokenizer(unclassifiedLine, "\t");
+		if( sToken.countTokens() != 2)
+			throw new Exception("Expecting 2");
+		
+		sToken.nextToken();
+		double aVal= Double.parseDouble(sToken.nextToken());
+		
+		if( Math.abs(aVal - count) > 0.001)
+			throw new Exception("Mismatch " + taxa + " " +  aVal+ " " + count );
 	}
 	
 	private static String getTaxaFromUnclassified( String s)
@@ -95,6 +111,42 @@ public class QiimeRDPParse
 		s = s.substring(s.indexOf("Unclassified") + "Unclassified".length() +  1, s.length());
 		s= s.substring(0, s.indexOf(" Taxa")).trim();
 		return s;
+	}
+	
+	private static double getMatchingCount( HashMap<String, Double> innerMap, String taxaName ) throws Exception
+	{
+		double sum =0;
+		
+		HashSet<String> setToRemove = new HashSet<>();
+		
+		for(String s: innerMap.keySet())
+		{
+			if( s.indexOf(taxaName) != -1 )
+			{
+				String subString = s.substring(s.indexOf(taxaName) + taxaName.length(), s.length());
+				
+				boolean foundSubClass = false;
+				
+				for( int x=1; x < TAXA_LEVELS.length; x++)
+					if( subString.indexOf(TAXA_LEVELS[x]+ "__") != -1)
+						foundSubClass =true;
+				
+				if( ! foundSubClass)
+				{
+					if( setToRemove.contains(s))
+						throw new Exception("Duplicate ");
+					sum += innerMap.get(s);
+					System.out.println("found " + s + " "+ innerMap.get(s));
+					
+					setToRemove.add(s);
+				}
+			}
+		}
+		
+		for(String s : setToRemove)
+			innerMap.remove(s);
+		
+		return sum;
 	}
 	
 	// outer key is the sample 
@@ -141,10 +193,8 @@ public class QiimeRDPParse
 		s = s.replaceAll(";", "|");
 		s = s.replace("D_0__Bacteria|", "").replace("D_0__Archaea|", "");
 		
-		String[] vals = { "", "phylum", "class", "order", "family", "genus" };
-		
 		for( int x=1; x<=5; x++)
-			s = s.replace("D_" + x, vals[x]);
+			s = s.replace("D_" + x, TAXA_LEVELS[x]);
 		
 		return s;
 	}
