@@ -86,7 +86,15 @@ public class QiimeRDPParse
 	
 	private static void checkUnclassified( HashMap<String, Double> innerMap, String unclassifiedLine ) throws Exception
 	{
-		System.out.println(unclassifiedLine);
+		System.out.println(getTaxaFromUnclassified(unclassifiedLine) + " " + unclassifiedLine );
+	}
+	
+	private static String getTaxaFromUnclassified( String s)
+	{
+		s = s.substring(s.lastIndexOf("|")+1 , s.length());
+		s = s.substring(s.indexOf("Unclassified") + "Unclassified".length() +  1, s.length());
+		s= s.substring(0, s.indexOf(" Taxa")).trim();
+		return s;
 	}
 	
 	// outer key is the sample 
