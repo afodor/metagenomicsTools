@@ -92,7 +92,7 @@ public class QiimeRDPParse
 	{
 		System.out.println(getTaxaFromUnclassified(unclassifiedLine) + " " + unclassifiedLine );
 		String taxa = getTaxaFromUnclassified(unclassifiedLine);
-		double count =getMatchingCount(innerMap, taxa);
+		double count =getMatchingCount(innerMap, taxa, unclassifiedLine);
 		
 		StringTokenizer sToken = new StringTokenizer(unclassifiedLine, "\t");
 		if( sToken.countTokens() != 2)
@@ -103,6 +103,8 @@ public class QiimeRDPParse
 		
 		if( Math.abs(aVal - count) > 0.001)
 			throw new Exception("Mismatch " + taxa + " " +  aVal+ " " + count );
+		else
+			System.out.println("Match " + taxa + " " + aVal + " " + count);
 	}
 	
 	private static String getTaxaFromUnclassified( String s)
@@ -113,7 +115,7 @@ public class QiimeRDPParse
 		return s;
 	}
 	
-	private static double getMatchingCount( HashMap<String, Double> innerMap, String taxaName ) throws Exception
+	private static double getMatchingCount( HashMap<String, Double> innerMap, String taxaName , String fullLine) throws Exception
 	{
 		double sum =0;
 		
@@ -124,11 +126,12 @@ public class QiimeRDPParse
 			if( s.indexOf(taxaName) != -1 )
 			{
 				String subString = s.substring(s.indexOf(taxaName) + taxaName.length(), s.length());
+				String firstPart = fullLine.substring(0, fullLine.indexOf(taxaName) - taxaName.length());
 				
 				boolean foundSubClass = false;
 				
 				for( int x=1; x < TAXA_LEVELS.length; x++)
-					if( subString.indexOf(TAXA_LEVELS[x]+ "__") != -1)
+					if( subString.indexOf(TAXA_LEVELS[x]+ "__") != -1 && s.indexOf(firstPart) != - 1)
 						foundSubClass =true;
 				
 				if( ! foundSubClass)
