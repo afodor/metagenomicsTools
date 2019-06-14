@@ -34,8 +34,8 @@ public class QiimeRDPParse
 				if( innerMap == null )
 					throw new Exception("Could not find " +sampleID );
 
-				for(String s2 : innerMap.keySet())
-					System.out.println(s2);
+				//for(String s2 : innerMap.keySet())
+					//System.out.println(s2);
 				
 				BufferedReader reader = new BufferedReader(new FileReader(new File(
 					ConfigReader.getGrantCheckDir() + File.separator + s	)));
@@ -61,11 +61,20 @@ public class QiimeRDPParse
 						
 						if( Math.abs(foundCount - val) > 0.001)
 							throw new Exception("Failed to match " + foundCount + " " + val );
+						
+						innerMap.remove(key);
 					}
 					
 				}
 				
 				reader.close();
+				
+				for(String s3 : innerMap.keySet())
+				{
+					if( innerMap.get(s3)> 0 )
+						System.out.println("\t\t\tLEFTOVER " + s3 + " " + innerMap.get(s3));
+				}
+					
 				System.out.println("\t\tPASS " + sampleID + "\n\n\n");
 			}
 		}
