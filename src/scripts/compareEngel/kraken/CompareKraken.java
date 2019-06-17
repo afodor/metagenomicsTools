@@ -20,7 +20,7 @@ import javax.tools.JavaFileManager.Location;
 
 public class CompareKraken
 {
-	private static final String[] LEVELS = { "phylum", "class", "order", "family", "genus", "species" };
+	public static final String[] LEVELS = { "phylum", "class", "order", "family", "genus", "species" };
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -43,7 +43,7 @@ public class CompareKraken
 				
 				if( fileCheck.exists())
 				{
-					HashMap<String, Long> map = getExpectedAtLevel(fileCheck, "" + level.charAt(0));
+					HashMap<String, Integer> map = getExpectedAtLevel(fileCheck, "" + level.charAt(0));
 				
 					System.out.println(map);
 					
@@ -55,10 +55,10 @@ public class CompareKraken
 						{
 							double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
 							
-							Long anotherVal = map.get(taxaName);
+							Integer anotherVal = map.get(taxaName);
 							
 							if(anotherVal == null)
-								anotherVal = 0l;
+								anotherVal = 0;
 							
 							if( Math.abs(aVal-anotherVal) > 0.001) 
 								throw new Exception("Mismatch " + taxaName + " "+  aVal + " " + anotherVal);
@@ -78,9 +78,9 @@ public class CompareKraken
 		System.out.println("Pass");
 	}
 	
-	private static HashMap<String, Long> getExpectedAtLevel(File file, String level) throws Exception
+	public static HashMap<String, Integer> getExpectedAtLevel(File file, String level) throws Exception
 	{
-		HashMap<String, Long> map = new LinkedHashMap<>();
+		HashMap<String, Integer> map = new LinkedHashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
@@ -103,7 +103,7 @@ public class CompareKraken
 				if( map.containsKey(taxa))
 					throw new Exception("Duplicate");
 				
-				map.put(taxa, Long.parseLong(splits[1]));
+				map.put(taxa, Integer.parseInt(splits[1]));
 			}
 		}
 		
