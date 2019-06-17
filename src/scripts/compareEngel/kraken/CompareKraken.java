@@ -28,11 +28,13 @@ public class CompareKraken
 		{
 			System.out.println(level);
 			
-			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getEngelCheckDir() + File.separator + 
-					"racialDisparityKraken2_2019Jun03_taxaCount_" + level + ".tsv");
+			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getEngelCheckDir() + File.separator + "krakenCheck" + File.separator + 
+					"racialDisparityKraken2_2019Jun10_taxaCount_" + level + ".tsv");
 			
-			for(String sample : wrapper.getSampleNames())
+			for(int x=0; x < wrapper.getSampleNames().size(); x++)
 			{
+				String sample = wrapper.getSampleNames().get(x);
+				System.out.println(sample);
 				
 				String sampleName = new StringTokenizer(sample, "-").nextToken();
 				
@@ -42,7 +44,28 @@ public class CompareKraken
 				if( fileCheck.exists())
 				{
 					HashMap<String, Long> map = getExpectedAtLevel(fileCheck, "" + level.charAt(0));
-					//System.out.println("Found " + sampleName);
+				
+					System.out.println(map);
+					
+					for( int y=0; y< wrapper.getOtuNames().size(); y++)
+					{
+						String taxaName = wrapper.getOtuNames().get(y);
+						
+						if( taxaName.toLowerCase().indexOf("unclassified") == - 1)
+						{
+							double aVal = wrapper.getDataPointsUnnormalized().get(x).get(y);
+							
+							Long anotherVal = map.get(taxaName);
+							
+							if(anotherVal == null)
+								anotherVal = 0l;
+							
+							if( Math.abs(aVal-anotherVal) > 0.001) 
+								throw new Exception("Mismatch " + taxaName + " "+  aVal + " " + anotherVal);
+							else
+								System.out.println("Pass " + taxaName+ " " + aVal + " " + anotherVal);
+						}
+					}
 				}
 				else
 				{
@@ -52,6 +75,7 @@ public class CompareKraken
 			}
 		}
 		
+		System.out.println("Pass");
 	}
 	
 	private static HashMap<String, Long> getExpectedAtLevel(File file, String level) throws Exception
