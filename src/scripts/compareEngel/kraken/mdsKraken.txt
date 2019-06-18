@@ -1,0 +1,21 @@
+rm(list=ls())
+library("vegan")
+setwd("C:\\EngelCheck\\krakenCheck\\mikeRelease")
+
+taxaLevels <- c("phylum", "class", "order", "family", "genus")
+
+for( taxa in taxaLevels ) 
+{
+	inFileName <- paste("kraken_", taxa, "MetaLogNorm.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	
+	myTData <- myT[,9:ncol(myT)]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+
+	newT <- data.frame( cbind(  myT,myPCOA$CA$u))
+	newT$names <- row.names(myT)
+	
+	write.table(newT, sep="\t", file=paste("pcoaKraken_", taxa, ".txt",sep=""),row.names=FALSE)
+	write.table(myPCOA$CA$eig,file=paste("eigenValuesKraken_", taxa, ".txt", sep=""), sep="\t")
+}
