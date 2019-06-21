@@ -1,6 +1,8 @@
 package scripts.tb_June2019;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashSet;
 
 import parsers.NewRDPParserFileLine;
@@ -19,13 +21,39 @@ public class AddMetadata
 			OtuWrapper wrapper = new OtuWrapper(ConfigReader.getTb_June_2019_Dir() + File.separator + 
 					"spreadsheets" + File.separator + "rdp_" + level + ".txt");
 			
-			for( int y=0; y < wrapper.getSampleNames().size(); y++)
-			{
-				String sampleName = wrapper.getSampleNames().get(y);
-				String category = getCategory(sampleName);
-				System.out.println(category);
-			}
+			File outFile = new File( ConfigReader.getTb_June_2019_Dir() + File.separator + 
+					"spreadsheets" + File.separator + "rdp_" + level + "logNormPlusMeta.txt" );
+			
+			writeLogNormalizedMeta(wrapper, outFile);
+		} 
+	}
+	
+	private static void writeLogNormalizedMeta(OtuWrapper wrapper, File outFile) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("id\tdiseaseStatus\tshannonDiversity");
+		
+		for(int x=0; x < wrapper.getOtuNames().size(); x++)
+			writer.write("\t" + wrapper.getOtuNames().get(x));
+		
+		writer.write("\n");
+		
+		for( int x=0; x < wrapper.getSampleNames().size(); x++)
+		{
+			String sampleId = wrapper.getSampleNames().get(x);
+			
+			writer.write(sampleId + "\t");
+			writer.write(getCategory(sampleId) );
+			writer.write("\t" + wrapper.getShannonEntropy(sampleId));
+			
+			for( int y =0; y < wrapper.getOtuNames().size(); y++)
+				writer.write("\t" + wrapper.getDataPointsNormalizedThenLogged().get(x).get(y));
+			
+			writer.write("\n");
 		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	public static String getCategory(String s ) throws Exception
@@ -82,6 +110,6 @@ public class AddMetadata
 			return "severe";
 		
 		System.out.println("Could not find " + anInt);
-		return null;
+		return "NA";
 	}
 }
