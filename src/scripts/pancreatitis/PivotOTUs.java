@@ -69,6 +69,40 @@ public class PivotOTUs
 	
 	}
 	
+	private static List<String> getOTUSAtThresholdFromLong(
+			HashMap<String, HashMap<String, Long>>  map,
+									int threshold) throws Exception
+	{
+		
+		HashMap<String, Long> countMap = new HashMap<String, Long>();
+		
+		for( String s: map.keySet() )
+		{
+			HashMap<String, Long> innerMap = map.get(s);
+				
+			for(String possibleOtu : innerMap.keySet())
+			{
+				Long oldCount = countMap.get(possibleOtu);
+					
+				if(oldCount == null)
+						oldCount = 0l;
+					
+				oldCount += innerMap.get(possibleOtu);
+					
+				countMap.put(possibleOtu, oldCount);
+			}
+		}
+			
+		List<String> otuList= new ArrayList<String>();
+		
+		for( String s : countMap.keySet() )
+			if( countMap.get(s) >= threshold )
+				otuList.add(s);
+		
+		return otuList;
+	
+	}
+	
 	public static void writeResults(HashMap<String, HashMap<String, Integer>>  map, String filepath ) 
 							throws Exception
 	{
@@ -104,6 +138,43 @@ public class PivotOTUs
 			writer.write("\n");
 		}
 		
+		writer.flush();  writer.close();
+	}
+	
+	public static void writeResultsFromLong(HashMap<String, HashMap<String, Long>>  map, String filepath ) 
+			throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
+
+		writer.write("sample");
+		List<String> otuList = getOTUSAtThresholdFromLong(map, 0);
+
+		for( String s : otuList)
+		writer.write("\t" +  s);
+
+		writer.write("\n");
+
+		for( String s : map.keySet())
+		{
+			//String expandedString = PivotRDPs.getExpandedString( s);
+			//writer.write( expandedString );
+			writer.write(s);
+
+			HashMap<String, Long> innerMap = map.get(s);
+
+			for( String otu : otuList)
+			{
+				Long aVal = innerMap.get(otu);
+	
+				if(aVal== null)
+					aVal = 0l;
+	
+				writer.write("\t" + aVal );
+			}
+
+			writer.write("\n");
+		}
+
 		writer.flush();  writer.close();
 	}
 	

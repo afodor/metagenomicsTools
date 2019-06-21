@@ -21,7 +21,7 @@ public class PivotRDP
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
 			System.out.println(level);
-			HashMap<String, HashMap<String,Long>> map = getCountsForDirectory(rdpInDir, level);
+		//	HashMap<String, HashMap<String,Long>> map = getCountsForDirectory(rdpInDir, level);
 		}
 		
 	}

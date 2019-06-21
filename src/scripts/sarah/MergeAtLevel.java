@@ -13,20 +13,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import parsers.OtuWrapper;
-import utils.ConfigReader;
 
 public class MergeAtLevel
 {
 	public static void main(String[] args) throws Exception
 	{
-		String [] levels = { "p", "c","o","f","g" };
+		//String [] levels = { "p", "c","o","f","g" };
 		//String [] levels = { "p" };
 		
 		
-		for(String level : levels)
+		//for(String level : levels)
 		{
-			Map<String, Map<String,Integer>> map = mergeAtLevel(level);
-			File rawFile = writeFile(map, level);
+			//Map<String, Map<String,Integer>> map = mergeAtLevel(level);
+			//File rawFile = writeFile(map, level);
 			
 			/*
 			File loggedFile = new File(ConfigReader.getTopeVickiDir() + File.separator + level + "_mergedLogged.txt");
@@ -37,7 +36,7 @@ public class MergeAtLevel
 		}
 	}
 	
-	private static Map<String, Map<String,Integer>> mergeAtLevel(String level ) throws Exception
+	public static Map<String, Map<String,Integer>> mergeAtLevel(String level ) throws Exception
 	{
 		//System.out.println(level);
 		Map<String, Map<String,Integer>> map = new HashMap<>();
@@ -68,7 +67,7 @@ public class MergeAtLevel
 		reader.close();
 	}
 	 
-	private static File writeFile( Map<String, Map<String,Integer>>  map, String level)
+	public static File writeFile( Map<String, Map<String,Integer>>  map, String level)
 		throws Exception
 	{
 		//System.out.println("Writing with " + map.size());

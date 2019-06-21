@@ -3,8 +3,6 @@ package scratch;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Reader;
-import java.util.List;
 
 import parsers.FastaSequence;
 import parsers.FastaSequenceOneAtATime;

@@ -5,12 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.Reader;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
-import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class AddMeta

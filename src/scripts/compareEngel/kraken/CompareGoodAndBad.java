@@ -3,9 +3,7 @@ package scripts.compareEngel.kraken;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
 import parsers.OtuWrapper;
-import scripts.pancreatitis.PivotOTUs;
 import utils.ConfigReader;
 
 public class CompareGoodAndBad

@@ -5,18 +5,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-import javax.tools.FileObject;
-import javax.tools.JavaFileObject;
 
 import utils.ConfigReader;
-
-import javax.tools.JavaFileManager.Location;
 
 
 public class Compare15And19

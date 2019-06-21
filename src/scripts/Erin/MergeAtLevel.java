@@ -1,22 +1,16 @@
 package scripts.Erin;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import parsers.OtuWrapper;
-import utils.ConfigReader;
 
 public class MergeAtLevel
 {
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		String [] levels = { "p", "c","o","f","g" };
@@ -34,9 +28,9 @@ public class MergeAtLevel
 			OtuWrapper wrapper = new OtuWrapper(rawFile);
 			wrapper.writeNormalizedLoggedDataToFile(loggedFile);
 			*/
-		}
-	}
-	
+		//}
+	//}
+	/*
 	private static Map<String, Map<String,Integer>> mergeAtLevel(String level ) throws Exception
 	{
 		//System.out.println(level);
@@ -48,7 +42,7 @@ public class MergeAtLevel
 		
 		return map;
 	}
-	
+	*/
 	private static void ensureNoDuplciates(File file) throws Exception
 	{
 		BufferedReader reader =new BufferedReader(new FileReader(file));
@@ -68,6 +62,7 @@ public class MergeAtLevel
 		reader.close();
 	}
 	 
+	/*
 	private static File writeFile( Map<String, Map<String,Integer>>  map, String level)
 		throws Exception
 	{
@@ -140,8 +135,8 @@ public class MergeAtLevel
 		
 		return file;
 	}
-	
-	private static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level,
+	*/
+	public static void addToMap(Map<String, Map<String,Integer>>  map, File file, String level,
 			String sampleSuffix) throws Exception
 	{
 		ensureNoDuplciates(file);

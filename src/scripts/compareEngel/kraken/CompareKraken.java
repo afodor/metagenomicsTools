@@ -3,20 +3,12 @@ package scripts.compareEngel.kraken;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
-import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
-import javax.tools.FileObject;
-import javax.tools.JavaFileObject;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
-
-import javax.tools.JavaFileManager.Location;
 
 public class CompareKraken
 {
