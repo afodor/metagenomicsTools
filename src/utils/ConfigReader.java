@@ -186,6 +186,8 @@ public class ConfigReader
 	
 	public static final String GRANT_CHECK_DIR = "GRANT_CHECK_DIR";
 	
+	public static final String TB_JUNE_2019_DIR = "TB_JUNE_2019_DIR";
+	
 	public static String getAaronExerciseDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(AARON_EXERCISE_TEST_DIR );
@@ -647,6 +649,11 @@ public class ConfigReader
 	public static String getBlastDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(BLAST_DIR);
+	}
+	
+	public static String getTb_June_2019_Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(TB_JUNE_2019_DIR);
 	}
 	
 	public static String getBurkholderiaDir() throws Exception
