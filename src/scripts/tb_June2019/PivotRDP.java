@@ -21,7 +21,13 @@ public class PivotRDP
 		{
 			String level = NewRDPParserFileLine.TAXA_ARRAY[x];
 			System.out.println(level);
-		//	HashMap<String, HashMap<String,Long>> map = getCountsForDirectory(rdpInDir, level);
+			HashMap<String, HashMap<String,Long>> map = getCountsForDirectory(rdpInDir, level);
+			
+			File outFile = new File(
+				ConfigReader.getTb_June_2019_Dir() + File.separator + 
+					"spreadsheets" + File.separator + "rdp_" + level + ".txt");
+			
+			scripts.pancreatitis.PivotOTUs.writeResultsFromLong(map, outFile.getAbsolutePath() );
 		}
 		
 	}
