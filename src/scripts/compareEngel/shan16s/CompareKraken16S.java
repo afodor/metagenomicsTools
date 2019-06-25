@@ -10,10 +10,13 @@ import utils.ConfigReader;
 
 public class CompareKraken16S
 {
+	private enum classification_type { r16S, kraken, metaphlan };
+	
 	private static class Holder
 	{
 		Double pValue16 = null;
 		Double pValueKraken = null;
+		Double metaphlan = null;
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -23,12 +26,17 @@ public class CompareKraken16S
 		File krakenFile = new File(	ConfigReader.getEngelCheckDir() +File.separator + "krakenCheck" + 
 						File.separator + "mikeRelease" + File.separator + "pValuesKrakengenus.txt");
 		
-		parseAFile(krakenFile, false, map);
+		parseAFile(krakenFile, classification_type.kraken, map);
 		
 		File qiimeFile =  new File(	ConfigReader.getEngelCheckDir() +File.separator + "shan16S" + 
 								File.separator + "pValues6.txt");
 		
-		parseAFile(qiimeFile, true, map);
+		parseAFile(qiimeFile, classification_type.r16S, map);
+		
+		File metaphlan = new File(ConfigReader.getEngelCheckDir() + File.separator +  "pValuesgenus.txt");
+		
+		parseAFile(metaphlan, classification_type.metaphlan, map);
+		
 		writeResults(map);
 	}
 	
@@ -38,12 +46,13 @@ public class CompareKraken16S
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("taxa\tkrakenP\tqiimeP\n");
+		writer.write("taxa\tkrakenP\tqiimeP\tmetaphlanP\n");
 		
 		for(String s : map.keySet())
 		{
 			writer.write(s + "\t" + getValOrNone(map.get(s).pValueKraken) + "\t" +
-						getValOrNone(map.get(s).pValue16) + "\n");
+						getValOrNone(map.get(s).pValue16) + "\t" + 
+							getValOrNone(map.get(s).metaphlan) + "\n");
 		}
 		writer.flush();  writer.close();
 	}
@@ -56,7 +65,7 @@ public class CompareKraken16S
 		return d.toString();
 	}
 	
-	private static void parseAFile(File file, boolean is_16s,HashMap<String, Holder> map ) throws Exception
+	private static void parseAFile(File file, classification_type type ,HashMap<String, Holder> map ) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		reader.readLine();
@@ -75,7 +84,7 @@ public class CompareKraken16S
 				
 				if( taxa.toLowerCase().indexOf("mds") == -1 )
 				{
-					if( is_16s)
+					if( type== classification_type.r16S)
 					{
 						if( taxa.indexOf("g__") != -1 )
 						{
@@ -99,14 +108,19 @@ public class CompareKraken16S
 						aPvalue = - aPvalue;
 					}
 					
-					if( is_16s)
+					if( type== classification_type.r16S)
 					{
 						h.pValue16 = aPvalue;
 					}
-					else
+					else if( type == classification_type.kraken)
 					{	
 						h.pValueKraken = aPvalue;
 					}
+					else if ( type == classification_type.metaphlan)
+					{
+						h.metaphlan = aPvalue;
+					}
+					else throw new Exception("Logic error");
 				}
 			}
 		}
