@@ -59,15 +59,19 @@ for( taxa in taxaLevels )
 		data <- myT[,which(names(myT) == toString( dFrame$taxaName[i]))]
 		meta <- myT[,which(names(myT) == toString( dFrame$metaName[i]))]
 		
-		aTitle <- paste(dFrame$taxaName[i], "\nvs", dFrame$metaName[i],"\np=",format(dFrame$pValues[i],3), " adj p =",format(dFrame$adjustedP[i],3))
+		aName <- dFrame$taxaName[i]
+		
+		aName <- sub( "f__", "\nf__", aName)
+		
+		aTitle <- paste(aName, "\nvs", dFrame$metaName[i],"\np=",format(dFrame$pValues[i],3), " adj p =",format(dFrame$adjustedP[i],3))
 		
 		if(  dFrame$metaName[i]== "yripct" ) 
 		{
-			plot(data, meta,main=aTitle,ylab=dFrame$taxaName[i],xlab=dFrame$metaName[i])
+			plot(data, meta,main=aTitle,xlab=dFrame$metaName[i],cex.main=0.75,ylab="taxa")
 		}
 		else
 		{
-			boxplot( data~ meta, main = aTitle,ylab=dFrame$taxaName[i],xlab=dFrame$metaName[i])
+			boxplot( data~ meta, main = aTitle,xlab=dFrame$metaName[i],cex.main=0.75,ylab="taxa")
 		
 			myFrame <- data.frame(meta,data)	
 		
