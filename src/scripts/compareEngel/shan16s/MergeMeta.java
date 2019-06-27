@@ -17,7 +17,7 @@ public class MergeMeta
 	
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=2; x <=6; x++)
+		for( int x=2; x <=7; x++)
 			mergeAtLevel(x);
 	}
 	

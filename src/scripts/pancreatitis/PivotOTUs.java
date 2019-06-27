@@ -141,13 +141,14 @@ public class PivotOTUs
 		writer.flush();  writer.close();
 	}
 	
-	public static void writeResultsFromLong(HashMap<String, HashMap<String, Long>>  map, String filepath ) 
-			throws Exception
+	public static void writeResultsFromLong(HashMap<String, HashMap<String, Long>>  map, String filepath ,
+			int threshold) throws Exception
 	{
+
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
 
 		writer.write("sample");
-		List<String> otuList = getOTUSAtThresholdFromLong(map, 0);
+		List<String> otuList = getOTUSAtThresholdFromLong(map, threshold);
 
 		for( String s : otuList)
 		writer.write("\t" +  s);
@@ -176,6 +177,14 @@ public class PivotOTUs
 		}
 
 		writer.flush();  writer.close();
+
+	}
+	
+	
+	public static void writeResultsFromLong(HashMap<String, HashMap<String, Long>>  map, String filepath ) 
+			throws Exception
+	{ 
+		writeResultsFromLong(map, filepath,0);	
 	}
 	
 	/*

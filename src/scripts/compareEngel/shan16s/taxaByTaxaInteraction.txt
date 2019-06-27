@@ -4,7 +4,7 @@ library("Kendall")
 
 setwd("C:\\EngelCheck\\shan16S")
 
-taxaLevels <- c("2","3","4","5","6","7")
+taxaLevels <- c("2","3","4","5","6")
 
 for( taxa in taxaLevels ) 
 {
@@ -24,32 +24,29 @@ for( taxa in taxaLevels )
 	for( i in startCol:endCol )
 	{
 		bug <- myT[,i]
-		
-		if( sum( bug[!is.na(bug)] !=0 ) > length(bug[!is.na(bug)]) /4 ) 
+	
+		for (metaCol in 4:6) 
 		{
-			for (metaCol in 4:6) 
+			meta <- myT[,metaCol]
+			metaName[index] <- names(myT)[metaCol]
+			taxaName[index] <- names(myT)[i]
+			
+			# last two columns are factors (but not ancestry)
+			if( metaCol > 4 ) 
 			{
-				meta <- myT[,metaCol]
-				metaName[index] <- names(myT)[metaCol]
-				taxaName[index] <- names(myT)[i]
-				
-				# last two columns are factors (but not ancestry)
-				if( metaCol > 4 ) 
-				{
-					meta <- factor(meta)
-					pValues[index] <- wilcox.test( bug ~ meta )$p.value
-				}	
-				else
-				{	
-					pValues[index] <- Kendall(bug,meta)$sl[1]	
-				}
-				
-				mean_MRace1[index] <- mean( bug[ myT$c_mrace == 1 & !is.na(myT$c_mrace == 1) ] )
-				mean_MRace2[index] <- mean( bug[ myT$c_mrace == 2 & !is.na(myT$c_mrace == 2) ])
-				
-				index <- index + 1
-				
+				meta <- factor(meta)
+				pValues[index] <- wilcox.test( bug ~ meta )$p.value
+			}	
+			else
+			{	
+				pValues[index] <- Kendall(bug,meta)$sl[1]	
 			}
+			
+			mean_MRace1[index] <- mean( bug[ myT$c_mrace == 1 & !is.na(myT$c_mrace == 1) ] )
+			mean_MRace2[index] <- mean( bug[ myT$c_mrace == 2 & !is.na(myT$c_mrace == 2) ])
+			
+			index <- index + 1
+			
 		}
 	}
 	

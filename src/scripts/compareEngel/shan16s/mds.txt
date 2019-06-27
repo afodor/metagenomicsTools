@@ -2,7 +2,7 @@ rm(list=ls())
 library("vegan")
 setwd("C:\\EngelCheck\\shan16S")
 
-taxaLevels <- c("2","3","4","5","6")
+taxaLevels <- c("2","3","4","5","6","7")
 
 for( taxa in taxaLevels ) 
 {
@@ -19,3 +19,4 @@ for( taxa in taxaLevels )
 	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
 	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
 }
+
