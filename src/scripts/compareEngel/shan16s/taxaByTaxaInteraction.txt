@@ -4,19 +4,24 @@ library("Kendall")
 
 setwd("C:\\EngelCheck\\shan16S")
 
-taxaLevels <- c("2","3","4","5","6")
+taxaLevels <- c("2","3","4","5","6","7")
 
 for( taxa in taxaLevels ) 
 {
 	index <- 1
-	pValues <- vector()
-	metaName <- vector()
+	pValueMRace <- vector()
+	pValueCaseControl <- vector()
+	pValueInteraction <- vector()
 	taxaName <- vector()
-	mean_MRace1 <- vector()
-	mean_MRace2 <- vector()
 		
 	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
 	myT <- myT[ myT$c_mrace == 1 | myT$c_mrace == 2, ]
+	myT <- myT[ !is.na(myT$c_mrace ), ]
+	myT <- myT[ myT$c_case2 == 0 | myT$c_case2== 1, ]
+	myT <- myT[ !is.na(myT$c_case2 ), ]
+	
+	mRace <- factor(myT$c_mrace)
+	cCase <- factor(myT$c_case2)
 	
 	startCol <- 7
 	endCol <- which(names(myT) == "MDS5")
@@ -25,68 +30,28 @@ for( taxa in taxaLevels )
 	{
 		bug <- myT[,i]
 	
-		for (metaCol in 4:6) 
-		{
-			meta <- myT[,metaCol]
-			metaName[index] <- names(myT)[metaCol]
-			taxaName[index] <- names(myT)[i]
+		aLm <- lm( bug ~ mRace * cCase ) 
+		taxaName[index] <- names(myT)[i]
+		aSummary <- summary(aLm)
+		pValueMRace[index] = summary(aLm)$coefficients[2,4]
+		pValueCaseControl[index] = summary(aLm)$coefficients[3,4]
+		pValueInteraction[index] = summary(aLm)$coefficients[4,4]
 			
-			# last two columns are factors (but not ancestry)
-			if( metaCol > 4 ) 
-			{
-				meta <- factor(meta)
-				pValues[index] <- wilcox.test( bug ~ meta )$p.value
-			}	
-			else
-			{	
-				pValues[index] <- Kendall(bug,meta)$sl[1]	
-			}
-			
-			mean_MRace1[index] <- mean( bug[ myT$c_mrace == 1 & !is.na(myT$c_mrace == 1) ] )
-			mean_MRace2[index] <- mean( bug[ myT$c_mrace == 2 & !is.na(myT$c_mrace == 2) ])
-			
-			index <- index + 1
+		index <- index + 1
 			
 		}
 	}
 	
-	dFrame <- data.frame( metaName , taxaName ,pValues,mean_MRace1 ,mean_MRace2 )
-	dFrame <- dFrame [order(dFrame$pValues),]
-	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
-	write.table(dFrame, file=paste("pValues", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
-		
-	pdf(paste0("pValues",taxa,".pdf"))
+	dFrame <- data.frame( taxaName,pValueMRace ,	pValueCaseControl ,pValueInteraction )
+	dFrame <- dFrame [order(dFrame$pValueInteraction ),]
+	dFrame$adjustedPRace <- p.adjust( dFrame$pValueMRace , method = "BH" )	
+	dFrame$adjustedPCase <- p.adjust( dFrame$pValueCaseControl , method = "BH" )	
+	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValueInteraction , method = "BH" )	
 	
-	par(mfrow=c(2,2))
+	write.table(dFrame, file=paste("pValuesInteraction", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 	
-	for( i in 1:nrow(dFrame))
-	{
-		data <- myT[,which(names(myT) == toString( dFrame$taxaName[i]))]
-		meta <- myT[,which(names(myT) == toString( dFrame$metaName[i]))]
-		
-		aName <- dFrame$taxaName[i]
-		
-		aName <- sub( "f__", "\nf__", aName)
-		
-		aTitle <- paste(aName, "\nvs", dFrame$metaName[i],"\np=",format(dFrame$pValues[i],3), " adj p =",format(dFrame$adjustedP[i],3))
-		
-		if(  dFrame$metaName[i]== "yripct" ) 
-		{
-			plot(data, meta,main=aTitle,xlab=dFrame$metaName[i],cex.main=0.75,ylab="taxa")
-		}
-		else
-		{
-			boxplot( data~ meta, main = aTitle,xlab=dFrame$metaName[i],cex.main=0.75,ylab="taxa")
-		
-			myFrame <- data.frame(meta,data)	
-		
-			stripchart(data~ meta, 	data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
-		}
-	}
+	par(mfrow=c(2,2))	
+	hist(pValueMRace,main="race")
+	hist(pValueCaseControl,main="case/control")
+	hist(pValueInteraction,main="interaction")
 	
-	hist(pValues[metaName =="yripct"],main="yripc")
-	hist(pValues[metaName =="c_mrace"],main="c_mrace")
-	hist(pValues[metaName =="c_case2"],,main="c_case2")
-	
-	dev.off()
-}
