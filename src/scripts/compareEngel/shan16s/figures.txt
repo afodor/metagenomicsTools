@@ -4,7 +4,8 @@ setwd("C:\\EngelCheck")
 
 myT <- read.table("krakenVsQiime_cMrace.txt", sep="\t", header=TRUE)
 
-plot( myT$krakenP, myT$qiimeP,xlim=c(-5,5),ylim=c(-10,10))
+plot( myT$krakenP, myT$qiimeP,xlim=c(-5,5),ylim=c(-10,10),xlab="kraken -log10(pValues)", ylab="qiime -log10(pValues)",
+cex=1.25)
 
 lines(c(-5,5),c(0,0),lty=3)
 lines(c(0,0), c(-12,12),lty=3)
@@ -13,3 +14,6 @@ lines( c(-5,log10(.05)), c(log10(.05),log10(.05)), col="red", lty=3)
 
 lines( c(log10(.05),log10(.05)), c(-12,log10(.05)), col="red", lty=3)
 
+lines( c(5,-log10(.05)), c(-log10(.05),-log10(.05)), col="red", lty=3)
+
+lines( c(-log10(.05),-log10(.05)), c(12,-log10(.05)), col="red", lty=3)
