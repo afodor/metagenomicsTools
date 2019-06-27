@@ -27,6 +27,13 @@ public class MergeMeta
 		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getEngelCheckDir() + File.separator + 
 				"shan16S" + File.separator + "pivoted_L" + level  + ".txt");
 		
+		double sum =0;
+		
+		for( int x=0; x < wrapper.getSampleNames().size(); x++)
+			sum += wrapper.getCountsForSample(x);
+		
+		System.out.println("Average depth = " + sum / wrapper.getSampleNames().size());
+		
 		HashMap<String, MetadataFileParser> map =  MetadataFileParser.getMetaMap();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(

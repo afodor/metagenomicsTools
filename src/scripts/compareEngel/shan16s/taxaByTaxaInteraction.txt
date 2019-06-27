@@ -15,12 +15,12 @@ for( taxa in taxaLevels )
 	taxaName <- vector()
 		
 	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
-	myT <- myT[ myT$c_mrace == 1 | myT$c_mrace == 2, ]
-	myT <- myT[ !is.na(myT$c_mrace ), ]
+	#myT <- myT[ myT$c_mrace == 1 | myT$c_mrace == 2, ]
+	#myT <- myT[ !is.na(myT$c_mrace ), ]
 	myT <- myT[ myT$c_case2 == 0 | myT$c_case2== 1, ]
 	myT <- myT[ !is.na(myT$c_case2 ), ]
 	
-	mRace <- factor(myT$c_mrace)
+	mRace <- myT$yripct
 	cCase <- factor(myT$c_case2)
 	
 	startCol <- 7
