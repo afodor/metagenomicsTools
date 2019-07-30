@@ -12,7 +12,8 @@ for( taxa in taxaLevels )
 	
 	endIndex <- which(names(myT) == "MDS5")
 	
-	pValues <- vector()
+	pValuesAnova <- vector()
+	pValuesDegree <- vector()
 	index <- 1 
 	names <- vector()
 	
@@ -23,7 +24,8 @@ for( taxa in taxaLevels )
 		if( sum( data != 0 ) > length(data) / 4 ) 
 		{
 			aLm <- lm( data ~ myT$diseaseStatus )
-			pValues[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesAnova[index] <- anova(aLm)$"Pr(>F)"[1]
+			pValuesDegree[index] <- wilcox.test( data[myT$diseaseStatus=="severe"] ,data[myT$diseaseStatus=="moderate"]  )$p.value
 			names[index] = names(myT)[i]
 			index =index + 1			
 		}
