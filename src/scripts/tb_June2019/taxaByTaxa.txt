@@ -1,0 +1,11 @@
+rm(list=ls())
+library("vegan")
+setwd("C:\\tb_RDP\\spreadsheets")
+
+taxaLevels <- c("phylum", "class", "order", "family", "genus")
+
+for( taxa in taxaLevels ) 
+{
+	fileName <- paste0("pcoa_", taxa, ".txt")
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+}
