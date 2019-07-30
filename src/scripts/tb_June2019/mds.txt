@@ -1,0 +1,21 @@
+rm(list=ls())
+library("vegan")
+setwd("C:\\tb_RDP\\spreadsheets")
+
+taxaLevels <- c("phylum", "class", "order", "family", "genus")
+
+for( taxa in taxaLevels ) 
+{
+	inFileName <- paste("rdp_", taxa, "logNormPlusMeta.txt", sep ="")
+	myT <-read.table(inFileName,header=TRUE,sep="\t")
+	
+	myTData <- myT[,3:ncol(myT)]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+
+	newT <- data.frame( cbind(  myT,myPCOA$CA$u))
+	newT$names <- row.names(myT)
+	
+	write.table(newT, sep="\t", file=paste("pcoa_", taxa, ".txt",sep=""),row.names=FALSE)
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", taxa, ".txt", sep=""), sep="\t")
+}
