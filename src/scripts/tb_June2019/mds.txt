@@ -9,7 +9,7 @@ for( taxa in taxaLevels )
 	inFileName <- paste("rdp_", taxa, "logNormPlusMeta.txt", sep ="")
 	myT <-read.table(inFileName,header=TRUE,sep="\t")
 	
-	myTData <- myT[,3:ncol(myT)]
+	myTData <- myT[,4:ncol(myT)]
 	
 	myPCOA <- capscale(myTData~1,distance="bray")
 

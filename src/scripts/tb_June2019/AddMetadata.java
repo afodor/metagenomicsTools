@@ -1,8 +1,11 @@
 package scripts.tb_June2019;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import parsers.NewRDPParserFileLine;
@@ -11,6 +14,35 @@ import utils.ConfigReader;
 
 public class AddMetadata
 {
+	public static HashMap<String, String> getInfectionGroupMap() throws Exception
+	{
+		HashMap<String, String> map = new HashMap<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(ConfigReader.getTb_June_2019_Dir() +
+				File.separator + "Cavities and microbiome Clinical data.txt"));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null ; s = reader.readLine())
+		{
+			s = s.trim();
+			
+			if( s.length() >0)
+			{
+				String[] splits = s.split("\t");
+				
+				int key = Integer.parseInt(splits[1]);
+				
+				if( map.containsKey(key))
+					throw new Exception("Duplicate " + key);
+				
+				map.put("" + key, splits[3].replace("MTBC-", ""));
+			}
+		}
+		
+		return map;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		for(int x=1; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
@@ -30,9 +62,10 @@ public class AddMetadata
 	
 	private static void writeLogNormalizedMeta(OtuWrapper wrapper, File outFile) throws Exception
 	{
+		HashMap<String, String> groupMap = getInfectionGroupMap();
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
-		writer.write("id\tdiseaseStatus\tshannonDiversity");
+		writer.write("id\tdiseaseStatus\tgroup\tshannonDiversity");
 		
 		for(int x=0; x < wrapper.getOtuNames().size(); x++)
 			writer.write("\t" + wrapper.getOtuNames().get(x));
@@ -44,7 +77,7 @@ public class AddMetadata
 			String sampleId = wrapper.getSampleNames().get(x);
 			
 			writer.write(sampleId + "\t");
-			writer.write(getCategory(sampleId) );
+			writer.write(getCategory(sampleId) + "\t" + groupMap.get(sampleId) );
 			writer.write("\t" + wrapper.getShannonEntropy(sampleId));
 			
 			for( int y =0; y < wrapper.getOtuNames().size(); y++)
