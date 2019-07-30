@@ -8,4 +8,24 @@ for( taxa in taxaLevels )
 {
 	fileName <- paste0("pcoa_", taxa, ".txt")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
+	myT <- myT[ !is.na(myT$diseaseStatus),]
+	
+	endIndex <- which(names(myT) == "MDS5")
+	
+	pValues <- vector()
+	index <- 1 
+	names <- vector()
+	
+	for( i in 5:endIndex) 
+	{
+		data <- myT[,i]
+		
+		if( sum( data != 0 ) > length(data) / 4 ) 
+		{
+			aLm <- lm( data ~ myT$diseaseStatus )
+			pValues[index] <- anova(aLm)$"Pr(>F)"[1]
+			names[index] = names(myT)[i]
+			index =index + 1			
+		}
+	}
 }
