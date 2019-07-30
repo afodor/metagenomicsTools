@@ -1,0 +1,57 @@
+rm(list=ls())
+
+library("Kendall")
+
+setwd("C:\\EngelCheck\\shan16S")
+
+taxaLevels <- c("2","3","4","5","6","7")
+
+for( taxa in taxaLevels ) 
+{
+	index <- 1
+	pValueMRace <- vector()
+	pValueCaseControl <- vector()
+	pValueInteraction <- vector()
+	taxaName <- vector()
+		
+	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
+	#myT <- myT[ myT$c_mrace == 1 | myT$c_mrace == 2, ]
+	#myT <- myT[ !is.na(myT$c_mrace ), ]
+	myT <- myT[ myT$c_case2 == 0 | myT$c_case2== 1, ]
+	myT <- myT[ !is.na(myT$c_case2 ), ]
+	
+	mRace <- myT$yripct
+	cCase <- factor(myT$c_case2)
+	
+	startCol <- 7
+	endCol <- which(names(myT) == "MDS5")
+	
+	for( i in startCol:endCol )
+	{
+		bug <- myT[,i]
+	
+		aLm <- lm( bug ~ mRace * cCase ) 
+		taxaName[index] <- names(myT)[i]
+		aSummary <- summary(aLm)
+		pValueMRace[index] = summary(aLm)$coefficients[2,4]
+		pValueCaseControl[index] = summary(aLm)$coefficients[3,4]
+		pValueInteraction[index] = summary(aLm)$coefficients[4,4]
+			
+		index <- index + 1
+			
+		}
+	}
+	
+	dFrame <- data.frame( taxaName,pValueMRace ,	pValueCaseControl ,pValueInteraction )
+	dFrame <- dFrame [order(dFrame$pValueInteraction ),]
+	dFrame$adjustedPRace <- p.adjust( dFrame$pValueMRace , method = "BH" )	
+	dFrame$adjustedPCase <- p.adjust( dFrame$pValueCaseControl , method = "BH" )	
+	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValueInteraction , method = "BH" )	
+	
+	write.table(dFrame, file=paste("pValuesInteraction", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	par(mfrow=c(2,2))	
+	hist(pValueMRace,main="race")
+	hist(pValueCaseControl,main="case/control")
+	hist(pValueInteraction,main="interaction")
+	

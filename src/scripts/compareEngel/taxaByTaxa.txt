@@ -12,6 +12,8 @@ for( taxa in taxaLevels )
 	pValues <- vector()
 	metaName <- vector()
 	taxaName <- vector()
+	mean_MRace1 <- vector()
+	mean_MRace2 <- vector()
 		
 	myT <- read.table(file=paste("pcoa_", taxa, ".txt",sep=""), sep="\t", header=TRUE)
 	
@@ -39,12 +41,15 @@ for( taxa in taxaLevels )
 				pValues[index] <- Kendall(bug,meta)$sl[1]	
 			}
 			
+			mean_MRace1[index] <- mean( bug[ myT$c_mrace == 1 & !is.na(myT$c_mrace == 1) ] )
+			mean_MRace2[index] <- mean( bug[ myT$c_mrace == 2 & !is.na(myT$c_mrace == 2) ])
+			
 			index <- index + 1
 			
 		}
 	}
 	
-	dFrame <- data.frame( metaName , taxaName ,pValues)
+	dFrame <- data.frame( metaName , taxaName ,pValues,mean_MRace1,mean_MRace2)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 	write.table(dFrame, file=paste("pValues", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
