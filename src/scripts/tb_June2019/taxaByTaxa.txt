@@ -27,7 +27,7 @@ for( taxa in taxaLevels )
 		{
 			aLm <- lm( data ~ dStatus )
 			pValuesAnova[index] <- anova(aLm)$"Pr(>F)"[1]
-			pValuesDegree[index] <- wilcox.test( data[myT$diseaseStatus=="severe"] ,data[myT$diseaseStatus=="moderate"]  )$p.value
+			pValuesDegree[index] <- t.test( data[myT$diseaseStatus=="severe"] ,data[myT$diseaseStatus=="moderate"]  )$p.value
 			names[index] = names(myT)[i]
 			dataColumn[index] = i
 			index =index + 1			
