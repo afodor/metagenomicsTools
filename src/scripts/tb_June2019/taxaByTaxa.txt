@@ -9,11 +9,13 @@ for( taxa in taxaLevels )
 	fileName <- paste0("pcoa_", taxa, ".txt")
 	myT <- read.table(fileName, sep="\t", header=TRUE)
 	myT <- myT[ !is.na(myT$diseaseStatus),]
+	dStatus <- myT$diseaseStatus 
 	
 	endIndex <- which(names(myT) == "MDS5")
 	
 	pValuesAnova <- vector()
 	pValuesDegree <- vector()
+	dataColumn <- vector()
 	index <- 1 
 	names <- vector()
 	
@@ -23,19 +25,37 @@ for( taxa in taxaLevels )
 		
 		if( sum( data != 0 ) > length(data) / 4 ) 
 		{
-			aLm <- lm( data ~ myT$diseaseStatus )
+			aLm <- lm( data ~ dStatus )
 			pValuesAnova[index] <- anova(aLm)$"Pr(>F)"[1]
 			pValuesDegree[index] <- wilcox.test( data[myT$diseaseStatus=="severe"] ,data[myT$diseaseStatus=="moderate"]  )$p.value
 			names[index] = names(myT)[i]
+			dataColumn[index] = i
 			index =index + 1			
 		}
 	}
 	
-	
-	aFrame <- data.frame(names ,pValuesAnova , pValuesDegree )
+	aFrame <- data.frame(names ,dataColumn,pValuesAnova , pValuesDegree )
 	aFrame <- aFrame[order(aFrame$pValuesAnova ),]
 	aFrame$adjustedPAnova <- p.adjust( aFrame$pValuesAnova , method = "BH" )
 	aFrame$adjustedPDegree <- p.adjust( aFrame$pValuesDegree , method = "BH" )
 	write.table(aFrame, file=paste0("pValues_", taxa,".txt"),sep="\t",row.names=FALSE)
+
+	pdf( paste0(taxa, ".pdf"))
+	par(mfrow=c(2,2))
+
+	for( i in 1:nrow(aFrame))
+	{
+		data <- myT[, aFrame$dataColumn[i] ]
+		
+		myFrame <- data.frame(data,dStatus)
+	
+		graphMain = paste( myFrame$names[i] ) 
+	
+		plot( data ~ dStatus, ylab = names[index],main = graphMain )	
+			
+		stripchart(data ~ dStatus, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+	}
+	
+	dev.off()
 }
 
