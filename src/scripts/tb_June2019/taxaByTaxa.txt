@@ -30,4 +30,12 @@ for( taxa in taxaLevels )
 			index =index + 1			
 		}
 	}
+	
+	
+	aFrame <- data.frame(names ,pValuesAnova , pValuesDegree )
+	aFrame <- aFrame[order(aFrame$pValuesAnova ),]
+	aFrame$adjustedPAnova <- p.adjust( aFrame$pValuesAnova , method = "BH" )
+	aFrame$adjustedPDegree <- p.adjust( aFrame$pValuesDegree , method = "BH" )
+	write.table(aFrame, file=paste0("pValues_", taxa,".txt"),sep="\t",row.names=FALSE)
 }
+
