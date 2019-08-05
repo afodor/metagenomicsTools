@@ -52,7 +52,7 @@ for( taxa in taxaLevels )
 		graphMain = paste0( aFrame$names[i], "\nadj p anova=", format( aFrame$adjustedPAnova[i],digits=3) ,
 					"\nadj p severity=", format( aFrame$adjustedPDegree[i] ,digits=3)  ) 
 	
-		plot( data ~ dStatus, ylab = names[i],main = graphMain )	
+		plot( data ~ dStatus, ylab = aFrame$names[i],main = graphMain )	
 			
 		stripchart(data ~ dStatus, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 	}
