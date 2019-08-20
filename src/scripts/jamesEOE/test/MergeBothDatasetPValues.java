@@ -24,6 +24,15 @@ public class MergeBothDatasetPValues
 		writeResults(map);
 	}
 	
+	private static String getValOrNA( Double d  )
+	{
+		if( d == null)
+			return "NA";
+		
+		return "" + d;
+		
+	}
+	
 	private static void writeResults( HashMap<String, Holder> map ) throws Exception
 	{
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File("C:\\JamesEOE\\test\\genusMerged.txt")));
@@ -34,10 +43,10 @@ public class MergeBothDatasetPValues
 		{
 			Holder h = map.get(s);
 			
-			writer.write(s);
+			writer.write(s + "\t");
 			
-			writer.write( ( h.evanPValue == null ? "NA" :h.evanPValue )  + "\t" );
-			writer.write( ( h.benitezPValue== null ? "NA" :h.benitezPValue )  + "\t" );
+			writer.write( getValOrNA(h.evanPValue) + "\t" );
+			writer.write( getValOrNA(h.benitezPValue) + "\n" );
 		}
 		
 		
@@ -58,7 +67,7 @@ public class MergeBothDatasetPValues
 			
 			double pValue = Math.log10( Double.parseDouble(splits[0]));
 			
-			if( Double.parseDouble(splits[5]) > Double.parseDouble(splits[5]) )
+			if( Double.parseDouble(splits[5]) > Double.parseDouble(splits[4]) )
 				pValue = -pValue;
 			
 			if( h== null)
