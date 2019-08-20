@@ -14,6 +14,8 @@ for( t in taxa )
 	pValues <-vector()
 	bugIndex <- vector()
 	bugName<- vector()
+	meanCase <- vector()
+	meanControl <- vector()
 	index <- 1
 	
 	for( i in 5:ncol(myT) ) 
@@ -23,6 +25,8 @@ for( t in taxa )
 		if( sum( bug != 0 ) > nrow(myT) / 4 ) 
 		{
 			aLm <- lm( bug ~ factor( myT$caseControl))
+			meanControl[index] <- mean( bug[myT$caseControl==0] )
+			meanCase[index] <- mean( bug[myT$caseControl==1] )
 			pValues[index] <- anova(aLm)$"Pr(>F)"[1]		
 			bugName[index] <- names(myT)[i]
 			bugIndex[index] <- i
@@ -30,7 +34,7 @@ for( t in taxa )
 		}	
 	}
 	
-	dFrame <- data.frame(pValues,bugName,bugIndex)
+	dFrame <- data.frame(pValues,bugName,bugIndex,meanCase,meanControl)
 	
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$pValuesAdjusted<- p.adjust( dFrame$pValues, method = "BH" )	
