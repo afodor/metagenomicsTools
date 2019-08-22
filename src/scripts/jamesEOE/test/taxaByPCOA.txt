@@ -9,8 +9,10 @@ for( t in taxa )
 	inFile <- paste0( "pcoa_",t,"Log10NormMetadataNoInactive.txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 	
-	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
-	myT <- myT[myT$activeInactive != "Inactive",  ]
+#	myT <- myT[ myT$source == "Benitez" & !is.na(myT$source) & myT$caseControl != "buffer",]
+#	myT <- myT[myT$activeInactive != "Inactive",  ]
+	myT <- myT[ myT$source == "Evan" & !is.na(myT$source) & myT$caseControl != "buffer",]
+	
 	
 	pValues <-vector()
 	bugIndex <- vector()
@@ -53,7 +55,7 @@ for( t in taxa )
 	
 	dev.off()
 		
-	write.table(dFrame, file=paste0(t,"af_PCOAFirstModelsBenitez.txt"), row.names=FALSE, sep="\t")
+	write.table(dFrame, file=paste0(t,"af_PCOAFirstModelsEvan.txt"), row.names=FALSE, sep="\t")
 
 	
 }
