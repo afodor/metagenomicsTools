@@ -25,5 +25,6 @@ for( prob in errorProbs )
 	plot( log10(sequencingDepth), expectedVals,main=paste("prob=", prob))
 	windows()
 	
+	
 }
 
