@@ -3,8 +3,10 @@ rm(list=ls())
 
 seqLength <- 250
 
-N <- c( 10,100,1000,10000,50000,100000 )
-errorProbs <- c( 0.1, 0.01, 0.05, 0.005 , 0.00001, 0.00000001 )
+N <- seq(10,100000,10)
+#errorProbs <- c( 0.1, 0.01, 0.05, 0.005 , 0.00001, 0.00000001 )
+
+errorProbs <- c( 0.0001 )
 
 for( prob in errorProbs ) 
 {
@@ -17,14 +19,13 @@ for( prob in errorProbs )
 		sequencingDepth[index] = n;
 		
 		probASingleVariant = 1- dbinom(0, n, prob / 3) 
-		expectedVals[index]  = seqLength * probASingleVariant * 3
+		expectedVals[index]  = seqLength * probASingleVariant * 3 / (seqLength * 3) 
 		
 		index = index + 1;
 	}
 	
-	plot( log10(sequencingDepth), expectedVals,main=paste("prob=", prob))
-	windows()
+		plot( log10(sequencingDepth), expectedVals,main=paste("prob=", prob))
 	
-	
+	#windows()	
 }
 
