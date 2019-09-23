@@ -1,0 +1,140 @@
+rm(list=ls())
+
+# this simulation assumes normality of data
+numSimulations <- 100
+
+# there are typically around 70-75 families that are called by the RDP
+# classification scheme in diverse sample types (such as gut or oral 
+# microbiota) in large datasets (Fodor lab, unpublished data)
+numTaxa <- 75
+
+numSubtype1<- 50
+numSubtype2 <- 50
+
+# here we assume that 20% of the bugs are different between
+# subtype1 and subtype with race as an interaction term
+fractionTruePositives <- 0.20
+
+# for simplicity we assume one effect size for all effects
+globalEffectSize = .6
+
+# We assume 40% enrollment of African American in our study
+fractionAA <- 0.40
+
+subtyp1IsAA <- rnorm(numSubtype1) <= fractionAA 
+subtype2isAA <- rnorm(numSubtype2) <= fractionAA 
+allAreAA <- c(subtyp1IsAA ,subtype2isAA)
+allIsSubtype1 <- c( rep(TRUE, numSubtype1), rep(FALSE, numSubtype2) )
+
+powerSubtype <- vector()
+powerRace <- vector()
+powerInteraction <- vector()
+
+for( i in 1:numSimulations)
+{
+	pValuesSubType <- vector()
+	pValuesRace <- vector()
+	pValuesInteraction <- vector()
+	taxaisSubtypePositive <- rnorm(numTaxa) <= fractionTruePositives
+	taxaisRacePositive <- rnorm(numTaxa) <= fractionTruePositives
+	
+	for( j in 1:numTaxa)
+	{
+		subtype1Vals <- vector()
+		
+		for ( k in 1:numSubtype2 ) 
+		{
+			thisEffectSize = 0;
+			if( subtype2isAA[k] &  taxaisRacePositive[j] ) 
+			{
+				thisEffectSize = globalEffectSize;
+			}
+			
+			subtype1Vals[k] = rnorm(1, mean= thisEffectSize )
+		}
+		
+		subtype2Vals <- vector()
+		
+		for ( k in 1:numSubtype1) 
+		{
+			thisEffectSize = 0;
+			
+			if( taxaisSubtypePositive[j] ) 
+			{
+				thisEffectSize = globalEffectSize;
+			}
+			
+			if( subtyp1IsAA[k] &  taxaisRacePositive[j] ) 
+			{
+				thisEffectSize = thisEffectSize +  globalEffectSize;
+			}
+			
+			if( subtyp1IsAA[k] &  taxaisRacePositive[j] &  taxaisSubtypePositive[j] ) 
+			{
+				# if the taxa is responsive to both subtype1 and race
+				# there is an interaction doubling the impact of either one alone
+				thisEffectSize = thisEffectSize + 2 * globalEffectSize
+			}
+			
+			subtype2Vals[k] = rnorm(1, mean= thisEffectSize )
+		}
+	
+		# horribly inefficient here, but seems to still be fast enough
+		data <- c( subtype2Vals, subtype1Vals ) 
+		
+		# build model with the interaction term
+		myLm <- lm( data ~ allIsSubtype1 * allAreAA ) 
+		
+		#record p-values with anova
+		myAnova <- anova(myLm)
+		
+		# use ANOVA to capture the p-values
+		pValuesSubType[j] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesRace[j] <- anova(myLm)$"Pr(>F)"[2]
+		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
+	}
+	
+	# adjust the p-values
+	caseControlAdjust <- p.adjust( pValuesSubType, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( caseControlAdjust[j] < 0.10 & taxaisSubtypePositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerSubtype[i] =  numTrueFound  / sum(taxaisSubtypePositive)
+	
+	cesarianAdjust <- p.adjust( pValuesRace, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( cesarianAdjust[j] < 0.10 & taxaisRacePositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerRace[i] =  numTrueFound  / sum(taxaisRacePositive)
+	
+	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( interactionAdjust[j] < 0.10 & taxaisRacePositive[j] &  taxaisSubtypePositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerInteraction[i] =  numTrueFound  / sum(taxaisRacePositive &taxaisSubtypePositive )
+	
+	
+}
+
+# print out mean power across all simulations
+mean(powerSubtype)
+mean(powerRace)
+mean(powerInteraction)
