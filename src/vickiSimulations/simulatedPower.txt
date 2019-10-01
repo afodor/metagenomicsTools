@@ -3,7 +3,7 @@ rm(list=ls())
 # this simulation assumes normality of data
 numSimulations <- 100
 
-# there are typically around 70-75 families that are called by the RDP
+# there are typically around 70-75 non-rare families or genra that are called by the RDP
 # classification scheme in diverse sample types (such as gut or oral 
 # microbiota) in large datasets (Fodor lab, unpublished data)
 numTaxa <- 75
@@ -11,19 +11,24 @@ numTaxa <- 75
 numSubtype1<- 50
 numSubtype2 <- 50
 
-# here we assume that 20% of the bugs are different between
-# subtype1 and subtype with race as an interaction term
-fractionTruePositives <- 0.20
+# to simplify the simulation, we assume that 
+# every taxa is significantly associated for both main effects
+# and interaction terms - 
+# Our calculation therefore yields the power for detecting true positives
+# and this simulation does not address what fraction of true negatives
+# are called in error
 
-# for simplicity we assume one effect size for all effects
-globalEffectSize = .6
+# we allow one effect size for main effects and one for interaction terms
+mainEffectSize = .6
+interactionEffectSize = 0.9
 
-# We assume 40% enrollment of African American in our study
-fractionAA <- 0.40
+# We assume 50% enrollment of African American in our study
+# consistent with our recruitment goals
+fractionAA <- 0.50
 
-subtyp1IsAA <- rnorm(numSubtype1) <= fractionAA 
-subtype2isAA <- rnorm(numSubtype2) <= fractionAA 
-allAreAA <- c(subtyp1IsAA ,subtype2isAA)
+subtype1IsAA <- runif(numSubtype1) <= fractionAA 
+subtype2isAA <- runif(numSubtype2) <= fractionAA 
+allAreAA <- c(subtype1IsAA ,subtype2isAA)
 allIsSubtype1 <- c( rep(TRUE, numSubtype1), rep(FALSE, numSubtype2) )
 
 powerSubtype <- vector()
@@ -35,19 +40,19 @@ for( i in 1:numSimulations)
 	pValuesSubType <- vector()
 	pValuesRace <- vector()
 	pValuesInteraction <- vector()
-	taxaisSubtypePositive <- rnorm(numTaxa) <= fractionTruePositives
-	taxaisRacePositive <- rnorm(numTaxa) <= fractionTruePositives
-	
+		
 	for( j in 1:numTaxa)
 	{
 		subtype1Vals <- vector()
 		
-		for ( k in 1:numSubtype2 ) 
+		for ( k in 1:numSubtype1 ) 
 		{
 			thisEffectSize = 0;
-			if( subtype2isAA[k] &  taxaisRacePositive[j] ) 
+			
+			# add in the main effect for race
+			if( subtype1IsAA[k] ) 
 			{
-				thisEffectSize = globalEffectSize;
+				thisEffectSize = thisEffectSize +  mainEffectSize;
 			}
 			
 			subtype1Vals[k] = rnorm(1, mean= thisEffectSize )
@@ -55,25 +60,15 @@ for( i in 1:numSimulations)
 		
 		subtype2Vals <- vector()
 		
-		for ( k in 1:numSubtype1) 
+		for ( k in 1:numSubtype2) 
 		{
-			thisEffectSize = 0;
+			thisEffectSize = mainEffectSize;
 			
-			if( taxaisSubtypePositive[j] ) 
+			# add in the main effect for race (here with the interaction term because the 
+			# effect size is larger for AA with subtype2 than for AA and subtype 1
+			if( subtype2isAA[k]) 
 			{
-				thisEffectSize = globalEffectSize;
-			}
-			
-			if( subtyp1IsAA[k] &  taxaisRacePositive[j] ) 
-			{
-				thisEffectSize = thisEffectSize +  globalEffectSize;
-			}
-			
-			if( subtyp1IsAA[k] &  taxaisRacePositive[j] &  taxaisSubtypePositive[j] ) 
-			{
-				# if the taxa is responsive to both subtype1 and race
-				# there is an interaction doubling the impact of either one alone
-				thisEffectSize = thisEffectSize + 2 * globalEffectSize
+				thisEffectSize = thisEffectSize +  mainEffectSize + interactionEffectSize;
 			}
 			
 			subtype2Vals[k] = rnorm(1, mean= thisEffectSize )
@@ -100,24 +95,24 @@ for( i in 1:numSimulations)
 	numTrueFound <-0 
 	
 	for ( j in 1:numTaxa ) 
-	{
-		if( caseControlAdjust[j] < 0.10 & taxaisSubtypePositive[j] )
+	{	
+		if( caseControlAdjust[j] < 0.10  )
 			numTrueFound = numTrueFound + 1
 	}
 	
-	powerSubtype[i] =  numTrueFound  / sum(taxaisSubtypePositive)
+	powerSubtype[i] =  numTrueFound  
 	
-	cesarianAdjust <- p.adjust( pValuesRace, method="BH")
+	raceAdjust <- p.adjust( pValuesRace, method="BH")
 	
 	numTrueFound <-0 
 	
 	for ( j in 1:numTaxa ) 
 	{
-		if( cesarianAdjust[j] < 0.10 & taxaisRacePositive[j] )
+		if( raceAdjust[j] < 0.10  )
 			numTrueFound = numTrueFound + 1
 	}
 	
-	powerRace[i] =  numTrueFound  / sum(taxaisRacePositive)
+	powerRace[i] =  numTrueFound 
 	
 	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
 	
@@ -125,13 +120,11 @@ for( i in 1:numSimulations)
 	
 	for ( j in 1:numTaxa ) 
 	{
-		if( interactionAdjust[j] < 0.10 & taxaisRacePositive[j] &  taxaisSubtypePositive[j] )
+		if( interactionAdjust[j] < 0.10  )
 			numTrueFound = numTrueFound + 1
 	}
 	
-	powerInteraction[i] =  numTrueFound  / sum(taxaisRacePositive &taxaisSubtypePositive )
-	
-	
+	powerInteraction[i] =  numTrueFound 
 }
 
 # print out mean power across all simulations
