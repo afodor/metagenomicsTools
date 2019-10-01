@@ -122,3 +122,4 @@ mean(powerSubtype)
 mean(powerRace)
 mean(powerInteraction)
 
+
