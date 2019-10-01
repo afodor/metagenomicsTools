@@ -8,7 +8,7 @@ numSimulations <- 10
 # microbiota) in large datasets (Fodor lab, unpublished data)
 numTaxa <- 75
 
-numPatients <- 100
+numPatients <- 200
 
 # to simplify the simulation, we assume that 
 # every taxa is significantly associated for both main effects
@@ -18,8 +18,8 @@ numPatients <- 100
 # are called in error
 
 # we allow one effect size for main effects and one for interaction terms
-mainEffectSize = .2
-interactionEffectSize = 1.1
+mainEffectSize = .06
+interactionEffectSize = .75
 
 # We assume 50% enrollment of African American in our study
 # consistent with our recruitment goals
