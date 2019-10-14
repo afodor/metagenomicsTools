@@ -20,6 +20,29 @@ public class TestMeta
 		File ivoryLog = new File("C:\\chWorkshop\\190709-DORSEY\\04_statistics\\190709-DORSEY_log10NormalizedCounts_withMeta.txt");
 		
 		checkLines(map, ivoryLog);
+		checkFirstLines(firstFile, ivoryLog);
+	}
+	
+	private static void checkFirstLines(File firstFile, File logFile) throws Exception
+	{
+		BufferedReader reader1 =new BufferedReader(new FileReader(firstFile));
+		BufferedReader reader2 = new BufferedReader(new FileReader(logFile));
+		
+		String[] splits1 = reader1.readLine().split("\t");
+		String[] splits2 = reader2.readLine().split("\t");
+		
+		for( int x=1; x < splits1.length; x++)
+		{
+			if( ! splits1[x].equals(splits2[x]))
+				throw new Exception("No");
+			
+			System.out.println(splits1[x] + " " + splits2[x]);
+				
+		}
+				
+				
+		reader1.close();
+		reader2.close();
 	}
 	
 	private static void checkLines(HashMap<String, String> map , File file) throws Exception
