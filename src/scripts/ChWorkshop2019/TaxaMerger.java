@@ -4,15 +4,19 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.annotation.processing.Filer;
 
 public class TaxaMerger
 {
-	private final static String[] TAXA_LEVELS = {"p"};  //,"c","o","f","g","s"};
+	private final static String[] TAXA_LEVELS = {"p","c","o","f","g","s"};
 	
 	
 	public static void main(String[] args) throws Exception
@@ -21,6 +25,7 @@ public class TaxaMerger
 		{
 			HashMap<String, HashMap<String,Integer> > map  = parseAtLevel(t);
 			
+			/*
 			for(String s : map.keySet())
 			{
 				System.out.println(s);
@@ -28,10 +33,60 @@ public class TaxaMerger
 				for( String s2 : map.get(s).keySet())
 					System.out.println("\t" + s2 + " " + map.get(s).get(s2));
 				
-				System.exit(1);
 			}
+			*/
+			writeFile(map, t);
+			System.out.println(t);
 		}
 		
+	}
+	
+	private static void writeFile(HashMap<String, HashMap<String,Integer> > map, String taxonomicLevel) throws Exception
+	{
+		File outFile = 
+				new File( "C:\\chWorkshop\\190709-DORSEY\\03_countsTables_txtFormat\\190709-DORSEY-txt\\" + 
+		  taxonomicLevel + "_merged.txt");
+
+		BufferedWriter writer =new BufferedWriter(new FileWriter(outFile));
+		
+		List<String> samples = new ArrayList<>(map.keySet());
+		
+		writer.write("sample");
+		
+		HashSet<String> otus = new HashSet();
+		
+		for(String s : map.keySet())
+			for(String s2 : map.get(s).keySet())
+				otus.add(s2);
+		
+		List<String> otuList = new ArrayList<>(otus);
+		Collections.sort(otuList);
+		
+		for(String s : otuList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+
+		for(String s : map.keySet())
+		{
+			writer.write(s);
+			
+			HashMap<String, Integer> innerMap =map.get(s);
+			
+			for(String otu : otuList)
+			{
+				Integer val = innerMap.get(otu);
+				
+				if( val == null)
+					val = 0;
+				
+				writer.write("\t" + val);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	
@@ -41,7 +96,7 @@ public class TaxaMerger
 	 * */
 	private static HashMap<String, HashMap<String,Integer> > parseAtLevel( String taxaLeve) throws Exception
 	{
-		HashMap<String, HashMap<String,Integer> > map = new HashMap<>();
+		HashMap<String, HashMap<String,Integer> > map = new LinkedHashMap();
 		
 		File inFile = new File( "C:\\chWorkshop\\190709-DORSEY\\03_countsTables_txtFormat\\190709-DORSEY-txt\\taxa-table.txt");
 		
