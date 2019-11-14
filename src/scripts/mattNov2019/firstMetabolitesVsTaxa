@@ -2,6 +2,7 @@
 rm(list=ls())
 
 setwd("C:\\MattNov14");
+library("Kendall")
 
 myT <- read.delim("genuswMetadata.tsv", header=TRUE, comment.char="@", stringsAsFactors=FALSE,check.name=FALSE)
 myT <- myT[!is.na(myT[,2]),]
@@ -12,20 +13,24 @@ metaboliteLow <- which(names(myT)=="Liver DHMA (ug/G)")
 metaboliteHigh <- ncol(myT)
 metaboliteRange <- c(  which(names(myT)=="Corticosterone Values (pg/ml)"), metaboliteLow:metaboliteHigh )
 
-metaboliteRange <- 
+pValues <- vector()
 
+index <-1 
 for( i in taxaRange )
 {
 	if( sum(myT[,i] ==0 ) <= nrow(myT) /4 ) 
 	{
 		for( j in metaboliteRange )
 		{
-			toInclude<- !is.na(myT[,j])
+			allTaxa <- as.numeric(myT[,j])
+		
+			toInclude<- !is.na(allTaxa)
 			
 			taxaData <- myT[toInclude,i]
-			metaboliteData <- myT[toInclude,j]
-		}
-		
+			metaboliteData <- allTaxa[toInclude]
+			pValues[index] <- Kendall(taxaData ,metaboliteData )$sl
+			index <- index + 1
+		}		
 	}
 	
 }
