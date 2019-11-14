@@ -1,0 +1,31 @@
+
+rm(list=ls())
+
+setwd("C:\\MattNov14");
+
+myT <- read.delim("genuswMetadata.tsv", header=TRUE, comment.char="@", stringsAsFactors=FALSE,check.name=FALSE)
+myT <- myT[!is.na(myT[,2]),]
+
+taxaRange <- 2:which(names(myT)=="SampleSum")
+
+metaboliteLow <- which(names(myT)=="Liver DHMA (ug/G)")
+metaboliteHigh <- ncol(myT)
+metaboliteRange <- c(  which(names(myT)=="Corticosterone Values (pg/ml)"), metaboliteLow:metaboliteHigh )
+
+metaboliteRange <- 
+
+for( i in taxaRange )
+{
+	if( sum(myT[,i] ==0 ) <= nrow(myT) /4 ) 
+	{
+		for( j in metaboliteRange )
+		{
+			toInclude<- !is.na(myT[,j])
+			
+			taxaData <- myT[toInclude,i]
+			metaboliteData <- myT[toInclude,j]
+		}
+		
+	}
+	
+}
