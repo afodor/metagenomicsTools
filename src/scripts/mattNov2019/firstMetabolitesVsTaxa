@@ -4,73 +4,82 @@ rm(list=ls())
 setwd("C:\\MattNov14");
 library("Kendall")
 
-myT <- read.delim("genuswMetadata.tsv", header=TRUE, comment.char="@", stringsAsFactors=FALSE,check.name=FALSE)
-myT <- myT[!is.na(myT[,2]),]
 
-taxaRange <- 2:which(names(myT)=="SampleSum")
+tissueType <- c("Fecal", "Cecal")
 
-metaboliteLow <- which(names(myT)=="Liver DHMA (ug/G)")
-metaboliteHigh <- ncol(myT)
-metaboliteRange <- c(  which(names(myT)=="Corticosterone Values (pg/ml)"), metaboliteLow:metaboliteHigh )
-
-pValues <- vector()
-taxaName <- vector()
-metaboliteName <- vector()
-spearmanR <- vector()
-sampleSize <- vector()
-taxaCol <- vector()
-metaboliteCol <- vector()
-
-index <-1 
-for( i in taxaRange )
+for( tissue in tissueType ) 
 {
-	if( sum(myT[,i] ==0 ) <= nrow(myT) /4 ) 
-	{
-		for( j in metaboliteRange )
-		{
-			allMetabolites <- as.numeric(myT[,j])
-		
-			toInclude<- !is.na(allMetabolites)
-			
-			taxaData <- myT[toInclude,i]
-			metaboliteData <- allMetabolites [toInclude]
-			pValues[index] <- Kendall(taxaData ,metaboliteData )$sl
-			taxaName[index] <- names(myT)[i]
-			metaboliteName[index] <- names(myT)[j]
-			spearmanR[index] <- cor(taxaData ,metaboliteData ,method="spearman")
-			sampleSize[index] <- length(taxaData )
-			taxaCol[index] <- i
-			metaboliteCol[index] <- j
-			index <- index + 1
-		}		
-	}
-}
-
-hist(pValues)
-
-myFrame <- data.frame(pValues,taxaName ,metaboliteName ,spearmanR ,sampleSize, taxaCol, metaboliteCol )
-myFrame$adjustedP <- p.adjust(myFrame$pValues, method="BH")
-myFrame<- myFrame [order(myFrame$adjustedP),]
-
-write.table(myFrame, file=paste("firstPValuesGenus.txt",sep=""), sep="\t",row.names=FALSE)
-
-pdf("genus.pdf")
-par(mfrow=c(2,2))
-
-for( i in 1:1500) 
-{
-	myText <- paste0( myFrame$metaboliteName[i] , " vs\n", myFrame$taxaName[i] , "\n",
-							"p=", format(  myFrame$pValues[i],digits=3), " adj. p=", 
-									 format(  myFrame$adjustedP[i],digits=3), " r = ",
-									format(  myFrame$spearmanR[i],digits=3) )
+	myT <- read.delim("genuswMetadata.tsv", header=TRUE, comment.char="@", stringsAsFactors=FALSE,check.name=FALSE)
+	myT <- myT[ myT$"Source Type" == tissue ,]
+	myT <- myT[!is.na(myT[,2]),]
 	
-	allMetabolites <- as.numeric(myT[,myFrame$metaboliteCol[i]])
-		
-	toInclude<- !is.na(allMetabolites)
+	taxaRange <- 2:(which(names(myT)=="SampleSum")-1)
+	
+	metaboliteLow <- which(names(myT)=="Liver DHMA (ug/G)")
+	metaboliteHigh <- ncol(myT)
+	metaboliteRange <- c(  which(names(myT)=="Corticosterone Values (pg/ml)"), metaboliteLow:metaboliteHigh )
+	
+	pValues <- vector()
+	taxaName <- vector()
+	metaboliteName <- vector()
+	spearmanR <- vector()
+	sampleSize <- vector()
+	taxaCol <- vector()
+	metaboliteCol <- vector()
+	
+	index <-1 
+	for( i in taxaRange )
+	{
+		if( sum(myT[,i] ==0 ) <= nrow(myT) /4 ) 
+		{
+			for( j in metaboliteRange )
+			{
+				allMetabolites <- as.numeric(myT[,j])
 			
-	taxaData <- myT[,myFrame$taxaCol[i]]
-		 
-	plot( taxaData , allMetabolites , main=myText, xlab = myFrame$taxaName[i] ,ylab =myFrame$metaboliteName[i] ) 
+				toInclude<- !is.na(allMetabolites)
+				
+				taxaData <- myT[toInclude,i]
+				metaboliteData <- allMetabolites [toInclude]
+				pValues[index] <- Kendall(taxaData ,metaboliteData )$sl
+				taxaName[index] <- names(myT)[i]
+				metaboliteName[index] <- names(myT)[j]
+				spearmanR[index] <- cor(taxaData ,metaboliteData ,method="spearman")
+				sampleSize[index] <- length(taxaData )
+				taxaCol[index] <- i
+				metaboliteCol[index] <- j
+				index <- index + 1
+			}		
+		}
+	}
+	
+	hist(pValues)
+	
+	myFrame <- data.frame(pValues,taxaName ,metaboliteName ,spearmanR ,sampleSize, taxaCol, metaboliteCol )
+	myFrame$adjustedP <- p.adjust(myFrame$pValues, method="BH")
+	myFrame<- myFrame [order(myFrame$adjustedP),]
+	
+	write.table(myFrame, file=paste(paste0("firstPValuesGenus_", tissue,".txt"),sep=""), sep="\t",row.names=FALSE)
+	
+	pdf(paste0("genus_", tissue,".pdf"))
+	par(mfrow=c(2,2))
+	hist(pValues)
+	
+	for( i in 1:1500) 
+	{
+		myText <- paste0( myFrame$metaboliteName[i] , " vs\n", myFrame$taxaName[i] , "\n",
+								"p=", format(  myFrame$pValues[i],digits=3), " adj. p=", 
+										 format(  myFrame$adjustedP[i],digits=3), " r = ",
+										format(  myFrame$spearmanR[i],digits=3) )
+		
+		allMetabolites <- as.numeric(myT[,myFrame$metaboliteCol[i]])
+			
+		toInclude<- !is.na(allMetabolites)
+				
+		taxaData <- myT[,myFrame$taxaCol[i]]
+			 
+		plot( taxaData , allMetabolites , main=myText, xlab = myFrame$taxaName[i] ,ylab =myFrame$metaboliteName[i] ) 
+	}
+	
+	dev.off()
 }
 
-dev.off()
