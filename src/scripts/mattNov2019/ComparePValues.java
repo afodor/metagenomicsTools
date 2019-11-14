@@ -32,7 +32,7 @@ public class ComparePValues
 		BufferedWriter writer =new BufferedWriter(new FileWriter(
 				new File("C:\\MattNov14\\PValuesCecalVsFecal_genus.txt")));
 		
-		writer.write("taxa\tmetabolite\tcecumSpearman\tfecalSpeaman\n");
+		writer.write("taxa\tmetabolite\tmetaboliteFirstName\tmetaboliteLastName\tcecumSpearman\tfecalSpeaman\n");
 		
 		for(String s : map.keySet())
 		{
@@ -41,13 +41,39 @@ public class ComparePValues
 			if( sToken.countTokens() != 2)
 				throw new Exception();
 			
-			writer.write(sToken.nextToken() + "\t" + sToken.nextToken() + "\t"+ 
-					map.get(s).spearmanFromCecum + "\t" + map.get(s).spearmanFromFecal + "\n");
+			String taxa = sToken.nextToken();
+			String fullMetabolite = sToken.nextToken();
+			String firstName = getFirstName(fullMetabolite).trim();
+			String lastName  = fullMetabolite.replace("\"", "").replace(firstName, "").trim();
+			
+			
+			writer.write(taxa+ "\t" + fullMetabolite+ "\t"+ firstName + "\t" + lastName + "\t" + 
+				getValOrEmpty(map.get(s).spearmanFromCecum) + "\t" +
+					getValOrEmpty( map.get(s).spearmanFromFecal) + "\n");
 			
 			
 		}
 		
 		writer.flush(); writer.close();
+	}
+	
+	private static String getValOrEmpty(Double d)
+	{
+		if ( d== null )
+			return "";
+		
+		return d.toString();
+	}
+	
+	private static String getFirstName(String s) throws Exception
+	{
+		s = s.replace("\"", "").trim();
+		
+		for(String s2 : CompareAcrossTissues.FIRST_WORDS)
+			if( s.startsWith(s2))
+				return s2;
+		
+		throw new Exception("No");
 	}
 	
 	private static void addToMap(HashMap<String, Holder> map ,File f, boolean isFecal)
