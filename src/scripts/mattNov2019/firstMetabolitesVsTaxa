@@ -14,6 +14,10 @@ metaboliteHigh <- ncol(myT)
 metaboliteRange <- c(  which(names(myT)=="Corticosterone Values (pg/ml)"), metaboliteLow:metaboliteHigh )
 
 pValues <- vector()
+taxaName <- vector()
+metaboliteName <- vector()
+spearmanR <- vector()
+sampleSize <- vector()
 
 index <-1 
 for( i in taxaRange )
@@ -29,8 +33,18 @@ for( i in taxaRange )
 			taxaData <- myT[toInclude,i]
 			metaboliteData <- allTaxa[toInclude]
 			pValues[index] <- Kendall(taxaData ,metaboliteData )$sl
+			taxaName[index] <- names(myT)[i]
+			metaboliteName[index] <- names(myT)[j]
+			spearmanR[index] <- cor(taxaData ,metaboliteData ,method="spearman")
+			sampleSize[index] <- length(taxaData )
 			index <- index + 1
 		}		
 	}
-	
 }
+
+hist(pValues)
+
+myFrame <- data.frame(pValues,taxaName ,metaboliteName ,spearmanR ,sampleSize )
+myFrame$adjutedP <- p.adjust(myFrame$pValues, method="BH")
+
+write.table(myFrame, file=paste("firstPValuesGenus.txt",sep=""), sep="\t",row.names=FALSE)
