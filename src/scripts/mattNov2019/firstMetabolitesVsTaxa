@@ -4,7 +4,6 @@ rm(list=ls())
 setwd("C:\\MattNov14");
 library("Kendall")
 
-
 tissueType <- c("Fecal", "Cecal")
 
 for( tissue in tissueType ) 
