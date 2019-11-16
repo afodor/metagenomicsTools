@@ -1,0 +1,37 @@
+rm(list=ls())
+
+setwd("C:\\MattNov14")
+
+myT <- read.table("pivotedMetabolites.txt",header=TRUE, sep="\t")
+
+myT <- myT[myT$metabolite=="5HT",]
+
+myT <- myT[! is.na(myT$"Distal.Colon") & ! is.na(myT$"Proximal.Colon"),]
+
+rVal = format( cor( myT$"Distal.Colon", myT$"Proximal.Colon",method="spearman"),digits=2)
+
+aText <- paste("5HT in proximal vs. distal colon\nr=", rVal)
+
+plot(myT$"Distal.Colon", myT$"Proximal.Colon",ylim=c(0,100),xlab="Proximal Colon", ylab="Distal colon",
+			main=aText)
+lines(c(0,100),c(0,100))
+
+
+rm(list=ls())
+
+setwd("C:\\MattNov14")
+
+myT <- read.table("pivotedMetabolites.txt",header=TRUE, sep="\t")
+
+myT <- myT[myT$metabolite=="Norepinephrine",]
+
+myT <- myT[! is.na(myT$"Distal.Colon") & ! is.na(myT$"Proximal.Colon"),]
+
+rVal = format( cor( myT$"Distal.Colon", myT$"Proximal.Colon",method="spearman"),digits=2)
+
+aText <- paste("Norepinephrine in proximal vs. distal colon\nr=", rVal)
+
+plot(myT$"Distal.Colon", myT$"Proximal.Colon",xlim=c(0,5),ylim=c(0,5),xlab="Proximal Colon", ylab="Distal colon",
+			main=aText)
+lines(c(0,100),c(0,100))
+
