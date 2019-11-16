@@ -1,9 +1,17 @@
 package scripts.mattNov2019;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class PivotMetabolites
 {
@@ -13,6 +21,61 @@ public class PivotMetabolites
 		
 		for(String s : map.keySet())
 			System.out.println(s + " "+  map.get(s));
+		
+		writePivot(map);
+		System.out.println("Done");
+	}
+	
+	private static void writePivot(HashMap<String, Double> map ) throws Exception
+	{
+		HashSet<String> tissueSet = new LinkedHashSet<>();
+		HashSet<String> samples = new LinkedHashSet<>();
+		HashSet<String> metabolites = new LinkedHashSet<>();
+		
+		for(String s : map.keySet())
+		{
+			String[] splits =s.split("@");
+			if( splits.length != 3)
+				throw new Exception();
+			
+			tissueSet.add(splits[2]);
+			samples.add(splits[0]);
+			metabolites.add(splits[1]);
+		}
+		
+		// or could just us a tree set
+		List<String> tissues = new ArrayList<>(tissueSet);
+		Collections.sort(tissues);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\MattNov14\\pivotedMetabolites.txt"));
+		
+		writer.write("sample\tmetabolite");
+		
+		for(String s : tissues )
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String sampleId : samples)
+		{
+			for(String metabolite : metabolites)
+			{
+				writer.write(sampleId + "\t" + metabolite + "\t");
+				
+				for(String t : tissues)
+				{
+					String key = sampleId + "@" + metabolite + "@" + t;
+					Double val = map.get(key);
+					
+					writer.write( "\t" + (val == null ? "NA" : val ));
+				}
+								
+				writer.write("\n");
+
+			}
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	/*
