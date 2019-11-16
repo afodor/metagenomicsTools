@@ -60,7 +60,7 @@ public class PivotMetabolites
 		{
 			for(String metabolite : metabolites)
 			{
-				writer.write(sampleId + "\t" + metabolite + "\t");
+				writer.write(sampleId + "\t" + metabolite);
 				
 				for(String t : tissues)
 				{
