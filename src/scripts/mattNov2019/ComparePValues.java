@@ -65,7 +65,7 @@ public class ComparePValues
 		return d.toString();
 	}
 	
-	private static String getFirstName(String s) throws Exception
+	public static String getFirstName(String s) throws Exception
 	{
 		s = s.replace("\"", "").trim();
 		
@@ -73,7 +73,7 @@ public class ComparePValues
 			if( s.startsWith(s2))
 				return s2;
 		
-		throw new Exception("No");
+		throw new Exception("No " + s);
 	}
 	
 	private static void addToMap(HashMap<String, Holder> map ,File f, boolean isFecal)
