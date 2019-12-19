@@ -89,7 +89,7 @@ public class MetadataParser
 
 	private MetadataParser(String s) throws Exception
 	{
-		System.out.println(s);
+		//System.out.println(s);
 		this.fileLine = s;
 		String[] splits = s.split("\t");
 		
@@ -107,6 +107,18 @@ public class MetadataParser
 		this.candidiasis = splits[8];
 		this.hPV16or18 =splits[9];	
 		this.age = Integer.parseInt(splits[10]);
+	}
+	
+	public static String getTopMetaLine() throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				ConfigReader.getPierce2019Dir() + File.separator+ "OPCStudySubset.txt"	)));
+			
+		String aLine = reader.readLine();
+		
+		reader.close();
+		
+		return aLine;
 	}
 	
 	public static HashMap<String, MetadataParser> getMetaMap() throws Exception
