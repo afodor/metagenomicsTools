@@ -1,0 +1,16 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ChristinePierce_Dec2019")
+
+myT <- read.table("taxaAsColumns_OTULogNormPlusMeta.txt", header=TRUE,sep="\t")
+myTData <- myT[,12:ncol(myT)]
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_otu",".txt",sep=""))
+write.table(myPCOA$CA$eig,file=paste("eigenValues_otu",".txt", sep=""), sep="\t")	
+
+myMerge <- cbind( myT, myPCOA$CA$u)
+
+write.table(myMerge , sep="\t", file=paste("pcoa_metadataOTU",".txt",sep=""),row.names=FALSE)

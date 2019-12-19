@@ -54,7 +54,7 @@ public class MergeMetadata
 			
 			if( mp == null)
 			{	
-				for( int x=1; x < topSplits.length; x++)
+				for( int x=1; x < headerSplits.length; x++)
 					writer.write("\tNA");
 			}
 			else
@@ -66,8 +66,6 @@ public class MergeMetadata
 
 				for( int x=1; x < moreSplits.length; x++)
 					writer.write("\t" + moreSplits[x]);
-				
-				writer.write("\t" + mp.getFileLine());
 			}
 				
 			
