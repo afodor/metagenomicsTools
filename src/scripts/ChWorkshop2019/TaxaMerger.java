@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.annotation.processing.Filer;
-
 public class TaxaMerger
 {
 	private final static String[] TAXA_LEVELS = {"p","c","o","f","g","s"};

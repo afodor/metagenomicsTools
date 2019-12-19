@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.annotation.processing.Filer;
-
-import scripts.lactoCheck.Normalize;
 import utils.Avevar;
 
 public class IvoryTest

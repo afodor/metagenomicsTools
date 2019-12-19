@@ -24,6 +24,7 @@ public class ClassExample
 	
 	private static class SequenceWorker implements Runnable
 	{
+		@SuppressWarnings("unused")
 		private final FastaSequence aSequence;
 		
 		public SequenceWorker(FastaSequence seq) 

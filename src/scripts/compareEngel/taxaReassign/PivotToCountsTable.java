@@ -14,7 +14,7 @@ public class PivotToCountsTable
 		File inFile =new File(ConfigReader.getEngelCheckDir() + File.separator + 
 				"JenDatabase" + File.separator +  "Engel_PIN" + File.separator +  "16S" + 
 				File.separator + "STIRRUPS" + File.separator + "Engel_16S_stirrups_summary_97_070819.txt");
-		HashMap<String, HashMap<String,Long>> map =getMap(inFile);
+		/*HashMap<String, HashMap<String,Long>> map = */ getMap(inFile);
 		
 		
 	}

@@ -2,13 +2,11 @@ package scripts.mattNov2019;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import javax.annotation.processing.Filer;
 
 public class CompareAcrossTissues
 {
