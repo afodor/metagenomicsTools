@@ -65,7 +65,7 @@ public class MergeMetadata
 					throw new Exception();
 
 				for( int x=1; x < moreSplits.length; x++)
-					writer.write("\t" + moreSplits[x]);
+					writer.write("\t" + moreSplits[x].replace("1or2", "2"));
 			}
 				
 			
