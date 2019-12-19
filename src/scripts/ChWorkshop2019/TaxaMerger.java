@@ -132,7 +132,7 @@ public class TaxaMerger
 		
 		writer.write("\n");
 
-		for(String s : map.keySet())
+		for(String s : samples)
 		{
 			writer.write(s);
 			
