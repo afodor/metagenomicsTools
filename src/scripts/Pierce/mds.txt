@@ -5,7 +5,7 @@ rm(list=ls())
 setwd("C:\\ChristinePierce_Dec2019")
 
 myT <- read.table("taxaAsColumns_OTULogNormPlusMeta.txt", header=TRUE,sep="\t")
-myTData <- myT[,12:ncol(myT)]
+myTData <- myT[,13:ncol(myT)]
 myPCOA <- capscale(myTData~1,distance="bray")
 	
 write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_otu",".txt",sep=""))

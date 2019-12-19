@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.OtuWrapper;
 import utils.ConfigReader;
 
 public class MergeMetadata
@@ -22,6 +23,10 @@ public class MergeMetadata
 				new File(ConfigReader.getPierce2019Dir() + File.separator + 
 						"taxaAsColumns_OTULogNormPlusMeta.txt");
 		
+		File unlogged = new File(ConfigReader.getPierce2019Dir() + File.separator + "taxaAsColumns_OTU.txt");
+		
+		OtuWrapper wrapper = new OtuWrapper(unlogged);
+		
 		BufferedReader reader = new BufferedReader(new FileReader(pivotFileLogNorm));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(pivotFileMetadata));
@@ -29,6 +34,8 @@ public class MergeMetadata
 		String[] topSplits = reader.readLine().split("\t");
 		
 		writer.write(topSplits[0]);
+		
+		writer.write("\tShannonDiversity");
 		
 		String[] headerSplits = MetadataParser.getTopMetaLine().split("\t");
 		
@@ -46,6 +53,7 @@ public class MergeMetadata
 			String[] splits= s.split("\t");
 			
 			writer.write(splits[0]);
+			writer.write("\t" + wrapper.getShannonEntropy(splits[0]));
 			
 			if( splits.length != topSplits.length)
 				throw new Exception();
