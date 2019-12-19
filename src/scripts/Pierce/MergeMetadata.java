@@ -39,7 +39,7 @@ public class MergeMetadata
 		
 		String[] headerSplits = MetadataParser.getTopMetaLine().split("\t");
 		
-		for( int x=1; x < headerSplits.length; x++)
+		for( int x=0; x < headerSplits.length; x++)
 			writer.write("\t" + headerSplits[x]);
 		
 		for( int x=1; x < topSplits.length; x++)
@@ -62,7 +62,7 @@ public class MergeMetadata
 			
 			if( mp == null)
 			{	
-				for( int x=1; x < headerSplits.length; x++)
+				for( int x=0; x < headerSplits.length; x++)
 					writer.write("\tNA");
 			}
 			else
@@ -72,7 +72,7 @@ public class MergeMetadata
 				if( moreSplits.length != headerSplits.length)
 					throw new Exception();
 
-				for( int x=1; x < moreSplits.length; x++)
+				for( int x=0; x < moreSplits.length; x++)
 					writer.write("\t" + moreSplits[x].replace("1or2", "2"));
 			}
 				

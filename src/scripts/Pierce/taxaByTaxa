@@ -1,0 +1,11 @@
+
+rm(list=ls())
+
+setwd("C:\\ChristinePierce_Dec2019")
+
+myT <- read.table("pcoa_metadataOTU.txt", header=TRUE,sep="\t")
+
+analysisCols <- c(2,14:which(names(myT)=="MDS5"))
+
+pValueStatus <- vector()
+
