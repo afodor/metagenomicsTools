@@ -3,18 +3,37 @@ rm(list=ls())
 
 setwd("C:\\ChristinePierce_Dec2019")
 
-
 levels <- c( "phylum", "class" , "order", "family", "genus", "OTU" )
 
 for( taxa in levels ) 
 {	
 	inFileName <- paste0("pcoa_metadata", taxa, ".txt")	
 	myT <- read.table(inFileName, header=TRUE,sep="\t")
+	myT <- myT[ !is.na(myT$PatientNo), ]
+	patientIDs <- factor( myT$PatientNo)
+	status <- factor( myT$Status) 
 	
 	analysisCols <- c(2,14:which(names(myT)=="MDS5"))
 	
 	pValueStatus <- vector()
 	pValueIndividual <- vector()
+	taxaName <- vector()
+	
+	index  <- 1
+	for( i in analysisCols )
+	{
+		data <- myT[,i]
+		
+		if( sum(data !=0) > (length(data) / 4 ) ) 
+		{	
+			aLm <- lm( data ~  status +  patientIDs )
+			anAnova <- anova(aLm)
+			pValueStatus[index] <- anAnova$"Pr(>F)"[1]
+			pValueIndividual[index] <- anAnova$"Pr(>F)"[2]
+			taxaName[index] <- names(myT)[i]
+			index = index +1
+		}		
+	}
 }
 
 
