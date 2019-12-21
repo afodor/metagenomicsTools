@@ -34,6 +34,11 @@ for( taxa in levels )
 			index = index +1
 		}		
 	}
+	
+	dFrame <- data.frame(taxaName,pValueStatus,pValueIndividual)
+	dFrame <- dFrame [order(dFrame$pValueStatus),]
+	dFrame$pValuesStatusAdjusted<- p.adjust( dFrame$pValueStatus, method = "BH")
+	dFrame$pValuesSubjectAdjusted<- p.adjust( dFrame$pValueIndividual, method = "BH")
+	
+	write.table(dFrame, file=paste("taxa_models_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
-
-
