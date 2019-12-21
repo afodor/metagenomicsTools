@@ -1,11 +1,17 @@
 package scripts.Pierce;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
-
 import parsers.OtuWrapper;
 import utils.ConfigReader;
 
@@ -29,6 +35,51 @@ public class ParseTaxaAssignment
 		
 	}
 	
+	public static void writePivotedTaxaCounts( OtuWrapper wrapper, int level , File outFile)
+		throws Exception
+	{
+		HashMap<String, Map<String, Double>>  map = pivotToLevel(wrapper, level);
+		
+		List<String> samples = new ArrayList<String>( map.keySet());
+		
+		HashSet<String> taxa = new LinkedHashSet<String>();
+		
+		for(String s : map.keySet())
+			taxa.addAll(map.get(s).keySet());
+		
+		List<String> taxaList = new ArrayList<String>(taxa);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		writer.write("sample");
+		
+		for(String s : taxaList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String sample : samples)
+		{
+			writer.write(sample);
+			
+			Map<String, Double> innerMap =map.get(sample);
+			
+			for(String s2: innerMap.keySet())
+			{
+				Double aVal = innerMap.get(s2);
+				
+				if( aVal == null)
+					aVal =0.0;
+				
+				writer.write("\t" + aVal);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
 	/*
 	 * x =0 == phylum
 	 * x= 4  == genus
@@ -38,7 +89,7 @@ public class ParseTaxaAssignment
 	public static HashMap<String, Map<String, Double>> pivotToLevel(OtuWrapper wrapper, int level ) 
 		throws Exception
 	{
-		HashMap<String, Map<String, Double>>  returnMap =new HashMap<String, Map<String, Double>>();
+		HashMap<String, Map<String, Double>>  returnMap =new LinkedHashMap<String, Map<String, Double>>();
 		HashMap<String, String> taxaMap = getMapForLevel(level);
 		
 		for(int x=0; x < wrapper.getSampleNames().size(); x++)
@@ -48,7 +99,7 @@ public class ParseTaxaAssignment
 			if( returnMap.containsKey(sampleName))
 				throw new Exception("Duplicate " + sampleName);
 			
-			Map<String, Double> innerMap = new HashMap<String, Double>();
+			Map<String, Double> innerMap = new LinkedHashMap<String, Double>();
 			returnMap.put(sampleName, innerMap);
 			
 			for( int y=0; y < wrapper.getOtuNames().size(); y++)

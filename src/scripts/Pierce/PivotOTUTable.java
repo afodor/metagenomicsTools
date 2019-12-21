@@ -33,6 +33,24 @@ public class PivotOTUTable
 		
 		OtuWrapper wrapper = new OtuWrapper(pivotFile);
 		wrapper.writeNormalizedLoggedDataToFile(pivotFileLogNorm);
+		
+		String[] taxa = { "phylum", "class" , "order", "family", "genus" };
+		
+		for( int x=0; x <=4; x++)
+		{
+			System.out.println(taxa[x]);
+			File taxaFile = new File(ConfigReader.getPierce2019Dir() + File.separator + 
+					"taxaAsColumns_" + taxa[x] + ".txt");
+			
+			ParseTaxaAssignment.writePivotedTaxaCounts(wrapper, x, taxaFile);
+			
+			OtuWrapper taxaWrapper =new OtuWrapper(taxaFile);
+
+			File taxaFileLogNorm = new File(ConfigReader.getPierce2019Dir() + File.separator + 
+					"taxaAsColumns_" + taxa[x] + "LogNorm.txt");
+			
+			taxaWrapper.writeNormalizedLoggedDataToFile(taxaFileLogNorm);
+		}
 	
 	}
 	
