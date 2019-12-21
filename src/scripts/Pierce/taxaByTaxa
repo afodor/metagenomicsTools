@@ -21,12 +21,15 @@ for( taxa in levels )
 	pValueTreatmentType <- vector()
 	taxaName <- vector()
 	
+	pdf( paste0(taxa,"_graphs.pdf"))
+	par(mfrow=c(2,2))
+			
 	index  <- 1
 	for( i in analysisCols )
 	{
 		data <- myT[,i]
 		
-		if( sum(data !=0) > (length(data) / 4 ) ) 
+		if( sum(data !=0) > (length(data) / 10 ) ) 
 		{	
 			aLm <- lm( data ~  status + treatmentType +  patientIDs )
 			anAnova <- anova(aLm)
@@ -34,9 +37,20 @@ for( taxa in levels )
 			pValueTreatmentType[index] <- anAnova$"Pr(>F)"[2]
 			pValueIndividual[index] <- anAnova$"Pr(>F)"[3]
 			taxaName[index] <- names(myT)[i]
+			
+			graphMain =  paste( names(myT)[i], " pStatus=", format(pValueStatus[index], digits=3))
+			
+			plot( data ~ status, ylab = taxaName[index],main = graphMain )	
+			
 			index = index +1
 		}		
 	}
+	
+	hist(pValueStatus, main="p-values status")
+	hist(pValueTreatmentType, main="p-values treatment type")
+	hist(pValueStatus, main="p-values pValueIndividual")
+	
+	dev.off()
 	
 	dFrame <- data.frame(taxaName,pValueStatus,pValueTreatmentType,pValueIndividual)
 	dFrame <- dFrame [order(dFrame$pValueStatus),]
