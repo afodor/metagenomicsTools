@@ -12,11 +12,13 @@ for( taxa in levels )
 	myT <- myT[ !is.na(myT$PatientNo), ]
 	patientIDs <- factor( myT$PatientNo)
 	status <- factor( myT$Status) 
+	treatmentType <-  myT$TreatmentType
 	
 	analysisCols <- c(2,14:which(names(myT)=="MDS5"))
 	
 	pValueStatus <- vector()
 	pValueIndividual <- vector()
+	pValueTreatmentType <- vector()
 	taxaName <- vector()
 	
 	index  <- 1
@@ -26,19 +28,21 @@ for( taxa in levels )
 		
 		if( sum(data !=0) > (length(data) / 4 ) ) 
 		{	
-			aLm <- lm( data ~  status +  patientIDs )
+			aLm <- lm( data ~  status + treatmentType +  patientIDs )
 			anAnova <- anova(aLm)
 			pValueStatus[index] <- anAnova$"Pr(>F)"[1]
-			pValueIndividual[index] <- anAnova$"Pr(>F)"[2]
+			pValueTreatmentType[index] <- anAnova$"Pr(>F)"[2]
+			pValueIndividual[index] <- anAnova$"Pr(>F)"[3]
 			taxaName[index] <- names(myT)[i]
 			index = index +1
 		}		
 	}
 	
-	dFrame <- data.frame(taxaName,pValueStatus,pValueIndividual)
+	dFrame <- data.frame(taxaName,pValueStatus,pValueTreatmentType,pValueIndividual)
 	dFrame <- dFrame [order(dFrame$pValueStatus),]
 	dFrame$pValuesStatusAdjusted<- p.adjust( dFrame$pValueStatus, method = "BH")
 	dFrame$pValuesSubjectAdjusted<- p.adjust( dFrame$pValueIndividual, method = "BH")
+	dFrame$pValuesTreatmentTypeAdjusted<- p.adjust( dFrame$pValueTreatmentType, method = "BH")
 	
 	write.table(dFrame, file=paste("taxa_models_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
 }
