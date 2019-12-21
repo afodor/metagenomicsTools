@@ -3,9 +3,18 @@ rm(list=ls())
 
 setwd("C:\\ChristinePierce_Dec2019")
 
-myT <- read.table("pcoa_metadataOTU.txt", header=TRUE,sep="\t")
 
-analysisCols <- c(2,14:which(names(myT)=="MDS5"))
+levels <- c( "phylum", "class" , "order", "family", "genus", "OTU" )
 
-pValueStatus <- vector()
+for( taxa in levels ) 
+{	
+	inFileName <- paste0("pcoa_metadata", taxa, ".txt")	
+	myT <- read.table(inFileName, header=TRUE,sep="\t")
+	
+	analysisCols <- c(2,14:which(names(myT)=="MDS5"))
+	
+	pValueStatus <- vector()
+	pValueIndividual <- vector()
+}
+
 
