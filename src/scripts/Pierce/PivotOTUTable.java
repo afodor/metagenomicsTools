@@ -15,6 +15,7 @@ import utils.ConfigReader;
 
 public class PivotOTUTable 
 {
+	private static int controlCount =0;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -47,13 +48,23 @@ public class PivotOTUTable
 		writer.write("sample");
 		
 		for(String s : otuNames)
-			writer.write("\t" + s);
-		
+		{
+			writer.write("\t" + s);	
+		}
+			
 		writer.write("\n");
 		
 		for(int x=1; x < sampleNames.size(); x++)
 		{
-			writer.write( sampleNames.get(x));
+			String sampleName = sampleNames.get(x);
+			
+			if(sampleName.indexOf("Ctrl") != -1 ) 
+			{
+				sampleName = sampleName + "_" + controlCount;
+				controlCount++;
+			}
+			
+			writer.write( sampleName );
 			
 			for(String otu : otuNames)
 			{
