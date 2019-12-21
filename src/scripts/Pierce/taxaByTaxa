@@ -38,9 +38,23 @@ for( taxa in levels )
 			pValueIndividual[index] <- anAnova$"Pr(>F)"[3]
 			taxaName[index] <- names(myT)[i]
 			
-			graphMain =  paste( names(myT)[i], " pStatus=", format(pValueStatus[index], digits=3))
+			graphMain =  paste( "status\n",names(myT)[i], " pStatus=", format(pValueStatus[index], digits=3))
 			
 			plot( data ~ status, ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,status)
+		
+			stripchart(data ~ status, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+			graphMain =  paste( "treatmentType\n", names(myT)[i], " pStatus=", 
+					format(pValueTreatmentType[index], digits=3))
+			
+			plot( data ~ treatmentType , ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,treatmentType )
+		
+			stripchart(data ~ treatmentType , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
 			
 			index = index +1
 		}		
