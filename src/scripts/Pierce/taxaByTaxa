@@ -55,7 +55,17 @@ for( taxa in levels )
 		
 			stripchart(data ~ treatmentType , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
 		
+			graphMain =  paste( "subject\n", names(myT)[i], " pStatus=", 
+					format(pValueIndividual[index], digits=3))
 			
+			plot( data ~ patientIDs , ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,patientIDs )
+		
+			stripchart(data ~ patientIDs , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+			plot.new()
+		
 			index = index +1
 		}		
 	}
