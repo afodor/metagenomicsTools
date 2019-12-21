@@ -12,24 +12,37 @@ import utils.ConfigReader;
 
 public class MergeMetadata
 {
+	public static String[] TAXA_LEVELS =  { "phylum", "class" , "order", "family", "genus", "OTU" };
+	
 	public static void main(String[] args) throws Exception
+	{
+		for( String s : TAXA_LEVELS)
+		{
+			System.out.println(s);
+			File pivotFileLogNorm = new File(ConfigReader.getPierce2019Dir() + File.separator + 
+					"taxaAsColumns_" + s +  "LogNorm.txt");
+			
+			File pivotFileMetadata =
+					new File(ConfigReader.getPierce2019Dir() + File.separator + 
+							"taxaAsColumns_" + s +  "LogNormPlusMeta.txt");
+			
+			mergeMetadata(pivotFileLogNorm, pivotFileMetadata);
+		}
+		
+	}
+	
+	public static void mergeMetadata(File inFile, File outFile) throws Exception
 	{
 		HashMap<String, MetadataParser> metaMap = MetadataParser.getMetaMap();
 		
-		File pivotFileLogNorm = new File(ConfigReader.getPierce2019Dir() + File.separator + 
-				"taxaAsColumns_OTULogNorm.txt");
-		
-		File pivotFileMetadata =
-				new File(ConfigReader.getPierce2019Dir() + File.separator + 
-						"taxaAsColumns_OTULogNormPlusMeta.txt");
 		
 		File unlogged = new File(ConfigReader.getPierce2019Dir() + File.separator + "taxaAsColumns_OTU.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(unlogged);
 		
-		BufferedReader reader = new BufferedReader(new FileReader(pivotFileLogNorm));
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(pivotFileMetadata));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
@@ -49,7 +62,7 @@ public class MergeMetadata
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			System.out.println(s);
+			//System.out.println(s);
 			String[] splits= s.split("\t");
 			
 			writer.write(splits[0]);
