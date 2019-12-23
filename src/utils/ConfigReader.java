@@ -188,6 +188,8 @@ public class ConfigReader
 	
 	public static final String TB_JUNE_2019_DIR = "TB_JUNE_2019_DIR";
 	
+	public static final String PIERCE_DEC_2019_DIR = "PIERCE_DEC_2019_DIR";
+	
 	public static String getAaronExerciseDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(AARON_EXERCISE_TEST_DIR );
@@ -197,6 +199,12 @@ public class ConfigReader
 	{
 		return getConfigReader().getAProperty(ENGEL_CHECK_DIR);
 	}
+	
+	public static String getPierce2019Dir() throws Exception
+	{
+		return getConfigReader().getAProperty(PIERCE_DEC_2019_DIR );
+	}
+	
 	
 	public static String getGrantCheckDir() throws Exception
 	{

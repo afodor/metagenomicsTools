@@ -1,16 +1,10 @@
 package scripts.compareEngel.shan16s;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
-import parsers.OtuWrapper;
 import scripts.pancreatitis.PivotOTUs;
 import utils.ConfigReader;
 

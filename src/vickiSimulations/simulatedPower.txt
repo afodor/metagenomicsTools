@@ -1,0 +1,125 @@
+rm(list=ls())
+
+# this simulation assumes normality of data
+numSimulations <- 10
+
+# there are typically around 70-75 non-rare families or genra that are called by the RDP
+# classification scheme in diverse sample types (such as gut or oral 
+# microbiota) in large datasets (Fodor lab, unpublished data)
+numTaxa <- 75
+
+numPatients <- 200
+
+# to simplify the simulation, we assume that 
+# every taxa is significantly associated for both main effects
+# and interaction terms - 
+# Our calculation therefore yields the power for detecting true positives
+# and this simulation does not address what fraction of true negatives
+# are called in error
+
+# we allow one effect size for main effects and one for interaction terms
+mainEffectSize = .06
+interactionEffectSize = .75
+
+# We assume 50% enrollment of African American in our study
+# consistent with our recruitment goals
+fractionAA <- 0.50
+
+# we assume a 50/50 split between patient subtypes
+fractionSubtype1 <- 0.50
+
+isSubtype1 <- runif(numPatients) <= fractionSubtype1
+isAA <- runif(numPatients) <= fractionAA
+
+powerSubtype <- vector()
+powerRace <- vector()
+powerInteraction <- vector()
+
+for( i in 1:numSimulations)
+{
+	pValuesSubType <- vector()
+	pValuesRace <- vector()
+	pValuesInteraction <- vector()
+		
+	for( j in 1:numTaxa)
+	{
+		data <- vector()
+		
+		for ( k in 1:numPatients) 
+		{
+			thisEffectSize = 0;
+			
+			if( isSubtype1[k] )
+			{
+				thisEffectSize = thisEffectSize + mainEffectSize
+			}
+			
+			if( isAA[k] ) 
+			{
+				thisEffectSize = thisEffectSize + mainEffectSize
+			}
+			
+			if( isSubtype1[k] && isAA[k]) 
+			{
+				thisEffectSize = thisEffectSize +  interactionEffectSize;
+			}
+			
+			data[k] = rnorm(1, mean= thisEffectSize )
+		}
+		
+		# build model with the interaction term
+		myLm <- lm( data ~ isSubtype1* isAA) 
+		
+		#record p-values with anova
+		myAnova <- anova(myLm)
+		
+		# use ANOVA to capture the p-values
+		pValuesSubType[j] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesRace[j] <- anova(myLm)$"Pr(>F)"[2]
+		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
+	}
+	
+	# adjust the p-values
+	caseControlAdjust <- p.adjust( pValuesSubType, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{	
+		if( caseControlAdjust[j] < 0.10  )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerSubtype[i] =  numTrueFound  / numTaxa
+	
+	raceAdjust <- p.adjust( pValuesRace, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( raceAdjust[j] < 0.10  )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerRace[i] =  numTrueFound  / numTaxa
+	
+	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( interactionAdjust[j] < 0.10  )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerInteraction[i] =  numTrueFound / numTaxa
+}
+
+# print out mean power across all simulations
+mean(powerSubtype)
+mean(powerRace)
+mean(powerInteraction)
+
+

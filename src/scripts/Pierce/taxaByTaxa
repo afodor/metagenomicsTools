@@ -1,0 +1,86 @@
+
+rm(list=ls())
+
+setwd("C:\\ChristinePierce_Dec2019")
+
+levels <- c( "phylum", "class" , "order", "family", "genus", "OTU" )
+
+for( taxa in levels ) 
+{	
+	inFileName <- paste0("pcoa_metadata", taxa, ".txt")	
+	myT <- read.table(inFileName, header=TRUE,sep="\t")
+	myT <- myT[ !is.na(myT$PatientNo), ]
+	patientIDs <- factor( myT$PatientNo)
+	status <- factor( myT$Status) 
+	treatmentType <-  myT$TreatmentType
+	
+	analysisCols <- c(2,14:which(names(myT)=="MDS5"))
+	
+	pValueStatus <- vector()
+	pValueIndividual <- vector()
+	pValueTreatmentType <- vector()
+	taxaName <- vector()
+	
+	pdf( paste0(taxa,"_graphs.pdf"))
+	par(mfrow=c(2,2))
+			
+	index  <- 1
+	for( i in analysisCols )
+	{
+		data <- myT[,i]
+		
+		if( sum(data !=0) > (length(data) / 10 ) ) 
+		{	
+			aLm <- lm( data ~  status + treatmentType +  patientIDs )
+			anAnova <- anova(aLm)
+			pValueStatus[index] <- anAnova$"Pr(>F)"[1]
+			pValueTreatmentType[index] <- anAnova$"Pr(>F)"[2]
+			pValueIndividual[index] <- anAnova$"Pr(>F)"[3]
+			taxaName[index] <- names(myT)[i]
+			
+			graphMain =  paste( "status\n",names(myT)[i], " pStatus=", format(pValueStatus[index], digits=3))
+			
+			plot( data ~ status, ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,status)
+		
+			stripchart(data ~ status, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+			graphMain =  paste( "treatmentType\n", names(myT)[i], " pStatus=", 
+					format(pValueTreatmentType[index], digits=3))
+			
+			plot( data ~ treatmentType , ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,treatmentType )
+		
+			stripchart(data ~ treatmentType , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+			graphMain =  paste( "subject\n", names(myT)[i], " pStatus=", 
+					format(pValueIndividual[index], digits=3))
+			
+			plot( data ~ patientIDs , ylab = taxaName[index],main = graphMain )	
+			
+			myFrame <- data.frame( data,patientIDs )
+		
+			stripchart(data ~ patientIDs , data = myFrame,vertical = TRUE, pch = 21, add=TRUE )		
+		
+			plot.new()
+		
+			index = index +1
+		}		
+	}
+	
+	hist(pValueStatus, main="p-values status")
+	hist(pValueTreatmentType, main="p-values treatment type")
+	hist(pValueStatus, main="p-values pValueIndividual")
+	
+	dev.off()
+	
+	dFrame <- data.frame(taxaName,pValueStatus,pValueTreatmentType,pValueIndividual)
+	dFrame <- dFrame [order(dFrame$pValueStatus),]
+	dFrame$pValuesStatusAdjusted<- p.adjust( dFrame$pValueStatus, method = "BH")
+	dFrame$pValuesSubjectAdjusted<- p.adjust( dFrame$pValueIndividual, method = "BH")
+	dFrame$pValuesTreatmentTypeAdjusted<- p.adjust( dFrame$pValueTreatmentType, method = "BH")
+	
+	write.table(dFrame, file=paste("taxa_models_", taxa,".txt",sep=""), sep="\t",row.names=FALSE)
+}
