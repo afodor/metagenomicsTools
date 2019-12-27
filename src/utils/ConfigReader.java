@@ -190,9 +190,16 @@ public class ConfigReader
 	
 	public static final String PIERCE_DEC_2019_DIR = "PIERCE_DEC_2019_DIR";
 	
+	public static final String VICKI_DEC_2019_DIR = "VICKI_DEC_2019_DIR";
+	
 	public static String getAaronExerciseDirectory() throws Exception
 	{
 		return getConfigReader().getAProperty(AARON_EXERCISE_TEST_DIR );
+	}
+	
+	public static String getVicki2019Directory() throws Exception
+	{
+		return getConfigReader().getAProperty(VICKI_DEC_2019_DIR  );
 	}
 	
 	public static String getEngelCheckDir() throws Exception
