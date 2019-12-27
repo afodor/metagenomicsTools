@@ -1,12 +1,16 @@
 package scripts.vickie_2019;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-
 import utils.ConfigReader;
 
 public class InitialPivots
@@ -38,6 +42,51 @@ public class InitialPivots
 		
 		HashMap<String, HashMap<String,Long>> countMap = 
 				getMap(inFile);
+		
+		writeCountFile(countOutFile, countMap);
+	}
+	
+	private static void writeCountFile(File outFile,HashMap<String, HashMap<String,Long>> countMap )
+		throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		List<String> samples = new ArrayList<>(countMap.keySet());
+		
+		HashSet<String> taxa = new LinkedHashSet<>();
+		
+		for(String s : countMap.keySet())
+			taxa.addAll(countMap.get(s).keySet());
+		
+		List<String> taxaList = new ArrayList<>(taxa);
+		
+		writer.write("sample");
+		
+		for(String s : taxaList)
+			writer.write("\t\"" + s + "\"");
+		
+		writer.write("\n");
+		
+		for(String sample : samples)
+		{
+			writer.write(sample);
+			
+			HashMap<String, Long> innerMap = countMap.get(sample);
+			
+			for(String aTaxa : taxaList)
+			{
+				Long aVal = innerMap.get(aTaxa);
+				
+				if( aVal == null)
+					aVal =0l;
+				
+				writer.write("\t" + aVal);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	/*
@@ -45,14 +94,14 @@ public class InitialPivots
 	 */
 	private static HashMap<String, HashMap<String,Long>> getMap(File inFile ) throws Exception
 	{
-		HashMap<String, HashMap<String,Long>> map = new HashMap<>();
+		HashMap<String, HashMap<String,Long>> map = new LinkedHashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
 		for(String s : topSplits)
-			map.put(s, new HashMap<>());
+			map.put(s, new LinkedHashMap<>());
 		
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
