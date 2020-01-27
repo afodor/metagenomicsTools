@@ -25,7 +25,7 @@ getDataFromLikelihood <- function( likelihood, numPoints)
 }
 
 numTests <- 1:20
-numSimulationsPerCycle <- 5000
+numSimulationsPerCycle <- 10000
 
 averagePosteriorValue <- c(length=length(numTests))
 estimatedPower<- c(length=length(numTests))
@@ -53,17 +53,15 @@ for( i in numTests )
 	}
 	
 	averagePosteriorValue[i] = mean(posteriorValues)
+	estimatedPower[i] <- sum(posteriorValues >= 1-0.0001  ) / numSimulationsPerCycle 
 }
 	
 
 plot(numTests, log10(1-averagePosteriorValue))
-
 lines( numTests, rep(log10(.05),length(numTests)),col="red")
-
 lines( numTests, rep(log10(.1),length(numTests)),col="blue")
-
 lines( numTests, rep(log10(.0001),length(numTests)),col="green")
 
-
+plot( numTests, estimatedPower)
 
 
