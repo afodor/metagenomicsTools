@@ -31,3 +31,4 @@ lines( numTests, rep(log10(.05),length(numTests)),col="red")
 lines( numTests, rep(log10(.1),length(numTests)),col="blue")
 
 lines( numTests, rep(log10(.0001),length(numTests)),col="green")
+
