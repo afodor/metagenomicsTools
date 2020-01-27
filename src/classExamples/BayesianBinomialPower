@@ -1,0 +1,69 @@
+rm(list=ls())
+
+# p(positive) , p(negative)
+likelihoodGivenCylon <- c( 0.9, 0.1)
+likelihoodGivenNotCylon<- c(0.05,0.95)
+
+getDataFromLikelihood <- function( likelihood, numPoints) 
+{
+	d <- vector(mode="integer", length=numPoints);
+	
+	for( i in 1:numPoints ) 
+	{
+		if( runif(1) <= likelihood[1] )
+		{
+			d[i] <- 1;
+		}
+		else
+		{
+			d[i] <- 2;
+		}
+			
+	}
+	
+	return(d)
+}
+
+numTests <- 1:20
+numSimulationsPerCycle <- 5000
+
+averagePosteriorValue <- c(length=length(numTests))
+estimatedPower<- c(length=length(numTests))
+
+for( i in numTests ) 
+{
+	posteriorValues <- c(length=numSimulationsPerCycle)
+		
+	for( j in 1:numSimulationsPerCycle  ) 
+	{
+		# reset our prior each time
+		probCylon <-  c(0.01,0.99)
+	
+		data <- getDataFromLikelihood( likelihoodGivenCylon, numTests[i])
+	
+		for( k in 1:length(data))
+		{
+			denom <- probCylon[1] * likelihoodGivenCylon[data[i]] + probCylon[2] * likelihoodGivenNotCylon[data[k]];
+	
+			probCylon[1] = probCylon[1] * likelihoodGivenCylon[data[k]] / denom;
+			probCylon[2] = probCylon[2] * likelihoodGivenNotCylon[data[k]] / denom;
+		}
+		
+		posteriorValues[j] = probCylon[1]	
+	}
+	
+	averagePosteriorValue[i] = mean(posteriorValues)
+}
+	
+
+plot(numTests, log10(1-averagePosteriorValue))
+
+lines( numTests, rep(log10(.05),length(numTests)),col="red")
+
+lines( numTests, rep(log10(.1),length(numTests)),col="blue")
+
+lines( numTests, rep(log10(.0001),length(numTests)),col="green")
+
+
+
+
