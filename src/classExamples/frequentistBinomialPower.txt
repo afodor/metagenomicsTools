@@ -7,9 +7,11 @@ probTruePositive = 0.9
 # Our null hypothesis is that the person is healthy
 
 numTests <- 1:10
-numSimulationsPerCycle <- 100
+numSimulationsPerCycle <- 1000
 
 averagePValue <- c(length=length(numTests))
+
+estimatedPower<- c(length=length(numTests))
 
 for( i in numTests ) 
 {
@@ -22,6 +24,9 @@ for( i in numTests )
 	}
 	
 	averagePValue[i] <- mean(pValues)
+	
+	#what fraction of the time are we under a 10E-04 threshold
+	estimatedPower[i] <- sum(pValues < 0.0001 ) / numSimulationsPerCycle 
 }
 
 plot(numTests, log10(averagePValue))
@@ -32,3 +37,4 @@ lines( numTests, rep(log10(.1),length(numTests)),col="blue")
 
 lines( numTests, rep(log10(.0001),length(numTests)),col="green")
 
+plot( numTests, estimatedPower)
