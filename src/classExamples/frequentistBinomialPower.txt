@@ -1,0 +1,33 @@
+rm(list=ls())
+
+# p(positive|healthy) 
+probFalsePositive = .05
+probTruePositive = 0.9
+
+# Our null hypothesis is that the person is healthy
+
+numTests <- 1:10
+numSimulationsPerCycle <- 100
+
+averagePValue <- c(length=length(numTests))
+
+for( i in numTests ) 
+{
+	pValues <- c(length=numSimulationsPerCycle)
+	numPositives <- rbinom( numSimulationsPerCycle, numTests[i], p=probTruePositive)
+	
+	for( j in 1:numSimulationsPerCycle ) 
+	{
+		pValues[j] <- binom.test( numPositives[j],numTests[i], p=probFalsePositive )$p.value
+	}
+	
+	averagePValue[i] <- mean(pValues)
+}
+
+plot(numTests, log10(averagePValue))
+
+lines( numTests, rep(log10(.05),length(numTests)),col="red")
+
+lines( numTests, rep(log10(.1),length(numTests)),col="blue")
+
+lines( numTests, rep(log10(.0001),length(numTests)),col="green")
