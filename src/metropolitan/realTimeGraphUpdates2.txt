@@ -1,0 +1,78 @@
+rm(list=ls())
+
+# step prior is an alternative prior to dexp.
+# but is not used in the code below...
+stepPrior <- function(x) 
+{
+	if( x >=0 & x < .2)
+	{
+		return (5/13)
+	}
+	
+	if(x >= .2 & x < .6 ) 
+	{
+		return (10/13)
+	}
+	
+	if( x >=.6 & x <=1.0)
+	{
+		return (20/13)
+	}
+}
+
+plot(xSeqs, lapply( xSeqs,stepPrior),ylim=c(0,2))
+
+numIterations <- 500000
+posteiorDist <- vector(length=numIterations )
+numHeads = 5430
+numTails=3470
+numHistBreaks = 5000
+
+piOld = numHeads/ (numHeads + numTails)
+
+posteriorDistFromGrid <- vector()
+xVals <- seq(0,1,1/numHistBreaks);
+
+i <- 1;
+sum <- 0;
+for( x in xVals )
+{
+	posteriorDistFromGrid[i] <- dexp( piOld,x=5) * dbinom( numHeads, numHeads +numTails, x)
+	sum = sum + posteriorDistFromGrid[i];
+	i <- i + 1;	
+}
+
+for( i in 1:numIterations )
+{
+	# our prior from dexp
+	# our new data with 14 heads and 10 tails
+	pOld <- dexp( piOld,x=5) * dbinom( numHeads, numTails+numHeads, piOld )
+	
+	piNew <- piOld + rnorm(1, 0, sd =0.001);
+	
+	if( piNew > 1) 
+		piNew = 1;
+	
+	if( piNew < 0 ) 
+		piNew =0;
+		
+	pNew <- dexp( piOld,x=5)* dbinom( numHeads, numTails+numHeads, piNew )
+	
+	ratio <- pNew / pOld
+	
+	if( ratio > 1 || ratio >= runif(1) ) 
+		piOld = piNew;
+		
+	posteiorDist[i] = piOld;
+	
+	if( i %% 100== 0)
+	{
+		title <- paste( i , " iterations", sep="")
+		myHist <- hist(posteiorDist[1:i],breaks=200,plot=FALSE)
+		plot( myHist$mids, myHist$counts/i, main = title) 
+		lines( xVals, posteriorDistFromGrid / sum, col="red")
+		Sys.sleep(.5)
+		
+	}
+}
+
