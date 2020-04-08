@@ -19,10 +19,14 @@ for ( i in 1:ncol(myT))
 colors <- c( rep("red", 3), rep("blue",3), rep("green",5))
 
 myPCA <- prcomp(myTNorm)
-plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors)
+plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors,cex=2,pch=19)
+legend("topright",legend=c("day 2", "week 12", "week 18"), cex=2,pch=19, col=c("red","blue","green"))
+
 
 library("vegan")
 
 myPCOA <- capscale(t(myTNorm)~1,distance="bray")
-plot(myPCOA$CA$u[,1],myPCOA$CA$u[,2], col=colors)
+plot(myPCOA$CA$u[,1],myPCOA$CA$u[,2], col=colors,cex=2,pch=19)
+legend("topleft",legend=c("day 2", "week 12", "week 18"), cex=2,pch=19, col=c("red","blue","green"))
+
 
