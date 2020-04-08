@@ -65,3 +65,4 @@ lines( numTests, rep(log10(.0001),length(numTests)),col="green")
 plot( numTests, estimatedPower)
 
 
+
