@@ -1,7 +1,7 @@
 rm(list=ls())
 
 # p(positive) , p(negative)
-likelihoodGivenCylon <- c( 0.9, 0.1)
+likelihoodGivenCylon <- c( 0.96, 0.04)
 likelihoodGivenNotCylon<- c(0.05,0.95)
 
 getDataFromLikelihood <- function( likelihood, numPoints) 
@@ -37,9 +37,9 @@ for( i in numTests )
 	for( j in 1:numSimulationsPerCycle  ) 
 	{
 		# reset our prior each time
-		probCylon <-  c(0.01,0.99)
+		probCylon <-  c(0.001,0.999)
 	
-		data <- getDataFromLikelihood( likelihoodGivenCylon, numTests[i])
+		data <- getDataFromLikelihood(likelihoodGivenCylon, numTests[i])
 	
 		for( k in 1:length(data))
 		{
