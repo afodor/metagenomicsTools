@@ -1,0 +1,35 @@
+
+rm(list=ls())
+
+setwd("c:\\temp")
+
+myT <- read.table("nc101_scaff_dataCounts.txt",header=TRUE,row.names=1)
+
+plot(log10(apply(myT, 1, mean)), log10(apply(myT, 1, var)))
+lines(c(0,5), c(0,5),col="red")
+
+#myT <- myT[ (myT$D2_01 + myT$D2_02 > 50),]
+
+pValuesFisher <- vector()
+pValuesPoisson <- vector()
+
+for( i in 1:nrow(myT))
+{
+	d1AssignedToGene = myT[i,1]
+	d2AssignedToGene = myT[i,2]
+	d1NotGene = sum(myT[,1]) - myT[i,1]
+	d2NotAssignedToGene  = sum(myT[,2]) - myT[i,2]
+	m <- matrix(c(d1AssignedToGene ,d2AssignedToGene ,d1NotGene ,d2NotAssignedToGene),nrow=2  )
+	pValuesFisher[i] = fisher.test(m)$p.value
+	
+	expected <- d1AssignedToGene /sum(myT[,1])
+	
+	pValuesPoisson[i] <- poisson.test( d2AssignedToGene , sum(myT[,2]) , r = expected )$p.value
+	
+}
+
+hist(pValuesFisher)
+hist(pValuesPoisson)
+
+plot(log10(pValuesFisher),log10(pValuesPoisson))
+lines(c(-150,0), c(-150,0),col="red")
