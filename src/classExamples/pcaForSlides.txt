@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("c:\\Temp")
+
+myT <- read.table("nc101_scaff_dataCounts.txt", header=TRUE, sep="\t",row.names=1)
+
+myPCA <- prcomp(myT)
+
+myTNorm <- myT
+for ( i in 1:ncol(myT))
+{
+	colSum = sum(myT[,i])
+	myTNorm[,i] = log10( myTNorm[,i]/colSum + 0.000001)
+}
+
+colors <- c( rep("red", 3), rep("blue",3), rep("green",5))
+
+plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors)
