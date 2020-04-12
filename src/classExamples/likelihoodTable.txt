@@ -1,0 +1,30 @@
+rm(list=ls())
+
+numParams <- vector()
+likelihood <- vector()
+aic <- vector()
+
+myT <- read.table("qPCRWithSampleDays.txt", sep="\t", header=TRUE)
+
+# one paramater model
+aLm <- lm( myT$LogPseudo  ~ 1) 
+likelihood[1] <- logLik(aLm)
+aic[1] <- AIC(aLm) 
+numParams[1] <- 1
+
+
+# two paramater model
+aLm <- lm( myT$LogPseudo  ~ myT$sampleDays ) 
+likelihood[2] <- logLik(aLm)
+aic[2] <- AIC(aLm) 
+numParams[2] <- 2
+
+for( i in 3:7)
+{
+	aLm <- lm( myT$LogPseudo  ~ poly(myT$sampleDays, i-1) + myT$treatment)
+	likelihood[i] <- logLik(aLm)
+	aic[i] <- AIC(aLm) 
+	numParams[i] <- i
+}
+
+myFrame <- data.frame( numParams ,likelihood , aic)
