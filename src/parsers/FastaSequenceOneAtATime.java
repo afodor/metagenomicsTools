@@ -169,19 +169,16 @@ public class FastaSequenceOneAtATime
 	
 	public static void main(String[] args) throws Exception
 	{
-		File myFile = new File("C:\\topeOneAtATime\\file3\\fastaOut\\DV-000-001_1_set3.fasta.gz");
 		
-		List<FastaSequence> list = 
-				FastaSequenceOneAtATime.collapseIdenticalSequences(myFile);
+		File myFile = new File("C:\\Temp\\Fast1.txt");
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				"c:\\temp\\testFile.fasta")));
+		FastaSequenceOneAtATime fsoat = new FastaSequenceOneAtATime(myFile);
 		
-		for( FastaSequence fs : list)
+		for( FastaSequence fs = fsoat.getNextSequence(); fs != null; fs = fsoat.getNextSequence())
 		{
-			writer.write(fs.getHeader() + "\n" + fs.getSequence() + "\n");
+			System.out.println(fs.getHeader() + "\t" + fs.getSequence());
 		}
 		
-		writer.flush(); writer.close();
+		fsoat.close();
 	}
 }
