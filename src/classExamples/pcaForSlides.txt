@@ -7,14 +7,18 @@ myT <- read.table("nc101_scaff_dataCounts.txt", header=TRUE, sep="\t",row.names=
 myPCA <- prcomp(myT)
 
 myTNorm <- myT
+
+overallAverage = sum( apply(myT,2, sum)) / ncol(myT)
+
 for ( i in 1:ncol(myT))
 {
 	colSum = sum(myT[,i])
-	myTNorm[,i] = log10( myTNorm[,i]/colSum + 0.000001)
+	myTNorm[,i] = log10( myTNorm[,i]/colSum * colAvg + 1)
 }
 
 colors <- c( rep("red", 3), rep("blue",3), rep("green",5))
 
+<<<<<<< HEAD
 plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors)
 
 library("vegan")
@@ -22,3 +26,17 @@ library("vegan")
 myPCOA <- capscale(myTNorm ~1,distance="bray")
 	
 write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allGenus",".txt",sep=""))
+=======
+myPCA <- prcomp(myTNorm)
+plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors,cex=2,pch=19)
+legend("topright",legend=c("day 2", "week 12", "week 18"), cex=2,pch=19, col=c("red","blue","green"))
+
+
+library("vegan")
+
+myPCOA <- capscale(t(myTNorm)~1,distance="bray")
+plot(myPCOA$CA$u[,1],myPCOA$CA$u[,2], col=colors,cex=2,pch=19)
+legend("topleft",legend=c("day 2", "week 12", "week 18"), cex=2,pch=19, col=c("red","blue","green"))
+
+
+>>>>>>> refs/remotes/origin/master

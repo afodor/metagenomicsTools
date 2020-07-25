@@ -1,0 +1,37 @@
+rm(list=ls())
+
+numDatapoints <- 1000
+myFrame <- data.frame(1:numDatapoints)
+
+aVector <- rnorm(1000)			
+
+for( i in 1:100) 
+{
+	colName <- paste( "sample" , i ,sep="")
+	
+	anotherVector <- aVector
+
+	for( j in 1:numDatapoints)
+	{
+		if( rnorm(1) > .999) 
+		{
+			anotherVector[i] = aVector[i] + 5*rnorm(1)
+		}
+		else
+		{
+			anotherVector[i] = 0; 
+		}
+	}
+	
+	myFrame[[colName]] = anotherVector
+}
+
+#drop X1.numdatapoints
+myFrame <- myFrame[-c(1)]
+
+myPCA <- princomp(myFrame)
+
+plot(myPCA$scores[1,], myPCA$scores[2,])
+summary(myPCA)
+
+
