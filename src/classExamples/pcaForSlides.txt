@@ -16,3 +16,9 @@ for ( i in 1:ncol(myT))
 colors <- c( rep("red", 3), rep("blue",3), rep("green",5))
 
 plot(myPCA$rotation[,1],myPCA$rotation[,2], col=colors)
+
+library("vegan")
+
+myPCOA <- capscale(myTNorm ~1,distance="bray")
+	
+write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_allGenus",".txt",sep=""))
