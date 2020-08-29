@@ -8,25 +8,43 @@ import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
-public class ParseBSMeta
+public class ParsePallejaMeta
 {
-	private static class BS_Meta implements SurgeryMetadataInterface
+	private static class Palleja_Meta implements SurgeryMetadataInterface
 	{
 		private String participantID;
 		private String sampleID;
 		private Integer timepoint;
 		
-		private BS_Meta(String fileLine)
+		private Palleja_Meta(String fileLine) throws Exception
 		{
-			String[] splits = fileLine.split("\t");
+			String[] splits = fileLine.split(",");
 			
-			this.participantID = splits[0];
-			this.sampleID = splits[1];
+			this.sampleID = splits[0];
 			
-			if( ! splits[3].equals("NA"))
-				this.timepoint = Integer.parseInt( splits[3]);
+			String lastToken = splits[splits.length-1];
+			
+			String[] lastSplits = lastToken.split("_");
+			
+			if( lastSplits.length !=2 )
+				throw new Exception("Parsing error " + lastSplits);
+			
+			this.participantID = lastSplits[0];
+			
+			if( lastSplits[1].equals("Baseline"))
+			{
+				this.timepoint =0;
+			}
+			else if (lastSplits[1].equals("3MO"))
+			{
+				this.timepoint =3;
+			}
+			else if (lastSplits[1].equals("1Y"))
+			{
+				this.timepoint = 12;
+			}
 			else
-				this.timepoint = null;
+				throw new Exception("Parsing error");
 		}
 		
 		
@@ -56,14 +74,14 @@ public class ParseBSMeta
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(
 				new FileReader(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
-						"Metadata_BS_RYGB.txt"));
+						"metaData_Palleja.txt"));
 		
 		reader.readLine();
 		
 		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
 			
-			BS_Meta bsm = new BS_Meta(s);
+			Palleja_Meta bsm = new Palleja_Meta(s);
 				
 			if( map.containsKey(bsm.getSampleID()))
 				throw new Exception("Error: duplicate " + bsm.getSampleID());
@@ -80,6 +98,7 @@ public class ParseBSMeta
 		 HashMap<String, SurgeryMetadataInterface> map = parseMetaFile();
 		 
 		 for(SurgeryMetadataInterface smi : map.values())
+			 if( smi.getSampleID().equals("ERR1305877"))
 			 System.out.println(smi.getSampleID() + " " + smi.getParticipantID() + " " + smi.getTimepoint());
 		 
 		 

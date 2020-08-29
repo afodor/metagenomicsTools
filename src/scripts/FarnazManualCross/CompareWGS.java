@@ -20,25 +20,42 @@ public class CompareWGS
 	public static void main(String[] args) throws Exception
 	{
 		
-		HashMap<String, SurgeryMetadataInterface> bs_metaMap = ParseBSInteface.parseMetaFile();
+		HashMap<String, SurgeryMetadataInterface> bs_metaMap = ParseBSMeta.parseMetaFile();
+		HashMap<String, SurgeryMetadataInterface> palleja_metaMap = ParsePallejaMeta.parseMetaFile();
 		
-		File dataFile = new File(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
+		File dataFileBS = new File(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
 					"humanN2_pathabundance_cpm.tsv");
 		
-		HashMap<String, Double> pValues0_1 = getPValuesWithin(bs_metaMap, dataFile, 0, 1);
-		HashMap<String, Double> pValues0_6 = getPValuesWithin(bs_metaMap, dataFile, 0, 6);
-		HashMap<String, Double> pValues1_6 = getPValuesWithin(bs_metaMap, dataFile, 1, 6);
+		File dataFilePalleja = new File(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
+				"humanN2_pathabundance_cpm_Palleja.tsv");
+		
+
+		HashMap<String, Double> bs_pValues0_1 = getPValuesWithin(bs_metaMap, dataFileBS, 0, 1);
+		HashMap<String, Double> bs_pValues0_6 = getPValuesWithin(bs_metaMap, dataFileBS, 0, 6);
+		HashMap<String, Double> bs_pValues1_6 = getPValuesWithin(bs_metaMap, dataFileBS, 1, 6);
+		
+		HashMap<String, Double> palleja_pValues0_3 = getPValuesWithin( palleja_metaMap, dataFilePalleja, 0, 3);
+		HashMap<String, Double> palleja_pValues0_12 = getPValuesWithin( palleja_metaMap, dataFilePalleja, 0, 12);
+		HashMap<String, Double> palleja_pValues3_12 = getPValuesWithin( palleja_metaMap, dataFilePalleja, 3, 12);
 		
 		
 		List<String> labels = new ArrayList<String>();
 		labels.add("bs_0_vs_1");
 		labels.add("bs_0_vs_6");
 		labels.add("bs_1_vs_6");
+		labels.add("palleja_0_vs_3");
+		labels.add("palleja_0_vs_12");
+		labels.add("palleja_3_vs_12");
+		
 		
 		List< HashMap<String, Double> > pValues = new ArrayList<HashMap<String,Double>>();
-		pValues.add(pValues0_1);
-		pValues.add(pValues0_6);
-		pValues.add(pValues1_6);
+		pValues.add(bs_pValues0_1);
+		pValues.add(bs_pValues0_6);
+		pValues.add(bs_pValues1_6);
+		
+		pValues.add(palleja_pValues0_3);
+		pValues.add(palleja_pValues0_12);
+		pValues.add(palleja_pValues3_12);
 		
 		writePValues(labels, pValues);
 	
@@ -123,7 +140,6 @@ public class CompareWGS
 			HashMap<String, Holder> patientToTimepointDataMap = new HashMap<String, CompareWGS.Holder>();
 			
 			String[] splits = s.split("\t");
-			System.out.println("Adding " + splits[0]);
 			
 			if( splits.length != firstSplits.length)
 				throw new Exception("Parsing error");
@@ -185,7 +201,7 @@ public class CompareWGS
 			}
 			catch(Exception ex)
 			{
-				System.out.println("TTest failed " + av1.getAve() + " " + av2.getAve());
+				//System.out.println("TTest failed " + av1.getAve() + " " + av2.getAve());
 			}
 			
 			map.put(splits[0], pValue);
