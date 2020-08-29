@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
@@ -21,7 +22,11 @@ public class ParseBSInteface
 			
 			this.participantID = splits[0];
 			this.sampleID = splits[1];
-			this.timepoint = Integer.parseInt( splits[3]);
+			
+			if( ! splits[3].equals("NA"))
+				this.timepoint = Integer.parseInt( splits[3]);
+			else
+				this.timepoint = null;
 		}
 		
 		
@@ -46,7 +51,7 @@ public class ParseBSInteface
 	
 	public static HashMap<String, SurgeryMetadataInterface> parseMetaFile() throws Exception
 	{
-		HashMap<String, SurgeryMetadataInterface> map = new HashMap<String, SurgeryMetadataInterface>();
+		HashMap<String, SurgeryMetadataInterface> map = new LinkedHashMap<String, SurgeryMetadataInterface>();
 		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(
@@ -58,17 +63,12 @@ public class ParseBSInteface
 		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
 			
-			String[] splits = s.split("\t");
-			
-			if( ! splits[5].equals("NA"))
-			{
-				BS_Meta bsm = new BS_Meta(s);
+			BS_Meta bsm = new BS_Meta(s);
 				
-				if( map.containsKey(bsm.getSampleID()))
-					throw new Exception("Error: duplicate " + bsm.getSampleID());
+			if( map.containsKey(bsm.getSampleID()))
+				throw new Exception("Error: duplicate " + bsm.getSampleID());
 				
-				map.put(bsm.getSampleID(), bsm);
-			}
+			map.put(bsm.getSampleID(), bsm);
 		}
 		
 		reader.close();
