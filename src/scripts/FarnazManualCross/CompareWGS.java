@@ -1,13 +1,15 @@
 package scripts.FarnazManualCross;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import utils.Avevar;
 import utils.ConfigReader;
 import utils.TTest;
@@ -23,10 +25,61 @@ public class CompareWGS
 		File dataFile = new File(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
 					"humanN2_pathabundance_cpm.tsv");
 		
-		HashMap<String, Double> pValues = getPValuesWithin(bs_metaMap, dataFile, 0, 1);
+		HashMap<String, Double> pValues0_1 = getPValuesWithin(bs_metaMap, dataFile, 0, 1);
+		HashMap<String, Double> pValues0_6 = getPValuesWithin(bs_metaMap, dataFile, 0, 6);
+		HashMap<String, Double> pValues1_6 = getPValuesWithin(bs_metaMap, dataFile, 1, 6);
 		
-		for(String s : pValues.keySet())
-			System.out.println( s + " "  + pValues.get(s));
+		
+		List<String> labels = new ArrayList<String>();
+		labels.add("bs_0_vs_1");
+		labels.add("bs_0_vs_6");
+		labels.add("bs_1_vs_6");
+		
+		List< HashMap<String, Double> > pValues = new ArrayList<HashMap<String,Double>>();
+		pValues.add(pValues0_1);
+		pValues.add(pValues0_6);
+		pValues.add(pValues1_6);
+		
+		writePValues(labels, pValues);
+	
+	}
+	
+	private static void writePValues( List<String> labels, List< HashMap<String, Double> > pValues) 
+		throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigReader.getFarnazCrossDirBS() + 
+				File.separator + "pivotedPValues.txt"));
+		
+		writer.write("id");
+		
+		for( int x=0; x < labels.size(); x++)
+			writer.write("\t" + labels.get(x));
+		
+		writer.write("\n");
+		
+		HashSet<String> keys = new HashSet<String>();
+		
+		for( HashMap<String, Double> map : pValues )
+			keys.addAll(map.keySet());
+		
+		for(String s : keys)
+		{
+			writer.write(s);
+			
+			for( HashMap<String, Double> map : pValues )
+			{
+				Double val = map.get(s);
+				
+				if( val == null)
+					writer.write("\tNA");
+				else
+					writer.write("\t" + val);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static class Holder
