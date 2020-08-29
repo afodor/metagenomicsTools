@@ -10,7 +10,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details at http://www.gnu.org * * */
 
-
 package utils;
 
 import java.io.InputStream;
@@ -191,6 +190,13 @@ public class ConfigReader
 	public static final String PIERCE_DEC_2019_DIR = "PIERCE_DEC_2019_DIR";
 	
 	public static final String VICKI_DEC_2019_DIR = "VICKI_DEC_2019_DIR";
+	
+	public static final String FARNAZ_CROSS_DIR_BS = "FARNAZ_CROSS_DIR_BS";
+	
+	public static String getFarnazCrossDirBS() throws Exception
+	{
+		return getConfigReader().getAProperty(FARNAZ_CROSS_DIR_BS);
+	}
 	
 	public static String getAaronExerciseDirectory() throws Exception
 	{
