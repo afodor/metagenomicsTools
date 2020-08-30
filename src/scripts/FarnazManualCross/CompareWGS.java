@@ -201,7 +201,7 @@ public class CompareWGS
 
 				pValue = Math.log10(TTest.pairedTTest(list1, list2).getPValue());
 
-				if( av1.getAve() > av2.getAve() )
+				if( av2.getAve() > av1.getAve() )
 					pValue = -pValue;
 
 			}

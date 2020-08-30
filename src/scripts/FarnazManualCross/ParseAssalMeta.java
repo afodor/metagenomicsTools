@@ -8,25 +8,49 @@ import java.util.LinkedHashMap;
 
 import utils.ConfigReader;
 
-public class ParseBS16S
+public class ParseAssalMeta
 {
-	private static class BS_Meta implements SurgeryMetadataInterface
+	private static class Assal_Meta implements SurgeryMetadataInterface
 	{
 		private String participantID;
 		private String sampleID;
 		private Integer timepoint;
 		
-		private BS_Meta(String fileLine)
+		private Assal_Meta(String fileLine) throws Exception
 		{
 			String[] splits = fileLine.split("\t");
 			
-			this.participantID = splits[5];
 			this.sampleID = splits[0];
 			
-			if( ! splits[6].equals("NA"))
-				this.timepoint = Integer.parseInt( splits[6]);
+			int lastTokenIndex = splits.length -1;
+			
+			this.participantID = splits[lastTokenIndex];
+			
+			String timepointString = splits[lastTokenIndex-1];
+			
+			
+			if( timepointString.equals("2Y"))
+			{
+				this.timepoint =24;
+			}
+			else if( timepointString.equals("1Y"))
+			{
+				this.timepoint =12;
+			}
+			else if( timepointString.equals("Pre"))
+			{
+				this.timepoint =0;
+			}
+			else if( timepointString.equals("3M"))
+			{
+				this.timepoint =3;
+			}
+			else if( timepointString.equals("3Y"))
+			{
+				this.timepoint =36;
+			}
 			else
-				this.timepoint = null;
+				throw new Exception("Parsing error " + timepointString);
 		}
 		
 		
@@ -55,16 +79,16 @@ public class ParseBS16S
 		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(
-				new FileReader(ConfigReader.getFarnazCrossDirBS() + File.separator+ 
-						"16S" + File.separator + 
-						"2019.04.29_BS_16S_mapping_file_FF.txt"));
+				new FileReader(ConfigReader.getFarnazCrossDirBS() + File.separator+ "16S"
+						+ File.separator 
+						+ "metaData_Assal.txt"));
 		
 		reader.readLine();
 		
 		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
 			
-			BS_Meta bsm = new BS_Meta(s);
+			Assal_Meta bsm = new Assal_Meta(s);
 				
 			if( map.containsKey(bsm.getSampleID()))
 				throw new Exception("Error: duplicate " + bsm.getSampleID());
@@ -83,8 +107,6 @@ public class ParseBS16S
 		 for(SurgeryMetadataInterface smi : map.values())
 			 System.out.println(smi.getSampleID() + " " + smi.getParticipantID() + " " + smi.getTimepoint());
 		 
-		 for(String s : map.keySet())
-			 System.out.println(s);
 		 
 	}
 }
