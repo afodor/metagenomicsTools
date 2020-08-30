@@ -2,21 +2,46 @@ rm(list=ls())
 
 setwd("C:\\RYGB_IntegratedAnalysis\\manual\\")
 
-myT <- read.table("pivotedPValues.txt", header=TRUE, sep="\t")
+myT <- read.table("pValues_taxa_BS_vs_Palleja.txt", header=TRUE, sep="\t")
 
-mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1 , myT$bs_0_vs_6, use="complete.obs"),digits=3))
+par(mfrow=c(2,3))
+
+mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1 , myT$bs_0_vs_6, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$bs_0_vs_1  ~ myT$bs_0_vs_6))$"Pr(>F)"[1],digits=3) )
 plot( myT$bs_0_vs_1 , myT$bs_0_vs_6 ,xlim=c(-12,12),ylim=c(-12,12),main=mainVal)
 lines( c(-100,100), c(0,0), lty=2, col="red")
 lines( c(-0,0), c(-100,100), lty=2, col="red")
 
 
-mainVal =  paste("cor", format(  cor(myT$palleja_0_vs_3  , myT$palleja_0_vs_12, use="complete.obs"),digits=3))
+mainVal =  paste("cor", format(  cor(myT$palleja_0_vs_3 , myT$palleja_0_vs_12, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$palleja_0_vs_3  ~ myT$palleja_0_vs_12))$"Pr(>F)"[1],digits=3) )
 plot( myT$palleja_0_vs_3 , myT$palleja_0_vs_12 ,xlim=c(-7,7),ylim=c(-7,7),main=mainVal)
 lines( c(-100,100), c(0,0), lty=2, col="red")
 lines( c(-0,0), c(-100,100), lty=2, col="red")
 
-mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1  , myT$palleja_0_vs_12, use="complete.obs"),digits=3))
+mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1 , myT$palleja_0_vs_12, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$bs_0_vs_1  ~ myT$palleja_0_vs_12))$"Pr(>F)"[1],digits=3) )
 plot( myT$bs_0_vs_1 , myT$palleja_0_vs_12 ,main=mainVal)
 lines( c(-100,100), c(0,0), lty=2, col="red")
 lines( c(-0,0), c(-100,100), lty=2, col="red")
+
+mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1 , myT$bs_1_vs_6, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$bs_0_vs_1  ~ myT$bs_1_vs_6))$"Pr(>F)"[1],digits=3) )
+plot( myT$bs_0_vs_1 , myT$bs_1_vs_6 ,xlim=c(-12,12),ylim=c(-12,12),main=mainVal)
+lines( c(-100,100), c(0,0), lty=2, col="red")
+lines( c(-0,0), c(-100,100), lty=2, col="red")
+
+
+mainVal =  paste("cor", format(  cor(myT$palleja_0_vs_3 , myT$palleja_3_vs_12, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$palleja_0_vs_3 ~ myT$palleja_3_vs_12))$"Pr(>F)"[1],digits=3) )
+plot( myT$palleja_0_vs_3 , myT$palleja_3_vs_12 ,main=mainVal)
+lines( c(-100,100), c(0,0), lty=2, col="red")
+lines( c(-0,0), c(-100,100), lty=2, col="red")
+
+mainVal =  paste("cor", format(  cor(myT$bs_1_vs_6 , myT$palleja_3_vs_12, use="complete.obs"),digits=3), "p=",
+ format(  anova(lm(myT$bs_1_vs_6 ~ myT$palleja_3_vs_12))$"Pr(>F)"[1],digits=3) )
+plot( myT$bs_1_vs_6 , myT$palleja_3_vs_12 ,main=mainVal)
+lines( c(-100,100), c(0,0), lty=2, col="red")
+lines( c(-0,0), c(-100,100), lty=2, col="red")
+
 

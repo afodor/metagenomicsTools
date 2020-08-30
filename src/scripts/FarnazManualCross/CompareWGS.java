@@ -57,15 +57,16 @@ public class CompareWGS
 		pValues.add(palleja_pValues0_12);
 		pValues.add(palleja_pValues3_12);
 		
-		writePValues(labels, pValues);
+		writePValues(labels, pValues, "pValues_WGS_BS_vs_Palleja.txt");
 	
 	}
 	
-	private static void writePValues( List<String> labels, List< HashMap<String, Double> > pValues) 
+	public static void writePValues( List<String> labels, List< HashMap<String, Double> > pValues,
+			String fileName) 
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigReader.getFarnazCrossDirBS() + 
-				File.separator + "pivotedPValues.txt"));
+				File.separator + fileName ));
 		
 		for( int x=0; x < labels.size(); x++)
 			writer.write(labels.get(x) + ( x == labels.size()-1 ? "\n" : "\t"));
