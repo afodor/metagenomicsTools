@@ -67,33 +67,38 @@ public class CompareWGS
 		BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigReader.getFarnazCrossDirBS() + 
 				File.separator + "pivotedPValues.txt"));
 		
-		writer.write("id");
-		
 		for( int x=0; x < labels.size(); x++)
-			writer.write("\t" + labels.get(x));
+			writer.write(labels.get(x) + ( x == labels.size()-1 ? "\n" : "\t"));
 		
-		writer.write("\n");
 		
 		HashSet<String> keys = new HashSet<String>();
 		
 		for( HashMap<String, Double> map : pValues )
 			keys.addAll(map.keySet());
 		
-		for(String s : keys)
+		List<String> keyList = new ArrayList<String>(keys);
+		
+		for(int x=0; x < keyList.size(); x++)
 		{
-			writer.write(s);
-			
+			boolean first = true;
 			for( HashMap<String, Double> map : pValues )
 			{
-				Double val = map.get(s);
+				
+				if( ! first)
+					writer.write("\t");
+				
+				Double val = map.get(keyList.get(x));
 				
 				if( val == null)
-					writer.write("\tNA");
+					writer.write("NA");
 				else
-					writer.write("\t" + val);
+					writer.write( "" + val);
+				
+				first = false;
 			}
 			
-			writer.write("\n");
+			writer.write( "\n");
+			
 		}
 		
 		writer.flush();  writer.close();

@@ -1,0 +1,10 @@
+rm(list=ls())
+
+setwd("C:\\RYGB_IntegratedAnalysis\\manual\\")
+
+myT <- read.table("pivotedPValues.txt", header=TRUE, sep="\t")
+
+mainVal =  paste("cor", format(  cor(myT$bs_0_vs_1 , myT$bs_0_vs_6, use="complete.obs"),digits=3))
+plot( myT$bs_0_vs_1 , myT$bs_0_vs_6 ,xlim=c(-12,12),ylim=c(-12,12),main=mainVal)
+lines( c(-100,100), c(0,0), lty=2, col="red")
+lines( c(-0,0), c(-100,100), lty=2, col="red")
