@@ -2,7 +2,9 @@ rm(list=ls())
 
 setwd("C:\\RYGB_IntegratedAnalysis\\manual\\")
 
-myT <- read.table("pValues_taxa_BS_vs_Palleja.txt", header=TRUE, sep="\t")
+#myT <- read.table("pValues_taxa_BS_vs_Palleja.txt", header=TRUE, sep="\t")
+myT <- read.table("pValues_WGS_BS_vs_Palleja.txt", header=TRUE, sep="\t")
+
 
 par(mfrow=c(2,3))
 

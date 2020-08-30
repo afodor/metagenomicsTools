@@ -154,7 +154,7 @@ public class CompareWGS
 			{
 				SurgeryMetadataInterface smi = topLine.get(x-1);
 				
-				if( smi != null)
+				if( smi != null && smi.getTimepoint() != null)
 				{
 					boolean add = false;
 					
