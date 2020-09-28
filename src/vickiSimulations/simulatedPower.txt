@@ -8,7 +8,7 @@ numSimulations <- 10
 # microbiota) in large datasets (Fodor lab, unpublished data)
 numTaxa <- 75
 
-numPatients <- 200
+numPatients <- 700
 
 # to simplify the simulation, we assume that 
 # every taxa is significantly associated for both main effects
@@ -18,15 +18,15 @@ numPatients <- 200
 # are called in error
 
 # we allow one effect size for main effects and one for interaction terms
-mainEffectSize = .06
-interactionEffectSize = .75
+mainEffectSize = .02
+interactionEffectSize = .4
 
 # We assume 50% enrollment of African American in our study
 # consistent with our recruitment goals
 fractionAA <- 0.50
 
-# we assume a 50/50 split between patient subtypes
-fractionSubtype1 <- 0.50
+# we assume a 75/25 split between patient subtypes
+fractionSubtype1 <- 0.75
 
 isSubtype1 <- runif(numPatients) <= fractionSubtype1
 isAA <- runif(numPatients) <= fractionAA
