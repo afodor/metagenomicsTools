@@ -18,6 +18,8 @@ numPatients <- 700
 # are called in error
 
 # we allow one effect size for main effects and one for interaction terms
+# the main effect size is assumed to the same for race (AA vs. non-AA) and 
+# associations of the microbiome with sub-type
 mainEffectSize = .02
 interactionEffectSize = .4
 
