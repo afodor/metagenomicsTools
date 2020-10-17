@@ -127,8 +127,7 @@ public class EncodeACGT
 		System.out.println( totalUncompressed + " " + totalCompressed + " " + (totalCompressed/totalUncompressed));
 		
 	}
-	
-	
+
 
 	  private static String getRandomKMer(int size)
 	  {
