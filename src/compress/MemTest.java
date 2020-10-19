@@ -8,13 +8,13 @@ public class MemTest
 	{
 		long startTime = System.currentTimeMillis();
 		
-		HashSet<EncodedSequence> set = new HashSet<EncodedSequence>();
+		HashSet<String> set = new HashSet<String>();
 		
 		while(true)
 		{
-			set.add( new EncodedSequence( EncodeACGT.getRandomKMer(1000)));
+			set.add( EncodeACGT.getRandomKMer(100000));
 			
-			if( set.size() % 1000 == 0)
+			if( set.size() % 100 == 0)
 			{
 				float elapsedTime = (System.currentTimeMillis() -startTime) / 1000f;
 				System.out.println(set.size() + " " + elapsedTime/set.size());
