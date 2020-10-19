@@ -5,32 +5,25 @@ import java.util.Random;
 
 public class EncodeACGT
 {
-	private static HashMap<Character, String> charTo8MerMap = new HashMap<Character, String>();
-	private static HashMap<String, Character> eightMerToCharMap= new HashMap<String, Character>();
+	private static final HashMap<Character, String> charTo8MerMap;
+	private static final HashMap<String, Character> eightMerToCharMap = new HashMap<String, Character>();
 	
 	private static Random RANDOM = new Random();
 	
 	static
 	{
-		try
-		{
-			charTo8MerMap = getCharTo8MerMap();
+		charTo8MerMap = getCharTo8MerMap();
 			
-			for( Character c : charTo8MerMap.keySet() )
-			{
-				String s = charTo8MerMap.get(c);
-				
-				if( eightMerToCharMap.containsKey(s))
-					throw new Exception("Logic error");
-				
-				eightMerToCharMap.put(s, c);
-			}
-		}
-		catch(Exception ex)
+		for( Character c : charTo8MerMap.keySet() )
 		{
-			System.out.println("Fatal logic error");
-			throw new RuntimeException(ex);
+			String s = charTo8MerMap.get(c);
+			
+			if( eightMerToCharMap.containsKey(s))
+				throw new RuntimeException("Logic error");
+			
+			eightMerToCharMap.put(s, c);
 		}
+	
 	}
 	
 	/*
@@ -92,7 +85,7 @@ public class EncodeACGT
 		return buff.toString();
 	}
 	
-	private static HashMap<Character, String> getCharTo8MerMap() throws Exception
+	private static HashMap<Character, String> getCharTo8MerMap() 
 	{
 		HashMap<Character, String> map = new HashMap<Character, String>();
 		
@@ -141,7 +134,7 @@ public class EncodeACGT
 		  return buff.toString();
 	  }
 	
-	private static String get8MerFromChar(char c) throws Exception
+	private static String get8MerFromChar(char c)
 	{
 		StringBuffer buff = new StringBuffer();
 		String vals = Integer.toBinaryString(c);
@@ -161,7 +154,7 @@ public class EncodeACGT
 				buff.append("G");
 			else if ( subString.equals("11"))
 				buff.append("T");
-			else throw new Exception("Logic error " + subString);
+			else throw new RuntimeException("Logic error " + subString);
 		}
 		
 		return buff.toString();
