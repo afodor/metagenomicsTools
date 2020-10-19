@@ -122,7 +122,7 @@ public class EncodeACGT
 	}
 
 
-	  private static String getRandomKMer(int size)
+	  public static String getRandomKMer(int size)
 	  {
 		  StringBuffer buff = new StringBuffer();
 		  
