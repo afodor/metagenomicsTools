@@ -1,0 +1,32 @@
+rm(list=ls())
+
+setwd("C:\\farnaz_BioRX\\BioRxiv2020\\China")
+
+myT <- read.table("OneMismatchCluster.txt",sep="\t", header=TRUE)
+
+plot(log10(myT$ParentAbundance), myT$NumberOfChildren)
+
+ N <- seq(min(myT$ParentAbundance),max(myT$ParentAbundance),100) 
+ 
+  errorProbs <- c(0.00015)
+  
+   for( prob in errorProbs ) 
+  {
+    expectedVals <- vector()
+    sequencingDepth <- vector()
+    index <- 1
+    
+    for( n in N ) 
+    {
+      sequencingDepth[index] = n;
+      
+      probASingleVariant = 1- dbinom(0, n, prob / 3) 
+      expectedVals[index]  = 750 * probASingleVariant 
+      
+      index = index + 1;
+    }
+    
+  }
+  
+   lines(log10(sequencingDepth), expectedVals,lty=1,col="red",lwd=2)
+  
