@@ -8,7 +8,7 @@ plot(log10(myT$ParentAbundance), myT$NumberOfChildren/750)
 
  N <- seq(min(myT$ParentAbundance),max(myT$ParentAbundance),100) 
  
-  errorProbs <- c(0.00015/3)
+  errorProbs <- c(0.00015)
   
    for( prob in errorProbs ) 
   {
@@ -20,7 +20,7 @@ plot(log10(myT$ParentAbundance), myT$NumberOfChildren/750)
     {
       sequencingDepth[index] = n;
       
-      probASingleVariant = 1- dbinom(0, n, prob ) 
+      probASingleVariant = 1- dbinom(0, n, prob /3) 
       expectedVals[index]  = probASingleVariant 
       
       index = index + 1;
