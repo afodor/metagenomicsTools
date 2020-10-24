@@ -4,11 +4,11 @@ setwd("C:\\farnaz_BioRX\\BioRxiv2020\\China")
 
 myT <- read.table("OneMismatchCluster.txt",sep="\t", header=TRUE)
 
-plot(log10(myT$ParentAbundance), myT$NumberOfChildren)
+plot(log10(myT$ParentAbundance), myT$NumberOfChildren/750)
 
  N <- seq(min(myT$ParentAbundance),max(myT$ParentAbundance),100) 
  
-  errorProbs <- c(0.00015)
+  errorProbs <- c(0.00015/3)
   
    for( prob in errorProbs ) 
   {
@@ -20,8 +20,8 @@ plot(log10(myT$ParentAbundance), myT$NumberOfChildren)
     {
       sequencingDepth[index] = n;
       
-      probASingleVariant = 1- dbinom(0, n, prob / 3) 
-      expectedVals[index]  = 750 * probASingleVariant 
+      probASingleVariant = 1- dbinom(0, n, prob ) 
+      expectedVals[index]  = probASingleVariant 
       
       index = index + 1;
     }
@@ -30,3 +30,7 @@ plot(log10(myT$ParentAbundance), myT$NumberOfChildren)
   
    lines(log10(sequencingDepth), expectedVals,lty=1,col="red",lwd=2)
   
+ javaT <- read.table("depth.txt", sep="\t", header=TRUE)
+ 
+   lines(log10(javaT$depth), javaT$numMutations/750,lty=1,col="blue",lwd=2)
+ 
