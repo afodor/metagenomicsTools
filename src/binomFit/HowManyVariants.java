@@ -81,12 +81,18 @@ public class HowManyVariants
 	{
 		HashSet<String> newSet = new HashSet<String>(originalSet);
 		
+		long numNovel =0;
+		
 		for( int x=0; x < depth; x++)
 		{
 			String newSequence = copyWithErrorRate(originalS, errorRate);
 			newSet.remove(newSequence);
+			
+			if( !newSequence.equals(originalS)  && ! originalSet.contains(newSequence))
+				numNovel++;
 		}
 		
+		System.out.println("Found " + numNovel + " " +  (((double) numNovel) / depth) + " double or more SNPS" );
 		return originalSet.size() - newSet.size();
 	}
 	
