@@ -13,10 +13,10 @@ colors <- c("red","blue","green","orange","pink","yellow","black","cyan","dodger
 
 while(TRUE)
 {
-    nVals <- c(2,4)
+    nVals <- c(4,8)
 
 	par(mfrow=c(2,1))
-	vals <- cos( (1/4) * t) * sin( 1* pi * seqs/(4*pi))
+	vals <- cos( (2/4) * t) * sin( 2* pi * seqs/(4*pi))
 	plot(seqs, vals,ylim=c(-1,1))
 	
 	for( i in nVals)
