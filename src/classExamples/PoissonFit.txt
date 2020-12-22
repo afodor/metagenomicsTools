@@ -1,0 +1,13 @@
+rm(list=ls())
+
+# data with mean== variance; poisson fit is a good one
+
+data <- rnorm(1000000, mean=100, sd=10)
+
+myHist <- hist( data,breaks=50)
+
+poisVals <- dpois( round( myHist$mids), var(data))
+
+poisVals <- length(data) *  poisVals / sum(poisVals)
+
+lines( myHist$mids, poisVals)
