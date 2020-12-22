@@ -1,5 +1,7 @@
 rm(list=ls())
 
+par(mfrow=c(2,1))
+
 # data with mean== variance; poisson fit is a good one
 
 data <- rnorm(1000000, mean=100, sd=10)
@@ -11,3 +13,34 @@ poisVals <- dpois( round( myHist$mids), var(data))
 poisVals <- length(data) *  poisVals / sum(poisVals)
 
 lines( myHist$mids, poisVals)
+
+# normal distribution is good too
+
+normVals <- dnorm( myHist$mids, mean=mean(data), sd=sd(data) )
+
+normVals <- length(data) *  normVals / sum(normVals)
+
+lines( myHist$mids, normVals,col="red")
+
+
+# now a dataset where the mean doesn't equal the variance
+
+
+data <- rnorm(1000000, mean=100, sd=11)
+
+#poisson distribution misses
+myHist <- hist( data,breaks=50)
+
+poisVals <- dpois( round( myHist$mids), var(data))
+
+poisVals <- length(data) *  poisVals / sum(poisVals)
+
+lines( myHist$mids, poisVals)
+
+# normal distribution is sill ok
+
+normVals <- dnorm( myHist$mids, mean=mean(data), sd=sd(data) )
+
+normVals <- length(data) *  normVals / sum(normVals)
+
+lines( myHist$mids, normVals,col="red")
