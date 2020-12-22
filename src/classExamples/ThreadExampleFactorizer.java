@@ -3,25 +3,39 @@ package classExamples;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 public class ThreadExampleFactorizer
 {
 	public static void main(String[] args) throws Exception
 	{
+			
 		Random r = new Random();
 		long startTime = System.currentTimeMillis();
 		
-		int numIterations = 25;
+		int numIterations = 100;
+		int numThreadsAtATime = 6;
+		
+		Semaphore s = new Semaphore(numThreadsAtATime);
 		
 		for( int x=0; x < numIterations; x++)
 		{
-			FactorizerWorker bf =new FactorizerWorker(
-					 Math.abs(r.nextInt()));
+			s.acquire();
+			FactorizerWorker fw =new FactorizerWorker(Math.abs(r.nextInt()), s);
 			
-			// how NOT to kick off a thread; this will not be multi-threaded
-			bf.run();
-			System.out.println( (System.currentTimeMillis() - startTime) / 1000f );
+			
+			// kick off the threads one at a time - CPU won't go to 100%
+			//fw.run();
+			
+			 //kick off the threads in parallel use all my CPU and it will be faster
+			new Thread( fw).start();
+			
+			
+			System.out.println( "Started a worker " + (System.currentTimeMillis() - startTime) / 1000f );
 		}
+		
+		for( int x=0; x < numThreadsAtATime; x++)
+			s.acquire();
 		
 		System.out.println("Total time : " 
 					+ (System.currentTimeMillis() - startTime) / 1000f );
@@ -32,10 +46,13 @@ public class ThreadExampleFactorizer
 	private static class FactorizerWorker implements Runnable
 	{
 		private final int numberToFactor;
-
-		public FactorizerWorker(int someBigNum)
+		private Semaphore semaphore;
+		
+		
+		public FactorizerWorker(int someBigNum, Semaphore semaphore)
 		{
 			this.numberToFactor = someBigNum;
+			this.semaphore = semaphore;
 		}
 		
 		@Override	
@@ -55,6 +72,10 @@ public class ThreadExampleFactorizer
 				System.out.println(" prime ");
 			else
 				System.out.println( factors.toString());
+			
+			System.out.println("Worker finishing ");
+			semaphore.release();
+			
 		}
 	}
 }
