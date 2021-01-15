@@ -14,7 +14,7 @@ public class QuickCompare
 {
 	private static class Holder
 	{
-		double rpdAverage=0;
+		double rdpAverage =0;
 		
 		double qiimeCounts =0;
 		double qiimeAverage = 0;
@@ -22,7 +22,7 @@ public class QuickCompare
 		@Override
 		public String toString()
 		{
-			return "rdpAverage : " + this.rpdAverage + " qiime average " + qiimeAverage;
+			return "rdpAverage : " + this.rdpAverage + " qiime average " + qiimeAverage;
 		}
 		
 	}
@@ -34,7 +34,7 @@ public class QuickCompare
 		writer.write("taxa\trdpAvg\tqiimeAvg\n");
 		
 		for(String s : map.keySet())
-			writer.write(s + "\t" + map.get(s).rpdAverage + "\t" + map.get(s).qiimeAverage + "\n");
+			writer.write(s + "\t" + map.get(s).rdpAverage + "\t" + map.get(s).qiimeAverage + "\n");
 		
 		writer.flush(); writer.close();
 	}
@@ -71,6 +71,12 @@ public class QuickCompare
 					throw new Exception("No " + nameSplits[nameSplits.length-1] + " " + s);
 				
 				String genus = nameSplits[nameSplits.length-1].replace("D_5__", "");
+				genus = genus.replace("Unclassified ", "").trim();
+				
+
+				if( genus.equals("Prevotella 9"))
+					genus= "Prevotella";
+				
 				
 				Holder h = map.get(genus);
 				
@@ -103,15 +109,17 @@ public class QuickCompare
 		for( int x=0; x < wrapper1.getOtuNames().size(); x++)
 		{
 			String taxaName = wrapper1.getOtuNames().get(x);
+			String mappedTaxaName= taxaName.replace("Unclassified ", "").trim();
 			
-			Holder h = new Holder();
+			Holder h = map.get(mappedTaxaName);
 			
-			if( map.containsKey(taxaName))
-				throw new Exception("No");
+			if( h== null)
+			{
+				h = new Holder();
+				map.put(mappedTaxaName, h);
+			}
 			
-			map.put(taxaName, h);
-			
-			h.rpdAverage = ((double) wrapper1.getCountsForTaxa(taxaName)) / wrapper1.getOtuNames().size();
+			h.rdpAverage += ((double) wrapper1.getCountsForTaxa(taxaName)) / wrapper1.getOtuNames().size();
 		}
 		
 		return map;
