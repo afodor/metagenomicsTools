@@ -2075,7 +2075,7 @@ public class OtuWrapper
 
 		nextLine = reader.readLine();
 
-		int totalCounts = 0;
+		long totalCounts = 0;
 		while (nextLine != null)
 		{
 			tr = new TabReader(nextLine);
@@ -2200,10 +2200,10 @@ public class OtuWrapper
 		}
 	}
 
-	private static void assertNum(int totalCounts,
+	private static void assertNum(long totalCounts,
 			List<List<Double>> dataPointsUnnormalized) throws Exception
 	{
-		int sum = 0;
+		long sum = 0;
 
 		for (int x = 0; x < dataPointsUnnormalized.size(); x++)
 			for (int y = 0; y < dataPointsUnnormalized.get(x).size(); y++)
