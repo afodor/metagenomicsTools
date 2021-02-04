@@ -7,36 +7,34 @@ import java.util.HashMap;
 public class MetaParser1
 {
 	private final String sampleID;
-	private final int timepoint;
-	private final String patientID_timepoint;
-	private final int run;
-	private final Integer typeOfSurgery;
+	private final Integer timepoint;
+	//private final Integer typeOfSurgery;
 	private final String patientId;
+	private final Integer site;
+	private final String sampleType;
 	
-	public int getTimepoint()
+	public Integer getTimepoint()
 	{
 		return timepoint;
 	}
 
-	public String getPatientID_timepoint()
-	{
-		return patientID_timepoint;
-	}
-
-	public int getRun()
-	{
-		return run;
-	}
-
-	public Integer getTypeOfSurgery()
-	{
-		return typeOfSurgery;
-	}
-
+	
 	public String getPatientId()
 	{
 		return patientId;
 	}
+
+	public Integer getSite()
+	{
+		return site;
+	}
+
+
+	public String getSampleType()
+	{
+		return sampleType;
+	}
+
 
 	public String getSampleID()
 	{
@@ -47,28 +45,22 @@ public class MetaParser1
 	{
 		String[] splits = s.split("\t");
 		
-		this.sampleID = splits[1];
-		this.patientID_timepoint = splits[2];
+		this.sampleID = splits[0];
+		this.patientId = splits[1];
 		
-		int lastIndex = this.patientID_timepoint.lastIndexOf("-");
-		
-		this.patientId =  this.patientID_timepoint.substring(0, lastIndex);
-		
-		int timepoint = Integer.parseInt(this.patientID_timepoint.substring(lastIndex+1, this.patientID_timepoint.length()));
-		
-		Integer spreadsheetTimepoint = Integer.parseInt(splits[3]);
-		
-		if( timepoint != spreadsheetTimepoint)
-			throw new Exception("Spreadsheet mismatch");
-		
-		this.timepoint = timepoint;
-		this.run = Integer.parseInt(splits[4]);
-		
-		if(  splits[7].equals("NA"))
-			this.typeOfSurgery = null;
+		if( ! splits[2].equals("NA"))
+			this.timepoint = Integer.parseInt(splits[2]);
 		else
-			this.typeOfSurgery = Integer.parseInt(splits[7]);
-			
+			this.timepoint = null;
+		
+		
+		if( ! splits[3].equals("NA"))
+			this.site= Integer.parseInt(splits[3]);
+		else
+			this.site= null;
+		
+		this.sampleType = splits[4];
+		
 		
 	}
 	
@@ -82,7 +74,7 @@ public class MetaParser1
 		HashMap<String, MetaParser1> map = new HashMap<String, MetaParser1>();
 		
 		@SuppressWarnings("resource")
-		BufferedReader reader= new BufferedReader(new FileReader("C:\\BariatricSurgery_Analyses2021-main\\input\\Metadata\\Metadata_BS_RYGB.txt"));
+		BufferedReader reader= new BufferedReader(new FileReader("C:\\BariatricSurgery_Analyses2021-main\\input\\Metadata\\metadata.txt"));
 		
 		reader.readLine();
 		
