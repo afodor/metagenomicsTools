@@ -12,7 +12,6 @@ public class AddMeta
 	
 	public static final String[] LEVELS = {  "phylum"};
 	
-	
 	public static void main(String[] args) throws Exception
 	{
 		for(String s : LEVELS)
@@ -24,6 +23,8 @@ public class AddMeta
 	private static void addALevel(String level)  throws Exception
 	{
 		HashMap<String, MetaParser1> metaMap1 = MetaParser1.getMetaMap1();
+		HashMap<String, Integer> typeOfSurgerymap = MetaParser1.getSurgeryType();
+		
 		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
@@ -59,7 +60,24 @@ public class AddMeta
 			}
 			
 			if( ! metaMap1.containsKey(sampleId))
-				System.out.println("Could not find " + sampleId );
+			{
+				System.out.println("Could not find " + sampleId + " for meta " );
+				
+			}
+			else
+			{
+				MetaParser1 mp1 = metaMap1.get(sampleId);
+				
+				String patientID = mp1.getPatientId();
+				
+				String shortPatientID = patientID.substring(0, patientID.lastIndexOf("-"));
+				
+				
+				if( ! typeOfSurgerymap.containsKey(shortPatientID))
+					System.out.println("COuld not find " + shortPatientID+ " for surgery " + patientID );
+			}
+				
+			
 		}
 		
 		reader.close();
