@@ -13,6 +13,31 @@ public class MetaParser1
 	private final Integer typeOfSurgery;
 	private final String patientId;
 	
+	public int getTimepoint()
+	{
+		return timepoint;
+	}
+
+	public String getPatientID_timepoint()
+	{
+		return patientID_timepoint;
+	}
+
+	public int getRun()
+	{
+		return run;
+	}
+
+	public Integer getTypeOfSurgery()
+	{
+		return typeOfSurgery;
+	}
+
+	public String getPatientId()
+	{
+		return patientId;
+	}
+
 	public String getSampleID()
 	{
 		return sampleID;
