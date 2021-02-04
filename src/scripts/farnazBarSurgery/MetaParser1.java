@@ -7,20 +7,44 @@ import java.util.HashMap;
 public class MetaParser1
 {
 	private final String sampleID;
-	//private final int timepoint;
-	//private final String patientID_timepoint;
-	//private final Integer typeOfSurgery;
+	private final int timepoint;
+	private final String patientID_timepoint;
+	private final int run;
+	private final Integer typeOfSurgery;
+	private final String patientId;
 	
 	public String getSampleID()
 	{
 		return sampleID;
 	}
 	
-	private MetaParser1(String s )
+	private MetaParser1(String s ) throws Exception
 	{
 		String[] splits = s.split("\t");
 		
 		this.sampleID = splits[1];
+		this.patientID_timepoint = splits[2];
+		
+		int lastIndex = this.patientID_timepoint.lastIndexOf("-");
+		
+		this.patientId =  this.patientID_timepoint.substring(0, lastIndex);
+		
+		int timepoint = Integer.parseInt(this.patientID_timepoint.substring(lastIndex+1, this.patientID_timepoint.length()));
+		
+		Integer spreadsheetTimepoint = Integer.parseInt(splits[3]);
+		
+		if( timepoint != spreadsheetTimepoint)
+			throw new Exception("Spreadsheet mismatch");
+		
+		this.timepoint = timepoint;
+		this.run = Integer.parseInt(splits[4]);
+		
+		if(  splits[7].equals("NA"))
+			this.typeOfSurgery = null;
+		else
+			this.typeOfSurgery = Integer.parseInt(splits[7]);
+			
+		
 	}
 	
 	public static void main(String[] args) throws Exception
