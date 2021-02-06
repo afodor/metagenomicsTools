@@ -24,7 +24,7 @@ public class AddMeta
 	{
 		HashMap<String, MetaParser1> metaMap1 = MetaParser1.getMetaMap1();
 		HashMap<String, Integer> typeOfSurgerymap = MetaParser1.getSurgeryType();
-		
+		HashMap<String, MetaParser2> metaMap2 = MetaParser2.getMeta2Map();
 		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
@@ -61,7 +61,7 @@ public class AddMeta
 			
 			if( ! metaMap1.containsKey(sampleId))
 			{
-				System.out.println("Could not find " + sampleId + " for meta " );
+				//System.out.println("Could not find " + sampleId + " for meta " );
 				
 			}
 			else
@@ -74,7 +74,15 @@ public class AddMeta
 				
 				
 				if( ! typeOfSurgerymap.containsKey(shortPatientID))
-					System.out.println("COuld not find " + shortPatientID+ " for surgery " + patientID );
+				{
+					//System.out.println("COuld not find " + shortPatientID+ " for surgery " + patientID );
+				}
+				
+				if( ! metaMap2.containsKey(shortPatientID))
+				{
+					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
+				}
+					
 			}
 				
 			
