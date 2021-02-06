@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 public class AddMeta
 {
-	public static final String[] LEVELS = {  "phylum", "class", "order" , "family", "genus", "species" };
+	public static final String[] LEVELS = {  "phylum", "class", "order" , "family", "genus" };
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -35,7 +35,7 @@ public class AddMeta
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType");
+		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType\t");
 		
 		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\ttwelveMonthWeightInPounds");
 		
@@ -108,8 +108,6 @@ public class AddMeta
 					
 					for( int x=0; x < 5; x++)
 						writer.write("\t" + "NA");
-					
-					writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\ttwelveMonthWeightInPounds");
 					
 				}
 				else

@@ -1,0 +1,24 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+
+levels <- c(  "phylum", "class", "order" , "family", "genus")
+
+for( taxa in levels ) 
+{
+	inFile <- paste0("mergedMeta_",taxa, ".txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	myTData <- myT[,17:ncol(myT)]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+	names(myMerge)[[1]] = "SampleID"
+	
+	write.table(myMerge, file=paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
+}
