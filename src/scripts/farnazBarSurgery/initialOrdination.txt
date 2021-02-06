@@ -6,14 +6,16 @@ rm(list=ls())
 
 setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
 
+#levels <- c(  "phylum")
 levels <- c(  "phylum", "class", "order" , "family", "genus")
+
 
 for( taxa in levels ) 
 {
 	inFile <- paste0("mergedMeta_",taxa, ".txt")	
-	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	myT <- read.table(inFile, sep="\t", header=TRUE)
 	
-	myTData <- myT[,17:ncol(myT)]
+	myTData <- myT[,12:ncol(myT)]
 	
 	myPCOA <- capscale(myTData~1,distance="bray")
 	

@@ -75,8 +75,8 @@ public class AddMeta
 			{
 				System.out.println("Could not find " + sampleId + " for meta " );
 				
-				for( int x=0; x < 5; x++)
-					writer.write("\tNA");
+				for( int x=0; x < 9; x++)
+					writer.write("NA\t");
 				
 			}
 			else
