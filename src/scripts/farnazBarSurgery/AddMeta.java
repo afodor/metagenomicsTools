@@ -37,6 +37,8 @@ public class AddMeta
 		
 		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType");
 		
+		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\ttwelveMonthWeightInPounds");
+		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
 		
@@ -103,6 +105,19 @@ public class AddMeta
 				if( ! metaMap2.containsKey(shortPatientID))
 				{
 					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
+					
+					for( int x=0; x < 5; x++)
+						writer.write("\t" + "NA");
+					
+					writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\ttwelveMonthWeightInPounds");
+					
+				}
+				else
+				{
+					MetaParser2 mp2 = metaMap2.get(shortPatientID);
+					
+					writer.write("\t"+ mp2.getAge() + "\t" + mp2.getBlWeightInPounds() + "\t" + mp2.getOneMonthWeightInPounds() + "\t"+ 
+									mp2.getSixMonthWeightInPoinds() + "\t" + mp2.getTwelveMonthWeightInPounds() );		
 				}
 			}
 				
