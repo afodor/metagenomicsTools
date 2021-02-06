@@ -18,17 +18,19 @@ for( taxa in levels )
 {
 	inFile <- paste0("mergedMeta_",taxa, ".txt")	
 	myT <- read.table(inFile, sep="\t", header=TRUE)
+	myT <- myT[ myT$sampleType == "Sample",  ]
+	myT <- myT[ ! is.na( myT$sampleType),  ]
 	
 	myTData <- myT[,12:ncol(myT)]
 	
-	includedCols <- apply( myTData, 2, fractionZero) <= 0.75
-	
-	myTData <- myTData[,includedCols]
+	# for now leave rare in 
+	#includedCols <- apply( myTData, 2, fractionZero) <= 0.75
+	#myTData <- myTData[,includedCols]
 
 	myPCOA <- capscale(myTData~1,distance="bray")
 	
 	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
 	names(myMerge)[[1]] = "SampleID"
 	
-	write.table(myMerge, file=paste0(taxa,"pivotedLogNormRareRemovedPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
+	write.table(myMerge, file=paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
 }
