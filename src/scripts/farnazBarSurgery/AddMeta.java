@@ -10,9 +10,7 @@ import java.util.StringTokenizer;
 
 public class AddMeta
 {
-	//public static final String[] LEVELS = {  "phylum", "class", "order" , "family", "genus", "species" };
-	
-	public static final String[] LEVELS = {  "phylum"};
+	public static final String[] LEVELS = {  "phylum", "class", "order" , "family", "genus", "species" };
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -49,7 +47,7 @@ public class AddMeta
 			String[] splits = s.split("\t");
 			
 			String sampleId = new StringTokenizer(splits[0], "_").nextToken();
-			
+			writer.write(sampleId + "\t");
 			
 			if(  splits[0].startsWith("BS"))
 			{
@@ -85,7 +83,7 @@ public class AddMeta
 				
 				String patientID = mp1.getPatientId();
 				
-				writer.write( sampleId + "\t" + mp1.getTimepoint() +"\t" );
+				writer.write( mp1.getTimepoint() +"\t" );
 				
 				String shortPatientID = patientID.substring(0, patientID.lastIndexOf("-"));
 				
@@ -106,15 +104,12 @@ public class AddMeta
 				{
 					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
 				}
-				
-				for(int x=1; x < splits.length; x++)
-					writer.write("\t" + splits[x]);
-				
-				writer.write("\n");
-					
 			}
 				
+			for(int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
 			
+			writer.write("\n");
 		}
 		
 		writer.flush();  writer.close();
