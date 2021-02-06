@@ -62,14 +62,13 @@ public class MetaParser2
 	
 	private MetaParser2(String s) throws Exception
 	{
-		String[] splits= s.split("\t");
-		this.patientID =splits[0];
-		this.site = Double.parseDouble(splits[1]);
-		this.age = Double.parseDouble(splits[2]);
+		this.patientID =TabReader.getTokenAtIndex(s, 0);
+		this.site = Double.parseDouble(TabReader.getTokenAtIndex(s, 1));
+		this.age = Double.parseDouble(TabReader.getTokenAtIndex(s, 2));
 		this.blWeightInPounds = Double.parseDouble( TabReader.getTokenAtIndex(s, 12));
 		this.oneMonthWeightInPounds = getValOrNull(TabReader.getTokenAtIndex(s, 19));
 		this.sixMonthWeightInPoinds =getValOrNull(TabReader.getTokenAtIndex(s, 26));
-		this.twelveMonthWeightInPounds = getValOrNull(TabReader.getTokenAtIndex(s, 31));
+		this.twelveMonthWeightInPounds = getValOrNull(TabReader.getTokenAtIndex(s, 33));
 	}
 	
 	public static HashMap<String, MetaParser2> getMeta2Map() throws Exception
@@ -94,5 +93,20 @@ public class MetaParser2
 		
 		
 		return map;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<String, MetaParser2> meta2Map = MetaParser2.getMeta2Map();
+		
+		for(String s : meta2Map.keySet())
+		{
+			MetaParser2 mp2 = meta2Map.get(s);
+			
+			System.out.println( s + " "  + mp2.getPatientID() + " " + mp2.getSite() + " " + mp2.getAge() + " " + 
+						mp2.getBlWeightInPounds() + " " + mp2.getOneMonthWeightInPounds() + " " + mp2.getSixMonthWeightInPoinds() + " " + 
+								mp2.getTwelveMonthWeightInPounds() );
+			
+		}
 	}
 }

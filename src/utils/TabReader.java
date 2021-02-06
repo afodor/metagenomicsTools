@@ -22,7 +22,7 @@ public class TabReader
     {
     	TabReader tReader = new TabReader(s);
     	
-    	for( int x=0; x < index -1; x++)
+    	for( int x=0; x < index; x++)
     		tReader.getNext();
     	
     	return tReader.getNext();
