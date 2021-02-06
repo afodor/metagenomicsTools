@@ -9,6 +9,10 @@ setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
 #levels <- c(  "phylum")
 levels <- c(  "phylum", "class", "order" , "family", "genus")
 
+fractionZero <- function(x)
+{
+	return (  sum(x ==0) / length(x) )
+}
 
 for( taxa in levels ) 
 {
@@ -17,10 +21,14 @@ for( taxa in levels )
 	
 	myTData <- myT[,12:ncol(myT)]
 	
+	includedCols <- apply( myTData, 2, fractionZero) <= 0.75
+	
+	myTData <- myTData[,includedCols]
+
 	myPCOA <- capscale(myTData~1,distance="bray")
 	
 	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
 	names(myMerge)[[1]] = "SampleID"
 	
-	write.table(myMerge, file=paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
+	write.table(myMerge, file=paste0(taxa,"pivotedLogNormRareRemovedPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
 }
