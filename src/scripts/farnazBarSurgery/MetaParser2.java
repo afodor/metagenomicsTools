@@ -37,7 +37,7 @@ public class MetaParser2
 		return oneMonthWeightInPounds;
 	}
 
-	public Double getSixMonthWeightInPoinds()
+	public Double getSixMonthWeightInPounds()
 	{
 		return sixMonthWeightInPoinds;
 	}
@@ -104,7 +104,7 @@ public class MetaParser2
 			MetaParser2 mp2 = meta2Map.get(s);
 			
 			System.out.println( s + " "  + mp2.getPatientID() + " " + mp2.getSite() + " " + mp2.getAge() + " " + 
-						mp2.getBlWeightInPounds() + " " + mp2.getOneMonthWeightInPounds() + " " + mp2.getSixMonthWeightInPoinds() + " " + 
+						mp2.getBlWeightInPounds() + " " + mp2.getOneMonthWeightInPounds() + " " + mp2.getSixMonthWeightInPounds() + " " + 
 								mp2.getTwelveMonthWeightInPounds() );
 			
 		}

@@ -37,7 +37,8 @@ public class AddMeta
 		
 		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType\t");
 		
-		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\ttwelveMonthWeightInPounds");
+		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\t" + 
+				"twelveMonthWeightInPounds\tpercentChangeOneSixWeight\tpercentChangeOneTwelveWeight\tpercentChangeSixTwelveWeek");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -75,7 +76,7 @@ public class AddMeta
 			{
 				System.out.println("Could not find " + sampleId + " for meta " );
 				
-				for( int x=0; x < 9; x++)
+				for( int x=0; x < 12; x++)
 					writer.write("NA\t");
 				
 			}
@@ -106,7 +107,7 @@ public class AddMeta
 				{
 					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
 					
-					for( int x=0; x < 5; x++)
+					for( int x=0; x < 8; x++)
 						writer.write("\t" + "NA");
 					
 				}
@@ -115,7 +116,11 @@ public class AddMeta
 					MetaParser2 mp2 = metaMap2.get(shortPatientID);
 					
 					writer.write("\t"+ mp2.getAge() + "\t" + mp2.getBlWeightInPounds() + "\t" + mp2.getOneMonthWeightInPounds() + "\t"+ 
-									mp2.getSixMonthWeightInPoinds() + "\t" + mp2.getTwelveMonthWeightInPounds() );		
+									mp2.getSixMonthWeightInPounds() + "\t" + mp2.getTwelveMonthWeightInPounds() + "\t" + 
+											getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getSixMonthWeightInPounds()) 
+												+"\t" + getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
+												+ "\t" + getPercentWeightChange(mp2.getSixMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
+							);		
 				}
 			}
 				
@@ -127,6 +132,14 @@ public class AddMeta
 		
 		writer.flush();  writer.close();
 		reader.close();
+	}
+	
+	private static String getPercentWeightChange(Double early, Double late)
+	{
+		if( early == null || late == null)
+			return "NA";
+		
+		return "" + ( 100  * ( late-early )/ early );
 	}
 
 }
