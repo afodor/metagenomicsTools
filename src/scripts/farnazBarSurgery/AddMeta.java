@@ -1,8 +1,10 @@
 package scripts.farnazBarSurgery;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -30,7 +32,17 @@ public class AddMeta
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				"C:\\BariatricSurgery_Analyses2021-main\\input\\bariatricSurgery_Sep152020_2_2020Sep15_taxaCount_norm_Log10_" + level + ".tsv")));
 		
-		reader.readLine();
+		BufferedWriter writer = new BufferedWriter(new FileWriter( new File(
+				"C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged\\mergedMeta_" + level + ".txt") ));
+		
+		String[] topSplits = reader.readLine().split("\t");
+		
+		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType");
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write("\n");
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -61,7 +73,10 @@ public class AddMeta
 			
 			if( ! metaMap1.containsKey(sampleId))
 			{
-				//System.out.println("Could not find " + sampleId + " for meta " );
+				System.out.println("Could not find " + sampleId + " for meta " );
+				
+				for( int x=0; x < 5; x++)
+					writer.write("\tNA");
 				
 			}
 			else
@@ -70,24 +85,40 @@ public class AddMeta
 				
 				String patientID = mp1.getPatientId();
 				
-				String shortPatientID = patientID.substring(0, patientID.lastIndexOf("-"));
+				writer.write( sampleId + "\t" + mp1.getTimepoint() +"\t" );
 				
+				String shortPatientID = patientID.substring(0, patientID.lastIndexOf("-"));
 				
 				if( ! typeOfSurgerymap.containsKey(shortPatientID))
 				{
-					//System.out.println("COuld not find " + shortPatientID+ " for surgery " + patientID );
+					System.out.println("COuld not find " + shortPatientID+ " for surgery " + patientID );
+					writer.write("NA\t");
 				}
+				else
+				{
+					writer.write(typeOfSurgerymap.get(shortPatientID) + "\t");
+				}
+				
+				writer.write(shortPatientID + "\t" + mp1.getSite() + "\t" + mp1.getSampleType());
+				
 				
 				if( ! metaMap2.containsKey(shortPatientID))
 				{
 					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
 				}
+				
+				for(int x=1; x < splits.length; x++)
+					writer.write("\t" + splits[x]);
+				
+				writer.write("\n");
 					
 			}
 				
 			
 		}
 		
+		writer.flush();  writer.close();
 		reader.close();
 	}
+
 }
