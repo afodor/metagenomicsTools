@@ -18,6 +18,16 @@ public class TabReader
 {
     private String inString;
     
+    public static String getTokenAtIndex(String s, int index)
+    {
+    	TabReader tReader = new TabReader(s);
+    	
+    	for( int x=0; x < index -1; x++)
+    		tReader.getNext();
+    	
+    	return tReader.getNext();
+    }
+    
     public TabReader(String inString ) 
     {
 		if ( inString == null )

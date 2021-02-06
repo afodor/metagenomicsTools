@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import utils.TabReader;
+
 public class MetaParser2
 {
 	private final String patientID;
@@ -64,10 +66,10 @@ public class MetaParser2
 		this.patientID =splits[0];
 		this.site = Double.parseDouble(splits[1]);
 		this.age = Double.parseDouble(splits[2]);
-		this.blWeightInPounds = Double.parseDouble(splits[12]);
-		this.oneMonthWeightInPounds = getValOrNull(splits[19]);
-		this.sixMonthWeightInPoinds =getValOrNull(splits[26]);
-		this.twelveMonthWeightInPounds = getValOrNull(splits[31]);
+		this.blWeightInPounds = Double.parseDouble( TabReader.getTokenAtIndex(s, 12));
+		this.oneMonthWeightInPounds = getValOrNull(TabReader.getTokenAtIndex(s, 19));
+		this.sixMonthWeightInPoinds =getValOrNull(TabReader.getTokenAtIndex(s, 26));
+		this.twelveMonthWeightInPounds = getValOrNull(TabReader.getTokenAtIndex(s, 31));
 	}
 	
 	public static HashMap<String, MetaParser2> getMeta2Map() throws Exception
