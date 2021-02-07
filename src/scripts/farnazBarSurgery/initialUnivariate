@@ -26,9 +26,9 @@ for( timepoint in timepoints )
 		testName <- vector()
 		index <- 1
 		
-		for( dataCol in dataCols ) 
+		for( testCol in testCols )
 		{
-			for( testCol in testCols )
+			for( dataCol in dataCols ) 
 			{
 				if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 				{
