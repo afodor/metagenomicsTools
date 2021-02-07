@@ -5,7 +5,7 @@ library("Kendall")
 
 levels <- c(  "phylum", "class", "order" , "family", "genus")
 
-timepoints <- c(0 ,1 ,6, 12 )
+timepoints <- c(0 ,1 ,6 )
 
 for( taxa in levels ) 
 for( timepoint in timepoints ) 
@@ -37,17 +37,17 @@ for( timepoint in timepoints )
 						aLm <- lm( myT[,dataCol] ~ myT[,testCol] )
 						pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
 						
-						#plot(  myT[,dataCol] ~ myT[,testCol] , main=paste(names(myT)[testCol] , 
-								#names(myT)[dataCol],"\np=", format(pValues[index],length=3)), ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
+						plot(  myT[,dataCol] ~ myT[,testCol] , main=paste(names(myT)[testCol] , 
+								names(myT)[dataCol],"\np=", format(pValues[index],length=3)), ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
 					}
 					else
 					{
 						 pValues[index]  = Kendall( myT[,dataCol] , myT[,testCol] )$sl[1]
 						
 					
-						#plot(  myT[,testCol] ~ myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
-								# names(myT)[dataCol],"\np=", format(pValues[index],length=3)),
-							#				ylab=names(myTWithChow)[testCol], xlab=names(myT)[dataCol])
+						plot(  myT[,testCol] ~ myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
+								 names(myT)[dataCol],"\np=", format(pValues[index],length=3)),
+										ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
 						
 					}
 					
