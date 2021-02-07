@@ -1,0 +1,72 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+library("Kendall")
+
+levels <- c(  "phylum", "class", "order" , "family", "genus")
+
+timepoints <- c(0 ,1 ,6, 12 )
+
+for( taxa in levels ) 
+for( timepoint in timepoints ) 
+	{
+	
+		pdf( paste0("univariate_", taxa, "_", timepoint ,".pdf"))
+		par(mfrow=c(3,2))
+		
+		myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
+		myT <- myT[ myT$timepoint == timepoint, ]
+		
+		testCols <- c(3,4,6,8:15)
+		
+		dataCols <- c(16:ncol(myT))
+		
+		pValues <- vector()
+		taxaName<- vector()
+		testName <- vector()
+		index <- 1
+		
+		for( dataCol in dataCols ) 
+		{
+			for( testCol in testCols )
+			{
+				if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
+				{
+					if( ! is.numeric(myT[,testCol]))
+					{
+						aLm <- lm( myT[,dataCol] ~ myT[,testCol] )
+						pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
+						
+						#plot(  myT[,dataCol] ~ myT[,testCol] , main=paste(names(myT)[testCol] , 
+								#names(myT)[dataCol],"\np=", format(pValues[index],length=3)), ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
+					}
+					else
+					{
+						 pValues[index]  = Kendall( myT[,dataCol] , myT[,testCol] )$sl[1]
+						
+					
+						#plot(  myT[,testCol] ~ myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
+								# names(myT)[dataCol],"\np=", format(pValues[index],length=3)),
+							#				ylab=names(myTWithChow)[testCol], xlab=names(myT)[dataCol])
+						
+					}
+					
+					taxaName[index] <- names(myT)[dataCol]
+					testName[index] <- names(myT)[testCol]
+					index <- index + 1
+				}
+			}
+			
+			hist( pValues , breaks= 20, main=names(myT)[testCol])
+		}	
+		
+		dev.off()
+		
+		dFrame <- data.frame( testName, taxaName, pValues)
+		dFrame <- dFrame [order(dFrame$pValues),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+		write.table(dFrame, file=paste("pValuesUnivariate_", taxa, "_", timepoint, ".txt",sep=""), sep="\t",row.names=FALSE)
+		
+	}
+
+

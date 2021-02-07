@@ -115,8 +115,8 @@ public class AddMeta
 				{
 					MetaParser2 mp2 = metaMap2.get(shortPatientID);
 					
-					writer.write("\t"+ mp2.getAge() + "\t" + mp2.getBlWeightInPounds() + "\t" + mp2.getOneMonthWeightInPounds() + "\t"+ 
-									mp2.getSixMonthWeightInPounds() + "\t" + mp2.getTwelveMonthWeightInPounds() + "\t" + 
+					writer.write("\t"+ mp2.getAge() + "\t" +  mp2.getBlWeightInPounds() + "\t" + getValOrNA( mp2.getOneMonthWeightInPounds() )+ "\t"+ 
+								getValOrNA(	mp2.getSixMonthWeightInPounds()) + "\t" + getValOrNA( mp2.getTwelveMonthWeightInPounds()) + "\t" + 
 											getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getSixMonthWeightInPounds()) 
 												+"\t" + getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
 												+ "\t" + getPercentWeightChange(mp2.getSixMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
@@ -132,6 +132,14 @@ public class AddMeta
 		
 		writer.flush();  writer.close();
 		reader.close();
+	}
+	
+	private static String getValOrNA(Double d)
+	{
+		if( d== null)
+			return "NA";
+		
+		return "" + d;
 	}
 	
 	private static String getPercentWeightChange(Double early, Double late)
