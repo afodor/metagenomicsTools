@@ -23,7 +23,7 @@ public class AddMeta
 	private static void addALevel(String level)  throws Exception
 	{
 		HashMap<String, MetaParser1> metaMap1 = MetaParser1.getMetaMap1();
-		HashMap<String, Integer> typeOfSurgerymap = MetaParser1.getSurgeryType();
+		HashMap<String, String> typeOfSurgerymap = MetaParser1.getSurgeryType();
 		HashMap<String, MetaParser2> metaMap2 = MetaParser2.getMeta2Map();
 		
 		@SuppressWarnings("resource")

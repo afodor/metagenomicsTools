@@ -65,9 +65,9 @@ public class MetaParser1
 		
 	}
 	
-	public static HashMap<String, Integer> getSurgeryType() throws Exception
+	public static HashMap<String, String> getSurgeryType() throws Exception
 	{
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, String> map = new HashMap<String, String>();
 		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\BariatricSurgery_Analyses2021-main\\input\\Metadata\\TypeDateofSurgery-BiobehavioralR016-12-2020_FF.txt")));
@@ -86,7 +86,19 @@ public class MetaParser1
 			if( map.containsKey(key))
 				throw new Exception("No");
 			
-			map.put(key, Integer.parseInt(splits[2]));
+			
+			int aVal = Integer.parseInt(splits[2]);
+			
+			String type = null;
+			
+			if( aVal == 1)
+				type = "GastricBypass";
+			else if (aVal == 2)
+				type = "SleeveGastrectomy";
+			else throw new Exception("No");
+				
+			
+			map.put(key, type);
 		}
 		
 		
@@ -97,7 +109,7 @@ public class MetaParser1
 	{
 		//HashMap<String, MetaParser1> metaMap1 = getMetaMap1();
 		
-		HashMap<String, Integer> map = getSurgeryType();
+		HashMap<String, String> map = getSurgeryType();
 		
 		System.out.println( map.get("BIO-1-203"));
 	}
