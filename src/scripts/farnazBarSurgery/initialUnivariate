@@ -1,4 +1,4 @@
-rm(list=ls())
+fcrm(list=ls())
 
 setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
 library("Kendall")

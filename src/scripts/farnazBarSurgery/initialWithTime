@@ -7,7 +7,7 @@ levels <- c(  "phylum", "class", "order" , "family", "genus")
 
 for( taxa in levels ) 
 {
-	pdf( paste0("withTime_", taxa, "pdf"))
+	pdf( paste0("withTime_", taxa, ".pdf"))
 	par(mfrow=c(3,2))
 	
 	fileName <- paste0(taxa,"pivotedLogNormPlusMetaMDS.txt")
@@ -43,9 +43,9 @@ for( taxa in levels )
 	testName <- vector()
 	index <- 1
 		
-	for( testCol in testCols )
+	for( dataCol in dataCols ) 
 	{
-		for( dataCol in dataCols ) 
+		for( testCol in testCols )
 		{
 			if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 			{
@@ -58,6 +58,20 @@ for( taxa in levels )
 				plot( myT$timepoint, myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
 								 names(myT)[dataCol],"\np_time=", format(pValuesTime[index],length=3)),
 										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+				
+				if( is.numeric( myT[,testCol]))
+				{
+					plot( myT[,testCol], myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
+								 names(myT)[dataCol],"\np=", format(pValuesTestCol[index],length=3)),
+										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+				}
+				else
+				{
+					plot(  myT[,dataCol] ~ myT[,testCol], main=paste(names(myT)[testCol] , "\n",
+								 names(myT)[dataCol],"\np=", format(pValuesTestCol[index],length=3)),
+										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+				}
+				
 					
 					
 				taxaName[index] <- names(myT)[dataCol]
