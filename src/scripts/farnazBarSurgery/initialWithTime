@@ -63,8 +63,8 @@ for( taxa in levels )
 				if( firstTest )
 				{
 					plot( myT$timepoint, myT[,dataCol] , main=paste("time", "\n",
-								 names(myT)[dataCol],"\np=", format(pValuesTime[index],length=3)),
-										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+								 names(myT)[dataCol],"\np=", format(pValuesTime[index],length=3)), col =surgeryColors ,
+								 xlab="Time", ylab= names(myT)[dataCol])
 					
 				}
 				
@@ -75,12 +75,11 @@ for( taxa in levels )
 				
 				if( is.numeric( myT[,testCol]))
 				{
-					plot( myT[,testCol], myT[,dataCol] , main= mainText,
-										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+					plot( myT[,testCol], myT[,dataCol] , main= mainText, col =surgeryColors ,xlab=names(myT)[testCol], ylab= names(myT)[dataCol])
 				}
 				else
 				{
-					plot(  myT[,dataCol] ~ myT[,testCol], main=mainText)
+					plot(  myT[,dataCol] ~ myT[,testCol], main=mainText,xlab=names(myT)[testCol], ylab= names(myT)[dataCol])
 				}	
 					
 				index <- index + 1
