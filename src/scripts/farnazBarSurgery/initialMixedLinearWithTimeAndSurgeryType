@@ -1,0 +1,65 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+
+library("lmtest")
+library("nlme")
+
+
+levels <- c(  "phylum", "class", "order" , "family", "genus")
+
+for( taxa in levels ) 
+{
+
+	fileName <- paste0(taxa,"pivotedLogNormPlusMetaMDS.txt")
+		
+	myT <- read.table(fileName, sep="\t",header=TRUE)
+	myT <- myT[ !is.na(myT$typeOfSurgery), ]
+	
+	dataCols <- c(3,17:ncol(myT))
+		
+	pValuesTime <- vector()
+	pValuesSurgeryType <- vector()
+	pValuesInteraction <- vector()
+	taxaName<- vector()
+	index <- 1
+		
+	time <- myT$timepoint
+	typeOfSurgery <- factor(myT$typeOfSurgery)
+	patientID <- factor(myT$patientId )
+			
+	for( dataCol in dataCols ) 
+	{
+		if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
+		{
+			bug <- myT[,dataCol]
+			
+			myFrame <- data.frame(bug, time, typeOfSurgery , patientID)
+	
+			fullModelLME <- lme(bug~  time * typeOfSurgery, method="REML", random = ~1|factor(patientID), data = myFrame)		
+	
+			pValuesTime[index] <- anova(fullModelLME)$"p-value"[2]
+			pValuesSurgeryType[index] <- anova(fullModelLME)$"p-value"[3]
+			pValuesInteraction[index] <-  anova(fullModelLME)$"p-value"[4]
+			taxaName[index] <- names(myT)[dataCol]
+					
+			index <- index + 1
+		}
+	}	
+	
+	dFrame <- data.frame( taxaName, pValuesTime,pValuesSurgeryType ,pValuesInteraction )
+	dFrame <- dFrame [order(dFrame$pValuesSurgeryType ),]
+	dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )	
+	dFrame$adjustedpValuesSurgeryType <- p.adjust( dFrame$pValuesSurgeryType, method = "BH" )	
+	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
+	
+	write.table(dFrame, file=paste("mixedLinearModelWithTimeAndSurgeryType_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)	
+	
+	par(mfrow=c(1,3))
+	
+	hist(pValuesTime)
+	hist(pValuesSurgeryType )
+	hist(pValuesInteraction)
+}
+
+
