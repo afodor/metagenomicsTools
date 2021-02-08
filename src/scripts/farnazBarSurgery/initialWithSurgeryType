@@ -16,6 +16,8 @@ for( timepoint in timepoints )
 		
 		myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
 		myT <- myT[ myT$timepoint == timepoint, ]
+		myT <- myT[ !is.na(myT$typeOfSurgery), ]
+	
 		
 		surgeryColors <- vector()
 		
@@ -50,7 +52,7 @@ for( timepoint in timepoints )
 			{
 				if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 				{
-					aLm <- lm( myT[,dataCol] ~ myT[,testCol] )
+					aLm <- lm( myT[,dataCol] ~ myT[,testCol] * myT$typeOfSurgery )
 					pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
 					
 					taxaName[index] <- names(myT)[dataCol]
