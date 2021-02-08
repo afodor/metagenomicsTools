@@ -64,10 +64,15 @@ for( taxa in levels )
 			pValuesInteraction[index] <-  anova(fullModelLME)$"p-value"[4]
 			taxaName[index] <- names(myT)[dataCol]
 			
-			mainText = paste( names(myT)[dataCol],"p time=", format(pValuesTime[index],digits=3), 
-			"\nSurgeryType=",  format(pValuesSurgeryType[index],digits=3) , " pInteraction=", format(pValuesInteraction[index],digits=3))
+			mainText = paste( names(myT)[dataCol],"\np time=", format(pValuesTime[index],digits=3))
 			
 			plot( time, bug, main= mainText, col =surgeryColors ,xlab="time", ylab= names(myT)[dataCol])
+			
+			
+			boxText <- paste( names(myT)[dataCol], 
+			"\nSurgeryType=",  format(pValuesSurgeryType[index],digits=3) , " pInteraction=", format(pValuesInteraction[index],digits=3))
+			
+			boxplot( bug ~ typeOfSurgery, main= boxText,ylab=names(myT)[dataCol])
 					
 			index <- index + 1
 		}
