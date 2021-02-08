@@ -45,6 +45,8 @@ for( taxa in levels )
 		
 	for( dataCol in dataCols ) 
 	{
+		firstTest = TRUE;
+	
 		for( testCol in testCols )
 		{
 			if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
@@ -55,9 +57,14 @@ for( taxa in levels )
 				pValuesTestCol[index] =coef(summary(aLm))[3,4]
 				pValuesInteraction[index] = coef(summary(aLm))[4,4]
 				
-				plot( myT$timepoint, myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
+				if( firstTest )
+				{
+					plot( myT$timepoint, myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
 								 names(myT)[dataCol],"\np_time=", format(pValuesTime[index],length=3)),
 										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+				}
+				
+				firstTest =FALSE;
 				
 				if( is.numeric( myT[,testCol]))
 				{
@@ -69,7 +76,7 @@ for( taxa in levels )
 				{
 					plot(  myT[,dataCol] ~ myT[,testCol], main=paste(names(myT)[testCol] , "\n",
 								 names(myT)[dataCol],"\np=", format(pValuesTestCol[index],length=3)),
-										ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col =surgeryColors )
+										ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
 				}
 				
 					
