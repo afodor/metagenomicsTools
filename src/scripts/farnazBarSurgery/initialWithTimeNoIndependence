@@ -32,9 +32,9 @@ for( taxa in levels )
 		}
 	}
 		
-	testCols <- c(4,6,8:15)
+	testCols <- c(5,7,9:16)
 		
-	dataCols <- c(16:ncol(myT))
+	dataCols <- c(17:ncol(myT))
 		
 	pValuesTime <- vector()
 	pValuesTestCol <- vector()
