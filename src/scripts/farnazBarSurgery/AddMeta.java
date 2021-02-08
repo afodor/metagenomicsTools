@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import parsers.OtuWrapper;
+
 public class AddMeta
 {
 	public static final String[] LEVELS = {  "phylum", "class", "order" , "family", "genus" };
@@ -26,6 +28,10 @@ public class AddMeta
 		HashMap<String, String> typeOfSurgerymap = MetaParser1.getSurgeryType();
 		HashMap<String, MetaParser2> metaMap2 = MetaParser2.getMeta2Map();
 		
+		OtuWrapper unnormalizedWrapper = new OtuWrapper(
+				"C:\\BariatricSurgery_Analyses2021-main\\input\\none-normalized\\bariatricSurgery_Sep152020_2_2020Sep15_taxaCount_" + level +  ".tsv");
+				 
+		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				"C:\\BariatricSurgery_Analyses2021-main\\input\\bariatricSurgery_Sep152020_2_2020Sep15_taxaCount_norm_Log10_" + level + ".tsv")));
@@ -35,7 +41,7 @@ public class AddMeta
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		writer.write("sampleID\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType\t");
+		writer.write("sampleID\tshannonDiversity\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType\t");
 		
 		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\t" + 
 				"twelveMonthWeightInPounds\tpercentChangeOneSixWeight\tpercentChangeOneTwelveWeight\tpercentChangeSixTwelveWeek");
@@ -51,6 +57,7 @@ public class AddMeta
 			
 			String sampleId = new StringTokenizer(splits[0], "_").nextToken();
 			writer.write(sampleId + "\t");
+			writer.write(unnormalizedWrapper.getShannonEntropy(splits[0]) + "\t");
 			
 			if(  splits[0].startsWith("BS"))
 			{

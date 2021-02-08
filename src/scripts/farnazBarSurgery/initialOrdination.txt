@@ -21,7 +21,7 @@ for( taxa in levels )
 	myT <- myT[ myT$sampleType == "Sample",  ]
 	myT <- myT[ ! is.na( myT$sampleType),  ]
 	
-	myTData <- myT[,15:ncol(myT)]
+	myTData <- myT[,16:ncol(myT)]
 	
 	# for now leave rare in 
 	#includedCols <- apply( myTData, 2, fractionZero) <= 0.75

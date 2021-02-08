@@ -17,9 +17,9 @@ for( timepoint in timepoints )
 		myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
 		myT <- myT[ myT$timepoint == timepoint, ]
 		
-		testCols <- c(4,6,8:15)
+		testCols <- c(5,7,9:16)
 		
-		dataCols <- c(16:ncol(myT))
+		dataCols <- c(3,17:ncol(myT))
 		
 		pValues <- vector()
 		taxaName<- vector()
