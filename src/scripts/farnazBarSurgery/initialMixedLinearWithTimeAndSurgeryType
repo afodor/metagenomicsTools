@@ -11,10 +11,31 @@ levels <- c(  "phylum", "class", "order" , "family", "genus")
 for( taxa in levels ) 
 {
 
+	pdf(paste0("timePlusSurgery_",taxa,".pdf"))
+	par(mfrow=c(3,2))
+
 	fileName <- paste0(taxa,"pivotedLogNormPlusMetaMDS.txt")
 		
 	myT <- read.table(fileName, sep="\t",header=TRUE)
 	myT <- myT[ !is.na(myT$typeOfSurgery), ]
+	
+	surgeryColors <- vector()
+	
+	for( i in 1:nrow(myT)) 
+	{
+		if( is.na( myT$typeOfSurgery[i] ) )
+		{
+			surgeryColors[i] = "gray"
+		}
+		else if (myT$typeOfSurgery[i] == "GastricBypass")
+		{	
+				surgeryColors[i] = "red"
+		}
+		else if (myT$typeOfSurgery[i] == "SleeveGastrectomy")
+		{
+				surgeryColors[i] = "blue"
+		}
+	}
 	
 	dataCols <- c(3,17:ncol(myT))
 		
@@ -42,6 +63,11 @@ for( taxa in levels )
 			pValuesSurgeryType[index] <- anova(fullModelLME)$"p-value"[3]
 			pValuesInteraction[index] <-  anova(fullModelLME)$"p-value"[4]
 			taxaName[index] <- names(myT)[dataCol]
+			
+			mainText = paste( names(myT)[dataCol],"p time=", format(pValuesTime[index],digits=3), 
+			"\nSurgeryType=",  format(pValuesSurgeryType[index],digits=3) , " pInteraction=", format(pValuesInteraction[index],digits=3))
+			
+			plot( time, bug, main= mainText, col =surgeryColors ,xlab="time", ylab= names(myT)[dataCol])
 					
 			index <- index + 1
 		}
@@ -60,6 +86,8 @@ for( taxa in levels )
 	hist(pValuesTime)
 	hist(pValuesSurgeryType )
 	hist(pValuesInteraction)
+	
+	dev.off()
 }
 
 
