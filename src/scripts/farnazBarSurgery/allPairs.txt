@@ -39,9 +39,10 @@ for( taxa in levels )
 			index <- index + 1
 		}
 			
-		hist( pValues , breaks= 20, main=names(myT)[testCol])
+		mainText <- paste("t1=", t1,"t2=",t2)
+		hist( pValues , breaks= 20, main=mainText )
 		
-		dFrame <- data.frame( testName, taxaName, pValues)
+		dFrame <- data.frame( taxaName, pValues)
 		dFrame <- dFrame [order(dFrame$pValues),]
 		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 		write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
