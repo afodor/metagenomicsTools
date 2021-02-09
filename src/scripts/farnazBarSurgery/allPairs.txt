@@ -18,10 +18,11 @@ for( taxa in levels )
 	pdf( paste0("timepointComparisons_", taxa,".pdf"))
 	par(mfrow=c(3,2))
 	
-	for( t1 in timepoints)
-	for( t2 in timepoints )
-	if ( t1 != t2 )  
+	for( i in 1:(length( timepoints) -1 ) )
+	for( j in (i+1):length( timepoints ))
 	{
+		t1 = timepoints[i]
+		t2 = timepoints[j]
 		pValues <- vector()
 		taxaName<- vector()
 		index <- 1
@@ -46,7 +47,7 @@ for( taxa in levels )
 		#dFrame <- dFrame [order(dFrame$pValues),]
 		#dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 		#write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
-	}	
+	}
 		
 	dev.off()
 }
