@@ -9,6 +9,13 @@ timepoints <- c(0 ,1 ,6,12,18,24 )
 
 for( taxa in levels ) 
 {
+	numSignificant<- vector()
+	timepoint1 <- vector()
+	timepoint2 <- vector()
+	sampleSize1 <- vector()
+	sampleSize2 <- vector()
+	globalIndex <- 1
+
 	myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
 	myT <- myT[ !is.na(myT$typeOfSurgery), ]
 	
@@ -23,15 +30,12 @@ for( taxa in levels )
 	{
 		t1 = timepoints[i]
 		t2 = timepoints[j]
-		pValues <- vector()
-		taxaName<- vector()
-		index <- 1
 		
+		pValues <- vector()
+		index <- 1
 		for( dataCol in dataCols )
 		if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 		{ 
-			taxaName[index] <- names(myT)[dataCol]
-			
 			vals1<- myT[myT$timepoint == t1, dataCol]
 			vals2<- myT[myT$timepoint == t2, dataCol]
 			
@@ -43,11 +47,17 @@ for( taxa in levels )
 		mainText <- paste("t1=", t1,"t2=",t2)
 		hist( pValues , breaks= 20, main=mainText )
 		
-		#dFrame <- data.frame( taxaName, pValues)
-		#dFrame <- dFrame [order(dFrame$pValues),]
-		#dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
-		#write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
+		numSignificant[globalIndex] <- sum( p.adjust(pValues, method="BH") <= .1)
+		timepoint1[globalIndex]  <- t1
+		timepoint2[globalIndex]  <- t2
+		sampleSize1[globalIndex]  <- sum( myT$timepoint == t1)
+		sampleSize2[globalIndex]  <- sum( myT$timepoint == t2)
+		globalIndex <- globalIndex + 1
+		
 	}
+	
+	dFrame <- data.frame( numSignificant,timepoint1,timepoint2,sampleSize1 ,sampleSize2)
+	write.table(dFrame, file=paste0("timePointComparison_", taxa,".txt"), sep="\t",row.names=FALSE)
 		
 	dev.off()
 }
