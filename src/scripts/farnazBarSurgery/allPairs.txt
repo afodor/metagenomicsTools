@@ -1,0 +1,44 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+library("Kendall")
+
+levels <- c(  "phylum", "class", "order" , "family", "genus")
+
+timepoints <- c(0 ,1 ,6,12,18,24 )
+
+for( taxa in levels ) 
+{
+	myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
+	myT <- myT[ !is.na(myT$typeOfSurgery), ]
+	
+	lastCol <- which(names(myT)=="MDS1") -1
+	dataCols <- 20:lastCol
+		
+	pdf( paste0("timepointComparisons_", taxa,".pdf"))
+	par(mfrow=c(3,2))
+	
+	for( t1 in timepoints)
+	for( t2 in timepoints )
+	if ( t1 != t2 )  
+	{
+		pValues <- vector()
+		taxaName<- vector()
+		index <- 1
+		
+		for( dataCol in dataCols )
+		{ 
+			taxaName[index] <- names(myT)[dataCol]
+			index <- index + 1
+		}
+			
+		hist( pValues , breaks= 20, main=names(myT)[testCol])
+		
+		dFrame <- data.frame( testName, taxaName, pValues)
+		dFrame <- dFrame [order(dFrame$pValues),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+		write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
+	}	
+		
+	dev.off()
+}
