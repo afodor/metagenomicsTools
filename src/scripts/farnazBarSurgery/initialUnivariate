@@ -36,9 +36,9 @@ for( timepoint in timepoints )
 			}
 		}
 			
-		testCols <- c(5,7,9:16)
+		testCols <- c(5,7,9:19)
 		
-		dataCols <- c(3,17:ncol(myT))
+		dataCols <- c(3,20:ncol(myT))
 		
 		pValues <- vector()
 		taxaName<- vector()
