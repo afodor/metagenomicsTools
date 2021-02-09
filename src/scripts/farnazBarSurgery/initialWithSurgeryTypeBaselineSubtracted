@@ -1,0 +1,98 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+
+levels <- c(  "phylum", "class", "order" , "family", "genus")
+
+timepoints <- c(1 ,6 )
+
+for( taxa in levels ) 
+for( timepoint in timepoints ) 
+	{
+	
+		pdf(paste0("testWithSurgeryTypeHistograms_",taxa,"_", timepoint, "_baselineSubtracted.pdf"))
+		par(mfrow=c(3,2))
+		
+		myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
+		fullT <- myT
+		myT <- myT[ myT$timepoint == timepoint, ]
+		myT <- myT[ !is.na(myT$typeOfSurgery), ]
+		fullT <- fullT[  !is.na(myT$typeOfSurgery),]
+		
+		if( ncol(fullT) != ncol(myT))
+			stop() 
+		
+		surgeryColors <- vector()
+		
+		for( i in 1:nrow(myT)) 
+		{
+			if( is.na( myT$typeOfSurgery[i] ) )
+			{
+				surgeryColors[i] = "gray"
+			}
+			else if (myT$typeOfSurgery[i] == "GastricBypass")
+			{	
+					surgeryColors[i] = "red"
+			}
+			else if (myT$typeOfSurgery[i] == "SleeveGastrectomy")
+			{
+					surgeryColors[i] = "blue"
+			}
+		}
+		
+		testCols <- c(10,12:19)
+		
+		dataCols <- c(20:ncol(myT))
+		
+		pValues <- vector()
+		taxaName<- vector()
+		testName <- vector()
+		index <- 1
+		
+		for( dataCol in dataCols ) 
+		{
+			diffVals <- vector()
+			
+			for( i in 1:length(myT[,dataCol]))
+			{
+				aVal = fullT[ fullT$patientId == myT$patientId[i] & fullT$timepoint == 0 , dataCol ] 
+		
+				if( length(aVal) == 0  ) 
+				{
+					diffVals[i] = NA
+				}
+				else
+				{
+					diffVals[i] = myT[,dataCol][i] - aVal 
+				}
+			}
+			
+			if( length(diffVals) != length(myT[,dataCol]) ) 
+				stop()
+			
+			for( testCol in testCols )
+			{
+				if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
+				{
+					aLm <- lm( diffVals ~ myT[,testCol] * myT$typeOfSurgery )
+					pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
+					
+					taxaName[index] <- names(myT)[dataCol]
+					testName[index] <- names(myT)[testCol]
+					index <- index + 1
+				}
+			}
+			
+			hist( pValues , breaks= 20, main=names(myT)[testCol])
+		}	
+		
+		dev.off()
+		
+		dFrame <- data.frame( testName, taxaName, pValues)
+		dFrame <- dFrame [order(dFrame$pValues),]
+		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+		write.table(dFrame, file=paste("pValueWithSurgeryType_", taxa, "_", timepoint, "_baselineSubtracted.txt",sep=""), sep="\t",row.names=FALSE)
+		
+	}
+
+
