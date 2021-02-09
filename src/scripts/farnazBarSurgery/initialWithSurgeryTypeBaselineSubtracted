@@ -77,13 +77,16 @@ for( timepoint in timepoints )
 					aLm <- lm( diffVals ~ myT[,testCol] * myT$typeOfSurgery )
 					pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
 					
+					mainText = paste( names(myT)[dataCol], names(myT)[testCol],  "\np=", format(pValues[index],digits=3))
+			
+					
+					plot(  diffVals , myT[,testCol] , col = surgeryColors , main=mainText)
+					
 					taxaName[index] <- names(myT)[dataCol]
 					testName[index] <- names(myT)[testCol]
 					index <- index + 1
 				}
 			}
-			
-			hist( pValues , breaks= 20, main=names(myT)[testCol])
 		}	
 		
 		dev.off()
