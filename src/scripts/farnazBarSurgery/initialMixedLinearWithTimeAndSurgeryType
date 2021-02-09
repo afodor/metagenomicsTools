@@ -37,7 +37,7 @@ for( taxa in levels )
 		}
 	}
 	
-	dataCols <- c(3,17:ncol(myT))
+	dataCols <- c(3,20:ncol(myT))
 		
 	pValuesTime <- vector()
 	pValuesSurgeryType <- vector()
