@@ -27,7 +27,7 @@ public class MetaParser2
 		return age;
 	}
 
-	public double getBlWeightInPounds()
+	public Double getBlWeightInPounds()
 	{
 		return blWeightInPounds;
 	}

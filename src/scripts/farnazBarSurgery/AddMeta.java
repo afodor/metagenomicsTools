@@ -44,7 +44,8 @@ public class AddMeta
 		writer.write("sampleID\tshannonDiversity\ttimepoint\ttypeOfSurgery\tpatientId\tsite\tsampleType\t");
 		
 		writer.write("age\tblWeightInPounds\toneMonthWeightInPounds\tsixMonthWeightInPoinds\t" + 
-				"twelveMonthWeightInPounds\tpercentChangeOneSixWeight\tpercentChangeOneTwelveWeight\tpercentChangeSixTwelveWeek");
+				"twelveMonthWeightInPounds\t" + "percentChangeBLOneWeight\tpercentChangeBLSixWeight\tpercentChangeBLTwelveWeight\t" + 
+				"percentChangeOneSixWeight\tpercentChangeOneTwelveWeight\tpercentChangeSixTwelveWeek");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -83,7 +84,7 @@ public class AddMeta
 			{
 				System.out.println("Could not find " + sampleId + " for meta " );
 				
-				for( int x=0; x < 12; x++)
+				for( int x=0; x < 15; x++)
 					writer.write("NA\t");
 				
 			}
@@ -114,7 +115,7 @@ public class AddMeta
 				{
 					System.out.println("Could not find " + shortPatientID + " for metamap2 " + patientID);
 					
-					for( int x=0; x < 8; x++)
+					for( int x=0; x < 11; x++)
 						writer.write("\t" + "NA");
 					
 				}
@@ -124,6 +125,9 @@ public class AddMeta
 					
 					writer.write("\t"+ mp2.getAge() + "\t" +  mp2.getBlWeightInPounds() + "\t" + getValOrNA( mp2.getOneMonthWeightInPounds() )+ "\t"+ 
 								getValOrNA(	mp2.getSixMonthWeightInPounds()) + "\t" + getValOrNA( mp2.getTwelveMonthWeightInPounds()) + "\t" + 
+								getPercentWeightChange(mp2.getBlWeightInPounds(),mp2.getOneMonthWeightInPounds()) + "\t" + 
+								getPercentWeightChange(mp2.getBlWeightInPounds(),mp2.getSixMonthWeightInPounds()) + "\t" + 
+								getPercentWeightChange(mp2.getBlWeightInPounds(),mp2.getTwelveMonthWeightInPounds()) + "\t" + 
 											getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getSixMonthWeightInPounds()) 
 												+"\t" + getPercentWeightChange(mp2.getOneMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
 												+ "\t" + getPercentWeightChange(mp2.getSixMonthWeightInPounds(),mp2.getTwelveMonthWeightInPounds())
