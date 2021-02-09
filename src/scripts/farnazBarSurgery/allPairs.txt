@@ -27,8 +27,15 @@ for( taxa in levels )
 		index <- 1
 		
 		for( dataCol in dataCols )
+		if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 		{ 
 			taxaName[index] <- names(myT)[dataCol]
+			
+			vals1<- myT[myT$timepoint == t1, dataCol]
+			vals2<- myT[myT$timepoint == t1, dataCol]
+			
+			pValues[index] = t.test( vals1,vals2)$p.value
+			
 			index <- index + 1
 		}
 			
