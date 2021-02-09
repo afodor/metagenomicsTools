@@ -32,7 +32,7 @@ for( taxa in levels )
 			taxaName[index] <- names(myT)[dataCol]
 			
 			vals1<- myT[myT$timepoint == t1, dataCol]
-			vals2<- myT[myT$timepoint == t1, dataCol]
+			vals2<- myT[myT$timepoint == t2, dataCol]
 			
 			pValues[index] = t.test( vals1,vals2)$p.value
 			
@@ -42,10 +42,10 @@ for( taxa in levels )
 		mainText <- paste("t1=", t1,"t2=",t2)
 		hist( pValues , breaks= 20, main=mainText )
 		
-		dFrame <- data.frame( taxaName, pValues)
-		dFrame <- dFrame [order(dFrame$pValues),]
-		dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
-		write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
+		#dFrame <- data.frame( taxaName, pValues)
+		#dFrame <- dFrame [order(dFrame$pValues),]
+		#dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+		#write.table(dFrame, file=paste("timePointComparison_", taxa, "_", t1 ,"_vs_", t2, ".txt",sep=""), sep="\t",row.names=FALSE)
 	}	
 		
 	dev.off()
