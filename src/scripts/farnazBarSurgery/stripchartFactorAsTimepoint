@@ -5,8 +5,14 @@ library("Kendall")
 
 levels <- c(  "phylum", "class", "order" , "family", "genus")
 
+
 for( taxa in levels ) 
-{	
+{
+	pValues <- vector()
+	taxaName <- vector()
+	colIndex <- vector()
+	index<- 1
+	
 	myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
 	myT <- myT[ !is.na(myT$typeOfSurgery), ]
 	
@@ -32,7 +38,6 @@ for( taxa in levels )
 
 	timepoints <- factor(myT$timepoint) 
 		
-
 	pdf( paste0("stripChartsWithTimeAsFactor_", taxa, ".pdf"))
 	par(mfrow=c(3,2))
 
@@ -40,16 +45,31 @@ for( taxa in levels )
 	{
 		if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
 		{
-			boxplot( myT[,dataCol] ~ timepoints, main =names(myT)[dataCol] )
+			pValues[index] = anova(lm( myT[,dataCol] ~ timepoints))$"Pr(>F)"[1]
 			
-			bug <- myT[,dataCol]
-			myFrame <- data.frame( bug, timepoints)
-			
-			stripchart(bug~ timepoints,  data = myFrame,vertical = TRUE, pch = 21, add=TRUE )					
-			
+			taxaName[index] <- names(myT)[dataCol]
+			colIndex[index] <- dataCol
+			index <- index + 1
 		}
 	}
-
+	
+	dFrame <- data.frame(pValues, taxaName, colIndex)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	
+	for( i in 1:nrow(dFrame))
+	{
+		bug <- myT[,dFrame$colIndex[i]]
+	
+		mainText <- paste(names(myT)[dFrame$colIndex[i]] 
+			, "\np=" , format(dFrame$pValues[i],digits=3), "adj. p=", format( dFrame$adjustedP[i],digits=3))
+		boxplot( bug ~ timepoints, main =mainText)
+			
+		myFrame <- data.frame( bug, timepoints)
+		stripchart(bug~ timepoints,  data = myFrame,vertical = TRUE, pch = 21, add=TRUE )					
+			
+	}
+	
 	dev.off()
 }
 
