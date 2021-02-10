@@ -29,7 +29,7 @@ for( taxa in levels )
 
 	myPCOA <- capscale(myTData~1,distance="bray")
 	
-	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:10])
 	names(myMerge)[[1]] = "SampleID"
 	
 	write.table(myMerge, file=paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
