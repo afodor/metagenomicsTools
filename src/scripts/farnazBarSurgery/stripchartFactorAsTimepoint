@@ -60,7 +60,7 @@ for( taxa in levels )
 	}
 	
 	dFrame <- data.frame(pValues,pValuesDiff2Models, taxaName, colIndex)
-	dFrame <- dFrame [order(dFrame$pValuesDiff2Models),]
+	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 	dFrame$adjustedPValuesDiff2Models <- p.adjust( dFrame$pValuesDiff2Models, method = "BH" )	
 	
@@ -69,8 +69,9 @@ for( taxa in levels )
 		bug <- myT[,dFrame$colIndex[i]]
 	
 		mainText <- paste(names(myT)[dFrame$colIndex[i]] 
-			, "\np=" , format(dFrame$pValues[i],digits=3), "adj. p=", format( dFrame$adjustedP[i],digits=3),
-			"\np diff models=" , format(dFrame$pValuesDiff2Models[i],digits=3), "adj. p diff models=", format( dFrame$adjustedPValuesDiff2Models[i],digits=3))
+			, "\np=" , format(dFrame$pValues[i],digits=3), "adj. p=", format( dFrame$adjustedP[i],digits=3) )
+		#	"\np diff models=" , format(dFrame$pValuesDiff2Models[i],digits=3), "adj. p diff models=", format( dFrame$adjustedPValuesDiff2Models[i],digits=3))
+		
 		boxplot( bug ~ timepoints, main =mainText)
 			
 		myFrame <- data.frame( bug, timepoints)
