@@ -9,6 +9,7 @@ levels <- c(  "phylum", "class", "order" , "family", "genus")
 for( taxa in levels ) 
 {
 	pValues <- vector()
+	pValuesDiff2Models <- vector()
 	taxaName <- vector()
 	colIndex <- vector()
 	index<- 1
@@ -47,22 +48,29 @@ for( taxa in levels )
 		{
 			pValues[index] = anova(lm( myT[,dataCol] ~ timepoints))$"Pr(>F)"[1]
 			
+			lm1 <- lm (  myT[,dataCol] ~ myT$timepoint ) 
+			lm2 <- lm (  myT[,dataCol] ~ poly(myT$timepoint,2))
+			
+			pValuesDiff2Models[index] <- anova(lm1,lm2)$"Pr(>F)"[2]
+		
 			taxaName[index] <- names(myT)[dataCol]
 			colIndex[index] <- dataCol
 			index <- index + 1
 		}
 	}
 	
-	dFrame <- data.frame(pValues, taxaName, colIndex)
-	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame <- data.frame(pValues,pValuesDiff2Models, taxaName, colIndex)
+	dFrame <- dFrame [order(dFrame$pValuesDiff2Models),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	dFrame$adjustedPValuesDiff2Models <- p.adjust( dFrame$pValuesDiff2Models, method = "BH" )	
 	
 	for( i in 1:nrow(dFrame))
 	{
 		bug <- myT[,dFrame$colIndex[i]]
 	
 		mainText <- paste(names(myT)[dFrame$colIndex[i]] 
-			, "\np=" , format(dFrame$pValues[i],digits=3), "adj. p=", format( dFrame$adjustedP[i],digits=3))
+			, "\np=" , format(dFrame$pValues[i],digits=3), "adj. p=", format( dFrame$adjustedP[i],digits=3),
+			"\np diff models=" , format(dFrame$pValuesDiff2Models[i],digits=3), "adj. p diff models=", format( dFrame$adjustedPValuesDiff2Models[i],digits=3))
 		boxplot( bug ~ timepoints, main =mainText)
 			
 		myFrame <- data.frame( bug, timepoints)
