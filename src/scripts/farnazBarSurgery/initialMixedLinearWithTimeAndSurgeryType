@@ -43,6 +43,7 @@ for( taxa in levels )
 	pValuesSurgeryType <- vector()
 	pValuesInteraction <- vector()
 	taxaName<- vector()
+	colIndex <- vector()
 	index <- 1
 		
 	time <- myT$timepoint
@@ -63,6 +64,7 @@ for( taxa in levels )
 			pValuesSurgeryType[index] <- anova(fullModelLME)$"p-value"[3]
 			pValuesInteraction[index] <-  anova(fullModelLME)$"p-value"[4]
 			taxaName[index] <- names(myT)[dataCol]
+			colIndex[index] <- dataCol
 			
 			mainText = paste( names(myT)[dataCol],"\np time=", format(pValuesTime[index],digits=3))
 			
@@ -78,13 +80,32 @@ for( taxa in levels )
 		}
 	}	
 	
-	dFrame <- data.frame( taxaName, pValuesTime,pValuesSurgeryType ,pValuesInteraction )
+	dFrame <- data.frame( taxaName, colIndex, pValuesTime,pValuesSurgeryType ,pValuesInteraction )
 	dFrame <- dFrame [order(dFrame$pValuesSurgeryType ),]
 	dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )	
 	dFrame$adjustedpValuesSurgeryType <- p.adjust( dFrame$pValuesSurgeryType, method = "BH" )	
 	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
 	
 	write.table(dFrame, file=paste("mixedLinearModelWithTimeAndSurgeryType_", taxa, ".txt",sep=""), sep="\t",row.names=FALSE)	
+	
+	for( i in 1:nrow(dFrame))
+	{
+		dataCol <- dFrame$colIndex[i] 
+		
+		bug <- myT[,dataCol]
+			
+		dFrame <- data.frame(bug, time, typeOfSurgery , patientID)
+		
+		mainText = paste( names(myT)[dataCol],"\np time=", format(dFrame$pValuesTime[i],digits=3))
+			
+		plot( time, bug, main= mainText, col =surgeryColors ,xlab="time", ylab= names(myT)[dataCol])
+			
+			
+		boxText <- paste( names(myT)[dataCol], 
+		"\nSurgeryType=",  format(dFrame$pValuesSurgeryType[i],digits=3) , " pInteraction=", format(dFrame$pValuesInteraction[i],digits=3))
+			
+		boxplot( bug ~ typeOfSurgery, main= boxText,ylab=names(myT)[dataCol])
+	}
 	
 	par(mfrow=c(1,3))
 	
