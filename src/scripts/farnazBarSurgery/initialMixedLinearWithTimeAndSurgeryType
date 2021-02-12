@@ -81,7 +81,7 @@ for( taxa in levels )
 	}	
 	
 	dFrame <- data.frame( taxaName, colIndex, pValuesTime,pValuesSurgeryType ,pValuesInteraction )
-	dFrame <- dFrame [order(dFrame$pValuesSurgeryType ),]
+	dFrame <- dFrame[order(dFrame$pValuesSurgeryType ),]
 	dFrame$adjustedPTime <- p.adjust( dFrame$pValuesTime, method = "BH" )	
 	dFrame$adjustedpValuesSurgeryType <- p.adjust( dFrame$pValuesSurgeryType, method = "BH" )	
 	dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction, method = "BH" )	
@@ -94,12 +94,9 @@ for( taxa in levels )
 		
 		bug <- myT[,dataCol]
 			
-		dFrame <- data.frame(bug, time, typeOfSurgery , patientID)
-		
 		mainText = paste( names(myT)[dataCol],"\np time=", format(dFrame$pValuesTime[i],digits=3))
 			
 		plot( time, bug, main= mainText, col =surgeryColors ,xlab="time", ylab= names(myT)[dataCol])
-			
 			
 		boxText <- paste( names(myT)[dataCol], 
 		"\nSurgeryType=",  format(dFrame$pValuesSurgeryType[i],digits=3) , " pInteraction=", format(dFrame$pValuesInteraction[i],digits=3))
