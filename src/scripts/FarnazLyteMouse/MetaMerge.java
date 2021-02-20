@@ -35,6 +35,13 @@ public class MetaMerge
 			if( firstToken.length() > 0 )
 			{
 				System.out.println( firstToken);
+				
+				String key = tReader.getTokenAtIndex(s, 13) + "@" + tReader.getTokenAtIndex(s, 4);
+				
+				if( map.containsKey(key))
+					throw new Exception("Duplicate " + key);
+				
+				map.put(key, firstToken);
 			}
 		}
 		
