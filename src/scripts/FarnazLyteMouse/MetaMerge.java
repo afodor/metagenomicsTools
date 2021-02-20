@@ -3,6 +3,7 @@ package scripts.FarnazLyteMouse;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import utils.TabReader;
 
@@ -16,6 +17,8 @@ public class MetaMerge
 			System.out.println(s + " " + map.get(s));
 		
 		System.out.println(map.size());
+		
+		System.out.println(map.get("1@3/24/17@Fecal"));
 	}
 	
 	/*
@@ -23,7 +26,7 @@ public class MetaMerge
 	 */
 	public static HashMap<String, String> getKeyMap() throws Exception
 	{
-		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, String> map = new LinkedHashMap<String, String>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(
 			"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\input\\" + 
