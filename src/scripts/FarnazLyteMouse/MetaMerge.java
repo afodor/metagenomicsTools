@@ -11,10 +11,15 @@ public class MetaMerge
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, String> map = getKeyMap();
+		
+		for(String s : map.keySet())
+			System.out.println(s + " " + map.get(s));
+		
+		System.out.println(map.size());
 	}
 	
 	/*
-	 * Key is animalId@dateString
+	 * Key is animalId@dateString@SampleSource
 	 */
 	public static HashMap<String, String> getKeyMap() throws Exception
 	{
@@ -34,9 +39,8 @@ public class MetaMerge
 			
 			if( firstToken.length() > 0 )
 			{
-				System.out.println( firstToken);
-				
-				String key = tReader.getTokenAtIndex(s, 13) + "@" + tReader.getTokenAtIndex(s, 4);
+				String key = tReader.getTokenAtIndex(s, 13) + "@" + tReader.getTokenAtIndex(s, 4) +"@"  + 
+								tReader.getTokenAtIndex(s, 1);
 				
 				if( map.containsKey(key))
 					throw new Exception("Duplicate " + key);
