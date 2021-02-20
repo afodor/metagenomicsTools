@@ -22,49 +22,24 @@ public class MetaboliteParser
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			String anId = getOneId(s, keyMap);
+			String anId = getOneId(s, keyMap, "Fecal");
 			
-			if( anId != null )
-				System.out.println(anId);
+			System.out.println(anId);
 		}
 		
 		reader.close();
 	}
 	
-	private static String getOneId(String s, HashMap<String, String> keyMap ) throws Exception
+	private static String getOneId(String s, HashMap<String, String> keyMap, String tissueType ) throws Exception
 	{
 		String yearString = TabReader.getTokenAtIndex(s, 0);
 		
 		yearString = yearString.replace("2017", "17");
 		yearString = yearString.replace("2018", "18");
 		
-		String key = TabReader.getTokenAtIndex(s, 8) + "@" + yearString;
-		
-		String fecalID = keyMap.get(key + "@Fecal");
-		String cecalID = keyMap.get(key + "@Cecal");
-		
-		if( fecalID == null && cecalID == null)
-		{
-			System.out.println("Found neither " + key);
-			return null;
-		}
-			
-		if( fecalID != null && cecalID != null)
-		{
-			if( ! fecalID.equals(cecalID))
-				throw new Exception("Conflicting answers " + fecalID + " " + cecalID);
-			
-			return fecalID;
-		}
-		
-		if( fecalID == null)
-			return cecalID;
-		
-		if( cecalID != null)
-			throw new Exception("Logic error");
-		
-		return fecalID;
-		
+		String key = TabReader.getTokenAtIndex(s, 8) + "@" + yearString + "@" + tissueType;
+				
+		return keyMap.get(key);
 	}
 	
 }
