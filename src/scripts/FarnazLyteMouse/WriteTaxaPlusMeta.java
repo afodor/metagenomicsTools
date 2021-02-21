@@ -36,6 +36,8 @@ public class WriteTaxaPlusMeta
 				if( topSplits[index].equals("Argonne Sequence Number"))
 					foundId =true;
 			}
+			int num=0;
+			
 			
 			for(String s= reader.readLine(); s != null; s = reader.readLine())
 			{
@@ -47,7 +49,17 @@ public class WriteTaxaPlusMeta
 				
 				if( mp == null)
 					throw new Exception("Could not find " + key);
+				
+				
+				if( mp.getExperiment().equals("Beef Supplementation") && mp.getDateOfExperiment().endsWith("17") ) 
+				{
+					System.out.println(mp.getSampleID());
+					num++;
+				}
 			}
+			
+			System.out.println(num);
+			 
 		}
 		
 		
