@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import parsers.OtuWrapper;
+
 public class WriteTaxaPlusMeta
 {
 	public static void main(String[] args) throws Exception
@@ -30,9 +32,11 @@ public class WriteTaxaPlusMeta
 				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\input\\" + 
 							level+  "_table.txt"));
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+		File outFile = new File(
 				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
-					level + "_beefSup2017.txt"	)));
+						level + "_beefSup2017.txt"	);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 			
 		String[] topSplits = reader.readLine().split("\t");
 			
@@ -81,5 +85,13 @@ public class WriteTaxaPlusMeta
 		}
 			
 		writer.flush();  writer.close();	 
+		
+		OtuWrapper wrapper = new OtuWrapper(outFile);
+		
+		File outFileLogNorm = new File(
+				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
+						level + "_beefSup2017_logNorm.txt"	);
+		
+		wrapper.writeNormalizedLoggedDataToFile(outFileLogNorm);
 	}
 }
