@@ -21,6 +21,11 @@ public class MetaMerge
 		System.out.println(map.get("1@3/24/17@Fecal"));
 	}
 	
+	public static void writeMergedMetaTables() throws Exception
+	{
+		
+	}
+	
 	/*
 	 * Key is animalId@dateString@SampleSource
 	 */
