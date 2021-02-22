@@ -20,7 +20,66 @@ public class WriteTaxaPlusMeta
 		for( String level : levels)
 		{	
 			writeTaxaTablesForLevel(level);
+			addMetadata(level);
 		}
+	}
+	
+	private static void addMetadata(String level ) throws Exception
+	{
+		HashMap<String, MetadataParser> metaMap = MetadataParser.getMetaMap();
+		
+		File logNormalFile = getLogNormalFile(level);
+		
+		BufferedReader reader =new BufferedReader(new FileReader(logNormalFile));
+		
+		File metaFile = 
+				new File(
+						"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
+								level + "_beefSup2017_logNormPlusMeta.txt"	);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
+		
+		writer.write("sampleID\textentOfStress\tdateOfExperiment\texperiment\tsex\tcageID\tdiet");
+		
+		String [] topSplits = reader.readLine().split("\t");
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write("\n");
+		
+		for(String s= reader.readLine();s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			MetadataParser mp = metaMap.get(splits[0]);
+			
+			writer.write(splits[0] + "\t" + mp.getExtentOfStress() + "\t" + mp.getDateOfExperiment() + "\t" + 
+							mp.getExperiment() + "\t" + mp.getSex() + "\t" + mp.getCageID() + "\t" + 
+									mp.getDiet() );
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
+	private static File getBaseTaxaFile(String level) throws Exception
+	{
+		return new File(
+				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
+						level + "_beefSup2017.txt"	);
+		
+	}
+	
+	private static File getLogNormalFile(String level) throws Exception
+	{
+		return new File(
+				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
+						level + "_beefSup2017_logNorm.txt"	);
 	}
 	
 	public static void writeTaxaTablesForLevel(String level)  throws Exception
@@ -32,10 +91,7 @@ public class WriteTaxaPlusMeta
 				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\input\\" + 
 							level+  "_table.txt"));
 		
-		File outFile = new File(
-				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
-						level + "_beefSup2017.txt"	);
-		
+		File outFile = getBaseTaxaFile(level);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 			
 		String[] topSplits = reader.readLine().split("\t");
@@ -88,10 +144,7 @@ public class WriteTaxaPlusMeta
 		
 		OtuWrapper wrapper = new OtuWrapper(outFile);
 		
-		File outFileLogNorm = new File(
-				"C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT\\taxa_" + 
-						level + "_beefSup2017_logNorm.txt"	);
-		
+		File outFileLogNorm = getLogNormalFile(level);
 		wrapper.writeNormalizedLoggedDataToFile(outFileLogNorm);
 	}
 }
