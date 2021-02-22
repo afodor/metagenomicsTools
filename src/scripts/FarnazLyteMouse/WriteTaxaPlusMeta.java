@@ -39,7 +39,7 @@ public class WriteTaxaPlusMeta
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
-		writer.write("sampleID\textentOfStress\tdateOfExperiment\texperiment\tsex\tcageID\tdiet");
+		writer.write("sampleID\tsampleSource\textentOfStress\tdateOfExperiment\texperiment\tsex\tcageID\tdiet");
 		
 		String [] topSplits = reader.readLine().split("\t");
 		
@@ -54,7 +54,7 @@ public class WriteTaxaPlusMeta
 			
 			MetadataParser mp = metaMap.get(splits[0]);
 			
-			writer.write(splits[0] + "\t" + mp.getExtentOfStress() + "\t" + mp.getDateOfExperiment() + "\t" + 
+			writer.write(splits[0] + "\t" +  mp.getSampleSource() + "\t" +  mp.getExtentOfStress() + "\t" + mp.getDateOfExperiment() + "\t" + 
 							mp.getExperiment() + "\t" + mp.getSex() + "\t" + mp.getCageID() + "\t" + 
 									mp.getDiet() );
 			

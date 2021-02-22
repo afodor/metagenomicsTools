@@ -10,6 +10,7 @@ import utils.TabReader;
 public class MetadataParser
 {
 	private final String sampleID;
+	private final String sampleSource;
 	private final String extentOfStress;
 	private final String dateOfExperiment;
 	private final String experiment;
@@ -30,6 +31,11 @@ public class MetadataParser
 	public String getDateOfExperiment()
 	{
 		return dateOfExperiment;
+	}
+	
+	public String getSampleSource()
+	{
+		return sampleSource;
 	}
 
 	public String getExperiment()
@@ -93,6 +99,7 @@ public class MetadataParser
 	private MetadataParser(String s ) throws Exception
 	{
 		this.sampleID  = TabReader.getTokenAtIndex(s, 0);
+		this.sampleSource = TabReader.getTokenAtIndex(s, 1);
 		this.extentOfStress = TabReader.getTokenAtIndex(s, 2);
 		this.dateOfExperiment = TabReader.getTokenAtIndex(s, 4);
 		this.experiment = TabReader.getTokenAtIndex(s, 5);
