@@ -1,0 +1,25 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\LyteManuscriptInPieces\\MouseStressStudy_BeefSupplement2020-main\\AF_OUT")
+
+levels <- c(  "Phylum", "Class", "Order" , "Family", "Genus")
+
+for( taxa in levels ) 
+{
+	inFile <- paste0("taxa_",taxa, "_beefSup2017_logNormPlusMeta.txt")	
+	myT <- read.table(inFile, sep="\t", header=TRUE)
+	
+		
+	myTData <- myT[,9:ncol(myT)]	
+
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+	names(myMerge)[[1]] = "SampleID"
+	
+	write.table(myMerge, file=paste0("taxa_",taxa, "_beefSup2017_logNormPlusMetaPlusPCOA.txt"), sep="\t", row.names=FALSE)
+}
