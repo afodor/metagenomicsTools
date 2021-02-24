@@ -11,11 +11,11 @@ colCounts <- vector()
 
 for( i in 1:ncol(myTData) )
 {
-	colCounts[i] = sum(is.na(myTData[,i] )) / nrow(myT) 
+	colCounts[i] = sum(is.na(myTData[,i] ) | myTData[,i] == 0 ) / nrow(myT) 
 }
 
-# data must be 90% present
-myTData <- myTData[ , colCounts < 0.10]
+# data must be 75% present
+myTData <- myTData[ , colCounts < 0.25]
 
 rowCounts <- vector()
 
@@ -25,7 +25,7 @@ for( i in 1:ncol(myTData) )
 }
 
 myTData <- myTData[rowCounts < 0.05,]
-myT <- myT[ rowCounts < 0.05 ]
+myT <- myT[ rowCounts < 0.05 ,]
 
 for( i in 1:nrow(myTData)) 
 {
@@ -33,6 +33,16 @@ for( i in 1:nrow(myTData))
 	{
 		if(  is.na(myTData[i,j]) )
 			myTData[i,j] =0 
+	}
+}
+
+colMeans <- apply(myTData,2,mean)
+
+for( i in 1:nrow(myTData)) 
+{
+	for( j in 1:ncol(myTData))
+	{
+		myTData[i,j] = myTData[i,j] / colMeans[j]
 	}
 }
 
