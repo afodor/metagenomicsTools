@@ -1,0 +1,46 @@
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\LyteManuscriptInPieces")
+
+myT <- read.table("Beef Supplementation Data - Corrected values.txt", sep="\t", header=TRUE)
+
+myTData <- myT[,15:ncol(myT)]	
+
+colCounts <- vector()
+
+for( i in 1:ncol(myTData) )
+{
+	colCounts[i] = sum(is.na(myTData[,i] )) / nrow(myT) 
+}
+
+# data must be 90% present
+myTData <- myTData[ , colCounts < 0.10]
+
+rowCounts <- vector()
+
+for( i in 1:ncol(myTData) )
+{
+	rowCounts[i] = sum(is.na(myTData[i,] )) / ncol(myT) 
+}
+
+myTData <- myTData[rowCounts < 0.05,]
+myT <- myT[ rowCounts < 0.05 ]
+
+for( i in 1:nrow(myTData)) 
+{
+	for( j in 1:ncol(myTData))
+	{
+		if(  is.na(myTData[i,j]) )
+			myTData[i,j] =0 
+	}
+}
+
+write.table(myTData, file="dataOut.txt",sep="\t")
+
+myPCOA <- capscale(myTData~1)
+	
+myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+names(myMerge)[[1]] = "SampleID"
+	
+write.table(myMerge, file=paste0("metabolitesFullColOnlyPlusPCOA.txt"), sep="\t", row.names=FALSE)
