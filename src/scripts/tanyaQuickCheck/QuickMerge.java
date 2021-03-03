@@ -20,7 +20,7 @@ public class QuickMerge
 	
 	public static void main(String[] args) throws Exception
 	{
-		File preFile =  new File( "C:\\tanyaQuickRep\\pos_pre.txt");
+		File preFile =  new File( "C:\\tanyaQuickRep\\neg_pre.txt");
 		
 		HashMap<String, String> metaboliteLines =  getMetaboliteLines(preFile);
 		
@@ -34,7 +34,7 @@ public class QuickMerge
 			
 			wrapper.writeLoggedDataWithTaxaAsColumns(loggedFile);
 			
-			writeMergedFile(loggedFile, metaboliteLines, preFile, level, "pre");
+			writeMergedFile(loggedFile, metaboliteLines, preFile, level, "neg");
 		}
 		
 	}

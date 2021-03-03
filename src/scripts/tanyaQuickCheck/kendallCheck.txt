@@ -1,0 +1,14 @@
+
+metNames <- c("pre", "neg")
+
+taxaNames <-  c("phylum", "class", "order", "family", "species")
+setwd("C:\\tanyaQuickRep")
+
+for( met in metNames )
+for( taxa in taxaNames ) 
+{
+	fileName <- paste0( taxa,"_logged_", met, ".txt" )
+	
+	myT <- read.table(fileName, sep="\t", header=TRUE ) 
+
+}
