@@ -13,10 +13,10 @@ import utils.TabReader;
 
 public class QuickMerge
 {
-	public static String[] LEVELS = {"phylum"};
+	//public static String[] LEVELS = {"phylum"};
 	
 	
-	//public static String[] LEVELS = {"phylum", "class", "order", "family", "species"};
+	public static String[] LEVELS = {"phylum", "class", "order", "family", "species"};
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -70,7 +70,6 @@ public class QuickMerge
 			writer.write("\t" + topLineMetabolites[x]);
 		
 		writer.write("\n");
-		
 
 		int found =0;
 		for(String s = reader.readLine(); s != null; s= reader.readLine())
@@ -79,15 +78,29 @@ public class QuickMerge
 			
 			String metaboliteLine = metaboliteLines.get(splits[0]);
 			
-		
 			if( metaboliteLine == null)
 			{
-				System.out.println("Could not find " + splits[0]);
+			//	System.out.println("Could not find " + splits[0]);
+				
 			}
 			else
 			{
-				System.out.println("Found" + splits[0]);
+				//System.out.println("Found" + splits[0]);
 				found++;
+				
+				writer.write(splits[0]);
+				
+				String[] taxaSplits = s.split("\t");
+				
+				for( int x=1; x < taxaSplits.length; x++)
+					writer.write("\t" + splits[x]);
+				
+				String[] metSplits = metaboliteLine.split("\t");
+				
+				for( int x=1; x < metSplits.length; x++)
+					writer.write("\t" +  metSplits[x]);
+					
+				writer.write("\n");
 			}
 		}
 		
