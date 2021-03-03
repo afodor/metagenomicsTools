@@ -14,10 +14,8 @@ public class QuickMerge
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> map = getMetaMap();
-		
-		for(String s : map.keySet())
-			System.out.println(s + " " + map.get(s));
+	
+		getMetaboliteLines( new File( "C:\\tanyaQuickRep\\pos_pre.txt"));
 		
 		/*
 		for(String level : LEVELS)
@@ -30,6 +28,50 @@ public class QuickMerge
 		*/
 	}
 	
+	
+	/*
+	 * Key is going to be the microbiome id; 
+	 * the values is going to be the entire line of the metabolite file
+	 */
+	private static HashMap<String, String> getMetaboliteLines(File file) throws Exception
+	{
+		HashMap<String, String> idMap = getMetaMap();
+		
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		reader.readLine();
+		
+		int numFound =0;
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			String key = splits[0];
+			
+			String microbeID = idMap.get(key);
+			
+			if( microbeID == null) 
+			{
+				System.out.println("Could not find " +key );
+			}
+			else
+			{
+				System.out.println("Found " + microbeID);
+				numFound++;
+			}
+				
+		}
+		
+		System.out.println("Found " + numFound);
+		reader.close();
+		
+		return map;
+		
+	}
 	
 	private static HashMap<String, String> getMetaMap() throws Exception
 	{
