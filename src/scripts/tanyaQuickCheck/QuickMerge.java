@@ -16,14 +16,19 @@ public class QuickMerge
 	//public static String[] LEVELS = {"phylum"};
 	
 	
-	public static String[] LEVELS = {"phylum", "class", "order", "family", "species"};
+	public static String[] LEVELS = {"phylum", "class", "order", "family", "genus",  "species"};
 	
 	public static void main(String[] args) throws Exception
 	{
-		File preFile =  new File( "C:\\tanyaQuickRep\\neg_pre.txt");
+		writeMetFilesMerged("neg");
+		writeMetFilesMerged("pos");
+	}
+	
+	public static void writeMetFilesMerged(String prePostString) throws Exception
+	{
+		File preFile =  new File( "C:\\tanyaQuickRep\\" + prePostString + "_pre.txt");
 		
 		HashMap<String, String> metaboliteLines =  getMetaboliteLines(preFile);
-		
 		
 		for(String level : LEVELS)
 		{
@@ -34,7 +39,7 @@ public class QuickMerge
 			
 			wrapper.writeLoggedDataWithTaxaAsColumns(loggedFile);
 			
-			writeMergedFile(loggedFile, metaboliteLines, preFile, level, "neg");
+			writeMergedFile(loggedFile, metaboliteLines, preFile, level, prePostString);
 		}
 		
 	}
