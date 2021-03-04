@@ -49,7 +49,7 @@ for( taxa in taxaLevels)
 	{
 		bugs <- myT[,i]
 		
-		if( mean(bugs) > 4) 
+		if( mean(bugs) > 2) 
 		{
 			for( j in firstMetCol:ncol(myT) ) 
 			{
