@@ -55,7 +55,7 @@ for( taxa in taxaLevels)
 			{
 				#if( mean( myT[,j] > 0 ) )
 				{
-					pValues[index] = anova(lm(myT[,i] ~ myT[,j]))$"Pr(>F)"[1]
+					pValues[index] = coef(summary(lm(myT[,i] ~ myT[,j])))[2,4]
 					taxaNames[index] = names(myT)[i]
 					metNames[index] = names(myT)[j]
 				
