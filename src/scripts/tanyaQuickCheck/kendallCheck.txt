@@ -80,7 +80,7 @@ for( taxa in taxaLevels)
 			firstIndex <- which(names(myT)==dFrame$taxaNames[z])
 			secondIndex <- which(names(myT)==dFrame$metNames[z])
 			
-			mainText <- paste( "p=", format( dFrame$pValues[z],length=3), " adj p = ", format(dFrame$adjustedP[z],length=3) )
+			mainText <- paste( "p=", format( dFrame$pValues[z],length=3), "\nadj p = ", format(dFrame$adjustedP[z],length=3) )
 			
 			plot( myT[,firstIndex], myT[,secondIndex], main=mainText, xlab=dFrame$taxaNames[z], ylab=dFrame$metNames[z] )
 		}
