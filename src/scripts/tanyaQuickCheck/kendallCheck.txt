@@ -1,11 +1,10 @@
 library("vegan")
 library("Kendall")
 
-#metNames <- c("pos", "neg")
-#taxaLevels <-  c("phylum", "class", "order", "family", "genus", "species")
+metNames <- c("pos", "neg")
+taxaLevels <-  c("phylum", "class", "order", "family", "genus")
 
-metNames <- c("pos")
-taxaLevels <-  c("genus")
+pdf("histograms.pdf")
 
 setwd("C:\\tanyaQuickRep")
 
@@ -16,9 +15,11 @@ for( taxa in taxaLevels)
 	
 	myT <- read.table(fileName, sep="\t", header=TRUE ) 
 
-	# todo: switch if negative
 	firstMetCol <- which(names(myT) == "X85.0284_52.9" ) 
 	
+	if( met == "neg" ) 
+		firstMetCol <- which(names(myT) == "X85.0051_129.5" ) 
+		
 	#hist( apply(myT[,firstMetCol:ncol(myT)], 2, mean), breaks=20 )
 	
 	dataT <- myT[,firstMetCol:ncol(myT)]
@@ -52,7 +53,7 @@ for( taxa in taxaLevels)
 		{
 			for( j in firstMetCol:ncol(myT) ) 
 			{
-				if( mean( myT[,j] > 0 ) )
+				#if( mean( myT[,j] > 0 ) )
 				{
 					pValues[index] = Kendall(rnorm(123), rnorm(123))$sl[1]
 					taxaNames[index] = names(myT)[i]
@@ -65,4 +66,11 @@ for( taxa in taxaLevels)
 	}
 	
 	hist(pValues, main=paste(met,taxa))	
+	
+	dFrame <- data.frame( taxaNames, metNames, pValues)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+	write.table(dFrame, file=paste("pValues_", met,"_",  taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
 }
+
+dev.off()
