@@ -1,5 +1,6 @@
+library("vegan")
 
-metNames <- c("pre", "neg")
+metNames <- c("pos", "neg")
 
 taxaNames <-  c("phylum", "class", "order", "family", "species")
 setwd("C:\\tanyaQuickRep")
@@ -11,4 +12,28 @@ for( taxa in taxaNames )
 	
 	myT <- read.table(fileName, sep="\t", header=TRUE ) 
 
+	# todo: switch if negative
+	firstMetCol <- which(names[myT] == "X85.0284_52.9" ) 
+	
+	hist( apply(myT[,firstMetCol:ncol(myT)], 2, mean), breaks=20 )
+	
+	dataT <- myT[,firstMetCol:ncol(myT)]
+	myPCOAMet <- capscale(dataT~1)
+
+	plot( myPCOAMet$CA$u[,1], myPCOAMet$CA$u[,2])
+	
+	dataT <- myT[,2:(firstMetCol-1)]
+	myPCOATaxa <- capscale(dataT~1)
+
+	plot( myPCOATaxa$CA$u[,1], myPCOATaxa$CA$u[,2])
+	
+	par(mfrow=c(4,4))
+		
+	for ( i in 1:4) 
+	for ( j in 1:4) 
+	{
+		
+		plot( myPCOATaxa$CA$u[,i], myPCOAMet$CA$u[,j])
+		
+	}
 }
