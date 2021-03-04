@@ -55,7 +55,7 @@ for( taxa in taxaLevels)
 			{
 				#if( mean( myT[,j] > 0 ) )
 				{
-					pValues[index] = Kendall(rnorm(123), rnorm(123))$sl[1]
+					pValues[index] = Kendall(myT[,i], myT[,j])$sl[1]
 					taxaNames[index] = names(myT)[i]
 					metNames[index] = names(myT)[j]
 				
