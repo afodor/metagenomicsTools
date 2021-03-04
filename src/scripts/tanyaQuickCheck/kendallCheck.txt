@@ -1,39 +1,68 @@
 library("vegan")
+library("Kendall")
 
-metNames <- c("pos", "neg")
+#metNames <- c("pos", "neg")
+#taxaLevels <-  c("phylum", "class", "order", "family", "genus", "species")
 
-taxaNames <-  c("phylum", "class", "order", "family", "species")
+metNames <- c("pos")
+taxaLevels <-  c("genus")
+
 setwd("C:\\tanyaQuickRep")
 
 for( met in metNames )
-for( taxa in taxaNames ) 
+for( taxa in taxaLevels) 
 {
 	fileName <- paste0( taxa,"_logged_", met, ".txt" )
 	
 	myT <- read.table(fileName, sep="\t", header=TRUE ) 
 
 	# todo: switch if negative
-	firstMetCol <- which(names[myT] == "X85.0284_52.9" ) 
+	firstMetCol <- which(names(myT) == "X85.0284_52.9" ) 
 	
-	hist( apply(myT[,firstMetCol:ncol(myT)], 2, mean), breaks=20 )
+	#hist( apply(myT[,firstMetCol:ncol(myT)], 2, mean), breaks=20 )
 	
 	dataT <- myT[,firstMetCol:ncol(myT)]
 	myPCOAMet <- capscale(dataT~1)
 
-	plot( myPCOAMet$CA$u[,1], myPCOAMet$CA$u[,2])
+	#plot( myPCOAMet$CA$u[,1], myPCOAMet$CA$u[,2])
 	
 	dataT <- myT[,2:(firstMetCol-1)]
 	myPCOATaxa <- capscale(dataT~1)
 
-	plot( myPCOATaxa$CA$u[,1], myPCOATaxa$CA$u[,2])
+	#plot( myPCOATaxa$CA$u[,1], myPCOATaxa$CA$u[,2])
 	
-	par(mfrow=c(4,4))
+	#par(mfrow=c(4,4))
 		
-	for ( i in 1:4) 
-	for ( j in 1:4) 
+	#for ( i in 1:4) 
+	#for ( j in 1:4) 
+	#{	
+#		plot( myPCOATaxa$CA$u[,i], myPCOAMet$CA$u[,j],xlab=paste("taxa",i), ylab=paste("met",j))	
+#	}
+
+	pValues <- vector()
+	taxaNames <- vector()
+	metNames <- vector()
+
+	index <- 1
+	for( i in 2:(firstMetCol-1) )
 	{
+		bugs <- myT[,i]
 		
-		plot( myPCOATaxa$CA$u[,i], myPCOAMet$CA$u[,j])
-		
+		if( mean(bugs) > 4) 
+		{
+			for( j in firstMetCol:ncol(myT) ) 
+			{
+				if( mean( myT[,j] > 0 ) )
+				{
+					pValues[index] = Kendall(rnorm(123), rnorm(123))$sl[1]
+					taxaNames[index] = names(myT)[i]
+					metNames[index] = names(myT)[j]
+				
+					index <- index + 1	
+				}
+			}	
+		}
 	}
+	
+	hist(pValues, main=paste(met,taxa))	
 }
