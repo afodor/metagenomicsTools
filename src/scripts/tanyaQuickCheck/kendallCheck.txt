@@ -5,6 +5,7 @@ metNames <- c("pos", "neg")
 taxaLevels <-  c("phylum", "class", "order", "family", "genus")
 
 pdf("histograms.pdf")
+par(mfrow=c(2,2))
 
 setwd("C:\\tanyaQuickRep")
 
@@ -71,6 +72,19 @@ for( taxa in taxaLevels)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 	write.table(dFrame, file=paste("pValues_", met,"_",  taxa, ".txt",sep=""), sep="\t",row.names=FALSE)
+	
+	for( z in 1:nrow(dFrame))
+	{
+		if( dFrame$adjustedP[z] < .1 )
+		{
+			firstIndex <- which(names(myT)==dFrame$taxaNames[z])
+			secondIndex <- which(names(myT)==dFrame$metNames[z])
+			
+			mainText <- paste( "p=", format( dFrame$pValues[z],length=3), " adj p = ", format(dFrame$adjustedP[z],length=3) )
+			
+			plot( myT[,firstIndex], myT[,secondIndex], main=mainText, xlab=dFrame$taxaNames[z], ylab=dFrame$metNames[z] )
+		}
+	}
 }
 
 dev.off()
