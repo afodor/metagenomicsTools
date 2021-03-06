@@ -1,0 +1,19 @@
+rm(list=ls())
+
+library("vegan")
+
+setwd("C:\\jamesComparison")
+
+myT <- read.table("Metaphlan2_Vanderbilt_Forward_Only_phylum_Normalized.txt", sep="\t", header=TRUE)
+
+myTData <- myT[,6:ncol(myT)]
+
+colSums <- apply(myTData,2,mean)
+myTData <- myTData[,colSums > 2]
+	
+myPCOA <- capscale(myTData~1,distance="bray")
+	
+myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+names(myMerge)[[1]] = "SampleID"
+	
+write.table(myMerge, file=paste0("phylum_pivotedLogNormPlusMetaMDS.txt"), sep="\t", row.names=FALSE)
