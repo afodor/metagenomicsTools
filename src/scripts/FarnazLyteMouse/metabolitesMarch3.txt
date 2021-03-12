@@ -22,7 +22,6 @@ par(mfrow=c(2,2))
 myTData <- myTData[ , colCounts < 0.25]
 
 pValues <- vector()
-names <- vector()
 metNames <- vector()
 index <- 1
 
@@ -33,9 +32,14 @@ for( i in 1:ncol(myTData) )
 	someText <- paste( names(myTData)[ i] , "\np=", format( pValues[index] , digits=3 )  )
 	
 	boxplot(myTData[,i] ~ myT[,1] ,main=someText )
-	names[index] <- names(myTData)[ i] 
+	metNames[index] <- names(myTData)[ i] 
 	index <- index + 1
 }
 
+dFrame <- data.frame( metNames, pValues)
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+write.table(dFrame, file=paste("pValuesUnivariate.txt",sep=""), sep="\t",row.names=FALSE)
+		
 dev.off()
 
