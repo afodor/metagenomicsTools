@@ -1,0 +1,33 @@
+rm(list=ls())
+
+setwd("C:\\LyteManuscriptInPieces\\March3_Metabolites")
+
+myT <- read.table("Beef Supplementation Data Compilation for UNCC_March 3 2021.txt", header=TRUE, sep="\t")
+
+metCols <- 13:72
+
+myTData <- myT[,metCols]	
+
+colCounts <- vector()
+
+for( i in 1:ncol(myTData) )
+{
+	colCounts[i] = sum(is.na(myTData[,i] ) | myTData[,i] == 0 ) / nrow(myT) 
+}
+
+# data must be 75% present
+myTData <- myTData[ , colCounts < 0.25]
+
+pValues <- vector()
+names <- vector()
+metNames <- vector()
+index <- 1
+
+for( i in 1:ncol(myTData) ) 
+{
+	pValues[index] <-  t.test( myTData[,i] ~ myT[,1] )$p.value
+	names[index] <- names(myT)[ i] 
+	index <- index + 1
+}
+
+
