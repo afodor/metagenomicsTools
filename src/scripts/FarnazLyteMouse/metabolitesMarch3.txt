@@ -15,6 +15,9 @@ for( i in 1:ncol(myTData) )
 	colCounts[i] = sum(is.na(myTData[,i] ) | myTData[,i] == 0 ) / nrow(myT) 
 }
 
+pdf("boxplots.pdf")
+par(mfrow=c(2,2))
+
 # data must be 75% present
 myTData <- myTData[ , colCounts < 0.25]
 
@@ -26,8 +29,13 @@ index <- 1
 for( i in 1:ncol(myTData) ) 
 {
 	pValues[index] <-  t.test( myTData[,i] ~ myT[,1] )$p.value
-	names[index] <- names(myT)[ i] 
+	
+	someText <- paste( names(myTData)[ i] , "\np=", format( pValues[index] , digits=3 )  )
+	
+	boxplot(myTData[,i] ~ myT[,1] ,main=someText )
+	names[index] <- names(myTData)[ i] 
 	index <- index + 1
 }
 
+dev.off()
 
