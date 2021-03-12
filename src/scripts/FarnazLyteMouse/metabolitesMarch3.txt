@@ -15,8 +15,6 @@ for( i in 1:ncol(myTData) )
 	colCounts[i] = sum(is.na(myTData[,i] ) | myTData[,i] == 0 ) / nrow(myT) 
 }
 
-pdf("boxplots.pdf")
-par(mfrow=c(2,2))
 
 # data must be 75% present
 myTData <- myTData[ , colCounts < 0.25]
@@ -29,9 +27,6 @@ for( i in 1:ncol(myTData) )
 {
 	pValues[index] <-  t.test( myTData[,i] ~ myT[,1] )$p.value
 	
-	someText <- paste( names(myTData)[ i] , "\np=", format( pValues[index] , digits=3 )  )
-	
-	boxplot(myTData[,i] ~ myT[,1] ,main=someText )
 	metNames[index] <- names(myTData)[ i] 
 	index <- index + 1
 }
@@ -40,6 +35,20 @@ dFrame <- data.frame( metNames, pValues)
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
 write.table(dFrame, file=paste("pValuesUnivariate.txt",sep=""), sep="\t",row.names=FALSE)
+
+pdf("boxplots.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame))
+{
+	originalIndex <- which( names(myTData) == dFrame$metNames[i] ) 
+	
+	
+	someText <- paste( names(myTData)[ i] , "\np=", format( dFrame$pValues[i] , digits=3 ), " adj p=",
+					 format(dFrame$adjustedP[i], digits=3) )
+	
+	boxplot(myTData[,originalIndex] ~ myT[,1] ,main=someText )
+	
+}
 		
 dev.off()
-
