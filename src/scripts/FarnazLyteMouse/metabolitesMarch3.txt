@@ -56,11 +56,15 @@ for( i in 1:nrow(dFrame))
 	v3 = myTData[ myT[,1] == "3/24/2017" & myT[,7] == "ISU Chow" ,originalIndex]
 	v4 = myTData[ myT[,1] == "6/26/2017" & myT[,7] == "ISU Chow" ,originalIndex]
 	
+	someText <- paste( names(myTData)[ i] , "\np cohort=", format( dFrame$pValuesCohort[i] , digits=3 ), " adj p cohort=",
+					 format(dFrame$adjustedPCohort[i], digits=3) , 
+					 "\np diet=", format( dFrame$pValuesDiet[i] , digits=3 ), " adj p diet=",
+					 format(dFrame$adjustedPDiet[i], digits=3),
+					 "\np interaction=", format( dFrame$pValuesInteraction[i] , digits=3 ), " adj p interaction=",
+					 format(dFrame$adjustedPInteraction[i], digits=3))
 	
-	someText <- paste( names(myTData)[ i] , "\np=", format( dFrame$pValues[i] , digits=3 ), " adj p=",
-					 format(dFrame$adjustedP[i], digits=3) )
-	
-	boxplot(myTData[,originalIndex] ~ myT[,1] ,main=someText )
+	boxplot(v1,v2,v3,v4,names=c("Male_beef", "Female_beef", "Male_chow", "Female_chow"),las=2,
+	main=someText)
 	
 }
 		
