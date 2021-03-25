@@ -65,7 +65,6 @@ for( i in 1:nrow(dFrame))
 	
 	boxplot(v1,v2,v3,v4,names=c("Male_beef", "Female_beef", "Male_chow", "Female_chow"),las=2,
 	main=someText,cex.main=.8)
-	
 }
 		
 dev.off()
