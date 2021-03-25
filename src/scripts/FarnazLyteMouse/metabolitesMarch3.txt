@@ -15,7 +15,6 @@ for( i in 1:ncol(myTData) )
 	colCounts[i] = sum(is.na(myTData[,i] ) | myTData[,i] == 0 ) / nrow(myT) 
 }
 
-
 # data must be 75% present
 myTData <- myTData[ , colCounts < 0.25]
 
