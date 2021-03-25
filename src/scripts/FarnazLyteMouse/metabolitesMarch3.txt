@@ -19,21 +19,30 @@ for( i in 1:ncol(myTData) )
 # data must be 75% present
 myTData <- myTData[ , colCounts < 0.25]
 
-pValues <- vector()
+pValuesCohort <- vector()
+pValuesDiet <- vector()
+pValuesInteraction <- vector()
+
 metNames <- vector()
 index <- 1
 
 for( i in 1:ncol(myTData) ) 
 {
-	pValues[index] <-  t.test( myTData[,i] ~ myT[,1] )$p.value
+	myLm <- lm(myTData[,i] ~ myT[,1] *myT[,7]   )
+	myAnova <- anova(myLm)
+	pValuesCohort[index] <-  myAnova$"Pr(>F)"[1]
+	pValuesDiet[index]  <- myAnova$"Pr(>F)"[2]
+	pValuesInteraction[index]  <- myAnova$"Pr(>F)"[3]
 	
 	metNames[index] <- names(myTData)[ i] 
 	index <- index + 1
 }
 
-dFrame <- data.frame( metNames, pValues)
-dFrame <- dFrame [order(dFrame$pValues),]
-dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+dFrame <- data.frame( metNames, pValuesCohort ,pValuesDiet ,pValuesInteraction )
+dFrame <- dFrame [order(dFrame$pValuesCohort ),]
+dFrame$adjustedPCohort <- p.adjust( dFrame$pValuesCohort , method = "BH" )	
+dFrame$adjustedPDiet <- p.adjust( dFrame$pValuesDiet , method = "BH" )	
+dFrame$adjustedPInteraction <- p.adjust( dFrame$pValuesInteraction , method = "BH" )	
 write.table(dFrame, file=paste("pValuesUnivariate.txt",sep=""), sep="\t",row.names=FALSE)
 
 pdf("boxplots.pdf")
@@ -42,7 +51,6 @@ par(mfrow=c(2,2))
 for( i in 1:nrow(dFrame))
 {
 	originalIndex <- which( names(myTData) == dFrame$metNames[i] ) 
-	
 	
 	someText <- paste( names(myTData)[ i] , "\np=", format( dFrame$pValues[i] , digits=3 ), " adj p=",
 					 format(dFrame$adjustedP[i], digits=3) )
