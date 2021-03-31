@@ -1,0 +1,39 @@
+rm(list=ls())
+
+setwd("C:\\LyteManuscriptInPieces\\March3_Metabolites")
+
+myT <-read.table("combined.txt",header=TRUE,sep="\t")
+	
+behaviorCols <- 8:34
+metaboliteCols <- 47:106
+
+myTMetData <- myT[,metaboliteCols]	
+
+colCounts <- vector()
+
+for( i in 1:ncol(myTMetData ) )
+{
+	colCounts[i] = sum(is.na(myTMetData[,i] ) | myTMetData[,i] == 0 ) / nrow(myT) 
+}
+
+# data must be 75% present
+myTMetData <- myTMetData[ , colCounts < 0.25]
+	
+behaviorNames <- vector()
+metaboliteNames <- vector()
+index <-1
+pValues <- vector()
+	
+for( b in behaviorCols )
+{
+	bData <- myT[,b]
+
+	for(m in 1:ncol(myTMetData )) 
+	{
+		mData <- myTMetData[,m]
+		pValues[index] <- anova( lm( mData ~ bData))$"Pr(>F)"[1]
+		metaboliteNames [index] <- names(myTMetData)[m]
+		behaviorNames[index] <- names(myT)[b]				
+		index <- index + 1
+	}
+}
