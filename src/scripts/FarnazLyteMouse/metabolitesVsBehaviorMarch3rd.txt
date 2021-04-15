@@ -18,6 +18,9 @@ for( i in 1:ncol(myTMetData ) )
 
 # data must be 75% present
 myTMetData <- myTMetData[ , colCounts < 0.25]
+
+#only "HIAA"
+myTMetData <- myTMetData[ , grepl("HIAA", names(myTMetData), fixed=TRUE)]
 	
 behaviorNames <- vector()
 metaboliteNames <- vector()
