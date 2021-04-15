@@ -4,7 +4,7 @@ setwd("C:\\LyteManuscriptInPieces\\March3_Metabolites")
 
 myT <-read.table("combined.txt",header=TRUE,sep="\t")
 	
-behaviorCols <- 8:34
+behaviorCols <- 9:34
 metaboliteCols <- 47:106
 
 myTMetData <- myT[,metaboliteCols]	
@@ -32,8 +32,29 @@ for( b in behaviorCols )
 	{
 		mData <- myTMetData[,m]
 		pValues[index] <- anova( lm( mData ~ bData))$"Pr(>F)"[1]
-		metaboliteNames [index] <- names(myTMetData)[m]
+		metaboliteNames[index] <- names(myTMetData)[m]
 		behaviorNames[index] <- names(myT)[b]				
 		index <- index + 1
 	}
 }
+
+dFrame <- data.frame(behaviorNames,metaboliteNames,pValues )
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )	
+write.table(dFrame, file="behaviorsVsPValues.txt", sep="\t",row.names=FALSE)
+
+pdf("scatterplots_behaviorsVsMetabolites.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame) ) 
+{
+	mIndex <- which(names(myT) == dFrame$metaboliteNames[i] ) 
+	bIndex <- which(names(myT) == dFrame$behaviorNames[i] ) 
+	mainText = paste( dFrame$metaboliteNames[i] , "\nvs",dFrame$behaviorNames[i] , "\nadj. p=", format(dFrame$adjustedP[i],digits=3)  )
+			plot( myT[, mIndex], myT[, bIndex], main=mainText, xlab= dFrame$metaboliteNames[i],ylab=dFrame$behaviorNames[i])
+			abline(lm(myT[, bIndex]~myT[, mIndex]))
+}
+	
+dev.off()
+
+
