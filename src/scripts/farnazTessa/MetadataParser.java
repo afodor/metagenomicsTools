@@ -3,6 +3,7 @@ package scripts.farnazTessa;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -20,7 +21,15 @@ public class MetadataParser
 		HashMap<String, MetadataParser> map = getMetaMap();
 		
 		for(String s : map.keySet())
-			System.out.println( s + " " +  map.get(s).date);
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yy");
+			
+			String date = map.get(s).date;
+			
+			if( ! date.equals("NA"))
+			System.out.println( s + " " + date + " "+ sdf.parse(date)); 
+		}
+			
 	}
 	
 	private MetadataParser(String s) throws Exception
