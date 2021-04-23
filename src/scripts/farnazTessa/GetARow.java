@@ -5,7 +5,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class GetARow
@@ -18,7 +21,10 @@ public class GetARow
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\HCT_Probiotic2020-main\\AF\\AM42_10AC.txt")));
 		
-		writer.write("sample\tfraction\n");
+		HashMap<String, MetadataParser> map = MetadataParser.getMetaMap();
+		
+		
+		writer.write("sample\tfraction\tdate\n");
 		
 		String[] topLine =reader.readLine().split("\t");
 		
@@ -32,7 +38,14 @@ public class GetARow
 			if( splits[0].indexOf("Ruminococcus sp. AM42-10AC") != -1)
 				for( int x=1; x < splits.length; x++)
 				{
-					writer.write( sampleNames.get(x-1) + "\t" + splits[x] + "\n"  );
+					String timeString = "NA";
+					
+					MetadataParser mp = map.get(sampleNames.get(x-1));
+					
+					if( mp != null)
+						timeString = "" + mp.getDate();
+					
+					writer.write( sampleNames.get(x-1) + "\t" + splits[x] + "\t" + timeString  + "\n" );
 				}
 		}
 		
