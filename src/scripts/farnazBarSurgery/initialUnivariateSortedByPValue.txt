@@ -53,20 +53,11 @@ for( timepoint in timepoints )
 				if( ! is.numeric(myT[,testCol]))
 				{
 					aLm <- lm( myT[,dataCol] ~ myT[,testCol] )
-					pValues[index] <- anova(aLm)$"Pr(>F)"[1]	
-					
-					plot(  myT[,dataCol] ~ myT[,testCol] , main=paste(names(myT)[testCol] , 
-							names(myT)[dataCol],"\np=", format(pValues[index],length=3)), ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
+					pValues[index] <- anova(aLm)$"Pr(>F)"[1]		
 				}
 				else
 				{
-					 pValues[index]  = Kendall( myT[,dataCol] , myT[,testCol] )$sl[1]
-					
-				
-					plot(  myT[,testCol] ~ myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
-							 names(myT)[dataCol],"\np=", format(pValues[index],length=3)),
-									ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col=surgeryColors)
-					
+					 pValues[index]  = Kendall( myT[,dataCol] , myT[,testCol] )$sl[1]	
 				}
 				
 				taxaName[index] <- names(myT)[dataCol]
