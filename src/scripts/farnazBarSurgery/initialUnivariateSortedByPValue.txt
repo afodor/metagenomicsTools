@@ -81,8 +81,8 @@ for( timepoint in timepoints )
 		dataCol = which(names(myT) == dFrame$taxaName[i])
 		
 		mainText = paste(names(myT)[testCol] , 
-				names(myT)[dataCol],"\np=", format(dFrame$pValues[i],length=3),
-				"adj. p=",  format(dFrame$adjustedP[i],length=3))
+				names(myT)[dataCol],"\np=", format(dFrame$pValues[i],digits=3),
+				"adj. p=",  format(dFrame$adjustedP[i],digits=3))
 		
 		if( ! is.numeric(myT[,testCol]))
 		{
