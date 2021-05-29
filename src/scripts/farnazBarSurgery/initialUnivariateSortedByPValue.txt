@@ -80,16 +80,20 @@ for( timepoint in timepoints )
 		testCol =  which(names(myT) == dFrame$testName[i])
 		dataCol = which(names(myT) == dFrame$taxaName[i])
 		
+		mainText = paste(names(myT)[testCol] , 
+				names(myT)[dataCol],"\np=", format(dFrame$pValues[i],length=3),
+				"adj. p=",  format(dFrame$adjustedP[i],length=3))
+		
 		if( ! is.numeric(myT[,testCol]))
 		{
-			plot(  myT[,dataCol] ~ myT[,testCol] , main=paste(names(myT)[testCol] , 
-					names(myT)[dataCol],"\np=", format(dFrame$pValues[i],length=3)), 
+		
+			plot(  myT[,dataCol] ~ myT[,testCol] , main=mainText,
 						ylab=names(myT)[testCol], xlab=names(myT)[dataCol])
 		}
 		else
 		{
-			plot(  myT[,testCol] ~ myT[,dataCol] , main=paste(names(myT)[testCol] , "\n",
-					names(myT)[dataCol],"\np=", format(dFrame$pValues[i],length=3)),
+		
+			plot(  myT[,testCol] ~ myT[,dataCol] , main=mainText,
 					ylab=names(myT)[testCol], xlab=names(myT)[dataCol], col=surgeryColors)
 		}			
 	}
