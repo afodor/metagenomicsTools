@@ -1,0 +1,25 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+library("Kendall")
+
+taxa <- "phylum"
+
+timepoint <- 0
+	
+myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
+	
+myT <- myT[ myT$timepoint == timepoint, ]
+
+myT <- myT[ ! is.na( myT$typeOfSurgery ),   ]
+myT <- myT[ ! is.na( myT$percentChangeBLTwelveWeight),]
+
+meanSG <- mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] )
+sdSG <- sd(myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"])
+length( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"]) 
+
+meanGB <- mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
+sdGB <- sd( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
+length(  myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
+
+wilcox.test( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] ,myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"]  ) 
