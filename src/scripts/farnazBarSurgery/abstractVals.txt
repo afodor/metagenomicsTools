@@ -5,7 +5,7 @@ library("Kendall")
 
 taxa <- "phylum"
 
-timepoint <- 0
+timepoint <- 1
 	
 myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
 	
@@ -14,12 +14,28 @@ myT <- myT[ myT$timepoint == timepoint, ]
 myT <- myT[ ! is.na( myT$typeOfSurgery ),   ]
 myT <- myT[ ! is.na( myT$percentChangeBLTwelveWeight),]
 
-meanSG <- mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] )
-sdSG <- sd(myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"])
+mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] )
+sd(myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"])
 length( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"]) 
 
-meanGB <- mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
-sdGB <- sd( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
+mean( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
+sd( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
 length(  myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"] )
 
 wilcox.test( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] ,myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"]  ) 
+
+boxplot( myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="SleeveGastrectomy"] ,myT$percentChangeBLTwelveWeight[ myT$typeOfSurgery =="GastricBypass"]  ) 
+
+wilcox.test( myT$Proteobacteria[ myT$typeOfSurgery =="SleeveGastrectomy"] ,myT$Proteobacteria[ myT$typeOfSurgery =="GastricBypass"]  ) 
+
+boxplot( myT$Proteobacteria[ myT$typeOfSurgery =="SleeveGastrectomy"] ,myT$Proteobacteria[ myT$typeOfSurgery =="GastricBypass"]  ) 
+
+mean(myT$Proteobacteria[ myT$typeOfSurgery =="SleeveGastrectomy"])
+mean(myT$Proteobacteria[ myT$typeOfSurgery =="GastricBypass"]  )
+
+Kendall(myT$Proteobacteria,  myT$percentChangeOneSixWeight)
+cor(myT$Proteobacteria,  myT$percentChangeOneSixWeight,method="spear")
+
+Kendall(myT$Proteobacteria,  myT$percentChangeOneTwelveWeight)
+cor(myT$Proteobacteria,  myT$percentChangeOneTwelveWeight,method="spear")
+
