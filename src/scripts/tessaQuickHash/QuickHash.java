@@ -95,6 +95,7 @@ public class QuickHash
 			else
 			{
 				String nextToken = sToken.nextToken();
+				nextToken = nextToken.toLowerCase();
 				
 				if( nextToken.equals("break"))
 				{
