@@ -12,7 +12,7 @@ import java.util.List;
 
 import parsers.FastaSequence;
 
-public class QuickRT
+public class Quick_454_Parse
 {
 	public static final String PRIMER_TO_TRIM = "GCCTCCCTCGCGCCATCAG";
 	
