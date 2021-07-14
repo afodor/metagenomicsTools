@@ -14,14 +14,14 @@ import parsers.FastaSequence;
 
 public class QuickRT
 {
-	public static final String PRIMER_TO_TRIM = "GCCTCCCTCGCGCCATC";
+	public static final String PRIMER_TO_TRIM = "GCCTCCCTCGCGCCATCAG";
 	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, String> primerMap = getPrimerToSampleMap();
 		
 		System.out.println(primerMap.keySet());
-		
+	
 		List<FastaSequence> list = FastaSequence.readFastaFile(new File("C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\uhnto.1tca454rea.fna"));
 		
 		int numMatches =0;
