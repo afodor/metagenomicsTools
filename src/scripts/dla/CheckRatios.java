@@ -12,9 +12,16 @@ public class CheckRatios
 
 		//WIAB_2 is UNC donor
 		//WIAB_5 is UNC POST
-		
 		HashSet<String> set = getRatiosOverCutoff(5, "WIAB_2", "WIAB_5");
+		
+		//WIAB_VBD is vanderbilt donor
+		//WIAB_10 is POST
+		HashSet<String> set2 = getRatiosOverCutoff(5, "WIAB_VBD", "WIAB_10");
+		
+		set.retainAll(set2);
 		System.out.println(set);
+		System.out.println(set.size());
+		
 	}
 
 	public static HashSet<String> getRatiosOverCutoff( double cutoff , String colName1, String colName2) 
@@ -40,6 +47,7 @@ public class CheckRatios
 				set.add(splits[0]);
 		}
 		
+		reader.close();
 		return set;
 	}
 	
