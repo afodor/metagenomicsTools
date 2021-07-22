@@ -71,6 +71,9 @@ public class CheckRatios
 			
 			if( val2 > 0 && val1/val2 >= cutoff)
 				set.add(splits[0]);
+			
+			if( val1 > 0 && val2/val1 >= cutoff)
+				set.add(splits[0]);
 		}
 		
 		reader.close();
