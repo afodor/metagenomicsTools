@@ -1,8 +1,10 @@
 package scripts.dla;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashSet;
 
 public class CheckRatios 
@@ -22,6 +24,30 @@ public class CheckRatios
 		System.out.println(set);
 		System.out.println(set.size());
 		
+		writeMarked(set);
+	}
+	
+	private static void writeMarked(HashSet<String> set ) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				"C:\\DLA_Analyses2021-main\\input\\hum"
+				+ "anN2_pathabundance_relab.tsv"	)));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"C:\\DLA_Analyses2021-main\\af_out\\anN2_pathabundance_relab.tsv")));
+		
+		writer.write(reader.readLine() + "\tmarked\n");
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			writer.write(s + "\t" + set.contains(splits[0]) + "\n");
+		}
+		
+		writer.flush();  writer.close();
+		
+		reader.close();
 	}
 
 	public static HashSet<String> getRatiosOverCutoff( double cutoff , String colName1, String colName2) 
