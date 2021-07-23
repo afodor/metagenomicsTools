@@ -134,5 +134,4 @@ public class Quick_454_Parse
 		
 		return s2.toString();
 	}
-	
 }
