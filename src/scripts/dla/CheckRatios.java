@@ -12,15 +12,15 @@ public class CheckRatios
 	public static void main(String[] args) throws Exception
 	{
 
-		double cutoff = 50;
+		double cutoff = 10;
 		
 		//WIAB_2 is UNC donor
-		//WIAB_5 is UNC POST
-		HashSet<String> set = getRatiosOverCutoff(cutoff, "WIAB_2", "WIAB_5");
+		//WIAB_4 is UNC PRE
+		HashSet<String> set = getRatiosOverCutoff(cutoff, "WIAB_2", "WIAB_4");
 		
 		//WIAB_VBD is vanderbilt donor
-		//WIAB_10 is POST
-		HashSet<String> set2 = getRatiosOverCutoff(cutoff, "WIAB_VBD", "WIAB_10");
+		//WIAB_VB1 is PRE
+		HashSet<String> set2 = getRatiosOverCutoff(cutoff, "WIAB_VBD", "WIAB_VB1");
 		
 
 		set.retainAll(set2);
