@@ -5,17 +5,21 @@ setwd("C:\\DLA_Analyses2021-main\\af_out\\")
 myT <- read.table("anN2_pathabundance_withMarked.txt", sep="\t", header=TRUE)
 
 myColors <- vector()
+myLabels <- vector()
 
 for( i in 1:nrow(myT))
 {
 	if( myT$marked[i] =="Marked")
 	{
 		myColors[i] = "RED"
+		myLabels[i] = myT$Pathway[i]
 	}
 	else
 	{
 		myColors[i] = "BLACK"
+		myLabels[i] = ""
 	}
 }
 
 plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16,col=myColors)
+text(log(myT$WIAB_2), log(myT$WIAB_4),myLabels)
