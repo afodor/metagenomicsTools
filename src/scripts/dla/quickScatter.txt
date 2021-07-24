@@ -8,7 +8,14 @@ myColors <- vector()
 
 for( i in 1:nrow(myT))
 {
-	if( myT$m
+	if( myT$marked[i] =="Marked")
+	{
+		myColors[i] = "RED"
+	}
+	else
+	{
+		myColors[i] = "BLACK"
+	}
 }
 
-plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16)
+plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16,col=myColors)
