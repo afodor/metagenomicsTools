@@ -18,6 +18,7 @@ public class Quick_454_Parse
 	
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, BufferedWriter> outputMap = new HashMap<String, BufferedWriter>();
 		HashMap<String, String> primerMap = getPrimerToSampleMap();
 		
 		System.out.println(primerMap.keySet());
@@ -35,7 +36,25 @@ public class Quick_454_Parse
 				for(String s : primerMap.keySet())
 				{
 					if( fs.getSequence().startsWith(s))
+					{
 						foundAMatch = true;
+						String fileName = s + ".txt";
+						
+						BufferedWriter writer = outputMap.get(fileName);
+						
+						if( writer == null)
+						{
+							writer = new BufferedWriter(new FileWriter(
+									"C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\demultiplexed\\" + fileName));
+							
+							outputMap.put(fileName, writer);
+						}
+						
+						writer.write(fs.getHeader() + "\n");
+						writer.write(fs.getSequence().replace(s, "") + "\n");
+						//System.out.println(fs.getSequence());
+					}
+						
 				}
 				
 				if( foundAMatch )
@@ -44,6 +63,11 @@ public class Quick_454_Parse
 		}
 			
 		System.out.println( numMatches + " " +  list.size() + " " + ((float)numMatches / list.size()) ); 
+		
+		for( BufferedWriter w : outputMap.values())
+		{
+			w.flush();  w.close();
+		}
 		
 	}
 	
@@ -110,5 +134,5 @@ public class Quick_454_Parse
 		
 		return s2.toString();
 	}
-	
 }
+
