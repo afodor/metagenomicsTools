@@ -1,0 +1,14 @@
+rm(list=ls())
+
+setwd("C:\\DLA_Analyses2021-main\\af_out\\")
+
+myT <- read.table("anN2_pathabundance_withMarked.txt", sep="\t", header=TRUE)
+
+myColors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$m
+}
+
+plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16)

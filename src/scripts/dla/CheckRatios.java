@@ -12,19 +12,23 @@ public class CheckRatios
 	public static void main(String[] args) throws Exception
 	{
 
+		double cutoff = 50;
+		
 		//WIAB_2 is UNC donor
 		//WIAB_5 is UNC POST
-		HashSet<String> set = getRatiosOverCutoff(5, "WIAB_2", "WIAB_5");
+		HashSet<String> set = getRatiosOverCutoff(cutoff, "WIAB_2", "WIAB_5");
 		
 		//WIAB_VBD is vanderbilt donor
 		//WIAB_10 is POST
-		HashSet<String> set2 = getRatiosOverCutoff(5, "WIAB_VBD", "WIAB_10");
+		HashSet<String> set2 = getRatiosOverCutoff(cutoff, "WIAB_VBD", "WIAB_10");
 		
+
 		set.retainAll(set2);
 		System.out.println(set);
-		System.out.println(set.size());
 		
 		writeMarked(set);
+
+		System.out.println(set.size());
 	}
 	
 	private static void writeMarked(HashSet<String> set ) throws Exception
@@ -34,15 +38,37 @@ public class CheckRatios
 				+ "anN2_pathabundance_relab.tsv"	)));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				"C:\\DLA_Analyses2021-main\\af_out\\anN2_pathabundance_relab.tsv")));
+				"C:\\DLA_Analyses2021-main\\af_out\\anN2_pathabundance_withMarked.txt")));
 		
-		writer.write(reader.readLine() + "\tmarked\n");
+		String firstLine = reader.readLine().replaceAll("#", "");
 		
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		String[] firstSplits = firstLine.split("\t");
+		
+		writer.write(firstSplits[0].trim());
+		
+		for(int x=1; x < firstSplits.length; x++)
+		{
+			String s= firstSplits[x];
+			s = s.substring(0, s.indexOf("-Emily"));
+			writer.write("\t" + s);
+		}
+		
+		writer.write("\tmarked\n");
+		
+		for(String s= reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
-			writer.write(s + "\t" + set.contains(splits[0]) + "\n");
+			writer.write(splits[0].replaceAll(";", "_").replaceAll("\\|", "_").replaceAll(" ","_").
+					replaceAll(":", "_").replaceAll("\\.","_").replaceAll("-", "_").replaceAll("\t", "_")
+					.replaceAll("/","_").replaceAll("'", "_") );
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			boolean isThere = set.contains(splits[0]);
+		
+			writer.write("\t" + (isThere ? "Marked" : "Unmarked") + "\n");
 		}
 		
 		writer.flush();  writer.close();
