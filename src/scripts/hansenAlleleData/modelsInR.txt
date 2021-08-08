@@ -1,7 +1,10 @@
 rm(list=ls())
 
 library("Kendall")
-setwd("C:\\JonHansenNewdata\\outputTextFiles")
+
+setwd("C:\\JonathanHansenAlleles\\outputTextFiles")
+
+inFiles <- c("BCaccae","Bdentium","Bhansenii","Bvulgatus","Cbolteae","Ccomes","Ecoli","Erectale","E_coli_NC101","E_faecalis_OG1RF","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
 
 makeAGraph <- function(filter,labelNames,vals,pValue, adjString) 
 {
@@ -57,8 +60,6 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 	 	}
 	 }
 }
-
-inFiles <- c("Bhansenii","Bvulgatus","B_caccae","B_dentium","Cbolteae","Ccomes","ecoli","Erectale","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
 
 for( fileName in inFiles ) 
 {

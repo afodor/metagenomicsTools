@@ -10,15 +10,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import utils.ConfigReader;
 import utils.TabReader;
 
 public class PivotOut
 {
 	public static void main(String[] args) throws Exception
 	{
-		File inDirectory = new File( ConfigReader.getHansenAlleleDirectory() + File.separator + 
-				"inputTextFiles");
+		File inDirectory = new File( "C:\\JonathanHansenAlleles\\inputTextFiles");
 		
 		String[] inputFiles = inDirectory.list();
 		
@@ -33,8 +31,8 @@ public class PivotOut
 				
 				String prefix = s.replace(".txt", "");
 		
-				File outFile = new File(ConfigReader.getHansenAlleleDirectory() + File.separator + 
-						"outputTextFiles" + File.separator +  prefix +  "ForR.txt");
+				File outFile = new File("C:\\JonathanHansenAlleles\\outputTextFiles"
+						+ File.separator +  prefix +  "ForR.txt");
 				
 				System.out.println(inFile.getName() + " "+ outFile.getName());
 				fileNames.add(outFile.getName());
