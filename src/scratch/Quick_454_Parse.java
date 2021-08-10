@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import parsers.FastaSequence;
 
@@ -26,6 +27,9 @@ public class Quick_454_Parse
 		List<FastaSequence> list = FastaSequence.readFastaFile(new File("C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\uhnto.1tca454rea.fna"));
 		
 		int numMatches =0;
+		
+		BufferedWriter allWriter = new BufferedWriter(new FileWriter( new File(
+				"C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\allDemulti.txt")));
 		
 		for(FastaSequence fs : list)
 		{
@@ -53,6 +57,11 @@ public class Quick_454_Parse
 						writer.write(fs.getHeader() + "\n");
 						writer.write(fs.getSequence().replace(s, "") + "\n");
 						//System.out.println(fs.getSequence());
+						
+						StringTokenizer sToken = new StringTokenizer(fs.getHeader());
+						
+						allWriter.write(sToken.nextToken() + "_" + s + "\n") ;
+						allWriter.write(fs.getSequence() + "\n");
 					}
 						
 				}
@@ -69,6 +78,7 @@ public class Quick_454_Parse
 			w.flush();  w.close();
 		}
 		
+		allWriter.flush();  allWriter.close();
 	}
 	
 	private static HashMap<String, String> getPrimerToSampleMap() throws Exception
