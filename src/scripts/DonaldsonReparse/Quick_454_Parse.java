@@ -1,4 +1,4 @@
-package scratch;
+package scripts.DonaldsonReparse;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
