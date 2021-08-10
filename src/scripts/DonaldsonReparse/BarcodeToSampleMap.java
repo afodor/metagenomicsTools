@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 
-public class AssingMetaCategory
+public class BarcodeToSampleMap
 {
 	public static void main(String[] args) throws Exception
 	{
@@ -15,7 +15,7 @@ public class AssingMetaCategory
 			System.out.println(s + " " + barcodeMap.get(s));
 	}
 	
-	private static HashMap<String, String> getBarcodeToSampleMap() throws Exception
+	public static HashMap<String, String> getBarcodeToSampleMap() throws Exception
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		
