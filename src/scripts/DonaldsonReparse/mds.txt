@@ -1,0 +1,26 @@
+library("vegan")
+
+rm(list=ls())
+setwd("C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\rdpOut")
+taxa <- c("phylum","class","order","family","genus")
+
+
+for( t in taxa )
+{
+	fileName <- paste0(t,"asColumnsLogNormPlusMeta.txt")
+	myT <- read.table(fileName, header=TRUE,sep="\t")
+
+	dataT <- myT[,4:ncol(myT)]
+	
+	myPCOA <- capscale(dataT~1,distance="bray")
+		
+	#write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_",t,".txt",sep=""))
+	#write.table(myPCOA$CA$eig,file=paste("eigenValues_",t,".txt", sep=""), sep="\t")	
+
+	myMerge <- cbind( myT, myPCOA$CA$u)
+
+	write.table(myMerge , sep="\t", file=paste("pcoa__withMetadata",t,".txt",sep=""),row.names=FALSE)
+}
+
+
+
