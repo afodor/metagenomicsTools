@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import parsers.OtuWrapper;
+import utils.Pearson;
+import utils.Spearman;
 
 public class ParentVsChild
 {
@@ -13,6 +15,8 @@ public class ParentVsChild
 	{
 		int index;
 		double count;
+		Double corrWithParent;
+		Integer parentIndex;
 		
 		@Override
 		public int compareTo(Holder o)
@@ -20,6 +24,17 @@ public class ParentVsChild
 			return Double.compare(o.count , this.count);
 		}
 	}
+	
+	private static List<Double> getTaxa( OtuWrapper wrapper, int index ) throws Exception
+	{
+		List<Double> list = new ArrayList<>();
+		
+		for(int x=0; x < wrapper.getSampleNames().size(); x++)
+			list.add(wrapper.getDataPointsUnnormalized().get(x).get(index));
+		
+		return list;
+	}
+	
 	
 	private static List<Holder> getSortedHolders(OtuWrapper wrapper ) throws Exception
 	{
@@ -38,6 +53,26 @@ public class ParentVsChild
 		
 		Collections.sort(list);
 		
+		for( int x=1; x < list.size(); x++)
+		{
+			Holder childHolder = list.get(x);
+			List<Double> childData = getTaxa(wrapper, childHolder.index);
+			
+			for( int y=0;  y < x; y++ )
+			{
+				Holder parentHolder = list.get(y);
+				List<Double> parentData = getTaxa(wrapper, parentHolder.index);
+				
+				double spearman = Spearman.getSpearFromDouble(childData, parentData).getRs();
+				
+				if( childHolder.corrWithParent == null || childHolder.corrWithParent < spearman )
+				{
+					childHolder.corrWithParent = spearman;
+					childHolder.parentIndex = parentHolder.index;
+				}
+			}
+		}
+		
 		return list;
 	}
 	
@@ -50,7 +85,7 @@ public class ParentVsChild
 		
 		List<Holder> list = getSortedHolders(wrapper);
 		
-		for( Holder h : list)
-			System.out.println( h.index + " " + h.count );
+		for(Holder h : list )
+			System.out.println( h.index + " " + h.count + " "+  h.parentIndex  + " " + h.corrWithParent);
 	}
 }
