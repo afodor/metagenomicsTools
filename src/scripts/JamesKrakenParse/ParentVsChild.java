@@ -85,7 +85,7 @@ public class ParentVsChild
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\JamesKraken\\"+ level + "Vanderbilt.txt")));
 		
-		writer.write("childName\tparentName\tchildAbundance\tparentAbundance\trSquared\t");
+		writer.write("childName\tparentName\tchildAbundance\tparentAbundance\trSquared\n");
 		
 		for(Holder h : list)
 		{
