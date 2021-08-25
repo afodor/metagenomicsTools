@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import parsers.OtuWrapper;
-import utils.Pearson;
 import utils.Spearman;
 
 public class ParentVsChild
@@ -44,13 +43,15 @@ public class ParentVsChild
 		
 		for( int x=0; x < wrapper.getOtuNames().size(); x++)
 		{
-			double count  = wrapper.getCountsForTaxa(x);
-			
-			Holder h = new Holder();
-			h.count = count;
-			h.index = x;
-			
-			list.add(h);
+			if( wrapper.getOtuNames().get(x).toLowerCase().indexOf("unclassified") == -1)
+			{
+				double count  = wrapper.getCountsForTaxa(x);
+				
+				Holder h = new Holder();
+				h.count = count;
+				h.index = x;
+				list.add(h);
+			}
 		}
 		
 		Collections.sort(list);
@@ -84,7 +85,7 @@ public class ParentVsChild
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\JamesKraken\\"+ level + "Vanderbilt.txt")));
 		
-		writer.write("childName\tparentName\tchildAbundance\tparentAbundance\trSquared\n");
+		writer.write("childName\tparentName\tchildAbundance\tparentAbundance\trSquared\t");
 		
 		for(Holder h : list)
 		{
@@ -111,7 +112,10 @@ public class ParentVsChild
 	public static void main(String[] args) throws Exception
 	{
 		File topDir = new File("C:\\JamesKraken");
-		String level = "phylum";
+		//String level = "phylum";
+		
+		String level = "genus";
+		
 		
 		OtuWrapper wrapper = new OtuWrapper(topDir.getAbsolutePath() 
 				+ File.separator + "WGS_Kraken2_Vanderbilt_Forward_2020Oct02_taxaCount_" + level + ".tsv");
