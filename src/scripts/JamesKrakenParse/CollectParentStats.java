@@ -24,7 +24,9 @@ public class CollectParentStats
 	
 	public static void main(String[] args) throws Exception
 	{
-		String level = "genus";
+		String level = "phylum";
+		
+		//String level = "genus";
 		
 		HashMap<String, Holder> map = getParentStats(level);
 		writeAverages(map, level);
@@ -34,7 +36,7 @@ public class CollectParentStats
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\JamesKraken\\"+ level + "VanderbiltParentAverages.txt")));
 		
-		writer.write("parentName\tparentAbundance\tnumberOfChildren\tchildrenAvg\tchildrenSD\tcorAvg\tcorSD\n");
+		writer.write("parentName\tparentAbundance\tnumberOfChildren\tchildrenAvg\tchildrenVar\tchildTotal\tcorAvg\tcorSD\tchildrenNames\n");
 		
 		for( String s : map.keySet() )
 		{
@@ -42,8 +44,22 @@ public class CollectParentStats
 			Holder h = map.get(s);
 			
 			writer.write( s + "\t" +  h.parentAbundance + "\t" + h.childNames.size() + "\t" +  
-						new Avevar(h.childDepths).getAve() + "\t" + new Avevar(h.childDepths).getSD() + 
-						"\t" + new Avevar(h.rSquaredValues).getAve() +"\t" + new Avevar(h.rSquaredValues).getSD() + "\n");
+						new Avevar(h.childDepths).getAve() + "\t" + new Avevar(h.childDepths).getSD() *new Avevar(h.childDepths).getSD());
+			
+			double sum =0;
+			
+			for( Double d : h.childDepths )
+				sum += d;
+			
+			writer.write("\t" + sum);
+			 		
+			StringBuffer buff = new StringBuffer();
+			
+			for(String s2 : h.childNames)
+				buff.append(s2+ ";");
+			
+			writer.write( "\t" + new Avevar(h.rSquaredValues).getAve() +"\t" + new Avevar(h.rSquaredValues).getSD() + "\t" 
+								+ buff.toString() + "\n");
 		}
 		
 		writer.flush();  writer.close();
