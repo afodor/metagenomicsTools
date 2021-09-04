@@ -16,8 +16,7 @@ public class MetaMergePathways
 	{
 		List<String> sampleNames = getSampleNames();
 		
-		for(String s : sampleNames)
-			System.out.println(s);
+		HashMap<String, List<Double>> map = getPathwayData();
 	}
 	
 	private static List<String> getSampleNames() throws Exception
@@ -42,11 +41,11 @@ public class MetaMergePathways
 			list.add(name);
 		}
 		
+		reader.close();
 		return list;
 	}
 	
-	
-	// key is sampleID
+	// key is pathway
 	private static HashMap<String, List<Double>> getPathwayData() throws Exception
 	{
 		HashMap<String, List<Double>> map = new HashMap<>();
@@ -55,6 +54,21 @@ public class MetaMergePathways
 		
 		reader.readLine();
 		
+		for(String s= reader.readLine(); s!= null; s = reader.readLine() )
+		{
+			String[] splits = s.split("\t");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("Duplicate");
+			
+			
+			List<Double> list = new ArrayList<>();
+			
+			map.put(splits[0], list);
+			
+			for( int x=1; x < list.size(); x++)
+				list.add(Double.parseDouble(splits[x]));
+		}
 		
 		reader.close();
 		return map;
