@@ -11,12 +11,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import parsers.OtuWrapper;
+
 public class MetaMergePathways
 {
 	public final static String PATHWAY_FILE = "C:\\MarthaMethylation\\shanCountTables\\van_re_humann2_unstratified.tsv";
+	
 	public final static String PATHWAY_FILE_PIVOTED = 
 				"C:\\MarthaMethylation\\shanCountTables\\humann2.txt";
 	
+	public final static String PATHWAY_FILE_PIVOTED_LOG_NORM = 
+			"C:\\MarthaMethylation\\shanCountTables\\humann2LogNorm.txt";
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -24,6 +29,9 @@ public class MetaMergePathways
 		
 		HashMap<String, List<Double>> map = getPathwayData();
 		writePivotedTable(sampleNames, map);
+		
+		OtuWrapper wrapper = new OtuWrapper(PATHWAY_FILE_PIVOTED);
+		wrapper.writeNormalizedLoggedDataToFile(PATHWAY_FILE_PIVOTED_LOG_NORM);
 	}
 	
 	private static void writePivotedTable(List<String> sampleNames , 
