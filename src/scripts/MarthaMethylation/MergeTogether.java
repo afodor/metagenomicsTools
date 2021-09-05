@@ -35,7 +35,8 @@ public class MergeTogether
 		
 		for( int x=1; x < topSplits.length; x++)
 			if( includeList.get(x-1))
-				writer.write("\t" + topSplits[x]);
+				//writer.write("\t" + topSplits[x].replaceAll(";", "_").replaceAll(":", "_"));
+				writer.write("\tPathway_" + x);
 		
 		writer.write("\n");
 		

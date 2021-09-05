@@ -1,6 +1,29 @@
 rm(list=ls())
+library("Kednall")
 
 setwd("C:\\MarthaMethylation\\shanCountTables")
 
 myT <- read.table("humann2LogNormPlusMeta.txt", sep="\t", header=TRUE)
+
+testCols <- 3:6
+
+pathwayCols <- 7:ncol(myT)
+
+par(mfrow=c(2,2))
+
+for( t in testCols)
+{
+	index <- 1
+	pValues <- vector()
+	
+	for( p in pathwayCols)
+	{
+		pValues[index] <- Kendall( myT[,t], myT[,p])$sl[1]
+		index = index + 1
+	}
+	
+	hist(pValues)
+	
+	print(sum( p.adjust(pValues,method="BH") < 0.1 ))
+}
 
