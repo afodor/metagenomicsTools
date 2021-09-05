@@ -74,6 +74,41 @@ public class OtuWrapper
 		return returnVal;
 	}
 	
+	/*
+	 * Threshold is between 0 and 1.
+	 * 
+	 * If for example, it is set to 0.75, any sample that is over 75% zeros will be false, othewise true
+	 */
+	public List<Boolean> getKeepSamplesAbovePrevelanceThreshold(  double threshold ) throws Exception
+	{
+		if( threshold <0 || threshold > 1)
+			throw new Exception("threshould out of range");
+		
+		List<Boolean> list =new ArrayList<>();
+		
+		for( int x=0; x < getDataPointsUnnormalized().size(); x++ )
+		{
+			double numZeros=0;
+			
+			List<Double> innerList = getDataPointsUnnormalized().get(x);
+			
+			for( int y=0; y < innerList.size(); y++)
+			{
+				if( innerList.get(y) == 0.0 )
+					numZeros++;
+			}
+			
+			double fractionZeros = numZeros / innerList.size();
+			
+			if(fractionZeros >= threshold)
+				list.add(false);
+			else
+				list.add(true);
+		}
+		
+		return list;
+	}
+	
 	public void writeRarifiedSpreadhseet(File filepath, boolean withReplacement, int depth) throws Exception
 	{
 		Random random = new Random(24231);

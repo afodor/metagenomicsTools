@@ -1,0 +1,6 @@
+rm(list=ls())
+
+setwd("C:\\MarthaMethylation\\shanCountTables")
+
+myT <- read.table("humann2LogNormPlusMeta.txt", sep="\t", header=TRUE)
+

@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.List;
+
+import parsers.OtuWrapper;
 
 public class MergeTogether
 {
@@ -20,6 +23,10 @@ public class MergeTogether
 				MetaMergePathways.PATHWAY_FILE_PIVOTED_LOG_NORM
 				)));
 		
+		OtuWrapper wrapper = new OtuWrapper(MetaMergePathways.PATHWAY_FILE_PIVOTED_LOG_NORM);
+		
+		List<Boolean> includeList = wrapper.getKeepSamplesAbovePrevelanceThreshold(0.75);
+		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(PATHWAY_PLUS_META)));
 		
 		String[] topSplits = reader.readLine().split("\t");
@@ -27,7 +34,8 @@ public class MergeTogether
 		writer.write(topSplits[0] + "\tsubjectID\tBS_pred_methy\tBS_pred_methy_post\tmc_pred_methy\tmc_pred_methy_post");
 		
 		for( int x=1; x < topSplits.length; x++)
-			writer.write("\t" + topSplits[x]);
+			if( includeList.get(x-1))
+				writer.write("\t" + topSplits[x]);
 		
 		writer.write("\n");
 		
@@ -56,6 +64,7 @@ public class MergeTogether
 			}
 			
 			for( int x=1; x < splits.length; x++)
+				if( includeList.get(x-1))
 				writer.write("\t" + splits[x]);
 			
 			writer.write("\n");
