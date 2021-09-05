@@ -25,7 +25,7 @@ public class MergeTogether
 		
 		OtuWrapper wrapper = new OtuWrapper(MetaMergePathways.PATHWAY_FILE_PIVOTED_LOG_NORM);
 		
-		List<Boolean> includeList = wrapper.getKeepSamplesAbovePrevelanceThreshold(0.75);
+		List<Boolean> includeList = wrapper.getKeepTaxaAbovePrevelanceThreshold(0.75);
 		
 		BufferedWriter writer =new BufferedWriter(new FileWriter(new File(PATHWAY_PLUS_META)));
 		

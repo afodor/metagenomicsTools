@@ -79,26 +79,24 @@ public class OtuWrapper
 	 * 
 	 * If for example, it is set to 0.75, any sample that is over 75% zeros will be false, othewise true
 	 */
-	public List<Boolean> getKeepSamplesAbovePrevelanceThreshold(  double threshold ) throws Exception
+	public List<Boolean> getKeepTaxaAbovePrevelanceThreshold(  double threshold ) throws Exception
 	{
 		if( threshold <0 || threshold > 1)
 			throw new Exception("threshould out of range");
 		
 		List<Boolean> list =new ArrayList<>();
 		
-		for( int x=0; x < getDataPointsUnnormalized().size(); x++ )
+		for( int x=0; x < getOtuNames().size(); x++ )
 		{
 			double numZeros=0;
 			
-			List<Double> innerList = getDataPointsUnnormalized().get(x);
-			
-			for( int y=0; y < innerList.size(); y++)
+			for( int y=0; y < getSampleNames().size(); y++)
 			{
-				if( innerList.get(y) == 0.0 )
+				if( getDataPointsUnnormalized().get(y).get(x) == 0.0 )
 					numZeros++;
 			}
 			
-			double fractionZeros = numZeros / innerList.size();
+			double fractionZeros = numZeros / getSampleNames().size();
 			
 			if(fractionZeros >= threshold)
 				list.add(false);
