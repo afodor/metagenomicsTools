@@ -15,6 +15,7 @@ timepoints <- c("pre", "post")
 
 par(mfrow=c(4,3))
 
+overallIndex <- 1
 for( t in testCols)
 for( sampleType in sampleTypes  )
 for( timepoint in timepoints )
@@ -33,8 +34,9 @@ for( timepoint in timepoints )
 		index = index + 1
 	}
 	
-	thisLabel = paste(names(myT)[t], sampleType, timepoint , sep ="_")
+	thisLabel = paste(overallIndex,names(myT)[t], sampleType, timepoint , sep ="_")
 	hist(pValues, main=thisLabel)
+	
 	
 	dFrame <- data.frame( indexVal, pValues, pathwayNames)
 	dFrame <- dFrame [order(dFrame$pValues),]
@@ -48,6 +50,7 @@ for( timepoint in timepoints )
 	print( paste(thisLabel,  sum( p.adjust(pValues,method="BH") < 0.1 )))
 	
 	pdfName <- paste0( "pValues_", thisLabel, ".pdf")
+	
 	
 	pdf(pdfName)
 	par(mfrow=c(2,2))
@@ -65,5 +68,6 @@ for( timepoint in timepoints )
 	}
 	
 	dev.off()
+	overallIndex <- overallIndex + 1
 }
 
