@@ -21,7 +21,7 @@ for( t in testCols)
 	for( p in pathwayCols)
 	{
 		pValues[index] <- Kendall( myT[,t], myT[,p])$sl[1]
-		indexVal[index] <- index
+		indexVal[index] <- p
 		pathwayNames[index] <- names(myT)[p]
 		index = index + 1
 	}
@@ -38,5 +38,24 @@ for( t in testCols)
 	write.table(dFrame, file=tableName, sep="\t",row.names=FALSE)
 	
 	print(sum( p.adjust(pValues,method="BH") < 0.1 ))
+	
+	pdfName <- paste0( "pValues", names(myT)[t], ".pdf")
+	
+	pdf(pdfName)
+	par(mfrow=c(2,2))
+	
+	for( i in 1:nrow(dFrame))
+	{
+		dataVector <- myT[, dFrame$indexVal[i] ]
+		
+		pathwayName <- dFrame$pathwayNames[i]
+		
+		mainText = paste(  pathwayName,  "\n" , "p=", 
+		format( dFrame$pValues[i], digits=3 ), " adj p =",  format( dFrame$adjustedP[i], digits=3 ) )
+		
+		plot( myT[,t], dataVector, xlab = names(myT)[t], ylab="log 10 pathway",  main = mainText )
+	}
+	
+	dev.off()
 }
 
