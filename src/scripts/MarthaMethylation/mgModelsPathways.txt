@@ -15,15 +15,27 @@ for( t in testCols)
 {
 	index <- 1
 	pValues <- vector()
+	pathwayNames <- vector()
+	indexVal <- vector()
 	
 	for( p in pathwayCols)
 	{
 		pValues[index] <- Kendall( myT[,t], myT[,p])$sl[1]
+		indexVal[index] <- index
+		pathwayNames[index] <- names(myT)[p]
 		index = index + 1
 	}
 	
 	hist(pValues)
 	
+	dFrame <- data.frame( indexVal, pValues, pathwayNames)
+	dFrame <- dFrame [order(dFrame$pValues),]
+	
+	dFrame$adjustedP<- p.adjust( dFrame$pValues , method = "BH" )
+	
+	tableName <- paste0( "pValues", names(myT)[t], ".txt")
+	
+	write.table(dFrame, file=tableName, sep="\t",row.names=FALSE)
 	
 	print(sum( p.adjust(pValues,method="BH") < 0.1 ))
 }
