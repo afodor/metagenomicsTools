@@ -47,7 +47,7 @@ public class MergeTogether
 		
 		String[] topSplits = reader.readLine().split("\t");
 		
-		writer.write(topSplits[0] + "\tsubjectID\tBS_pred_methy\tBS_pred_methy_post\tmc_pred_methy\tmc_pred_methy_post");
+		writer.write(topSplits[0] + "\tsubjectID\tsampleType\tvisit\tBS_pred_methy\tBS_pred_methy_post\tmc_pred_methy\tmc_pred_methy_post");
 		
 		for( int x=1; x < topSplits.length; x++)
 			if( includeList.get(x-1))
@@ -65,7 +65,7 @@ public class MergeTogether
 			
 			MgDefScoreParserLine mdspl = map.get(smpl.getStudyID());
 			
-			writer.write("\t" + smpl.getStudyID());
+			writer.write("\t" + smpl.getStudyID() + "\t" + smpl.getSampleType() + "\t" + smpl.getVisit());
 			
 			if( mdspl == null)
 			{
