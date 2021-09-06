@@ -1,5 +1,5 @@
 rm(list=ls())
-library("Kednall")
+library("Kendall")
 
 setwd("C:\\MarthaMethylation\\shanCountTables")
 
@@ -23,6 +23,7 @@ for( t in testCols)
 	}
 	
 	hist(pValues)
+	
 	
 	print(sum( p.adjust(pValues,method="BH") < 0.1 ))
 }

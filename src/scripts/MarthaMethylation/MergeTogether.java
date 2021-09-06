@@ -14,6 +14,22 @@ public class MergeTogether
 {
 	public static String PATHWAY_PLUS_META = "C:\\MarthaMethylation\\shanCountTables\\humann2LogNormPlusMeta.txt";
 	
+	private static String alphaNumericOnly(String s)
+	{
+		StringBuffer buff = new StringBuffer();
+		
+		for( int x=0; x < s.length(); x++)
+		{
+			char c=  s.charAt(x);
+			if( Character.isAlphabetic(c) || Character.isDigit(c))
+				buff.append(c);
+			else
+				buff.append("_");
+		}
+		
+		return buff.toString();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, MgDefScoreParserLine>  map = MgDefScoreParserLine.getMgScoreMap();
@@ -35,8 +51,7 @@ public class MergeTogether
 		
 		for( int x=1; x < topSplits.length; x++)
 			if( includeList.get(x-1))
-				//writer.write("\t" + topSplits[x].replaceAll(";", "_").replaceAll(":", "_"));
-				writer.write("\tPathway_" + x);
+				writer.write("\t" + alphaNumericOnly(topSplits[x]));
 		
 		writer.write("\n");
 		
