@@ -39,7 +39,7 @@
 	plot(myT$Proteobacteria, myT$percentChangeOneTwelveWeight,col=surgeryColors,pch=19,cex=1.2,
 	xlab="Proteobacteria", ylab="% change one month to twelve month")
 	
-	
+
 	
 	
 	
