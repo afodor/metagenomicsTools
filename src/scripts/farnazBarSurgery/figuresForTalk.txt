@@ -1,0 +1,43 @@
+rm(list=ls())
+
+setwd("C:\\BariatricSurgery_Analyses2021-main\\input\\AF_Merged")
+library("Kendall")
+
+taxa <- "phylum"
+		
+myT <- read.table(paste0(taxa,"pivotedLogNormPlusMetaMDS.txt"), sep="\t",header=TRUE)
+myT <- myT[ myT$timepoint == 1 & ! is.na( myT$typeOfSurgery ) , ]		
+				
+surgeryColors <- vector()
+	
+for( i in 1:nrow(myT)) 
+{
+	if( is.na( myT$typeOfSurgery[i] ) )
+	{
+		surgeryColors[i] = "gray"
+	}
+	else if (myT$typeOfSurgery[i] == "GastricBypass")
+	{	
+			surgeryColors[i] = "red"
+	}
+	else if (myT$typeOfSurgery[i] == "SleeveGastrectomy")
+	{
+			surgeryColors[i] = "blue"
+	}
+	
+	
+}
+
+par(mfrow=c(1,2))
+
+plot(myT$Proteobacteria, myT$percentChangeOneSixWeight,col=surgeryColors,pch=19,cex=1.2,
+xlab="Proteobacteria", ylab="% change one month to six month")
+
+
+
+plot(myT$Proteobacteria, myT$percentChangeOneTwelveWeight,col=surgeryColors,pch=19,cex=1.2,
+xlab="Proteobacteria", ylab="% change one month to twelve month")
+
+
+
+
