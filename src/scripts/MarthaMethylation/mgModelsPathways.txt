@@ -4,46 +4,57 @@ library("Kendall")
 setwd("C:\\MarthaMethylation\\shanCountTables")
 
 myT <- read.table("humann2LogNormPlusMeta.txt", sep="\t", header=TRUE)
+myT <- myT[ myT$visit == "pre" | myT$visit = "post", ]
 
-testCols <- 3:6
+testCols <- 5:8
 
-pathwayCols <- 7:ncol(myT)
+pathwayCols <- 9:ncol(myT)
 
-par(mfrow=c(2,2))
+sampleTypes <- sort(unique(myT$sampleType))
+timepoints <- c("pre", "post")
 
+par(mfrow=c(4,3))
+
+overallIndex <- 1
 for( t in testCols)
+for( sampleType in sampleTypes  )
+for( timepoint in timepoints )
 {
 	index <- 1
 	pValues <- vector()
 	pathwayNames <- vector()
 	indexVal <- vector()
+	includeRows <- which(myT$visit==timepoint & myT$sampleType == sampleType ) 
 	
 	for( p in pathwayCols)
 	{
-		pValues[index] <- Kendall( myT[,t], myT[,p])$sl[1]
+		pValues[index] <- Kendall( myT[includeRows ,t], myT[includeRows,p])$sl[1]
 		indexVal[index] <- p
 		pathwayNames[index] <- names(myT)[p]
 		index = index + 1
 	}
 	
-	hist(pValues)
+	thisLabel = paste(overallIndex,names(myT)[t], sampleType, timepoint , sep ="_")
+	hist(pValues, main=thisLabel)
+	
 	
 	dFrame <- data.frame( indexVal, pValues, pathwayNames)
 	dFrame <- dFrame [order(dFrame$pValues),]
 	
 	dFrame$adjustedP<- p.adjust( dFrame$pValues , method = "BH" )
 	
-	tableName <- paste0( "pValues", names(myT)[t], ".txt")
+	tableName <- paste0( "pValues", thisLabel, ".txt")
 	
 	write.table(dFrame, file=tableName, sep="\t",row.names=FALSE)
 	
-	print(sum( p.adjust(pValues,method="BH") < 0.1 ))
+	print( paste(thisLabel,  sum( p.adjust(pValues,method="BH") < 0.1 )))
 	
-	pdfName <- paste0( "pValues", names(myT)[t], ".pdf")
+	pdfName <- paste0( "pValues_", thisLabel, ".pdf")
+	
 	
 	pdf(pdfName)
 	par(mfrow=c(2,2))
-	
+		
 	for( i in 1:nrow(dFrame))
 	{
 		dataVector <- myT[, dFrame$indexVal[i] ]
@@ -53,9 +64,10 @@ for( t in testCols)
 		mainText = paste(  pathwayName,  "\n" , "p=", 
 		format( dFrame$pValues[i], digits=3 ), " adj p =",  format( dFrame$adjustedP[i], digits=3 ) )
 		
-		plot( myT[,t], dataVector, xlab = names(myT)[t], ylab="log 10 pathway",  main = mainText )
+		plot( myT[includeRows ,t], dataVector[includeRows], xlab = names(myT)[t], ylab="log 10 pathway",  main = mainText )
 	}
 	
 	dev.off()
+	overallIndex <- overallIndex + 1
 }
 
