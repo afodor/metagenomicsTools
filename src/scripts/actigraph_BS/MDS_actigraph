@@ -1,0 +1,16 @@
+rm(list=ls())
+library("vegan")
+
+setwd("C:\\AliActigraphs")
+
+myT <- read.table("phylum_metaCounts.tsv", sep="\t", header=TRUE)
+
+metaDataCols <- 6:33
+
+metaData <- myT[ ,metaDataCols ]
+
+myPCOA <- capscale(metaData~1)
+
+myMerge <- cbind( myT, myPCOA$CA$u[,1:10])
+
+write.table( myMerge, file="phyla_merged.txt",sep="\t", row.names=FALSE)
