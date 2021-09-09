@@ -83,7 +83,7 @@ public class ParentVsChild
 	
 	private static void writeResults(List<Holder> list, String level, OtuWrapper wrapper) throws Exception
 	{
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\JamesKraken\\"+ level + "Vanderbilt.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\JamesKraken\\"+ level + "Vanderbilt_RDP.txt")));
 		
 		writer.write("childName\tparentName\tchildAbundance\tparentAbundance\trSquared\n");
 		
@@ -109,6 +109,7 @@ public class ParentVsChild
 		
 	}
 	
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		File topDir = new File("C:\\JamesKraken");
@@ -119,6 +120,25 @@ public class ParentVsChild
 		
 		OtuWrapper wrapper = new OtuWrapper(topDir.getAbsolutePath() 
 				+ File.separator + "WGS_Kraken2_Vanderbilt_Forward_2020Oct02_taxaCount_" + level + ".tsv");
+		
+		List<Holder> list = getSortedHolders(wrapper);
+		
+		writeResults(list, level, wrapper);
+		
+		
+	}*/
+	
+
+	public static void main(String[] args) throws Exception
+	{
+		File topDir = new File("C:\\JamesKraken");
+		//String level = "phylum";
+		
+		String level = "genus";
+		
+		
+		OtuWrapper wrapper = new OtuWrapper(topDir.getAbsolutePath() 
+				+ File.separator + "vanderbiltRDP_" + level + "_taxaAsColumns.txt");
 		
 		List<Holder> list = getSortedHolders(wrapper);
 		
