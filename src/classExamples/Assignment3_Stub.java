@@ -8,7 +8,7 @@ public class Assignment3_Stub
 	}
 	
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws Exception
 	{
 		float[] dnaWeights = { .3f, .3f, .2f, .2f };
 		char[] dnaChars = { 'A', 'C', 'G', 'T'  };
