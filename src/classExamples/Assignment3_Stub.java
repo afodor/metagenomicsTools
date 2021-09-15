@@ -2,7 +2,7 @@ package classExamples;
 
 public class Assignment3_Stub
 {
-	public static String generateRandomSequence(char[] alphabet, float[] weights, int length)
+	public static String generateRandomSequence(char[] alphabet, float[] weights, int length) throws Exception
 	{
 		return null;
 	}
