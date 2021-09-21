@@ -3,27 +3,30 @@ library("vegan")
 
 setwd("C:\\AliActigraphs")
 
-myT <- read.table("phylum_metaCounts.tsv", sep="\t", header=TRUE)
+myT <- read.table("genus_metaCounts.tsv", sep="\t", header=TRUE)
 
 metaDataCols <- 6:33
 
 metaData <- myT[ ,metaDataCols ]
 
-plot( myT[,metaDataCols ])
+#this is slow
+#plot( myT[,metaDataCols ])
 
 myPCOA <- capscale(metaData~1)
 
 myMerge <- cbind( myT, myPCOA$CA$u[,1:10])
 
-write.table( myMerge, file="phyla_merged.txt",sep="\t", row.names=FALSE)
+write.table( myMerge, file="genus_merged.txt",sep="\t", row.names=FALSE)
 
-pdf("AllVsMDS1.pdf")
+pdf("AllVsMDS2_genus.pdf")
 par(mfrow=c(2,2))
 
 index <- 1
 
 pValues <- vector()
 taxaNames <- vector()
+
+mdsCol <- which(names(myMerge) == "MDS1" )
 
 for( i in 6:ncol(myMerge))
 {
@@ -34,15 +37,20 @@ for( i in 6:ncol(myMerge))
 		plot( myMerge[,i] ~ myMerge$MDS1, xlab="MDS1", ylab=names(myMerge)[i],
 		main = paste("p=", anova(aLm)$"Pr(>F)"[1]))
 		
-		if( i > 40 & i < 87)
+		if( i > 40 & i < mdsCol)
 		{
 			pValues[index] <-  anova(aLm)$"Pr(>F)"[1]
 			taxaNames[index] <- names(myMerge)[i]
 			index = index + 1
 		}
 	}
-
 	
 }
 
 dev.off()
+
+dFrame <- data.frame(pValues,taxaNames )
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )
+		
+write.table(dFrame, file=paste("pValuesActigraphVsGenus.txt",sep=""), sep="\t",row.names=FALSE)
