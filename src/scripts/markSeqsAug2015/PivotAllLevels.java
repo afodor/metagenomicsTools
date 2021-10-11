@@ -31,7 +31,12 @@ public class PivotAllLevels
 		{
 			System.out.println(s);
 			HashMap<String, List<Long>> map = getCounts(s, inFile);
-			File outFile = writeResults(s, sampleNames, map);
+			
+
+			File outFile = new File( ConfigReader.getMarkAug2015Batch1Dir() + File.separator +
+					"qiime_" + s+ "_freads_asColumns.txt");
+			
+			writeResults(s, sampleNames, map, outFile);
 			
 			OtuWrapper wrapper = new OtuWrapper(outFile);
 			wrapper.writeNormalizedLoggedDataToFile(ConfigReader.getMarkAug2015Batch1Dir()
@@ -39,16 +44,13 @@ public class PivotAllLevels
 		}
 	}
 	
-	private static File writeResults(String level,List<String> sampleNames,  HashMap<String, List<Long>> map )
+	public static void writeResults(String level,List<String> sampleNames,  HashMap<String, List<Long>> map , File outFile)
 		throws Exception
 	{
 
 		for(List<Long> list : map.values())
 			if( list.size() != sampleNames.size())
 				throw new Exception("No");
-		
-		File outFile = new File( ConfigReader.getMarkAug2015Batch1Dir() + File.separator +
-				"qiime_" + level + "_freads_asColumns.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 		
@@ -73,10 +75,9 @@ public class PivotAllLevels
 		}
 		
 		writer.flush();  writer.close();
-		return outFile;
 	}
 	
-	private static HashMap<String, List<Long>> getCounts(String level, File inFile) throws Exception
+	public static HashMap<String, List<Long>> getCounts(String level, File inFile) throws Exception
 	{
 		HashMap<String, List<Long>> map = new HashMap<String, List<Long>>();
 		
@@ -93,22 +94,25 @@ public class PivotAllLevels
 			if( ! level.equals("otu"))
 				id = getTaxonomy(splits[splits.length-1], level);
 			
-			List<Long> innerList = map.get(id);
-			
-			if( innerList == null)
+			if( id != null)
 			{
-				innerList = new ArrayList<Long>();
+				List<Long> innerList = map.get(id);
 				
-				for( int x=1; x < splits.length-1; x++)
-					innerList.add(Long.parseLong( new StringTokenizer(splits[x], ".").nextToken()));
-				
-				map.put(id, innerList);
-			}
-			else
-			{
-				for( int x=1; x < splits.length-1; x++)
-					innerList.set((x-1) , 
-							innerList.get(x-1) + Long.parseLong(new StringTokenizer(splits[x], ".").nextToken()));
+				if( innerList == null)
+				{
+					innerList = new ArrayList<Long>();
+					
+					for( int x=1; x < splits.length-1; x++)
+						innerList.add(Long.parseLong( new StringTokenizer(splits[x], ".").nextToken()));
+					
+					map.put(id, innerList);
+				}
+				else
+				{
+					for( int x=1; x < splits.length-1; x++)
+						innerList.set((x-1) , 
+								innerList.get(x-1) + Long.parseLong(new StringTokenizer(splits[x], ".").nextToken()));
+				}
 			}
 		}
 		
@@ -136,10 +140,10 @@ public class PivotAllLevels
 			}
 		}
 		
-		throw new Exception("Could not find " + level + " in " + lastToken);
+		return null;
 	}
 	
-	private static List<String> getSampleNames(File inFile) throws Exception
+	public static List<String> getSampleNames(File inFile) throws Exception
 	{
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
