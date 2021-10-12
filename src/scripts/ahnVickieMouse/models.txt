@@ -11,12 +11,11 @@ par(mfrow=c(2,2))
 for( t in taxa )
 {
 	taxaName <- vector()
-	pValuesCaseControl_Tissue_Study1 <- vector()
-	pValuesDiet_Tissue_Study1 <- vector()
+	pValuesCaseControl_Tissue_Study2 <- vector()
+	pValuesDiet_Tissue_Study2 <- vector()
 	
-	pValuesCaseControl_Stool_Study1 <- vector()
-	pValuesDiet_Stool_Study1 <- vector()
-	
+	pValuesCaseControl_Stool_Study2 <- vector()
+	pValuesDiet_Stool_Study2 <- vector()
 	
 	index <- 1
 	
@@ -36,39 +35,45 @@ for( t in taxa )
 			taxaName[index] <- names(myT1)[i]
 		
 			myLm <- lm( myT1[,i] ~ factor(myT1$disease_Status) + factor(myT1$diet))
-			pValuesCaseControl_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[1]
-			pValuesDiet_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[2]	
+			pValuesCaseControl_Tissue_Study2[index] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesDiet_Tissue_Study2[index] <- anova(myLm)$"Pr(>F)"[2]	
 		
 			myLm <- lm( myTStool1[,i] ~ factor(myTStool1$disease_Status) + factor(myTStool1$diet))
-			pValuesCaseControl_Stool_Study1 [index] <- anova(myLm)$"Pr(>F)"[1]
-			pValuesDiet_Stool_Study1 [index] <- anova(myLm)$"Pr(>F)"[2]	
+			pValuesCaseControl_Stool_Study2 [index] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesDiet_Stool_Study2 [index] <- anova(myLm)$"Pr(>F)"[2]	
 		
-			if(is.na(pValuesCaseControl_Stool_Study1 [index] ))
-				pValuesCaseControl_Stool_Study1 [index] =1
+			if(is.na(pValuesCaseControl_Stool_Study2 [index] ))
+				pValuesCaseControl_Stool_Study2 [index] =1
 			
-			if(is.na(pValuesDiet_Stool_Study1 [index] ))
-				pValuesDiet_Stool_Study1 [index] =1
+			if(is.na(pValuesDiet_Stool_Study2 [index] ))
+				pValuesDiet_Stool_Study2 [index] =1
 		
 			index <- index + 1
 		}
 		
 	}
 	
-	print( paste( t," pValuesCaseControl_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
-	print( paste( t," pValuesDiet_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
+	print( paste( t," pValuesCaseControl_Tissue_Study2 ", sum( p.adjust(pValuesCaseControl_Tissue_Study2, method="BH")<.1 )))
+	print( paste( t," pValuesDiet_Tissue_Study2 ", sum( p.adjust(pValuesCaseControl_Tissue_Study2, method="BH")<.1 )))
 	
-	print( paste( t," pValuesCaseControl_Stool_Study1  ", sum( p.adjust(pValuesCaseControl_Stool_Study1 , method="BH")<.1 )))
-	print( paste( t," pValuesDiet_Stool_Study1 ", sum( p.adjust(pValuesDiet_Stool_Study1, method="BH")<.1 )))
+	print( paste( t," pValuesCaseControl_Stool_Study2  ", sum( p.adjust(pValuesCaseControl_Stool_Study2 , method="BH")<.1 )))
+	print( paste( t," pValuesDiet_Stool_Study2 ", sum( p.adjust(pValuesDiet_Stool_Study2, method="BH")<.1 )))
 	
-	hist(pValuesCaseControl_Stool_Study1, main=paste("Case control stool study 1",t),breaks=10)
-	hist(pValuesDiet_Stool_Study1, main =paste("Diet stool study 1",t  ),breaks=10)
+	hist(pValuesCaseControl_Stool_Study2, main=paste("Case control stool study 1",t),breaks=10)
+	hist(pValuesDiet_Stool_Study2, main =paste("Diet stool study 1",t  ),breaks=10)
 	
-	hist(pValuesCaseControl_Tissue_Study1, main=paste("Case control tissue study 1",t),breaks=10)
-	hist(pValuesDiet_Tissue_Study1, main =paste("Diet tissue study 1",t  ),breaks=10)
+	hist(pValuesCaseControl_Tissue_Study2, main=paste("Case control tissue study 1",t),breaks=10)
+	hist(pValuesDiet_Tissue_Study2, main =paste("Diet tissue study 1",t  ),breaks=10)
 }
 
 dev.off()
 
-#dFrame <- data.frame( pValues, percentExplained,names) 
-#write.table(dFrame, file=  "pValuesForRep1VsRep3.txt", sep="\t", row.names=FALSE)
+dFrame <- data.frame(taxaName ,pValuesCaseControl_Tissue_Study2 ,pValuesDiet_Tissue_Study2 ,
+	pValuesCaseControl_Stool_Study2,  pValuesDiet_Stool_Study2 )
+	
+dFrame$pValuesDiet_Stool_Study2_Adj <- p.adjust(pValuesDiet_Stool_Study2 ,method="BH") 
+
+dFrame <- dFrame[order(dFrame$pValuesDiet_Stool_Study2 ),]
+
+write.table(dFrame, file="pValueSummary.txt", sep="\t", row.names=FALSE)
 							
