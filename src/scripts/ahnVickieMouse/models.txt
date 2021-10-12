@@ -13,21 +13,42 @@ for( t in taxa )
 	taxaName <- vector()
 	pValuesCaseControl_Tissue_Study1 <- vector()
 	pValuesDiet_Tissue_Study1 <- vector()
+	
+	pValuesCaseControl_Stool_Study1 <- vector()
+	pValuesDiet_Stool_Study1 <- vector()
+	
+	
 	index <- 1
+	
+	myT <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
 	
 	myT1 <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
 	myT1 <- myT1[ myT1$StudyNum == 2 & myT1$Sample_Type == "Tissue", ]
 	
+	myTStool1 <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
+	myTStool1 <- myTStool1[ myTStool1$StudyNum == 2 & myTStool1$Sample_Type == "Stool", ]
+	
+	
 	for( i in 9:which(names(myT1)=="MDS5"))
 	{
-		if( sum(myT1[,i] != 0 ) > nrow(myT1) / 4 )
+		if( sum(myT[,i] != 0 ) > nrow(myT) / 4 )
 		{
 			taxaName[index] <- names(myT1)[i]
 		
 			myLm <- lm( myT1[,i] ~ factor(myT1$disease_Status) + factor(myT1$diet))
 			pValuesCaseControl_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[1]
 			pValuesDiet_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[2]	
+		
+			myLm <- lm( myTStool1[,i] ~ factor(myTStool1$disease_Status) + factor(myTStool1$diet))
+			pValuesCaseControl_Stool_Study1 [index] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesDiet_Stool_Study1 [index] <- anova(myLm)$"Pr(>F)"[2]	
+		
+			if(is.na(pValuesCaseControl_Stool_Study1 [index] ))
+				pValuesCaseControl_Stool_Study1 [index] =1
 			
+			if(is.na(pValuesDiet_Stool_Study1 [index] ))
+				pValuesDiet_Stool_Study1 [index] =1
+		
 			index <- index + 1
 		}
 		
@@ -35,6 +56,13 @@ for( t in taxa )
 	
 	print( paste( t," pValuesCaseControl_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
 	print( paste( t," pValuesDiet_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
+	
+	print( paste( t," pValuesCaseControl_Stool_Study1  ", sum( p.adjust(pValuesCaseControl_Stool_Study1 , method="BH")<.1 )))
+	print( paste( t," pValuesDiet_Stool_Study1 ", sum( p.adjust(pValuesDiet_Stool_Study1, method="BH")<.1 )))
+	
+	hist(pValuesCaseControl_Stool_Study1, main=paste("Case control stool study 1",t),breaks=10)
+	hist(pValuesDiet_Stool_Study1, main =paste("Diet stool study 1",t  ),breaks=10)
+	
 	hist(pValuesCaseControl_Tissue_Study1, main=paste("Case control tissue study 1",t),breaks=10)
 	hist(pValuesDiet_Tissue_Study1, main =paste("Diet tissue study 1",t  ),breaks=10)
 }
