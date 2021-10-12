@@ -17,6 +17,8 @@ for( t in taxa )
 	pValuesCaseControl_Stool_Study2 <- vector()
 	pValuesDiet_Stool_Study2 <- vector()
 	
+	pValuesDiet_Tissue_Study1 <- vector()
+	
 	index <- 1
 	
 	myT <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
@@ -26,6 +28,9 @@ for( t in taxa )
 	
 	myTStool1 <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
 	myTStool1 <- myTStool1[ myTStool1$StudyNum == 2 & myTStool1$Sample_Type == "Stool", ]
+	
+	myTStudy1 <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )	
+	myTStudy1 <- myTStudy1[ myTStudy1$StudyNum == 1 , ]
 	
 	
 	for( i in 9:which(names(myT1)=="MDS5"))
@@ -48,7 +53,14 @@ for( t in taxa )
 			if(is.na(pValuesDiet_Stool_Study2 [index] ))
 				pValuesDiet_Stool_Study2 [index] =1
 		
+			myLm <- lm( myTStudy1[,i] ~ factor(myTStudy1$diet) )
+			pValuesDiet_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[1]
+			
+			if(is.na(pValuesDiet_Tissue_Study1[index] ))
+				pValuesDiet_Tissue_Study1[index] =1
+				
 			index <- index + 1
+		
 		}
 		
 	}
@@ -59,11 +71,15 @@ for( t in taxa )
 	print( paste( t," pValuesCaseControl_Stool_Study2  ", sum( p.adjust(pValuesCaseControl_Stool_Study2 , method="BH")<.1 )))
 	print( paste( t," pValuesDiet_Stool_Study2 ", sum( p.adjust(pValuesDiet_Stool_Study2, method="BH")<.1 )))
 	
-	hist(pValuesCaseControl_Stool_Study2, main=paste("Case control stool study 1",t),breaks=10)
-	hist(pValuesDiet_Stool_Study2, main =paste("Diet stool study 1",t  ),breaks=10)
+	print( paste( t," pValuesDiet_Tissue_Study1", sum( p.adjust(pValuesDiet_Tissue_Study1, method="BH")<.1 )))
+	
+	hist(pValuesCaseControl_Stool_Study2, main=paste("Case control stool study 2",t),breaks=10)
+	hist(pValuesDiet_Stool_Study2, main =paste("Diet stool study 2",t  ),breaks=10)
 	
 	hist(pValuesCaseControl_Tissue_Study2, main=paste("Case control tissue study 1",t),breaks=10)
-	hist(pValuesDiet_Tissue_Study2, main =paste("Diet tissue study 1",t  ),breaks=10)
+	hist(pValuesDiet_Tissue_Study2, main =paste("Diet tissue study 2",t  ),breaks=10)
+	
+	hist(pValuesDiet_Tissue_Study1, main=paste("Diet tissue study 1",t),breaks=10)
 }
 
 dev.off()
