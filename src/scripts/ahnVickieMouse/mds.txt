@@ -1,0 +1,24 @@
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\AnhVickiMouseData")
+
+taxa <- c("p", "c", "o", "f", "g")
+
+for( t in taxa )
+{
+	
+	filepath<- paste("pivoted_", t, "_logNormPlusMeta.txt",sep ="")
+	myT <-read.table(filepath,sep="\t",header=TRUE)
+	dataSub <- myT[  ,9:ncol(myT)]
+	myPCOA <- capscale(dataSub~1,distance="bray")
+
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_" ,t, "_allData",".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_",t,".txt", sep=""), sep="\t")	
+	
+	myMerge <- cbind( myT, myPCOA$CA$u)
+	write.table(myMerge , sep="\t", file=paste("pcoa_withMetadata",t,".txt",sep=""),row.names=FALSE)
+}
+
+

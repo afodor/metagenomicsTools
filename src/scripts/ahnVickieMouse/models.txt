@@ -1,0 +1,46 @@
+
+rm(list=ls())
+
+setwd("C:\\AnhVickiMouseData")
+
+taxa <- c("p", "c", "o", "f", "g")
+
+pdf("pValues.pdf")
+par(mfrow=c(2,2))
+
+for( t in taxa )
+{
+	taxaName <- vector()
+	pValuesCaseControl_Tissue_Study1 <- vector()
+	pValuesDiet_Tissue_Study1 <- vector()
+	index <- 1
+	
+	myT1 <- read.table( paste("pcoa_withMetadata",t,".txt",sep=""), sep="\t", header=TRUE )		
+	myT1 <- myT1[ myT1$StudyNum == 2 & myT1$Sample_Type == "Tissue", ]
+	
+	for( i in 9:which(names(myT1)=="MDS5"))
+	{
+		if( sum(myT1[,i] != 0 ) > nrow(myT1) / 4 )
+		{
+			taxaName[index] <- names(myT1)[i]
+		
+			myLm <- lm( myT1[,i] ~ factor(myT1$disease_Status) + factor(myT1$diet))
+			pValuesCaseControl_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesDiet_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[2]	
+			
+			index <- index + 1
+		}
+		
+	}
+	
+	print( paste( t," pValuesCaseControl_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
+	print( paste( t," pValuesDiet_Tissue_Study1 ", sum( p.adjust(pValuesCaseControl_Tissue_Study1, method="BH")<.1 )))
+	hist(pValuesCaseControl_Tissue_Study1, main=paste("Case control tissue study 1",t),breaks=10)
+	hist(pValuesDiet_Tissue_Study1, main =paste("Diet tissue study 1",t  ),breaks=10)
+}
+
+dev.off()
+
+#dFrame <- data.frame( pValues, percentExplained,names) 
+#write.table(dFrame, file=  "pValuesForRep1VsRep3.txt", sep="\t", row.names=FALSE)
+							
