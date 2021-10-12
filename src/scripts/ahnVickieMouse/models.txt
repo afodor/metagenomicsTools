@@ -6,7 +6,6 @@ setwd("C:\\AnhVickiMouseData")
 taxa <- c("p", "c", "o", "f", "g")
 
 pdf("pValues.pdf")
-par(mfrow=c(2,2))
 
 for( t in taxa )
 {
@@ -52,6 +51,9 @@ for( t in taxa )
 			
 			if(is.na(pValuesDiet_Stool_Study2 [index] ))
 				pValuesDiet_Stool_Study2 [index] =1
+				
+			boxplot( myTStool1[,i] ~ factor(myTStool1$disease_Status) + factor(myTStool1$diet), ylab=names(myT)[i],
+							main= paste( "pValuesDiet_Stool =  " , format( pValuesDiet_Stool_Study2[index],digits=3) ),xlab="")
 		
 			myLm <- lm( myTStudy1[,i] ~ factor(myTStudy1$diet) )
 			pValuesDiet_Tissue_Study1[index] <- anova(myLm)$"Pr(>F)"[1]
@@ -80,6 +82,8 @@ for( t in taxa )
 	hist(pValuesDiet_Tissue_Study2, main =paste("Diet tissue study 2",t  ),breaks=10)
 	
 	hist(pValuesDiet_Tissue_Study1, main=paste("Diet tissue study 1",t),breaks=10)
+	
+	plot(  log10(pValuesDiet_Tissue_Study2), log10(pValuesDiet_Tissue_Study1))
 }
 
 dev.off()
