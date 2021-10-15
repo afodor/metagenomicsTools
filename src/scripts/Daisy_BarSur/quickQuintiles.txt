@@ -79,7 +79,7 @@ for( i in 20:ncol(myT))
 {
 	for( j in 1:5)
 	{
-		myText = paste("pvalue " ,pValues[i-19,j][[1]][1] , names(myT)[i-19])
+		myText = paste("pvalue " ,pValues[i-19,j][[1]][1] , names(myT)[i])
 		plot( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ] ,main=myText) 	
 	}
 		
