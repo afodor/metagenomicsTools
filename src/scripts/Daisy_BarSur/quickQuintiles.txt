@@ -75,15 +75,14 @@ for( j in 1:5 )
 
 plot.new()
 
-for( j in 1:5)
+for( i in 20:ncol(myT))
 {
-	plot( myT[ qunitAssignments == j  ,1] ~ myT$timepoint[qunitAssignments == j  ], ylim=c(0,1000) ) 
-	
-	for( i in 20:ncol(myT))
+	for( j in 1:5)
 	{
-		points( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ],ylim=c(0,1000) ) 
-		
+		myText = paste("pvalue " ,pValues[i-19,j][[1]][1] , names(myT)[i-19])
+		plot( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ] ,main=myText) 	
 	}
+		
 }
 
 plot.new()
