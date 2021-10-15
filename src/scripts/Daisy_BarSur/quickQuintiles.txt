@@ -29,4 +29,13 @@ for( i in 1:nrow(myT))
 	qunitAssignments[i] = getQuintileGroup(  myT$percentChangeBLTwelveWeight[i], quintile ) 
 }
 
+pValues <-matrix(list(), nrow=ncol(myT)-20+1, ncol=5)
 
+for( i in 20:ncol(myT))
+{
+	for( j in 1:5 )
+	{
+		myLm <- lm(  myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ])
+		pValues[i-19,j] = anova(myLm)$"Pr(>F)"[1]	
+	}
+}
