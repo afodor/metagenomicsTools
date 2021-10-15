@@ -73,6 +73,20 @@ for( j in 1:5 )
 		
 }
 
+plot.new()
+
+for( j in 1:5)
+{
+	plot( myT[ qunitAssignments == j  ,1] ~ myT$timepoint[qunitAssignments == j  ], ylim=c(0,1000) ) 
+	
+	for( i in 20:ncol(myT))
+	{
+		points( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ],ylim=c(0,1000) ) 
+		
+	}
+}
+
+plot.new()
 dev.off()
 		
 }
