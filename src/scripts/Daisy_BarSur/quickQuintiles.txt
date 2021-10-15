@@ -39,3 +39,41 @@ for( i in 20:ncol(myT))
 		pValues[i-19,j] = anova(myLm)$"Pr(>F)"[1]	
 	}
 }
+
+par(mfrow=c(3,2))
+
+for( j in 1:5 ) 
+{
+	pValuesToPlot <- vector()
+
+	for( i in 1:nrow(pValues))
+	{
+		pValuesToPlot[i] = pValues[i,j][[1]][1]
+	
+		if(  is.nan( pValuesToPlot[i] ))
+				pValuesToPlot[i] = 1
+	}
+	
+pdf("histograms.pdf")
+par(mfrow=c(3,2))
+
+for( j in 1:5 ) 
+{
+	pValuesToPlot <- vector()
+
+	for( i in 1:nrow(pValues))
+	{
+		pValuesToPlot[i] = pValues[i,j][[1]][1]
+	
+		if(  is.nan( pValuesToPlot[i] ))
+				pValuesToPlot[i] = 1
+	}
+	
+	hist(pValuesToPlot)
+		
+}
+
+dev.off()
+		
+}
+
