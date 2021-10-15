@@ -82,10 +82,10 @@ for( i in 20:ncol(myT))
 		myText = paste("pvalue " ,pValues[i-19,j][[1]][1] , names(myT)[i])
 		plot( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ] ,main=myText) 	
 	}
-		
+	
+	plot.new()		
 }
 
-plot.new()
 dev.off()
 		
 }
