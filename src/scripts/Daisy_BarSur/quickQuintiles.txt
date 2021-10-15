@@ -1,0 +1,32 @@
+rm(list=ls())
+
+setwd("C:\\DaisyQunitles")
+
+getQuintileGroup <- function( val, quintile )
+{
+	for( i in 1:4)
+	{
+		if( val >= as.numeric(quintile[i]) & val <= as.numeric(quintile[i+1]) ) 
+			return (i) 
+	}
+
+	return (5)
+	
+}
+
+
+
+myT <- read.table("genuspivotedLogNormPlusMetaMDS.txt", sep="\t", header=TRUE)
+
+myT <- myT[  !is.na(myT$percentChangeBLTwelveWeight),]
+
+quintile <- quantile(myT$percentChangeBLTwelveWeight, probs=c(0,.2,.4,.6,.8,1))
+
+qunitAssignments <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	qunitAssignments[i] = getQuintileGroup(  myT$percentChangeBLTwelveWeight[i], quintile ) 
+}
+
+
