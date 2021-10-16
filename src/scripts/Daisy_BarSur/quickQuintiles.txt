@@ -93,8 +93,10 @@ for( i in 1:nrow(dFrame))
 			paste( dFrame$taxaNames[rowNum], "quintile", dFrame$qintForPValue[rowNum], "p=", 
 						format(dFrame$qintForPValue[rowNum],digits=3) )
 						
-			plot(myT$timepoint[qunitAssignments == j  ],myT[ qunitAssignments == j  ,dataCol] )
+			plot(myT$timepoint[qunitAssignments == j  ],myT[ qunitAssignments == j  ,dataCol] , main=myText)
 		}
+		
+		plot.new()
 	}
 }
 
