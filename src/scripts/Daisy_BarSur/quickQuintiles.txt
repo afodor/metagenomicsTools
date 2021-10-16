@@ -14,6 +14,19 @@ getQuintileGroup <- function( val, quintile )
 	
 }
 
+# very slow.... 
+getMatchingRowIndex <- function( myFrame, taxaName, q)
+{
+	for( i in 1:nrow(myFrame))
+	{
+		if( myFrame$taxaNames[i] == taxaName & myFrame$qintForPValue[i] == q   )
+		{
+			return (i)
+		}
+	}
+	
+	return (-1)
+}
 
 
 myT <- read.table("genuspivotedLogNormPlusMetaMDS.txt", sep="\t", header=TRUE)
@@ -62,20 +75,29 @@ boxplot(  myT$percentChangeBLTwelveWeight[qunitAssignments == 1],
 				myT$percentChangeBLTwelveWeight[qunitAssignments == 3],
 					myT$percentChangeBLTwelveWeight[qunitAssignments == 4],
 						myT$percentChangeBLTwelveWeight[qunitAssignments == 5],xlab="quintile", ylab="Percent Change BL TwelveWeight")
-					
 
-for( i in 20:ncol(myT))
+dFrame<-data.frame(pValues,qintForPValue,taxaNames)
+dFrame <- dFrame[ order( pValues ),]
+write.table(dFrame, file="allPValuesToTimeByQuintile.txt", sep="\t", row.names=FALSE)					
+
+for( i in 1:nrow(dFrame))
 {
-	for( j in 1:5)
+	if(dFrame$qintForPValue[i] == 1)
 	{
-		myText = paste("pvalue " ,pValues[i-19,j][[1]][1] , names(myT)[i])
-		plot( myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ] ,main=myText) 	
+		dataCol <- which( names(myT) == dFrame$taxaNames[i] )
+		
+		for( j in 1:5) 
+		{
+			rowNum = getMatchingRowIndex( dFrame, dFrame$taxaNames[i] ,  dFrame$qintForPValue[j])
+			myText <- 
+			paste( dFrame$taxaNames[rowNum], "quintile", dFrame$qintForPValue[rowNum], "p=", 
+						format(dFrame$qintForPValue[rowNum],digits=3) )
+						
+			plot(myT$timepoint[qunitAssignments == j  ],myT[ qunitAssignments == j  ,dataCol] )
+		}
 	}
-	
-	plot.new()		
 }
 
 dev.off()
 		
-}
-
+	
