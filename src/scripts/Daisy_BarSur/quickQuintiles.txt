@@ -57,7 +57,12 @@ for( j in 1:5 )
 	hist(pValues[qintForPValue==j], main=paste("Quintile=",j) )		
 }
 
-plot.new()
+boxplot(  myT$percentChangeBLTwelveWeight[qunitAssignments == 1], 
+			myT$percentChangeBLTwelveWeight[qunitAssignments == 2],
+				myT$percentChangeBLTwelveWeight[qunitAssignments == 3],
+					myT$percentChangeBLTwelveWeight[qunitAssignments == 4],
+						myT$percentChangeBLTwelveWeight[qunitAssignments == 5],xlab="quintile", ylab="Percent Change BL TwelveWeight")
+					
 
 for( i in 20:ncol(myT))
 {
