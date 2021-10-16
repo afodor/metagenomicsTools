@@ -88,10 +88,10 @@ for( i in 1:nrow(dFrame))
 		
 		for( j in 1:5) 
 		{
-			rowNum = getMatchingRowIndex( dFrame, dFrame$taxaNames[i] ,  dFrame$qintForPValue[j])
+			rowNum = getMatchingRowIndex( dFrame, dFrame$taxaNames[i] ,  j)
 			myText <- 
-			paste( dFrame$taxaNames[rowNum], "quintile", dFrame$qintForPValue[rowNum], "p=", 
-						format(dFrame$qintForPValue[rowNum],digits=3) )
+			paste( dFrame$taxaNames[rowNum], "\nquintile", dFrame$qintForPValue[rowNum], "p=", 
+						format(dFrame$pValues[rowNum],digits=3) )
 						
 			plot(myT$timepoint[qunitAssignments == j  ],myT[ qunitAssignments == j  ,dataCol] , main=myText)
 		}
