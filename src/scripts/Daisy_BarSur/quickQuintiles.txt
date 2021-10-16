@@ -29,48 +29,32 @@ for( i in 1:nrow(myT))
 	qunitAssignments[i] = getQuintileGroup(  myT$percentChangeBLTwelveWeight[i], quintile ) 
 }
 
-pValues <-matrix(list(), nrow=ncol(myT)-20+1, ncol=5)
+pValues <-vector()
+qintForPValue <- vector()
+taxaNames <- vector()
+index <- 1
 
 for( i in 20:ncol(myT))
 {
-	for( j in 1:5 )
+	if( sum(myT[,i] != 0 ) > nrow(myT) / 10 )
 	{
-		myLm <- lm(  myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ])
-		pValues[i-19,j] = anova(myLm)$"Pr(>F)"[1]	
+		for( j in 1:5 )
+		{
+			myLm <- lm(  myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ])
+			pValues[index] = anova(myLm)$"Pr(>F)"[1]
+			qintForPValue[index] = j
+			taxaNames[index] = names(myT)[i]
+			index = index + 1	
+		}
 	}
 }
-
-par(mfrow=c(3,2))
-
-for( j in 1:5 ) 
-{
-	pValuesToPlot <- vector()
-
-	for( i in 1:nrow(pValues))
-	{
-		pValuesToPlot[i] = pValues[i,j][[1]][1]
-	
-		if(  is.nan( pValuesToPlot[i] ))
-				pValuesToPlot[i] = 1
-	}
 	
 pdf("histograms.pdf")
 par(mfrow=c(3,2))
 
 for( j in 1:5 ) 
 {
-	pValuesToPlot <- vector()
-
-	for( i in 1:nrow(pValues))
-	{
-		pValuesToPlot[i] = pValues[i,j][[1]][1]
-	
-		if(  is.nan( pValuesToPlot[i] ))
-				pValuesToPlot[i] = 1
-	}
-	
-	hist(pValuesToPlot)
-		
+	hist(pValues[qintForPValue==j], main=paste("Quintile=",j) )		
 }
 
 plot.new()
