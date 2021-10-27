@@ -35,14 +35,23 @@ for( i in 1:nrow(myT))
 	}
 }
 
-par(mfrow=c(3,4))
+par(mfrow=c(4,3))
 plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16,col=myColors)
 plot(myT$WIAB_2, myT$WIAB_5,log="xy", xlab= "UNC donor", ylab="UNC post-FMT 1", pch=16,col=myColors)
 plot(myT$WIAB_2, myT$WIAB_6,log="xy", xlab= "UNC donor", ylab="UNC post-FMT 2", pch=16,col=myColors)
-plot.new()
 
 plot(myT$WIAB_4, myT$WIAB_5,log="xy", xlab= "UNC pre-FMT", ylab="UNC post-FMT 1", pch=16,col=myColors)
 plot(myT$WIAB_4, myT$WIAB_6,log="xy", xlab= "UNC pre-FMT", ylab="UNC post-FMT 2", pch=16,col=myColors)
 plot.new()
-plot.now()
+legend( "topleft",legend=c("Lactobacillus","Bifidobacterium","Veillonella", "Faecalibacterium", "Escherichia"),col=c("RED","BLUE", "ORANGE", "YELLOW", "PURPLE"),pch=16,cex=0.6,
+pt.cex=1.2)
 
+
+plot(myT$WIAB_VBD, myT$WIAB_VB1,log="xy", xlab= "Vanderbilt donor", ylab="Vanderbilt pre-FMT", pch=16,col=myColors)
+plot(myT$WIAB_VBD, myT$WIAB_10,log="xy", xlab= "Vanderbilt donor", ylab="Vanderbilt post-FMT 1", pch=16,col=myColors)
+plot(myT$WIAB_VBD, myT$WIAB_VB3,log="xy", xlab= "Vanderbilt donor", ylab="Vanderbilt post-FMT 2", pch=16,col=myColors)
+
+
+plot(myT$WIAB_VB1,myT$WIAB_10,log="xy", xlab= "Vanderbilt pre", ylab="Vanderbilt post-FMT 1", pch=16,col=myColors)
+plot(myT$WIAB_VB1,myT$WIAB_VB3,log="xy", xlab= "Vanderbilt pre", ylab="Vanderbilt post-FMT 1", pch=16,col=myColors)
+plot(myT$WIAB_VB1,myT$WIAB_4,log="xy", xlab= "Vanderbilt pre", ylab="UNC pre", pch=16,col=myColors)
