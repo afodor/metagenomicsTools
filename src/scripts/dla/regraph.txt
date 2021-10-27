@@ -25,12 +25,24 @@ for( i in 1:nrow(myT))
 	{
 		myColors[i] = "YELLOW"
 	}
+	else if(grepl("Escherichia", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "PURPLE"
+	}
 	else
 	{
 		myColors[i] = "BLACK"
 	}
 }
 
-par(mfrow=c(3,3))
+par(mfrow=c(3,4))
 plot(myT$WIAB_2, myT$WIAB_4,log="xy", xlab= "UNC donor", ylab="UNC pre-FMT", pch=16,col=myColors)
+plot(myT$WIAB_2, myT$WIAB_5,log="xy", xlab= "UNC donor", ylab="UNC post-FMT 1", pch=16,col=myColors)
+plot(myT$WIAB_2, myT$WIAB_6,log="xy", xlab= "UNC donor", ylab="UNC post-FMT 2", pch=16,col=myColors)
+plot.new()
+
+plot(myT$WIAB_4, myT$WIAB_5,log="xy", xlab= "UNC pre-FMT", ylab="UNC post-FMT 1", pch=16,col=myColors)
+plot(myT$WIAB_4, myT$WIAB_6,log="xy", xlab= "UNC pre-FMT", ylab="UNC post-FMT 2", pch=16,col=myColors)
+plot.new()
+plot.now()
 
