@@ -21,6 +21,10 @@ for( i in 1:nrow(myT))
 	{
 		myColors[i] = "ORANGE"
 	}
+	else if(grepl("Faecalibacterium", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "YELLOW"
+	}
 	else
 	{
 		myColors[i] = "BLACK"
