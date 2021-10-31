@@ -1,0 +1,26 @@
+rm(list=ls())
+
+setwd("C:\\DaisyQunitles")
+
+myT <- read.table("genuspivotedLogNormPlusMetaMDS.txt", sep="\t", header=TRUE)
+
+myT <- myT[  !is.na(myT$percentChangeBLTwelveWeight),]
+
+pValues <-vector()
+taxaNames <- vector()
+index <- 1
+
+for( i in 20:ncol(myT))
+{
+	if( sum(myT[,i] != 0 ) > nrow(myT) / 10 )
+	{
+			myLm <- lm(  myT[ ,i] ~ myT$timepoint)
+			pValues[index] = anova(myLm)$"Pr(>F)"[1]
+			taxaNames[index] = names(myT)[i]
+			index = index + 1	
+	}
+}
+
+
+pValuesAdjust = p.adjust(pValues, method="BH")
+sum(pValuesAdjust<0.05)
