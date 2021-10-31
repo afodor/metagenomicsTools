@@ -21,6 +21,5 @@ for( i in 20:ncol(myT))
 	}
 }
 
-
 pValuesAdjust = p.adjust(pValues, method="BH")
 sum(pValuesAdjust<0.05)
