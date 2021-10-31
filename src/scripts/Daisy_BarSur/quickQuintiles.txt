@@ -109,4 +109,9 @@ boxplot(  -log10( pValues[qintForPValue==1]),
 						-log10(pValues[qintForPValue==5]),xlab="quintile", ylab="-log10(pValues)")
 
 		
-	
+pValuesAdjust = p.adjust(pValues, method="BH")
+sum(pValuesAdjust[qintForPValue==1] <0.05)
+sum(pValuesAdjust[qintForPValue==2] <0.05)
+sum(pValuesAdjust[qintForPValue==3] <0.05)
+sum(pValuesAdjust[qintForPValue==4] <0.05)
+sum(pValuesAdjust[qintForPValue==5] <0.05)
