@@ -2,3 +2,9 @@ setwd("C:\\wolfgangDonaldsonCombinedDir\\seqs_May_2021\\rdpOut")
 
 myT <- read.table("pcoa__withMetadatagenus.txt", sep="\t", header=TRUE)
 
+myColors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	
+}
