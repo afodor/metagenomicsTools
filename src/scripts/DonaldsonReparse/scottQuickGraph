@@ -6,5 +6,23 @@ myColors <- vector()
 
 for( i in 1:nrow(myT))
 {
+	if( myT$visitType[i] == 1 )
+	{
+		myColors[i] = "red"
+	}
+	else if( myT$visitType[i] == 2 )
+	{
+		myColors[i] = "blue"
+	}else if( myT$visitType[i] == 3 )
+	{
+		myColors[i] = "orange"
+	}
+	else{ myColors[i] = "yellow"} 
 	
 }
+
+plot( myT$MDS1, myT$MDS2, col=myColors, xlab="MDS 1", ylab ="MDS 2",cex=1.2,pch=19)
+
+
+legend("topleft", legend=c("visit 1", "visit 2", "visit 3"), col =c("red", "blue", "orange"),cex=1.4,pch=19)
+

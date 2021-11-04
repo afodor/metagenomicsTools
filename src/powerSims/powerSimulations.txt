@@ -4,13 +4,13 @@
 # so these results should be considered a rough approximation
 
 rm(list=ls())
-sampleSizeForEachGroup <- 15
-numHypotheses <- 1000
+sampleSizeForEachGroup <- 20
+numHypotheses <- 100
 numUnder <- 0
 numBonferroniUnder <-0
-fractionTruePositives <- 0.1
+fractionTruePositives <- 1
 numTruePositves <-0;
-effectSize <- 1.1
+effectSize <- .85
 
 pValues <- vector();
 truePositives <- vector()
