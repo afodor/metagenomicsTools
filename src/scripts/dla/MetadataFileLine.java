@@ -31,8 +31,8 @@ public class MetadataFileLine
 		String[] splits = s.split("\t");
 		
 		this.sampleName = splits[0];
-		this.timepoint = splits[1];
-		this.patient = splits[2];
+		this.timepoint = splits[2];
+		this.patient = splits[3];
 	}
 	
 	@SuppressWarnings("resource")

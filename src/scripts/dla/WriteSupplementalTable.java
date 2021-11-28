@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 public class WriteSupplementalTable
 {
@@ -13,8 +14,11 @@ public class WriteSupplementalTable
 		writeUnsortedTable();
 	}
 	
+	@SuppressWarnings("resource")
 	private static void writeUnsortedTable() throws Exception
 	{
+		HashMap<String, MetadataFileLine> map = MetadataFileLine.getMetaMap();
+		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
 				"C:\\DLA_Analyses2021-main\\input\\hum"
 				+ "anN2_pathabundance_relab.tsv"	)));
@@ -33,7 +37,12 @@ public class WriteSupplementalTable
 			String s= firstSplits[x];
 			s = s.substring(0, s.indexOf("-Emily"));
 			
-			writer.write("\t" + s);
+			MetadataFileLine mfl = map.get(s);
+			
+			if( mfl== null)
+				throw new Exception("Could not find " + s);
+			
+			writer.write("\t" + mfl.getPatient() + "_" + mfl.getTimepoint());
 		}
 		
 		writer.write("\n");
