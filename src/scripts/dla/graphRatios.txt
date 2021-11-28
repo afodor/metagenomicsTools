@@ -1,0 +1,38 @@
+
+rm(list=ls())
+
+setwd("C:\\DLA_Analyses2021-main\\af_out\\")
+
+myT <- read.table("tableWithRatios.txt", sep="\t", header=TRUE)
+
+myColors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( grepl("Lactobacillus", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "RED"
+	}
+	else if(grepl("Bifidobacterium", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "BLUE"
+	}
+	else if(grepl("Veillonella", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "ORANGE"
+	}
+	else if(grepl("Faecalibacterium", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "YELLOW"
+	}
+	else if(grepl("Escherichia", myT$Pathway[i]) == TRUE)
+	{
+		myColors[i] = "PURPLE"
+	}
+	else
+	{
+		myColors[i] = "BLACK"
+	}
+}
+
+plot(myT$vanderbiltRatio,myT$uncRatio,xlab= "Vanderbilt ratio", ylab="unc ratio", pch=16,col=myColors)
