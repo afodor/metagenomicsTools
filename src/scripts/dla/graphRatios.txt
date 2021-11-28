@@ -5,6 +5,9 @@ setwd("C:\\DLA_Analyses2021-main\\af_out\\")
 
 myT <- read.table("tableWithRatios.txt", sep="\t", header=TRUE)
 
+plot(myT$vanderbiltRatio,myT$uncRatio,xlab= "Vanderbilt ratio", ylab="unc ratio", pch=16)
+
+
 myColors <- vector()
 
 for( i in 1:nrow(myT))
@@ -36,3 +39,4 @@ for( i in 1:nrow(myT))
 }
 
 plot(myT$vanderbiltRatio,myT$uncRatio,xlab= "Vanderbilt ratio", ylab="unc ratio", pch=16,col=myColors)
+

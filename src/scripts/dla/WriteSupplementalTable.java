@@ -51,23 +51,12 @@ public class WriteSupplementalTable
 		if (denom == 0 )
 			return 0;
 		
-		boolean flip = false;
-		
 		double ratio = numeratorAvg/denom;
 		
 		if(ratio == 0 )
 			return 0;
 		
-		if( ratio < 1)
-		{
-			flip = true;
-			ratio = 1 /ratio;
-		}
-		
 		ratio = Math.log10(ratio);
-		
-		if( flip )
-			ratio = - ratio;
 		
 		return ratio;
 	}
