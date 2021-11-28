@@ -37,6 +37,8 @@ public class WriteSupplementalTable
 		
 		double numeratorSum =0;
 		
+		//System.out.println(vanderbilt + " " + numeratorIndex);
+		
 		for( Integer i : numeratorIndex)
 		{
 			numeratorSum += Double.parseDouble(splits[i]);
@@ -89,6 +91,7 @@ public class WriteSupplementalTable
 		
 		String[] splits = s.split("\t");
 		
+		//System.out.println(vanderbilt + " donor " + index);
 		return Double.parseDouble(splits[index]);
 	}
 	
