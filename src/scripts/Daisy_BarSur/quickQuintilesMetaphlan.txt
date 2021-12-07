@@ -28,7 +28,7 @@ getMatchingRowIndex <- function( myFrame, taxaName, q)
 	return (-1)
 }
 
-myT <- read.table("updated_genus_Metaphlan.txt", sep="\t", header=TRUE)
+myT <- read.table("updated_genus_Kraken.txt", sep="\t", header=TRUE)
 
 firstData <- which(names(myT)=="percentChangeBLTwelveWeight") + 1
 
@@ -65,7 +65,7 @@ for( i in firstData:ncol(myT))
 	}
 }
 	
-pdf("histogramsGenusMetaphlan.pdf")
+pdf("histogramsGenusKraken.pdf")
 par(mfrow=c(3,2))
 
 for( j in 1:5 ) 
@@ -81,7 +81,7 @@ boxplot(  myT$percentChangeBLTwelveWeight[qunitAssignments == 1],
 
 dFrame<-data.frame(pValues,qintForPValue,taxaNames)
 dFrame <- dFrame[ order( pValues ),]
-write.table(dFrame, file="allPValuesToTimeByQuintileGenusMetaphlan.txt", sep="\t", row.names=FALSE)					
+write.table(dFrame, file="allPValuesToTimeByQuintileGenusKraken.txt", sep="\t", row.names=FALSE)					
 
 for( i in 1:nrow(dFrame))
 {
