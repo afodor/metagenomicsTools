@@ -19,10 +19,14 @@ public class CompareOneToTwelve
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Holder> map = getOldMap();
-		System.out.println(map.keySet());
 		
+		for(String s : map.keySet())
+		{
+			System.out.println(s + " "  + map.get(s).oneMonth + " " + map.get(s).twelveMonth);
+		}
 	}
 	
+	@SuppressWarnings("resource")
 	private static HashMap<String, Holder> getOldMap() throws Exception
 	{
 		HashMap<String, Holder> map = new LinkedHashMap<>();
@@ -40,6 +44,10 @@ public class CompareOneToTwelve
 			
 			String patientId = tReader.nextToken();
 			
+			for( int x=0;x  < 3; x++)
+				tReader.nextToken();
+			
+			
 			Holder h= map.get(patientId);
 			
 			if( h == null)
@@ -50,16 +58,18 @@ public class CompareOneToTwelve
 			
 			String oneMWeightString = tReader.nextToken();
 			
-			for( int x=0;x  < 5; x++)
-				tReader.nextToken();
+			tReader.nextToken();tReader.nextToken();
 			
 			String twelveWeightString = tReader.nextToken();
 			
 			if( h.oneMonth != null && ! h.oneMonth.equals(oneMWeightString))
 				throw new Exception("No " + patientId + " " + h.oneMonth + " " + oneMWeightString);
 
+			if( h.twelveMonth!= null && ! h.twelveMonth.equals(twelveWeightString))
+				throw new Exception("No " + patientId + " " + h.twelveMonth+ " " + twelveWeightString);
 			
 			h.oneMonth = oneMWeightString;
+			h.twelveMonth = twelveWeightString;
 		}
 		
 		return map;
