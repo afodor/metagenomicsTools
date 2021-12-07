@@ -1,9 +1,14 @@
 package scripts.Daisy_BarSur;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class MergeQunitilesAtGenus
 {
@@ -15,6 +20,33 @@ public class MergeQunitilesAtGenus
 		
 	}
 	
+	private static void writeResults( HashMap<String, Holder> map   ) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\bariatricSurgery_Daisy\\fromDaisy\\pivotGenusMetaphlanVsKraken.txt" )));
+		
+		List<String> list = new ArrayList<>(map.keySet());
+		Collections.sort(list);
+		
+		writer.write("taxa\tquintile\tmetaphlan\tkraken\n");
+		
+		for(String s : list)
+		{
+			writer.write(s);
+			
+			Holder h = map.get(s);
+			
+			for( int x=0; x < 5; x++)
+			{
+				writer.write("\t" + x);
+				
+				writer.write("\t" + (h.metaphlanQunits[x] == null ? "NA" : ""+h.metaphlanQunits[x]));
+				writer.write("\t" + (h.krakenQunits[x] == null ? "NA" : ""+h.krakenQunits[x])  + "\n");
+			}
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Holder> map  =new HashMap<>();
@@ -22,6 +54,8 @@ public class MergeQunitilesAtGenus
 		addAFile( map, new File("C:\\bariatricSurgery_Daisy\\fromDaisy\\allPValuesToTimeByQuintileGenusKraken.txt"), true );
 
 		addAFile( map, new File("C:\\bariatricSurgery_Daisy\\fromDaisy\\allPValuesToTimeByQuintileGenusMetaphlan.txt"), false);
+		
+		writeResults(map);
 	}
 	
 	private static void addAFile( HashMap<String, Holder> map, File f , boolean isKraken ) throws Exception
