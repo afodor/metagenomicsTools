@@ -52,7 +52,7 @@ index <- 1
 
 for( i in firstData:ncol(myT))
 {
-	if( sum(myT[,i] > -13.55 ) > nrow(myT) / 10 )
+	if( sum(myT[,i] > 0 ) > nrow(myT) / 10 )
 	{
 		for( j in 1:5 )
 		{
