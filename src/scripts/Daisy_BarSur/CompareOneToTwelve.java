@@ -16,14 +16,58 @@ public class CompareOneToTwelve
 		String twelveMonth;
 	}
 	
+	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Holder> map = getOldMap();
 		
-		for(String s : map.keySet())
+	//	for(String s : map.keySet())
+//		{
+	//		System.out.println(s + " "  + map.get(s).oneMonth + " " + map.get(s).twelveMonth);
+	//	}
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\bariatricSurgery_Daisy\\fromDaisy\\updated_phylum_Metaphlan.txt" )));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			System.out.println(s + " "  + map.get(s).oneMonth + " " + map.get(s).twelveMonth);
+			TabReader tReader = new TabReader(s);
+			
+			tReader.nextToken();
+			
+			String patientId = tReader.nextToken();
+			
+			Holder h = map.get(patientId);
+			
+			if( h != null )
+			{
+				for( int x=0; x < 39; x++)
+					tReader.nextToken();
+				
+				String oneToTwelve = tReader.nextToken();
+				
+				if( ! oneToTwelve.equals("NA") )
+				{
+					Double oneVal = Double.parseDouble(h.oneMonth);
+					Double twleveVal = Double.parseDouble(h.twelveMonth);
+					
+					double percentChange = (twleveVal -oneVal ) / oneVal;
+					
+					System.out.println("MATCH " + patientId + " " + oneToTwelve + " " + percentChange);
+					
+					Double daisyVal = Double.parseDouble(oneToTwelve);
+					
+					if( Math.abs(daisyVal - percentChange) > 0.0001)
+						throw new Exception("Fail");
+					
+				}
+				
+				
+			}
 		}
+		
+		System.out.println("PASS");
 	}
 	
 	@SuppressWarnings("resource")
