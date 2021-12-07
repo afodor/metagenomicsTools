@@ -1,0 +1,121 @@
+rm(list=ls())
+
+setwd("C:\\bariatricSurgery_Daisy\\fromDaisy")
+
+getQuintileGroup <- function( val, quintile )
+{
+	for( i in 1:4)
+	{
+		if( val >= as.numeric(quintile[i]) & val <= as.numeric(quintile[i+1]) ) 
+			return (i) 
+	}
+
+	return (5)
+	
+}
+
+# very slow.... 
+getMatchingRowIndex <- function( myFrame, taxaName, q)
+{
+	for( i in 1:nrow(myFrame))
+	{
+		if( myFrame$taxaNames[i] == taxaName & myFrame$qintForPValue[i] == q   )
+		{
+			return (i)
+		}
+	}
+	
+	return (-1)
+}
+
+myT <- read.table("updated_genus_Metaphlan.txt", sep="\t", header=TRUE)
+
+firstData <- which(names(myT)=="percentChangeBLTwelveWeight") + 1
+
+
+myT <- myT[  !is.na(myT$percentChangeBLTwelveWeight),]
+myT <- myT[ !is.na(myT[,firstData]),]
+
+quintile <- quantile(myT$percentChangeBLTwelveWeight, probs=c(0,.2,.4,.6,.8,1))
+
+qunitAssignments <- vector()
+
+for( i in 1:nrow(myT)) 
+{
+	qunitAssignments[i] = getQuintileGroup(  myT$percentChangeBLTwelveWeight[i], quintile ) 
+}
+
+pValues <-vector()
+qintForPValue <- vector()
+taxaNames <- vector()
+index <- 1
+
+for( i in firstData:ncol(myT))
+{
+	if( sum(myT[,i] > -13.55 ) > nrow(myT) / 10 )
+	{
+		for( j in 1:5 )
+		{
+			myLm <- lm(  myT[ qunitAssignments == j  ,i] ~ myT$timepoint[qunitAssignments == j  ])
+			pValues[index] = anova(myLm)$"Pr(>F)"[1]
+			qintForPValue[index] = j
+			taxaNames[index] = names(myT)[i]
+			index = index + 1	
+		}
+	}
+}
+	
+pdf("histogramsGenusMetaphlan.pdf")
+par(mfrow=c(3,2))
+
+for( j in 1:5 ) 
+{
+	hist(pValues[qintForPValue==j], main=paste("Quintile=",j) )		
+}
+
+boxplot(  myT$percentChangeBLTwelveWeight[qunitAssignments == 1], 
+			myT$percentChangeBLTwelveWeight[qunitAssignments == 2],
+				myT$percentChangeBLTwelveWeight[qunitAssignments == 3],
+					myT$percentChangeBLTwelveWeight[qunitAssignments == 4],
+						myT$percentChangeBLTwelveWeight[qunitAssignments == 5],xlab="quintile", ylab="Percent Change BL TwelveWeight")
+
+dFrame<-data.frame(pValues,qintForPValue,taxaNames)
+dFrame <- dFrame[ order( pValues ),]
+write.table(dFrame, file="allPValuesToTimeByQuintileGenusMetaphlan.txt", sep="\t", row.names=FALSE)					
+
+for( i in 1:nrow(dFrame))
+{
+	if(dFrame$qintForPValue[i] == 1)
+	{
+		dataCol <- which( names(myT) == dFrame$taxaNames[i] )
+		
+		for( j in 1:5) 
+		{
+			rowNum = getMatchingRowIndex( dFrame, dFrame$taxaNames[i] ,  j)
+			myText <- 
+			paste( dFrame$taxaNames[rowNum], "\nquintile", dFrame$qintForPValue[rowNum], "p=", 
+						format(dFrame$pValues[rowNum],digits=3) )
+						
+			plot(myT$timepoint[qunitAssignments == j  ],myT[ qunitAssignments == j  ,dataCol] , main=myText, xlab="Time (months)", 
+					ylab =paste("log normalized", dFrame$taxaNames[rowNum]))
+		}
+		
+		plot.new()
+	}
+}
+
+dev.off()
+
+boxplot(  -log10( pValues[qintForPValue==1]), 
+			-log10(pValues[qintForPValue==2]),
+				-log10(pValues[qintForPValue==3]),
+					-log10(pValues[qintForPValue==4]),
+						-log10(pValues[qintForPValue==5]),xlab="quintile", ylab="-log10(pValues)")
+
+		
+pValuesAdjust = p.adjust(pValues, method="BH")
+sum(pValuesAdjust[qintForPValue==1] <0.05)
+sum(pValuesAdjust[qintForPValue==2] <0.05)
+sum(pValuesAdjust[qintForPValue==3] <0.05)
+sum(pValuesAdjust[qintForPValue==4] <0.05)
+sum(pValuesAdjust[qintForPValue==5] <0.05)
