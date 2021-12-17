@@ -1,0 +1,41 @@
+rm(list=ls())
+
+setwd("C:\\JonathanHansenAlleles\\outputTextFiles\\");
+
+#myT <- read.table("E_coli_NC101ForR.txt",header=TRUE,sep="\t")
+
+myT <- read.table("E_faecalis_OG1RFForR.txt",header=TRUE,sep="\t")
+
+pValues <- vector()
+location <- vector()
+geneName <- vector()
+
+pdf("EFaec_boxplots.pdf")
+
+index <- 1
+for( i in 1:nrow(myT))
+{
+		koVal <- myT[i, 8:16]
+		wtVal <- myT[i,17:27]
+		
+		if( sum(! is.na( koVal  )) > 5 & sum(! is.na( wtVal )) > 5 ) 
+		{
+			pValues[index] <- t.test( koVal,  wtVal)$p.value
+			location[index] <- paste(myT$Chrom[i], myT$Index[i])
+			geneName[index] <-  myT$Gene_ID[i]
+			
+			boxplot(as.numeric( koVal), as.numeric(wtVal), main=paste(myT$Chrom[i], myT$Index[i], " p = " , pValues[index]  ))
+			;
+			index= index + 1
+		}
+}
+
+pValuesAdj <- p.adjust(pValues,method="BH")
+
+dFrame <- data.frame( pValues, geneName, location)
+	
+write.table(dFrame, file="EFaec_OUT.txt", sep="\t", row.names=FALSE)
+
+
+
+dev.off()
