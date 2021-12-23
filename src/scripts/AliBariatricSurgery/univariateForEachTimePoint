@@ -1,0 +1,24 @@
+
+rm(list=ls())
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
+
+#inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+#				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", 
+#							"humanN2_metadatawithPercentChange.txt")
+				
+
+inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")
+
+labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")	
+				
+
+
+for( fileIndex in 1:length(inFileNames))
+{
+	inFile <- inFileNames[fileIndex]
+	label <- labelNames[fileIndex]
+	
+	myT <- read.table(inFile, sep="\t", header=TRUE)
+	
+}
