@@ -78,8 +78,20 @@ public class AddOneMonthDates
 		{
 			String[] splits = s.split("\t");
 			
-			for( int x=0; x <6; x++)
-				writer.write("\t" + splits[x]);
+			writer.write(splits[0]);
+			
+			for( int x=1; x <6; x++)
+				writer.write( "\t" +  splits[x]);
+			
+
+			int index = splits[0].lastIndexOf("-");
+			String subjectId = splits[0].substring(0,index);
+			
+			if( ! subjectId.equals(splits[1]))
+				throw new Exception("No");
+			
+			Integer timepoint = Integer.parseInt(splits[0].substring(index+1, splits[0].length()));
+			writer.write("\t" + timepoint);
 			
 			HashMap<Integer, Double> innerMap = map.get(splits[1]);
 			
