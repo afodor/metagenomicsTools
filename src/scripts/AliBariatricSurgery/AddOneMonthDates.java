@@ -12,7 +12,8 @@ public class AddOneMonthDates
 	
 	public static void main(String[] args) throws Exception
 	{
-		getPatientWeightMap();
+		 HashMap<String, HashMap<Integer,Double>> map = getPatientWeightMap();
+		 System.out.println(map);
 	}
 	
 	// outerkey is patient ID;  inner key is timepoint;  inner value is weight
@@ -29,8 +30,18 @@ public class AddOneMonthDates
 			
 			if( ! inFile.isDirectory() && s.endsWith(".tsv"))
 			{
-
-				getPatientWeightMap(inFile);
+				if( map == null)
+				{
+					map = getPatientWeightMap(inFile);
+				}
+				else
+				{
+					HashMap<String, HashMap<Integer,Double>> map2 = getPatientWeightMap(inFile);
+					
+					if( ! map.equals(map2))
+						throw new Exception("No");
+				}
+					
 			}
 		}
 		
@@ -41,6 +52,7 @@ public class AddOneMonthDates
 	{
 		HashMap<String, HashMap<Integer,Double>> map = new LinkedHashMap<String,HashMap<Integer,Double>>();
 		
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
 		reader.readLine();
@@ -51,12 +63,29 @@ public class AddOneMonthDates
 			
 			String id = splits[0];
 			
-			int index = id.lastIndexOf("-");
+			if( ! splits[8].equals("NA"))
+			{
+
+				int index = id.lastIndexOf("-");
+				
+				String subjectId = id.substring(0,index);
+				Integer timepoint = Integer.parseInt(id.substring(index+1, id.length()));
+				Double weight = Double.parseDouble(splits[8]);
+				
+				HashMap<Integer,Double> innerMap = map.get(subjectId);
+				 
+				 if( innerMap == null)
+				 {
+					 innerMap = new HashMap<Integer,Double>();
+					 map.put(subjectId, innerMap);
+				 }
+				 
+				 if( innerMap.containsKey(timepoint) && ! weight.equals(innerMap.get(timepoint)))
+					 throw new Exception(" No " + subjectId + " " + timepoint);
+				 
+				 innerMap.put(timepoint,weight );
+			}
 			
-			String subjectId = id.substring(0,index);
-			Integer timepoint = Integer.parseInt(id.substring(index+1, id.length()));
-			
-			System.out.println( id + " " +  subjectId + " " + timepoint );
 		}
 		
 		reader.close();
