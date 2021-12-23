@@ -53,7 +53,12 @@ for( fileIndex in 1:length(inFileNames))
 				{
 					if( sum(myTSub2[,tCol] != 0 ) > nrow(myTSub2) / 10 )
 					{
-						pValues[index] = Kendall( myTSub2[,tCol] , myTSub2[,dCol])$sl[1]
+						#pValues[index] = Kendall( myTSub2[,tCol] , myTSub2[,dCol])$sl[1]
+						
+						myLm <- lm( myTSub2[,tCol] ~ myTSub2[,dCol])
+						pValues[index] = anova(myLm)$"Pr(>F)"[1]
+						
+						
 						allPValues[allIndex] = pValues[index] 
 						allDataColNames[allIndex] <- dataColName 
 						allTaxaNames[allIndex] <- names(myT)[ tCol ]
