@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class AddOneMonthDates
 {
@@ -38,14 +39,28 @@ public class AddOneMonthDates
 				{
 					HashMap<String, HashMap<Integer,Double>> map2 = getPatientWeightMap(inFile);
 					
-					if( ! map.equals(map2))
-						throw new Exception("No");
+					assertTwoMapsEqual(map, map2);
 				}
 					
 			}
 		}
 		
 		return map;
+	}
+	
+	private static void assertTwoMapsEqual(   HashMap<String, HashMap<Integer,Double>> map1,  HashMap<String, HashMap<Integer,Double>>  map2) throws Exception
+	{
+		Set<String> set1 = map1.keySet();
+		Set<String> set2 = map2.keySet();
+		
+		if( ! set1.equals(set2))
+			throw new Exception("NO");
+		
+		for(String s : set1)
+		{
+			if( ! map1.get(s).equals(map2.get(s)))
+				throw new Exception("NO");
+		}
 	}
 	
 	private static HashMap<String, HashMap<Integer,Double>> getPatientWeightMap(File inFile) throws Exception
