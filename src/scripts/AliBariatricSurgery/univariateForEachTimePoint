@@ -11,12 +11,14 @@ library("Kendall")
 inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
 				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")
 
-labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")	
-				
-
+labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
 
 for( fileIndex in 1:length(inFileNames))
 {
+	allPValues <- vector()
+	allDataColNames <- vector()
+	allTaxaNames <- vector()
+	allIndex <- 1
 	inFile <- inFileNames[fileIndex]
 	label <- labelNames[fileIndex]
 	pdf( paste0(label, "_histPValues.pdf"))
@@ -39,6 +41,7 @@ for( fileIndex in 1:length(inFileNames))
 		
 		for( dCol in dataCols )
 		{
+			dataColName <- names(myTSub)[dCol]
 			myTSub2 <- myTSub[ !is.na(myTSub[ dCol ] ), ]
 			pValues <- vector()
 			index <- 1
@@ -50,7 +53,13 @@ for( fileIndex in 1:length(inFileNames))
 					if( sum(myTSub2[,tCol] != 0 ) > nrow(myTSub2) / 10 )
 					{
 						pValues[index] = Kendall( myTSub2[,tCol] , myTSub2[,dCol])$sl[1]
-						index = index + 1
+						allPValues[allIndex] = pValues[index] 
+						allDataColNames[allIndex] <- dataColName 
+						allTaxaNames[allIndex] <- names(myT)[ tCol ]
+						
+						allIndex <- allIndex + 1
+						index <= index + 1
+						
 					}
 				}
 				
@@ -58,12 +67,16 @@ for( fileIndex in 1:length(inFileNames))
 
 			if( length( pValues ) > 1 ) 
 			{
-				histTitle <- paste( "Time", time, label, names(myTSub)[dCol] )
+				histTitle <- paste( "Time", time, label, dataColName )
 				hist(pValues, breaks=25, main=histTitle)			
 			}
 		}
 	}
 	
 	dev.off()
+	dFrame <- data.frame(allDataColNames, allTaxaNames, allPValues )
+	dFrame <- dFrame[ order( allPValues),]
+	dFrame$adjPValues <- p.adjust(allPValues, method="BH")
+	write.table(dFrame, file=paste("pValues", label, ".txt"), sep="\t", row.names=FALSE)					
 	
 }
