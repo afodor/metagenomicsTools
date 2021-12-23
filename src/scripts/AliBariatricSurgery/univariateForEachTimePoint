@@ -59,6 +59,12 @@ for( fileIndex in 1:length(inFileNames))
 						allTaxaNames[allIndex] <- names(myT)[ tCol ]
 						allTimepoints[allIndex] <- time
 						
+						if(pValues[index]  <= 0.001 )
+						{
+							aLegend <- paste( allDataColNames[allIndex] , allTaxaNames[allIndex] , "\ntime=", time, format(allPValues[allIndex],digits=3))
+							plot(  myTSub2[,dCol], myTSub2[,tCol],main=aLegend, xlab = allDataColNames[allIndex] , ylab=allTaxaNames[allIndex] )
+						}
+						
 						allIndex <- allIndex + 1
 						index <= index + 1
 						
