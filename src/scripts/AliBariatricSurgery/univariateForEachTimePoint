@@ -1,6 +1,7 @@
 
 rm(list=ls())
 setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
+library("Kendall")
 
 #inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
 #				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", 
@@ -18,7 +19,51 @@ for( fileIndex in 1:length(inFileNames))
 {
 	inFile <- inFileNames[fileIndex]
 	label <- labelNames[fileIndex]
+	pdf( paste0(label, "_histPValues.pdf"))
+	par(mfrow=c(3,2))
 	
 	myT <- read.table(inFile, sep="\t", header=TRUE)
+	
+	timepoints <- sort(unique( myT$timepointInt))
+	
+	lastDataCol <- which(names(myT)=="BMI_kgm2")
+	
+	myT <- myT[ !is.na( myT[,lastDataCol+1]), ]
+	
+	dataCols <- 8:lastDataCol
+	taxaCols <- (lastDataCol+1):ncol(myT)
+	
+	for( time in timepoints)
+	{
+		myTSub <- myT[ myT$timepointInt == time, ]
+		
+		for( dCol in dataCols )
+		{
+			myTSub2 <- myTSub[ !is.na(myTSub[ dCol ] ), ]
+			pValues <- vector()
+			index <- 1
+			
+			for( tCol in taxaCols ) 
+			{
+				if( length( myTSub2[,tCol] ) >10  ) 
+				{
+					if( sum(myTSub2[,tCol] != 0 ) > nrow(myTSub2) / 10 )
+					{
+						pValues[index] = Kendall( myTSub2[,tCol] , myTSub2[,dCol])$sl[1]
+						index = index + 1
+					}
+				}
+				
+			}
+
+			if( length( pValues ) > 1 ) 
+			{
+				histTitle <- paste( "Time", time, label, names(myTSub)[dCol] )
+				hist(pValues, breaks=25, main=histTitle)			
+			}
+		}
+	}
+	
+	dev.off()
 	
 }
