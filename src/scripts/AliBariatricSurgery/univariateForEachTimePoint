@@ -18,6 +18,7 @@ for( fileIndex in 1:length(inFileNames))
 	allPValues <- vector()
 	allDataColNames <- vector()
 	allTaxaNames <- vector()
+	allTimepoints <- vector()
 	allIndex <- 1
 	inFile <- inFileNames[fileIndex]
 	label <- labelNames[fileIndex]
@@ -56,6 +57,7 @@ for( fileIndex in 1:length(inFileNames))
 						allPValues[allIndex] = pValues[index] 
 						allDataColNames[allIndex] <- dataColName 
 						allTaxaNames[allIndex] <- names(myT)[ tCol ]
+						allTimepoints[allIndex] <- time
 						
 						allIndex <- allIndex + 1
 						index <= index + 1
@@ -74,7 +76,7 @@ for( fileIndex in 1:length(inFileNames))
 	}
 	
 	dev.off()
-	dFrame <- data.frame(allDataColNames, allTaxaNames, allPValues )
+	dFrame <- data.frame(allDataColNames, allTaxaNames, allTimepoints, allPValues )
 	dFrame <- dFrame[ order( allPValues),]
 	dFrame$adjPValues <- p.adjust(allPValues, method="BH")
 	write.table(dFrame, file=paste("pValues", label, ".txt"), sep="\t", row.names=FALSE)					
