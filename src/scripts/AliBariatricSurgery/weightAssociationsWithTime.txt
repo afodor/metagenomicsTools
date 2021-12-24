@@ -15,6 +15,18 @@ inFileNames <- c("pcoa_genus_metaphlan.txt", "pcoa_genus_kraken.txt",
 
 labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
 
+getQuintileGroup <- function( val, quintile )
+{
+	for( i in 1:4)
+	{
+		if( val >= as.numeric(quintile[i]) & val <= as.numeric(quintile[i+1]) ) 
+			return (i) 
+	}
+
+	return (5)
+	
+}
+
 for( fileIndex in 1:length(inFileNames))
 {
 	pValuesTime <- vector()
@@ -31,7 +43,19 @@ for( fileIndex in 1:length(inFileNames))
 	
 	myT <- myT[ !is.na( myT[,lastDataCol+1]), ]
 	myT <- myT[ !is.na( myT$Weight_lbs), ]
+	myT <- myT[ !is.na( myT$percentChange_12_1 ), ]
+	
 	myT <- myT[  myT$TypeofSurgery == "Sleeve Gastrectomy" | myT$TypeofSurgery == "Gastric Bypass",  ]
+	
+	quintile_12_1 <- quantile(myT$percentChange_12_1 , probs=c(0,.2,.4,.6,.8,1))
+
+	qunitAssignments_12_1 <- vector()
+	
+	for( i in 1:nrow(myT)) 
+	{
+		qunitAssignments_12_1[i] = getQuintileGroup(  myT$percentChange_12_1[i], quintile_12_1 ) 
+	}
+	
 	
 	taxaCols <- (lastDataCol+1):ncol(myT)
 	
@@ -81,7 +105,14 @@ for( fileIndex in 1:length(inFileNames))
 		aTitle <- paste( dFrame$taxaNames[i] , "\nadj. p surgery type=", format( dFrame$adjPValuesSurgery[i], length=3))	
 		boxplot( myT[,dataCol] ~  myT$TypeofSurgery , las=2, xlab="",ylab =dFrame$taxaName[i], main = aTitle )
 		
-		plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
+		for( j in 1:5 )
+		{
+			myLm <- lm(  myT[ qunitAssignments_12_1 == j  ,dataCol] ~ myT$timepointInt[qunitAssignments_12_1 == j  ])
+			p= anova(myLm)$"Pr(>F)"[1]
+			aTitle <- paste( "Quintile 1\n", dFrame$taxaNames[i] , "\np time=", format( p, length=3))
+			plot(  myT$timepointInt[qunitAssignments_12_1== j  ],myT[qunitAssignments_12_1 == j,dataCol] , ylab =dFrame$taxaName[i] , xlab="time (months)", main=aTitle,cex.main = 0.75,
+			col = ifelse( myT$TypeofSurgery == "Sleeve Gastrectomy", "red", "blue" ) )
+		}
 	}
 	
 	dev.off()				
