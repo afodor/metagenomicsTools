@@ -17,7 +17,8 @@ labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_meta
 
 for( fileIndex in 1:length(inFileNames))
 {
-	pValues <- vector()
+	pValuesTime <- vector()
+	pValuesWeight <- vector()
 	taxaNames <- vector()
 	inFile <- inFileNames[fileIndex]
 	label <- labelNames[fileIndex]
@@ -41,16 +42,18 @@ for( fileIndex in 1:length(inFileNames))
 			patientID <- myT$PatientID
 			timepoint <- as.numeric( myT$timepointInt)
 			myFrame <- data.frame(bug, weight, patientID, timepoint )
-			M.mixed <- lme( weight ~ timepoint + bug, method = "REML", random = ~1 | patientID, data=myFrame ) 
-			pValues[index] = anova(M.mixed)$"p-value"[3]
+			M.mixed <- lme( bug~ timepoint + weight, method = "REML", random = ~1 | patientID, data=myFrame ) 
+			pValuesTime[index] = anova(M.mixed)$"p-value"[2]
+			pValuesWeight[index] = anova(M.mixed)$"p-value"[3]
 			taxaNames[index] <- names(myT)[ tCol ]		
 			index <- index + 1		
 		}
 	}
 	
-	dFrame <- data.frame(taxaNames,pValues)
-	dFrame$adjPValues <- p.adjust(pValues, method="BH")
-	dFrame <- dFrame[ order( pValues),]
+	dFrame <- data.frame(taxaNames,pValuesWeight, pValuesTime)
+	dFrame$adjPValuesWeight <- p.adjust(pValuesWeight, method="BH")
+	dFrame$adjPValuesTime <- p.adjust(pValuesTime, method="BH")
+	dFrame <- dFrame[ order( pValuesWeight),]
 	write.table(dFrame, file=paste("timeModels_", label, ".txt"), sep="\t", row.names=FALSE)	
 	
 	pdf(paste("timeModels_",label, ".pdf"))
@@ -60,8 +63,11 @@ for( fileIndex in 1:length(inFileNames))
 	for( i in 1:nrow(dFrame))
 	{
 		dataCol <- which( dFrame$taxaNames[i] == names(myT) ) 
-		aTitle <- paste( dFrame$taxaNames[i] , "\nadj. p=", format( dFrame$adjPValues[i], length=3))
-		plot(  myT[,dataCol] , myT$Weight_lbs, xlab =dFrame$taxaName[i] , ylab="weight (lbs)", main=aTitle,cex.main = 0.75 )
+		aTitle <- paste( dFrame$taxaNames[i] , "\nadj. p weight=", format( dFrame$adjPValuesWeight[i], length=3))
+		plot(  myT$Weight_lbs,myT[,dataCol] , ylab =dFrame$taxaName[i] , xlab="weight (lbs)", main=aTitle,cex.main = 0.75 )
+		
+		aTitle <- paste( dFrame$taxaNames[i] , "\nadj. p time=", format( dFrame$adjPValuesTime[i], length=3))
+		plot(  myT$timepointInt,myT[,dataCol] , ylab =dFrame$taxaName[i] , xlab="weight (lbs)", main=aTitle,cex.main = 0.75 )
 	}
 	
 	dev.off()				
