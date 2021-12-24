@@ -7,8 +7,8 @@ setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
 #							"humanN2_metadatawithPercentChange.txt")
 				
 
-inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
-				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")
+inFileNames <- c("pcoa_genus_metaphlan.txt", "pcoa_genus_kraken.txt",
+				"pcoa_phylum_kraken.txt", "pcoa_phylum_metaphlan.txt")
 
 labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
 
