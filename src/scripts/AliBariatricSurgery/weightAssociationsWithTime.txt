@@ -1,5 +1,8 @@
 
 rm(list=ls())
+
+library("nlme")
+
 setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
 
 #inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
@@ -25,6 +28,7 @@ for( fileIndex in 1:length(inFileNames))
 	lastDataCol <- which(names(myT)=="BMI_kgm2")
 	
 	myT <- myT[ !is.na( myT[,lastDataCol+1]), ]
+	myT <- myT[ !is.na( myT$Weight_lbs), ]
 	
 	taxaCols <- (lastDataCol+1):ncol(myT)
 	
@@ -32,8 +36,12 @@ for( fileIndex in 1:length(inFileNames))
 	{
 		if( sum(myT[,tCol] != 0 ) > nrow(myT) / 10 )
 		{
-			myLm <- lm( myT$Weight_lbs ~ myT[,tCol] )
-			pValues[index] = anova(myLm)$"Pr(>F)"[1]
+			bug <- myT[,tCol] 
+			weight <- myT$Weight_lbs 
+			patientID <- myT$PatientID
+			myFrame <- data.frame(bug, weight, patientID)
+			M.mixed <- lme( weight ~ bug, method = "REML", random = ~1 | patientID, data=myFrame ) 
+			pValues[index] = anova(M.mixed)$"p-value"[2]
 			taxaNames[index] <- names(myT)[ tCol ]		
 			index <- index + 1		
 		}
