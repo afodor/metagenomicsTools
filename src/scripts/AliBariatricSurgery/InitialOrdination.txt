@@ -1,0 +1,40 @@
+
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
+
+inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", 
+							"humanN2_metadatawithPercentChange.txt")
+
+#inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+#				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")
+
+labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
+
+for( fileIndex in 1:length(inFileNames))
+{
+	fileName <- inFileNames[fileIndex]
+	label <- labelNames[fileIndex]
+	myT <- read.table(fileName, sep="\t", header=TRUE)
+	
+	lastDataCol <- which(names(myT)=="BMI_kgm2")
+	myT <- myT[ !is.na( myT[,lastDataCol+1]), ]
+	
+	myTData <- myT[,(lastDataCol+1):ncol(myT)]
+	
+	myPCOA <- capscale(myTData~1,distance="bray")
+	
+	myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+	names(myMerge)[[1]] = "SampleID"
+	
+	write.table(myMerge, file=paste0("pcoa_",label,".txt"), sep="\t", row.names=FALSE)
+		
+}
+	
+	
+	
