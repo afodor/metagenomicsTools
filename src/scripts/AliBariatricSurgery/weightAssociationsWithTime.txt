@@ -109,9 +109,9 @@ for( fileIndex in 1:length(inFileNames))
 		{
 			myLm <- lm(  myT[ qunitAssignments_12_1 == j  ,dataCol] ~ myT$timepointInt[qunitAssignments_12_1 == j  ])
 			p= anova(myLm)$"Pr(>F)"[1]
-			aTitle <- paste( "Quintile 1\n", dFrame$taxaNames[i] , "\np time=", format( p, length=3))
+			aTitle <- paste( "Quintile", j, "\n", dFrame$taxaNames[i] , "\np time=", format( p, length=3))
 			plot(  myT$timepointInt[qunitAssignments_12_1== j  ],myT[qunitAssignments_12_1 == j,dataCol] , ylab =dFrame$taxaName[i] , xlab="time (months)", main=aTitle,cex.main = 0.75,
-			col = ifelse( myT$TypeofSurgery == "Sleeve Gastrectomy", "red", "blue" ) )
+			col = ifelse( myT$TypeofSurgery[qunitAssignments_12_1== j ] == "Sleeve Gastrectomy", "red", "blue" ) )
 		}
 	}
 	
