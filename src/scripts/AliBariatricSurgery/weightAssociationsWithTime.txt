@@ -1,0 +1,50 @@
+
+rm(list=ls())
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
+
+#inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+#				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", 
+#							"humanN2_metadatawithPercentChange.txt")
+				
+
+inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
+				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")
+
+labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
+
+for( fileIndex in 1:length(inFileNames))
+{
+	pValues <- vector()
+	taxaNames <- vector()
+	inFile <- inFileNames[fileIndex]
+	label <- labelNames[fileIndex]
+	index <- 1
+	
+	myT <- read.table(inFile, sep="\t", header=TRUE)
+	
+	lastDataCol <- which(names(myT)=="BMI_kgm2")
+	
+	myT <- myT[ !is.na( myT[,lastDataCol+1]), ]
+	
+	taxaCols <- (lastDataCol+1):ncol(myT)
+	
+	for( tCol in taxaCols ) 
+	{
+		if( sum(myT[,tCol] != 0 ) > nrow(myT) / 10 )
+		{
+			myLm <- lm( myT$Weight_lbs ~ myT[,tCol] )
+			pValues[index] = anova(myLm)$"Pr(>F)"[1]
+			taxaNames[index] <- names(myT)[ tCol ]		
+			index <- index + 1		
+		}
+	}
+	
+	dFrame <- data.frame(taxaNames,pValues)
+	dFrame$adjPValues <- p.adjust(pValues, method="BH")
+	dFrame <- dFrame[ order( pValues),]
+	write.table(dFrame, file=paste("timeModels_", label, ".txt"), sep="\t", row.names=FALSE)					
+}
+						
+						
+							
+	
