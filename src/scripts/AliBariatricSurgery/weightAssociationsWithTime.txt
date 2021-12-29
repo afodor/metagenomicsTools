@@ -11,8 +11,7 @@ setwd("C:\\bariatricSurgery_Daisy\\fromAli_Dec15_2021\\AF_Out")
 
 
 inFileNames <- c("genus_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", "genus_LogNormalizedCounts_Kraken2withPercentChange.txt",
-				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt", 
-							"humanN2_metadatawithPercentChange.txt")				
+				"phylum_LogNormalizedCounts_Kraken2withPercentChange.txt", "phylum_LogNormalizedCounts_MetaPhlAn2withPercentChange.txt")				
 
 labelNames <- c("genus_metaphlan", "genus_kraken", "phylum_kraken", "phylum_metaphlan", "humanN")					
 
@@ -138,6 +137,7 @@ for( fileIndex in 1:length(inFileNames))
 	dev.off()				
 	qFrame <- data.frame( qTaxaNames, qunitileNumbers,quintilePValues)
 	qFrame <- qFrame[ order( qFrame$quintilePValues),]
+	qFrame$adjPValues <- p.adjust(qFrame$quintilePValues, method="BH")
 	write.table(qFrame, file=paste("quintiles_", label, ".txt"), sep="\t", row.names=FALSE)	
 	
 	print(label)		
