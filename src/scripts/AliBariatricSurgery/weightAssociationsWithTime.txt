@@ -91,6 +91,11 @@ for( fileIndex in 1:length(inFileNames))
 	
 	par(mfrow=c(2,2))
 	
+	quintilePValues <- vector()
+	qunitileNumbers <- vector()
+	qTaxaNames <- vector()
+	qIndex <- 1
+	
 	for( i in 1:nrow(dFrame))
 	{
 		dataCol <- which( dFrame$taxaNames[i] == names(myT) ) 
@@ -109,13 +114,40 @@ for( fileIndex in 1:length(inFileNames))
 		{
 			myLm <- lm(  myT[ qunitAssignments_12_1 == j  ,dataCol] ~ myT$timepointInt[qunitAssignments_12_1 == j  ])
 			p= anova(myLm)$"Pr(>F)"[1]
+			quintilePValues[qIndex] <- p
+			qunitileNumbers[qIndex] <- j
+			qTaxaNames[qIndex] <- dFrame$taxaNames[i] 
+			qIndex <- qIndex + 1
 			aTitle <- paste( "Quintile", j, "\n", dFrame$taxaNames[i] , "\np time=", format( p, length=3))
 			plot(  myT$timepointInt[qunitAssignments_12_1== j  ],myT[qunitAssignments_12_1 == j,dataCol] , ylab =dFrame$taxaName[i] , xlab="time (months)", main=aTitle,cex.main = 0.75,
 			col = ifelse( myT$TypeofSurgery[qunitAssignments_12_1== j ] == "Sleeve Gastrectomy", "red", "blue" ) )
 		}
 	}
 	
+	dev.off()
+	
+	pdf(paste("qunitile_", label, ".pdf"))
+	
+	boxplot(  -log10( quintilePValues[qunitileNumbers==1]), 
+				-log10(quintilePValues[qunitileNumbers==2]),
+					-log10(quintilePValues[qunitileNumbers==3]),
+						-log10(quintilePValues[qunitileNumbers==4]),
+							-log10(quintilePValues[qunitileNumbers==5]),xlab="quintile", ylab="-log10(pValues)")
+	
 	dev.off()				
+	qFrame <- data.frame( qTaxaNames, qunitileNumbers,quintilePValues)
+	qFrame <- qFrame[ order( qFrame$quintilePValues),]
+	write.table(dFrame, file=paste("quintiles_", label, ".txt"), sep="\t", row.names=FALSE)	
+	
+	print(label)		
+	pValuesAdjust = p.adjust(quintilePValues, method="BH")
+	sum(pValuesAdjust[qunitileNumbers==1] <0.05)
+	sum(pValuesAdjust[qunitileNumbers==2] <0.05)
+	sum(pValuesAdjust[qunitileNumbers==3] <0.05)
+	sum(pValuesAdjust[qunitileNumbers==4] <0.05)
+	sum(pValuesAdjust[qunitileNumbers==5] <0.05)
+	print("\n\n\n")
+
 }
 						
 						
