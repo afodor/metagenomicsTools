@@ -2,7 +2,7 @@ rm(list=ls())
 
 setwd("C:\\JonathanHansenAlleles\\outputTextFiles")
 
-inFiles <- c("BCaccae","Bdentium","Bhansenii","Bvulgatus","Cbolteae","Ccomes","Ecoli","Erectale","E_coli_NC101","E_faecalis_OG1RF","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
+inFiles <- c("BCaccae","Bdentium","Bhansenii","Bvulgatus","Cbolteae","Ccomes","Ecoli","Erectale","Fprausnitzii","Rgnavus","Tnexilis","Vparvula")
 
 pdf(paste0("ManhattanPlots",".pdf"))	
 par(mfrow=c(2,1))
