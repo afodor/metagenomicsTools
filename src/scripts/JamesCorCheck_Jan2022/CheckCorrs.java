@@ -30,7 +30,14 @@ public class CheckCorrs
 		File inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Kraken2_China_genus_Normalized.csv");
 		File outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Kraken2_China_genus_Normalized_Corr.txt");
 		
+
 		writeCorrFile(inFile, outFile);
+		
+		inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Metaphlan2_China_genus_Normalized.csv");
+		outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Metaphlan2_China_genus_Normalized_Corr.txt");
+		
+		writeCorrFile(inFile, outFile);
+		
 	}
 	
 	private static List<Holder> parseFile( File inputFile ) throws Exception
