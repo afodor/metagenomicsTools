@@ -7,7 +7,7 @@ myT <- read.table("Kraken2_China_genus_Normalized_Corr.txt", sep="\t",header=TRU
 
 plot(myT$averageVal, myT$maxCor)
 
-myLm <- lm(myT$maxCor[ myT$averageVal <=2 ] ~  poly(myT$averageVal[ myT$averageVal <=2 ],6), x=TRUE)
+myLm <- lm(myT$maxCor[ myT$averageVal <=2 ] ~  poly(myT$averageVal[ myT$averageVal <=2 ],5), x=TRUE)
 points(myT$averageVal[ myT$averageVal <=2 ], fitted(myLm), col="RED")
 
 summary(myLm)
