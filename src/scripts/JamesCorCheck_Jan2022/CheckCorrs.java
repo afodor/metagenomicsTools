@@ -1,10 +1,15 @@
 package scripts.JamesCorCheck_Jan2022;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import utils.Avevar;
+import utils.Spearman;
 
 public class CheckCorrs
 {
@@ -12,7 +17,7 @@ public class CheckCorrs
 	{
 		String taxaName;
 		List<Double> taxaValues = new ArrayList<>();
-		double maxCorrelation = 1;
+		double maxCorrelation = -1;
 		
 		Holder(String s )
 		{
@@ -28,7 +33,7 @@ public class CheckCorrs
 		writeCorrFile(inFile, outFile);
 	}
 	
-	public static void writeCorrFile(File inputFile, File outputFile) throws Exception
+	private static List<Holder> parseFile( File inputFile ) throws Exception
 	{
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -56,9 +61,51 @@ public class CheckCorrs
 			}
 		}
 		
-		for(Holder h : taxaList)
-			System.out.println(h.taxaName + " " + h.taxaValues);
+		//for(Holder h : taxaList)
+		//	System.out.println(h.taxaName + " " + h.taxaValues);
 		
 		reader.close();
+		
+		return taxaList;
+	}
+	
+	
+	public static void writeCorrFile(File inputFile, File outputFile) throws Exception
+	{
+		System.out.println(inputFile.getAbsolutePath() + " " + outputFile.getAbsolutePath());
+		List<Holder> taxaList = parseFile(inputFile);
+		
+		for( int x=0; x < taxaList.size() -1 ; x++)
+		{
+			
+			Holder xHolder = taxaList.get(x);
+			
+			
+			for( int y = x+ 1; y < taxaList.size(); y++)
+			{
+				Holder yHolder = taxaList.get(y);
+				
+				double corValue = Spearman.getSpearFromDouble(xHolder.taxaValues, yHolder.taxaValues).getRs();
+				
+				if( corValue > xHolder.maxCorrelation )
+					xHolder.maxCorrelation = corValue;
+				
+				if( corValue > yHolder.maxCorrelation)
+					yHolder.maxCorrelation = corValue;
+			}
+		}
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+		
+		writer.write("taxaName\taverageVal\tmaxCor\n");
+		
+		for( Holder h : taxaList)
+		{
+			writer.write(h.taxaName + "\t" + 
+						new Avevar(h.taxaValues).getAve() + "\t" +  h.maxCorrelation + "\n");
+		}
+		
+		writer.flush();  writer.close();
+			
 	}
 }
