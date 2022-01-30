@@ -1,0 +1,13 @@
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out")
+
+myT <- read.table("Kraken2_China_genus_Normalized_Corr.txt", sep="\t",header=TRUE)
+
+plot(myT$averageVal, myT$maxCor)
+
+myLm <- lm(myT$maxCor[ myT$averageVal <=2 ] ~  poly(myT$averageVal[ myT$averageVal <=2 ],3), x=TRUE)
+points(myT$averageVal[ myT$averageVal <=2 ], fitted(myLm), col="RED")
+
+summary(myLm)
