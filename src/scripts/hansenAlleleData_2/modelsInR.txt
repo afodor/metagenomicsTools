@@ -4,7 +4,9 @@ library("Kendall")
 
 setwd("C:\\JonathanHansenAlleles\\outputTextFiles_2")
 
-inFiles <- c("Bdentium","Erectale","E_coli_NC101","E_faecalis_OG1RF")
+inFiles <- c("E_faecalis_OG1RF")
+#inFiles <- c("Bdentium","Erectale","E_coli_NC101","E_faecalis_OG1RF")
+
 
 makeAGraph <- function(filter,labelNames,vals,pValue, adjString) 
 {
