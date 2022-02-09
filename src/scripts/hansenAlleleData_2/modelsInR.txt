@@ -4,7 +4,7 @@ library("Kendall")
 
 setwd("C:\\JonathanHansenAlleles\\outputTextFiles_2")
 
-inFiles <- c("E_faecalis_OG1RF")
+inFiles <- c("Erectale")
 #inFiles <- c("Bdentium","Erectale","E_coli_NC101","E_faecalis_OG1RF")
 
 
@@ -144,10 +144,11 @@ for( fileName in inFiles )
 	Effect <-myT$Effect   
 	Gene_ID <- myT$Gene_ID  
 	averageReadDepth <- myT$averageReadDepth
+	controlVals <- myT$control
 	
-	dFrame <- data.frame(rowIndex, Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,averageReadDepth ,pValues_KOWT,pValues_dates)
+	dFrame <- data.frame(rowIndex, Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,averageReadDepth ,pValues_KOWT,pValues_dates,controlVals)
 	
-	dFrame <- dFrame [order(dFrame$pValues_dates),]
+	dFrame <- dFrame [order(dFrame$pValues_KOWT),]
 	dFrame$adjustedPValues_KOWT <- p.adjust( dFrame$pValues_KOWT, method = "BH" )
 	dFrame$adjustedPValues_dates <- p.adjust( dFrame$pValues_dates, method = "BH" )
 		
