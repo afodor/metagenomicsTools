@@ -232,8 +232,19 @@ public class PivotOut
 		
 		for( Integer i : map.keySet())
 		{	
+			boolean isAnInt = true;
+			
+			try
+			{
+				Integer.parseInt(map.get(i));
+			}
+			catch(Exception ex )
+			{
+				isAnInt = false;
+			}
+			
 			if( ! map.get(i).equals("NA"))
-				if(  map.get(i).indexOf("/") != -1 || Integer.parseInt(map.get(i))> 10000)
+				if(  map.get(i).indexOf("/") != -1 || ( isAnInt &&  Integer.parseInt(map.get(i))> 10000) ) 
 					map.put(i, map.get(i+1));
 		}
 		

@@ -1,0 +1,225 @@
+rm(list=ls())
+
+library("Kendall")
+
+setwd("C:\\JonathanHansenAlleles\\outputTextFiles_2")
+
+inFiles <- c("Bdentium","Erectale","E_coli_NC101","E_faecalis_OG1RF")
+
+makeAGraph <- function(filter,labelNames,vals,pValue, adjString) 
+{
+	 animalIds <- vector()
+	 dates <- vector()
+	 
+	 for( k in 1:(length(labelNames)-1)) 
+	 {
+	 	wtKo = strsplit(labelNames[k], "_")[[1]][1]
+	 	id = strsplit(labelNames[k], "_")[[1]][2]
+	 
+	 	animalIds[k] = paste0(wtKo ,"_",id)
+	 	dates[k] = strsplit(labelNames[k], "_")[[1]][3]
+	 			
+	 }
+	 
+	 uniqueIDs <- unique( animalIds)
+	 
+	 plot(1, type="n", xlab="date", ylab="fraction allele", 
+	 xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax),
+	 main=paste(filter,"(",adjString, "pValue all time=",format(pValue,digits=3),")"))
+	 		  
+	 for( k in 1:(length(uniqueIDs))) 
+	 {
+	 	if( substr(uniqueIDs[k],1,2) == filter )
+	 	{
+	 		toGraph = vals[animalIds==uniqueIDs[k]]  
+	 		datesToGraph <- dates[animalIds==uniqueIDs[k]]
+	 		maxVal = which( toGraph == max(toGraph[!is.na(toGraph)]))[1]
+		
+	 		points( datesToGraph, toGraph)
+	 		lines(datesToGraph, toGraph)
+	 		
+	 		if( !is.na(maxVal) )
+	 		{
+		 		textVals <- vector()
+		 		
+		 		for( m in 1:length(toGraph))
+		 		{
+		 			if( m == maxVal ) 
+		 			{
+		 				textVals[m] =  uniqueIDs[k]
+		 			}
+		 			else
+		 			{
+		 				textVals[m] =  ""
+		 			}
+		 		}
+		 		
+		 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]]+ rnorm(1,0,.02), textVals)	
+	 		}
+	 		
+	 	}
+	 }
+}
+
+for( fileName in inFiles ) 
+{
+	inFile <- paste0(fileName, "ForR.txt")
+	myT <- read.table(inFile,header=TRUE,sep="\t")
+
+	includedData <- startsWith(names(myT), "WT") | startsWith(names(myT), "KO")
+	
+	dates <- vector()
+	animalIDs <- vector()
+	dateIndex <- 1
+	
+	for( k in 1:(ncol(myT)))
+	{
+		if( includedData[k] )
+		{
+			dates[dateIndex] = as.numeric( strsplit(names(myT)[k], "_")[[1]][3])
+			
+			wtKo = strsplit(names(myT)[k], "_")[[1]][1]
+	 		id = strsplit(names(myT)[k], "_")[[1]][2]
+	 
+	 		animalIDs[dateIndex] = paste0(wtKo ,"_",id)
+			
+			dateIndex = dateIndex + 1
+		}
+	}
+	
+	index <- 1
+	pValues_KOWT <- vector()
+	pValues_dates <- vector()
+	alleleNames <- vector()
+	rowIndex <- vector()
+	
+	for( i in 1:nrow(myT))
+	{
+		wtData <- as.numeric( myT[ i,startsWith(names(myT), "WT")])
+		
+		wtData <- wtData[ !is.na(wtData) ]
+		
+		koData <- as.numeric( myT[i,startsWith(names(myT), "KO")])
+	
+		koData <- koData[ !is.na(koData) ]
+	
+		pValues_KOWT[index] <- 1
+		pValues_dates[index] <- 1
+		rowIndex[index] <- i
+		
+		if( length(wtData) >3 & length(koData) > 3) 
+		{	
+			if( sum(wtData) >0 | sum(koData) >0 ) 
+			{
+				pValues_KOWT[index] <- wilcox.test(wtData ,koData )$p.value
+				
+				allData <- myT[i,includedData ]
+				myDates <- dates[ ! is.na(allData)]
+				myIDS <-  animalIDs[! is.na(allData)]
+				allData <- allData [ ! is.na(allData)]
+				
+				if( sum(allData) > 0 ) 
+				{
+					#myLM <- lm( allData  ~ myDates + factor(myIDS ) )
+					pValues_dates[index] <-  Kendall(myDates ,allData )$sl[[1]]
+					#pValues_dates[index] <- anova(myLM)$"Pr(>F)"[1]
+					
+					if( ! is.finite(pValues_dates[index] ))
+					{
+						pValues_dates[index]=1
+					}
+				}
+			}		
+		}
+			
+		index <- index + 1	
+	}	
+	
+	Chrom <- myT$Chrom  
+	Index <- myT$Index 
+	Ref  <- myT$Ref  
+	Alt  <-   myT$Alt   
+	Effect <-myT$Effect   
+	Gene_ID <- myT$Gene_ID  
+	averageReadDepth <- myT$averageReadDepth
+	
+	dFrame <- data.frame(rowIndex, Chrom ,Index ,Ref  ,Alt  ,Effect ,Gene_ID,averageReadDepth ,pValues_KOWT,pValues_dates)
+	
+	dFrame <- dFrame [order(dFrame$pValues_dates),]
+	dFrame$adjustedPValues_KOWT <- p.adjust( dFrame$pValues_KOWT, method = "BH" )
+	dFrame$adjustedPValues_dates <- p.adjust( dFrame$pValues_dates, method = "BH" )
+		
+	write.table(dFrame, file=paste( fileName,"pValues.txt",sep=""), sep="\t",row.names=FALSE)
+	
+	pdf(paste0(fileName,".pdf"))
+	
+	par(mfrow=c(2,2))
+	
+	for( j in 1:nrow(dFrame))
+	{
+		i <- dFrame$rowIndex[j]
+	
+		wtData <- as.numeric( myT[ i,startsWith(names(myT), "WT")])
+		
+		wtData <- wtData[ !is.na(wtData) ]
+		
+		koData <- as.numeric( myT[i,startsWith(names(myT), "KO")])
+	
+		koData <- koData[ !is.na(koData) ]
+		
+		text <- paste0("Index= ", myT$Index[i], " p=", format( dFrame$pValues_KOWT[j],digits=3),
+							" bh_adjP=",format( dFrame$adjustedPValues_KOWT[j],digits=3), "\n",
+							"avg. read depth=" , format( dFrame$averageReadDepth[j],digits=3))
+		
+		if( length(wtData) >3 & length(koData) > 3 & (dFrame$pValues_KOWT[j] < .25 |dFrame$pValues_dates[j] < .25  ) ) 
+		{
+			koLabel <- paste0( "KO(n=", length(koData),")")
+			wtLabel <- paste0( "WT(n=", length(wtData),")")
+			boxplot( koData ,wtData,main=text,names=c(koLabel,wtLabel),cex.main=0.8)		
+			
+			allData <- c(koData,wtData)
+			cats <- c( rep("KO",length(koData) ),rep("WT",length(wtData)) )
+			myFrame <- data.frame( allData, cats )
+				
+			stripchart(allData ~ cats, data = myFrame,vertical = TRUE, pch = 21, add=TRUE )	
+			
+			vals <- myT[i,8:ncol(myT)]
+			labelNames<- names(vals)
+			newNames <- vector()
+			newNames[1] = labelNames[1]
+			
+			for( k in 2:(length(labelNames))) 
+			{
+				if( labelNames[k] == "control" ) 
+				{
+					newNames[k]  = labelNames[k]
+				}
+				else if(strsplit(labelNames[k], "_")[[1]][3] == strsplit(labelNames[k-1], "_")[[1]][3]) 
+				{
+					newNames[k] = ""	
+				}
+				else
+				{
+					newNames[k]  = labelNames[k]
+				}
+			}
+			
+			colors = c(rep("black", length(vals)-1), "red")
+			
+			boxplot( vals, names = newNames,las=2,
+			main=paste(myT$Chrom[i],"\n", myT$Effect[i], "\n", myT$Gene_ID[i], "Ref:", myT$Ref[i], "Alt:", myT$Alt[i] ),cex.main=0.8, medcol=colors)
+			
+			yMax = max(vals[!is.na(vals)])
+			 
+			# strip off the control
+			vals = vals[1:(length(vals)-1)]
+			makeAGraph ("KO",labelNames,vals,dFrame$pValues_dates[j], "") 
+			makeAGraph ("WT",labelNames,vals,dFrame$adjustedPValues_dates[j], "adj.") 
+		}
+	}
+	
+	dev.off()	
+}
+
+
+
