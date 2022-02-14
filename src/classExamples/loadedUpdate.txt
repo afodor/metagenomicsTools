@@ -1,0 +1,31 @@
+
+rm(list=ls())
+
+# prob die is loaded; prob die is not loaded
+probLoaded <-  c(0.01,0.99)
+
+likelihoodLoaded <- c(  rep(1/5,5), .5 )
+likelihoodFair <- rep(1/6,6)
+
+data<-c(2,3,2,6,3,5,6,2,6,6,2,6,6,2,3,6,6,6,5,6,6,5,6,6,6,6,6,4,6,3,3,3,6,6,5,6,6)
+
+probLoadedVals <- vector();
+
+titleStr <- ""
+for( i in 1:length(data))
+{
+	probLoadedVals[i] <- probLoaded[1];
+	
+	denom <- probLoaded[1] * likelihoodLoaded[data[i]] + probLoaded[2] * likelihoodFair[data[i]];
+	
+	probLoaded[1] = probLoaded[1] * likelihoodLoaded[data[i]] / denom;
+	probLoaded[2] = probLoaded[2] * likelihoodFair[data[i]] / denom;
+	
+	titleStr <- paste(titleStr,data[i],sep="")
+	
+}
+
+plot(1:i,probLoadedVals, main = titleStr,ylim=c(0,1),xlim=c(1,length(data)+1))
+
+##########################################################################################
+
