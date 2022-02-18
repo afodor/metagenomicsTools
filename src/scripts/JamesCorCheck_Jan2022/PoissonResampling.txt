@@ -64,13 +64,15 @@ for( i in 1:a)
 	probs[i] = aSum /sumTop
 }
 
-backgroundErrorRate <- 0.01
+backgroundErrorRateMean <- 0.001
+backgroundErrorRateSD  <- 0.01
 
 simMeans <- vector()
 simCors <- vector()
 
 for( i in 1:(numCols-a))
 {
+	backgroundErrorRate = rnorm(1,mean = backgroundErrorRateMean, sd = backgroundErrorRateSD  )
 	# choose by relative abundance
 	colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
 	
