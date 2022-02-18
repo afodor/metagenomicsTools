@@ -36,15 +36,15 @@ for( i in 1:(numCols -1))
 	}
 }
 
+
+par(mfrow=c(2,1))
 plot(averageDepth, maxCors)
 
 
 meanRanks <- rank(-averageDepth, ties.method="min")
-plot(meanRanks,averageDepth)
+#plot(meanRanks,averageDepth)
 
-poissonResamples <- vector()
-
-a <- 50
+a <- 10
 
 sumTop <- 0 
 
@@ -64,8 +64,26 @@ for( i in 1:a)
 	probs[i] = aSum /sumTop
 }
 
-for( i in 1:(ncol-a))
+backgroundErrorRate <- 0.01
+
+simMeans <- vector()
+simCors <- vector()
+
+for( i in 1:(numCols-a))
 {
 	# choose by relative abundance
-		
+	colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
+	
+	dataSimCol <- vector(length=nrow(myT))
+	
+	for( j in 1:nrow(myT)) 
+	{
+		dataSimCol[j] <- rbinom( 1, ceiling( 10 ^ myT[j,colIndex]) -1 , backgroundErrorRate )
+	}
+	
+	simMeans[i] <- log10( mean(dataSimCol) -1 ) 
+	simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
 }
+
+plot(simMeans, simCors)
+
