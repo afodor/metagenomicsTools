@@ -13,7 +13,7 @@ for( i in 1:ncol(myT))
 	maxCors[i] <- -1
 }
 
-for( i in 1:ncol(myT))
+for( i in 1:(ncol(myT)-1))
 {
 	averageDepth[i] <- mean( myT[,i] )
 	
@@ -23,3 +23,5 @@ for( i in 1:ncol(myT))
 		maxCors[j] <- max(  maxCors[j], maxCors[i]  )
 	}
 }
+
+plot(averageDepth, maxCors)
