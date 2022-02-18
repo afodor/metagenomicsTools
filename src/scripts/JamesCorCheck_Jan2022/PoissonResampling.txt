@@ -40,7 +40,6 @@ for( i in 1:(numCols -1))
 par(mfrow=c(2,1))
 plot(averageDepth, maxCors)
 
-
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
 
@@ -65,7 +64,7 @@ for( i in 1:a)
 }
 
 backgroundErrorRateMean <- 0.001
-backgroundErrorRateSD  <- 0.01
+backgroundErrorRateSD  <- 0.001
 
 simMeans <- vector()
 simCors <- vector()
@@ -73,6 +72,12 @@ simCors <- vector()
 for( i in 1:(numCols-a))
 {
 	backgroundErrorRate = rnorm(1,mean = backgroundErrorRateMean, sd = backgroundErrorRateSD  )
+	
+	if( backgroundErrorRate < 0.00001 ) 
+	{
+		backgroundErrorRate  = 0.00001 
+	}
+	
 	# choose by relative abundance
 	colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
 	
@@ -84,6 +89,12 @@ for( i in 1:(numCols-a))
 	}
 	
 	simMeans[i] <- log10( mean(dataSimCol) -1 ) 
+	
+	if( is.nan(simMeans[i]) |  simMeans[i]  < 0 ) 
+	{
+		simMeans[i] = 0
+	}
+	
 	simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
 }
 
