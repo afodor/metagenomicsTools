@@ -37,8 +37,8 @@ for( i in 1:(numCols -1))
 }
 
 
-par(mfrow=c(2,1))
-plot(averageDepth, maxCors)
+#par(mfrow=c(2,1))
+#plot(averageDepth, maxCors)
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
@@ -63,7 +63,7 @@ for( i in 1:a)
 	probs[i] = aSum /sumTop
 }
 
-backgroundErrorRateMean <- 0.001
+backgroundErrorRateMean <- 0.00005
 backgroundErrorRateSD  <- 0.001
 
 simMeans <- vector()
@@ -73,9 +73,9 @@ for( i in 1:(numCols-a))
 {
 	backgroundErrorRate = rnorm(1,mean = backgroundErrorRateMean, sd = backgroundErrorRateSD  )
 	
-	if( backgroundErrorRate < 0.00001 ) 
+	if( backgroundErrorRate < 0) 
 	{
-		backgroundErrorRate  = 0.00001 
+		backgroundErrorRate  = 0
 	}
 	
 	# choose by relative abundance
@@ -98,5 +98,8 @@ for( i in 1:(numCols-a))
 	simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
 }
 
-plot(simMeans, simCors)
+#plot(simMeans, simCors)
+
+plot(averageDepth, maxCors)
+points(simMeans, simCors,col="red")
 
