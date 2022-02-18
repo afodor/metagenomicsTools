@@ -1,0 +1,25 @@
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
+
+myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE)
+myT <- myT[,3:ncol(myT)]
+
+maxCors <- vector(length=ncol(myT))
+averageDepth <- vector(length=ncol(myT))
+
+for( i in 1:ncol(myT))
+{
+	maxCors[i] <- -1
+}
+
+for( i in 1:ncol(myT))
+{
+	averageDepth[i] <- mean( myT[,i] )
+	
+	for( j in (i+1):ncol(myT))
+	{
+		maxCors[i] <- max( cor( myT[,i], myT[,j],method="spearman" ), maxCors[i] )
+		maxCors[j] <- max(  maxCors[j], maxCors[i]  )
+	}
+}
