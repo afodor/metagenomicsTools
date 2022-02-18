@@ -1,27 +1,71 @@
 rm(list=ls())
 
-setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
+#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
+#myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE)
 
-myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE)
-myT <- myT[,3:ncol(myT)]
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
+myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE)
+
+myT <- myT[,4:ncol(myT)]
 
 maxCors <- vector(length=ncol(myT))
 averageDepth <- vector(length=ncol(myT))
 
-for( i in 1:ncol(myT))
+numCols <- ncol(myT)
+
+for( i in 1:numCols )
 {
 	maxCors[i] <- -1
 }
 
-for( i in 1:(ncol(myT)-1))
+
+for( i in 1:(numCols -1))
 {
 	averageDepth[i] <- mean( myT[,i] )
 	
-	for( j in (i+1):ncol(myT))
+	for( j in (i+1):numCols )
 	{
-		maxCors[i] <- max( cor( myT[,i], myT[,j],method="spearman" ), maxCors[i] )
-		maxCors[j] <- max(  maxCors[j], maxCors[i]  )
+		corVal <- cor( myT[,i], myT[,j],method="spearman" )
+		
+		if( ! is.na(corVal) )
+		{
+			maxCors[i] <- max(corVal , maxCors[i] )
+			maxCors[j] <- max(  maxCors[j], maxCors[i]  )
+		}
+		
 	}
 }
 
 plot(averageDepth, maxCors)
+
+
+meanRanks <- rank(-averageDepth, ties.method="min")
+plot(meanRanks,averageDepth)
+
+poissonResamples <- vector()
+
+a <- 50
+
+sumTop <- 0 
+
+probs <- vector(length=a)
+
+for( i in 1:a) 
+{
+	index <- which( meanRanks == i ) 
+	aSum <- 10 ^ averageDepth[index] -1
+	sumTop <- sumTop + aSum
+}
+
+for( i in 1:a)
+{
+	index <- which( meanRanks == i ) 
+	aSum <- 10 ^ averageDepth[index] -1
+	probs[i] = aSum /sumTop
+}
+
+for( i in 1:(ncol-a))
+{
+	# choose by relative abundance
+		
+}
