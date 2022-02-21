@@ -1,0 +1,44 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\tiffany")
+
+inFile <- "pivot_otu_fil_Meta.txt"
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+myT <- myT[myT$race != "null",]	
+
+myTData <- myT[,2:ncol(myT)]
+	
+myPCOA <- capscale(myTData~1)
+	
+myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+names(myMerge)[[1]] = "SampleID"
+	
+write.table(myMerge, file="pivotedPlusMetaMDS.txt", sep="\t", row.names=FALSE)
+
+colors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$race[i] == 1)
+	{
+		colors[i] = "RED"
+	}
+	else if ( myT$race[i] == 2) 
+	{
+		colors[i] = "BLUE"
+	}
+}
+
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA1 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
+points(pcoa12,"sites",col=adjustcolor(colors, alpha.f = 0.2),pch=16,cex=2.5)
+
+ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="RED",show.groups=1,label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="Blue",show.groups=2,label=T,font=2,cex=1)
+
+
