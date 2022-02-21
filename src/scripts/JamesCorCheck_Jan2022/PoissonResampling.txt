@@ -63,15 +63,16 @@ for( i in 1:a)
 	probs[i] = aSum /sumTop
 }
 
-backgroundErrorRateMean <- 0.00005
-backgroundErrorRateSD  <- 0.001
+# this version samples uniformly
+#backgroundErrorRateMean <- 0.00005
+#backgroundErrorRateSD  <- 0.001
 
 simMeans <- vector()
 simCors <- vector()
 
 for( i in 1:(numCols-a))
 {
-	backgroundErrorRate = rnorm(1,mean = backgroundErrorRateMean, sd = backgroundErrorRateSD  )
+	backgroundErrorRate = runif(1)/ 1000
 	
 	if( backgroundErrorRate < 0) 
 	{
