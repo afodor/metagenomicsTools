@@ -42,3 +42,5 @@ ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="
 ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="Blue",show.groups=2,label=T,font=2,cex=1)
 
 
+
+

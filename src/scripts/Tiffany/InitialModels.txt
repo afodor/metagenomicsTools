@@ -1,0 +1,32 @@
+
+rm(list=ls())
+
+setwd("C:\\tiffany")
+
+fileName <- "pivotedPlusMetaMDS.txt"
+myT <- read.table( fileName, sep="\t", header=TRUE)
+	
+pValuesRace <- vector()
+taxaNames <- vector()
+index <- 1
+	
+dataCols <- c(3:ncol(myT))
+	
+for( dataCol in dataCols ) 
+{
+	if( sum(myT[,dataCol] != 0 ) > nrow(myT) / 10 )
+	{
+		bug <- myT[,dataCol] 
+		
+		pValuesRace[index] <- t.test( bug[ myT$race==1], bug[myT$race==2] )$p.value
+		taxaNames[index] <- names(myT)[ dataCol ]
+		index <- index + 1
+	}
+}		
+
+dFrame <- data.frame(taxaNames, pValuesRace)
+dFrame <- dFrame [order(dFrame$pValuesRace),]
+dFrame$adjustedPValuesRace <- p.adjust( dFrame$pValuesRace, method = "BH" )
+	
+write.table(dFrame, file=paste("pValues_Race.txt",sep=""), sep="\t",row.names=FALSE)
+	
