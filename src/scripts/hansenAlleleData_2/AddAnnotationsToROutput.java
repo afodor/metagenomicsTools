@@ -11,6 +11,7 @@ public class AddAnnotationsToROutput
 {
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		addAnnotations(new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\ErectalepValues.txt"), 
 						new File("C:\\JonathanHansenAlleles\\inputTextFiles_2\\Erectale annotations.txt"), 
 						new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\ErectalepValuesPlusAnnotation.txt"));
@@ -19,6 +20,12 @@ public class AddAnnotationsToROutput
 		addAnnotations(new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\ErectaleForR.txt"), 
 						new File("C:\\JonathanHansenAlleles\\inputTextFiles_2\\Erectale annotations.txt"), 
 						new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\ErectaleForRPlusAnnotation.txt"));
+						*/
+		
+
+		addAnnotations(new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\E_coli_NC101pValues.txt"), 
+						new File("C:\\JonathanHansenAlleles\\inputTextFiles_2\\Ecoli NC101 annotations.txt"), 
+						new File("C:\\JonathanHansenAlleles\\outputTextFiles_2\\eColi101_pValuesPlusAnnonation.txt"));
 	}
 	
 	private static void addAnnotations(File rOutputFile, File annotationFile, File newOutputFile) throws Exception
@@ -55,12 +62,13 @@ public class AddAnnotationsToROutput
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
+			System.out.println(splits[1]);
 			
 			if( splits.length != 2)
 				throw new Exception("No");
 			
-			if( map.containsKey(splits[1]))
-				throw new Exception("No " + splits[0] + " " +  splits[1]);
+			if( map.containsKey(splits[1]) && ! map.get(splits[1]).equals(splits[0]))
+				throw new Exception(splits[1] + " @" +   " No " + splits[0] + " " +  splits[1] +  " " + map.get(splits[1]));
 			
 			map.put(splits[1], splits[0]);
 		}
