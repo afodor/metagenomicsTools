@@ -13,18 +13,18 @@ public class AgeReparse
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper("C:\\anhDraft\\gloorJustCounts.txt");
+		OtuWrapper wrapper = new OtuWrapper("C:\\anhDraft\\goodrichJustCounts.txt");
 		
-		File logNormFile = new File("C:\\anhDraft\\gloorJustCountsLogNorm.txt" );
+		File logNormFile = new File("C:\\anhDraft\\goodrichJustCountsLogNorm.txt" );
 		
 		wrapper.writeNormalizedLoggedDataToFile(logNormFile);
 	
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\anhDraft\\GloorForR.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\anhDraft\\GoodrichForR.txt")));
 		
 		BufferedReader logReader = new BufferedReader(new FileReader(logNormFile));
 		
-		
 		HashMap<String, Double> map= getAgeMap();
+		System.out.println(map);
 		
 		writer.write("sample\tage");
 		
@@ -53,7 +53,7 @@ public class AgeReparse
 	private static HashMap<String, Double> getAgeMap() throws Exception
 	{
 		HashMap<String, Double> map = new HashMap<>();
-		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\anhDraft\\gloor.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\anhDraft\\goodrich.txt")));
 		
 		reader.readLine();
 		
