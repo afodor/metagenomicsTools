@@ -1,0 +1,22 @@
+
+rm(list=ls())
+
+setwd("C:\\anhDraft")
+
+myT <- read.table("GloorForR.txt", sep="\t", header=TRUE)
+
+names <- vector()
+pValues <- vector()
+
+index <-1 
+for( i in 4:ncol(myT))
+{
+	myLm <- lm( myT$age ~ myT[,i] )
+	pValues[index] = anova(myLm)$"Pr(>F)"[1]
+	names[index] = names(myT)[i]	
+	index <- index +1 
+}
+
+myFrame <- data.frame( names,pValues )
+write.table(myFrame, file="rPValuesOut.txt", sep="\t",row.names=FALSE)
+	
