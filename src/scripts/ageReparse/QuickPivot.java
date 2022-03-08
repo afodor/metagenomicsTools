@@ -52,6 +52,7 @@ public class QuickPivot
 	
 	private static void addToMap(HashMap<String, Holder> map,  File file, boolean isGloor) throws Exception
 	{
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		reader.readLine();
@@ -59,7 +60,7 @@ public class QuickPivot
 		for(String s = reader.readLine(); s != null; s = reader.readLine())
 		{
 			String[] splits = s.split("\t");
-			if( splits.length != 2)
+			if( splits.length != 3)
 				throw new Exception("No");
 			
 			String key= splits[0].replaceAll("\"","");
@@ -78,14 +79,21 @@ public class QuickPivot
 				if( h.pValueGloor != null)
 					throw new Exception("No");
 				
-				h.pValueGloor = Double.parseDouble(splits[1]);
+				h.pValueGloor = Math.log10(Double.parseDouble(splits[1]));
+				
+				if( Double.parseDouble(splits[2]) > 0)
+					h.pValueGloor = - h.pValueGloor ;
 			}
 			else
 			{
 				if( h.pValueGoodrich != null)
 					throw new Exception("No");
 				
-				h.pValueGoodrich = Double.parseDouble(splits[1]);
+				h.pValueGoodrich = Math.log10( Double.parseDouble(splits[1]));
+				
+
+				if( Double.parseDouble(splits[2]) > 0)
+					h.pValueGoodrich = - h.pValueGoodrich;
 			}
 		}
 		
