@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+import parsers.OtuWrapper;
 import utils.Avevar;
 import utils.Spearman;
 
@@ -40,18 +40,14 @@ public class CheckCorrs
 		File inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Kraken2_China_genus_Normalized.csv");
 		File outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Kraken2_China_genus_Normalized_Corr.txt");
 		
-		writeCorrFile(inFile, outFile,2);
-		/*
-		writeCorrFile(inFile, outFile);
+		//writeCorrFile(inFile, outFile,2);
 		
 		inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Metaphlan2_China_genus_Normalized.csv");
-		outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Metaphlan2_China_genus_Normalized_Corr.txt");
+		outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Metaphlan2_China_genus_Normalized_CorrTopCorr.txt");
 		
-		writeCorrFile(inFile, outFile);
-		*/
+		//writeCorrFile(inFile, outFile,2);
 		
-		/*
-		File inFile = new File("C:\\JamesKraken\\chinaKraken.txt");
+		inFile = new File("C:\\JamesKraken\\chinaKraken.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
 		
@@ -59,13 +55,19 @@ public class CheckCorrs
 		
 		wrapper.writeNormalizedLoggedDataToFile(logFile);
 		
-		File outFile = new File("C:\\JamesKraken\\chinaKrakenLogNormCorr.txt");
+		outFile = new File("C:\\JamesKraken\\chinaKrakenLogNormCorrTopCorr.txt");
 	
-		writeCorrFile(logFile, outFile);
-		*/
+		writeCorrFile(logFile, outFile,1, "\t");
+	
+		//logFile = new File("C:\\JamesKraken\\china16S.txt");
+		
+		//outFile = new File("C:\\JamesKraken\\china16SLogNormCorrTopCorr.txt");
+	
+		//writeCorrFile(logFile, outFile,1, "\t");
+	
 	}
 	
-	private static List<Holder> parseFile( File inputFile, int startNum ) throws Exception
+	private static List<Holder> parseFile( File inputFile, int startNum, String delimiter ) throws Exception
 	{
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -73,23 +75,28 @@ public class CheckCorrs
 		List<Holder> taxaList = new ArrayList<>();
 		
 		String topLine = reader.readLine();
-		String [] topSplits= topLine.split(",");
+		String [] topSplits= topLine.split(delimiter);
 		
 		for( int x=startNum; x < topSplits.length; x++)
 			taxaList.add(new Holder(topSplits[x]));
 		
 		for(String s = reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
 		{
-			String[] splits = s.split(",");
+			String[] splits = s.split(delimiter);
 			
 			if( splits.length != topSplits.length)
-				throw new Exception("NO " + topSplits.length + " " + splits.length);
+				throw new Exception("NO " + topSplits.length + " " + splits.length + " " + s);
 			
 			for( int x=startNum; x < splits.length; x++)
 			{
 				Holder h = taxaList.get(x-startNum);
 				
-				h.taxaValues.add(Double.parseDouble(splits[x]));
+				String aVal = splits[x];
+				
+				if( aVal.equals(""))
+					aVal = "0.0";
+				
+				h.taxaValues.add(Double.parseDouble(aVal));
 			}
 		}
 		
@@ -109,23 +116,25 @@ public class CheckCorrs
 	}
 	
 	
-	public static void writeCorrFile(File inputFile, File outputFile, int startNum) throws Exception
+	public static void writeCorrFile(File inputFile, File outputFile, int startNum, String delimiter) throws Exception
 	{
 		System.out.println(inputFile.getAbsolutePath() + " " + outputFile.getAbsolutePath());
-		List<Holder> taxaList = parseFile(inputFile, startNum);
+		List<Holder> taxaList = parseFile(inputFile, startNum,delimiter);
+		
+		if( taxaList.size() == 0)
+			throw new Exception("Failed to parse!");
 		
 		for(Holder h : taxaList)
 		{
 			System.out.println(h.taxaName + " " + h.averageVal);
 		}
 		
-		for( int x=0; x < taxaList.size() -1 ; x++)
+		for( int x=1; x < taxaList.size() ; x++)
 		{
 			
 			Holder xHolder = taxaList.get(x);
 			
-			
-			for( int y = x+ 1; y < taxaList.size(); y++)
+			for( int y = 0; y < x; y++)
 			{
 				Holder yHolder = taxaList.get(y);
 				
@@ -133,9 +142,6 @@ public class CheckCorrs
 				
 				if( corValue > xHolder.maxCorrelation )
 					xHolder.maxCorrelation = corValue;
-				
-				if( corValue > yHolder.maxCorrelation)
-					yHolder.maxCorrelation = corValue;
 			}
 		}
 		
