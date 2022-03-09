@@ -11,7 +11,6 @@ myT <- myT[ , c(2:ncol(myT)) ]
 #myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
 #myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
 
-
 maxCors <- vector(length=ncol(myT))
 averageDepth <- vector(length=ncol(myT))
 
@@ -39,11 +38,14 @@ for( i in 1:numCols )
 	maxCors[i] <- -1
 }
 
+
+a <- 60
+
 for( i in 2:numCols)
 {
 	averageDepth[i] <- mean( myT[,i] )
 	
-	stopVal <- min(i-1,60)
+	stopVal <- min(i-1,a)
 	for( j in 1:stopVal )
 	{
 		
@@ -65,7 +67,6 @@ plot(averageDepth, maxCors, ylim=c(0,1))
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
 
-a <- 60
 
 sumTop <- 0 
 
