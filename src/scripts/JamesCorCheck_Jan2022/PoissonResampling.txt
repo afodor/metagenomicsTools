@@ -21,6 +21,8 @@ myT <- myT[, ! is.na(sums)]
 sums <- apply(myT, 2, sum)
 myT<- myT[ ,  sums> 0 ]
 
+myT <- myT[,order(-apply(myT, 2, sum))]
+
 keepVals <- vector()
 
 for( i in 1:ncol(myT))
