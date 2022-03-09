@@ -29,6 +29,8 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 	 xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax),
 	 main=paste(filter,"(",adjString, "pValue all time=",format(pValue,digits=3),")"))
 	 		  
+	 colors <- c("red", "blue", "green", "pink", "orange", "yellow", "black" , "gray", "magenta")
+	 		  
 	 for( k in 1:(length(uniqueIDs))) 
 	 {
 	 	if( substr(uniqueIDs[k],1,2) == filter )
@@ -37,8 +39,8 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 	 		datesToGraph <- dates[animalIds==uniqueIDs[k]]
 	 		maxVal = which( toGraph == max(toGraph[!is.na(toGraph)]))[1]
 		
-	 		points( datesToGraph, toGraph)
-	 		lines(datesToGraph, toGraph)
+			points( datesToGraph, toGraph, col=colors[k])
+	 		lines(datesToGraph, toGraph, col=colors[k],lwd=2)
 	 		
 	 		if( !is.na(maxVal) )
 	 		{
@@ -56,7 +58,7 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 		 			}
 		 		}
 		 		
-		 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]]+ rnorm(1,0,.02), textVals)	
+		 		text(dates[animalIds==uniqueIDs[k]],vals[animalIds==uniqueIDs[k]]+ rnorm(1,0,.02), textVals,  col=colors[k])	
 	 		}
 	 		
 	 	}
