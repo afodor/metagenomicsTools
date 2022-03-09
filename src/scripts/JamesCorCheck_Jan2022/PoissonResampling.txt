@@ -1,13 +1,14 @@
 rm(list=ls())
 
-#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
-#myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE)
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
+myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
+myT <- myT[ , c(2:ncol(myT)) ]
 
 #setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
 #myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE)
 
-setwd("c:\\JamesKraken")
-myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+#setwd("c:\\JamesKraken")
+#myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
 #myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
 
 
@@ -24,7 +25,7 @@ keepVals <- vector()
 
 for( i in 1:ncol(myT))
 {
-	keepVals[i] <-  sum( myT[,i]) > 3
+	keepVals[i] <-  sum( myT[,i]) > 10
 }
 
 myT <- myT[, keepVals] 
@@ -36,35 +37,24 @@ for( i in 1:numCols )
 	maxCors[i] <- -1
 }
 
-for( i in 1:(numCols -1))
+for( i in 2:numCols)
 {
 	averageDepth[i] <- mean( myT[,i] )
 	
-	for( j in (i+1):numCols )
+	for( j in 1:(i-1) )
 	{
-		if( i == j ) 
-		{
-			print("EQUALS")
-		}
-	
-		corVal <- cor( myT[,i], myT[,j],method="spearman" )
-		#corVal <- cor.test(x=myT[,i],y=myT[,j],method="spearman",alternative="two.sided")$estimate
 		
+		corVal <- cor( myT[,i], myT[,j],method="spearman" )
 		
 		if( ! is.na(corVal) )
-		{
-			if( corVal >= 0.999) 
-			{
-				print( paste( i, j, corVal ))
-			}
-			
-			maxCors[i] <- max(corVal , maxCors[i] )
-			maxCors[j] <- max(  maxCors[j], maxCors[i]  )
+		{	
+			maxCors[i] <- max(  maxCors[i], corVal  )
 		}
 		
 	}
 }
 
+maxCors[1] = 1
 
 #par(mfrow=c(2,1))
 plot(averageDepth, maxCors, ylim=c(0,1))
