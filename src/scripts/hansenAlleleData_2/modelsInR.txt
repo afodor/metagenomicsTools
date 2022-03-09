@@ -29,7 +29,8 @@ makeAGraph <- function(filter,labelNames,vals,pValue, adjString)
 	 xlim=c(as.numeric(min(dates))-10, as.numeric(max(dates))+10), ylim=c(0, yMax),
 	 main=paste(filter,"(",adjString, "pValue all time=",format(pValue,digits=3),")"))
 	 		  
-	 colors <- c("red", "blue", "green", "pink", "orange", "yellow", "black" , "gray", "magenta")
+	 colors <- c("red", "blue", "green", "pink", "orange", "yellow", "black" , "gray", "magenta",
+	 			"red", "blue", "green", "pink", "orange", "yellow", "black" , "gray", "magenta")
 	 		  
 	 for( k in 1:(length(uniqueIDs))) 
 	 {
