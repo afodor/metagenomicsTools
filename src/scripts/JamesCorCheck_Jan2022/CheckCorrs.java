@@ -6,15 +6,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import parsers.OtuWrapper;
+
 import utils.Avevar;
 import utils.Spearman;
 
 public class CheckCorrs
 {
-	private static class Holder
+	private static class Holder implements Comparable<Holder>
 	{
 		String taxaName;
 		List<Double> taxaValues = new ArrayList<>();
@@ -24,15 +25,23 @@ public class CheckCorrs
 		{
 			this.taxaName =s ;
 		}
+		
+		double averageVal;
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return Double.compare(o.averageVal, this.averageVal);
+		}
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		/*
 		File inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Kraken2_China_genus_Normalized.csv");
 		File outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Kraken2_China_genus_Normalized_Corr.txt");
 		
-
+		writeCorrFile(inFile, outFile,2);
+		/*
 		writeCorrFile(inFile, outFile);
 		
 		inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Metaphlan2_China_genus_Normalized.csv");
@@ -41,6 +50,7 @@ public class CheckCorrs
 		writeCorrFile(inFile, outFile);
 		*/
 		
+		/*
 		File inFile = new File("C:\\JamesKraken\\chinaKraken.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
@@ -52,9 +62,10 @@ public class CheckCorrs
 		File outFile = new File("C:\\JamesKraken\\chinaKrakenLogNormCorr.txt");
 	
 		writeCorrFile(logFile, outFile);
+		*/
 	}
 	
-	private static List<Holder> parseFile( File inputFile ) throws Exception
+	private static List<Holder> parseFile( File inputFile, int startNum ) throws Exception
 	{
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -64,7 +75,7 @@ public class CheckCorrs
 		String topLine = reader.readLine();
 		String [] topSplits= topLine.split(",");
 		
-		for( int x=2; x < topSplits.length; x++)
+		for( int x=startNum; x < topSplits.length; x++)
 			taxaList.add(new Holder(topSplits[x]));
 		
 		for(String s = reader.readLine(); s != null && s.trim().length() > 0; s= reader.readLine())
@@ -74,9 +85,9 @@ public class CheckCorrs
 			if( splits.length != topSplits.length)
 				throw new Exception("NO " + topSplits.length + " " + splits.length);
 			
-			for( int x=2; x < splits.length; x++)
+			for( int x=startNum; x < splits.length; x++)
 			{
-				Holder h = taxaList.get(x-2);
+				Holder h = taxaList.get(x-startNum);
 				
 				h.taxaValues.add(Double.parseDouble(splits[x]));
 			}
@@ -87,14 +98,26 @@ public class CheckCorrs
 		
 		reader.close();
 		
+		for( Holder h : taxaList )
+		{
+			h.averageVal = new Avevar(h.taxaValues).getAve();
+		}
+		
+		Collections.sort(taxaList);
+		
 		return taxaList;
 	}
 	
 	
-	public static void writeCorrFile(File inputFile, File outputFile) throws Exception
+	public static void writeCorrFile(File inputFile, File outputFile, int startNum) throws Exception
 	{
 		System.out.println(inputFile.getAbsolutePath() + " " + outputFile.getAbsolutePath());
-		List<Holder> taxaList = parseFile(inputFile);
+		List<Holder> taxaList = parseFile(inputFile, startNum);
+		
+		for(Holder h : taxaList)
+		{
+			System.out.println(h.taxaName + " " + h.averageVal);
+		}
 		
 		for( int x=0; x < taxaList.size() -1 ; x++)
 		{
