@@ -3,10 +3,12 @@ rm(list=ls())
 #setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
 #myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE)
 
-setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
-myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE)
+#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
+#myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE)
 
-myT <- myT[,4:ncol(myT)]
+setwd("c:\\JamesKraken")
+myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+
 
 maxCors <- vector(length=ncol(myT))
 averageDepth <- vector(length=ncol(myT))
@@ -38,7 +40,7 @@ for( i in 1:(numCols -1))
 
 
 #par(mfrow=c(2,1))
-#plot(averageDepth, maxCors)
+plot(averageDepth, maxCors)
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)

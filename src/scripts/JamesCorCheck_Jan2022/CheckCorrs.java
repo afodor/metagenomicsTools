@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import parsers.OtuWrapper;
 import utils.Avevar;
 import utils.Spearman;
 
@@ -27,6 +28,7 @@ public class CheckCorrs
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		File inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Kraken2_China_genus_Normalized.csv");
 		File outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Kraken2_China_genus_Normalized_Corr.txt");
 		
@@ -37,7 +39,19 @@ public class CheckCorrs
 		outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Metaphlan2_China_genus_Normalized_Corr.txt");
 		
 		writeCorrFile(inFile, outFile);
+		*/
 		
+		File inFile = new File("C:\\JamesKraken\\chinaKraken.txt");
+		
+		OtuWrapper wrapper = new OtuWrapper(inFile);
+		
+		File logFile = new File("C:\\JamesKraken\\chinaKrakenLogNorm.txt");
+		
+		wrapper.writeNormalizedLoggedDataToFile(logFile);
+		
+		File outFile = new File("C:\\JamesKraken\\chinaKrakenLogNormCorr.txt");
+	
+		writeCorrFile(logFile, outFile);
 	}
 	
 	private static List<Holder> parseFile( File inputFile ) throws Exception
