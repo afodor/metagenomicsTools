@@ -1,16 +1,16 @@
 rm(list=ls())
 
-#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
 #myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
 #myT <- myT[ , c(2:ncol(myT)) ]
 
-#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
-#myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
-#myT <- myT[ , c(3:ncol(myT)) ]
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
+myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
+myT <- myT[ , c(3:ncol(myT)) ]
 
-setwd("c:\\JamesKraken")
-myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
-myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+#setwd("c:\\JamesKraken")
+#myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+#myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
 
 maxCors <- vector(length=ncol(myT))
 averageDepth <- vector(length=ncol(myT))
@@ -23,14 +23,15 @@ myT<- myT[ ,  sums> 0 ]
 
 myT <- myT[,order(-apply(myT, 2, sum))]
 
-keepVals <- vector()
+
+#keepVals <- vector()
 
 for( i in 1:ncol(myT))
 {
-	keepVals[i] <-  sum( myT[,i]) > 10
+	keepVals[i] <-  sum( myT[,i]) > nrow(myT)[2]
 }
 
-myT <- myT[, keepVals] 
+#myT <- myT[, keepVals] 
 
 numCols <- ncol(myT)
 
@@ -40,7 +41,7 @@ for( i in 1:numCols )
 }
 
 
-a <- 80
+a <- 60
 
 for( i in 2:numCols)
 {
