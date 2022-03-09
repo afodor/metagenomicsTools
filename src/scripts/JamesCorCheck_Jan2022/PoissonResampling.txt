@@ -1,136 +1,142 @@
 rm(list=ls())
 
+tables <- list()
+names <- list()
+
 setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
 myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
 myT <- myT[ , c(2:ncol(myT)) ]
+tables[[1]] <- myT
+names[[1]] <- "James China full kraken"
 
-#setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
-#myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
-#myT <- myT[ , c(3:ncol(myT)) ]
+setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
+myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
+myT <- myT[ , c(3:ncol(myT)) ]
+tables[[2]] <- myT
+names[[2]] <- "James IBD full kraken"
 
-#setwd("c:\\JamesKraken")
-#myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
-#myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+setwd("c:\\JamesKraken")
+myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+tables[[3]] <- myT
+names[[3]] <- "Winglee China mini kraken"
 
-maxCors <- vector(length=ncol(myT))
-averageDepth <- vector(length=ncol(myT))
+setwd("c:\\JamesKraken")
+myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+tables[[4]] <- myT
+names[[4]] <- "Winglee China 16S"
 
-sums <- apply(myT, 2, sum)
-myT <- myT[, ! is.na(sums)]
-
-#sums <- apply(myT, 2, sum)
-#myT<- myT[ ,  sums> 0 ]
-
-myT <- myT[,order(-apply(myT, 2, sum))]
-
-
-#keepVals <- vector()
-
-#for( i in 1:ncol(myT))
-#{
-#	keepVals[i] <-  sum( myT[,i]) > nrow(myT)[2]
-#}
-
-#myT <- myT[, keepVals] 
-
-numCols <- ncol(myT)
-
-for( i in 1:numCols )
+par(mfrow=c(2,2))
+for( i in 1:length(tables) ) 
 {
-	maxCors[i] <- -1
-}
+	myT <- tables[[i]]
+	maxCors <- vector(length=ncol(myT))
+	averageDepth <- vector(length=ncol(myT))
+
+	sums <- apply(myT, 2, sum)
+	myT <- myT[, ! is.na(sums)]
 
 
-a <- 60
+	myT <- myT[,order(-apply(myT, 2, sum))]
 
-for( i in 2:numCols)
-{
-	averageDepth[i] <- mean( myT[,i] )
+	numCols <- ncol(myT)
 	
-	#stopVal <- min(i-1,a)
-	
-	stopVal <- min(i-1)
-	
-	for( j in 1:stopVal )
+	for( i in 1:numCols )
 	{
-		
-		corVal <- cor( myT[,i], myT[,j],method="spearman" )
-		
-		if( ! is.na(corVal) )
-		{	
-			maxCors[i] <- max(  maxCors[i], corVal  )
-		}
-		
+		maxCors[i] <- -1
 	}
-}
 
-maxCors[1] = 1
-averageDepth[1] <- mean( myT[,1] )
 
+	a <- 60
+
+	for( i in 2:numCols)
+	{
+		averageDepth[i] <- mean( myT[,i] )
+		
+		stopVal <- min(i-1)
+		
+		for( j in 1:stopVal )
+		{
+			
+			corVal <- cor( myT[,i], myT[,j],method="spearman" )
+			
+			if( ! is.na(corVal) )
+			{	
+				maxCors[i] <- max(  maxCors[i], corVal  )
+			}
+			
+		}
+	}
+
+	maxCors[1] = 1
+	averageDepth[1] <- mean( myT[,1] )
+	
 
 #par(mfrow=c(2,1))
-plot(averageDepth, maxCors, ylim=c(0,1))
+#plot(averageDepth, maxCors, ylim=c(0,1))
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
 
 
-sumTop <- 0 
-
-probs <- vector(length=a)
-
-for( i in 1:a) 
-{
-	index <- which( meanRanks == i ) 
-	aSum <- 10 ^ averageDepth[index] -1
-	sumTop <- sumTop + aSum
-}
-
-for( i in 1:a)
-{
-	index <- which( meanRanks == i ) 
-	aSum <- 10 ^ averageDepth[index] -1
-	probs[i] = aSum /sumTop
-}
-
-# this version samples uniformly
-#backgroundErrorRateMean <- 0.00005
-#backgroundErrorRateSD  <- 0.001
-
-simMeans <- vector()
-simCors <- vector()
-
-for( i in 1:(numCols-a))
-{
-	backgroundErrorRate = runif(1)/ 1000
+	sumTop <- 0 
 	
-	if( backgroundErrorRate < 0) 
+	probs <- vector(length=a)
+	
+	for( i in 1:a) 
 	{
-		backgroundErrorRate  = 0
+		index <- which( meanRanks == i ) 
+		aSum <- 10 ^ averageDepth[index] -1
+		sumTop <- sumTop + aSum
 	}
 	
-	# choose by relative abundance
-	colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
-	
-	dataSimCol <- vector(length=nrow(myT))
-	
-	for( j in 1:nrow(myT)) 
+	for( i in 1:a)
 	{
-		dataSimCol[j] <- rbinom( 1, ceiling( 10 ^ myT[j,colIndex]) -1 , backgroundErrorRate )
+		index <- which( meanRanks == i ) 
+		aSum <- 10 ^ averageDepth[index] -1
+		probs[i] = aSum /sumTop
 	}
 	
-	simMeans[i] <- log10( mean(dataSimCol) -1 ) 
+	# this version samples uniformly
+	#backgroundErrorRateMean <- 0.00005
+	#backgroundErrorRateSD  <- 0.001
 	
-	if( is.nan(simMeans[i]) |  simMeans[i]  < 0 ) 
+	simMeans <- vector()
+	simCors <- vector()
+	
+	for( i in 1:(numCols-a))
 	{
-		simMeans[i] = 0
+		backgroundErrorRate = runif(1)/ 1000
+		
+		if( backgroundErrorRate < 0) 
+		{
+			backgroundErrorRate  = 0
+		}
+		
+		# choose by relative abundance
+		colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
+		
+		dataSimCol <- vector(length=nrow(myT))
+		
+		for( j in 1:nrow(myT)) 
+		{
+			dataSimCol[j] <- rbinom( 1, ceiling( 10 ^ myT[j,colIndex]) -1 , backgroundErrorRate )
+		}
+		
+		simMeans[i] <- log10( mean(dataSimCol) -1 ) 
+		
+		if( is.nan(simMeans[i]) |  simMeans[i]  < 0 ) 
+		{
+			simMeans[i] = 0
+		}
+		
+		simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
 	}
 	
-	simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
+	#plot(simMeans, simCors)
+	
+	plot(averageDepth, maxCors,ylim=c(0,1),main = names[i] )
+	points(simMeans, simCors,col="red")	
 }
-
-#plot(simMeans, simCors)
-
-plot(averageDepth, maxCors,ylim=c(0,1))
-points(simMeans, simCors,col="red")
 
