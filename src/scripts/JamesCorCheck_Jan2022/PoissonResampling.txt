@@ -60,6 +60,8 @@ for( i in 2:numCols)
 }
 
 maxCors[1] = 1
+averageDepth[1] <- mean( myT[,1] )
+
 
 #par(mfrow=c(2,1))
 plot(averageDepth, maxCors, ylim=c(0,1))
