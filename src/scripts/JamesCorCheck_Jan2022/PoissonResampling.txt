@@ -7,11 +7,27 @@ rm(list=ls())
 #myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE)
 
 setwd("c:\\JamesKraken")
-myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+#myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
 
 
 maxCors <- vector(length=ncol(myT))
 averageDepth <- vector(length=ncol(myT))
+
+sums <- apply(myT, 2, sum)
+myT <- myT[, ! is.na(sums)]
+
+sums <- apply(myT, 2, sum)
+myT<- myT[ ,  sums> 0 ]
+
+keepVals <- vector()
+
+for( i in 1:ncol(myT))
+{
+	keepVals[i] <-  sum( myT[,i]) > 3
+}
+
+myT <- myT[, keepVals] 
 
 numCols <- ncol(myT)
 
@@ -20,17 +36,28 @@ for( i in 1:numCols )
 	maxCors[i] <- -1
 }
 
-
 for( i in 1:(numCols -1))
 {
 	averageDepth[i] <- mean( myT[,i] )
 	
 	for( j in (i+1):numCols )
 	{
+		if( i == j ) 
+		{
+			print("EQUALS")
+		}
+	
 		corVal <- cor( myT[,i], myT[,j],method="spearman" )
+		#corVal <- cor.test(x=myT[,i],y=myT[,j],method="spearman",alternative="two.sided")$estimate
+		
 		
 		if( ! is.na(corVal) )
 		{
+			if( corVal >= 0.999) 
+			{
+				print( paste( i, j, corVal ))
+			}
+			
 			maxCors[i] <- max(corVal , maxCors[i] )
 			maxCors[j] <- max(  maxCors[j], maxCors[i]  )
 		}
@@ -40,7 +67,7 @@ for( i in 1:(numCols -1))
 
 
 #par(mfrow=c(2,1))
-plot(averageDepth, maxCors)
+plot(averageDepth, maxCors, ylim=c(0,1))
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
