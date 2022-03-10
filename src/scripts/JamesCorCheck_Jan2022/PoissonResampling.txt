@@ -83,6 +83,7 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	
 	sumTop <- 0 
 	
+	
 	probs <- vector(length=a)
 	
 	for( i in 1:a) 
@@ -140,4 +141,3 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	plot(averageDepth, maxCors,ylim=c(0,1),main = names[graphIndex] )
 	points(simMeans, simCors,col="red")	
 }
-
