@@ -5,9 +5,9 @@ names <- vector()
 
 setwd("c:\\JamesKraken")
 myT <- read.table("genusTaxaAsColumnsRDPWithMetadata.txt", sep="\t", header=TRUE, row.names=1)
-myT <- myT[,5:ncol(myT)]
+myT <- myT[ myT$readNumber ==1 & myT$timepoint == "first_A" ,5:ncol(myT)]
 tables[[1]] <- myT
-names[1] <- "genusTaxaAsColumnsRDPWithMetadata.txt"
+names[1] <- "Winglee 16S"
 
 
 setwd("c:\\JamesKraken")
