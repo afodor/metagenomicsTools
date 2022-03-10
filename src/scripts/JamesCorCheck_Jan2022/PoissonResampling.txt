@@ -53,7 +53,7 @@ for( graphIndex in 1:length(tables) )
 	{
 		averageDepth[i] <- mean( myT[,i] )
 		
-		stopVal <- min(i-1)
+		stopVal <- i-1
 		
 		for( j in 1:stopVal )
 		{
