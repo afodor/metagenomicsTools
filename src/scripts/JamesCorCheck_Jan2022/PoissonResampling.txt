@@ -117,7 +117,7 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 		for( j in 1:nrow(myT)) 
 		{
 			# importantly, only the abundance of the parent taxa for that sample is fed to the Poisson distribution
-			# (the Poisson distribution is the same as the binomial distrbution for a small background error rate
+			# (the Poisson distribution is the same as the binomial distrbution for a small background error rate)
 			dataSimCol[j] <- rbinom( 1, ceiling( 10 ^ myT[j,colIndex]) -1 , backgroundErrorRate )
 		}
 		
