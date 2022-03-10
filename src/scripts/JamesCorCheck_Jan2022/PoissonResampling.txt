@@ -83,7 +83,6 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	
 	sumTop <- 0 
 	
-	
 	probs <- vector(length=a)
 	
 	for( i in 1:a) 
@@ -100,29 +99,25 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 		probs[i] = aSum /sumTop
 	}
 	
-	# this version samples uniformly
-	#backgroundErrorRateMean <- 0.00005
-	#backgroundErrorRateSD  <- 0.001
-	
 	simMeans <- vector()
 	simCors <- vector()
 	
+	
+	# for every taxa except the a most abundant
 	for( i in 1:(numCols-a))
 	{
 		backgroundErrorRate = runif(1)/ 1000
 		
-		if( backgroundErrorRate < 0) 
-		{
-			backgroundErrorRate  = 0
-		}
-		
-		# choose by relative abundance
+		# choose the parent weighted by relative abundance
 		colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
 		
 		dataSimCol <- vector(length=nrow(myT))
 		
+		# simulate the taxa for every sample
 		for( j in 1:nrow(myT)) 
 		{
+			# importantly, only the abundance of the parent taxa for that sample is fed to the Poisson distribution
+			# (the Poisson distribution is the same as the binomial distrbution for a small background error rate
 			dataSimCol[j] <- rbinom( 1, ceiling( 10 ^ myT[j,colIndex]) -1 , backgroundErrorRate )
 		}
 		
