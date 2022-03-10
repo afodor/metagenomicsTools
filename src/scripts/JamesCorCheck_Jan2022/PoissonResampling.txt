@@ -51,31 +51,30 @@ for( graphIndex in 1:length(tables) )
 
 	a <- 60
 
-	for( i in 2:numCols)
+	for( i in 1:(numCols-1))
 	{
 		averageDepth[i] <- mean( myT[,i] )
 		
-		stopVal <- min(i-1)
-		
-		for( j in 1:stopVal )
+		for( j in 1:numCols)
 		{
+			if( i != j ) 
+			{
+				corVal <- cor( myT[,i], myT[,j],method="spearman" )
 			
-			corVal <- cor( myT[,i], myT[,j],method="spearman" )
-			
-			if( ! is.na(corVal) )
-			{	
-				maxCors[i] <- max(  maxCors[i], corVal  )
+				if( ! is.na(corVal) )
+				{	
+					maxCors[i] <- max(  maxCors[i], corVal  )
+				}
 			}
-			
 		}
 	}
 
-	maxCors[1] = 1
-	averageDepth[1] <- mean( myT[,1] )
+	#maxCors[1] = 1
+	#averageDepth[1] <- mean( myT[,1] )
 	
 
 #par(mfrow=c(2,1))
-#plot(averageDepth, maxCors, ylim=c(0,1))
+#plot(averageDepth, maxCors)
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
