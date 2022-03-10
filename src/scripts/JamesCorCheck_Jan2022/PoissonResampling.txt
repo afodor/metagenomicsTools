@@ -3,16 +3,17 @@ rm(list=ls())
 tables <- list()
 names <- vector()
 
+setwd("c:\\JamesKraken")
+myT <- read.table("genusTaxaAsColumnsRDPWithMetadata.txt", sep="\t", header=TRUE, row.names=1)
+myT <- myT[,5:ncol(myT)]
+tables[[1]] <- myT
+names[1] <- "genusTaxaAsColumnsRDPWithMetadata.txt"
+
 
 setwd("c:\\JamesKraken")
 myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
-tables[[1]] <- myT
-names[1] <- "Winglee China mini kraken"
-
-setwd("c:\\JamesKraken")
-myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
 tables[[2]] <- myT
-names[2] <- "Winglee China 16S"
+names[2] <- "Winglee China mini kraken"
 
 
 setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
