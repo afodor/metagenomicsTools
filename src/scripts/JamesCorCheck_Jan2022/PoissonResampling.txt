@@ -1,36 +1,36 @@
 rm(list=ls())
 
 tables <- list()
-names <- list()
+names <- vector()
+
+
+setwd("c:\\JamesKraken")
+myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
+tables[[1]] <- myT
+names[1] <- "Winglee China mini kraken"
+
+setwd("c:\\JamesKraken")
+myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
+tables[[2]] <- myT
+names[2] <- "Winglee China 16S"
+
 
 setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China")
 myT <- read.table("Kraken2_China_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
 myT <- myT[ , c(2:ncol(myT)) ]
-tables[[1]] <- myT
-names[[1]] <- "James China full kraken"
+tables[[3]] <- myT
+names[3] <- "James China full kraken"
 
 setwd("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\IBD")
 myT <- read.table("Kraken2_IBD_genus_Normalized.csv", sep=",", header=TRUE,row.names=1)
 myT <- myT[ , c(3:ncol(myT)) ]
-tables[[2]] <- myT
-names[[2]] <- "James IBD full kraken"
-
-setwd("c:\\JamesKraken")
-myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
-myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
-tables[[3]] <- myT
-names[[3]] <- "Winglee China mini kraken"
-
-setwd("c:\\JamesKraken")
-myT <- read.table("china16S.txt", sep="\t", header=TRUE, row.names=1)
-myT <- read.table("chinaKrakenLogNorm.txt", sep="\t", header=TRUE, row.names=1)
 tables[[4]] <- myT
-names[[4]] <- "Winglee China 16S"
+names[4] <- "James IBD full kraken"
 
 par(mfrow=c(2,2))
-for( i in 1:length(tables) ) 
+for( graphIndex in 1:length(tables) ) 
 {
-	myT <- tables[[i]]
+	myT <- tables[[graphIndex]]
 	maxCors <- vector(length=ncol(myT))
 	averageDepth <- vector(length=ncol(myT))
 
@@ -136,7 +136,7 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	
 	#plot(simMeans, simCors)
 	
-	plot(averageDepth, maxCors,ylim=c(0,1),main = names[i] )
+	plot(averageDepth, maxCors,ylim=c(0,1),main = names[graphIndex] )
 	points(simMeans, simCors,col="red")	
 }
 
