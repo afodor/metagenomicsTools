@@ -49,37 +49,38 @@ for( graphIndex in 1:length(tables) )
 	}
 
 
-	a <- 60
-
-	for( i in 1:(numCols-1))
+	for( i in 2:numCols)
 	{
 		averageDepth[i] <- mean( myT[,i] )
 		
-		for( j in 1:numCols)
+		stopVal <- min(i-1)
+		
+		for( j in 1:stopVal )
 		{
-			if( i != j ) 
-			{
-				corVal <- cor( myT[,i], myT[,j],method="spearman" )
 			
-				if( ! is.na(corVal) )
-				{	
-					maxCors[i] <- max(  maxCors[i], corVal  )
-				}
+			corVal <- cor( myT[,i], myT[,j],method="spearman" )
+			
+			if( ! is.na(corVal) )
+			{	
+				maxCors[i] <- max(  maxCors[i], corVal  )
 			}
+			
 		}
 	}
 
-	#maxCors[1] = 1
-	#averageDepth[1] <- mean( myT[,1] )
+	maxCors[1] = 1
+	averageDepth[1] <- mean( myT[,1] )
 	
 
 #par(mfrow=c(2,1))
-#plot(averageDepth, maxCors)
+#plot(averageDepth, maxCors, ylim=c(0,1))
 
 meanRanks <- rank(-averageDepth, ties.method="min")
 #plot(meanRanks,averageDepth)
-
-
+	
+	# the number of "real" taxa the model considers...
+	a <- 60
+	
 	sumTop <- 0 
 	
 	probs <- vector(length=a)
