@@ -28,8 +28,6 @@ powerCaseControlResultsSD <- vector()
 powerRaceResultsSD <- vector()
 powerInteractionResultsSD <- vector()
 
-
-
 # our sampling scheme assumes 50% in each race
 fractionBlack <- 0.5
 
@@ -42,10 +40,11 @@ controlsAreBlack <- runif(numControls) <= fractionBlack
 allAreBlack <- c(casesAreBlack ,controlsAreBlack)
 allIsCase <- c( rep(TRUE, numCases), rep(FALSE, numControls) )
 
-for( globalEffectSize in effectSizes ) 
-{
-	anIndex <- 1
+anIndex <- 1
 	
+
+for( globalEffectSize in effectSizes ) 
+{	
 	for( i in 1:numSimulations)
 	{
 		pValuesCaseControl <- vector()
@@ -163,7 +162,6 @@ for( globalEffectSize in effectSizes )
 	powerInteractionResultsSD[anIndex] < sd(powerInteraction)
 	
 	anIndex <- anIndex + 1
-	
 }
 
 
