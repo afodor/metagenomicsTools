@@ -17,7 +17,7 @@ fractionTruePositives <- 0.20
 
 # for simplicity we assume one effect size for all effects
 # so the interaction term is twice the 
-effectSizes <- seq(.1,1,.25)
+effectSizes <- seq(.1,1.2,.1)
 
 powerCaseControlResults <- vector()
 powerRaceResults <- vector()
@@ -159,10 +159,24 @@ for( globalEffectSize in effectSizes )
 	
 	powerCaseControlResultsSD[anIndex] <- sd(powerCaseControl)
 	powerRaceResultsSD[anIndex] <- sd(powerRace)
-	powerInteractionResultsSD[anIndex] < sd(powerInteraction)
+	powerInteractionResultsSD[anIndex] <- sd(powerInteraction)
 	
 	anIndex <- anIndex + 1
 }
 
 
+plot( effectSizes, powerCaseControlResults, col="RED",pch=19, cex=1.25)
+arrows( effectSizes,  powerCaseControlResults + powerCaseControlResultsSD, effectSizes,  powerCaseControlResults - powerCaseControlResultsSD,length=0.05, angle=90, code=3 ,
+		col = "red")
+		
+		
+#points( effectSizes, powerRaceResults, col="BLUE",pch=19, cex=1.25)
+#arrows( effectSizes,  powerRaceResults + powerCaseControlResultsSD, effectSizes,  powerRaceResults- powerCaseControlResultsSD,length=0.05, angle=90, code=3 ,
+#		col = "red")
+
+
+points( effectSizes, powerInteractionResults, col="RED",pch=19, cex=1.25)
+arrows( effectSizes,  powerInteractionResults + powerInteractionResultsSD, effectSizes,  powerInteractionResults - powerInteractionResultsSD,length=0.05, angle=90, code=3 ,
+		col = "blue")
+		
 
