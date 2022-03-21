@@ -1,0 +1,148 @@
+rm(list=ls())
+
+# this simulation assumes normality of data
+numSimulations <- 100
+
+# there are typically around 70-75 families that are called by the RDP
+# classification scheme in diverse sample types (such as gut or oral 
+# microbiota) in large datasets (Fodor lab, unpublished data)
+numTaxa <- 75
+
+numCases <- 50
+numControls <- 50
+
+# here we assume that 20% of the bugs are different between
+# case and control with an interaction term for race
+fractionTruePositives <- 0.20
+
+# for simplicity we assume one effect size for all effects
+# so the interaction term is twice the 
+# effectSizes <- seq(.1,1,.01)
+
+effectSizes <- .2
+
+# our sampling scheme assumes 50% in each race
+fractionBlack <- 0.5
+
+powerCaseControl <- vector()
+powerRace<- vector()
+powerInteraction <- vector()
+
+casesAreBlack <- runif(numCases) <= fractionBlack
+controlsAreBlack <- runif(numControls) <= fractionBlack
+allAreBlack <- c(casesAreBlack ,controlsAreBlack)
+allIsCase <- c( rep(TRUE, numCases), rep(FALSE, numControls) )
+
+for( globalEffectSize in effectSizes ) 
+for( i in 1:numSimulations)
+{
+	pValuesCaseControl <- vector()
+	pValuesRace <- vector()
+	pValuesInteraction <- vector()
+	taxaisCaseControlPositive <- runif(numTaxa) <= fractionTruePositives
+	taxaisRacePositive <- runif(numTaxa) <= fractionTruePositives
+	
+	for( j in 1:numTaxa)
+	{
+		controlVals <- vector()
+		
+		for ( k in 1:numControls ) 
+		{
+			thisEffectSize = 0;
+			if( controlsAreBlack[k] &  taxaisRacePositive[j] ) 
+			{
+				thisEffectSize = globalEffectSize;
+			}
+			
+			controlVals[k] = rnorm(1, mean= thisEffectSize )
+		}
+		
+		caseVals <- vector()
+		
+		for ( k in 1:numCases ) 
+		{
+			thisEffectSize = 0;
+			
+			if( taxaisCaseControlPositive[j] ) 
+			{
+				thisEffectSize = globalEffectSize;
+			}
+			
+			if( casesAreBlack[k] &  taxaisRacePositive[j] ) 
+			{
+				thisEffectSize = thisEffectSize +  globalEffectSize;
+			}
+			
+			if( casesAreBlack[k] &  taxaisRacePositive[j] &  taxaisCaseControlPositive[j] ) 
+			{
+				# if the taxa is responsive to both case and control and race 
+				# there is an interaction doubling the impact of either one alone
+				thisEffectSize = thisEffectSize + 2 * globalEffectSize
+			}
+			
+			caseVals[k] = rnorm(1, mean= thisEffectSize )
+		}
+	
+		# horribly inefficient here, but seems to still be fast enough
+		data <- c( caseVals, controlVals ) 
+		
+		# build model with the interaction term
+		myLm <- lm( data ~ allIsCase * allAreBlack ) 
+		
+		#record p-values with anova
+		myAnova <- anova(myLm)
+		
+		# use ANOVA to capture the p-values
+		pValuesCaseControl[j] <- anova(myLm)$"Pr(>F)"[1]
+		pValuesRace[j] <- anova(myLm)$"Pr(>F)"[2]
+		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
+	}
+	
+	# adjust the p-values
+	caseControlAdjust <- p.adjust( pValuesCaseControl, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( caseControlAdjust[j] < 0.10 & taxaisCaseControlPositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerCaseControl[i] =  numTrueFound  / sum(taxaisCaseControlPositive)
+	
+	raceAdjust <- p.adjust( pValuesRace, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( raceAdjust[j] < 0.10 & taxaisRacePositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerRace[i] =  numTrueFound  / sum(taxaisRacePositive)
+	
+	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
+	
+	numTrueFound <-0 
+	
+	for ( j in 1:numTaxa ) 
+	{
+		if( interactionAdjust[j] < 0.10 & taxaisRacePositive[j] &  taxaisCaseControlPositive[j] )
+			numTrueFound = numTrueFound + 1
+	}
+	
+	powerInteraction[i] =  numTrueFound  / sum(taxaisRacePositive & taxaisCaseControlPositive )
+	
+	if( is.nan( powerInteraction[i] ) )
+	{
+		 powerInteraction[i]=0
+	}
+	
+}
+
+# print out mean power across all simulations
+mean(powerCaseControl)
+mean(powerRace)
+mean(powerInteraction)
