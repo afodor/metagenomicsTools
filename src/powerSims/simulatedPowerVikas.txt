@@ -17,7 +17,7 @@ fractionTruePositives <- 0.20
 
 # for simplicity we assume one effect size for all effects
 # so the interaction term is twice the 
-effectSizes <- seq(.1,1,.05)
+effectSizes <- seq(.1,1,.25)
 
 powerCaseControlResults <- vector()
 powerRaceResults <- vector()
@@ -154,9 +154,9 @@ for( globalEffectSize in effectSizes )
 		
 	}
 	
-	powerCaseControl[anIndex] <- mean(powerCaseControl)
-	powerRace[anIndex] <- mean(powerRace)
-	powerInteraction[anIndex] <- mean(powerInteraction)
+	powerCaseControlResults[anIndex] <- mean(powerCaseControl)
+	powerRaceResults[anIndex] <- mean(powerRace)
+	powerInteractionResults[anIndex] <- mean(powerInteraction)
 	
 	powerCaseControlResultsSD[anIndex] <- sd(powerCaseControl)
 	powerRaceResultsSD[anIndex] <- sd(powerRace)
@@ -166,6 +166,5 @@ for( globalEffectSize in effectSizes )
 	
 }
 
-# print out mean power across all simulations
 
 
