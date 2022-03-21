@@ -17,9 +17,13 @@ fractionTruePositives <- 0.20
 
 # for simplicity we assume one effect size for all effects
 # so the interaction term is twice the 
-# effectSizes <- seq(.1,1,.01)
+effectSizes <- seq(.1,1,.01)
 
-effectSizes <- .2
+powerCaseControlResults <- vector()
+powerRaceResults <- vector()
+powerInteractionResults <- vector()
+
+
 
 # our sampling scheme assumes 50% in each race
 fractionBlack <- 0.5
@@ -34,115 +38,129 @@ allAreBlack <- c(casesAreBlack ,controlsAreBlack)
 allIsCase <- c( rep(TRUE, numCases), rep(FALSE, numControls) )
 
 for( globalEffectSize in effectSizes ) 
-for( i in 1:numSimulations)
 {
-	pValuesCaseControl <- vector()
-	pValuesRace <- vector()
-	pValuesInteraction <- vector()
-	taxaisCaseControlPositive <- runif(numTaxa) <= fractionTruePositives
-	taxaisRacePositive <- runif(numTaxa) <= fractionTruePositives
+	anIndex <- 1
 	
-	for( j in 1:numTaxa)
+	for( i in 1:numSimulations)
 	{
-		controlVals <- vector()
+		pValuesCaseControl <- vector()
+		pValuesRace <- vector()
+		pValuesInteraction <- vector()
+		taxaisCaseControlPositive <- runif(numTaxa) <= fractionTruePositives
+		taxaisRacePositive <- runif(numTaxa) <= fractionTruePositives
 		
-		for ( k in 1:numControls ) 
+		for( j in 1:numTaxa)
 		{
-			thisEffectSize = 0;
-			if( controlsAreBlack[k] &  taxaisRacePositive[j] ) 
+			controlVals <- vector()
+			
+			for ( k in 1:numControls ) 
 			{
-				thisEffectSize = globalEffectSize;
+				thisEffectSize = 0;
+				if( controlsAreBlack[k] &  taxaisRacePositive[j] ) 
+				{
+					thisEffectSize = globalEffectSize;
+				}
+				
+				controlVals[k] = rnorm(1, mean= thisEffectSize )
 			}
 			
-			controlVals[k] = rnorm(1, mean= thisEffectSize )
+			caseVals <- vector()
+			
+			for ( k in 1:numCases ) 
+			{
+				thisEffectSize = 0;
+				
+				if( taxaisCaseControlPositive[j] ) 
+				{
+					thisEffectSize = globalEffectSize;
+				}
+				
+				if( casesAreBlack[k] &  taxaisRacePositive[j] ) 
+				{
+					thisEffectSize = thisEffectSize +  globalEffectSize;
+				}
+				
+				if( casesAreBlack[k] &  taxaisRacePositive[j] &  taxaisCaseControlPositive[j] ) 
+				{
+					# if the taxa is responsive to both case and control and race 
+					# there is an interaction doubling the impact of either one alone
+					thisEffectSize = thisEffectSize + 2 * globalEffectSize
+				}
+				
+				caseVals[k] = rnorm(1, mean= thisEffectSize )
+			}
+		
+			# horribly inefficient here, but seems to still be fast enough
+			data <- c( caseVals, controlVals ) 
+			
+			# build model with the interaction term
+			myLm <- lm( data ~ allIsCase * allAreBlack ) 
+			
+			#record p-values with anova
+			myAnova <- anova(myLm)
+			
+			# use ANOVA to capture the p-values
+			pValuesCaseControl[j] <- anova(myLm)$"Pr(>F)"[1]
+			pValuesRace[j] <- anova(myLm)$"Pr(>F)"[2]
+			pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
 		}
 		
-		caseVals <- vector()
+		# adjust the p-values
+		caseControlAdjust <- p.adjust( pValuesCaseControl, method="BH")
 		
-		for ( k in 1:numCases ) 
+		numTrueFound <-0 
+		
+		for ( j in 1:numTaxa ) 
 		{
-			thisEffectSize = 0;
-			
-			if( taxaisCaseControlPositive[j] ) 
-			{
-				thisEffectSize = globalEffectSize;
-			}
-			
-			if( casesAreBlack[k] &  taxaisRacePositive[j] ) 
-			{
-				thisEffectSize = thisEffectSize +  globalEffectSize;
-			}
-			
-			if( casesAreBlack[k] &  taxaisRacePositive[j] &  taxaisCaseControlPositive[j] ) 
-			{
-				# if the taxa is responsive to both case and control and race 
-				# there is an interaction doubling the impact of either one alone
-				thisEffectSize = thisEffectSize + 2 * globalEffectSize
-			}
-			
-			caseVals[k] = rnorm(1, mean= thisEffectSize )
+			if( caseControlAdjust[j] < 0.10 & taxaisCaseControlPositive[j] )
+				numTrueFound = numTrueFound + 1
 		}
-	
-		# horribly inefficient here, but seems to still be fast enough
-		data <- c( caseVals, controlVals ) 
 		
-		# build model with the interaction term
-		myLm <- lm( data ~ allIsCase * allAreBlack ) 
+		powerCaseControl[i] =  numTrueFound  / sum(taxaisCaseControlPositive)
 		
-		#record p-values with anova
-		myAnova <- anova(myLm)
+		raceAdjust <- p.adjust( pValuesRace, method="BH")
 		
-		# use ANOVA to capture the p-values
-		pValuesCaseControl[j] <- anova(myLm)$"Pr(>F)"[1]
-		pValuesRace[j] <- anova(myLm)$"Pr(>F)"[2]
-		pValuesInteraction[j] <- anova(myLm)$"Pr(>F)"[3]
+		numTrueFound <-0 
+		
+		for ( j in 1:numTaxa ) 
+		{
+			if( raceAdjust[j] < 0.10 & taxaisRacePositive[j] )
+				numTrueFound = numTrueFound + 1
+		}
+		
+		powerRace[i] =  numTrueFound  / sum(taxaisRacePositive)
+		
+		interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
+		
+		numTrueFound <-0 
+		
+		for ( j in 1:numTaxa ) 
+		{
+			if( interactionAdjust[j] < 0.10 & taxaisRacePositive[j] &  taxaisCaseControlPositive[j] )
+				numTrueFound = numTrueFound + 1
+		}
+		
+		powerInteraction[i] =  numTrueFound  / sum(taxaisRacePositive & taxaisCaseControlPositive )
+		
+		if( is.nan( powerInteraction[i] ) )
+		{
+			 powerInteraction[i]=0
+		}
+		
 	}
 	
-	# adjust the p-values
-	caseControlAdjust <- p.adjust( pValuesCaseControl, method="BH")
+	powerCaseControl[anIndex] <- mean(powerCaseControl)
+	powerRace[anIndex] <- mean(powerRace)
+	powerInteraction[anIndex] <- mean(powerInteraction)
 	
-	numTrueFound <-0 
+	powerCaseControlResultsSD[anIndex] <- sd(powerCaseControl)
+	powerRaceResultsSD[anIndex] <- sd(powerRace)
+	powerInteractionResultsSD[anIndex] < sd(powerInteraction)
 	
-	for ( j in 1:numTaxa ) 
-	{
-		if( caseControlAdjust[j] < 0.10 & taxaisCaseControlPositive[j] )
-			numTrueFound = numTrueFound + 1
-	}
-	
-	powerCaseControl[i] =  numTrueFound  / sum(taxaisCaseControlPositive)
-	
-	raceAdjust <- p.adjust( pValuesRace, method="BH")
-	
-	numTrueFound <-0 
-	
-	for ( j in 1:numTaxa ) 
-	{
-		if( raceAdjust[j] < 0.10 & taxaisRacePositive[j] )
-			numTrueFound = numTrueFound + 1
-	}
-	
-	powerRace[i] =  numTrueFound  / sum(taxaisRacePositive)
-	
-	interactionAdjust <- p.adjust( pValuesInteraction, method="BH")
-	
-	numTrueFound <-0 
-	
-	for ( j in 1:numTaxa ) 
-	{
-		if( interactionAdjust[j] < 0.10 & taxaisRacePositive[j] &  taxaisCaseControlPositive[j] )
-			numTrueFound = numTrueFound + 1
-	}
-	
-	powerInteraction[i] =  numTrueFound  / sum(taxaisRacePositive & taxaisCaseControlPositive )
-	
-	if( is.nan( powerInteraction[i] ) )
-	{
-		 powerInteraction[i]=0
-	}
+	anIndex <- anIndex + 1
 	
 }
 
 # print out mean power across all simulations
-mean(powerCaseControl)
-mean(powerRace)
-mean(powerInteraction)
+
+
