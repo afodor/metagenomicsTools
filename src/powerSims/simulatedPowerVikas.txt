@@ -17,11 +17,16 @@ fractionTruePositives <- 0.20
 
 # for simplicity we assume one effect size for all effects
 # so the interaction term is twice the 
-effectSizes <- seq(.1,1,.01)
+effectSizes <- seq(.1,1,.05)
 
 powerCaseControlResults <- vector()
 powerRaceResults <- vector()
 powerInteractionResults <- vector()
+
+
+powerCaseControlResultsSD <- vector()
+powerRaceResultsSD <- vector()
+powerInteractionResultsSD <- vector()
 
 
 
