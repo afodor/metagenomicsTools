@@ -8,8 +8,8 @@ numSimulations <- 100
 # microbiota) in large datasets (Fodor lab, unpublished data)
 numTaxa <- 75
 
-numCases <- 50
-numControls <- 50
+numCases <- 100
+numControls <- 100
 
 # here we assume that 20% of the bugs are different between
 # case and control with an interaction term for race
@@ -165,9 +165,10 @@ for( globalEffectSize in effectSizes )
 }
 
 
-plot( effectSizes, powerCaseControlResults, col="RED",pch=19, cex=1.25)
+plot( effectSizes, powerCaseControlResults, col="RED",pch=19, cex=1.25, xlab="effect size", ylab = "mean power (SD)")
 arrows( effectSizes,  powerCaseControlResults + powerCaseControlResultsSD, effectSizes,  powerCaseControlResults - powerCaseControlResultsSD,length=0.05, angle=90, code=3 ,
-		col = "red")
+		col = "red" )
+		
 		
 		
 #points( effectSizes, powerRaceResults, col="BLUE",pch=19, cex=1.25)
@@ -175,8 +176,11 @@ arrows( effectSizes,  powerCaseControlResults + powerCaseControlResultsSD, effec
 #		col = "red")
 
 
-points( effectSizes, powerInteractionResults, col="RED",pch=19, cex=1.25)
+plot( effectSizes, powerInteractionResults, col="BLUE",pch=19, cex=1.25,ylim=c(-.1,1.3))
 arrows( effectSizes,  powerInteractionResults + powerInteractionResultsSD, effectSizes,  powerInteractionResults - powerInteractionResultsSD,length=0.05, angle=90, code=3 ,
 		col = "blue")
+	
+
+lines(c(0,1.2),c(.8,.8))
 		
 
