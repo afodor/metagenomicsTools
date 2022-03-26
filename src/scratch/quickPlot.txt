@@ -1,0 +1,15 @@
+rm(list=ls())
+
+setwd("c:\\temp")
+
+myT <- read.table("t.txt",header=TRUE,sep="\t")
+
+plot(as.Date(myT$date), myT$all,cex=2,pch=19,ylim=c(0,4000000),col="black")
+
+stocks <- myT$dom + myT$international
+
+points(as.Date(myT$date), stocks,cex=2,pch=19,ylim=c(0,4000000),col="blue")
+
+points(as.Date(myT$date), myT$bonds,cex=2,pch=19,ylim=c(0,4000000),col="red")
+points(as.Date(myT$date), myT$dom,cex=2,pch=19,ylim=c(0,4000000),col="yellow")
+points(as.Date(myT$date), myT$international,cex=2,pch=19,ylim=c(0,4000000),col="orange")
