@@ -1,0 +1,19 @@
+
+rm(list=ls())
+
+setwd("C:\\topeMayData")
+inFile <-  "0522_FF_OTUsSamplesGenusNameLoggedPlusMeta.txt"
+
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+pValues <- vector()
+taxaNames <- vector()
+
+index <- 1
+for( i in 3:nrow(myT))
+{
+	pValues[index] <-t.test( myT[,i] ~ myT$race )$p.value
+	taxaNames[index] <- names(myT)[i] 
+	index <- index + 1
+}
+
