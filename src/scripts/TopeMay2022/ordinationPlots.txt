@@ -1,0 +1,38 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\topeMayData")
+inFile <-  "0522_FF_OTUsSamplesGenusNameLoggedPlusMeta.txt"
+
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+myTData <- myT[,3:ncol(myT)]
+
+colors <- vector()
+	
+for( i in 1:nrow(myT))
+{
+	if( myT$race[i] == "AA" )
+	{
+		colors[i] = "RED"
+	}
+	else if ( myT$race[i] == "Caucasian") 
+	{
+		colors[i] = "BLUE"
+	}
+}
+		
+myPCOA <- capscale(myTData~1, distance="bray")	
+	
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+	
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",xlab= xAxisLab, ylab = yAxisLab)
+points(pcoa12,"sites",col=adjustcolor(colors, alpha.f = 0.2),pch=16,cex=2.5)
+	
+ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="RED",show.groups="AA",label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$race, kind="se", conf=0.95, lwd=4, draw = "lines", col="BLUE",show.groups="Caucasian",label=T,font=2,cex=1)
+

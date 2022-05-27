@@ -76,7 +76,7 @@ public class MergeMeta
 			if( map.containsKey(splits[0]))
 				throw new Exception("Duplciate");
 			
-			map.put(key, splits[8]);
+			map.put(key, splits[8].trim());
 		}
 		
 		return map;
