@@ -71,7 +71,7 @@ public class MergeOTUs
 		if( s.trim().length() == 0  )
 			return "blank";
 		
-		int index = s.indexOf("g__");
+		int index = s.indexOf("f__");
 		
 		if( index == -1)
 			return s;
@@ -80,6 +80,11 @@ public class MergeOTUs
 
 		if( returnVal.trim().length() == 0)
 			return "null";
+		
+		int semiVal = returnVal.indexOf(";");
+		
+		if(semiVal != -1 ) 
+			returnVal = returnVal.substring(0, semiVal);
 		
 		return returnVal;
 	}

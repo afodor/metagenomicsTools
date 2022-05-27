@@ -4,7 +4,7 @@ rm(list=ls())
 setwd("C:\\topeMayData")
 
 # the transposition was done manually in Excel
-myT <- read.table("mergedTransposed.txt", sep="\t", header=TRUE)
+myT <- read.table("merged4_5_familyTransposed.txt", sep="\t", header=TRUE)
 
 pdf("comparisons.pdf")
 
