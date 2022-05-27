@@ -1,0 +1,34 @@
+
+rm(list=ls())
+
+setwd("C:\\topeMayData")
+
+# the transposition was done manually in Excel
+myT <- read.table("mergedTransposed.txt", sep="\t", header=TRUE)
+
+pdf("comparisons.pdf")
+
+plot (log10(myT$VBJ.EC1.001.T+1), log10(myT$VBJ.EC1.U001.F+1))
+plot (log10(myT$VBJ.EC1.002.T+1), log10(myT$VBJ.EC1.U002.F+1))
+plot (log10(myT$VBJ.EC1.003.T+1), log10(myT$VBJ.EC1.U003.F+1))
+plot (log10(myT$VBJ.EC1.004.T+1), log10(myT$VBJ.EC1.U004.F+1))
+plot (log10(myT$VBJ.EC1.005.T+1), log10(myT$VBJ.EC1.U005.F+1))
+plot (log10(myT$VBJ.EC1.006.T+1), log10(myT$VBJ.EC1.U006.F+1))
+plot (log10(myT$VBJ.EC1.007.T+1), log10(myT$VBJ.EC1.U007.F+1))
+plot (log10(myT$VBJ.EC1.008.T+1), log10(myT$VBJ.EC1.U008.F+1))
+plot (log10(myT$VBJ.EC1.009.T+1), log10(myT$VBJ.EC1.U009.F+1))
+plot (log10(myT$VBJ.EC1.010.T+1), log10(myT$VBJ.EC1.U010.F+1))
+plot (log10(myT$VBJ.EC1.011.T+1), log10(myT$VBJ.EC1.U011.F+1))
+plot (log10(myT$VBJ.EC1.012.T+1), log10(myT$VBJ.EC1.U012.F+1))
+plot (log10(myT$VBJ.EC1.013.T+1), log10(myT$VBJ.EC1.U013.F+1))
+plot (log10(myT$VBJ.EC1.014.T+1), log10(myT$VBJ.EC1.U014.F+1))
+plot (log10(myT$VBJ.EC1.015.T+1), log10(myT$VBJ.EC1.U015.F+1))
+plot (log10(myT$VBJ.EC1.016.T+1), log10(myT$VBJ.EC1.U016.F+1))
+plot (log10(myT$VBJ.EC1.017.T+1), log10(myT$VBJ.EC1.U017.F+1))
+plot (log10(myT$VBJ.EC1.018.T+1), log10(myT$VBJ.EC1.U018.F+1))
+plot (log10(myT$VBJ.EC1.019.T+1), log10(myT$VBJ.EC1.U019.F+1))
+plot (log10(myT$VBJ.EC1.020.T+1), log10(myT$VBJ.EC1.U020.F+1))
+plot (log10(myT$VBJ.EC1.021.T+1), log10(myT$VBJ.EC1.U021.F+1))
+
+
+dev.off()
