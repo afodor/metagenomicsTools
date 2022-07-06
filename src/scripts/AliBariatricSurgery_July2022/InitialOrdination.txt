@@ -11,7 +11,7 @@ taxa <- c("phylum" , "class", "order", "family", "genus", "species" )
 
 for( t in taxa ) 
 {
-	inFile <- paste0( "metaphlan_raw_", t, ".txt" )	
+	inFile <- paste0( "metaphlan_logged_", t, ".txt" )	
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 	myPCOA <- capscale(myT~1,distance="bray")
 	myMerge <- myMerge <- cbind(row.names(myT), myPCOA$CA$u)

@@ -25,6 +25,10 @@ public class WriteToOTUTable
 			
 			for(String s : wrapper.getSampleNames())
 				System.out.println(s + " " + wrapper.getCountsForSample(s));
+			
+			File logFile = new File("C:\\bariatricSurgery_Daisy\\fromAli_July5_2022\\MetaPhlAn2_count_tables\\AF_OUT\\metaphlan_logged_" + level + ".txt");
+			
+			wrapper.writeNormalizedLoggedDataToFile(logFile);
 		}
 		
 	}
