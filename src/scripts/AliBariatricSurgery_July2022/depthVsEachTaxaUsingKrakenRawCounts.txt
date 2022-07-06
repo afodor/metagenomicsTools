@@ -1,0 +1,40 @@
+rm(list=ls())
+library("Kendall")
+
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_July5_2022\\MetaPhlAn2_count_tables\\AF_OUT")
+
+t <- "genus"
+
+inFile <- paste0( "metaphlan_logged_", t, ".txt" )	
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+inFileCounts <- paste0( "genusCountsComparison.txt")
+myTCounts <- read.table(inFileCounts, sep="\t", header=TRUE)
+
+sampleSums <-  vector()
+
+index = 1
+for( s in row.names(myT)) 
+{
+	sampleSums[index] <- myTCounts$krakenCounts[ myTCounts$sample == s ]
+	index <- index + 1
+}
+	
+pValues <- vector()
+taxaNames <- vector()
+spearmanRSquared <- vector()
+taxaMean <- vector()
+	
+for( i in 1:ncol(myT))
+{
+	pValues[i] <- Kendall(myT[,i], sampleSums)$sl[1]
+	rVal <- cor(myT[,i], sampleSums,method="spearm")
+	spearmanRSquared[i] = rVal * rVal
+	taxaMean[i] = mean(myT[,i])
+	taxaNames[i] = names(myT)[i]
+}
+	
+par(mfrow=c(1,2))
+
+plot( taxaMean, -log10(pValues) , main="pValues")
+plot( taxaMean, spearmanRSquared , main="spearmans")
