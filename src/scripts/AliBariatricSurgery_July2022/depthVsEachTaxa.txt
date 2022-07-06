@@ -11,7 +11,10 @@ t <- "genus"
 	inFile <- paste0( "metaphlan_logged_", t, ".txt" )	
 	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 
-	sampleSums <-  as.numeric( rowSums(myT))	
+	inFileRaw <- paste0( "metaphlan_raw_", t, ".txt" )
+	myTRaw <- read.table(inFileRaw, sep="\t", header=TRUE,row.names=1)
+
+	sampleSums <-  as.numeric( rowSums(myTRaw))	
 	
 	pValues <- vector()
 	taxaNames <- vector()
