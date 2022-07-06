@@ -1,0 +1,23 @@
+
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_July5_2022\\MetaPhlAn2_count_tables\\AF_OUT")
+
+taxa <- c("phylum" , "class", "order", "family", "genus", "species" )
+
+for( t in taxa ) 
+{
+	inFile <- paste0( "metaphlan_raw_", t, ".txt" )	
+	myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	myPCOA <- capscale(myT~1,distance="bray")
+	myMerge <- myMerge <- cbind(row.names(myT), myPCOA$CA$u)
+	
+	names(myMerge)[[1]] = "SampleID"
+	
+	write.table(myMerge, file=paste0("pcoa_metaphlan_",t,".txt"), sep="\t", row.names=FALSE)	
+}
+	
