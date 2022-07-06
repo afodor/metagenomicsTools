@@ -18,9 +18,6 @@ for( t in taxa )
 	
 	myTPcoa <- read.table(inFilePcoa, sep="\t", header=TRUE,row.names=1)
 	
-	sampleSums <-  as.numeric( rowSums(myTData))
-	
-	
-		
+	sampleSums <-  as.numeric( rowSums(myTData))		
 }
 	
