@@ -1,0 +1,26 @@
+
+rm(list=ls())
+
+
+rm(list=ls())
+
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_July5_2022\\MetaPhlAn2_count_tables\\AF_OUT")
+
+taxa <- c("phylum" , "class", "order", "family", "genus", "species" )
+
+for( t in taxa ) 
+{
+	inFile <- paste0( "metaphlan_raw_", t, ".txt" )	
+	myTData <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
+	
+	inFilePcoa <-paste0("pcoa_metaphlan_",t,".txt")
+	
+	myTPcoa <- read.table(inFilePcoa, sep="\t", header=TRUE,row.names=1)
+	
+	sampleSums <-  as.numeric( rowSums(myTData))
+	
+	
+		
+}
+	
