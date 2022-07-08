@@ -13,7 +13,7 @@ myTCounts <- read.table(inFileCounts, sep="\t", header=TRUE)
 
 meanMetaphlan <- vector()
 numberZerosMetaphlan <- vector()
-numberZerosKrkaen <- vector()
+numberZerosKrakaen <- vector()
 
 par(mfrow=c(2,2))
 
@@ -44,4 +44,18 @@ cor(sampleSums, numberZerosMetaphlan,method="spearm") * cor(sampleSums, numberZe
 	
 inFile <- paste0( "kraken2_logged_", t, ".txt" )	
 myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+
+index = 1
+for( s in row.names(myT)) 
+{
+	vals <- as.numeric(myT[which(row.names(myT) == s ),])
+	numberZerosKrakaen[index] <- sum(vals ==0) 
+	
+	index <- index + 1
+}
+
+plot(sampleSums, log10( numberZerosKrakaen ))
+cor(sampleSums,  numberZerosKrakaen ,method="spearm") * cor(sampleSums,  numberZerosKrakaen ,method="spearm")
+
 	
