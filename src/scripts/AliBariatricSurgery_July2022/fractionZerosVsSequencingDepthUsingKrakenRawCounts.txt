@@ -1,0 +1,47 @@
+rm(list=ls())
+library("Kendall")
+
+setwd("C:\\bariatricSurgery_Daisy\\fromAli_July5_2022\\MetaPhlAn2_count_tables\\AF_OUT")
+
+t <- "genus"
+
+inFile <- paste0( "metaphlan_logged_", t, ".txt" )	
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+inFileCounts <- paste0( "genusCountsComparison.txt")
+myTCounts <- read.table(inFileCounts, sep="\t", header=TRUE)
+
+meanMetaphlan <- vector()
+numberZerosMetaphlan <- vector()
+numberZerosKrkaen <- vector()
+
+par(mfrow=c(2,2))
+
+
+sampleSums <-  vector()
+
+index = 1
+for( s in row.names(myT)) 
+{
+	sampleSums[index] <- myTCounts$krakenCounts[ myTCounts$sample == s ]
+	index <- index + 1
+}
+
+index = 1
+for( s in row.names(myT)) 
+{
+	vals <- as.numeric(myT[which(row.names(myT) == s ),])
+	numberZerosMetaphlan[index] <- sum(vals ==0) 
+	meanMetaphlan[index] <- mean(vals ) 
+	
+	index <- index + 1
+}
+
+plot(meanMetaphlan, numberZerosMetaphlan)
+plot(sampleSums, numberZerosMetaphlan)
+cor(sampleSums, numberZerosMetaphlan,method="spearm") * cor(sampleSums, numberZerosMetaphlan,method="spearm")
+
+	
+inFile <- paste0( "kraken2_logged_", t, ".txt" )	
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+	
