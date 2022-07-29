@@ -1,0 +1,23 @@
+
+#install.packages("vegan")
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\SandraMacroinvetebrates")
+
+
+
+myT <- read.table("otuFamilyPlusMeta.txt", sep="\t", header=TRUE,row.names=1)
+myTData <- myT[,4:ncol(myT)]
+myTData <- log10( myTData + 1)  
+
+
+myPCOA <- capscale(myTData~1, distance="bray")
+	
+myMerge <- cbind(row.names(myT),myT,myPCOA$CA$u[,1:5])
+names(myMerge)[[1]] = "SampleID"
+
+write.table(myMerge, file="otuFamilyPlusMetaPCOA.txt", sep="\t", row.names=FALSE)
+
+
