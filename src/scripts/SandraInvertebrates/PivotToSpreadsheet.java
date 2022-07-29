@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 import utils.TabReader;
 
@@ -25,6 +24,49 @@ public class PivotToSpreadsheet
 	//	for(String s : map.keySet())
 		//	System.out.println(s + " " + map.get(s));
 		writeOTUTable(map);
+		
+		HashMap<String, Holder> metaMap = getDateMeta();
+		System.out.println(metaMap);
+	}
+	
+	private static class Holder
+	{
+		String season;
+		String prepost;
+		
+		@Override
+		public String toString()
+		{
+			return season +  " " + prepost;
+		}
+	}
+	
+	@SuppressWarnings("resource")
+	public static HashMap<String, Holder> getDateMeta() throws Exception
+	{
+		HashMap<String, Holder> map = new HashMap<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\SandraMacroinvetebrates\\Restoration dates.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			String date = splits[0];
+			
+			if( map.containsKey(date))
+				System.out.println("duplicate " + date);
+			
+			Holder h = new Holder();
+			h.prepost = splits[2];
+			h.season = splits[1];
+			map.put(date, h);
+		}
+		
+		reader.close();
+		return map;
 	}
 	
 	private static File writeOTUTable(HashMap<String, HashMap<String, Integer>> map ) throws Exception
