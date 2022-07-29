@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import utils.TabReader;
 
@@ -28,7 +29,7 @@ public class PivotToSpreadsheet
 	
 	private static File writeOTUTable(HashMap<String, HashMap<String, Integer>> map ) throws Exception
 	{
-		File aFile = new File("C:\\\\SandraMacroinvetebrates\\\\otuGenus.txt");
+		File aFile = new File("C:\\\\SandraMacroinvetebrates\\\\otuFamily.txt");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
 		
 		HashSet<String> allGenus = new HashSet<>();
@@ -100,10 +101,13 @@ public class PivotToSpreadsheet
 			if( family.length() == 0)
 				family = "unclassified_" + order;
 			
+			tReader.nextToken();
+			/*
 			String genus = tReader.nextToken().trim();
 			
 			if( genus.length() == 0 )
 				genus = "unclassified_" + family;
+			*/
 			
 			String key = site + "@" + date;
 			
@@ -117,14 +121,14 @@ public class PivotToSpreadsheet
 				map.put(key, innerMap);
 			}
 			
-			Integer aVal = innerMap.get(genus);
+			Integer aVal = innerMap.get(family);
 			
 			if( aVal == null)
 				aVal = 0;
 			
 			tReader.nextToken();
 			aVal = aVal + Integer.parseInt(tReader.nextToken());
-			innerMap.put(genus, aVal);
+			innerMap.put(family, aVal);
 		}
 		
 		reader.close();
