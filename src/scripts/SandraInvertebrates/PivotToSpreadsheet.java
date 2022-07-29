@@ -1,10 +1,16 @@
 package scripts.SandraInvertebrates;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import utils.TabReader;
 
@@ -15,8 +21,57 @@ public class PivotToSpreadsheet
 		HashMap<String, HashMap<String, Integer>> map = getMap();
 		System.out.println(map.size());
 		
+	//	for(String s : map.keySet())
+		//	System.out.println(s + " " + map.get(s));
+		writeOTUTable(map);
+	}
+	
+	private static File writeOTUTable(HashMap<String, HashMap<String, Integer>> map ) throws Exception
+	{
+		File aFile = new File("C:\\\\SandraMacroinvetebrates\\\\otuGenus.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
+		
+		HashSet<String> allGenus = new HashSet<>();
+		
 		for(String s : map.keySet())
-			System.out.println(s + " " + map.get(s));
+			allGenus.addAll(map.get(s).keySet());
+		
+		List<String> allGenusList = new ArrayList<>();
+		
+		for(String s : allGenus)
+			allGenusList.add(s);
+		
+		Collections.sort(allGenusList);
+		
+		writer.write("sample");
+		
+		for(String s : allGenusList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String s : map.keySet())
+		{
+			writer.write(s);
+			
+			HashMap<String, Integer> innerMap = map.get(s);
+			
+			for(String s2 : allGenusList)
+			{
+				Integer aVal = innerMap.get(s2);
+				
+				if( aVal == null)
+					aVal = 0;
+				
+				writer.write("\t" + aVal);
+				
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+		return aFile;
 	}
 	
 	// outer key is site@Date; inner key is genus
@@ -58,7 +113,7 @@ public class PivotToSpreadsheet
 			
 			if( innerMap == null)
 			{
-				innerMap = new HashMap<>();
+				innerMap = new LinkedHashMap<>();
 				map.put(key, innerMap);
 			}
 			
