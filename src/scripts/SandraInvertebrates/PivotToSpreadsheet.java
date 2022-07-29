@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Formatter.BigDecimalLayoutForm;
 
 import utils.TabReader;
 
@@ -23,10 +24,46 @@ public class PivotToSpreadsheet
 		
 	//	for(String s : map.keySet())
 		//	System.out.println(s + " " + map.get(s));
-		writeOTUTable(map);
+		File otuFile = writeOTUTable(map);
 		
 		HashMap<String, Holder> metaMap = getDateMeta();
 		System.out.println(metaMap);
+		
+		addMeta(otuFile, metaMap);
+	}
+	
+	private static void addMeta( File inFile, HashMap<String, Holder> metaMap ) throws Exception
+	{
+		File aFile = new File("C:\\SandraMacroinvetebrates\\otuFamilyPlusMeta.txt");
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
+		
+		BufferedReader reader = new BufferedReader( new FileReader(inFile));
+		
+		writer.write("sample\tseason\tprePost");
+		
+		String[] topSplits =reader.readLine().split("\t");
+		
+		for( int x=1; x < topSplits.length; x++)
+			writer.write("\t" + topSplits[x]);
+		
+		writer.write("\n");
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+					
+			String sample = splits[0].trim();
+			String date = sample.substring(sample.indexOf("@") +1, sample.length()).trim();
+			Holder h = metaMap.get(date);
+			
+			if( h== null)
+				throw new Exception("Could not find date " + date);
+			
+		}
+		
+		writer.flush();  writer.close();
+		reader.close();
 	}
 	
 	private static class Holder
@@ -50,8 +87,9 @@ public class PivotToSpreadsheet
 		
 		reader.readLine();
 		
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		for(String s= reader.readLine(); s != null && s.trim().length() > 0 ; s= reader.readLine())
 		{
+			System.out.println(s);
 			String[] splits =s.split("\t");
 			
 			String date = splits[0];
@@ -71,7 +109,7 @@ public class PivotToSpreadsheet
 	
 	private static File writeOTUTable(HashMap<String, HashMap<String, Integer>> map ) throws Exception
 	{
-		File aFile = new File("C:\\\\SandraMacroinvetebrates\\\\otuFamily.txt");
+		File aFile = new File("C:\\SandraMacroinvetebrates\\otuFamily.txt");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(aFile));
 		
 		HashSet<String> allGenus = new HashSet<>();
