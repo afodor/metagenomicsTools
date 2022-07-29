@@ -32,6 +32,7 @@ public class PivotToSpreadsheet
 		addMeta(otuFile, metaMap);
 	}
 	
+	@SuppressWarnings("resource")
 	private static void addMeta( File inFile, HashMap<String, Holder> metaMap ) throws Exception
 	{
 		File aFile = new File("C:\\SandraMacroinvetebrates\\otuFamilyPlusMeta.txt");
@@ -40,7 +41,7 @@ public class PivotToSpreadsheet
 		
 		BufferedReader reader = new BufferedReader( new FileReader(inFile));
 		
-		writer.write("sample\tseason\tprePost");
+		writer.write("sampleKey\tsampleID\tseason\tprePost");
 		
 		String[] topSplits =reader.readLine().split("\t");
 		
@@ -57,8 +58,22 @@ public class PivotToSpreadsheet
 			String date = sample.substring(sample.indexOf("@") +1, sample.length()).trim();
 			Holder h = metaMap.get(date);
 			
+			String sampleID = splits[0].substring(0, splits[0].indexOf("@"));
+			
 			if( h== null)
 				throw new Exception("Could not find date " + date);
+			
+			String outVal = h.prepost;
+			
+			if( sampleID.equals("RCC2"))
+				outVal = "NR";
+			
+			writer.write(splits[0] + "\t" + sampleID + "\t" +  h.season + "\t" + outVal);
+			
+			for( int x=1; x < splits.length; x++)
+				writer.write("\t" + splits[x]);
+			
+			writer.write("\n");
 			
 		}
 		
