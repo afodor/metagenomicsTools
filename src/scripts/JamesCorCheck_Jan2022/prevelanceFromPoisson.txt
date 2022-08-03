@@ -1,0 +1,80 @@
+
+
+setwd("c:\\JamesKraken")
+rm(list=ls())
+myT <- read.table("chinaKraken.txt", sep="\t", header=TRUE, row.names=1)
+
+sampleSums <- vector()
+
+for( i in 1:nrow(myT))
+{
+	sampleSums[i] = sum( myT[i,] ) 
+}
+
+averageDepth <- vector(length=ncol(myT))
+
+sums <- apply(myT, 2, sum)
+myT <- myT[, ! is.na(sums)]
+
+myT <- myT[,order(-apply(myT, 2, sum))]
+
+numCols <- ncol(myT)
+	
+for( i in 2:numCols)
+{
+	averageDepth[i] <- mean( myT[,i] )
+}
+
+averageDepth[1] <- mean( myT[,1] )
+meanRanks <- rank(-averageDepth, ties.method="min")
+
+# the number of "real" taxa the model considers...
+a <- 10
+	
+sumTop <- 0 
+
+probs <- vector(length=a)
+
+for( i in 1:a) 
+{
+	index <- which( meanRanks == i ) 
+	aSum <- averageDepth[index] 
+	print(paste(i, aSum, sumTop ))
+	sumTop <- sumTop + aSum
+}
+
+for( i in 1:a)
+{
+	index <- which( meanRanks == i ) 
+	aSum <- averageDepth[index] 
+	probs[i] = aSum /sumTop
+}
+
+
+averageDepth <- vector()
+prevelance <- vector()
+
+# each loop simulates one taxa with a different background error rate
+for (  i in 1:10000 ) 
+{
+	dataSimCol <- vector()
+
+	backgroundErrorRate = runif(1)/ 1000
+		
+	# choose the parent weighted by relative abundance
+	colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
+
+	# simulate the taxa for every sample
+	for( j in 1:nrow(myT)) 
+	{
+			# importantly, only the abundance of the parent taxa for that sample is fed to the Poisson distribution
+			# (the Poisson distribution is the same as the binomial distrbution for a small background error rate)
+			dataSimCol[j] <- rbinom( 1, ceiling( myT[j,colIndex])  , backgroundErrorRate )
+	}
+	
+	averageDepth[i] <- mean(dataSimCol)
+	prevelance[i] <- ( sum( dataSimCol != 0  ) / nrow(myT) )
+				
+}
+
+plot( log10(averageDepth+1), prevelance ) 

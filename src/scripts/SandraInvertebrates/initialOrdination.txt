@@ -21,3 +21,35 @@ names(myMerge)[[1]] = "SampleID"
 write.table(myMerge, file="otuFamilyPlusMetaPCOA.txt", sep="\t", row.names=FALSE)
 
 
+colors <- vector()
+	
+for( i in 1:nrow(myT))
+{
+	if( myT$prePost[i] == "Post" )
+	{
+		colors[i] = "blue"
+	}
+	else if ( myT$prePost[i] == "Pre") 
+	{
+		colors[i] = "Red"
+	}
+	else if ( myT$prePost[i] == "NR") 
+	{
+		colors[i] = "black"
+	}
+}
+
+myAdonis <- adonis(myTData ~ myT$prePost ,permutations = 1000)
+
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab,main=paste("p=", format(myAdonis$aov.tab$"Pr(>F)"[1],digits=3)),
+		xlim=c(-2,2), ylim=c(-2,2))
+points(pcoa12,"sites",col=adjustcolor(colors, alpha.f = 0.2),pch=16,cex=2.5)
+
+ordiellipse(pcoa12, myT$prePost, kind="se", conf=0.95, lwd=4, draw = "lines", col="RED",show.groups="Pre",label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$prePost, kind="se", conf=0.95, lwd=4, draw = "lines", col="black",show.groups="NR",label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$prePost, kind="se", conf=0.95, lwd=4, draw = "lines", col="Blue",show.groups="Post",label=T,font=2,cex=1)
+
+				
