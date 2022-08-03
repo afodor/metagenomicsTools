@@ -78,3 +78,4 @@ for (  i in 1:10000 )
 }
 
 plot( log10(averageDepth+1), prevelance ) 
+
