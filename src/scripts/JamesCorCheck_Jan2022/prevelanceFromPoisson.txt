@@ -79,3 +79,17 @@ for (  i in 1:10000 )
 
 plot( log10(averageDepth+1), prevelance ) 
 
+myLogReg <- glm(  prevelance ~ log10(averageDepth+1), family = "binomial" )
+
+getProb <- function(x, B0, B1)
+{
+return (1 / (1 + exp(-(B0 + B1 * x ))))
+}
+
+
+xSeq <- seq(min(log10(averageDepth+1)), max(log10(averageDepth+1)), 0.001)
+lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]),col="red")
+
+
+
+
