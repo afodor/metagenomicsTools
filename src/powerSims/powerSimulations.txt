@@ -4,13 +4,13 @@
 # so these results should be considered a rough approximation
 
 rm(list=ls())
-sampleSizeForEachGroup <- 20
-numHypotheses <- 100
+sampleSizeForEachGroup <- 175
+numHypotheses <- 500
 numUnder <- 0
 numBonferroniUnder <-0
 fractionTruePositives <- 1
 numTruePositves <-0;
-effectSize <- .85
+effectSize <- .312
 
 pValues <- vector();
 truePositives <- vector()
@@ -64,7 +64,7 @@ bhUnder <- 0;
 
 for( i in 1:nrow(myFrame))
 {
-	if( myFrame$truePositives[i] & myFrame$pAdjust[i] < 0.10  )
+	if( myFrame$truePositives[i] & myFrame$pAdjust[i] < 0.05  )
 		bhUnder <- bhUnder + 1;
 }
 

@@ -136,3 +136,20 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	plot(averageDepth, maxCors,ylim=c(0,1),main = names[graphIndex] )
 	points(simMeans, simCors,col="red")	
 }
+
+
+#### logistic regression
+
+plot(simMeans, simCors)
+
+myLogReg <- glm(  simCors~ simMeans, family = "binomial" )
+
+getProb <- function(x, B0, B1)
+{
+return (1 / (1 + exp(-(B0 + B1 * x ))))
+}
+
+
+xSeq <- seq(min(simMeans), max(simMeans), 0.001)
+lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]),col="red")
+
