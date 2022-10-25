@@ -12,7 +12,6 @@ import utils.Avevar;
 
 public class ReplaceColumnNAsWithMeans
 {
-	
 	/**
 	 * THIS CODE HAS BUGS
 	 */
