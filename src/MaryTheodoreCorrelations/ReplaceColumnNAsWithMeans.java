@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utils.Avevar;
+import utils.TabReader;
 
 public class ReplaceColumnNAsWithMeans
 {
@@ -24,7 +25,7 @@ public class ReplaceColumnNAsWithMeans
 		for(Double d : colMeans)
 			System.out.println(d);
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\MaryTheodoreQuick\blah2.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\MaryTheodoreQuick\\blah2.txt")));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -32,7 +33,7 @@ public class ReplaceColumnNAsWithMeans
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			String[] splits = s.split("\t");
+			String[] splits = getStringArrayFromTabReader(s);
 			
 			for(int x=0; x < splits.length; x++)
 			{
@@ -58,20 +59,38 @@ public class ReplaceColumnNAsWithMeans
 		writer.flush(); writer.close();
 	}
 	
+	private static String[] getStringArrayFromTabReader(String s)
+	{
+		TabReader tReader = new TabReader(s);
+		
+		List<String> tokenList= new ArrayList<>();
+		
+		while(tReader.hasMore())
+			tokenList.add(tReader.getNext());
+		
+		String[] lineSplits = new String[  tokenList.size() ];
+		
+		for( int x=0; x < tokenList.size(); x++)
+			lineSplits[ x ] = tokenList.get(x);
+		
+		return lineSplits;
+	
+	}
+	
 	private static List<Double> getColumnMeans(File file) throws Exception
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		List<List<Double>> list = new ArrayList<>();
 		
-		String[] topLineSplits = reader.readLine().split("\t");
+		String[] topLineSplits = getStringArrayFromTabReader(reader.readLine());
 		
 		for(String s : topLineSplits)
 			list.add(new ArrayList<>());
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			String[] splits = s.split("\t");
+			String[] splits = getStringArrayFromTabReader(s);
 			
 			for(int x=0; x < splits.length; x++)
 			{
