@@ -1,22 +1,54 @@
 rm(list=ls())
 
 setwd("C:\\kePivot")
+library("Kendall")
 
 myT <- read.table("genusAsColumnsLogNormPlusMeta.txt", sep="\t", header=TRUE)
 
 pValues <- vector()
 taxaName <- vector()
+colIndex <- vector()
+
+logCal <- log(myT[,2])
 
 index <- 1
 for ( i in 3:ncol(myT)) 
 {
-	if( sum(myT[,i])/nrow(myT) > 1 ) 
+	if( sum(myT[,i])/nrow(myT) > 1) 
 	{
-		aLm <- lm( myT[,2] ~ myT[,i])
-		pValues[index] = anova(aLm)$"Pr(>F)"[1]
+	
+		aLm <- lm( logCal ~ myT[,i])
+		pValues[index] =  anova(aLm)$"Pr(>F)"[1]
+		
+		#pValues[index] = Kendall(logCal , myT[,i])$sl[1]
+		
 		taxaName[index] = names(myT)[i]
+		colIndex[index] = i
 		index = index + 1
 	}
 	
 }
+
+dFrame <- data.frame( pValues, taxaName, colIndex ) 
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedP <- p.adjust( dFrame$pValues, method = "BH" )
+
+hist(pValues)
+
+pdf("scatters.pdf")
+
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(dFrame ))
+{
+	
+	myData <- myT[,dFrame$colIndex[i]] 
+	mainText <- paste( dFrame$taxaName[i], 
+			"\nunadjusted p = ", format(dFrame$pValues[i],digits=3), "adj p = ", format(dFrame$adjustedP[i],digits=3)  ) 
+	plot( myData ,logCal , main=mainText)
+}
+
+dev.off()
+
+write.table(dFrame, file="calOut.txt", sep="\t",row.names=FALSE)
 
