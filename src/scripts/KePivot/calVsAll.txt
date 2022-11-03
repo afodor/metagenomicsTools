@@ -10,9 +10,13 @@ taxaName <- vector()
 index <- 1
 for ( i in 3:ncol(myT)) 
 {
-	aLm <- lm( myT[,2] ~ myT[,i])
-	pValues[index] = anova(aLm)$"Pr(>F)"[1]
-	taxaName[index] = names(myT)[i]
-	index = index + 1
+	if( sum(myT[,i])/nrow(myT) > 1 ) 
+	{
+		aLm <- lm( myT[,2] ~ myT[,i])
+		pValues[index] = anova(aLm)$"Pr(>F)"[1]
+		taxaName[index] = names(myT)[i]
+		index = index + 1
+	}
+	
 }
 
