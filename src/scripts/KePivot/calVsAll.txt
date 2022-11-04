@@ -14,7 +14,7 @@ logCal <- log(myT[,2])
 index <- 1
 for ( i in 3:ncol(myT)) 
 {
-	if( sum(myT[,i])/nrow(myT) > 1) 
+	if( sum(myT[,i])/nrow(myT) > 2) 
 	{
 	
 		aLm <- lm( logCal ~ myT[,i])
