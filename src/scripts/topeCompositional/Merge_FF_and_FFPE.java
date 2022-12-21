@@ -11,33 +11,49 @@ public class Merge_FF_and_FFPE
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, Integer> ffMetaMap = getIntegerToKeyMap();
-		
-		for(String s : ffMetaMap.keySet())
-			System.out.println(s + " " + ffMetaMap.get(s));
 		
 		 HashMap<String, Integer> countMap = getFFCounts();
+		
+		 for(String s : countMap.keySet())
+			 System.out.println(s + " " + countMap.get(s));
+		 
 	}
 	
 	//"Key is Sample_x_ff@taxa ; value is count"
+	@SuppressWarnings("resource")
 	private static HashMap<String, Integer> getFFCounts() throws Exception
 	{
 		HashMap<String, Integer> ffMetaMap = getIntegerToKeyMap();
 		
-		HashMap<String, Integer> countMap = new HashMap<>();
+		HashMap<String, Integer> countMap = new LinkedHashMap<>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\topeComparisonData\\FF_OTU_metaRemoved.txt")));
 		
-		reader.readLine();
+		String[] topSplits =  reader.readLine().split("\t");
 		
 		for(String s = reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits =s.split("\t");
 			
+			if( splits.length != topSplits.length)
+				throw new Exception("Parsing error");
+			
 			Integer topeIndex = ffMetaMap.get(splits[0]);
 			
 			if( topeIndex == null)
 				throw new Exception("Could not map " + splits[0]);
+			
+			String keyPrefix = "Sample_" + topeIndex +"_ff@";
+			
+			for( int x= 1; x < splits.length; x++)
+			{
+				String key = keyPrefix + topSplits[x];
+				
+				if( countMap.containsKey(key))
+					throw new Exception("Parsing error " + key);
+				
+				countMap.put(key, Integer.parseInt(splits[x]));
+			}
 		}
 		
 		return countMap;
