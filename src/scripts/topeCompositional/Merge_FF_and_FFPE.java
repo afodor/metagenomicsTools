@@ -13,10 +13,50 @@ public class Merge_FF_and_FFPE
 	{
 		
 		 HashMap<String, Integer> countMap = getFFCounts();
+		 add_FFPE_counts(countMap);
 		
 		 for(String s : countMap.keySet())
 			 System.out.println(s + " " + countMap.get(s));
 		 
+	}
+	
+	//"Key is Sample_x_ffpe@taxa ; value is count"
+	// samples ending in _2 are ignored
+	@SuppressWarnings("resource")
+	private static void add_FFPE_counts( HashMap<String, Integer> map ) throws Exception
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\topeComparisonData\\FFPE_OTU_metaRemoved.txt")));
+		
+		String[] topSplits =  reader.readLine().split("\t");
+		
+		for(String s = reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			if( splits.length != topSplits.length)
+				throw new Exception("Parsing error");
+			
+			String sample = splits[0];
+			
+			if( sample.endsWith("-1"))
+			{
+				StringTokenizer sToken = new StringTokenizer(sample, "-");
+				Integer topeIndex = Integer.parseInt(sToken.nextToken());
+				
+				String keyPrefix = "Sample_" + topeIndex +"_ffpe@";
+				
+				for( int x= 1; x < splits.length; x++)
+				{
+					String key = keyPrefix + topSplits[x];
+					
+					if( map.containsKey(key))
+						throw new Exception("Parsing error " + key);
+					
+					map.put(key, Integer.parseInt(splits[x]));
+				}
+			}
+		}
+	
 	}
 	
 	//"Key is Sample_x_ff@taxa ; value is count"
