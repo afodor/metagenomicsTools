@@ -1,10 +1,16 @@
 package scripts.topeCompositional;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Merge_FF_and_FFPE
@@ -18,6 +24,55 @@ public class Merge_FF_and_FFPE
 		 for(String s : countMap.keySet())
 			 System.out.println(s + " " + countMap.get(s));
 		 
+		 writeMerged(countMap);
+		 
+	}
+	
+	private static void writeMerged(HashMap<String, Integer> countMap ) throws Exception
+	{
+		HashSet<String> sampleSet = new HashSet<>();
+		HashSet<String> taxaSet = new HashSet<>();
+		
+		for(String s : countMap.keySet())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, "@");
+			sampleSet.add(sToken.nextToken());
+			taxaSet.add(sToken.nextToken());
+		}
+		
+		List<String> sampleList = new ArrayList<>(sampleSet);
+		List<String> taxaList = new ArrayList<>(taxaSet);
+		Collections.sort(sampleList);
+		Collections.sort(taxaList);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\topeComparisonData\\merged.txt")));
+		
+		writer.write("taxa");
+		
+		for(String s: sampleList)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String taxa : taxaList)
+		{
+			writer.write(taxa);
+			
+			for(String sample : sampleList)
+			{
+				String key = sample + "@" + taxa;
+				Integer aVal = countMap.get(key);
+				
+				if( aVal == null)
+					aVal = 0;
+				
+				writer.write("\t" + aVal);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	//"Key is Sample_x_ffpe@taxa ; value is count"
