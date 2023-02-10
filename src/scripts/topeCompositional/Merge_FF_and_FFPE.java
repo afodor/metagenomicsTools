@@ -20,10 +20,6 @@ public class Merge_FF_and_FFPE
 		
 		 HashMap<String, Integer> countMap = getFFCounts();
 		 add_FFPE_counts(countMap);
-		
-		 for(String s : countMap.keySet())
-			 System.out.println(s + " " + countMap.get(s));
-		 
 		 writeMerged(countMap);
 		 
 	}
@@ -89,7 +85,7 @@ public class Merge_FF_and_FFPE
 			String[] splits =s.split("\t");
 			
 			if( splits.length != topSplits.length)
-				throw new Exception("Parsing error");
+				throw new Exception("Parsing error " + splits[0] + " " + topSplits.length + " " + splits.length);
 			
 			String sample = splits[0];
 			
@@ -109,6 +105,10 @@ public class Merge_FF_and_FFPE
 					
 					map.put(key, Integer.parseInt(splits[x]));
 				}
+			}
+			else
+			{
+				System.out.println("Ignoring " + sample);
 			}
 		}
 	
