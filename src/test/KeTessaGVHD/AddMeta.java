@@ -3,43 +3,51 @@ package test.KeTessaGVHD;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class AddMeta
 {
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_Transposed.txt");
-		List<Boolean> list = getZeroColList(inFile);
 		
-		for(int x=0; x < list.size() ; x++ )
-			System.out.println( x + " "+ list.get(x));
+		OtuWrapper wrapper = new OtuWrapper(inFile);
+		
+		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_TransposedLogNorm.txt");
+		
+		wrapper.writeNormalizedLoggedDataToFile(logNorm);
+		*/
+		
+		HashMap<String, String> gvnMap = getMetaGvNMap();
+		
 	}
 	
-	public static List<Boolean> getZeroColList(File file) throws Exception
+	@SuppressWarnings("resource")
+	private static HashMap<String, String> getMetaGvNMap() throws Exception
 	{
-		List<Boolean> isZeroCol = new ArrayList<>();
+		HashMap<String, String> map = new HashMap<>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt")));
 		
-		String[] topLine= reader.readLine().split("\t");
+		reader.readLine();
 		
-		isZeroCol.add(false);
+		reader.readLine();
 		
-		for( int x=1; x < topLine.length; x++) 
-			isZeroCol.add(true);
-		
-		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
 			
-			for(int x=1; x < splits.length; x++)
-				if(Integer.parseInt(splits[x]) >0)
-					isZeroCol.set(x, false);
+			if( splits.length != 2)
+				throw new Exception("No");
+			
+			if( map.containsKey(splits[0]))
+				throw new Exception("No");
+			
+			map.put(splits[0], splits[1]);
+			
 		}
 		
-		reader.close();
-		return isZeroCol;
+		return map;
 	}
 }
