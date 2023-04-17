@@ -1,0 +1,38 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
+
+myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+myT <- myT[ myT$gvn != "null", ]
+
+myTData <- myT[,3:ncol(myT)]
+
+# colSums(myTData)/nrow(myT)
+
+myPCOA <- capscale(myTData~1)
+
+colors <- vector()
+
+for( i in 1:nrow(myT))
+{
+	if( myT$gvn[i] == "gvhd" )
+	{
+		colors[i] = "RED"
+	}
+	else if ( myT$gvn[i] == "no_gvhd") 
+	{
+		colors[i] = "BLUE"
+	}
+}
+
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA1 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
+points(pcoa12,"sites",col=adjustcolor(colors, alpha.f = 0.2),pch=16,cex=2.5)
+
+ordiellipse(pcoa12, myT$gvn, kind="se", conf=0.95, lwd=4, draw = "lines", col="RED",show.groups="gvhd",label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$gvn, kind="se", conf=0.95, lwd=4, draw = "lines", col="Blue",show.groups="no_gvhd",label=T,font=2,cex=1)
+
