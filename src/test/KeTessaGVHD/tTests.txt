@@ -1,0 +1,27 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
+
+myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+myT <- myT[ myT$gvn != "null", ]
+
+pValues <- vector()
+taxaName <- vector()
+
+myTData <- myT[,3:ncol(myT)]
+
+mySums <- colSums(myTData)/nrow(myT)
+
+index <- 1
+for( i in 1:ncol(myTData)) 
+{
+	if( mySums[i] > 1  )
+	{
+		 taxaName[ index ] <- names(myTData)[i]
+		 pValues[index] <- t.test( myTData[ myT$gvn == "gvhd" ,i], myTData[ myT$gvn == "no_gvhd" ,i])$p.value
+		 index <- index + 1
+	}
+}
