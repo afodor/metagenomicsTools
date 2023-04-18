@@ -18,10 +18,17 @@ mySums <- colSums(myTData)/nrow(myT)
 index <- 1
 for( i in 1:ncol(myTData)) 
 {
-	if( mySums[i] > 1  )
+	if( mySums[i] > 2  )
 	{
 		 taxaName[ index ] <- names(myTData)[i]
 		 pValues[index] <- t.test( myTData[ myT$gvn == "gvhd" ,i], myTData[ myT$gvn == "no_gvhd" ,i])$p.value
 		 index <- index + 1
 	}
 }
+
+dFrame <- data.frame( taxaName,pValues)		
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )
+
+write.table(dFrame, file="gvhd_adusted_pValues.txt", sep="\t",row.names=FALSE)
+
