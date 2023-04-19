@@ -11,7 +11,7 @@ myT <- myT[ myT$gvn != "null", ]
 pValues <- vector()
 taxaName <- vector()
 
-myTData <- myT[,3:ncol(myT)]
+myTData <- myT[,4:ncol(myT)]
 
 mySums <- colSums(myTData)/nrow(myT)
 
