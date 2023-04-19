@@ -24,13 +24,13 @@ public class AddMeta
 		//wrapper.writeNormalizedLoggedDataToFile(logNorm);
 		
 		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
-		
+		HashMap<String, String> srMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaSvR.txt"));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logNorm));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
-		writer.write(topSplits[0] + "\t" + "gvn");
+		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -46,7 +46,7 @@ public class AddMeta
 			
 			String id = splits[0];
 			
-			writer.write(id + "\t" + gvnMap.get(id));
+			writer.write(id + "\t" + gvnMap.get(id) + "\t" + srMap.get(id));
 
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
