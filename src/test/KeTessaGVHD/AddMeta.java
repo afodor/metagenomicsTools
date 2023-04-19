@@ -23,7 +23,8 @@ public class AddMeta
 		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_Genus_TransposedLogNormPlusMeta.txt");
 		//wrapper.writeNormalizedLoggedDataToFile(logNorm);
 		
-		HashMap<String, String> gvnMap = getMetaGvNMap();
+		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
+		
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logNorm));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
@@ -61,11 +62,11 @@ public class AddMeta
 	
 	
 	@SuppressWarnings("resource")
-	private static HashMap<String, String> getMetaGvNMap() throws Exception
+	private static HashMap<String, String> getAMap(File f) throws Exception
 	{
 		HashMap<String, String> map = new HashMap<>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(f));
 		
 		reader.readLine();
 		
