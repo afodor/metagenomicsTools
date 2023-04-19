@@ -7,21 +7,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.OtuWrapper;
+
 public class AddMeta
 {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
-		/*
-		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_Transposed.txt");
+		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_phyla_Transposed.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
-		*/
 		
-		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_TransposedLogNorm.txt");
+		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_phyla_TransposedLogNorm.txt");
 		
-		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_Genus_TransposedLogNormPlusMeta.txt");
-		//wrapper.writeNormalizedLoggedDataToFile(logNorm);
+		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_phyla_TransposedLogNormPlusMeta.txt");
+		wrapper.writeNormalizedLoggedDataToFile(logNorm);
 		
 		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
 		HashMap<String, String> srMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaSvR.txt"));
