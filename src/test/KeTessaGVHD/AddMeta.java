@@ -69,8 +69,6 @@ public class AddMeta
 		
 		reader.readLine();
 		
-		reader.readLine();
-		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			String[] splits = s.split("\t");
