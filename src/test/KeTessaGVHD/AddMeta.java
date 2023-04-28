@@ -18,6 +18,9 @@ public class AddMeta
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
 		
+		System.out.println(wrapper.getTotalCounts());
+		System.out.println(wrapper.getSampleNames().size());
+		
 		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_phyla_TransposedLogNorm.txt");
 		
 		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_phyla_TransposedLogNormPlusMeta.txt");
