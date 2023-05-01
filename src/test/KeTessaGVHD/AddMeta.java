@@ -28,12 +28,13 @@ public class AddMeta
 		
 		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
 		HashMap<String, String> srMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaSvR.txt"));
+		HashMap<String, Double> calProtectinMap= getCalprotectinMap();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logNorm));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
-		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr");
+		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr" + "\tcalprotectin");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -49,7 +50,7 @@ public class AddMeta
 			
 			String id = splits[0];
 			
-			writer.write(id + "\t" + gvnMap.get(id) + "\t" + srMap.get(id));
+			writer.write(id + "\t" + gvnMap.get(id) + "\t" + srMap.get(id) + "\t" + calProtectinMap.get(id));
 
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
@@ -63,6 +64,34 @@ public class AddMeta
 		reader.close();
 	}
 	
+	@SuppressWarnings("resource")
+	private static HashMap<String, Double> getCalprotectinMap() throws Exception
+	{
+		BufferedReader reader = new BufferedReader( new FileReader(new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\gvhd_calprotectin_results.tsv")));
+		
+		reader.readLine();
+		
+		HashMap<String, Double> map = new HashMap<>();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			String[] splits = s.split("\t");
+			
+			if( splits.length == 3)
+			{
+				String key = splits[0];
+				
+				if( map.containsKey(key))
+					throw new Exception("Duplicate key");
+				
+				map.put(key, Double.parseDouble(splits[2]));
+			}
+		}
+		
+		reader.close();
+		
+		return map;
+	}
 	
 	@SuppressWarnings("resource")
 	private static HashMap<String, String> getAMap(File f) throws Exception

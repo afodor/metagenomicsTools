@@ -1,0 +1,14 @@
+
+rm(list=ls())
+
+setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
+
+myT <- read.table("bracken_genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+
+myTAllSR <- myT[ myT$svr != "null", ]
+
+boxplot( myTAllSR$calprotectin[ myTAllSR$svr == "steroid_refractory_gvhd" ],myTAllSR$calprotectin[ myTAllSR$svr == "steroid_sensitive_gvhd" ] ,ylim=c(0,500) )
+
+
+wilcox.test( myTAllSR$calprotectin[ myTAllSR$svr == "steroid_refractory_gvhd" ],myTAllSR$calprotectin[ myTAllSR$svr == "steroid_sensitive_gvhd" ]  )
+
