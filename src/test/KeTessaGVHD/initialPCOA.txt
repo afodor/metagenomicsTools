@@ -12,7 +12,7 @@ myTData <- myT[,4:ncol(myT)]
 
 # colSums(myTData)/nrow(myT)
 
-myPCOA <- capscale(myTData~1)
+myPCOA <- capscale(myTData~1,dist="bray")
 
 colors <- vector()
 
@@ -29,7 +29,7 @@ for( i in 1:nrow(myT))
 }
 
 xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
-yAxisLab = paste0("PCoA1 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
 pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
 points(pcoa12,"sites",col=adjustcolor(colors, alpha.f = 0.2),pch=16,cex=2.5)
 
