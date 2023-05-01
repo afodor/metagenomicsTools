@@ -7,29 +7,33 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 
+import parsers.OtuWrapper;
+
 public class AddMeta
 {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
-		/*
-		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_Transposed.txt");
+		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_phyla_Transposed.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
-		*/
 		
-		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_Genus_TransposedLogNorm.txt");
+		System.out.println(wrapper.getTotalCounts());
+		System.out.println(wrapper.getSampleNames().size());
 		
-		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_Genus_TransposedLogNormPlusMeta.txt");
-		//wrapper.writeNormalizedLoggedDataToFile(logNorm);
+		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_phyla_TransposedLogNorm.txt");
 		
-		HashMap<String, String> gvnMap = getMetaGvNMap();
+		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_phyla_TransposedLogNormPlusMeta.txt");
+		wrapper.writeNormalizedLoggedDataToFile(logNorm);
+		
+		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
+		HashMap<String, String> srMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaSvR.txt"));
 		
 		BufferedReader reader = new BufferedReader(new FileReader(logNorm));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
-		writer.write(topSplits[0] + "\t" + "gvn");
+		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -45,7 +49,7 @@ public class AddMeta
 			
 			String id = splits[0];
 			
-			writer.write(id + "\t" + gvnMap.get(id));
+			writer.write(id + "\t" + gvnMap.get(id) + "\t" + srMap.get(id));
 
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
@@ -61,11 +65,11 @@ public class AddMeta
 	
 	
 	@SuppressWarnings("resource")
-	private static HashMap<String, String> getMetaGvNMap() throws Exception
+	private static HashMap<String, String> getAMap(File f) throws Exception
 	{
 		HashMap<String, String> map = new HashMap<>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(f));
 		
 		reader.readLine();
 		

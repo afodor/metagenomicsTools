@@ -5,13 +5,13 @@ rm(list=ls())
 
 setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
 
-myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+myT <- read.table("bracken_phyla_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
 myT <- myT[ myT$gvn != "null", ]
 
 pValues <- vector()
 taxaName <- vector()
 
-myTData <- myT[,3:ncol(myT)]
+myTData <- myT[,4:ncol(myT)]
 
 mySums <- colSums(myTData)/nrow(myT)
 
@@ -30,5 +30,5 @@ dFrame <- data.frame( taxaName,pValues)
 dFrame <- dFrame [order(dFrame$pValues),]
 dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )
 
-write.table(dFrame, file="gvhd_adusted_pValues.txt", sep="\t",row.names=FALSE)
+write.table(dFrame, file="gvhd_adusted_pValues_phyla.txt", sep="\t",row.names=FALSE)
 

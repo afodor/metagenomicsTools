@@ -8,7 +8,7 @@ setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
 myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
 myT <- myT[ myT$gvn != "null", ]
 
-myTData <- myT[,3:ncol(myT)]
+myTData <- myT[,4:ncol(myT)]
 
 # colSums(myTData)/nrow(myT)
 
