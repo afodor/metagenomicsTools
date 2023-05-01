@@ -1,5 +1,6 @@
 
 rm(list=ls())
+library("coin")
 
 setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
 
@@ -11,4 +12,12 @@ boxplot( myTAllSR$calprotectin[ myTAllSR$svr == "steroid_refractory_gvhd" ],myTA
 
 
 wilcox.test( myTAllSR$calprotectin[ myTAllSR$svr == "steroid_refractory_gvhd" ],myTAllSR$calprotectin[ myTAllSR$svr == "steroid_sensitive_gvhd" ]  )
+
+
+boxplot( myT$calprotectin[ myT$gvn== "gvhd" ],myT$calprotectin[myT$gvn == "no_gvhd" ] ,ylim=c(0,200))
+
+
+wilcox.test( myT$calprotectin[ myT$gvn== "gvhd" ],myT$calprotectin[myT$gvn == "no_gvhd" ] )
+
+wilcox_test( myT$calprotectin ~ factor(myT$gvn))
 
