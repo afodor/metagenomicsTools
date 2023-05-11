@@ -14,16 +14,16 @@ public class AddMeta
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
-		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_genus_Transposed.txt");
+		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_species_Transposed.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
 		
 		System.out.println(wrapper.getTotalCounts());
 		System.out.println(wrapper.getSampleNames().size());
 		
-		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_genus_TransposedLogNorm.txt");
+		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_species_TransposedLogNorm.txt");
 		
-		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_genus_TransposedLogNormPlusMeta.txt");
+		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_species_TransposedLogNormPlusMeta.txt");
 		wrapper.writeNormalizedLoggedDataToFile(logNorm);
 		
 		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
