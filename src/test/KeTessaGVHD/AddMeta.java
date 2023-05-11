@@ -50,7 +50,7 @@ public class AddMeta
 			
 			String id = splits[0];
 			
-			writer.write(id + "\t" + gvnMap.get(id) + "\t" + srMap.get(id) + "\t" + calProtectinMap.get(id));
+			writer.write(id.replaceAll("\\.", "_").replaceAll(" ", "_") + "\t" + gvnMap.get(id) + "\t" + srMap.get(id) + "\t" + calProtectinMap.get(id));
 
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);
