@@ -14,16 +14,16 @@ public class AddMeta
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
-		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_species_Transposed.txt");
+		File inFile = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_genus_Transposed.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(inFile);
 		
 		System.out.println(wrapper.getTotalCounts());
 		System.out.println(wrapper.getSampleNames().size());
 		
-		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_species_TransposedLogNorm.txt");
+		File logNorm = new File("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables\\bracken_genus_TransposedLogNorm.txt");
 		
-		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_species_TransposedLogNormPlusMeta.txt");
+		File metaFile = new File("C:\\\\ke_tessa_test\\\\GVHDProject-main\\\\CountsTables\\\\bracken_genus_TransposedLogNormPlusMeta.txt");
 		wrapper.writeNormalizedLoggedDataToFile(logNorm);
 		
 		HashMap<String, String> gvnMap = getAMap(new File("C:\\ke_tessa_test\\GVHDProject-main\\metaGvN.txt"));
@@ -34,7 +34,7 @@ public class AddMeta
 		BufferedWriter writer = new BufferedWriter(new FileWriter(metaFile));
 		
 		String[] topSplits = reader.readLine().split("\t");
-		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr" + "\tcalprotectin");
+		writer.write(topSplits[0] + "\t" + "gvn" + "\t" + "svr" + "\tcalprotectin\tshannonDiversity");
 		
 		for( int x=1; x < topSplits.length; x++)
 			writer.write("\t" + topSplits[x]);
@@ -50,7 +50,8 @@ public class AddMeta
 			
 			String id = splits[0];
 			
-			writer.write(id.replaceAll("\\.", "_").replaceAll(" ", "_") + "\t" + gvnMap.get(id) + "\t" + srMap.get(id) + "\t" + calProtectinMap.get(id));
+			writer.write(id.replaceAll("\\.", "_").replaceAll(" ", "_") + "\t" + gvnMap.get(id) + "\t" + srMap.get(id) + "\t" + calProtectinMap.get(id)
+							+ "\t" + wrapper.getShannonEntropy(id));
 
 			for( int x=1; x < splits.length; x++)
 				writer.write("\t" + splits[x]);

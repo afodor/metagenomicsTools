@@ -1,0 +1,21 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
+
+myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+
+boxplot( myT$shannonDiversity[myT$gvn == "no_gvhd"] , myT$shannonDiversity[myT$gvn == "gvhd"] ) 
+
+wilcox.test( myT$shannonDiversity[myT$gvn == "no_gvhd"] , myT$shannonDiversity[myT$gvn == "gvhd"] )$p.value
+
+myT <- myT[ myT$svr != "null, ]
+
+boxplot( myT$shannonDiversity[myT$svr == "steroid_refractory_gvhd"] , myT$shannonDiversity[myT$svr == "steroid_sensitive_gvhd"] ) 
+
+wilcox.test( myT$shannonDiversity[myT$svr == "steroid_refractory_gvhd"] , myT$shannonDiversity[myT$svr == "steroid_sensitive_gvhd"])$p.value
+
+
+
