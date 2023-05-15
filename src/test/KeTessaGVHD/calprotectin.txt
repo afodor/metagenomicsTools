@@ -1,0 +1,37 @@
+
+library("vegan")
+
+rm(list=ls())
+
+setwd("C:\\ke_tessa_test\\GVHDProject-main\\CountsTables")
+
+myT <- read.table("bracken_Genus_TransposedLogNormPlusMeta.txt", header=TRUE, sep="\t")
+myT <- myT[ myT$svr == "steroid_refractory_gvhd", ] 
+
+pValues <- vector()
+taxaName <- vector()
+
+myTData <- myT[,5:ncol(myT)]
+
+mySums <- colSums(myTData)/nrow(myT)
+
+index <- 1
+for( i in 1:ncol(myTData)) 
+{
+	if( mySums[i] > 2  )
+	{
+		 taxaName[ index ] <- names(myTData)[i]
+		 myLm <- lm( myTData[,i] ~ myT$calprotectin ) 
+		 pValues[index] <-  anova(myLm)$"Pr(>F)"[1]
+		 index <- index + 1
+	}
+}
+
+dFrame <- data.frame( taxaName,pValues)		
+dFrame <- dFrame [order(dFrame$pValues),]
+dFrame$adjustedPValues <- p.adjust( dFrame$pValues, method = "BH" )
+hist(pValues)
+
+write.table(dFrame, file="calprotecitc_adusted_pValues_genus.txt", sep="\t",row.names=FALSE)
+
+
