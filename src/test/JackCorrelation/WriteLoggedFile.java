@@ -10,7 +10,7 @@ public class WriteLoggedFile
 	{
 		File rawFile = new File("C:\\Jack_correlation\\pivotedGenus.txt");
 
-		File loggedFile = new File("C:\\Jack_correlation\\pivotedGenus.txt");
+		File loggedFile = new File("C:\\Jack_correlation\\pivotedGenusLogged.txt");
 		
 		OtuWrapper wrapper = new OtuWrapper(rawFile);
 		wrapper.writeNormalizedLoggedDataToFile(loggedFile);
