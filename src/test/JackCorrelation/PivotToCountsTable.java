@@ -4,20 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class PivotToCountsTable
 {
 	public static void main(String[] args) throws Exception
 	{
 		File directoryToParse = new File("C:\\Jack_correlation\\standard_kraken2_db_with_fungi_reports");
-		
-		String[] files = directoryToParse.list();
-		
-		for(String s : files)
-		{
-			File f= new File( directoryToParse.getAbsolutePath() + File.separator + s );
-			HashMap<String, Integer> innerMap = parseAFile(f);
-		}
+		getMapFromKraken(directoryToParse);
 	}
 	
 	// outer map is sampleID
@@ -25,12 +19,27 @@ public class PivotToCountsTable
 	{
 		HashMap<String, HashMap<String, Integer>> map = new HashMap<>();
 		
+		String[] files = directoryToParse.list();
+		
+		for(String s : files)
+		{
+			File f= new File( directoryToParse.getAbsolutePath() + File.separator + s );
+			HashMap<String, Integer> innerMap = parseAFile(f);
+			String key = new StringTokenizer(s, "_").nextToken();
+			System.out.println(key);
+			if( map.containsKey(key))
+				throw new Exception("Parsing error");
+			
+			map.put(key, innerMap);
+			
+		}
+		
 		return map;
 	}
 	
 	private static HashMap<String, Integer> parseAFile(File file) throws Exception
 	{
-		System.out.println(file.getAbsolutePath());
+		//System.out.println(file.getAbsolutePath());
 		HashMap<String, Integer> map = new HashMap<>();
 		
 		@SuppressWarnings("resource")
