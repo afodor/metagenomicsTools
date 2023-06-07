@@ -131,7 +131,7 @@ public class CheckCorrs
 		
 		for( int x=1; x < taxaList.size() ; x++)
 		{
-			
+			System.out.println(x + " of " + taxaList.size());
 			Holder xHolder = taxaList.get(x);
 			
 			for( int y = 0; y < x; y++)
