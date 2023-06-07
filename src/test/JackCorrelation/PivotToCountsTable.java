@@ -33,6 +33,7 @@ public class PivotToCountsTable
 		System.out.println(file.getAbsolutePath());
 		HashMap<String, Integer> map = new HashMap<>();
 		
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		for(String s = reader.readLine(); s != null; s= reader.readLine())
@@ -41,10 +42,34 @@ public class PivotToCountsTable
 			
 			if(splits.length != 2)
 				throw new Exception("parsing error");
+			
+			String genus = getAGenusOrNull(splits[0]);
+			
+			if( genus != null)
+			{
+				if( map.containsKey(genus))
+					throw new Exception("Parsing error " + genus);
+				
+				map.put(genus, Integer.parseInt(splits[1]));
+				
+			}
 		}
 		
 		reader.close();
 		
 		return map;
+	}
+	
+	private static String getAGenusOrNull( String firstToken ) 
+	{
+		String[] splits = firstToken.split("\\|");
+		
+		if( splits[splits.length-1].startsWith("g__"))
+		{
+			String genus = splits[splits.length-1].substring(3);
+			return genus;
+		}
+		
+		return null;
 	}
 }
