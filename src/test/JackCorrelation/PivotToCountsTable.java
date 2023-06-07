@@ -1,9 +1,15 @@
 package test.JackCorrelation;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class PivotToCountsTable
@@ -11,7 +17,57 @@ public class PivotToCountsTable
 	public static void main(String[] args) throws Exception
 	{
 		File directoryToParse = new File("C:\\Jack_correlation\\standard_kraken2_db_with_fungi_reports");
-		getMapFromKraken(directoryToParse);
+		HashMap<String, HashMap<String, Integer>> map = getMapFromKraken(directoryToParse);
+		
+		File outFile = new File("C:\\Jack_correlation\\pivotedGenus.txt");
+		
+		System.out.println("Writing to " + outFile.getAbsolutePath());
+		writeResults(map, outFile);
+	}
+	 
+	private static void writeResults( HashMap<String, HashMap<String, Integer>> map , File outFile) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+		
+		List<String> samples = new ArrayList<>(map.keySet());
+		Collections.sort(samples);
+		
+		HashSet<String> taxaSet = new HashSet<>();
+		
+		for(String s : map.keySet())
+			for(String s2: map.get(s).keySet())
+				taxaSet.add(s2);
+		
+		List<String> taxa = new ArrayList<>(taxaSet);
+		Collections.sort(taxa);
+		
+		writer.write("sample");
+		
+		for(String s : taxa)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		for(String s : samples)
+		{
+			writer.write(s);
+			
+			HashMap<String,Integer> innerMap = map.get(s);
+			
+			for(String s2 : taxa)
+			{
+				Integer aVal = innerMap.get(s2);
+				
+				if( aVal == null)
+					aVal = 0;
+				
+				writer.write("\t" + aVal);
+			}
+			
+			writer.write("\n");
+		}
+		
+		writer.flush(); writer.close();
 	}
 	
 	// outer map is sampleID
