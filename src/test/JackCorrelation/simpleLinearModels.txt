@@ -1,0 +1,22 @@
+
+setwd("c:\\temp")
+
+rm(list=ls())
+
+myT <- read.table("corrFileLogged.txt", sep="\t", header=TRUE)
+
+ myLm <- lm(myT$maxCor ~ myT$averageVal)
+
+ plot(myT$averageVal,myT$maxCor)
+ 
+ abline(myLm)
+ 
+ myTZoomed <- myT[ myT$averageVal >1, ]
+ 
+ myLm <- lm(myTZoomed$maxCor ~ myTZoomed$averageVal)
+
+ plot(myTZoomed$averageVal,myTZoomed$maxCor)
+ 
+ abline(myLm)
+ summary(myLm)
+ 
