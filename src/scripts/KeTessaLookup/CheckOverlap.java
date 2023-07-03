@@ -14,9 +14,20 @@ public class CheckOverlap
 	{
 		HashMap<String, String> map = getVSearchToDrugClassMap();
 		
+		/*
+		int x=0;
+		
 		
 		for(String s : map.keySet())
+		{
 			System.out.println(s + " " + map.get(s));
+			x++;
+			
+			if( x==100)
+				System.exit(1);
+		}
+		*/
+			
 	}
 	
 	@SuppressWarnings("resource")
@@ -46,6 +57,9 @@ public class CheckOverlap
 			
 			String value = tReader.nextToken();
 			addToMap(map, firstKey, value);
+			
+			if( secondKey.length() > 0 )
+				addToMap(map, secondKey, value);
 		}
 		
 		reader.close();
