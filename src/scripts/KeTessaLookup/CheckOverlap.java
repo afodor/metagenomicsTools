@@ -25,7 +25,7 @@ public class CheckOverlap
 			}
 			else
 			{
-				System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
+				//System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
 			}
 				
 		
