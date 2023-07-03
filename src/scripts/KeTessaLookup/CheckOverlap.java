@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import utils.TabReader;
 
@@ -17,6 +18,7 @@ public class CheckOverlap
 		HashMap<String, String> vSearchToDrugMap = getVSearchToDrugClassMap();
 		HashSet<String> vSearchNames = getVsearchNames();
 		
+		/*
 		for(String s : vSearchNames)
 		{
 			if( ! vSearchToDrugMap.containsKey(s) )
@@ -25,12 +27,10 @@ public class CheckOverlap
 			}
 			else
 			{
-				//System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
+				System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
 			}
-				
-		
 		}
-			
+		*/
 		
 		
 		/*
@@ -47,6 +47,26 @@ public class CheckOverlap
 		}
 		*/
 			
+		
+		TreeSet<String> allValues = getAllValues(vSearchToDrugMap);
+		
+		for(String s : allValues)
+			System.out.println(s);
+	}
+	
+	private static TreeSet<String> getAllValues(HashMap<String, String> map ) throws Exception
+	{
+		TreeSet<String> set = new TreeSet<String>();
+		
+		for(String s : map.values())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, ";");
+			
+			while(sToken.hasMoreTokens())
+				set.add(sToken.nextToken().trim());
+		}
+		
+		return set;
 	}
 	
 	@SuppressWarnings("resource")
