@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.StringTokenizer;
 
 import utils.TabReader;
 
@@ -12,7 +14,24 @@ public class CheckOverlap
 {
 	public static void main(String[] args) throws Exception
 	{
-		HashMap<String, String> map = getVSearchToDrugClassMap();
+		HashMap<String, String> vSearchToDrugMap = getVSearchToDrugClassMap();
+		HashSet<String> vSearchNames = getVsearchNames();
+		
+		for(String s : vSearchNames)
+		{
+			if( ! vSearchToDrugMap.containsKey(s) )
+			{
+				System.out.println("Could not find key " + s);
+			}
+			else
+			{
+				System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
+			}
+				
+		
+		}
+			
+		
 		
 		/*
 		int x=0;
@@ -28,6 +47,30 @@ public class CheckOverlap
 		}
 		*/
 			
+	}
+	
+	@SuppressWarnings("resource")
+	private static HashSet<String> getVsearchNames() throws Exception
+	{
+		HashSet<String> set = new HashSet<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\ke_Tessa_lookup\\vsearchFiltered.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s!= null; s = reader.readLine())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			String key = sToken.nextToken();
+			
+			if( set.contains(key))
+				throw new Exception("Duplicate key " + key);
+			
+			set.add(key);
+		}
+		
+		reader.close();
+		return set;
 	}
 	
 	@SuppressWarnings("resource")
