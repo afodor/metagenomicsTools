@@ -29,8 +29,7 @@ public class CheckOverlap
 			{
 				System.out.println("found " + s + " " + vSearchToDrugMap.get(s));
 			}
-		}
-		*/
+		}*/
 		
 		
 		/*
@@ -47,11 +46,13 @@ public class CheckOverlap
 		}
 		*/
 			
-		
+	
 		TreeSet<String> allValues = getAllValues(vSearchToDrugMap);
 		
 		for(String s : allValues)
 			System.out.println(s);
+		
+		System.out.println(allValues.size());
 	}
 	
 	private static TreeSet<String> getAllValues(HashMap<String, String> map ) throws Exception
@@ -62,10 +63,15 @@ public class CheckOverlap
 		{
 			StringTokenizer sToken = new StringTokenizer(s, ";");
 			
+
 			while(sToken.hasMoreTokens())
-				set.add(sToken.nextToken().trim());
+					set.add(sToken.nextToken());
+			
+		//	while(sToken.hasMoreTokens())
+		//		set.add(sToken.nextToken().trim().replace("antibiotic", "").trim());
 		}
 		
+		System.out.println(set.size());
 		return set;
 	}
 	
