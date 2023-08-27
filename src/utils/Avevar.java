@@ -56,6 +56,39 @@ public class Avevar
 		var = ( var - ep * ep / data.length ) / ( data.length - 1);
 	}
 	
+	public static double getFirstQuartile( List<Double> vals)
+	{
+		List<Double> newList = new ArrayList<Double>();
+	
+		for(Double d : vals)
+			newList.add(d);
+	
+		Collections.sort(newList);
+		
+		int firstIndex = (newList.size()+1) / 4;
+		
+		if( (newList.size()+1) % 4 == 0  )
+			return newList.get(firstIndex);
+		
+		return (  0.75*newList.get(firstIndex) + 0.25*newList.get(firstIndex+1));
+	}
+	
+	public static double getThirdQuartile( List<Double> vals)
+	{
+		List<Double> newList = new ArrayList<Double>();
+	
+		for(Double d : vals)
+			newList.add(d);
+	
+		Collections.sort(newList);
+		
+		int index = 3*newList.size()/ 4;
+		
+		if( 3*newList.size()/ 4== 0  )
+			return newList.get(index);
+		
+		return (  0.25*newList.get(index-1) + 0.75*newList.get(index));
+	}
 	
 	public Avevar( List<? extends Number> data ) 
 	{
