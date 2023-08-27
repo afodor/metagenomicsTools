@@ -65,11 +65,14 @@ public class Avevar
 	
 		Collections.sort(newList);
 		
-		int firstIndex = (newList.size()+1) / 4;
+		int firstIndex = newList.size() / 4;
 		
-		if( (newList.size()+1) % 4 == 0  )
-			return newList.get(firstIndex);
-		
+		if( newList.size() % 4 == 0 )
+		{
+			firstIndex = firstIndex-1;
+			return (  0.25*newList.get(firstIndex) + 0.75*newList.get(firstIndex+1));
+		}
+			
 		return (  0.75*newList.get(firstIndex) + 0.25*newList.get(firstIndex+1));
 	}
 	
@@ -84,9 +87,11 @@ public class Avevar
 		
 		int index = 3*newList.size()/ 4;
 		
-		if( 3*newList.size()/ 4== 0  )
-			return newList.get(index);
-		
+		if( 3*newList.size()%  4 ==0 )
+		{
+			return (  0.75*newList.get(index-1) + 0.25*newList.get(index));
+		}
+			
 		return (  0.25*newList.get(index-1) + 0.75*newList.get(index));
 	}
 	
