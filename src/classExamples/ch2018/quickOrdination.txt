@@ -15,11 +15,20 @@ myTData <- myT[,5:ncol(myT)]
 myPCOA <- capscale(myTData~1,distance="bray")
 
 plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "red", "blue"))
-
-plot(myPCOA$CA$u[,1], myPCOA$CA$u[,2],col = ifelse(myT$ruralUrban == "rural", "red", "blue"),
-xlab="MDS 1 (15.6% explained)", ylab="MDS 2 (11.7% explained)", main="Rural urban MDS", pch=19,cex=1.3)
-
 legend( "topleft", legend=c("urban", "rural"), col=c("red","blue"), pch=19,cex=1.3 )
+
+
+# an altenative, prettier plot
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA1 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab,main="arm")
+points(pcoa12,"sites",col=adjustcolor(ifelse(myT$ruralUrban == "rural", "red", "blue"), alpha.f = 0.2),pch=16,cex=2.5)
+
+ordiellipse(pcoa12, myT$ruralUrban, kind="se", conf=0.95, lwd=4, draw = "lines", col="blue",show.groups="rural",label=T,font=2,cex=1)
+ordiellipse(pcoa12, myT$ruralUrban, kind="se", conf=0.95, lwd=4, draw = "lines", col="red",show.groups="urban",label=T,font=2,cex=1)
+legend( "topleft", legend=c("urban", "rural"), col=c("red","blue"), pch=19,cex=1.3 )
+
+
 
 myMerge <- cbind(row.names(myT), myPCOA$CA$u[,1:5], myT)
 names(myMerge)[[1]] = "SampleID"
