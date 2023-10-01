@@ -19,9 +19,13 @@ legend( "topleft", legend=c("urban", "rural"), col=c("red","blue"), pch=19,cex=1
 
 
 # an altenative, prettier plot
+
+myAdonis <- adonis(myTData ~ myT$ruralUrban ,permutations = 1000)
+	
 xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
 yAxisLab = paste0("PCoA1 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
-pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab,main="rural vs. urban")
+pcoa12=ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab,
+	main=paste("rural vs urban p=",format(myAdonis$aov.tab$"Pr(>F)"[1],digits=3)))
 points(pcoa12,"sites",col=adjustcolor(ifelse(myT$ruralUrban == "rural", "blue", "red"), alpha.f = 0.2),pch=16,cex=2.5)
 
 ordiellipse(pcoa12, myT$ruralUrban, kind="se", conf=0.95, lwd=4, draw = "lines", col="blue",show.groups="rural",label=T,font=2,cex=1)
