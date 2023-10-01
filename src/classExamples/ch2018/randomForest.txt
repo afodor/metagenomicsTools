@@ -1,0 +1,77 @@
+#uncomment first time
+#install.packages("randomForest")
+#install.packages("ROCR")
+
+library(randomForest)
+library(ROCR)
+
+#with help from https://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/
+
+rm(list=ls())
+
+setwd("C:\\Users\\afodor\\git\\afodor.github.io\\classes\\ChapelHill2018")
+
+myT <- read.table("genusWithMeta.txt", sep="\t", header=TRUE,row.names=1)
+
+myT <- myT[ myT$readNumber ==1, ]
+
+
+myT <- myT[ , c(3,5:ncol(myT))]
+
+
+rf_classifier = randomForest(factor(ruralUrban) ~ ., data=myT,importance=TRUE)
+
+rf_classifier
+varImpPlot(rf_classifier,type=1)
+
+# now split into test and training
+
+# Set random seed to make results reproducible:
+set.seed(17)
+
+# Calculate the size of each of the data sets:
+data_set_size <- floor(nrow(myT)/2)
+
+# Generate a random sample of "data_set_size" indexes
+indexes <- sample(1:nrow(myT), size = data_set_size)
+
+# Assign the data to the correct sets
+training <- myT[indexes,]
+validation1 <- myT[-indexes,]
+
+# Calculate the probability of new observations belonging to each class
+# prediction_for_roc_curve will be a matrix with dimensions data_set_size x number_of_classes
+prediction_for_roc_curve <- predict(randomForest(factor(ruralUrban) ~ ., data=training,importance=TRUE),validation1[,-1],type="prob")
+
+# Use pretty colours:
+#pretty_colours <- c("#F8766D","#00BA38","#619CFF")
+pretty_colours <- c("RED","BLACK","BLUE")
+
+
+# Specify the different classes 
+classes <- levels(factor(validation1$ruralUrban))
+
+# For each class
+for (i in 1:length(classes))
+#i = 1
+{
+ # Define which observations belong to class[i]
+ true_values <- ifelse(validation1[,1]==classes[i],1,0)
+ # Assess the performance of classifier for class[i]
+ pred <- prediction(prediction_for_roc_curve[,i],true_values)
+ perf <- performance(pred, "tpr", "fpr")
+ if (i==1)
+ {
+     plot(perf,main="ROC Curve",col=pretty_colours[i]) 
+ }
+ else
+ {
+     plot(perf,main="ROC Curve",col=pretty_colours[i],add=TRUE) 
+ }
+ # Calculate the AUC and print it to screen
+ 
+ auc.perf <- performance(pred, measure = "auc")
+ print(auc.perf@y.values)
+}
+
+lines(c(0,1), c(0,1),col="Black")
