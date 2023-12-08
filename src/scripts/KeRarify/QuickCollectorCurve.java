@@ -1,6 +1,9 @@
 package scripts.KeRarify;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,19 +19,36 @@ public class QuickCollectorCurve
 	{
 		OtuWrapper wrapper = new OtuWrapper("C:\\keRarify\\amr_transposed.txt");
 		
-		HashMap<String, HashMap<Integer, Integer>> collapsedMap = 
+		LinkedHashMap<String, HashMap<Integer, Integer>> collapsedMap = 
 				getCollapsedMap(wrapper);
 		
 		System.out.println(collapsedMap);
 		
+		
+		
+		for(String s : collapsedMap.keySet())
+		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\keRarify\\curve" + s + ".txt")));
+			
+			writer.write("sampleDepth\tgenesSeen\n");
+			
+			HashMap<Integer, Integer> innerMap = collapsedMap.get(s);
+			
+			for( Integer i : innerMap.keySet())
+				writer.write((i+1) + "\t" + innerMap.get(i) + "\n");
+			
+			writer.flush(); writer.close();
+					
+				
+		}
 	}
 	
-	private static HashMap<String, HashMap<Integer, Integer>> getCollapsedMap(OtuWrapper wrapper) 
+	//outer key is the sample name
+			// inner map - key is rarefication depth; value is the taxa count at that depth
+	private static LinkedHashMap<String, HashMap<Integer, Integer>> getCollapsedMap(OtuWrapper wrapper) 
 		throws Exception
 	{
-		//outer key is the sample name
-		// inner map - key is rarefication depth; value is the taxa count at that depth
-		HashMap<String, HashMap<Integer, Integer>> map = new LinkedHashMap<>();
+		LinkedHashMap<String, HashMap<Integer, Integer>> map = new LinkedHashMap<>();
 		
 		for( int x=0; x < wrapper.getSampleNames().size(); x++)
 		{
@@ -42,9 +62,10 @@ public class QuickCollectorCurve
 			
 			List<Integer> countList = getCountsList(wrapper, x);
 			
-			//System.out.println(countList);
+			System.out.println(countList);
 			
 			Collections.shuffle(countList);
+			System.out.println(countList);
 			HashSet<Integer> taxaSeen = new HashSet<>();
 			
 			for( int y=0; y < countList.size(); y++ )
@@ -52,6 +73,8 @@ public class QuickCollectorCurve
 				taxaSeen.add(countList.get(y));
 				innerMap.put(y, taxaSeen.size());
 			}
+			
+			return map;
 			
 		}
 		
