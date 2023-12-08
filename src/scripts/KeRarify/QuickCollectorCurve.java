@@ -60,13 +60,13 @@ public class QuickCollectorCurve
 			HashMap<Integer, Integer> innerMap = new LinkedHashMap<>();
 			map.put(sampleName, innerMap);
 			
-			List<Integer> countList = getCountsList(wrapper, x);
+			List<String> countList = getCountsList(wrapper, x);
 			
 			System.out.println(countList);
 			
 			Collections.shuffle(countList);
 			System.out.println(countList);
-			HashSet<Integer> taxaSeen = new HashSet<>();
+			HashSet<String> taxaSeen = new HashSet<>();
 			
 			for( int y=0; y < countList.size(); y++ )
 			{
@@ -81,9 +81,9 @@ public class QuickCollectorCurve
 		return map;
 	}
 	
-	private static List<Integer> getCountsList(OtuWrapper wrapper, int taxaIndex) throws Exception
+	private static List<String> getCountsList(OtuWrapper wrapper, int taxaIndex) throws Exception
 	{
-		List<Integer> countList = new ArrayList<>();
+		List<String> countList = new ArrayList<>();
 		
 		for( int y=0; y < wrapper.getDataPointsUnnormalized().get(taxaIndex).size() ; y++)
 		{
@@ -91,7 +91,7 @@ public class QuickCollectorCurve
 			//System.out.println(sampleName + " " +  y + " " +  countCal);
 			
 			for( int z=0; z < countCal; z++)
-				countList.add(y);
+				countList.add(wrapper.getOtuNames().get(y));
 		}
 		
 		return countList;
