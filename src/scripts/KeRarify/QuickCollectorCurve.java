@@ -27,19 +27,30 @@ public class QuickCollectorCurve
 			HashMap<Integer, Integer> innerMap = new HashMap<>();
 			map.put(sampleName, innerMap);
 			
-			List<Integer> countList = new ArrayList<>();
+			List<Integer> countList = getCountsList(wrapper, x);
 			
-			for( int y=0; y < wrapper.getDataPointsUnnormalized().get(x).size() ; y++)
-			{
-				int countCal = wrapper.getDataPointsUnnormalized().get(x).get(y).intValue();
-				System.out.println(sampleName + y + " " +  countCal);
-			}
-			
+			System.out.println(countList);
 			System.exit(1);
 
 			
 		}
 	}
 	
+	private static List<Integer> getCountsList(OtuWrapper wrapper, int taxaIndex) throws Exception
+	{
+		List<Integer> countList = new ArrayList<>();
+		
+		for( int y=0; y < wrapper.getDataPointsUnnormalized().get(taxaIndex).size() ; y++)
+		{
+			int countCal = wrapper.getDataPointsUnnormalized().get(taxaIndex).get(y).intValue();
+			//System.out.println(sampleName + " " +  y + " " +  countCal);
+			
+			for( int z=0; z < countCal; z++)
+				countList.add(y);
+		}
+		
+		return countList;
+		
+	}
 
 }
