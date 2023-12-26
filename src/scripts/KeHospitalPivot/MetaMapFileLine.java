@@ -11,6 +11,12 @@ public class MetaMapFileLine
 	private final int timepoint;
 	private final String patientInOut;
 	private final String donor;
+	private final String bin;
+	
+	public String getBin()
+	{
+		return bin;
+	}
 		
 	public String getSampleID()
 	{
@@ -68,6 +74,7 @@ public class MetaMapFileLine
 		this.sampleID = splits[0];
 		this.patientID = splits[1];
 		this.timepoint = Integer.parseInt(splits[2]);
+		this.bin = splits[6];
 		this.patientInOut = splits[7];
 		this.donor = splits[8];
 	}

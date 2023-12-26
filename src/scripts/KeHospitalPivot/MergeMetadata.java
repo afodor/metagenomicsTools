@@ -18,7 +18,7 @@ public class MergeMetadata
 		
 		HashMap<String, MetaMapFileLine> map = MetaMapFileLine.getMetaMap();
 		
-		writer.write("sample\tpatientID\ttimepoint\tpatientInOut\tdonor\treadDepth\tshannonDiversity");
+		writer.write("sample\tpatientID\ttimepoint\tpatientInOut\tdonor\tbin\treadDepth\tshannonDiversity");
 		
 		for( int x=0; x < wrapper.getOtuNames().size(); x++)
 			writer.write("\t" + wrapper.getOtuNames().get(x));
@@ -40,6 +40,7 @@ public class MergeMetadata
 				System.out.println(wrapper.getSampleNames().get(x));
 				
 				writer.write("\t" + mfl.getPatientID() + "\t" + mfl.getTimepoint() + "\t" + mfl.getPatientInOut() + "\t" + mfl.getDonor());
+				writer.write("\t" + mfl.getBin());
 				writer.write("\t" + wrapper.getCountsForSample(x) + "\t" +  wrapper.getShannonEntropy(x));
 				
 				for( int y=0; y < wrapper.getOtuNames().size(); y++)
