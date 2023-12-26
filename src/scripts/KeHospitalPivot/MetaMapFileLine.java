@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 public class MetaMapFileLine
 {
-
 	private final String sampleID;
 	private final String patientID;
 	private final int timepoint;
