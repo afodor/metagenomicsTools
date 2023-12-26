@@ -1,5 +1,9 @@
 package scripts.KeHospitalPivot;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+
 public class MetaMapFileLine
 {
 
@@ -8,8 +12,7 @@ public class MetaMapFileLine
 	private final int timepoint;
 	private final String patientInOut;
 	private final String donor;
-	
-	
+		
 	public String getSampleID()
 	{
 		return sampleID;
@@ -34,7 +37,30 @@ public class MetaMapFileLine
 	{
 		return donor;
 	}
-
+	
+	public static HashMap<String, MetaMapFileLine> getMetaMap() throws Exception
+	{
+		HashMap<String, MetaMapFileLine> map = new HashMap<>();
+		
+		@SuppressWarnings("resource")
+		BufferedReader reader = new BufferedReader(new FileReader("C:\\Ke_Hospital\\MetaWithInOutDonerTreatmentType.txt"));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			MetaMapFileLine mfl = new MetaMapFileLine(s);
+			
+			if( map.containsKey(mfl.sampleID))
+				throw new Exception("Duplicate " + mfl.sampleID);
+			
+			map.put(mfl.sampleID, mfl);
+		}
+		
+		reader.close();
+		
+		return map;
+	}
 
 	private MetaMapFileLine(String s )
 	{
@@ -45,5 +71,13 @@ public class MetaMapFileLine
 		this.timepoint = Integer.parseInt(splits[2]);
 		this.patientInOut = splits[7];
 		this.donor = splits[8];
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		HashMap<String, MetaMapFileLine> map = getMetaMap();
+		
+		for(String s : map.keySet())
+			System.out.println(s + " " + map.get(s).getPatientInOut());
 	}
 }
