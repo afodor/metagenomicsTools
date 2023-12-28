@@ -27,7 +27,7 @@ public class WriteDistanceFromBaseline
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				"C:\\Ke_Hospital\\distancesFromPre.txt")));
 		
-		writer.write("patientID\tinOut\tDonor\tday\tdistance\n");
+		writer.write("patientID\tinOut\tDonor\tday\tbin\tdistance\n");
 		
 		for( MetaMapFileLine preMML : preSamples )
 		{
@@ -55,7 +55,7 @@ public class WriteDistanceFromBaseline
 						throw new Exception("Logic error");
 					
 					writer.write( prePatient + "\t" + mfl1.getPatientInOut() + "\t" + mfl1.getDonor() + 
-								"\t" + mfl2.getTimepoint() + "\t" + brayMap.get(s) + "\n");
+								"\t" + mfl2.getTimepoint() + "\t" + mfl2.getBin() + "\t" +  brayMap.get(s) + "\n");
 				}
 					
 			}
