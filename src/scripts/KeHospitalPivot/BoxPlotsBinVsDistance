@@ -1,0 +1,13 @@
+
+setwd("C:\\Ke_Hospital")
+
+myT <- read.table("distancesFromPre.txt", sep="\t", header=TRUE)
+
+bins <- factor(unique(myT$bin),levels=c( "D0", "D7", "D14", "D21", "D28", "D35", "D60" , "D100", "D180"))
+
+par(mfrow=c(3,3))
+
+for( bin: bins)
+{
+	myTSub <- myT	
+}
