@@ -8,17 +8,61 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /*
  * Run WriteBrayCurtisDistnace first
  */
 public class WriteDistanceFromBaseline
 {
+	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
+		HashMap<String, MetaMapFileLine> metaMap = MetaMapFileLine.getMetaMap();
+		
 		HashMap<String, Double> brayMap = getBrayDistanceMap();
 		
 		List<MetaMapFileLine> preSamples = getBaselineSamples();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"C:\\Ke_Hospital\\distancesFromPre.txt")));
+		
+		writer.write("patientID\tinOut\tDonor\tday\tdistance\n");
+		
+		for( MetaMapFileLine preMML : preSamples )
+		{
+			String prePatient = preMML.getPatientID();
+			
+			for(String s : brayMap.keySet())
+			{
+				StringTokenizer sToken = new StringTokenizer(s, "@");
+				String firstPatient = sToken.nextToken();
+				String secondPatient= sToken.nextToken();
+				
+				MetaMapFileLine mfl1 = metaMap.get(firstPatient);
+				MetaMapFileLine mfl2 = metaMap.get(secondPatient);
+				
+				if( mfl1 != null && mfl2 != null && mfl1.getPatientID().equals(prePatient) && mfl2.getPatientID().equals(prePatient)
+							&& mfl1.getBin().equals("PRE") && mfl2.getTimepoint() >= 0)
+				{
+					if( mfl1.getTimepoint() >= 0)
+						throw new Exception("Logic error");
+					
+					if( ! mfl1.getDonor().equals(mfl2.getDonor()))
+						throw new Exception("Logic error");
+					
+					if( ! mfl1.getPatientInOut().equals(mfl2.getPatientInOut()))
+						throw new Exception("Logic error");
+					
+					writer.write( prePatient + "\t" + mfl1.getPatientInOut() + "\t" + mfl1.getDonor() + 
+								"\t" + mfl2.getTimepoint() + "\t" + brayMap.get(s) + "\n");
+				}
+					
+			}
+		
+		}
+			
+		writer.flush();  writer.close();
 	}
 	
 	private static List<MetaMapFileLine> getBaselineSamples() throws Exception
