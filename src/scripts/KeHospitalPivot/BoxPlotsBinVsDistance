@@ -3,11 +3,20 @@ setwd("C:\\Ke_Hospital")
 
 myT <- read.table("distancesFromPre.txt", sep="\t", header=TRUE)
 
-bins <- factor(unique(myT$bin),levels=c( "D0", "D7", "D14", "D21", "D28", "D35", "D60" , "D100", "D180"))
+bins <-
+sort( factor(unique(myT$bin),levels=c( "D0", "D7", "D14", "D21", "D28", "D35", "D60" , "D100", "D180"),ordered=TRUE))
 
 par(mfrow=c(3,3))
 
-for( bin: bins)
+for( bin in bins)
 {
-	myTSub <- myT	
+	myTSub <- myT[ myT$bin == bin, ]
+	
+	myTest <- t.test( myTSub$distance[ myTSub$inOut=="Inpatient" ] , myTSub$distance[ myTSub$inOut=="Outpatient" ]  )$p.value
+	mainText <- paste("Day", bin, "n=", length(myTSub$inOut=="Inpatient" ) , "p=", format(myTest,digits=3) )
+	
+	boxplot(   myTSub$distance ~ myTSub$inOut, main=mainText )
+		
 }
+
+
