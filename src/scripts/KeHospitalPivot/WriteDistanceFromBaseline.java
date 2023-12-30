@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -23,6 +24,9 @@ public class WriteDistanceFromBaseline
 		HashMap<String, Double> brayMap = getBrayDistanceMap();
 		
 		List<MetaMapFileLine> preSamples = getBaselineSamples();
+		
+		//arbitrarily toss duplicates; key is bin@patientID
+		HashSet<String> included = new HashSet<>();
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				"C:\\Ke_Hospital\\distancesFromPre.txt")));
@@ -45,6 +49,7 @@ public class WriteDistanceFromBaseline
 				if( mfl1 != null && mfl2 != null && mfl1.getPatientID().equals(prePatient) && mfl2.getPatientID().equals(prePatient)
 							&& mfl1.getBin().equals("PRE") && mfl2.getTimepoint() >= 0)
 				{
+				
 					if( mfl1.getTimepoint() >= 0)
 						throw new Exception("Logic error");
 					
@@ -54,10 +59,21 @@ public class WriteDistanceFromBaseline
 					if( ! mfl1.getPatientInOut().equals(mfl2.getPatientInOut()))
 						throw new Exception("Logic error");
 					
-					writer.write( prePatient + "\t" + mfl1.getPatientInOut() + "\t" + mfl1.getDonor() + 
-								"\t" + mfl2.getTimepoint() + "\t" + mfl2.getBin() + "\t" +  brayMap.get(s) + "\n");
-				}
+					String key = mfl2.getBin() + "@" + prePatient;
 					
+					if( ! included.contains(key) )
+					{
+						writer.write( prePatient + "\t" + mfl1.getPatientInOut() + "\t" + mfl1.getDonor() + 
+								"\t" + mfl2.getTimepoint() + "\t" + mfl2.getBin() + "\t" +  brayMap.get(s) + "\n");
+						
+						included.add(key);
+						
+					}
+					else
+					{
+						System.out.println("Excluding duplicate " + key);
+					}
+				}
 			}
 		
 		}
