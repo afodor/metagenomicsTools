@@ -10,9 +10,10 @@ par(mfrow=c(3,3))
 
 for( bin in bins)
 {
+    # myTSub <- myT[ myT$bin == bin & myT$Donor=="Allo" , ]
 	myTSub <- myT[ myT$bin == bin & myT$Donor=="Allo" , ]
 	
-	if(sum(myTSub$inOut=="Inpatient" )  > 2 && sum(myTSub$inOut=="Outpatient" ) > 2 )
+	if(sum(myTSub$inOut=="Inpatient" )  >= 2 && sum(myTSub$inOut=="Outpatient" ) >= 2 )
 	{
 		
 		myTest <- t.test( myTSub$distance[ myTSub$inOut=="Inpatient" ] , myTSub$distance[ myTSub$inOut=="Outpatient" ]  )$p.value
