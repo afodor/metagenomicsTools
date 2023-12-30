@@ -81,7 +81,7 @@ public class WriteDistanceFromBaseline
 		writer.flush();  writer.close();
 	}
 	
-	private static List<MetaMapFileLine> getBaselineSamples() throws Exception
+	public static List<MetaMapFileLine> getBaselineSamples() throws Exception
 	{
 		HashMap<String, MetaMapFileLine> metaMap = MetaMapFileLine.getMetaMap();
 		
@@ -116,7 +116,7 @@ public class WriteDistanceFromBaseline
 	
 	
 	@SuppressWarnings("resource")
-	private static HashMap<String, Double> getBrayDistanceMap() throws Exception
+	public static HashMap<String, Double> getBrayDistanceMap() throws Exception
 	{
 		HashMap<String,Double> map = new HashMap<>();
 		
