@@ -1,0 +1,15 @@
+
+
+setwd("C:\\Ke_Hospital")
+
+myT <- read.table("C:\\Ke_Hospital\\maxDistancesFromPreForEachPatient.txt", sep="\t", header=TRUE)
+
+boxplot(  myT$distance  ~ myT$inOut) 
+t.test( myT$distance  ~ myT$inOut )
+
+t.test(myT$day ~ myT$inOut)
+
+myT <- myT[ myT$Donor == "Allo", ]
+boxplot(  myT$distance  ~ myT$inOut) 
+t.test( myT$distance  ~ myT$inOut )
+
