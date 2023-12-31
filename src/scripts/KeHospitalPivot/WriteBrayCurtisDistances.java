@@ -23,7 +23,7 @@ public class WriteBrayCurtisDistances
 				if( x != y)
 				{
 					writer.write( wrapper.getSampleNames().get(x) + "\t" + wrapper.getSampleNames().get(y) + "\t" +  
-									wrapper.getBrayCurtis(x, y, true) + "\n");	
+									wrapper.getBrayCurtis(x, y, false) + "\n");	
 				}
 			}
 		}
