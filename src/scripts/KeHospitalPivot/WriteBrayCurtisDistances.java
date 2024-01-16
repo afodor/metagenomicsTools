@@ -10,7 +10,7 @@ public class WriteBrayCurtisDistances
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\genus_transposed.txt");
+		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\brackenTransposed.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\Ke_Hospital\\brayCurtisDistances.txt")));
 		
@@ -23,7 +23,7 @@ public class WriteBrayCurtisDistances
 				if( x != y)
 				{
 					writer.write( wrapper.getSampleNames().get(x) + "\t" + wrapper.getSampleNames().get(y) + "\t" +  
-									wrapper.getBrayCurtis(x, y, false) + "\n");	
+									wrapper.getBrayCurtis(x, y, true) + "\n");	
 				}
 			}
 		}

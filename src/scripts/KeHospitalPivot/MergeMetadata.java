@@ -12,9 +12,9 @@ public class MergeMetadata
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\genus_transposed.txt");
+		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\brackenTransposed.txt");
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\Ke_Hospital\\genus_LogNormPlusMeta.txt")));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\Ke_Hospital\\bracken_LogNormPlusMeta.txt")));
 		
 		HashMap<String, MetaMapFileLine> map = MetaMapFileLine.getMetaMap();
 		
