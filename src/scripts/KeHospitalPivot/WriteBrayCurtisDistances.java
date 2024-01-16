@@ -10,7 +10,7 @@ public class WriteBrayCurtisDistances
 {
 	public static void main(String[] args) throws Exception
 	{
-		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\brackenTransposed.txt");
+		OtuWrapper wrapper = new OtuWrapper("C:\\Ke_Hospital\\bracken_LogNormFilteredMetaRemovedManually.txt");
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\Ke_Hospital\\brayCurtisDistances.txt")));
 		
