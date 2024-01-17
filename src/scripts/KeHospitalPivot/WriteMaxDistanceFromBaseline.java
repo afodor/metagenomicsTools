@@ -65,7 +65,7 @@ public class WriteMaxDistanceFromBaseline
 				MetaMapFileLine mfl2 = metaMap.get(secondPatient);
 				
 				if( mfl1 != null && mfl2 != null && mfl1.getPatientID().equals(prePatient) && mfl2.getPatientID().equals(prePatient)
-							&& mfl1.getBin().equals("PRE") && mfl2.getTimepoint() >= 0)
+							&& mfl1.getBin().equals("PRE") && mfl2.getTimepoint() > 0)
 				{
 					Holder h = maxDistanceMap.get(prePatient);
 					double distance = brayMap.get(s);

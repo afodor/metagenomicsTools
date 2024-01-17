@@ -1915,10 +1915,10 @@ public class OtuWrapper
 		{
 			si+= list.get(i).get(x);
 			sj+= list.get(j).get(x);
-			cij += Math.abs( list.get(i).get(x) - list.get(j).get(x));
+			cij += Math.min( list.get(i).get(x) , list.get(j).get(x));
 		}
 
-		return  cij / (si + sj);
+		return  1- (  (2*cij) / (si + sj) );
 	}
 	
 	public void writeBrayCurtisForMothur(String filepath, boolean log) throws Exception
