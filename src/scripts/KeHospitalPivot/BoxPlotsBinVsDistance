@@ -10,8 +10,8 @@ par(mfrow=c(3,3))
 
 for( bin in bins)
 {
-    myTSub <- myT[ myT$bin == bin & myT$Donor=="Allo" , ]
-	#myTSub <- myT[ myT$bin == bin , ]
+    #myTSub <- myT[ myT$bin == bin & myT$Donor=="Allo" , ]
+	myTSub <- myT[ myT$bin == bin , ]
 	
 	if(sum(myTSub$inOut=="Inpatient" )  >= 2 && sum(myTSub$inOut=="Outpatient" ) >= 2 )
 	{

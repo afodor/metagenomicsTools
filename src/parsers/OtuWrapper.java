@@ -1921,6 +1921,25 @@ public class OtuWrapper
 		return  1- (  (2*cij) / (si + sj) );
 	}
 	
+
+	public double getBrayCurtisFromRaw(int i, int j)
+	{
+		double si = 0;
+		double sj =0;
+		double cij =0;
+		
+		List<List<Double>> list = getDataPointsUnnormalized();
+		
+		for( int x=0; x < getOtuNames().size(); x++)
+		{
+			si+= list.get(i).get(x);
+			sj+= list.get(j).get(x);
+			cij += Math.min( list.get(i).get(x) , list.get(j).get(x));
+		}
+
+		return  1- (  (2*cij) / (si + sj) );
+	}
+	
 	public void writeBrayCurtisForMothur(String filepath, boolean log) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filepath)));
@@ -2304,57 +2323,9 @@ public class OtuWrapper
 	
 	public static void main(String[] args) throws Exception
 	{
+		OtuWrapper wrapper = new OtuWrapper("C:\\keRarify\\toyTransposed.txt");
 		
-		OtuWrapper wrapper = new OtuWrapper(
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
+		System.out.println(wrapper.getBrayCurtis(0, 1, false));
 		
-		wrapper.writeLoggedDataWithTaxaAsColumns( new File( ConfigReader.getBigDataScalingFactorsDir() 
-				+ File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyLogNorm.txt" ));
-		
-		for( int x=0;x < wrapper.getSampleNames().size(); x++)
-			for( int y=0; y < wrapper.getOtuNames().size(); y++)
-			{
-				System.out.println( wrapper.getDataPointsNormalizedThenLogged().get(x).get(y) );
-			}
-		
-		/*
-		wrapper.writeRawCountsWithRandomNoise(  
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyWithRandomNoise.txt", 3242321);
-
-		
-		/*
-		wrapper.writeRankedSpreadsheet(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyRanked.txt");
-		
-		/*
-		OtuWrapper wrapper = new OtuWrapper(
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-						+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnly.txt");
-		
-		wrapper.writeNormalizedDataToFile(new File(ConfigReader.getBigDataScalingFactorsDir() 
-				+ File.separator + "July_StoolRemoved" 
-				+ File.separator + "risk_raw_countsTaxaAsColumnsStoolOnlyNormalized.txt"));
-		
-		/*
-		transpose(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "July_StoolRemoved" 
-					+ File.separator + 
-				"risk_PL_rawCounts.txt", 
-				ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
-						+ File.separator + 
-					"risk_PL_rawCountsTaxaAsColumnns.txt", false
-				);
-		
-		/*
-		OtuWrapper wrapper = new OtuWrapper(ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
-				+ File.separator + 
-			"raw_100_taxaAsColumns.txt");
-		
-		wrapper.writeRankedSpreadsheet( ConfigReader.getBigDataScalingFactorsDir() + File.separator + "June24_risk" 
-				+ File.separator + 
-			"raw_100_taxaAsColumnsRankedSimple.txt"  );
-			*/
 	}
 }

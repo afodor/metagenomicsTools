@@ -9,7 +9,7 @@ stripchart(  distance  ~ inOut,  data = myT,vertical = TRUE, pch = 21, add=TRUE)
 t.test( myT$distance  ~ myT$inOut )
 
 
-#myT <- myT[ myT$Donor == "Allo", ]
+myT <- myT[ myT$Donor == "Allo", ]
 boxplot(  myT$distance  ~ myT$inOut)
 stripchart(  distance  ~ inOut,  data = myT,vertical = TRUE, pch = 21, add=TRUE)
        
