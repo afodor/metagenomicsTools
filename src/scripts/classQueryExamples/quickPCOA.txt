@@ -1,0 +1,44 @@
+
+library("vegan")
+
+inFile <- "C:\\query\\stream_abundance_table_genus.txt"
+
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+myTData <- t(myT)
+
+categories <- c()
+colors <- vector()
+
+for ( i in 1:12 ) 
+{
+	categories[i] <- substr(row.names(myTData)[i], 1, 3)
+	
+	if( i >= 1 & i <= 3 ) 
+	{
+		colors[i] = "red"
+	}
+	else if ( i >=4 & i <=6 )
+	{
+		colors[i] = "blue" 
+	}
+	else if ( i >=7 & i <=9 ) 
+	{
+		colors[i] = "green"
+	}
+	else
+	{
+		colors[i] = "orange"
+	}
+}
+
+myPCOA <- capscale(myTData~1, distance="bray")	
+xAxisLab = paste0("PCoA1 (", format(100 * summary(myPCOA)$cont$importance[2],digits=3),"%)")
+yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digits=3),"%)")
+	
+myPlot <- ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
+points(myPlot,"sites",pch=16,cex=2.5,col=adjustcolor(colors, alpha.f = 0.2))
+
+legend("topright", legend = unique(categories), fill = unique(colors), title = "Category")
+
+	
