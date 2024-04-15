@@ -5,7 +5,7 @@ inFile <- "C:\\query\\stream_abundance_table_genus.txt"
 
 myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
 
-myTData <- t(myT)
+myTData <- -log10( t(myT) + 0.000001)
 
 categories <- c()
 colors <- vector()
@@ -39,6 +39,6 @@ yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digi
 myPlot <- ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
 points(myPlot,"sites",pch=16,cex=2.5,col=adjustcolor(colors, alpha.f = 0.2))
 
-legend("topright", legend = unique(categories), fill = unique(colors), title = "Category")
+legend("topright", legend = legend_labels, col = legend_colors, pch = 16, title = "Site")
 
 	
