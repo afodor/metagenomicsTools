@@ -39,11 +39,19 @@ yAxisLab = paste0("PCoA2 (",format(100 * summary(myPCOA)$cont$importance[5],digi
 myPlot <- ordiplot(myPCOA,choices=c(1,2),type="none",cex.lab=1.2,xlab= xAxisLab, ylab = yAxisLab)
 points(myPlot,"sites",pch=16,cex=2.5,col=adjustcolor(colors, alpha.f = 0.2))
 
-
 # Define legend labels and colors based on unique categories and colors
 legend_labels <- unique(categories)
-legend_colors <- unique(colors)
 
 # Add legend to the plot
 legend("topright", legend = legend_labels, col = legend_colors, pch = 16, title = "Site")
+
+boxplot( scores(myPCOA)$sites[,1] ~ categories,ylab="MDS1",xlab="sites" )
+
+boxplot( scores(myPCOA)$sites[,2] ~ categories,ylab="MDS2",xlab="sites" )
+
+anova(lm(scores(myPCOA)$sites[,1] ~ categories) )
+
+anova(lm(scores(myPCOA)$sites[,2] ~ categories) )
+
+
 
