@@ -21,3 +21,22 @@ for( i in 1:nrow(myT))
 
 hist(pValues)
 
+myFrame <- data.frame( taxaNames, pValues )
+myFrame <- myFrame [order(myFrame$pValue),]
+myFrame$adjustedPValues <- p.adjust( myFrame$pValues, method = "BH" )
+write.table(myFrame, file="C:\\query\\stream_abundance_genus_Anova.txt", sep="\t",row.names=FALSE)
+
+pdf("C:\\query\\boxplots.pdf")
+par(mfrow=c(2,2))
+
+for( i in 1:nrow(myFrame) ) 
+{
+	row = which( row.names(myT) == myFrame$taxaNames[i] ) 
+	
+	mainText = paste( myFrame$taxaNames[i] , "\nfdrP=", format( myFrame$adjustedPValues[i] ,digits=3) )
+	
+	boxplot( unlist(myT[row,]) ~ categories ,main=mainText,ylab="relative abundance") 
+}
+
+dev.off()
+
