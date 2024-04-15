@@ -1,0 +1,23 @@
+
+inFile <- "C:\\query\\stream_abundance_table_genus.txt"
+
+myT <- read.table(inFile, sep="\t", header=TRUE,row.names=1)
+
+pValues <- c()
+taxaNames <- c()
+
+categories <- c()
+
+for ( i in 1:12 ) 
+{
+	categories[i] <- substr(names(myT)[i], 1, 3)
+}
+
+for( i in 1:nrow(myT)) 
+{
+	pValues[i] <- anova(lm(unlist(myT[i,]) ~ categories))$"Pr(>F)"[1]
+	taxaNames[i] <- row.names(myT)[i]
+}
+
+hist(pValues)
+

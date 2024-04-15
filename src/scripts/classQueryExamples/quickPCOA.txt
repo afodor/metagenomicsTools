@@ -53,5 +53,6 @@ anova(lm(scores(myPCOA)$sites[,1] ~ categories) )
 
 anova(lm(scores(myPCOA)$sites[,2] ~ categories) )
 
-
+myAdonis <- adonis2(myTData ~ categories,permutations = 1000)
+myAdonis$aov.tab$"Pr(>F)"[1]
 
