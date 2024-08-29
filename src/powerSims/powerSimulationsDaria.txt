@@ -2,6 +2,13 @@
 # and then applies a wilcoxon test which is robsust to the
 # underlying distribution.  This will lower our power in comparison to
 # a t-test but yields a more robust power estimate.
+# the assumption of normality is not well met by microbiome data, but we are using a non-parametric test
+# this will only give us a rough approximation of power
+
+# While the complexity of microbiome data makes exact power calculations difficult, we ran a simple,
+# crude simulation with 75 total paitents (20 in group #1, 55 in group #2).
+# This simulation demonstrated that we have ~81% power with an effect size of diet of 0.8
+# We think based on the literature that this effect size is reasonable (justification/references)
 
 rm(list=ls())
 
