@@ -1,9 +1,10 @@
 package scratch;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.Reader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,12 +43,17 @@ public class SortCitations
 	{
 		List<Holder> list = getList();
 		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"C:\\CV\\citationsSorted.txt")));
+		
 		for(Holder h : list)
 		{
 			System.out.println(h.citation);
 			System.out.println();
+			writer.write(h.citation + "\n\n");
 		}
 		
+		writer.flush();  writer.close();
 		System.out.println(list.size());
 	}
 	
