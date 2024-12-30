@@ -13,8 +13,12 @@ public class SortCitations
 {
 	private static class Holder implements Comparable<Holder>
 	{
-		int year;
-		String citation;
+		String authors;
+		String title;
+		String publication;
+		String volume;
+		String number;
+		int year =0;
 		
 		@Override
 		// with some help from chatGPT
@@ -23,21 +27,13 @@ public class SortCitations
 			 int yearComparison = Integer.compare(o.year, this.year);
 			
 			 if( yearComparison == 0 )
-				 return citation.compareTo(o.citation);
+				 return title.compareTo(o.title);
 			 
 			 return yearComparison;
 			 
 		}
 	}
 	
-	private static int getYear(String s ) throws Exception
-	{
-		for( int x=1990; x<=2025; x++)
-			if( s.indexOf("" + x) != -1)
-				return x;
-		
-		throw new Exception("Could not find year " + s);
-	}
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -48,9 +44,18 @@ public class SortCitations
 		
 		for(Holder h : list)
 		{
-			System.out.println(h.citation);
-			System.out.println();
-			writer.write(h.citation + "\n\n");
+			writer.write(h.authors + " " + h.title + " " + h.publication);
+			
+			if( h.volume != null )
+				writer.write( " " + h.volume);
+			
+			if( h.number != null)
+				writer.write(":" + h.number);
+			
+			if( h.year > 0)
+				writer.write(".  " + h.year);
+			
+			writer.write("\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -62,16 +67,33 @@ public class SortCitations
 		List<Holder> list = new ArrayList<SortCitations.Holder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\CV\\citationsUnsorted.txt")));
+				"C:\\CV\\citationTabDeliminted.txt")));
 		
+		reader.readLine();
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			if( s.trim().length() > 0 )
 			{
 				Holder h = new Holder();
-				h.citation = s;
-				h.year = getYear(s);
+				
+				String[] splits = s.split("\t",-1);
+				
+				h.authors = splits[0];
+				h.title = splits[1];
+				h.publication = splits[2];
+				
+				if( splits[3].trim().length() > 0 )
+					h.volume = splits[3];
+				
+				if( splits[4].trim().length() > 0 )
+					h.number = splits[4];
+				
+				if( splits[6].trim().length() > 0 )
+					h.year = Integer.parseInt(splits[6]);
+				
 				list.add(h);
+				
+				
 			}
 		}
 		
