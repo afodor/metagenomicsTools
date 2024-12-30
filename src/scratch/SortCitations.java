@@ -5,14 +5,37 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SortCitations
 {
-	private static class Holder
+	private static class Holder implements Comparable<Holder>
 	{
-		String year;
+		int year;
 		String citation;
+		
+		@Override
+		// with some help from chatGPT
+		public int compareTo(Holder o)
+		{
+			 int yearComparison = Integer.compare(o.year, this.year);
+			
+			 if( yearComparison == 0 )
+				 return citation.compareTo(o.citation);
+			 
+			 return yearComparison;
+			 
+		}
+	}
+	
+	private static int getYear(String s ) throws Exception
+	{
+		for( int x=1990; x<=2025; x++)
+			if( s.indexOf("" + x) != -1)
+				return x;
+		
+		throw new Exception("Could not find year " + s);
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -22,6 +45,7 @@ public class SortCitations
 		for(Holder h : list)
 		{
 			System.out.println(h.citation);
+			System.out.println();
 		}
 		
 		System.out.println(list.size());
@@ -36,12 +60,17 @@ public class SortCitations
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			Holder h = new Holder();
-			h.citation = s;
-			list.add(h);
+			if( s.trim().length() > 0 )
+			{
+				Holder h = new Holder();
+				h.citation = s;
+				h.year = getYear(s);
+				list.add(h);
+			}
 		}
 		
 		reader.close();
+		Collections.sort(list);
 		return list;
 	}
 }
