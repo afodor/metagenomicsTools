@@ -44,7 +44,7 @@ public class SortCitations
 		
 		for(Holder h : list)
 		{
-			writer.write(h.authors + " " + h.title + " " + h.publication);
+			writer.write(h.authors + " " + h.title + ".  " + h.publication);
 			
 			if( h.volume != null )
 				writer.write( " " + h.volume);
@@ -53,9 +53,9 @@ public class SortCitations
 				writer.write(":" + h.number);
 			
 			if( h.year > 0)
-				writer.write(".  " + h.year);
+				writer.write(" " + h.year);
 			
-			writer.write("\n");
+			writer.write("\n\n");
 		}
 		
 		writer.flush();  writer.close();
@@ -72,6 +72,8 @@ public class SortCitations
 		reader.readLine();
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
+			s =s.replaceAll("\"","");
+			
 			if( s.trim().length() > 0 )
 			{
 				Holder h = new Holder();
