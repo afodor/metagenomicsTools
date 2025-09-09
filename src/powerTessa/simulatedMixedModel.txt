@@ -11,14 +11,21 @@ par(mfrow=c(3,2))
 
 allX <- vector()
 allY <- vector()
+allPatients <- vector()
+
+# 4 drug classes evenly distributed
+# TODO: A more accurate power simulation would allow for different sized classes
+allDrug <- vector()
+
 
 index <- 1
+drugIndex <- 1
 
 for( i in 1:150) 
 {
 	x <- c(-7,0,7,14,21,28,35,42)
 
-	# choose slope so that true R^2 ≈ 0.2
+	# choose slope so that true R^2 ≈ 0.25
 	slope <- 1
 	sigma <- sqrt((slope^2 * var(x)) * (1 - 0.15) / 0.15)
 	
@@ -32,88 +39,25 @@ for( i in 1:150)
 	{
 		allX[index] <- x[j]
 		allY[index] <- y[j]
+		allPatients[index] <- i
+		allDrug[index] <- drugIndex
 		index <- index + 1
-	}
-	
-}
-
-mean(rSquareds)
-
-
-dev.off()
-
-
-
-
-
-
-
-ageMean <- 66
-ageSD <- 6
-
-timepoints <- c(-7,0,7,14,21,28,35,42)
-
-getSimData <- function()
-{
-	index <- 1	
-	antibioticIndex <-1
-	
-	
-	
-	y <- vector() #bacterialSurvival
-	antibiotic <- vector() # 4 classes
-	
-	for( i in 1:(numHospitalsPerGroup*2))
-	{
-		hospitalEffect <- rnorm( 1,mean=0, sd=50)
 		
-		for( j in 1:sampleSize)
-		{
-			data[index] <- rnorm(1,mean=hospitalEffect , sd=50)
-			hospital[index] <- paste("H", hospitalIndex , sep="")
-			drug[index] <- paste("D", drugIndex,sep="")
-			index <- index + 1
-		}
-		
-		hospitalIndex <- hospitalIndex + 1
 		drugIndex <- drugIndex + 1
 		
-		if( drugIndex > 2 ) 
-			drugIndex = 1
+		if(drugIndex == 5) 
+			drugIndex =1 ;
 	}
 	
-	myT <- data.frame(data,hospital,drug)
-		
 }
 
-pValuesFixed <- vector()
-pValuesGLS <- vector()
-pValuesMixed <- vector()
+#should be around .25
+mean(rSquareds)
+dev.off()
 
-index <- 1
+#x is time; y is response (tolerance)
+myFrame <- data.frame( allX, allY, allDrug, allPatients)
 
-for (i in 1:1000)
-{
-	myT<- getSimData()
-	myLm <- lm( myT$data ~ myT$drug + myT$hospital)
-	pValuesFixed[index] <- anova(myLm)$"Pr(>F)"[1]	
-	
-	M.gls <- gls( data ~ drug , method = "REML", correlation = corCompSymm( form = ~ 1 | hospital),data=myT)
-	pValuesGLS[index] <- anova(M.gls)$"p-value"[2]
-	
-	M.mixed <- lme( data ~ drug, method= "REML", random = ~1 | hospital, data = myT)
-	pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
-	
-	index = index + 1
-}
+M.mixed <- lme( allY ~ allX + allDrug, method= "REML", random = ~1 | allPatients, data = myFrame)
 
-par(mfrow=c(2,3))
-
-hist(pValuesFixed)
-hist(pValuesGLS)
-hist(pValuesMixed)
-
-library("gap")
-qqunif(pValuesFixed)
-qqunif(pValuesGLS)
-qqunif(pValuesMixed)
+pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
