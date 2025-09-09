@@ -15,9 +15,8 @@ allPatients <- vector()
 
 # 4 drug classes evenly distributed
 # TODO: A more accurate power simulation would allow for different sized classes
+
 allDrug <- vector()
-
-
 index <- 1
 drugIndex <- 1
 
@@ -31,6 +30,9 @@ for( i in 1:150)
 	
 	y <- slope * x + rnorm(length(x), sd = sigma)
 	
+	if( drugIndex == 1 ) 
+		y = y + y * .25
+	
 	rSquareds[i] =  summary(lm(y ~ x))$r.squared
 
 	plot(x,y, main = rSquareds[i] )
@@ -40,15 +42,15 @@ for( i in 1:150)
 		allX[index] <- x[j]
 		allY[index] <- y[j]
 		allPatients[index] <- i
-		allDrug[index] <- drugIndex
+		allDrug[index] <- drugIndex		
 		index <- index + 1
-		
-		drugIndex <- drugIndex + 1
-		
-		if(drugIndex == 5) 
-			drugIndex =1 ;
 	}
 	
+	drugIndex <- drugIndex + 1
+		
+	if(drugIndex == 5) 
+		drugIndex =1 ;
+
 }
 
 #should be around .25
@@ -60,4 +62,7 @@ myFrame <- data.frame( allX, allY, allDrug, allPatients)
 
 M.mixed <- lme( allY ~ allX + allDrug, method= "REML", random = ~1 | allPatients, data = myFrame)
 
-pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
+anova(M.mixed)
+
+
+#pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
