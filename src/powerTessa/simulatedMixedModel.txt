@@ -7,7 +7,7 @@ pValuesTime <- vector()
 pValuesDrug <- vector()
 meanrSquareds <- vector()
 
-for( z in 1:1000)
+for( z in 1:500)
 {
 	rSquareds <- vector()
 	
@@ -28,18 +28,20 @@ for( z in 1:1000)
 	index <- 1
 	drugIndex <- 1
 
-	for( i in 1:150) 
+	#this is the sample size
+	for( i in 1:200) 
 	{
 		x <- c(-7,0,7,14,21,28,35,42)
 	
-		# choose slope so that true R^2 ≈ 0.25
+		# this controls the effect size with time
 		slope <- 1
-		sigma <- sqrt((slope^2 * var(x)) * (1 - 0.5) / 0.5)
+		sigma <- sqrt((slope^2 * var(x)) * (1 - 0.3) / 0.3)
 		
 		y <- slope * x + rnorm(length(x), sd = sigma)
 		
-		if( drugIndex == 1 ) 
-			y = y + y * .25
+		# this controls the effect size with drug
+		if( drugIndex == 1 | drugIndex == 2 ) 
+			y = y + y * 0.30
 		
 		rSquareds[i] =  summary(lm(y ~ x))$r.squared
 
@@ -82,6 +84,10 @@ for( z in 1:1000)
 
 mean(meanrSquareds)
 
+#powertime
+sum(pValuesTime < 0.05  ) / length(pValuesTime )
 
+#powerDrug 
+sum(pValuesDrug < 0.05 ) / length(pValuesDrug) 
 
 
