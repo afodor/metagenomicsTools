@@ -3,67 +3,85 @@ rm(list=ls())
 
 library("nlme")
 
+pValuesTime <- vector()
+pValuesDrug <- vector()
+meanrSquareds <- vector()
 
-rSquareds <- vector()
-pdf("c:\\temp\\sims.pdf")
-
-par(mfrow=c(3,2))
-
-allX <- vector()
-allY <- vector()
-allPatients <- vector()
-
-# 4 drug classes evenly distributed
-# TODO: A more accurate power simulation would allow for different sized classes
-
-allDrug <- vector()
-index <- 1
-drugIndex <- 1
-
-for( i in 1:150) 
+for( z in 1:1000)
 {
-	x <- c(-7,0,7,14,21,28,35,42)
-
-	# choose slope so that true R^2 ≈ 0.25
-	slope <- 1
-	sigma <- sqrt((slope^2 * var(x)) * (1 - 0.5) / 0.5)
+	rSquareds <- vector()
 	
-	y <- slope * x + rnorm(length(x), sd = sigma)
-	
-	if( drugIndex == 1 ) 
-		y = y + y * .25
-	
-	rSquareds[i] =  summary(lm(y ~ x))$r.squared
-
-	plot(x,y, main = rSquareds[i] )
-	
-	for( j in 1:length(x))
+	if( z== 1 ) 
 	{
-		allX[index] <- x[j]
-		allY[index] <- y[j]
-		allPatients[index] <- i
-		allDrug[index] <- drugIndex		
-		index <- index + 1
+		pdf("c:\\temp\\sims.pdf")
+		par(mfrow=c(3,2))
 	}
 	
-	drugIndex <- drugIndex + 1
-		
-	if(drugIndex == 5) 
-		drugIndex =1 ;
+	allX <- vector()
+	allY <- vector()
+	allPatients <- vector()
+	
+	# 4 drug classes evenly distributed
+	# TODO: A more accurate power simulation would allow for different sized classes
+	
+	allDrug <- vector()
+	index <- 1
+	drugIndex <- 1
 
+	for( i in 1:150) 
+	{
+		x <- c(-7,0,7,14,21,28,35,42)
+	
+		# choose slope so that true R^2 ≈ 0.25
+		slope <- 1
+		sigma <- sqrt((slope^2 * var(x)) * (1 - 0.5) / 0.5)
+		
+		y <- slope * x + rnorm(length(x), sd = sigma)
+		
+		if( drugIndex == 1 ) 
+			y = y + y * .25
+		
+		rSquareds[i] =  summary(lm(y ~ x))$r.squared
+
+		if( z == 1 ) 	
+			plot(x,y, main = rSquareds[i] )
+		
+		for( j in 1:length(x))
+		{
+			allX[index] <- x[j]
+			allY[index] <- y[j]
+			allPatients[index] <- i
+			allDrug[index] <- drugIndex		
+			index <- index + 1
+		}
+		
+		drugIndex <- drugIndex + 1
+			
+		if(drugIndex == 5) 
+			drugIndex =1 ;
+	
+	}
+		
+	meanrSquareds[z] = mean(rSquareds)
+	
+	if ( z ==1 ) 
+		dev.off()
+	
+	#x is time; y is response (tolerance)
+	myFrame <- data.frame( allX, allY, allDrug, allPatients)
+	
+	M.mixed <- lme( allY ~ allX + allDrug, method= "REML", random = ~1 | allPatients, data = myFrame)
+	
+	anova(M.mixed)
+	
+	pValuesTime[z] <- anova(M.mixed)$"p-value"[2]
+	pValuesDrug[z] <- anova(M.mixed)$"p-value"[3]
+			
 }
 
-#should be around .25
-mean(rSquareds)
-dev.off()
 
-#x is time; y is response (tolerance)
-myFrame <- data.frame( allX, allY, allDrug, allPatients)
-
-M.mixed <- lme( allY ~ allX + allDrug, method= "REML", random = ~1 | allPatients, data = myFrame)
-
-anova(M.mixed)
+mean(meanrSquareds)
 
 
-#pValuesMixed[index] <- anova(M.mixed)$"p-value"[2]
+
 
