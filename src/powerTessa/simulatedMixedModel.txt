@@ -39,7 +39,7 @@ for( z in 1:500)
 		
 		y <- slope * x + rnorm(length(x), sd = sigma)
 		
-		# this controls the effect size with drug
+		# this controls the percent change with drug
 		if( drugIndex == 1 | drugIndex == 2 ) 
 			y = y + y * 0.30
 		
