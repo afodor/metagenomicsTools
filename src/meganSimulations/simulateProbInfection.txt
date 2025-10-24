@@ -1,0 +1,30 @@
+
+
+# modded from ChatGTP 
+
+# Set random seed for reproducibility
+set.seed(123)
+
+# Exponential dose–response model
+dose <- seq(5e4, 5e8, length.out = 100)  # dose values from 5e4 to 5e8
+
+# liteature derived value
+k <- 1.5 * 1e-8  # rate parameter controlling steepness
+
+
+# True probability of infection
+p_infect <- 1 - exp(-k * dose)
+
+# Simulate infection outcomes (0 = no infection, 1 = infection)
+n_per_dose <- 50
+infected <- sapply(p_infect, function(p) rbinom(1, n_per_dose, p) / n_per_dose)
+
+# Plot the simulated curve
+plot(dose, infected, ylim = c(0,1), pch = 19, col = "blue",
+     xlab = "Dose", ylab = "Probability of Infection",
+     main = "Simulated Exponential Dose–Response Curve")
+
+# Add theoretical curve
+lines(dose, p_infect, col = "red", lwd = 2)
+legend("topleft", legend = c("Simulated", "Theoretical"), col = c("blue", "red"),
+       pch = c(19, NA), lty = c(NA, 1), bty = "n")
