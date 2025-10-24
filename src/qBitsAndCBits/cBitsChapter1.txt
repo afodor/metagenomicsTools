@@ -67,5 +67,7 @@ swap <- ntildeA_ntildeB + nA_nB +
 
 swap
 
-
-
+nA_nB %*% ZERO_ZERO 
+nA_nB %*% ZERO_ONE
+nA_nB %*% ONE_ZERO
+nA_nB %*% ONE_ONE
