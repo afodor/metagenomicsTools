@@ -20,6 +20,18 @@ ONE_ONE <- matrix(c(0,0,0,1), ncol=1)
 swap %*% ONE_ONE
 
 
+c10 = matrix(c(1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0),nrow=4)
+
+c10 %*% ZERO_ZERO 
+c10 %*% ZERO_ONE
+c10 %*% ONE_ZERO
+c10 %*% ONE_ONE
+
+#1.23 construct swap from 3 cnots...
+# if all zero everything stays zero
+# if all 1 ...  <10> then <10> then <11>
+# if <10>  becomes <11> then <01> then <01>
+# if <11>  becomes <10> then <10> then <11>
 
 
 
