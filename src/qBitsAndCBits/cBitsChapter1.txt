@@ -34,19 +34,15 @@ c10 %*% ONE_ONE
 # if <11>  becomes <10> then <10> then <11>
 
 
+#1.32
+n_Project_One = matrix(c(0,0,0,1), nrow=2)
+n_Project_Zero = matrix(c(1,0,0,0), nrow=2)
+ZERO <- matrix(c(1,0),ncol=1)
+ONE <- matrix(c(0,1),ncol=1)
 
+n_Project_One  %*% ZERO
+n_Project_One   %*% ONE
 
-
-#1.35
-
-
-# if both are in |1>
-# ni * nJ
-
-n = matrix(c(0,0,0,1) ,nrow=2) 
-
-cbit_1 = matrix(c(0,1) ,ncol=1)
-
-# first tier
-(n %*% cbit_1) %*% t(n %*% cbit_1 )
+n_Project_Zero %*% ZERO
+n_Project_Zero %*% ONE
 
