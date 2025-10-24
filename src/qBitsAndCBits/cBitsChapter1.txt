@@ -27,12 +27,15 @@ c10 %*% ZERO_ONE
 c10 %*% ONE_ZERO
 c10 %*% ONE_ONE
 
+c01 = matrix(c(1,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0),nrow=4)
+
 #1.23 construct swap from 3 cnots...
 # if all zero everything stays zero
 # if all 1 ...  <10> then <10> then <11>
 # if <10>  becomes <11> then <01> then <01>
 # if <11>  becomes <10> then <10> then <11>
-
+# or
+c10 %*% c01 %*% c10 
 
 #1.32
 n_Project_One = matrix(c(0,0,0,1), nrow=2)
@@ -45,4 +48,24 @@ n_Project_One   %*% ONE
 
 n_Project_Zero %*% ZERO
 n_Project_Zero %*% ONE
+
+
+#1.35 (from chatGPT)
+# Define basic single-bit matrices
+n <- matrix(c(0,0,0,1), nrow=2, byrow=TRUE)
+ntilde <- matrix(c(1,0,0,0), nrow=2, byrow=TRUE)
+x <- matrix(c(0,1,1,0), nrow=2, byrow=TRUE)
+
+# Tensor (Kronecker) products
+nA_nB <- kronecker(n, n)
+ntildeA_ntildeB <- kronecker(ntilde, ntilde)
+xA_xB <- kronecker(x, x)
+
+# Verify SWAP operator
+swap <- ntildeA_ntildeB + nA_nB +
+        (kronecker(ntilde, n) + kronecker(n, ntilde)) %*% xA_xB
+
+swap
+
+
 
