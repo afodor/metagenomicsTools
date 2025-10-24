@@ -1,4 +1,40 @@
 
-#test
-# test
-test3
+
+#Quantum Computer Science
+
+#swap operator
+swap = matrix(c(1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1),nrow=4)
+
+ZERO_ZERO <- matrix(c(0,0,0,0) , ncol=1 ) 
+
+swap %*% ZERO_ZERO 
+
+ZERO_ONE <- matrix(c(0,1,0,0) , ncol=1 ) 
+
+ONE_ZERO <-  swap %*% ZERO_ONE
+
+swap %*% ONE_ZERO 
+
+ONE_ONE <- matrix(c(0,0,0,1), ncol=1)
+
+swap %*% ONE_ONE
+
+
+
+
+
+
+
+#1.35
+
+
+# if both are in |1>
+# ni * nJ
+
+n = matrix(c(0,0,0,1) ,nrow=2) 
+
+cbit_1 = matrix(c(0,1) ,ncol=1)
+
+# first tier
+(n %*% cbit_1) %*% t(n %*% cbit_1 )
+
