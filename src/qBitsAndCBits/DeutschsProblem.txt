@@ -3,43 +3,77 @@
 # following equations from Quantum Computer Science, p. 51-52
 rm(list=ls())
 
-# 1-qubit Pauli-X and Identity
-X <- matrix(c(0, 1,
-              1, 0), nrow = 2, byrow = TRUE)
+# 1-qubit gates
+I <- diag(2)
+X <- matrix(c(0,1,1,0), nrow=2, byrow=TRUE)
+H <- (1/sqrt(2)) * matrix(c(1, 1,
+                            1,-1), nrow=2, byrow=TRUE)
+                            
+                            
+# Two-qubit helpers
+kron <- function(A,B) kronecker(A,B)
+I4   <- diag(4)
+H2   <- kron(H,H)
+H1_I <- kron(H, I)
 
+
+# Basis kets (|00>,|01>,|10>,|11>)
+ZERO_ZERO <- matrix(c(1,0,0,0), ncol=1)
+ZERO_ONE  <- matrix(c(0,1,0,0), ncol=1)
+ONE_ZERO  <- matrix(c(0,0,1,0), ncol=1)
+ONE_ONE   <- matrix(c(0,0,0,1), ncol=1)
+
+
+# Standard Deutsch input: |+>|-> = (H⊗H)|01>
+psi_in <- H2 %*% ZERO_ONE
+
+#let's start with the case where f(0) == f(1) == 0 
+# this is the identity operator
+# 1-qubit identity
+I <- diag(2)
+# Two-qubit oracle: I ⊗ I = 4x4 identity
+U_const0 <- kronecker(I, I)
+U_const0
+
+#so our state after the unitatry transformation is
+U_const0 %*% psi_in
+
+# we apply the H transformation to the first qbit only
+# R code
+H <- (1/sqrt(2)) * matrix(c(1, 1,
+                            1,-1), nrow=2, byrow=TRUE)
 I <- diag(2)
 
-X1 <- kronecker(X, I)  # acts on first qubit
-X2 <- kronecker(I, X)  # acts on second qubit
-X12 <- kronecker(X, X) # acts on both
+# Hadamard on first qubit only
+H1_I <- kronecker(H, I)
+H1_I
 
-ZERO <- matrix(c(1,0),ncol=1)
-ONE <- matrix(c(0,1),ncol=1)
-
-
-ZERO_ZERO <- matrix(c(1,0,0,0) , ncol=1 ) 
-ZERO_ONE <- matrix(c(0,1,0,0) , ncol=1 ) 
-ONE_ZERO <-  matrix(c(0,0,1,0) , ncol=1 ) 
-ONE_ONE <- matrix(c(0,0,0,1), ncol=1)
-
-# verify the bitflop on both operators
-X12 %*% ZERO_ZERO
-X12 %*% ZERO_ONE
-X12 %*% ONE_ZERO
-X12 %*% ONE_ONE
-
-# Define the 1-qubit Hadamard gate
-H <- (1/sqrt(2)) * matrix(c(1, 1,
-                            1, -1), nrow = 2, byrow = TRUE)
-
-# Two-qubit Hadamard = H ⊗ H
-H2 <- kronecker(H, H)
-
-INPUT <- H2 %*% ONE_ONE 
+# yields I guess ∣0⟩⊗∣−⟩
+H1_I %*% psi_in
 
 
+#for f(0)= f(1) = 1, this flips the second qbit
+# Oracle for f(0) = f(1) = 1 (constant one function)
+# U_f |x, y> = |x, y ⊕ 1> = |x, X|y>>
 
+# 1-qubit Pauli-X and identity
+X <- matrix(c(0,1,1,0), nrow=2, byrow=TRUE)
+I <- diag(2)
 
+# Two-qubit oracle: I ⊗ X
+U_const1 <- kronecker(I, X)
+U_const1
 
+val_const1_1 <- U_const1 %*% psi_in
+H1_I %*% val_const1_1 
+
+# there is a sign flip here , but the story is that the minus sign effects only the
+# second qbits phase.  This is why eq. 2.20 doesn't follow algebraically from 2.19
+# because (according to chatGPT), the measurement doesn't matter...
+# very very subtle stuff (and possible chatGPT is not explaning it to me correctly...)
+
+# Note that according to chatGPT, this state does not produce entanglement 
+# (because the identity opertor doesn't change the first qBit and the 
+# function only flips the 2nd so doesn't entagle the first
 
 
