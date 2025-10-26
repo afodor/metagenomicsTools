@@ -74,6 +74,8 @@ H1_I %*% val_const1_1
 
 # Note that according to chatGPT, this state does not produce entanglement 
 # (because the identity opertor doesn't change the first qBit and the 
-# function only flips the 2nd so doesn't entagle the first
+# function only flips the 2nd so doesn't entagle the first)
+
+
 
 
