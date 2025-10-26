@@ -1,6 +1,6 @@
 
 # with help from ChatGPT
-# following equations from Quantum Computer Science, p. 51-52
+# following equations from Quantum Computer Science, N. David Mermin, p. 51-52
 rm(list=ls())
 
 # 1-qubit gates
@@ -75,6 +75,34 @@ H1_I %*% val_const1_1
 # Note that according to chatGPT, this state does not produce entanglement 
 # (because the identity opertor doesn't change the first qBit and the 
 # function only flips the 2nd so doesn't entagle the first)
+
+# So now if f(0) +!= f(1);  f(0) = 0; f(1) = 1
+# this is just a cnot01 opertor (look in cBitsChapter1.txt in this same folder)
+c10 = matrix(c(1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0),nrow=4)
+
+# so here is our result...
+val_balanced_1_0 <- c10  %*% psi_in
+
+H1_I %*% val_balanced_1_0
+
+# and finally f(0) = 1 ; f(1) = 0
+# from chat GPT this is just a "CNOT with inverted control gate 
+# and this will again I imagine just flip the minus sign
+
+U_balanced_10 <- matrix(c(
+  0, 1, 0, 0,  # |00> -> |01>
+  1, 0, 0, 0,  # |01> -> |00>
+  0, 0, 1, 0,  # |10> -> |10>
+  0, 0, 0, 1   # |11> -> |11>
+), nrow=4, byrow=TRUE)
+
+
+val_balanced_0_1 <- U_balanced_10   %*% psi_in
+H1_I %*% val_balanced_0_1
+
+# this gets all the way through the matrix representation of 2.24
+# our first quantum algorithm (which for the record is totally useless :-> ) 
+
 
 
 
