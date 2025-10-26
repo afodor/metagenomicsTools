@@ -3,6 +3,19 @@
 # following equations from Quantum Computer Science, N. David Mermin, p. 51-52
 rm(list=ls())
 
+# these comments are mine (not chatGPTs...)
+# maybe we can think of this algorithm as you have four coins:
+# one has heads on both sides
+# one has tails on both sides
+# two have heads on one side and tails on the other
+# I give you a coin but don't say which one
+# clasically, you can't tell which kind of coin you have (same on both sides or different)
+# by just flipping the coin once.
+# But quantum computers can flip the coin once and tell due to quantum spookiness 
+# that is described in matrix form below...
+
+
+
 # 1-qubit gates
 I <- diag(2)
 X <- matrix(c(0,1,1,0), nrow=2, byrow=TRUE)
