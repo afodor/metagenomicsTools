@@ -69,7 +69,9 @@ H1_I %*% val_const1_1
 
 # there is a sign flip here , but the story is that the minus sign effects only the
 # second qbits phase.  This is why eq. 2.20 doesn't follow algebraically from 2.19
-# because (according to chatGPT), the measurement doesn't matter...
+# because (according to chatGPT), the measurement of the 2nd bit  doesn't matter
+# (and because it is perfectly in phase, the 2nd bit is invariant in measuring in 
+# either the f(0) = f(1) = 0 or the f(0) = f(1) = 1 case.
 # very very subtle stuff (and possible chatGPT is not explaning it to me correctly...)
 
 # Note that according to chatGPT, this state does not produce entanglement 
