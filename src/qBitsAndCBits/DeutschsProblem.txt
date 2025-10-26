@@ -1,0 +1,45 @@
+
+# with help from ChatGPT
+# following equations from Quantum Computer Science, p. 51-52
+rm(list=ls())
+
+# 1-qubit Pauli-X and Identity
+X <- matrix(c(0, 1,
+              1, 0), nrow = 2, byrow = TRUE)
+
+I <- diag(2)
+
+X1 <- kronecker(X, I)  # acts on first qubit
+X2 <- kronecker(I, X)  # acts on second qubit
+X12 <- kronecker(X, X) # acts on both
+
+ZERO <- matrix(c(1,0),ncol=1)
+ONE <- matrix(c(0,1),ncol=1)
+
+
+ZERO_ZERO <- matrix(c(1,0,0,0) , ncol=1 ) 
+ZERO_ONE <- matrix(c(0,1,0,0) , ncol=1 ) 
+ONE_ZERO <-  matrix(c(0,0,1,0) , ncol=1 ) 
+ONE_ONE <- matrix(c(0,0,0,1), ncol=1)
+
+# verify the bitflop on both operators
+X12 %*% ZERO_ZERO
+X12 %*% ZERO_ONE
+X12 %*% ONE_ZERO
+X12 %*% ONE_ONE
+
+# Define the 1-qubit Hadamard gate
+H <- (1/sqrt(2)) * matrix(c(1, 1,
+                            1, -1), nrow = 2, byrow = TRUE)
+
+# Two-qubit Hadamard = H ⊗ H
+H2 <- kronecker(H, H)
+
+INPUT <- H2 %*% ONE_ONE 
+
+
+
+
+
+
+
