@@ -1,0 +1,201 @@
+## from chatGPT
+## --- Simon's algorithm full simulation in R (n small, e.g. n=3) ---
+
+#set.seed(1)
+rm(list=ls())
+
+# Helpers ---------------------------------------------------------------
+
+bits_to_int <- function(b) {
+  # b: vector of 0/1, MSB first
+  sum(b * 2^rev(seq_along(b)-1))
+}
+
+int_to_bits <- function(x, n) {
+  as.integer(intToBits(x))[1:n] |> rev()
+}
+
+hadamard_1 <- function() (1/sqrt(2)) * matrix(c(1,1,1,-1), 2, 2)
+
+hadamard_n <- function(n) {
+  H <- hadamard_1()
+  if (n == 1) return(H)
+  for (i in 2:n) H <- kronecker(H, hadamard_1())
+  H
+}
+
+random_nonzero_s <- function(n) {
+  repeat {
+    s <- sample(0:1, n, replace=TRUE)
+    if (any(s != 0)) return(s)
+  }
+}
+
+# Build a Simon-promise oracle f: {0,1}^n -> {0,1}^n with hidden s
+build_simon_f <- function(n, s_bits) {
+  N <- 2^n
+  f <- rep(NA_integer_, N)
+  used <- rep(FALSE, N)
+  for (x in 0:(N-1)) {
+    if (!is.na(f[x+1])) next
+    y <- bitwXor(x, bits_to_int(s_bits))
+    rep_idx <- min(x, y)  # canonical rep for the pair
+    # choose a fresh output for the pair
+    repeat {
+      out <- sample.int(N, 1) - 1
+      if (!used[out+1]) { used[out+1] <- TRUE; break }
+    }
+    f[x+1] <- out
+    f[y+1] <- out
+  }
+  f
+}
+
+# Build Uf permutation matrix (size 2^(2n) x 2^(2n))
+build_Uf <- function(n, f) {
+  N <- 2^n
+  dim <- 2^(2*n)
+  Uf <- matrix(0+0i, dim, dim)
+  for (x in 0:(N-1)) {
+    for (y in 0:(N-1)) {
+      inp  <- bitwOr(bitwShiftL(x, n), y) + 1
+      outy <- bitwXor(y, f[x+1])
+      out  <- bitwOr(bitwShiftL(x, n), outy) + 1
+      Uf[out, inp] <- 1+0i
+    }
+  }
+  Uf
+}
+
+# Measure one register (input or output) of a 2n-qubit state
+measure_register <- function(state, n, which=c("output","input")) {
+  which <- match.arg(which)
+  N <- 2^n
+  dim <- length(state)
+  probs <- numeric(N)
+  if (which == "output") {
+    for (y in 0:(N-1)) {
+      idxs <- (0:(N-1))*N + (y+1)
+      probs[y+1] <- sum(Mod(state[idxs])^2)
+    }
+    m <- sample.int(N, 1, prob = probs) - 1
+    post <- rep(0+0i, dim)
+    idxs <- (0:(N-1))*N + (m+1)
+    post[idxs] <- state[idxs]
+  } else {
+    for (x in 0:(N-1)) {
+      base <- x*N
+      idxs <- (base + 1):(base + N)
+      probs[x+1] <- sum(Mod(state[idxs])^2)
+    }
+    m <- sample.int(N, 1, prob = probs) - 1
+    post <- rep(0+0i, dim)
+    base <- m*N
+    idxs <- (base + 1):(base + N)
+    post[idxs] <- state[idxs]
+  }
+  norm <- sqrt(sum(Mod(post)^2))
+  if (norm > 0) post <- post / norm
+  list(value = m, state = post)
+}
+
+# Gaussian elimination over GF(2): returns rank and, if rank==n-1, a nullspace vector
+gauss_gf2 <- function(rows, n) {
+  if (length(rows) == 0) return(list(rank=0, null=NULL))
+  A <- do.call(rbind, rows) %% 2
+  m <- nrow(A)
+  r <- 1
+  piv <- rep(-1L, n)
+  for (c in 1:n) {
+    # find pivot at or below row r
+    pivot <- which(A[r:m, c] == 1)[1]
+    if (!is.na(pivot)) {
+      pivot <- pivot + r - 1
+      if (pivot != r) {
+        tmp <- A[r,]; A[r,] <- A[pivot,]; A[pivot,] <- tmp
+      }
+      piv[c] <- r
+      # eliminate in all other rows (reduced form)
+      for (i in seq_len(m)) {
+        if (i != r && A[i,c] == 1) A[i,] <- (A[i,] + A[r,]) %% 2
+      }
+      r <- r + 1
+      if (r > m) break
+    }
+  }
+  rank <- r - 1
+  null <- NULL
+  if (rank == n - 1) {
+    x <- rep(0L, n)
+    free_cols <- which(piv == -1L)
+    if (length(free_cols) == 1) {
+      fcol <- free_cols[1]
+      x[fcol] <- 1L
+      for (c in n:1) {
+        if (piv[c] != -1L) {
+          rr <- piv[c]
+          s <- 0L
+          if (c < n) s <- sum((A[rr, (c+1):n] & x[(c+1):n]) %% 2) %% 2
+          x[c] <- s
+        }
+      }
+      null <- x %% 2
+    }
+  }
+  list(rank = rank, null = null)
+}
+
+# One run of Simon's algorithm: returns measured y
+simon_run_once <- function(n, Uf, Hn) {
+  N <- 2^n
+  dim <- 2^(2*n)
+  state <- rep(0+0i, dim); state[1] <- 1+0i # |0^n>|0^n>
+  U1 <- kronecker(Hn, diag(N))              # H^{⊗n} on input
+  state <- U1 %*% state
+  state <- Uf %*% state                     # Apply Uf
+  # Optional: measure output for pedagogy
+  m_out <- measure_register(state, n, "output")
+  state <- m_out$state
+  # Apply H^{⊗n} on input again
+  state <- U1 %*% state
+  m_in <- measure_register(state, n, "input")
+  m_in$value
+}
+
+# Main ---------------------------------------------------------------
+
+n <- 6
+s_bits <- random_nonzero_s(n)
+cat("Hidden s (binary):", paste(s_bits, collapse=""), "\n")
+
+f <- build_simon_f(n, s_bits)
+Uf <- build_Uf(n, f)
+Hn <- hadamard_n(n)
+
+rows <- list()
+seen <- integer(0)
+rank <- 0
+tries <- 0
+
+while (rank < n - 1) {
+  tries <- tries + 1
+  y <- simon_run_once(n, Uf, Hn)          # integer 0..2^n-1
+  if (y == 0) next                         # zero gives no info
+  if (y %in% seen) next                    # skip duplicates
+  seen <- c(seen, y)
+  y_bits <- int_to_bits(y, n)
+  rows <- append(rows, list(y_bits))
+  g <- gauss_gf2(rows, n)
+  rank <- g$rank
+  cat(sprintf("Run %2d: y = %s, rank = %d\n",
+              tries, paste(y_bits, collapse=""), rank))
+}
+
+cat("\nCollected constraints (rows of Y):\n")
+for (r in rows) cat(paste(r, collapse=""), "\n")
+
+g <- gauss_gf2(rows, n)
+s_est <- g$null
+cat("\nRecovered s from nullspace:", paste(s_est, collapse=""), "\n")
+cat("True s:                    ", paste(s_bits, collapse=""), "\n")
+cat("Match? ", all(s_est == s_bits), "\n")
