@@ -1,0 +1,132 @@
+rm(list=ls())
+
+tables <- list()
+names <- vector()
+
+setwd("C:\\claudeSummary")
+myT <- read.table("lca_1881_counts_table_transposed.tsv", sep="\t", header=TRUE, row.names=1)
+tables[[1]] <- myT
+names[1] <- "Simon LCA"
+
+for( graphIndex in 1:length(tables) ) 
+{
+	myT <- tables[[graphIndex]]
+	maxCors <- vector(length=ncol(myT))
+	averageDepth <- vector(length=ncol(myT))
+
+	sums <- apply(myT, 2, sum)
+	
+	myT <- myT[,order(-apply(myT, 2, sum))]
+
+	numCols <- ncol(myT)
+	
+	for( i in 1:numCols )
+	{
+		maxCors[i] <- -1
+	}
+
+
+	for( i in 2:numCols)
+	{
+		averageDepth[i] <- mean( myT[,i] )
+		
+		stopVal <- i-1
+		
+		for( j in 1:stopVal )
+		{
+			
+			corVal <- cor( myT[,i], myT[,j],method="spearman" )
+			
+			if( ! is.na(corVal) )
+			{	
+				maxCors[i] <- max(  maxCors[i], corVal  )
+			}
+			
+		}
+	}
+
+	maxCors[1] = 1
+	averageDepth[1] <- mean( myT[,1] )
+	
+
+#par(mfrow=c(2,1))
+#plot(averageDepth, maxCors, ylim=c(0,1))
+
+meanRanks <- rank(-averageDepth, ties.method="min")
+#plot(meanRanks,averageDepth)
+	
+	# the number of "real" taxa the model considers...
+	a <- 400
+	
+	sumTop <- 0 
+	
+	probs <- vector(length=a)
+	
+	for( i in 1:a) 
+	{
+		index <- which( meanRanks == i ) 
+		aSum <- averageDepth[index] 
+		sumTop <- sumTop + aSum
+	}
+	
+	for( i in 1:a)
+	{
+		index <- which( meanRanks == i ) 
+		aSum <-  averageDepth[index] 
+		probs[i] = aSum /sumTop
+	}
+	
+	simMeans <- vector()
+	simCors <- vector()
+	
+	
+	# for every taxa except the a most abundant
+	for( i in 1:(numCols-a))
+	{
+		backgroundErrorRate = runif(1)/ 5
+		
+		# choose the parent weighted by relative abundance
+		colIndex <- which( meanRanks == sample(1:a,1,prob=probs))
+		
+		dataSimCol <- vector(length=nrow(myT))
+		
+		# simulate the taxa for every sample
+		for( j in 1:nrow(myT)) 
+		{
+			# importantly, only the abundance of the parent taxa for that sample is fed to the Poisson distribution
+			# (the Poisson distribution is the same as the binomial distrbution for a small background error rate)
+			dataSimCol[j] <- rbinom( 1, ceiling( myT[j,colIndex])  , backgroundErrorRate )
+		}
+		
+		simMeans[i] <- log10( mean(dataSimCol) -1 ) 
+		
+		if( is.nan(simMeans[i]) |  simMeans[i]  < 0 ) 
+		{
+			simMeans[i] = 0
+		}
+		
+		simCors[i] <-  cor( dataSimCol, myT[,colIndex],method="spearman" )
+	}
+	
+	#plot(simMeans, simCors)
+	
+	plot(log10(averageDepth+1), maxCors,ylim=c(0,1),main = names[graphIndex] )
+	points(simMeans, simCors,col="red")	
+}
+
+
+#### logistic regression
+
+plot(simMeans, simCors)
+
+myLogReg <- glm(  simCors~ simMeans, family = "binomial" )
+
+getProb <- function(x, B0, B1)
+{
+return (1 / (1 + exp(-(B0 + B1 * x ))))
+}
+
+
+xSeq <- seq(min(simMeans), max(simMeans), 0.001)
+lines( xSeq, getProb(xSeq, coef(myLogReg)[1], coef(myLogReg)[2]),col="red")
+

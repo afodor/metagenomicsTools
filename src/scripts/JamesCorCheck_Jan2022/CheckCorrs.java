@@ -37,6 +37,7 @@ public class CheckCorrs
 	
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		File inFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\Normalized_Tables\\China\\Kraken2_China_genus_Normalized.csv");
 		File outFile = new File("C:\\Users\\afodor\\git\\Ranking_WGS_Classifier\\AF_Out\\Kraken2_China_genus_Normalized_Corr.txt");
 		
@@ -64,6 +65,13 @@ public class CheckCorrs
 		//outFile = new File("C:\\JamesKraken\\china16SLogNormCorrTopCorr.txt");
 	
 		//writeCorrFile(logFile, outFile,1, "\t");
+		///
+		 */
+		
+		File inFile = new File("C:\\claudeSummary\\lca_1881_counts_table_transposed.tsv");
+		File outFile = new File("C:\\claudeSummary\\simonRho_lca.txt");
+
+		writeCorrFile(inFile, outFile,1, "\t");
 	
 	}
 	
