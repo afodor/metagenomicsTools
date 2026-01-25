@@ -114,7 +114,6 @@ meanRanks <- rank(-averageDepth, ties.method="min")
 	points(simMeans, simCors,col="red")	
 }
 
-
 #### logistic regression
 
 plot(simMeans, simCors)
