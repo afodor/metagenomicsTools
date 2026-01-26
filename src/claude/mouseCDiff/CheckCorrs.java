@@ -39,13 +39,13 @@ public class CheckCorrs
 	public static void main(String[] args) throws Exception
 	{
 
+		/*
 		File inFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_1879_counts_table_transposed.tsv");
 		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_1879_corVals.txt");
-
-		/*
-		File inFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_standard_counts_table.tsv");
-		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_standard_corrs.txt");
 		*/
+
+		File inFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_standard_counts_table_min100.tsv");
+		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\1879\\kraken_standard_corrs_min100.txt");
 		
 		writeCorrFile(inFile, outFile,1, "\t");
 	
