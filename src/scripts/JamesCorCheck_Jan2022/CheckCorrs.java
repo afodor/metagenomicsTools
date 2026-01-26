@@ -20,6 +20,7 @@ public class CheckCorrs
 		String taxaName;
 		List<Double> taxaValues = new ArrayList<>();
 		double maxCorrelation = -1;
+		Holder parentTaxa = null;
 		
 		Holder(String s )
 		{
@@ -149,18 +150,27 @@ public class CheckCorrs
 				double corValue = Spearman.getSpearFromDouble(xHolder.taxaValues, yHolder.taxaValues).getRs();
 				
 				if( corValue > xHolder.maxCorrelation )
+				{
 					xHolder.maxCorrelation = corValue;
+					xHolder.parentTaxa = yHolder;
+				}
+					
 			}
 		}
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		
-		writer.write("taxaName\taverageVal\tmaxCor\n");
+		writer.write("taxaName\taverageVal\tmaxCor\tparentTaxa\tparentAverageVal\n");
 		
 		for( Holder h : taxaList)
 		{
 			writer.write(h.taxaName + "\t" + 
-						new Avevar(h.taxaValues).getAve() + "\t" +  h.maxCorrelation + "\n");
+						new Avevar(h.taxaValues).getAve() + "\t" +  h.maxCorrelation +  "\t"); 
+			
+			if( h.parentTaxa != null)
+				writer.write(h.parentTaxa.taxaName + "\t" + h.parentTaxa.averageVal + "\n");
+			else
+				writer.write("NA\tNA\n");
 		}
 		
 		writer.flush();  writer.close();

@@ -1,0 +1,8 @@
+
+rm(list=ls())
+
+setwd("C:\\claudeSummary\\simonCrossRho\\1879")
+
+myT <- read.table("kraken_1879_corVals.txt", header=TRUE, sep="\t")
+
+
