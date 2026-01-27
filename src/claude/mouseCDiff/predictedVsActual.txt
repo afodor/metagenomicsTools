@@ -4,12 +4,29 @@ setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
 
 myT <- read.table("predictedVsActual.txt", sep="\t", header=TRUE)
 
-plot(log10(myT$predictedCount+1), log10(myT$actualCount+1), col=ifelse(myT$parent =="true", "red", "black" ))
+
 
 aLm <- lm ( log10(myT$actualCount+1) ~ log10(myT$predictedCount+1))
 
 anova(aLm)
 
-lines(c(0,7),c(0,7),col="red")
 
+r <- rstudent(aLm)
+# one-sided p-values for "above the line" (residual > 0)
+df_t <- df.residual(aLm) - 1
+
+myT$p_above <- pt(r, df = df_t, lower.tail = FALSE)
+
+myT <- myT[order(myT$actualCount), ]
+
+plot(log10(myT$predictedCount+1), log10(myT$actualCount+1), col=ifelse(myT$p_above <= 0.05 , "red", "black" ))
+abline(aLm, col = "red", lwd = 2)
+
+write.table(
+  myT,
+  file = "predictedVsActual_with_pvalues.txt",
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE
+)
 
