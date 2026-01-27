@@ -8,8 +8,6 @@ par(mfrow=c(1,2))
 myT <- read.table("krakenMax1Corrs.txt", header=TRUE, sep="\t")
 plot(log10(myT$averageVal), myT$maxCor, header="kraken_max1")
 
-
-myT <- read.table("krakenMax1Corrs_backSubtracted.txt", header=TRUE, sep="\t")
+myT <- read.table("krakenMax1Corrs_hardRemove.txt", header=TRUE, sep="\t")
 plot(log10(myT$averageVal), myT$maxCor, header="kraken_max1")
-
 

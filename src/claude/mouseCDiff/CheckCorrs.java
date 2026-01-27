@@ -54,9 +54,13 @@ public class CheckCorrs
 		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs.txt");
 		*/
 		
-		File inFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted.tsv");
-		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs_backSubtracted.txt");
+	//	File inFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted.tsv");
+		//File outFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs_backSubtracted.txt");
 		
+
+		File inFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted_hardRemove.tsv");
+		File outFile = new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs_hardRemove.txt");
+			
 		
 		writeCorrFile(inFile, outFile,1, "\t");
 	

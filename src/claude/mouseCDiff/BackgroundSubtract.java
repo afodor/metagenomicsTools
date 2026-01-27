@@ -17,61 +17,61 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import parsers.OtuWrapper;
+import scripts.JobinCardio.GetSampleNames;
 
 public class BackgroundSubtract
 {
-	static HashSet<String> getAllowedTaxa() throws Exception
+	private static HashSet<String> getTaxaToRemove() throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs.txt")));
+		BufferedReader reader = new BufferedReader(new FileReader(
+				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\misclass_vs_sartor_reads.tsv")));
 		
 		reader.readLine();
 		
-		boolean first =true;
-		for(String s= reader.readLine(); s!= null; s=reader.readLine())
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
-			s= s.replaceAll("\"", "").trim();
-			StringTokenizer sToken = new StringTokenizer(s, "\t");
-			String taxa = sToken.nextToken();
+			String[] splits = s.split("\t");
 			
-			if( first == true )
-			{
-				set.add(taxa);
-				first =false;
-			}
-			else
-			{
-				Double avg = Double.parseDouble(sToken.nextToken());
-				Double corr = Double.parseDouble(sToken.nextToken());
-				
-				if( avg >= 1000 && corr < .9)
-					set.add(taxa);
-			}
-			
-			
+			if( Double.parseDouble(splits[1]) >= Double.parseDouble(splits[2]))
+				set.add(splits[0]);
 		}
 		
+		reader.close();
 		return set;
 	}
-
+	
 	public static void main(String[] args) throws Exception
 	{
-
-		HashSet<String> allowedSet = getAllowedTaxa();
-		System.out.println(allowedSet);
 		
 		HashMap<String, Double> lookupMap = getLookupMap();
 	
 		OtuWrapper initialData = new OtuWrapper( new File( 
 			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv") );
 		
+		HashSet<String> taxaToRemove = getTaxaToRemove();
+		System.out.println(taxaToRemove);
+		
+		System.out.println(taxaToRemove.size());
+		
+		for( int x=0; x < initialData.getOtuNames().size(); x++)
+		{
+			if( taxaToRemove.contains(initialData.getOtuNames().get(x) ))
+			{
+				System.out.println("Zeroing" + initialData.getOtuNames().get(x));
+				for( int y=0; y < initialData.getSampleNames().size(); y++)
+				{
+					initialData.getDataPointsUnnormalized().get(y).set(x, 0.0);
+				}
+			}
+		}
+		
 		//System.out.println(initialData.getOtuNames());
 				
 		for( int x=0; x < initialData.getSampleNames().size(); x++)
 		{
-			//System.out.println("Starting " + x + " " +initialData.getSampleNames().size() );
+			System.out.println("Starting " + x + " " +initialData.getSampleNames().size() );
 			HashMap<String, Double> vals = new LinkedHashMap<String, Double>();
 			
 			for( int y=0; y < initialData.getOtuNames().size(); y++)
@@ -100,9 +100,7 @@ public class BackgroundSubtract
 			{
 				String sourceTaxa = sortedTaxaName.get(y).replaceAll("\"", "").trim();
 				
-				if( allowedSet.contains(sourceTaxa))
-				{
-					for(int z= y+1; z < sortedTaxaName.size(); z++)
+				for(int z= y+1; z < sortedTaxaName.size(); z++)
 					{
 						String destTaxa = sortedTaxaName.get(z).replaceAll("\"", "").trim();
 						
@@ -128,12 +126,11 @@ public class BackgroundSubtract
 							initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
 							
 						}				
-					}
 				}
 		}
 		
 		initialData.writeUnnormalizedDataToFile(new File(
-			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted_onlyTop.tsv"));
+			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted_hardRemove.tsv"));
 		}
 		
 	}
