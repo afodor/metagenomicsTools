@@ -1,0 +1,15 @@
+rm(list=ls())
+
+setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
+
+myT <- read.table("predictedVsActual.txt", sep="\t", header=TRUE)
+
+plot(log10(myT$predictedCount+1), log10(myT$actualCount+1))
+
+aLm <- lm ( log10(myT$actualCount+1) ~ log10(myT$predictedCount+1))
+
+anova(aLm)
+
+lines(c(0,7),c(0,7),col="red")
+
+
