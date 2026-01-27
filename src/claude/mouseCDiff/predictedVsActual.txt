@@ -4,7 +4,7 @@ setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
 
 myT <- read.table("predictedVsActual.txt", sep="\t", header=TRUE)
 
-plot(log10(myT$predictedCount+1), log10(myT$actualCount+1))
+plot(log10(myT$predictedCount+1), log10(myT$actualCount+1), col=ifelse(myT$parent =="true", "red", "black" ))
 
 aLm <- lm ( log10(myT$actualCount+1) ~ log10(myT$predictedCount+1))
 

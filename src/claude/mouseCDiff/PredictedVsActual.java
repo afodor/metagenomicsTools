@@ -67,7 +67,7 @@ public class PredictedVsActual
 			double depth = Double.parseDouble(sToken.nextToken());
 			double rho = Double.parseDouble(sToken.nextToken());
 			
-			if( first || (depth >= 1000 && rho < 0.9 ))
+			//if( first || ( depth >=500 && rho < 0.9 ))
 			{
 				parentSet.add(parentTaxa);
 				
@@ -103,14 +103,14 @@ public class PredictedVsActual
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\predictedVsActual.txt")));
 		
-		writer.write("taxa\tpredictedCount\tactualCount\n");
+		writer.write("taxa\tpredictedCount\tactualCount\tparent\n");
 		
 		for(String s: predictionSums.keySet())
-			if( ! parentSet.contains(s))
 		{
 			writer.write(s + "\t");
 			writer.write(predictionSums.get(s) + "\t");
-			writer.write(wrapper.getCountsForTaxa(s) + "\n");
+			writer.write(wrapper.getCountsForTaxa(s) + "\t");
+			writer.write( parentSet.contains(s) + "\n");
 		}
 		
 		writer.flush(); writer.close();
