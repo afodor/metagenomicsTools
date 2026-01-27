@@ -3,11 +3,13 @@ package claude.mouseCDiff;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +20,48 @@ import parsers.OtuWrapper;
 
 public class BackgroundSubtract
 {
+	private static HashSet<String> getAllowedTaxa() throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs.txt")));
+		
+		reader.readLine();
+		
+		boolean first =true;
+		for(String s= reader.readLine(); s!= null; s=reader.readLine())
+		{
+			s= s.replaceAll("\"", "").trim();
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			String taxa = sToken.nextToken();
+			
+			if( first == true )
+			{
+				set.add(taxa);
+				first =false;
+			}
+			else
+			{
+				Double avg = Double.parseDouble(sToken.nextToken());
+				Double corr = Double.parseDouble(sToken.nextToken());
+				
+				if( avg >= 1000 && corr < .9)
+					set.add(taxa);
+			}
+			
+			
+		}
+		
+		return set;
+	}
 
 	public static void main(String[] args) throws Exception
 	{
 
+		HashSet<String> allowedSet = getAllowedTaxa();
+		System.out.println(allowedSet);
+		
 		HashMap<String, Double> lookupMap = getLookupMap();
 	
 		OtuWrapper initialData = new OtuWrapper( new File( 
@@ -31,7 +71,7 @@ public class BackgroundSubtract
 				
 		for( int x=0; x < initialData.getSampleNames().size(); x++)
 		{
-			System.out.println("Starting " + x + " " +initialData.getSampleNames().size() );
+			//System.out.println("Starting " + x + " " +initialData.getSampleNames().size() );
 			HashMap<String, Double> vals = new LinkedHashMap<String, Double>();
 			
 			for( int y=0; y < initialData.getOtuNames().size(); y++)
@@ -60,39 +100,45 @@ public class BackgroundSubtract
 			{
 				String sourceTaxa = sortedTaxaName.get(y).replaceAll("\"", "").trim();
 				
-				for(int z= y+1; z < sortedTaxaName.size(); z++)
+				if( allowedSet.contains(sourceTaxa))
 				{
-					String destTaxa = sortedTaxaName.get(z).replaceAll("\"", "").trim();
-					
-					String key = sourceTaxa + "@" + destTaxa;
-					
-					Double proportion = lookupMap.get(key);
-					
-					
-					if( proportion != null)
+					for(int z= y+1; z < sortedTaxaName.size(); z++)
 					{
-						double subtractVal =
-								initialData.getDataPointsUnnormalized().get(x).get(y) * 
-								proportion;
+						String destTaxa = sortedTaxaName.get(z).replaceAll("\"", "").trim();
 						
-						double newVal = initialData.getDataPointsUnnormalized().get(x).get(z)
-												- subtractVal;
+						String key = sourceTaxa + "@" + destTaxa;
 						
-						if( newVal <0.0 )
-							newVal = 0.0;
+						Double proportion = lookupMap.get(key);
 						
-						initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
-						
-					}				
-			}
-			
+						if( proportion != null)
+						{
+							double subtractVal =
+									initialData.getDataPointsUnnormalized().get(x).get(y) * 
+									proportion;
+							
+							//if( subtractVal >100)
+								//System.out.println("Subtract " + sourceTaxa + " " + destTaxa + " " + subtractVal);
+							
+							double newVal = initialData.getDataPointsUnnormalized().get(x).get(z)
+													- subtractVal;
+							
+							if( newVal <0.0 )
+								newVal = 0.0;
+							
+							initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
+							
+						}				
+					}
+				}
 		}
 		
 		initialData.writeUnnormalizedDataToFile(new File(
-			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted.tsv"));
+			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted_onlyTop.tsv"));
 		}
 		
 	}
+	
+	
 	
 	// key is sourceGenome@targetGenome
 	private static HashMap<String, Double> getLookupMap() throws Exception
@@ -119,7 +165,7 @@ public class BackgroundSubtract
 			
 			String firstToken = sToken.nextToken();
 			
-			System.out.println(firstToken);
+			//System.out.println(firstToken);
 			
 			int x=0;
 			double sum =0;
