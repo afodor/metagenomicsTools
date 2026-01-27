@@ -16,8 +16,7 @@ import parsers.OtuWrapper;
 
 public class BackgroundSubtract
 {
-	
-	
+
 	public static void main(String[] args) throws Exception
 	{
 		HashMap<String, Double> lookupMap = getLookupMap();
@@ -25,7 +24,7 @@ public class BackgroundSubtract
 		OtuWrapper initialData = new OtuWrapper( new File( 
 			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv") );
 		
-		System.out.println(initialData.getOtuNames());
+		//System.out.println(initialData.getOtuNames());
 				
 		for( int x=0; x < initialData.getSampleNames().size(); x++)
 		{
@@ -35,7 +34,7 @@ public class BackgroundSubtract
 				vals.put(initialData.getOtuNames().get(y), 
 						initialData.getDataPointsUnnormalized().get(x).get(y));
 			
-			System.out.println(vals);
+			//System.out.println(vals);
 			
 			// sort descending from ChatGPT
 			vals =
@@ -48,11 +47,6 @@ public class BackgroundSubtract
 				            (a, b) -> a,
 				            LinkedHashMap::new
 				        ));
-			
-			for(String s : vals.keySet())
-				System.out.println( s + " " + vals.get(s));
-
-			System.exit(1);
 			
 		}
 		
