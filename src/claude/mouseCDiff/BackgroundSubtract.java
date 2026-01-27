@@ -20,7 +20,7 @@ import parsers.OtuWrapper;
 
 public class BackgroundSubtract
 {
-	private static HashSet<String> getAllowedTaxa() throws Exception
+	static HashSet<String> getAllowedTaxa() throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
@@ -141,7 +141,7 @@ public class BackgroundSubtract
 	
 	
 	// key is sourceGenome@targetGenome
-	private static HashMap<String, Double> getLookupMap() throws Exception
+	static HashMap<String, Double> getLookupMap() throws Exception
 	{
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
 		
