@@ -28,7 +28,7 @@ public class BackgroundSubtract
 				
 		for( int x=0; x < initialData.getSampleNames().size(); x++)
 		{
-			HashMap<String, Double> vals = new HashMap<String, Double>();
+			HashMap<String, Double> vals = new LinkedHashMap<String, Double>();
 			
 			for( int y=0; y < initialData.getOtuNames().size(); y++)
 				vals.put(initialData.getOtuNames().get(y), 
@@ -47,6 +47,50 @@ public class BackgroundSubtract
 				            (a, b) -> a,
 				            LinkedHashMap::new
 				        ));
+			
+			List<String> sortedTaxaName = new ArrayList<String>();
+			for(String s : vals.keySet())
+				sortedTaxaName.add(s);
+			
+			for(int y=0; y < sortedTaxaName.size()-1; y++)
+			{
+				String sourceTaxa = sortedTaxaName.get(y);
+				
+				for(int z= y+1; z < sortedTaxaName.size(); z++)
+				{
+					String destTaxa = sortedTaxaName.get(z);
+					
+					String key = sourceTaxa + "@" + destTaxa;
+					
+					double proportion = lookupMap.get(key);
+					
+					double subtractVal =
+							initialData.getDataPointsUnnormalized().get(x).get(y) * 
+							proportion;
+					
+					double newVal = initialData.getDataPointsUnnormalized().get(x).get(z)
+											- subtractVal;
+					
+					if( newVal <0.0 )
+						newVal = 0.0;
+					
+					if( y==2 )
+					{
+						System.out.println( 
+								initialData.getDataPointsUnnormalized().get(x).get(y) + " " + proportion + " " + 
+						sourceTaxa + " " + destTaxa + " " + initialData.getDataPointsUnnormalized().get(x).get(z) 
+								+ " " + newVal);
+						
+						if( z==10)
+							System.exit(1);
+						
+					}
+					
+					initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
+					
+					
+				}
+			}
 			
 		}
 		
