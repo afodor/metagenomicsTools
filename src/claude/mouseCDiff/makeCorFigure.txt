@@ -1,8 +1,8 @@
 
 rm(list=ls())
 
-setwd("C:\\claudeSummary\\simonCrossRho\\1879")
+setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
 
-myT <- read.table("kraken_1879_corVals.txt", header=TRUE, sep="\t")
-
+myT <- read.table("krakenMax1Corrs.txt", header=TRUE, sep="\t")
+plot(log10(myT$averageVal), myT$maxCor, header="kraken_max1")
 
