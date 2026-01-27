@@ -13,39 +13,10 @@ import parsers.OtuWrapper;
 
 public class PredictedVsActual
 {
-	/*
-	private static HashSet<String> getReliableTaxa() throws Exception
-	{
-		HashSet<String> set = new HashSet<String>();
-		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs.txt")));
-		
-		reader.readLine();
-		
-		boolean first = true;
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
-		{
-			StringTokenizer sToken = new StringTokenizer(s);
-			String parentTaxa = sToken.nextToken();
-			double depth = Double.parseDouble(sToken.nextToken());
-			double rho = Double.parseDouble(sToken.nextToken());
-			
-			if( first || (depth >= 1000 && rho < 0.9 ))
-			{
-				set.add(parentTaxa);
-			}
-			first = false;
-		}
-		
-		return set;
-	}
-	*/
+	
 	
 	public static void main(String[] args) throws Exception
 	{
-		HashSet<String> parentSet = new HashSet<String>();
-		
 		OtuWrapper wrapper = 
 				new OtuWrapper("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv");
 		
@@ -53,69 +24,49 @@ public class PredictedVsActual
 		
 		HashMap<String, Double> lookupMap = BackgroundSubtract.getLookupMap();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\krakenMax1Corrs.txt")));
-		
-		reader.readLine();
-		
-		boolean first = true;
-		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		for(int x=0; x < wrapper.getOtuNames().size(); x++)
 		{
-			StringTokenizer sToken = new StringTokenizer(s, "\t");
-			
-			String parentTaxa = sToken.nextToken();
-			double depth = Double.parseDouble(sToken.nextToken());
-			double rho = Double.parseDouble(sToken.nextToken());
-			
-			//if( first || ( depth >=500 && rho < 0.9 ))
+			String parentTaxa = wrapper.getOtuNames().get(x);
+			double depth = wrapper.getNumberOfSequencesForOTU(parentTaxa);
+			System.out.println( x + " " + wrapper.getOtuNames().size() +" " + parentTaxa);
+				
+			for( int y=0; y < wrapper.getOtuNames().size(); y++)
 			{
-				parentSet.add(parentTaxa);
-				
-				for( int x=0; x < wrapper.getOtuNames().size(); x++)
-				{
-					String childTaxa = wrapper.getOtuNames().get(x);
+				String childTaxa = wrapper.getOtuNames().get(y);
 					
-					if( ! parentTaxa.equals(childTaxa) )
-					{
-						Double val = lookupMap.get( parentTaxa + "@"+ childTaxa );
+				if( ! parentTaxa.equals(childTaxa) )
+				{
+					Double val = lookupMap.get( parentTaxa + "@"+ childTaxa );
 						
-						if( val == null)
-							val =0.0;
+					if( val == null)
+						val =0.0;
 						
-						double predicted = depth * val * wrapper.getSampleNames().size();
-						Double sum = predictionSums.get(childTaxa);
+					double predicted = depth * val;
+					Double sum = predictionSums.get(childTaxa);
 						
-						if( sum == null)
-							sum = 0.0;
+					if( sum == null)
+						sum = 0.0;
 						
-						sum = sum + predicted;
-						predictionSums.put(childTaxa, sum);
+					sum = sum + predicted;
+					predictionSums.put(childTaxa, sum);
 						
-					}
 				}
-				
-				first = false;
 			}
-			
-			System.out.println(parentTaxa);
+				
 		}
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\predictedVsActual.txt")));
 		
-		writer.write("taxa\tpredictedCount\tactualCount\tparent\n");
+		writer.write("taxa\tpredictedCount\tactualCount\n");
 		
 		for(String s: predictionSums.keySet())
 		{
 			writer.write(s + "\t");
 			writer.write(predictionSums.get(s) + "\t");
-			writer.write(wrapper.getCountsForTaxa(s) + "\t");
-			writer.write( parentSet.contains(s) + "\n");
+			writer.write(wrapper.getCountsForTaxa(s) + "\n");
 		}
 		
 		writer.flush(); writer.close();
-		
-		
-		reader.close();
 	}
 }

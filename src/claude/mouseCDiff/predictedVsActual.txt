@@ -4,8 +4,6 @@ setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
 
 myT <- read.table("predictedVsActual.txt", sep="\t", header=TRUE)
 
-
-
 aLm <- lm ( log10(myT$actualCount+1) ~ log10(myT$predictedCount+1))
 
 anova(aLm)
@@ -23,7 +21,7 @@ myT$p_above <- pt(r, df = df_t, lower.tail = FALSE)
 myT <- myT[order(myT$actualCount), ]
 
 plot(log10(myT$predictedCount+1), log10(myT$actualCount+1), col=ifelse(myT$p_above <= 0.05 , "red", "black" ),
-xlab="Predicted counts", ylab="Actual counts", pch=19, cex=1.1)
+xlab="Predicted misclassified counts", ylab="Actual counts", pch=19, cex=1.1)
 
 abline(aLm, col = "red", lwd = 2)
 
