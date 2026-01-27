@@ -2,7 +2,9 @@ package claude.mouseCDiff;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,8 +21,9 @@ public class BackgroundSubtract
 
 	public static void main(String[] args) throws Exception
 	{
+
 		HashMap<String, Double> lookupMap = getLookupMap();
-		
+	
 		OtuWrapper initialData = new OtuWrapper( new File( 
 			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv") );
 		
@@ -28,6 +31,7 @@ public class BackgroundSubtract
 				
 		for( int x=0; x < initialData.getSampleNames().size(); x++)
 		{
+			System.out.println("Starting " + x + " " +initialData.getSampleNames().size() );
 			HashMap<String, Double> vals = new LinkedHashMap<String, Double>();
 			
 			for( int y=0; y < initialData.getOtuNames().size(); y++)
@@ -54,44 +58,38 @@ public class BackgroundSubtract
 			
 			for(int y=0; y < sortedTaxaName.size()-1; y++)
 			{
-				String sourceTaxa = sortedTaxaName.get(y);
+				String sourceTaxa = sortedTaxaName.get(y).replaceAll("\"", "").trim();
 				
 				for(int z= y+1; z < sortedTaxaName.size(); z++)
 				{
-					String destTaxa = sortedTaxaName.get(z);
+					String destTaxa = sortedTaxaName.get(z).replaceAll("\"", "").trim();
 					
 					String key = sourceTaxa + "@" + destTaxa;
 					
-					double proportion = lookupMap.get(key);
+					Double proportion = lookupMap.get(key);
 					
-					double subtractVal =
-							initialData.getDataPointsUnnormalized().get(x).get(y) * 
-							proportion;
 					
-					double newVal = initialData.getDataPointsUnnormalized().get(x).get(z)
-											- subtractVal;
-					
-					if( newVal <0.0 )
-						newVal = 0.0;
-					
-					if( y==2 )
+					if( proportion != null)
 					{
-						System.out.println( 
-								initialData.getDataPointsUnnormalized().get(x).get(y) + " " + proportion + " " + 
-						sourceTaxa + " " + destTaxa + " " + initialData.getDataPointsUnnormalized().get(x).get(z) 
-								+ " " + newVal);
+						double subtractVal =
+								initialData.getDataPointsUnnormalized().get(x).get(y) * 
+								proportion;
 						
-						if( z==10)
-							System.exit(1);
+						double newVal = initialData.getDataPointsUnnormalized().get(x).get(z)
+												- subtractVal;
 						
-					}
-					
-					initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
-					
-					
-				}
+						if( newVal <0.0 )
+							newVal = 0.0;
+						
+						initialData.getDataPointsUnnormalized().get(x).set(z, newVal);
+						
+					}				
 			}
 			
+		}
+		
+		initialData.writeUnnormalizedDataToFile(new File(
+			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_backSubtracted.tsv"));
 		}
 		
 	}
@@ -101,8 +99,11 @@ public class BackgroundSubtract
 	{
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv"	)));
+		File inFile = new File(
+				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv.txt");
+		
+		BufferedReader reader = new BufferedReader(
+			    new InputStreamReader(new FileInputStream(inFile), StandardCharsets.UTF_8));
 		
 		StringTokenizer sToken = new StringTokenizer(reader.readLine(), "\t");
 		List<String> topNames = new ArrayList<String>();
@@ -110,13 +111,15 @@ public class BackgroundSubtract
 		sToken.nextToken();
 		
 		while(sToken.hasMoreTokens())
-			topNames.add(sToken.nextToken());
+			topNames.add(sToken.nextToken().replaceAll("\"", "").trim());
 		
 		for(String s= reader.readLine(); s!= null; s= reader.readLine())
 		{
 			sToken = new StringTokenizer(s, "\t");
 			
 			String firstToken = sToken.nextToken();
+			
+			System.out.println(firstToken);
 			
 			int x=0;
 			double sum =0;
@@ -127,15 +130,16 @@ public class BackgroundSubtract
 				
 				sum += val;
 				
-				map.put(firstToken + "@" + topNames.get(x), val);
+				map.put(firstToken + "@" + topNames.get(x).replaceAll("\"", "").trim(), val);
 				x++;
 			}
 			
 			if (sum > 0 )
-				if(Math.abs(1.0-sum) > 0.0000001)
+				if(Math.abs(1.0-sum) > 0.001)
 					throw new Exception("Parsing error " + sum + " "+ firstToken ); ;
 				
 		}
+		
 		
 		return map;
 	}
