@@ -37,11 +37,12 @@ for( sample in sampleIDS)
 				if( length(g1) !=1 ) 
 					 stop ("Logic error")
 					 
-				if( length(g2 != 1)
+				if( length(g2) != 1)
 					stop ("Logic error")
 					
 				genus1[index] <- g1
 				genus2[index] <- g2
+				index <- index + 1
 				
 			}
 			
