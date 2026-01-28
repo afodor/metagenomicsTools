@@ -12,8 +12,8 @@ sampleTypes <- unique(myT$SampleType)
 
 genra <- unique( myT$genus)
 
-firstID <- 1
-secondID <- 2
+firstID <- 3
+secondID <- 1
 
 spearmans <- vector()
 outerIndex <-1

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -21,12 +22,39 @@ public class ComparisonWith16S
 		
 		
 		add16SMap(writer);
-		addKrakenMax1(writer);
+		addKrakenMax1(writer, null, "kraken1_unfiltered");
+		
+		HashSet<String> set= getIncludedSet();
+		System.out.println(set );
+		System.out.println(set.size() );
+		addKrakenMax1(writer, set, "kraken1_filtered");
+		
 		
 		writer.flush();  writer.close();
 	}
 	
-	private static void addKrakenMax1(BufferedWriter flatFile) throws Exception
+	private static HashSet<String> getIncludedSet() throws Exception
+	{
+		HashSet<String> set = new HashSet<String>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(
+				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\predictedVsActual_with_pvalues.txt")));
+		
+		reader.readLine();
+		
+		for(String s= reader.readLine(); s!= null; s= reader.readLine())
+		{
+			String[] splits =s.split("\t");
+			
+			if( Double.parseDouble(splits[3]) < 0.05)
+				set.add(splits[0]);
+		}
+		
+		return set;
+		
+	}
+	
+	private static void addKrakenMax1(BufferedWriter flatFile, HashSet<String> filters, String outID) throws Exception
 	{
 		// outer key is genus@
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
@@ -38,10 +66,13 @@ public class ComparisonWith16S
 
 		topToken.nextToken();
 		List<String> genusNames = new ArrayList<String>();
+		List<String> fullNames = new ArrayList<String>();
 
 		while(topToken.hasMoreTokens())
 		{
-			String genus = topToken.nextToken();
+			String fullName =topToken.nextToken();
+			fullNames.add(fullName);
+			String genus = fullName ;
 			genus = genus.replace("Candidatus_", "");
 			
 			if( genus.indexOf("_") != -1 )
@@ -66,18 +97,25 @@ public class ComparisonWith16S
 			
 			while(sToken.hasMoreTokens())
 			{
-				String key = genusNames.get(x) + "@" + id;
-				Double oldVal = map.get(key);
-				x++;
-				
-				if(oldVal == null)
-					oldVal = 0.0;
-				
-				Double newVal = Double.parseDouble(sToken.nextToken());
-				
-				newVal = newVal + oldVal;
-				
-				map.put(key, newVal);
+				if( filters == null || filters.contains(fullNames.get(x)))
+				{	
+					String key = genusNames.get(x) + "@" + id;
+					Double oldVal = map.get(key);
+					x++;
+					
+					if(oldVal == null)
+						oldVal = 0.0;
+					
+					Double newVal = Double.parseDouble(sToken.nextToken());
+					
+					newVal = newVal + oldVal;
+					
+					map.put(key, newVal);
+				}
+				else
+				{
+					sToken.nextToken();
+				}
 			}
 		
 		}
@@ -85,7 +123,7 @@ public class ComparisonWith16S
 		reader.close();
 		for(String s : map.keySet())
 		{
-			flatFile.write("Kraken_max1_unfiltered");
+			flatFile.write(outID);
 			
 			StringTokenizer sToken = new StringTokenizer(s, "@");
 			String genus = sToken.nextToken();
