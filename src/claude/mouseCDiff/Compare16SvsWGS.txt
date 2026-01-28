@@ -1,65 +1,47 @@
 
-rm(list=ls())
+#chatGPT re-write for speed
+rm(list = ls())
+
+library(data.table)
 
 setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
 
+DT <- fread("allGenusFlat.txt", sep = "\t", header = TRUE)
 
-myT <- read.table("allGenusFlat.txt", header=TRUE, sep="\t")
-
-sampleIDS <- unique(myT$sampleID)
-
-sampleTypes <- unique(myT$SampleType)
-
-genra <- unique( myT$genus)
-
-firstID <- 3
+firstID  <- 3
 secondID <- 1
 
-spearmans <- vector()
-outerIndex <-1
-par(mfrow=c(2,1))
+sampleTypes <- unique(DT$SampleType)
+typeA <- sampleTypes[firstID]
+typeB <- sampleTypes[secondID]
 
-for( sample in sampleIDS)
-{
-	samples1 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[firstID] ]
-	samples2 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[secondID] ]
+# Keep only the two types of interest
+DT2 <- DT[SampleType %chin% c(typeA, typeB),
+          .(sampleID, genus, SampleType, genusSum)]
 
-	if( length(samples1) >0 & length( samples2 > 0 ) )
-	{	
-		#print(paste(length(samples1), length(samples2)))
-		
-		index =1
-		genus1 <- vector()
-		genus2 <- vector()
-		for( g in genra ) 
-		{
-			g1 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[firstID] & myT$genus==g ]
-			g2 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[secondID] & myT$genus==g ]
-			
-			if( length(g1) >0 && length(g2) >0 ) 
-			{
-				if( length(g1) !=1 ) 
-					 stop ("Logic error")
-					 
-				if( length(g2) != 1)
-					stop ("Logic error")
-					
-				genus1[index] <- g1
-				genus2[index] <- g2
-				index <- index + 1
-				
-			}
-		}
-		
-		print(sample)
-		
-		spearmans[outerIndex] <- cor(genus1, genus2, method = c("spearman"))
-		boxplot(spearmans)
-		outerIndex = outerIndex + 1
-		print(sample)
-		boxplot(spearmans)
-		plot(log10(genus1+1), log10(genus2+1))
-	}
+# If you truly expect exactly 1 value per (sampleID, SampleType, genus), enforce it
+dup <- DT2[, .N, by = .(sampleID, SampleType, genus)][N != 1]
+if (nrow(dup) > 0) {
+  print(dup[1:min(.N, 20)])
+  stop("Logic error: not exactly 1 row per (sampleID, SampleType, genus).")
 }
 
+# Wide: one row per (sampleID, genus), columns are the two sample types
+W <- dcast(DT2, sampleID + genus ~ SampleType, value.var = "genusSum")
 
+# Compute per-sample Spearman, using only genera present in BOTH types
+spearmans <- W[!is.na(get(typeA)) & !is.na(get(typeB)),
+              .(spearman = cor(get(typeA), get(typeB), method = "spearman")),
+              by = sampleID]
+
+# ----- Plots (once) -----
+par(mfrow = c(2, 1))
+boxplot(spearmans$spearman, main = sprintf("Spearman: %s vs %s", typeA, typeB))
+
+# Example scatter for one sample (choose the first, or change as you like)
+example_sample <- spearmans$sampleID[1]
+Ws <- W[sampleID == example_sample]
+plot(log10(Ws[[typeA]] + 1), log10(Ws[[typeB]] + 1),
+     xlab = paste0("log10(", typeA, " + 1)"),
+     ylab = paste0("log10(", typeB, " + 1)"),
+     main = paste("Sample:", example_sample))
