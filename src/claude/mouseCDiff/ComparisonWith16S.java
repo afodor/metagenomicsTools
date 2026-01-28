@@ -40,25 +40,62 @@ public class ComparisonWith16S
 		List<String> genusNames = new ArrayList<String>();
 
 		while(topToken.hasMoreTokens())
-			genusNames.add(topToken.nextToken().replaceAll("\"", "").trim());
-	
+		{
+			String genus = topToken.nextToken();
+			genus = genus.replace("Candidatus_", "");
+			
+			if( genus.indexOf("_") != -1 )
+				genus = genus.substring(0, genus.indexOf("_"));
+			
+			genus = genus.replace("[", "").replace("]","").replace("\"", "");
+			
+			genusNames.add(genus);
+			
+		}
+			
 		System.out.println(genusNames);
 		
-		List<String> sampleNames = new ArrayList<String>();
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
 			StringTokenizer sToken = new StringTokenizer(s, "\t");
 			String id = sToken.nextToken();
 			id = id.substring(0, id.indexOf("_"));
+		
+			int x=0;
 			
-			sampleNames.add(id);
+			while(sToken.hasMoreTokens())
+			{
+				String key = genusNames.get(x) + "@" + id;
+				Double oldVal = map.get(key);
+				x++;
+				
+				if(oldVal == null)
+					oldVal = 0.0;
+				
+				Double newVal = Double.parseDouble(sToken.nextToken());
+				
+				newVal = newVal + oldVal;
+				
+				map.put(key, newVal);
+			}
 		
 		}
 		
-		System.out.println(sampleNames);
-			
 		reader.close();
+		for(String s : map.keySet())
+		{
+			flatFile.write("Kraken_max1_unfiltered");
+			
+			StringTokenizer sToken = new StringTokenizer(s, "@");
+			String genus = sToken.nextToken();
+			String sample = sToken.nextToken();
+			
+			flatFile.write("\t" + sample + "\t" + genus + "\t" + map.get(s) + "\tNA\n");
+		}
+		
+		flatFile.flush();
+		System.out.println("Kraken Max 1");
 	}
 	
 	private static void add16SMap( BufferedWriter flatFile) throws Exception
