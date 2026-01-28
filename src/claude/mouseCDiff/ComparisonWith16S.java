@@ -40,6 +40,7 @@ public class ComparisonWith16S
 		List<String> sampleNames = new ArrayList<String>();
 		
 		sToken.nextToken();
+		sToken.nextToken();
 		
 		while(sToken.hasMoreTokens())
 				sampleNames.add(sToken.nextToken().replaceAll("\"", "").trim());
@@ -75,6 +76,7 @@ public class ComparisonWith16S
 					{
 						String key = genus + "@" + sampleNames.get(x);
 						Double oldVal = map.get(key);
+						x++;
 						
 						if(oldVal == null)
 							oldVal = 0.0;
