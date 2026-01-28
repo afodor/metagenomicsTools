@@ -21,8 +21,44 @@ public class ComparisonWith16S
 		
 		
 		add16SMap(writer);
+		addKrakenMax1(writer);
 		
 		writer.flush();  writer.close();
+	}
+	
+	private static void addKrakenMax1(BufferedWriter flatFile) throws Exception
+	{
+		// outer key is genus@
+		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(
+				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv")));
+		
+		StringTokenizer topToken = new StringTokenizer(reader.readLine(), "\t");
+
+		topToken.nextToken();
+		List<String> genusNames = new ArrayList<String>();
+
+		while(topToken.hasMoreTokens())
+			genusNames.add(topToken.nextToken().replaceAll("\"", "").trim());
+	
+		System.out.println(genusNames);
+		
+		List<String> sampleNames = new ArrayList<String>();
+		
+		for(String s= reader.readLine(); s != null; s= reader.readLine())
+		{
+			StringTokenizer sToken = new StringTokenizer(s, "\t");
+			String id = sToken.nextToken();
+			id = id.substring(0, id.indexOf("_"));
+			
+			sampleNames.add(id);
+		
+		}
+		
+		System.out.println(sampleNames);
+			
+		reader.close();
 	}
 	
 	private static void add16SMap( BufferedWriter flatFile) throws Exception
