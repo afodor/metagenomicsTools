@@ -1,0 +1,53 @@
+
+rm(list=ls())
+
+setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
+
+
+myT <- read.table("allGenusFlat.txt", header=TRUE, sep="\t")
+
+sampleIDS <- unique(myT$sampleID)
+
+sampleTypes <- unique(myT$SampleType)
+
+genra <- unique( myT$genus)
+
+firstID <- 1
+secondID <- 2
+
+for( sample in sampleIDS)
+{
+	samples1 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[firstID] ]
+	samples2 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[secondID] ]
+
+	if( length(samples1) >0 & length( samples2 > 0 ) )
+	{	
+		#print(paste(length(samples1), length(samples2)))
+		
+		index =1
+		genus1 <- vector()
+		genus2 <- vector()
+		for( g in genra ) 
+		{
+			g1 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[firstID] & myT$genus==g ]
+			g2 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[secondID] & myT$genus==g ]
+			
+			if( length(g1) >0 && length(g2) >0 ) 
+			{
+				if( length(g1) !=1 ) 
+					 stop ("Logic error")
+					 
+				if( length(g2 != 1)
+					stop ("Logic error")
+					
+				genus1[index] <- g1
+				genus2[index] <- g2
+				
+			}
+			
+			plot(genus1, genus2)
+		}
+	}
+}
+
+
