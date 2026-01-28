@@ -30,6 +30,7 @@ public class ComparisonWith16S
 		System.out.println(set );
 		System.out.println(set.size() );
 		addKrakenMax1(writer, set, "kraken1_filtered");
+		addSylph(writer);
 		
 		
 		writer.flush();  writer.close();
@@ -56,6 +57,81 @@ public class ComparisonWith16S
 		
 		reader.close();
 		return set;
+		
+	}
+	
+	private static void addSylph(BufferedWriter flatFile) throws Exception
+	{
+		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
+		
+		BufferedReader reader =
+			    Files.newBufferedReader(new 
+			    		File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\sylph_merged.txt").toPath(), 
+			    		StandardCharsets.UTF_8);
+		
+		StringTokenizer sToken = new StringTokenizer(reader.readLine());
+		List<String> sampleNames = new ArrayList<String>();
+		
+		sToken.nextToken();
+		
+		while(sToken.hasMoreTokens())
+		{
+			String sampleName = sToken.nextToken().replaceAll("\"", "").trim();
+			
+			sampleName = sampleName.substring(0, sampleName.indexOf("_"));
+			
+			sampleNames.add(sampleName);
+		}
+				
+		
+		System.out.println(sampleNames);
+		
+		for(String s= reader.readLine(); s != null; s = reader.readLine())
+		{
+			sToken = new StringTokenizer(s, "\t");
+			
+			String tax = sToken.nextToken();
+			
+				
+			String genus = SylphGenusCleaner.genusFromSylphLine(tax);
+			System.out.println(tax + " "+ genus);
+				
+			if(genus.length() > 0 )
+			{
+				int x=0;
+				while(sToken.hasMoreTokens())
+				{
+					String key = genus + "@" + sampleNames.get(x);
+					Double oldVal = map.get(key);
+					x++;
+					
+					if(oldVal == null)
+						oldVal = 0.0;
+					
+					Double newVal = Double.parseDouble(sToken.nextToken()) * 11069562;
+					
+					newVal = newVal + oldVal;
+					
+					map.put(key, newVal);
+					
+				}
+			}
+		}
+
+		for(String s : map.keySet())
+		{
+			flatFile.write("Sylph");
+			
+			sToken = new StringTokenizer(s, "@");
+			String genus = sToken.nextToken();
+			String sample = sToken.nextToken();
+			
+			flatFile.write("\t" + sample + "\t" + genus + "\t" + map.get(s) + "\tNA\n");
+		}
+		
+		flatFile.flush();
+		reader.close();
+		System.out.println("Wrote 16s");
 		
 	}
 	
@@ -195,9 +271,6 @@ public class ComparisonWith16S
 				genus = TaxonCleaners.clean16SLabel(genus);
 				
 				genus = genus.replaceAll("[\\r\\n]", "");
-				
-				if( genus.equals("Eggerthella"))
-					System.out.println("FOUND " +" Eggerthella");
 				
 				if(genus.length() > 0 )
 				{
