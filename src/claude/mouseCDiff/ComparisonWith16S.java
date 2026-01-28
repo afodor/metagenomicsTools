@@ -72,13 +72,7 @@ public class ComparisonWith16S
 		{
 			String fullName =topToken.nextToken();
 			fullNames.add(fullName);
-			String genus = fullName ;
-			genus = genus.replace("Candidatus_", "");
-			
-			if( genus.indexOf("_") != -1 )
-				genus = genus.substring(0, genus.indexOf("_"));
-			
-			genus = genus.replace("[", "").replace("]","").replace("\"", "");
+			String genus = TaxonCleaners.cleanWgsNameOrGenus(fullName); ;
 			
 			genusNames.add(genus);
 			
@@ -179,6 +173,8 @@ public class ComparisonWith16S
 				}
 				
 				genus = genus.trim();
+				
+				genus = TaxonCleaners.clean16SLabel(genus);
 				
 				if(genus.length() > 0 )
 				{

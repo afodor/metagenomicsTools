@@ -1,47 +1,126 @@
 
-#chatGPT re-write for speed
-rm(list = ls())
+#chatGPT re-write to compare both box plots
 
+rm(list = ls())
 library(data.table)
 
 setwd("C:\\claudeSummary\\simonCrossRho\\kraken_max1")
-
 DT <- fread("allGenusFlat.txt", sep = "\t", header = TRUE)
 
-firstID  <- 3
-secondID <- 1
-
 sampleTypes <- unique(DT$SampleType)
-typeA <- sampleTypes[firstID]
-typeB <- sampleTypes[secondID]
 
-# Keep only the two types of interest
-DT2 <- DT[SampleType %chin% c(typeA, typeB),
+# IDs
+id1 <- 1
+id2 <- 2
+id3 <- 3
+
+type1 <- sampleTypes[id1]
+type2 <- sampleTypes[id2]
+type3 <- sampleTypes[id3]
+
+cat("Comparisons:\n")
+cat("  2 vs 1:", type2, "vs", type1, "\n")
+cat("  3 vs 1:", type3, "vs", type1, "\n\n")
+
+# Keep only the 3 types we need
+DT3 <- DT[SampleType %chin% c(type1, type2, type3),
           .(sampleID, genus, SampleType, genusSum)]
 
-# If you truly expect exactly 1 value per (sampleID, SampleType, genus), enforce it
-dup <- DT2[, .N, by = .(sampleID, SampleType, genus)][N != 1]
-if (nrow(dup) > 0) {
-  print(dup[1:min(.N, 20)])
-  stop("Logic error: not exactly 1 row per (sampleID, SampleType, genus).")
+# Wide table: one row per (sampleID, genus), columns = sampleTypes
+W <- dcast(DT3, sampleID + genus ~ SampleType, value.var = "genusSum")
+
+# Helper: spearman per sample for a pair of columns
+spearman_by_sample <- function(W, colA, colB) {
+  W[!is.na(get(colA)) & !is.na(get(colB)),
+    .(n_genus = .N,
+      spearman = cor(get(colA), get(colB), method = "spearman")),
+    by = sampleID]
 }
 
-# Wide: one row per (sampleID, genus), columns are the two sample types
-W <- dcast(DT2, sampleID + genus ~ SampleType, value.var = "genusSum")
+sp_2v1 <- spearman_by_sample(W, type2, type1)
+sp_3v1 <- spearman_by_sample(W, type3, type1)
 
-# Compute per-sample Spearman, using only genera present in BOTH types
-spearmans <- W[!is.na(get(typeA)) & !is.na(get(typeB)),
-              .(spearman = cor(get(typeA), get(typeB), method = "spearman")),
-              by = sampleID]
+# ---- Show Spearmans in R (console + boxplot) ----
+cat("Spearman summary (2 vs 1):\n")
+print(summary(sp_2v1$spearman))
+cat("\nSpearman summary (3 vs 1):\n")
+print(summary(sp_3v1$spearman))
 
-# ----- Plots (once) -----
-par(mfrow = c(2, 1))
-boxplot(spearmans$spearman, main = sprintf("Spearman: %s vs %s", typeA, typeB))
+# Boxplot comparison in R
+sp_2v1[, comparison := paste(type2, "vs", type1)]
+sp_3v1[, comparison := paste(type3, "vs", type1)]
+all_sp <- rbind(sp_2v1[, .(sampleID, spearman, comparison)],
+                sp_3v1[, .(sampleID, spearman, comparison)])
 
-# Example scatter for one sample (choose the first, or change as you like)
-example_sample <- spearmans$sampleID[1]
-Ws <- W[sampleID == example_sample]
-plot(log10(Ws[[typeA]] + 1), log10(Ws[[typeB]] + 1),
-     xlab = paste0("log10(", typeA, " + 1)"),
-     ylab = paste0("log10(", typeB, " + 1)"),
-     main = paste("Sample:", example_sample))
+boxplot(spearman ~ comparison, data = all_sp,
+        ylab = "Spearman correlation",
+        main = "Per-sample genus-level Spearman")
+
+# ---- PDF with scatterplots (4 per page: 2 samples x 2 comparisons) ----
+
+# Choose samples that have at least 1 overlapping genus in EACH comparison
+ok_2v1 <- W[!is.na(get(type2)) & !is.na(get(type1)), unique(sampleID)]
+ok_3v1 <- W[!is.na(get(type3)) & !is.na(get(type1)), unique(sampleID)]
+samples_to_plot <- sort(intersect(ok_2v1, ok_3v1))
+
+pdf_file <- sprintf("scatterplots_%s_vs_%s__and__%s_vs_%s.pdf",
+                    type2, type1, type3, type1)
+
+pdf(pdf_file, width = 11, height = 8.5)  # landscape-ish
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 1), oma = c(0, 0, 2, 0))
+
+plot_one_sample <- function(sid) {
+  Ws <- W[sampleID == sid]
+
+  # left: 2 vs 1
+  ok <- !is.na(Ws[[type2]]) & !is.na(Ws[[type1]])
+  x <- Ws[[type2]][ok]
+  y <- Ws[[type1]][ok]
+  plot(log10(x + 1), log10(y + 1),
+       xlab = paste0("log10(", type2, " + 1)"),
+       ylab = paste0("log10(", type1, " + 1)"),
+       main = paste0("Sample ", sid, " (2 vs 1), n=", length(x)))
+  if (length(x) >= 2) {
+    r <- suppressWarnings(cor(x, y, method = "spearman"))
+    mtext(sprintf("Spearman = %.3f", r), side = 3, line = 0.2, cex = 0.85)
+  } else {
+    mtext("Spearman = NA (too few points)", side = 3, line = 0.2, cex = 0.85)
+  }
+
+  # right: 3 vs 1
+  ok <- !is.na(Ws[[type3]]) & !is.na(Ws[[type1]])
+  x <- Ws[[type3]][ok]
+  y <- Ws[[type1]][ok]
+  plot(log10(x + 1), log10(y + 1),
+       xlab = paste0("log10(", type3, " + 1)"),
+       ylab = paste0("log10(", type1, " + 1)"),
+       main = paste0("Sample ", sid, " (3 vs 1), n=", length(x)))
+  if (length(x) >= 2) {
+    r <- suppressWarnings(cor(x, y, method = "spearman"))
+    mtext(sprintf("Spearman = %.3f", r), side = 3, line = 0.2, cex = 0.85)
+  } else {
+    mtext("Spearman = NA (too few points)", side = 3, line = 0.2, cex = 0.85)
+  }
+}
+
+i <- 1
+while (i <= length(samples_to_plot)) {
+  # top row: sample i
+  plot_one_sample(samples_to_plot[i])
+
+  # bottom row: sample i+1 (or blank if odd count)
+  if (i + 1 <= length(samples_to_plot)) {
+    plot_one_sample(samples_to_plot[i + 1])
+  } else {
+    plot.new(); plot.new()
+  }
+
+  mtext(sprintf("Scatterplots: left=%s vs %s, right=%s vs %s",
+                type2, type1, type3, type1),
+        outer = TRUE, cex = 1.0)
+  i <- i + 2
+}
+
+dev.off()
+
+cat("\nWrote PDF:\n  ", pdf_file, "\n", sep = "")
