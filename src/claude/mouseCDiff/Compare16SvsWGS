@@ -17,6 +17,7 @@ secondID <- 2
 
 spearmans <- vector()
 outerIndex <-1
+par(mfrow=c(2,1))
 
 for( sample in sampleIDS)
 {
@@ -51,12 +52,13 @@ for( sample in sampleIDS)
 		}
 		
 		print(sample)
+		
 		spearmans[outerIndex] <- cor(genus1, genus2, method = c("spearman"))
 		boxplot(spearmans)
 		outerIndex = outerIndex + 1
 		print(sample)
 		boxplot(spearmans)
-		#plot(log10(genus1+1), log10(genus2+1))
+		plot(log10(genus1+1), log10(genus2+1))
 	}
 }
 
