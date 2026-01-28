@@ -15,6 +15,9 @@ genra <- unique( myT$genus)
 firstID <- 1
 secondID <- 2
 
+spearmans <- vector()
+outerIndex <-1
+
 for( sample in sampleIDS)
 {
 	samples1 <- myT$genusSum[ myT$sampleID == sample & myT$SampleType == sampleTypes[firstID] ]
@@ -45,9 +48,15 @@ for( sample in sampleIDS)
 				index <- index + 1
 				
 			}
-			
-			plot(genus1, genus2)
 		}
+		
+		print(sample)
+		spearmans[outerIndex] <- cor(genus1, genus2, method = c("spearman"))
+		boxplot(spearmans)
+		outerIndex = outerIndex + 1
+		print(sample)
+		boxplot(spearmans)
+		#plot(log10(genus1+1), log10(genus2+1))
 	}
 }
 
