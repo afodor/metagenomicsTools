@@ -1,10 +1,12 @@
 package claude.mouseCDiff;
 
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,8 +39,10 @@ public class ComparisonWith16S
 	{
 		HashSet<String> set = new HashSet<String>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\predictedVsActual_with_pvalues.txt")));
+		BufferedReader reader =
+			    Files.newBufferedReader(new File(
+						"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\predictedVsActual_with_pvalues.txt").toPath(), 
+			    			StandardCharsets.UTF_8);
 		
 		reader.readLine();
 		
@@ -50,6 +54,7 @@ public class ComparisonWith16S
 				set.add(splits[0]);
 		}
 		
+		reader.close();
 		return set;
 		
 	}
@@ -59,8 +64,9 @@ public class ComparisonWith16S
 		// outer key is genus@
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(
-				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv")));
+		BufferedReader reader =
+			    Files.newBufferedReader(new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv").toPath(), 
+			    		StandardCharsets.UTF_8);
 		
 		StringTokenizer topToken = new StringTokenizer(reader.readLine(), "\t");
 
@@ -76,10 +82,14 @@ public class ComparisonWith16S
 			
 			genusNames.add(genus);
 			
-		}
 			
-		System.out.println(genusNames);
+		}
 		
+		if(genusNames.size() != fullNames.size())
+			throw new Exception("logic error");
+		
+		for( int x=0; x < genusNames.size() ; x++)
+			System.out.println(genusNames.get(x) + " " + fullNames.get(x));
 		
 		for(String s= reader.readLine(); s != null; s= reader.readLine())
 		{
@@ -93,6 +103,12 @@ public class ComparisonWith16S
 			{
 				if( filters == null || filters.contains(fullNames.get(x)))
 				{	
+					//if( filters == null &&  genusNames.get(x).equals("Eggerthella"))
+						//System.out.println("FOUND Eggerthella in unfiltered");
+					
+					//if( filters != null && genusNames.get(x).equals("Eggerthella") )
+						//System.out.println(fullNames.get(x) + " " + genusNames.get(x));
+					
 					String key = genusNames.get(x) + "@" + id;
 					Double oldVal = map.get(key);
 					x++;
@@ -109,6 +125,7 @@ public class ComparisonWith16S
 				else
 				{
 					sToken.nextToken();
+					x++;
 				}
 			}
 		
@@ -135,8 +152,9 @@ public class ComparisonWith16S
 		// outer key is genus@
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(
-				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\genus.txt")));
+		BufferedReader reader =
+			    Files.newBufferedReader(new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\genus.txt").toPath(), 
+			    		StandardCharsets.UTF_8);
 		
 		
 		reader.readLine();
@@ -175,6 +193,11 @@ public class ComparisonWith16S
 				genus = genus.trim();
 				
 				genus = TaxonCleaners.clean16SLabel(genus);
+				
+				genus = genus.replaceAll("[\\r\\n]", "");
+				
+				if( genus.equals("Eggerthella"))
+					System.out.println("FOUND " +" Eggerthella");
 				
 				if(genus.length() > 0 )
 				{
