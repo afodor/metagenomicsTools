@@ -22,7 +22,9 @@ public class PredictedVsActual
 		
 		HashMap<String, Double> predictionSums = new HashMap<String, Double>();
 		
-		HashMap<String, Double> lookupMap = BackgroundSubtract.getLookupMap();
+		File inFile = new File(
+				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv.txt");
+		HashMap<String, Double> lookupMap = BackgroundSubtract.getLookupMap(inFile);
 		
 		for(int x=0; x < wrapper.getOtuNames().size(); x++)
 		{

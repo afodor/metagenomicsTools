@@ -48,7 +48,9 @@ public class BackgroundSubtract
 	public static void main(String[] args) throws Exception
 	{
 		
-		HashMap<String, Double> lookupMap = getLookupMap();
+		File inFile = new File(
+				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv.txt");
+		HashMap<String, Double> lookupMap = getLookupMap(inFile);
 	
 		OtuWrapper initialData = new OtuWrapper( new File( 
 			"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\kraken_max1_counts_table_transposed.tsv") );
@@ -141,12 +143,9 @@ public class BackgroundSubtract
 	
 	
 	// key is sourceGenome@targetGenome
-	static HashMap<String, Double> getLookupMap() throws Exception
+	public static HashMap<String, Double> getLookupMap(File inFile) throws Exception
 	{
 		HashMap<String, Double> map = new LinkedHashMap<String, Double>();
-		
-		File inFile = new File(
-				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv.txt");
 		
 		BufferedReader reader = new BufferedReader(
 			    new InputStreamReader(new FileInputStream(inFile), StandardCharsets.UTF_8));
