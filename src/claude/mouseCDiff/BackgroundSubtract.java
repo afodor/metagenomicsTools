@@ -17,10 +17,13 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import parsers.OtuWrapper;
-import scripts.JobinCardio.GetSampleNames;
+
+
 
 public class BackgroundSubtract
 {
+	
+	
 	private static HashSet<String> getTaxaToRemove() throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
