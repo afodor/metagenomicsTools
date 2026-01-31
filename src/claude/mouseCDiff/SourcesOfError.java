@@ -38,7 +38,9 @@ public class SourcesOfError
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\errorBreakdown.txt")));
 		
-		writer.write("queryID\tgenus\toverallQueryError\toverallQueryErrorOutsdieOfGenus\tnumberOfGenomes\t"
+		writer.write("queryID\tgenus\toverallQueryError\toverallQueryErrorOutsdieOfGenus\t" + 
+		"targetError\ttargetErrorOutsideOfGenus\t" + 
+		"numberOfGenomes\t"
 				+ "numberOfPlasmidsInGenomeFiles\tMBGenomes\tMBPlasmid\ttotalMB\tpctCompleteGenome\n");
 		
 		for(String s1 : querySet)
@@ -68,7 +70,32 @@ public class SourcesOfError
 				}
 			}
 			
+			double targetError =0;
+			double targetErrorOutsideOfGenus =0;
+			
+			for(String s2 : querySet)
+			{
+				if( ! s1.equals(s2))
+				{
+					String genus2 = TaxonCleaners.cleanWgsNameOrGenus(s2);
+					String key = s2 + "@" + s1;
+					
+					Double val = lookupMap.get(key);
+					
+					if( val != null)
+					{
+						targetError += val;
+						
+						if( ! genus1.equals(genus2))
+						{
+							targetErrorOutsideOfGenus += val;
+						}
+					}
+				}
+			}
+			
 			writer.write(s1 + "\t" + genus1 + "\t" + queryError + "\t" + queryErrorOutsideOfGenus + "\t");
+			writer.write(targetError + "\t" + targetErrorOutsideOfGenus + "\t");
 			TaxonGenomeCounts b = gct.get(s1);
 			
 			if( b != null)
@@ -86,5 +113,6 @@ public class SourcesOfError
 		
 		
 		writer.flush(); writer.close();
+		System.out.println("Finished");
 	}
 }
