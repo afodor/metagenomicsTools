@@ -1,0 +1,259 @@
+
+# ------------------------------------------------------------
+# Compare genus profiles across SampleTypes (2vs1, 3vs1, 4vs1)
+# - Per-sample Spearman correlations (genusSum vectors)
+# - Boxplot with 3 pairwise paired Wilcoxon tests shown as brackets + p-values
+# - PDF scatterplots: 2 rows (2 samples/page) x 3 cols (3 comparisons)
+# - Per-sample tables written to scatters/ directory
+#  ChatGPT based on a previous version checked into GIT
+# ------------------------------------------------------------
+
+rm(list = ls())
+library(data.table)
+
+setwd("C:\\claudeSummary\\simonCrossRho\\kraken_2871\\simonData")
+
+# -----------------------------
+# Load data
+# -----------------------------
+DT <- fread("allGenusFlat.txt", sep = "\t", header = TRUE)
+
+sampleTypes <- unique(DT$SampleType)
+
+# IDs (as requested): these are POSITIONS in unique(DT$SampleType)
+id1 <- 1
+id2 <- 2
+id3 <- 3
+id4 <- 4
+
+type1 <- sampleTypes[id1]
+type2 <- sampleTypes[id2]
+type3 <- sampleTypes[id3]
+type4 <- sampleTypes[id4]
+
+cat("Comparisons:\n")
+cat("  (2 vs 1): ", type2, " vs ", type1, "\n", sep = "")
+cat("  (3 vs 1): ", type3, " vs ", type1, "\n", sep = "")
+cat("  (4 vs 1): ", type4, " vs ", type1, "\n\n", sep = "")
+
+# -----------------------------
+# Keep only needed SampleTypes
+# -----------------------------
+DT4 <- DT[SampleType %chin% c(type1, type2, type3, type4),
+          .(sampleID, genus, SampleType, genusSum)]
+
+# Wide table: one row per (sampleID, genus), columns are SampleTypes
+W <- dcast(DT4, sampleID + genus ~ SampleType, value.var = "genusSum")
+
+# -----------------------------
+# Spearman per sample helper
+# -----------------------------
+spearman_by_sample <- function(W, colA, colB) {
+  W[!is.na(get(colA)) & !is.na(get(colB)),
+    .(n_genus = .N,
+      spearman = suppressWarnings(cor(get(colA), get(colB), method = "spearman"))),
+    by = sampleID]
+}
+
+sp_2v1 <- spearman_by_sample(W, type2, type1)
+sp_3v1 <- spearman_by_sample(W, type3, type1)
+sp_4v1 <- spearman_by_sample(W, type4, type1)
+
+# Console summaries
+cat("Spearman summary (2 vs 1):\n"); print(summary(sp_2v1$spearman))
+cat("\nSpearman summary (3 vs 1):\n"); print(summary(sp_3v1$spearman))
+cat("\nSpearman summary (4 vs 1):\n"); print(summary(sp_4v1$spearman))
+
+# -----------------------------
+# Paired Wilcoxon tests (pairwise among 3 comparisons)
+# Tests are on per-sample spearman correlations.
+# Safe: returns NA if too few paired samples.
+# -----------------------------
+paired_wilcox_safe <- function(A, B, labelA, labelB) {
+  common <- intersect(A$sampleID, B$sampleID)
+  if (length(common) < 2) {
+    return(list(p = NA_real_, n = length(common), label = paste0(labelA, " vs ", labelB)))
+  }
+  a <- A[sampleID %in% common][order(sampleID)]
+  b <- B[sampleID %in% common][order(sampleID)]
+  stopifnot(all(a$sampleID == b$sampleID))
+
+  res <- wilcox.test(a$spearman, b$spearman, paired = TRUE, exact = FALSE)
+  list(p = res$p.value, n = length(common), label = paste0(labelA, " vs ", labelB), res = res)
+}
+
+lab_2v1 <- paste(type2, "vs", type1)
+lab_3v1 <- paste(type3, "vs", type1)
+lab_4v1 <- paste(type4, "vs", type1)
+
+w_23 <- paired_wilcox_safe(sp_2v1, sp_3v1, lab_2v1, lab_3v1) # box 1 vs 2
+w_24 <- paired_wilcox_safe(sp_2v1, sp_4v1, lab_2v1, lab_4v1) # box 1 vs 3
+w_34 <- paired_wilcox_safe(sp_3v1, sp_4v1, lab_3v1, lab_4v1) # box 2 vs 3
+
+cat("\nPaired Wilcoxon signed-rank tests (Spearman correlations):\n")
+cat(sprintf("  %s: p=%s (n=%d)\n", w_23$label, ifelse(is.na(w_23$p), "NA", format(w_23$p, digits = 3)), w_23$n))
+cat(sprintf("  %s: p=%s (n=%d)\n", w_24$label, ifelse(is.na(w_24$p), "NA", format(w_24$p, digits = 3)), w_24$n))
+cat(sprintf("  %s: p=%s (n=%d)\n", w_34$label, ifelse(is.na(w_34$p), "NA", format(w_34$p, digits = 3)), w_34$n))
+
+# -----------------------------
+# Combine for boxplot
+# -----------------------------
+sp_2v1[, comparison := lab_2v1]
+sp_3v1[, comparison := lab_3v1]
+sp_4v1[, comparison := lab_4v1]
+
+all_sp <- rbind(
+  sp_2v1[, .(sampleID, spearman, comparison)],
+  sp_3v1[, .(sampleID, spearman, comparison)],
+  sp_4v1[, .(sampleID, spearman, comparison)]
+)
+
+# Force fixed ordering so the boxes are always in the expected positions (1,2,3)
+all_sp[, comparison := factor(comparison, levels = c(lab_2v1, lab_3v1, lab_4v1))]
+
+# If any comparison is empty, add a dummy NA row so boxplot reserves the slot
+if (nrow(sp_2v1) == 0) all_sp <- rbind(all_sp, data.table(sampleID=NA_integer_, spearman=NA_real_, comparison=factor(lab_2v1, levels=levels(all_sp$comparison))))
+if (nrow(sp_3v1) == 0) all_sp <- rbind(all_sp, data.table(sampleID=NA_integer_, spearman=NA_real_, comparison=factor(lab_3v1, levels=levels(all_sp$comparison))))
+if (nrow(sp_4v1) == 0) all_sp <- rbind(all_sp, data.table(sampleID=NA_integer_, spearman=NA_real_, comparison=factor(lab_4v1, levels=levels(all_sp$comparison))))
+
+# -----------------------------
+# Helper: draw significance brackets + p-values on a boxplot (base R)
+# -----------------------------
+p_to_label <- function(p, n) {
+  if (is.na(p)) return(sprintf("p=NA (n=%d)", n))
+  sprintf("p=%.3g (n=%d)", p, n)
+}
+
+add_bracket <- function(x1, x2, y, h, label, cex = 0.85) {
+  # bracket: up, across, down
+  segments(x1, y,  x1, y + h)
+  segments(x1, y + h, x2, y + h)
+  segments(x2, y + h, x2, y)
+  text((x1 + x2) / 2, y + h, label, pos = 3, cex = cex)
+}
+
+# -----------------------------
+# Boxplot + brackets with p-values
+# -----------------------------
+par(mfrow = c(1, 1))
+
+# give a little headroom so brackets don't get clipped
+ymax <- max(all_sp$spearman, na.rm = TRUE)
+ymin <- min(all_sp$spearman, na.rm = TRUE)
+if (!is.finite(ymax)) ymax <- 1
+if (!is.finite(ymin)) ymin <- 0
+pad <- 0.20 * (ymax - ymin + 1e-6)
+
+boxplot(
+  spearman ~ comparison,
+  data = all_sp,
+  ylab = "Spearman correlation",
+  main = "Per-sample genus-level Spearman correlations",
+  ylim = c(ymin, ymax + 3.5 * pad)
+)
+
+# Box positions are 1,2,3 because we fixed factor levels above
+# Choose stacked y-levels for the 3 brackets
+base_y <- ymax + 0.30 * pad
+h      <- 0.25 * pad
+
+add_bracket(1, 2, base_y + 0 * pad, h, p_to_label(w_23$p, w_23$n))
+add_bracket(1, 3, base_y + 1 * pad, h, p_to_label(w_24$p, w_24$n))
+add_bracket(2, 3, base_y + 2 * pad, h, p_to_label(w_34$p, w_34$n))
+
+# -----------------------------
+# PDF of scatterplots
+# Layout: 2 rows (2 samples per page) x 3 cols (3 comparisons)
+# Col1: 2 vs 1
+# Col2: 3 vs 1
+# Col3: 4 vs 1
+# -----------------------------
+
+# Samples that have overlap in ALL three comparisons
+ok_2v1 <- W[!is.na(get(type2)) & !is.na(get(type1)), unique(sampleID)]
+ok_3v1 <- W[!is.na(get(type3)) & !is.na(get(type1)), unique(sampleID)]
+ok_4v1 <- W[!is.na(get(type4)) & !is.na(get(type1)), unique(sampleID)]
+samples_to_plot <- sort(Reduce(intersect, list(ok_2v1, ok_3v1, ok_4v1)))
+
+pdf_file <- sprintf("scatterplots_%s_vs_%s__%s_vs_%s__%s_vs_%s.pdf",
+                    type2, type1, type3, type1, type4, type1)
+
+pdf(pdf_file, width = 13, height = 8.5)  # landscape, wider for 3 columns
+par(mfrow = c(2, 3), mar = c(4, 4, 3, 1), oma = c(0, 0, 2, 0))
+
+plot_pair <- function(Ws, colX, colY, label, sid) {
+  ok <- !is.na(Ws[[colX]]) & !is.na(Ws[[colY]])
+  x <- Ws[[colX]][ok]
+  y <- Ws[[colY]][ok]
+
+  plot(log10(x + 1), log10(y + 1),
+       xlab = paste0("log10(", colX, " + 1)"),
+       ylab = paste0("log10(", colY, " + 1)"),
+       main = paste0("Sample ", sid, " (", label, "), n=", length(x)))
+
+  if (length(x) >= 2) {
+    r <- suppressWarnings(cor(x, y, method = "spearman"))
+    mtext(sprintf("Spearman = %.3f", r), side = 3, line = 0.2, cex = 0.85)
+  } else {
+    mtext("Spearman = NA (too few points)", side = 3, line = 0.2, cex = 0.85)
+  }
+}
+
+plot_one_sample <- function(sid) {
+  Ws <- W[sampleID == sid]
+
+  plot_pair(Ws, type2, type1, "2 vs 1", sid)
+  plot_pair(Ws, type3, type1, "3 vs 1", sid)
+  plot_pair(Ws, type4, type1, "4 vs 1", sid)
+}
+
+i <- 1
+while (i <= length(samples_to_plot)) {
+
+  # Top row: sample i
+  plot_one_sample(samples_to_plot[i])
+
+  # Bottom row: sample i+1 (or blank if odd)
+  if (i + 1 <= length(samples_to_plot)) {
+    plot_one_sample(samples_to_plot[i + 1])
+  } else {
+    plot.new(); plot.new(); plot.new()
+  }
+
+  mtext(sprintf("Scatterplots: %s vs %s | %s vs %s | %s vs %s",
+                type2, type1, type3, type1, type4, type1),
+        outer = TRUE, cex = 1.0)
+
+  i <- i + 2
+}
+
+dev.off()
+
+cat("\nWrote PDF:\n  ", pdf_file, "\n", sep = "")
+
+# -----------------------------
+# Write per-sample scatter tables
+# -----------------------------
+outdir <- "C:\\claudeSummary\\simonCrossRho\\kraken_max1\\scatters"
+dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+
+keep_cols <- c("genus", type1, type2, type3, type4)
+
+for (sid in unique(W$sampleID)) {
+
+  Ws <- W[sampleID == sid, ..keep_cols]
+
+  # Replace NA with 0 (important for scatter plots)
+  for (col in keep_cols[-1]) {
+    set(Ws, which(is.na(Ws[[col]])), col, 0)
+  }
+
+  # Optional: sort by total abundance (descending)
+  Ws[, total := get(type1) + get(type2) + get(type3) + get(type4)]
+  setorder(Ws, -total)
+  Ws[, total := NULL]
+
+  outfile <- file.path(outdir, paste0("sample_", sid, "_genus_counts.tsv"))
+
+  fwrite(Ws, file = outfile, sep = "\t", quote = FALSE)
+}
