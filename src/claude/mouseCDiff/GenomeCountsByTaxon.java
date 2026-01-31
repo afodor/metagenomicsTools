@@ -25,6 +25,14 @@ public final class GenomeCountsByTaxon {
         private final double mbGenomes;
         private final double mbPlasmid;
         private final double totalMB;
+        //private final double pct_MAG;
+        //private final double pct_WGS;
+        //private final double pct_chromosome;
+        private final double pct_complete_genome;
+        //private final double pct_complete_sequence;
+        //private final double pct_genome_assembly;
+        //private final double pct_other;
+
 
         public TaxonGenomeCounts(
                 String taxaID,
@@ -32,7 +40,8 @@ public final class GenomeCountsByTaxon {
                 int numberOfPlasmidsInGenomeFiles,
                 double mbGenomes,
                 double mbPlasmid,
-                double totalMB
+                double totalMB,
+                double pct_complete_genome
         ) {
             this.taxaID = Objects.requireNonNull(taxaID, "taxaID");
             this.numberOfGenomes = numberOfGenomes;
@@ -40,6 +49,7 @@ public final class GenomeCountsByTaxon {
             this.mbGenomes = mbGenomes;
             this.mbPlasmid = mbPlasmid;
             this.totalMB = totalMB;
+            this.pct_complete_genome = pct_complete_genome;
         }
 
         public String getTaxaID() { return taxaID; }
@@ -48,6 +58,7 @@ public final class GenomeCountsByTaxon {
         public double getMbGenomes() { return mbGenomes; }
         public double getMbPlasmid() { return mbPlasmid; }
         public double getTotalMB() { return totalMB; }
+        public double getPctCompleteGenome() { return pct_complete_genome; }
 
         @Override
         public String toString() {
@@ -58,6 +69,7 @@ public final class GenomeCountsByTaxon {
                     ", mbGenomes=" + mbGenomes +
                     ", mbPlasmid=" + mbPlasmid +
                     ", totalMB=" + totalMB +
+                    ", pctCompleteGenome=" + pct_complete_genome + 
                     '}';
         }
     }
@@ -87,8 +99,8 @@ public final class GenomeCountsByTaxon {
 
                 // TSV split; keep it simple (your file is clean tab-delimited)
                 String[] f = line.split("\t", -1);
-                if (f.length != 6) {
-                    throw new IOException("Expected 6 columns at line " + lineNo + " but got " + f.length +
+                if (f.length != 14) {
+                    throw new IOException("Expected 14 columns at line " + lineNo + " but got " + f.length +
                             " | line=" + line);
                 }
 
@@ -99,9 +111,10 @@ public final class GenomeCountsByTaxon {
                 double mbGenomes = parseDouble(f[3], "MBGenomes", lineNo);
                 double mbPlasmid = parseDouble(f[4], "MBPlasmid", lineNo);
                 double totalMB = parseDouble(f[5], "totalMB", lineNo);
+                double pctCompleteGenome = parseDouble(f[9], "pct_complete_genome", lineNo);
 
                 TaxonGenomeCounts rec = new TaxonGenomeCounts(
-                        taxaID, numberOfGenomes, numberOfPlasmids, mbGenomes, mbPlasmid, totalMB
+                        taxaID, numberOfGenomes, numberOfPlasmids, mbGenomes, mbPlasmid, totalMB, pctCompleteGenome
                 );
 
                 // If you ever have duplicates, fail loudly (or change to "last wins" if preferred)
@@ -169,7 +182,7 @@ public final class GenomeCountsByTaxon {
 
     // Tiny demo
     public static void main(String[] args) throws Exception {
-        Path p = Path.of("genome_counts_by_taxon.tsv");
+        Path p = Path.of("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\errorModeling\\genome_counts_by_taxon.tsv");
         GenomeCountsByTaxon db = GenomeCountsByTaxon.load(p);
 
         TaxonGenomeCounts a = db.get("Acinetobacter_baumannii");

@@ -39,7 +39,7 @@ public class SourcesOfError
 				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\errorBreakdown.txt")));
 		
 		writer.write("queryID\tgenus\toverallQueryError\toverallQueryErrorOutsdieOfGenus\tnumberOfGenomes\t"
-				+ "numberOfPlasmidsInGenomeFiles\tMBGenomes\tMBPlasmid\ttotalMB\n");
+				+ "numberOfPlasmidsInGenomeFiles\tMBGenomes\tMBPlasmid\ttotalMB\tpctCompleteGenome\n");
 		
 		for(String s1 : querySet)
 		{
@@ -74,12 +74,13 @@ public class SourcesOfError
 			if( b != null)
 			{
 				writer.write(b.getNumberOfGenomes() + "\t" + b.getNumberOfPlasmidsInGenomeFiles() + "\t" + 
-						b.getMbGenomes() + "\t" + b.getMbPlasmid() + "\t" + b.getTotalMB() + "\n");
+						b.getMbGenomes() + "\t" + b.getMbPlasmid() + "\t" + b.getTotalMB() + "\t"+ 
+								b.getPctCompleteGenome() + "\n");
 			}
 			else
 			{
 
-				writer.write("NA\tNA\tNA\tNA\tNA\n");	
+				writer.write("NA\tNA\tNA\tNA\tNA\tNA\n");	
 			}
 		}
 		
