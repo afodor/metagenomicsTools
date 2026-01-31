@@ -3,10 +3,13 @@ package claude.mouseCDiff;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
+
+import claude.mouseCDiff.GenomeCountsByTaxon.TaxonGenomeCounts;
 
 public class SourcesOfError
 {
@@ -15,6 +18,10 @@ public class SourcesOfError
 		File inFile = new File(
 				"C:\\claudeSummary\\simonCrossRho\\kraken_max1\\relative_abundance_1879x_predicted.tsv.txt");
 		HashMap<String, Double> lookupMap = BackgroundSubtract.getLookupMap(inFile);
+		
+		GenomeCountsByTaxon gct = 
+				GenomeCountsByTaxon.load(
+					Path.of("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\errorModeling\\genome_counts_by_taxon.tsv"));
 		
 		HashSet<String> querySet = new LinkedHashSet<String>();
 		HashSet<String> targetSet = new LinkedHashSet<String>();
@@ -31,7 +38,8 @@ public class SourcesOfError
 		BufferedWriter writer = new BufferedWriter(new FileWriter(
 				new File("C:\\claudeSummary\\simonCrossRho\\kraken_max1\\errorBreakdown.txt")));
 		
-		writer.write("queryID\tgenus\toverallQueryError\toverallQueryErrorOutsdieOfGenus\n");
+		writer.write("queryID\tgenus\toverallQueryError\toverallQueryErrorOutsdieOfGenus\tnumberOfGenomes\t"
+				+ "numberOfPlasmidsInGenomeFiles\tMBGenomes\tMBPlasmid\ttotalMB\n");
 		
 		for(String s1 : querySet)
 		{
@@ -60,7 +68,19 @@ public class SourcesOfError
 				}
 			}
 			
-			writer.write(s1 + "\t" + genus1 + "\t" + queryError + "\t" + queryErrorOutsideOfGenus + "\n");
+			writer.write(s1 + "\t" + genus1 + "\t" + queryError + "\t" + queryErrorOutsideOfGenus + "\t");
+			TaxonGenomeCounts b = gct.get(s1);
+			
+			if( b != null)
+			{
+				writer.write(b.getNumberOfGenomes() + "\t" + b.getNumberOfPlasmidsInGenomeFiles() + "\t" + 
+						b.getMbGenomes() + "\t" + b.getMbPlasmid() + "\t" + b.getTotalMB() + "\n");
+			}
+			else
+			{
+
+				writer.write("NA\tNA\tNA\tNA\tNA\n");	
+			}
 		}
 		
 		
