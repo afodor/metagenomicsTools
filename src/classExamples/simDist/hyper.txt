@@ -28,18 +28,8 @@ for( i in 1:10000)
 	totalReads <- numReadsLane1 + numReadsLane2;
 	
 	m <- matrix( c(x1,x2,numReadsLane1-x1,numReadsLane2-x2 ), nrow=2)
-	pValue <- fisher.test(m,alternative="greater")$p.value;
+	pValue <- fisher.test(m)$p.value;
 		
-	
-	if( pValue  < 0.5 ) 
-	{
-		pValue = pValue * 2;
-	}
-	else
-	{
-		pValue = (1-pValue) * 2;
-	}
-	
 	pValues[i] <- pValue;
 	
 	titleStr <- paste("Number of simulated genes = ",i,sep="")
